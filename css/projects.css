@@ -1,0 +1,242 @@
+/* ==========================================================================
+   Projects Page - Innovation Gallery Styles
+   ========================================================================== */
+
+   .projects-page {
+    background-color: var(--gray-light);
+    padding-top: 80px; /* Offset for fixed header */
+}
+
+/* 1. Projects Hero Section */
+.projects-hero {
+    background-color: var(--white);
+    padding: 80px 0 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--gray-medium);
+}
+
+.tagline {
+    color: var(--primary-pink);
+    font-weight: 700;
+    letter-spacing: 3px;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+
+.projects-hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.8rem;
+    color: var(--dark-purple);
+    margin-bottom: 20px;
+}
+
+.projects-hero h1 span {
+    color: var(--primary-pink);
+}
+
+/* 2. Filter Buttons (Gen-Z Minimalist) */
+.project-filters {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 10px 24px;
+    border-radius: 50px;
+    border: 1px solid var(--gray-medium);
+    background: var(--white);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.filter-btn:hover {
+    border-color: var(--primary-pink);
+    color: var(--primary-pink);
+}
+
+.filter-btn.active {
+    background-color: var(--primary-pink);
+    color: var(--white);
+    border-color: var(--primary-pink);
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+}
+
+/* 3. Projects Grid */
+.projects-grid-section {
+    padding: 80px 0;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 35px;
+}
+
+/* 4. Project Card Styling */
+.project-card {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--gray-medium);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+/* Thumbnail & Coming Soon Overlay */
+.project-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+.project-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/* Glassmorphism Lock Overlay */
+.overlay-lock {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(75, 0, 130, 0.4); /* Dark Purple semi-transparent */
+    backdrop-filter: blur(8px); /* Efek Blur Estetik */
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    opacity: 1;
+    transition: var(--transition);
+}
+
+.overlay-lock i {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    color: var(--primary-pink);
+    filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.5));
+}
+
+.overlay-lock span {
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.project-card:hover .project-thumb img {
+    transform: scale(1.1);
+}
+
+/* Card Info */
+.project-info {
+    padding: 25px;
+    flex-grow: 1;
+}
+
+.track-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: var(--light-pink);
+    color: var(--primary-pink);
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.project-info h3 {
+    font-size: 1.4rem;
+    color: var(--dark-purple);
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.project-info p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+/* Card Footer */
+.project-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray-medium);
+}
+
+.author {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.btn-lock {
+    background: var(--gray-light);
+    color: var(--text-muted);
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: not-allowed;
+    transition: var(--transition);
+}
+
+.btn-lock:hover {
+    background-color: var(--gray-medium);
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 992px) {
+    .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .projects-hero h1 {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .projects-hero {
+        padding: 60px 0 30px;
+    }
+
+    .filter-btn {
+        padding: 8px 18px;
+        font-size: 0.8rem;
+    }
+}
