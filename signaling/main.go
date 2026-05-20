@@ -130,6 +130,12 @@ func (h *Hub) join(client *Client) {
 		h.rooms[client.room] = room
 	}
 
+	if existing := room.clients[client.id]; existing != nil {
+		_ = existing.conn.WriteJSON(SignalMessage{Type: "error", Payload: mustRaw(`{"message":"duplicate client id replaced"}`)})
+		_ = existing.conn.Close()
+		delete(room.clients, client.id)
+	}
+
 	var peers []string
 	for id := range room.clients {
 		peers = append(peers, id)
@@ -155,6 +161,10 @@ func (h *Hub) leave(client *Client) {
 
 	room := h.rooms[client.room]
 	if room == nil {
+		return
+	}
+
+	if room.clients[client.id] != client {
 		return
 	}
 

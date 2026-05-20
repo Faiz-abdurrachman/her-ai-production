@@ -51,6 +51,7 @@ window.initMeetingRoom = function() {
     const remoteScreenShares = new Map();
     const peerNames = new Map();
     const peerPresence = new Map();
+    const pendingJoinAnnouncements = new Set();
     const clientId = getMeetingClientId();
     const localPresence = {
         id: clientId,
@@ -74,6 +75,12 @@ window.initMeetingRoom = function() {
 
     const setStatus = (value) => {
         if (statusText) statusText.textContent = value;
+    };
+    const peerDisplayName = (peerId) => peerPresence.get(peerId)?.name || peerNames.get(peerId) || 'Peserta';
+    const announcePeerJoined = (peerId, fallbackName = '') => {
+        const name = fallbackName || peerDisplayName(peerId);
+        setStatus(`${name} telah bergabung`);
+        pendingJoinAnnouncements.delete(peerId);
     };
     const roomId = () => sanitizeMeetingRoom(roomInput?.value || '');
     const displayName = () => String(nameInput?.value || 'Peserta HerAI').trim() || 'Peserta HerAI';
@@ -149,8 +156,16 @@ window.initMeetingRoom = function() {
             if (event.candidate) sendSignal('ice', peerId, event.candidate);
         };
         pc.onconnectionstatechange = () => {
-            setStatus(`${peerId.slice(0, 6)}: ${pc.connectionState}`);
-            if (['failed', 'closed', 'disconnected'].includes(pc.connectionState)) closePeer(peerId);
+            const name = peerDisplayName(peerId);
+            const stateLabels = {
+                connected: 'terhubung',
+                connecting: 'sedang menghubungkan',
+                disconnected: 'koneksi terputus',
+                failed: 'gagal terhubung',
+                closed: 'keluar dari room'
+            };
+            setStatus(`${name} ${stateLabels[pc.connectionState] || pc.connectionState}`);
+            if (['failed', 'closed'].includes(pc.connectionState)) closePeer(peerId);
         };
         peers.set(peerId, pc);
         updateTileLayout();
@@ -166,12 +181,15 @@ window.initMeetingRoom = function() {
         const { type, from, payload } = message;
         if (!from || from === clientId) return;
         if (type === 'peer-joined') {
+            pendingJoinAnnouncements.add(from);
+            setStatus('Peserta baru sedang bergabung...');
             createPeer(from);
             sendSignal('peer-info', from, { name: displayName() });
             publishPresence(from);
             return;
         }
         if (type === 'peer-left') {
+            setStatus(`${peerDisplayName(from)} telah keluar`);
             closePeer(from);
             return;
         }
@@ -191,18 +209,20 @@ window.initMeetingRoom = function() {
             return;
         }
         if (type === 'peer-info') {
-            peerNames.set(from, payload?.name || from.slice(0, 8));
+            const name = payload?.name || peerNames.get(from) || 'Peserta';
+            peerNames.set(from, name);
             updateMeetingRemoteLabel(from);
             if (!peerPresence.has(from)) {
                 peerPresence.set(from, {
                     id: from,
-                    name: payload?.name || from.slice(0, 8),
+                    name,
                     mic: true,
                     camera: true,
                     hand: false,
                     screen: false
                 });
             }
+            if (pendingJoinAnnouncements.has(from)) announcePeerJoined(from, name);
             renderPeopleList();
             return;
         }
@@ -217,6 +237,7 @@ window.initMeetingRoom = function() {
             };
             peerNames.set(from, nextPresence.name);
             peerPresence.set(from, nextPresence);
+            if (pendingJoinAnnouncements.has(from)) announcePeerJoined(from, nextPresence.name);
             updateMeetingRemoteLabel(from);
             updateMeetingTilePresence(from, nextPresence);
             renderPeopleList();
@@ -765,13 +786,7 @@ window.initMeetingRoom = function() {
 };
 
 function getMeetingClientId() {
-    const key = 'herai_public_meeting_client_id';
-    let id = sessionStorage.getItem(key);
-    if (!id) {
-        id = crypto.randomUUID ? crypto.randomUUID() : `guest-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-        sessionStorage.setItem(key, id);
-    }
-    return id;
+    return crypto.randomUUID ? crypto.randomUUID() : `guest-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
 function sanitizeMeetingRoom(value) {
