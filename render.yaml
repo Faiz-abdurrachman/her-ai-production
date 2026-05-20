@@ -11,7 +11,7 @@ services:
       - key: HERAI_STATIC_ROOT
         value: ./public
       - key: GAS_WEB_APP_URL
-        sync: false
+        value: https://script.google.com/macros/s/AKfycbxivp4g8mVai8rZcei4w9pblh8s2Kks84CnRshveD_IR69erw_Ffbn_TwithrpNTEj_yw/exec
       - key: APP_ACCESS_PASSWORD
         sync: false
       - key: HERAI_ICE_SERVERS
