@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"flag"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -60,6 +62,7 @@ func main() {
 
 	hub := &Hub{rooms: make(map[string]*Room)}
 
+	http.HandleFunc("/__gas", proxyGAS)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if serveStaticApp(w, r) {
 			return
@@ -309,4 +312,116 @@ func serveStaticApp(w http.ResponseWriter, r *http.Request) bool {
 	}
 
 	return false
+}
+
+func proxyGAS(w http.ResponseWriter, r *http.Request) {
+	setJSONHeaders(w)
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	if r.Method != http.MethodPost {
+		http.Error(w, `{"status":"error","message":"method not allowed"}`, http.StatusMethodNotAllowed)
+		return
+	}
+
+	target := getenv("GAS_WEB_APP_URL", "https://script.google.com/macros/s/AKfycbxivp4g8mVai8rZcei4w9pblh8s2Kks84CnRshveD_IR69erw_Ffbn_TwithrpNTEj_yw/exec")
+	if target == "" {
+		http.Error(w, `{"status":"error","message":"GAS_WEB_APP_URL is not configured"}`, http.StatusBadGateway)
+		return
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, `{"status":"error","message":"failed to read request body"}`, http.StatusBadRequest)
+		return
+	}
+	if len(bytes.TrimSpace(body)) == 0 {
+		body = []byte(`{}`)
+	}
+
+	status, responseBody, contentType, err := postToGAS(target, body)
+	if err != nil {
+		w.WriteHeader(http.StatusBadGateway)
+		_ = json.NewEncoder(w).Encode(map[string]string{"status": "error", "message": err.Error()})
+		return
+	}
+
+	if contentType != "" {
+		w.Header().Set("Content-Type", contentType)
+	}
+	w.WriteHeader(status)
+	_, _ = w.Write(responseBody)
+}
+
+func postToGAS(target string, body []byte) (int, []byte, string, error) {
+	client := &http.Client{
+		Timeout: 30 * time.Second,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+
+	req, err := http.NewRequest(http.MethodPost, target, bytes.NewReader(body))
+	if err != nil {
+		return http.StatusBadGateway, nil, "", err
+	}
+	req.Header.Set("Content-Type", "text/plain;charset=utf-8")
+
+	res, err := client.Do(req)
+	if err != nil {
+		return http.StatusBadGateway, nil, "", err
+	}
+	defer res.Body.Close()
+
+	if isRedirect(res.StatusCode) && res.Header.Get("Location") != "" {
+		return getGASRedirect(client, res.Header.Get("Location"))
+	}
+
+	responseBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return http.StatusBadGateway, nil, "", err
+	}
+	return res.StatusCode, responseBody, normalizeContentType(res.Header.Get("Content-Type")), nil
+}
+
+func getGASRedirect(client *http.Client, location string) (int, []byte, string, error) {
+	req, err := http.NewRequest(http.MethodGet, location, nil)
+	if err != nil {
+		return http.StatusBadGateway, nil, "", err
+	}
+	res, err := client.Do(req)
+	if err != nil {
+		return http.StatusBadGateway, nil, "", err
+	}
+	defer res.Body.Close()
+
+	responseBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return http.StatusBadGateway, nil, "", err
+	}
+	return res.StatusCode, responseBody, normalizeContentType(res.Header.Get("Content-Type")), nil
+}
+
+func setJSONHeaders(w http.ResponseWriter) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Cache-Control", "no-store")
+	w.Header().Set("Content-Type", "application/json")
+}
+
+func isRedirect(status int) bool {
+	return status == http.StatusMovedPermanently ||
+		status == http.StatusFound ||
+		status == http.StatusSeeOther ||
+		status == http.StatusTemporaryRedirect ||
+		status == http.StatusPermanentRedirect
+}
+
+func normalizeContentType(value string) string {
+	if value == "" || strings.Contains(strings.ToLower(value), "text/html") {
+		return "application/json"
+	}
+	return value
 }
