@@ -1,5 +1,12 @@
 services:
   - type: web
+    name: herai-superapp
+    runtime: static
+    buildCommand: mkdir -p public && cp -R index.html assets components css js pages public/
+    staticPublishPath: ./public
+    autoDeploy: true
+
+  - type: web
     name: herai-signaling
     runtime: go
     rootDir: signaling

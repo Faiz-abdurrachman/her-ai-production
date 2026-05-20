@@ -462,6 +462,7 @@
        const localVideo = document.getElementById('manualLocalVideo');
        const remoteGrid = document.getElementById('manualRemoteGrid');
        const signalServerInput = document.getElementById('signalServerUrl');
+       const meetingPublicUrlInput = document.getElementById('meetingPublicUrl');
        const roomInput = document.getElementById('signalRoomId');
        const titleInput = document.getElementById('signalRoomTitle');
        const inviteLinkEl = document.getElementById('signalInviteLink');
@@ -492,12 +493,13 @@
        };
        const roomId = () => formatSignalRoomCode(roomInput?.value || 'ABCD-EFGH-JKLM');
        const roomTitle = () => String(titleInput?.value || 'HerAI Meeting').trim() || 'HerAI Meeting';
-       const inviteUrl = () => `${location.origin}${location.pathname}#/meeting?room=${encodeURIComponent(roomId())}&title=${encodeURIComponent(roomTitle())}&signal=${encodeURIComponent((signalServerInput?.value || 'ws://127.0.0.1:8080/ws').trim())}`;
+       const publicAppUrl = () => normalizeMeetingPublicUrl(meetingPublicUrlInput?.value || localStorage.getItem('herai_meeting_public_url') || `${location.origin}${location.pathname}`);
+       const inviteUrl = () => `${publicAppUrl()}#/meeting?room=${encodeURIComponent(roomId())}&title=${encodeURIComponent(roomTitle())}&signal=${encodeURIComponent((signalServerInput?.value || 'wss://herai-signaling.onrender.com/ws').trim())}`;
        const updateInviteLink = () => {
            if (inviteLinkEl) inviteLinkEl.textContent = inviteUrl();
        };
        const signalUrl = () => {
-           const base = (signalServerInput?.value || 'ws://127.0.0.1:8080/ws').trim();
+           const base = (signalServerInput?.value || 'wss://herai-signaling.onrender.com/ws').trim();
            const url = new URL(base);
            url.searchParams.set('room', roomId());
            url.searchParams.set('clientId', clientId);
@@ -633,6 +635,11 @@
            updateInviteLink();
        });
        titleInput?.addEventListener('input', updateInviteLink);
+       signalServerInput?.addEventListener('input', updateInviteLink);
+       meetingPublicUrlInput?.addEventListener('input', () => {
+           localStorage.setItem('herai_meeting_public_url', publicAppUrl());
+           updateInviteLink();
+       });
 
        document.getElementById('btnCopyRoomLink')?.addEventListener('click', async () => {
            persistAdminMeetingRoom();
@@ -717,7 +724,7 @@
 
        async function refreshActiveMeetingRooms() {
            try {
-               const base = (signalServerInput?.value || 'ws://127.0.0.1:8080/ws').replace(/^ws/, 'http').replace(/\/ws.*$/, '/rooms');
+               const base = (signalServerInput?.value || 'wss://herai-signaling.onrender.com/ws').replace(/^ws/, 'http').replace(/\/ws.*$/, '/rooms');
                const response = await fetch(base);
                const result = await response.json();
                renderAdminMeetingRooms(result.rooms || []);
@@ -752,6 +759,19 @@
 
    function sanitizeSignalValue(value) {
        return formatSignalRoomCode(value) || 'ABCD-EFGH-JKLM';
+   }
+
+   function normalizeMeetingPublicUrl(value) {
+       try {
+           const url = new URL(String(value || '').trim(), location.origin);
+           url.search = '';
+           url.hash = '';
+           url.pathname = url.pathname.replace(/index\.html$/i, '');
+           if (!url.pathname.endsWith('/')) url.pathname += '/';
+           return url.toString();
+       } catch (error) {
+           return `${location.origin}${location.pathname}`;
+       }
    }
 
    function formatSignalRoomCode(value) {
