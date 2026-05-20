@@ -428,19 +428,22 @@
     }
     .meeting-remote-grid.has-screen-share .meeting-video-tile.is-pinned,
     .meeting-remote-grid.has-screen-share .meeting-remote-tile.is-pinned {
-        flex: 1 1 calc(100% - 214px);
+        aspect-ratio: auto;
+        grid-column: 1;
+        grid-row: 1 / -1;
         height: 100%;
         min-height: 0;
         order: 0;
+        width: 100%;
     }
     .meeting-remote-grid.has-screen-share .meeting-video-tile:not(.is-screen),
     .meeting-remote-grid.has-screen-share .meeting-remote-tile:not(.is-screen) {
-        aspect-ratio: 1 / 1;
-        flex: 0 0 auto;
-        height: calc((100% - 60px) / 6);
+        aspect-ratio: auto;
+        grid-column: 2;
+        height: 100%;
         min-height: 0;
         order: 1;
-        width: clamp(132px, 15vw, 190px);
+        width: 100%;
     }
     .meeting-remote-grid.has-pinned-tile:not(.has-screen-share) {
         grid-auto-rows: minmax(126px, 1fr);
@@ -568,31 +571,31 @@
     }
     .meeting-remote-grid.has-screen-share {
         align-items: stretch;
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
+        display: grid;
         gap: 12px;
-        grid-auto-rows: unset;
-        grid-template-columns: none !important;
+        grid-auto-flow: row;
+        grid-template-columns: minmax(0, 1fr) clamp(132px, 15vw, 190px) !important;
+        grid-template-rows: repeat(6, minmax(0, 1fr));
+        justify-items: stretch;
     }
     .meeting-overflow-tile {
         align-items: center;
-        aspect-ratio: 1 / 1;
+        aspect-ratio: auto;
         background: linear-gradient(135deg, rgba(255, 20, 147, 0.92), rgba(124, 58, 237, 0.92));
         border: 1px solid rgba(255,255,255,0.18);
         border-radius: 8px;
         color: #fff;
         display: flex;
         flex-direction: column;
-        flex: 0 0 auto;
         gap: 4px;
-        height: calc((100% - 60px) / 6);
+        grid-column: 2;
+        height: 100%;
         justify-content: center;
         min-height: 0;
         order: 1;
         overflow: hidden;
         text-align: center;
-        width: clamp(132px, 15vw, 190px);
+        width: 100%;
     }
     .meeting-overflow-tile strong {
         font-size: clamp(1.4rem, 4vw, 2.25rem);
@@ -992,6 +995,8 @@
         .meeting-remote-grid.has-screen-share {
             align-content: flex-start;
             display: grid;
+            grid-auto-flow: row;
+            grid-template-rows: auto;
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             overflow: hidden;
         }
