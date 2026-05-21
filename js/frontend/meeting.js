@@ -1476,7 +1476,8 @@ window.initMeetingRoom = function() {
         const tiles = [...document.querySelectorAll('#meetingRemoteGrid .meeting-video-tile, #meetingRemoteGrid .meeting-remote-tile')];
         document.getElementById('meeting-overflow-tile')?.remove();
         const requested = tileViewSelect?.value || 'auto';
-        const pageSize = requested === 'auto' ? 50 : Number(requested) || 50;
+        const isCompactViewport = window.matchMedia?.('(max-width: 860px)')?.matches === true;
+        const pageSize = requested === 'auto' ? (isCompactViewport ? 6 : 16) : Number(requested) || 16;
         const totalPages = Math.max(1, Math.ceil(tiles.length / pageSize));
         if (currentPage > totalPages) currentPage = totalPages;
         const start = (currentPage - 1) * pageSize;
@@ -1503,17 +1504,25 @@ window.initMeetingRoom = function() {
                 remoteGrid.appendChild(summaryTile);
             }
             visibleCount = screenTiles.length + Math.min(cameraTiles.length, maxRailTiles) + (hiddenCount > 0 ? 1 : 0);
+            const railCount = Math.min(cameraTiles.length, maxRailTiles) + (hiddenCount > 0 ? 1 : 0);
+            remoteGrid?.style.setProperty('--meeting-rail-rows', String(Math.max(1, railCount)));
         } else {
             tiles.forEach((tile, index) => {
                 tile.style.display = index >= start && index < end ? '' : 'none';
             });
+            remoteGrid?.style.removeProperty('--meeting-rail-rows');
         }
         if (remoteGrid) {
             remoteGrid.classList.toggle('has-screen-share', hasScreenShare);
             remoteGrid.classList.toggle('has-pinned-tile', Boolean(remoteGrid.querySelector('.is-pinned')));
             remoteGrid.dataset.count = String(Math.min(visibleCount, 16));
             const cols = getMeetingColumnCount(visibleCount);
+            const effectiveCols = isCompactViewport && !hasScreenShare ? Math.min(cols, 2) : cols;
+            const rowCount = hasScreenShare
+                ? Math.max(1, Math.ceil(Math.max(1, visibleCount - 1) / (isCompactViewport ? 2 : 1)))
+                : Math.max(1, Math.ceil(visibleCount / Math.max(1, effectiveCols)));
             remoteGrid.style.setProperty('--meeting-cols', String(cols));
+            remoteGrid.style.setProperty('--meeting-rows', String(rowCount));
         }
         if (pageControls) pageControls.classList.toggle('active', totalPages > 1);
         if (pageInfo) pageInfo.textContent = `${currentPage} / ${totalPages}`;
@@ -1524,6 +1533,11 @@ window.initMeetingRoom = function() {
     window.__HERAI_MEETING_PEER_NAMES__ = peerNames;
     window.__HERAI_MEETING_PEER_PRESENCE__ = peerPresence;
     window.__HERAI_MEETING_LOCAL_PRESENCE__ = localPresence;
+    let meetingResizeTimer = null;
+    window.addEventListener('resize', () => {
+        clearTimeout(meetingResizeTimer);
+        meetingResizeTimer = setTimeout(updateTileLayout, 120);
+    });
     bindPinButtons();
     renderPeopleList();
     syncSidePanels();
