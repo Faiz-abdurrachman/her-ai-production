@@ -304,12 +304,7 @@
            };
    
            try {
-               const response = await fetch(SCRIPT_URL, {
-                   method: 'POST',
-                   headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                   body: JSON.stringify(payload)
-               });
-               const result = await response.json();
+               const result = await window.heraiPostJson(payload);
    
                if (result.status === 'success') {
                    sessionStorage.setItem('isAdminLoggedIn', 'true');
@@ -350,13 +345,7 @@
    
        try {
            const payload = { action: 'getData' };
-           const response = await fetch(SCRIPT_URL, {
-               method: 'POST',
-               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-               body: JSON.stringify(payload)
-           });
-           
-           const result = await response.json();
+           const result = await window.heraiPostJson(payload);
            
            if (result.status === 'success') {
                participantsData = result.data.reverse(); 
@@ -784,13 +773,7 @@
                newStatus: newStatus
            };
    
-           const response = await fetch(SCRIPT_URL, {
-               method: 'POST',
-               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-               body: JSON.stringify(payload)
-           });
-           
-           const result = await response.json();
+           const result = await window.heraiPostJson(payload);
            if (result.status !== 'success') throw new Error("Gagal mengupdate ke database");
            
        } catch (error) {

@@ -61,11 +61,7 @@ async function loadCompetencyData() {
 }
 
 async function postCompetencyMonitor(payload) {
-    const response = await fetch(COMPETENCY_MONITOR_API, {
-        method: 'POST',
-        body: JSON.stringify(payload)
-    });
-    const result = await response.json();
+    const result = await window.heraiPostJson(payload);
     if (result.status !== 'success') throw new Error(result.message || 'Gagal memuat data');
     return result;
 }

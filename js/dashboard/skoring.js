@@ -130,13 +130,7 @@
    
        try {
            const payload = { action: 'getData' };
-           const response = await fetch(SKORING_API_URL, {
-               method: 'POST',
-               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-               body: JSON.stringify(payload)
-           });
-           
-           const result = await response.json();
+           const result = await window.heraiPostJson(payload);
            
            if (result.status === 'success') {
                scoringData = result.data;
@@ -444,11 +438,7 @@
            };
    
            // Kirim update ke Google Sheets tanpa harus nungguin selesai untuk update UI
-           fetch(SKORING_API_URL, {
-               method: 'POST',
-               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-               body: JSON.stringify(payload)
-           }).catch(err => console.log("GAS Error (Silakan abaikan jika GAS belum siap):", err));
+           window.heraiPostJson(payload).catch(err => console.log("GAS Error (Silakan abaikan jika GAS belum siap):", err));
    
            // Sorting & Render ulang berdasarkan score efektif: reviewer override > AI baseline
            scoringData.sort((a, b) => getEffectiveRankingScore(b) - getEffectiveRankingScore(a));
@@ -474,12 +464,7 @@
        [acceptBtn, rejectBtn].forEach(btn => { if (btn) btn.disabled = true; });
 
        try {
-           const response = await fetch(SKORING_API_URL, {
-               method: 'POST',
-               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-               body: JSON.stringify({ action: 'updateStatus', rowId, newStatus: decision })
-           });
-           const result = await response.json();
+           const result = await window.heraiPostJson({ action: 'updateStatus', rowId, newStatus: decision });
            if (result.status !== 'success') throw new Error(result.message || 'Gagal menyimpan keputusan');
 
            const index = scoringData.findIndex(p => p.rowId === rowId);

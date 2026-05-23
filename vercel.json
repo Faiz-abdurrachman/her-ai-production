@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/__gas",
+      "destination": "/api/gas"
+    },
+    {
+      "source": "/__settings",
+      "destination": "/api/settings"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/index.html"
+    }
+  ]
+}

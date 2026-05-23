@@ -130,13 +130,7 @@
     }
 
     async function loadRemoteProjects() {
-        const response = await fetch(PROJECTS_API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: 'getFinalProjects' })
-        }).catch(() => null);
-        if (!response?.ok) return;
-        const result = await response.json().catch(() => null);
+        const result = await window.heraiPostJson({ action: 'getFinalProjects' }).catch(() => null);
         if (result?.status !== 'success' || !Array.isArray(result.projects) || !result.projects.length) return;
         const mapped = result.projects.map(project => ({
             teamName: project.team_name || project.teamName || '',
@@ -155,13 +149,7 @@
     }
 
     async function submitProjectToApi(project) {
-        const response = await fetch(PROJECTS_API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: 'submitFinalProject', ...project })
-        });
-        if (!response.ok) throw new Error('Project API unavailable');
-        const result = await response.json();
+        const result = await window.heraiPostJson({ action: 'submitFinalProject', ...project });
         if (result.status !== 'success') throw new Error(result.message || 'Project rejected');
         return result;
     }

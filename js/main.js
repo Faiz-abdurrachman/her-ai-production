@@ -8,6 +8,7 @@
     'use strict';
 
     const GLOBAL_SETTINGS_KEY = 'heraiGlobalSettings';
+    const HERAI_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxivp4g8mVai8rZcei4w9pblh8s2Kks84CnRshveD_IR69erw_Ffbn_TwithrpNTEj_yw/exec';
     const DEFAULT_GLOBAL_SETTINGS = {
         registrationOpen: true,
         afirmasiOpen: true,
@@ -19,6 +20,45 @@
         registrationClosedMessage: 'Pendaftaran HerAI Fellowship Batch 1 (2026) telah resmi ditutup.',
         twibbonUrl: '#/twibbon',
         passedInfoMessage: 'Harap periksa email Anda untuk undangan grup Telegram.'
+    };
+
+    async function readJsonResponse(response) {
+        const text = await response.text();
+        try {
+            return text ? JSON.parse(text) : {};
+        } catch {
+            const preview = text.trim().slice(0, 120) || response.statusText || 'Respons kosong';
+            throw new Error(`Server mengembalikan respons non-JSON (${response.status}): ${preview}`);
+        }
+    }
+
+    window.heraiFetchJson = async function(url, options = {}, fallbackUrl = '') {
+        let response;
+        try {
+            response = await fetch(url, options);
+            if (response.ok) return readJsonResponse(response);
+            if (!fallbackUrl || ![404, 405, 502].includes(response.status)) {
+                const result = await readJsonResponse(response);
+                throw new Error(result.message || `Server error (${response.status})`);
+            }
+        } catch (error) {
+            if (!fallbackUrl) throw error;
+        }
+
+        const fallbackResponse = await fetch(fallbackUrl, options);
+        const result = await readJsonResponse(fallbackResponse);
+        if (!fallbackResponse.ok) {
+            throw new Error(result.message || `Server error (${fallbackResponse.status})`);
+        }
+        return result;
+    };
+
+    window.heraiPostJson = function(payload) {
+        return window.heraiFetchJson('/__gas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload || {})
+        }, HERAI_GAS_WEB_APP_URL);
     };
 
     window.getGlobalSettings = function() {

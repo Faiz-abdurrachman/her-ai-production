@@ -440,13 +440,7 @@ const COMPETENCY_API_URL = '/__gas';
     }
 
     async function postCompetencyApi(payload) {
-        const response = await fetch(COMPETENCY_API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
-        });
-        if (!response.ok) throw new Error('Server tes tidak merespons.');
-        const result = await response.json();
+        const result = await window.heraiPostJson(payload);
         if (result.status !== 'success') throw new Error(result.message || 'Permintaan tes ditolak.');
         return result;
     }

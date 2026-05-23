@@ -77,15 +77,12 @@
        const sys = await window.getAdminSystemContext();
    
        try {
-           await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({
-                   action: 'logActivity', 
-                   adminId: adminId,
-                   tindakan: tindakan,
-                   perangkat: sys.device,
-                   lokasi: sys.lokasi
-               })
+           await window.heraiPostJson({
+               action: 'logActivity',
+               adminId: adminId,
+               tindakan: tindakan,
+               perangkat: sys.device,
+               lokasi: sys.lokasi
            });
            console.log(`[Audit Logged] ${tindakan}`);
        } catch (e) {
@@ -258,11 +255,7 @@
            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-muted);"><i class="fas fa-circle-notch fa-spin"></i> Membaca database pendaftar...</td></tr>`;
        }
        try {
-           const response = await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({ action: 'getData' })
-           });
-           const result = await response.json();
+           const result = await window.heraiPostJson({ action: 'getData' });
            if (result.status !== 'success') throw new Error(result.message || 'Gagal mengambil data pendaftar');
            fraudFindings = buildDuplicateFindings(result.data || []);
            renderFraudRows();
@@ -1005,7 +998,7 @@
        window.toggleModal('assetModal', 'close');
        window.logAdminActivity(`${editId ? 'Mengedit' : 'Menambahkan'} asset/link: ${name}`);
        try {
-           await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsset', asset: payload }) });
+           await window.heraiPostJson({ action: 'saveAsset', asset: payload });
        } catch (error) {
            console.warn('Asset tersimpan lokal, GAS belum merespons.', error);
        }
@@ -1295,11 +1288,7 @@
 
        tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--text-muted);"><i class="fas fa-circle-notch fa-spin"></i> Sinkronisasi data...</td></tr>`;
        try {
-           const response = await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({ action })
-           });
-           const result = await response.json();
+           const result = await window.heraiPostJson({ action });
            if (result.status !== 'success') throw new Error(result.message || 'Gagal memuat data');
            const rows = result.data || result.sessions || result.projects || result.certificates || [];
            renderer(Array.isArray(rows) && rows.length ? rows : getDefaultOpsRows(tableBodyId));
@@ -1425,12 +1414,7 @@
        tableBody.innerHTML = '';
        
        try {
-           const response = await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({ action: 'getAdmins' })
-           });
-           
-           const result = await response.json();
+           const result = await window.heraiPostJson({ action: 'getAdmins' });
            
            const admins = result.admins || result.data || [];
            if (result.status === 'success' && admins.length) {
@@ -1520,20 +1504,15 @@
        }
        
        try {
-           const response = await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({
-                   action: 'addAdmin',
-                   adminId,
-                   id_admin: adminId,
-                   name,
-                   password,
-                   role,
-                   peran_admin: role
-               })
+           const result = await window.heraiPostJson({
+               action: 'addAdmin',
+               adminId,
+               id_admin: adminId,
+               name,
+               password,
+               role,
+               peran_admin: role
            });
-           
-           const result = await response.json();
            
            if (result.status === 'success') {
                alert('Admin berhasil ditambahkan!');
@@ -1557,17 +1536,12 @@
        if (!newPassword) return;
        
        try {
-           const response = await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({
-                   action: 'updateAdmin',
-                   adminId,
-                   id_admin: adminId,
-                   password: newPassword
-               })
+           const result = await window.heraiPostJson({
+               action: 'updateAdmin',
+               adminId,
+               id_admin: adminId,
+               password: newPassword
            });
-           
-           const result = await response.json();
            
            if (result.status === 'success') {
                alert('Password berhasil diupdate!');
@@ -1585,16 +1559,11 @@
        if (!confirm(`Apakah Anda yakin ingin menghapus admin ${adminId}?`)) return;
        
        try {
-           const response = await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({
-                   action: 'deleteAdmin',
-                   adminId,
-                   id_admin: adminId
-               })
+           const result = await window.heraiPostJson({
+               action: 'deleteAdmin',
+               adminId,
+               id_admin: adminId
            });
-           
-           const result = await response.json();
            
            if (result.status === 'success') {
                alert('Admin berhasil dihapus!');

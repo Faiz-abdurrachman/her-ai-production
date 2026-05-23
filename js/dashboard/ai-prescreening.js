@@ -116,12 +116,7 @@
                }
            }
 
-           const response = await fetch(AI_API_URL, {
-               method: 'POST',
-               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-               body: JSON.stringify({ action: 'getData' })
-           });
-           const result = await response.json();
+           const result = await window.heraiPostJson({ action: 'getData' });
            
            if (result.status === 'success') {
                aiCandidatesData = result.data.reverse();
@@ -311,13 +306,12 @@
        const startTime = Date.now();
    
        try {
-           const response = await fetch(AI_API_URL, {
+           const result = await window.heraiFetchJson(AI_API_URL, {
                method: 'POST',
                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                body: JSON.stringify({ action: 'runAiAnalysis', participant: participant }),
-               signal: aiAbortController.signal 
-           });
-           const result = await response.json();
+               signal: aiAbortController.signal
+           }, 'https://script.google.com/macros/s/AKfycbxivp4g8mVai8rZcei4w9pblh8s2Kks84CnRshveD_IR69erw_Ffbn_TwithrpNTEj_yw/exec');
    
            if (result.status === 'success') {
                const timeInSeconds = (Date.now() - startTime) / 1000;

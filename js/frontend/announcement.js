@@ -119,13 +119,7 @@ async function checkParticipantStatus(nik, email, btnElement) {
     if(loadingSection) loadingSection.style.display = 'block';
 
     try {
-        const response = await fetch(ANNOUNCEMENT_API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: 'getData' }) 
-        });
-        
-        const result = await response.json();
+        const result = await window.heraiPostJson({ action: 'getData' });
         
         if (result.status === 'success') {
             const participant = result.data.find(p => String(p.nik || '') == nik && String(p.email || '').toLowerCase() == email);

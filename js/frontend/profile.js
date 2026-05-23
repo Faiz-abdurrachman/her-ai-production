@@ -168,13 +168,7 @@ async function updateParticipantProfile(updates) {
 }
 
 async function postProfileApi(payload) {
-    const response = await fetch(PARTICIPANT_PROFILE_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-    });
-    if (!response.ok) throw new Error('Database peserta tidak merespons.');
-    const result = await response.json();
+    const result = await window.heraiPostJson(payload);
     if (result.status && result.status !== 'success') {
         const error = new Error(result.message || 'Permintaan profil ditolak.');
         error.isApiError = true;

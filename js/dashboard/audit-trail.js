@@ -64,12 +64,7 @@ async function loadAllAuditData() {
     activeContainer.innerHTML = `<div class="audit-loading-small"><i class="fas fa-spinner fa-spin"></i> Memantau sesi...</div>`;
 
     try {
-        const response = await fetch(AUDIT_API_URL, {
-            method: 'POST',
-            body: JSON.stringify({ action: 'getAuditData' })
-        });
-        
-        const result = await response.json();
+        const result = await window.heraiPostJson({ action: 'getAuditData' });
 
         if (result.status === 'success') {
             globalAuditData = result.logs || result.data || []; 
