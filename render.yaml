@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: herai-signaling
+    runtime: go
+    plan: free
+    buildCommand: mkdir -p public && cp -R index.html assets components css js pages public/ && node scripts/harden-public.mjs public && cd signaling && go build -tags netgo -ldflags "-s -w" -o app .
+    startCommand: ./signaling/app
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: HERAI_STATIC_ROOT
+        value: ./public
+      - key: GAS_WEB_APP_URL
+        value: https://script.google.com/macros/s/AKfycbxivp4g8mVai8rZcei4w9pblh8s2Kks84CnRshveD_IR69erw_Ffbn_TwithrpNTEj_yw/exec
+      - key: APP_ACCESS_PASSWORD
+        sync: false
+      - key: HERAI_ICE_SERVERS
+        sync: false
+      - key: LIVEKIT_URL
+        sync: false
+      - key: LIVEKIT_API_KEY
+        sync: false
+      - key: LIVEKIT_API_SECRET
+        sync: false
