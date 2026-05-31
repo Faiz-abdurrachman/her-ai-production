@@ -59,6 +59,7 @@ window.initMeetingRoom = function() {
     let liveKitConfig = null;
     let liveKitRoom = null;
     let liveKitClientLoader = null;
+    let liveKitAudioUnlockBound = false;
     const liveKitRemoteStreams = new Map();
     let iceServers = [...DEFAULT_ICE_SERVERS];
     let audioContext = null;
@@ -561,6 +562,13 @@ window.initMeetingRoom = function() {
         if (isScreen) activeScreenOwner = participant.identity;
         ensureParticipantTile(participant.identity, presence.name, presence);
         renderMeetingRemote(participant.identity, stream, isScreen ? 'screen' : 'camera', presence.name);
+        const safeId = String(participant.identity).replace(/[^a-zA-Z0-9_-]/g, '');
+        const tileId = isScreen ? `meeting-remote-${safeId}-screen` : `meeting-remote-${safeId}`;
+        const video = document.getElementById(tileId)?.querySelector('video');
+        if (video) {
+            track.attach?.(video);
+            video.play?.().catch(() => bindLiveKitAudioUnlock());
+        }
         if (!isScreen && mediaTrack.kind === 'audio') startRemoteAudioMonitor(participant.identity, stream);
     };
     const removeLiveKitTrack = (track, publication, participant) => {
@@ -603,6 +611,9 @@ window.initMeetingRoom = function() {
             .on(RoomEvent.ParticipantMetadataChanged, (_metadata, participant) => applyLiveKitPresence(participant))
             .on(RoomEvent.TrackSubscribed, (track, publication, participant) => renderLiveKitTrack(track, publication, participant))
             .on(RoomEvent.TrackUnsubscribed, (track, publication, participant) => removeLiveKitTrack(track, publication, participant))
+            .on(RoomEvent.AudioPlaybackStatusChanged, () => {
+                if (!liveKitRoom?.canPlaybackAudio) bindLiveKitAudioUnlock();
+            })
             .on(RoomEvent.DataReceived, (payload, participant) => {
                 try {
                     const message = JSON.parse(new TextDecoder().decode(payload));
@@ -637,8 +648,6 @@ window.initMeetingRoom = function() {
         }
         syncPublishedDeviceState('audio', desiredMicEnabled);
         syncPublishedDeviceState('video', desiredCameraEnabled);
-        await liveKitRoom.localParticipant.setMicrophoneEnabled?.(desiredMicEnabled).catch(() => {});
-        await liveKitRoom.localParticipant.setCameraEnabled?.(desiredCameraEnabled).catch(() => {});
         liveKitRoom.remoteParticipants?.forEach(participant => {
             applyLiveKitPresence(participant);
             participant.trackPublications?.forEach(publication => {
@@ -647,7 +656,21 @@ window.initMeetingRoom = function() {
         });
         setStatus('Pertemuan sedang berlangsung');
     };
+    const bindLiveKitAudioUnlock = () => {
+        if (!liveKitRoom || liveKitAudioUnlockBound) return;
+        liveKitAudioUnlockBound = true;
+        setStatus('Klik layar untuk mengaktifkan audio');
+        const unlock = () => {
+            liveKitAudioUnlockBound = false;
+            liveKitRoom?.startAudio?.()
+                .then(() => setStatus('Pertemuan sedang berlangsung'))
+                .catch(() => bindLiveKitAudioUnlock());
+        };
+        document.addEventListener('pointerdown', unlock, { once: true, capture: true });
+        document.addEventListener('keydown', unlock, { once: true, capture: true });
+    };
     const disconnectLiveKit = () => {
+        liveKitAudioUnlockBound = false;
         liveKitRemoteStreams.clear();
         if (liveKitRoom) {
             try { liveKitRoom.disconnect(); } catch {}
@@ -1256,8 +1279,6 @@ window.initMeetingRoom = function() {
 
     function syncPublishedDeviceState(kind, enabled) {
         if (meetingTransport === 'livekit' && liveKitRoom?.localParticipant) {
-            if (kind === 'audio') liveKitRoom.localParticipant.setMicrophoneEnabled?.(enabled).catch(() => {});
-            if (kind === 'video') liveKitRoom.localParticipant.setCameraEnabled?.(enabled).catch(() => {});
             const publications = [
                 ...Array.from(liveKitRoom.localParticipant.audioTrackPublications?.values?.() || []),
                 ...Array.from(liveKitRoom.localParticipant.videoTrackPublications?.values?.() || [])
