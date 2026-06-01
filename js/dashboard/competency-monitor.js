@@ -6,6 +6,7 @@ const COMPETENCY_MONITOR_API = '/__gas';
 let competencySessions = [];
 let competencyParticipants = [];
 let competencyRows = [];
+let competencyLoadInFlight = false;
 
 window.initCompetencyMonitor = async function() {
     if (typeof window.loadSidebar === 'function') await window.loadSidebar();
@@ -13,7 +14,7 @@ window.initCompetencyMonitor = async function() {
     if (typeof window.updateAdminProfile === 'function') window.updateAdminProfile();
     if (typeof window.logAdminActivity === 'function') window.logAdminActivity('Sedang memantau Seleksi Tahap 2');
 
-    document.getElementById('btnSyncCompetency')?.addEventListener('click', loadCompetencyData);
+    document.getElementById('btnSyncCompetency')?.addEventListener('click', () => loadCompetencyData({ manual: true }));
     document.getElementById('competencySearch')?.addEventListener('input', renderCompetencyMonitor);
     document.getElementById('competencyStatusFilter')?.addEventListener('change', renderCompetencyMonitor);
     document.getElementById('competencyMonitorBody')?.addEventListener('click', event => {
@@ -39,12 +40,21 @@ window.initCompetencyMonitor = async function() {
         await setCompetencyDecision(nik, decision, button);
     });
     await loadCompetencyData();
-    setInterval(loadCompetencyData, 30000);
 };
 
-async function loadCompetencyData() {
+async function loadCompetencyData(options = {}) {
+    if (competencyLoadInFlight) return;
+    competencyLoadInFlight = true;
     const body = document.getElementById('competencyMonitorBody');
-    if (body) body.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:34px; color:var(--text-muted);"><i class="fas fa-circle-notch fa-spin"></i> Memuat peserta lolos tahap 1...</td></tr>';
+    const syncButton = document.getElementById('btnSyncCompetency');
+    const originalButtonHtml = syncButton?.innerHTML || '';
+    if (syncButton) {
+        syncButton.disabled = true;
+        syncButton.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Syncing...';
+    }
+    if (body && competencyRows.length === 0) {
+        body.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:34px; color:var(--text-muted);"><i class="fas fa-circle-notch fa-spin"></i> Memuat peserta lolos tahap 1...</td></tr>';
+    }
     try {
         const [participantsResult, sessionsResult] = await Promise.all([
             postCompetencyMonitor({ action: 'getData' }),
@@ -56,12 +66,26 @@ async function loadCompetencyData() {
         competencyRows = mergeParticipantsWithSessions(competencyParticipants, competencySessions);
         renderCompetencyMonitor();
     } catch (error) {
-        if (body) body.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:34px; color:var(--danger);">${error.message || 'Gagal memuat data tahap 2.'}</td></tr>`;
+        if (body && competencyRows.length === 0) {
+            body.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:34px; color:var(--danger);">${error.message || 'Gagal memuat data tahap 2.'}</td></tr>`;
+        } else if (options.manual) {
+            alert(error.message || 'Gagal memperbarui data tahap 2.');
+        }
+    } finally {
+        competencyLoadInFlight = false;
+        if (syncButton) {
+            syncButton.disabled = false;
+            syncButton.innerHTML = originalButtonHtml;
+        }
     }
 }
 
 async function postCompetencyMonitor(payload) {
-    const result = await window.heraiPostJson(payload);
+    const response = await fetch(COMPETENCY_MONITOR_API, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+    });
+    const result = await response.json();
     if (result.status !== 'success') throw new Error(result.message || 'Gagal memuat data');
     return result;
 }
