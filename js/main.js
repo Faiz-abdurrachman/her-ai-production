@@ -352,6 +352,9 @@
             
             // Suntikkan HTML ke dalam container
             container.innerHTML = window.__HERAI_SIDEBAR_HTML__;
+            if (typeof window.applyAdminSidebarAccess === 'function') {
+                window.applyAdminSidebarAccess(container);
+            }
 
             // Atur menu mana yang menyala (active)
             const navLinks = document.querySelectorAll('.sidebar .nav-link');
@@ -384,6 +387,8 @@
                 logoutBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     sessionStorage.removeItem('isAdminLoggedIn');
+                    localStorage.removeItem('adminId');
+                    localStorage.removeItem('heraiAdminProfile');
                     window.location.hash = "#/home"; // Lempar ke halaman depan
                 });
             }
