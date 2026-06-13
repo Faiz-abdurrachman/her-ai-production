@@ -80,6 +80,8 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
+const defaultGASWebAppURL = "https://script.google.com/macros/s/AKfycbxivp4g8mVai8rZcei4w9pblh8s2Kks84CnRshveD_IR69erw_Ffbn_TwithrpNTEj_yw/exec"
+
 func main() {
 	defaultPort := getenv("PORT", "8080")
 	addr := flag.String("addr", ":"+defaultPort, "HTTP listen address")
@@ -1368,7 +1370,7 @@ func proxyGAS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	target := getenv("GAS_WEB_APP_URL", "")
+	target := getenv("GAS_WEB_APP_URL", defaultGASWebAppURL)
 	if target == "" {
 		http.Error(w, `{"status":"error","message":"GAS_WEB_APP_URL is not configured"}`, http.StatusBadGateway)
 		return

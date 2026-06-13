@@ -1,0 +1,317 @@
+{
+  "generated_at": "2026-06-13T09:33:29.270Z",
+  "summary": {
+    "PASS": 44,
+    "WARN": 6,
+    "FAIL": 0
+  },
+  "config": {
+    "frontendUrl": "http://127.0.0.1:3000",
+    "messagingUrl": "http://127.0.0.1:8091",
+    "signalingUrl": "http://127.0.0.1:8080",
+    "gasUrl": "",
+    "timeoutMs": 4500
+  },
+  "results": [
+    {
+      "area": "Required Files",
+      "check": "index.html",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "Required Files",
+      "check": "server.js",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "Required Files",
+      "check": "render.yaml",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "Required Files",
+      "check": "gas/Code.gs",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "Required Files",
+      "check": "js/router.js",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "Required Files",
+      "check": "components/navbar.html",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "Required Files",
+      "check": "components/sidebar.html",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "Required Files",
+      "check": "components/footer.html",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "Required Files",
+      "check": "messaging/main.go",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "Required Files",
+      "check": "signaling/main.go",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "Required Files",
+      "check": "docs/DEVELOPER_HANDOVER_AND_ROADMAP.md",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "Required Files",
+      "check": "docs/DEVELOPER_HANDOVER_AND_ROADMAP.pdf",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "Required Files",
+      "check": "docs/HerAI_Developer_Prompt_Templates.pdf",
+      "status": "PASS",
+      "detail": "Found"
+    },
+    {
+      "area": "SPA Routes",
+      "check": "Route count",
+      "status": "PASS",
+      "detail": "39 routes detected"
+    },
+    {
+      "area": "SPA Routes",
+      "check": "Every route points to existing HTML",
+      "status": "PASS",
+      "detail": "All route files exist"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/dashboard/admin-modules.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/dashboard/ai-prescreening.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/dashboard/audit-trail.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/dashboard/competency-monitor.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/dashboard/dashboard.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/dashboard/data-visualization.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/dashboard/retest-monitor.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/dashboard/skoring.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/announcement.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/competency-test.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/data-penduduk.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/meeting.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/messaging.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/profile.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/projects.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/register.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/twibbon.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/main.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/router.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "server.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "Go Services",
+      "check": "messaging: go test ./...",
+      "status": "PASS",
+      "detail": "?   \therai-messaging\t[no test files]"
+    },
+    {
+      "area": "Go Services",
+      "check": "signaling: go test ./...",
+      "status": "PASS",
+      "detail": "?   \therai-signaling\t[no test files]"
+    },
+    {
+      "area": "GAS",
+      "check": "Sheet registry count",
+      "status": "PASS",
+      "detail": "59 sheets detected"
+    },
+    {
+      "area": "GAS",
+      "check": "Action route count",
+      "status": "PASS",
+      "detail": "44 actions detected"
+    },
+    {
+      "area": "GAS",
+      "check": "Duplicate actions",
+      "status": "PASS",
+      "detail": "None"
+    },
+    {
+      "area": "GAS",
+      "check": "Critical actions available",
+      "status": "PASS",
+      "detail": "All critical actions found"
+    },
+    {
+      "area": "Documentation",
+      "check": "docs/DEVELOPER_HANDOVER_AND_ROADMAP.md",
+      "status": "PASS",
+      "detail": "21 KB"
+    },
+    {
+      "area": "Documentation",
+      "check": "docs/DEVELOPER_HANDOVER_AND_ROADMAP.pdf",
+      "status": "PASS",
+      "detail": "36 KB"
+    },
+    {
+      "area": "Documentation",
+      "check": "docs/HerAI_Developer_Prompt_Templates.pdf",
+      "status": "PASS",
+      "detail": "15 KB"
+    },
+    {
+      "area": "Runtime Endpoint",
+      "check": "Frontend http://127.0.0.1:3000",
+      "status": "WARN",
+      "detail": "Not reachable or not OK: 0 fetch failed"
+    },
+    {
+      "area": "Runtime Endpoint",
+      "check": "Messaging http://127.0.0.1:8091/healthz",
+      "status": "WARN",
+      "detail": "Not reachable or not OK: 0 fetch failed"
+    },
+    {
+      "area": "Runtime Endpoint",
+      "check": "Messaging http://127.0.0.1:8091/api/config",
+      "status": "WARN",
+      "detail": "Not reachable or not OK: 0 fetch failed"
+    },
+    {
+      "area": "Runtime Endpoint",
+      "check": "Signaling http://127.0.0.1:8080/healthz",
+      "status": "WARN",
+      "detail": "Not reachable or not OK: 0 fetch failed"
+    },
+    {
+      "area": "Runtime Endpoint",
+      "check": "Signaling http://127.0.0.1:8080/meeting-config",
+      "status": "WARN",
+      "detail": "Not reachable or not OK: 0 fetch failed"
+    },
+    {
+      "area": "Runtime Endpoint",
+      "check": "GAS Web App",
+      "status": "WARN",
+      "detail": "GAS_WEB_APP_URL not provided in environment; skipped live GAS check"
+    }
+  ]
+}

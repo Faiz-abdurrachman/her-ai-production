@@ -22,3 +22,18 @@ services:
         sync: false
       - key: LIVEKIT_API_SECRET
         sync: false
+  - type: web
+    name: herai-messaging
+    runtime: go
+    plan: free
+    buildCommand: cd messaging && go build -tags netgo -ldflags "-s -w" -o app .
+    startCommand: ./messaging/app
+    healthCheckPath: /healthz
+    autoDeploy: true
+    disks:
+      - name: herai-messaging-data
+        mountPath: /var/data
+        sizeGB: 1
+    envVars:
+      - key: MESSAGING_DATA_FILE
+        value: /var/data/herai-messaging-data.json

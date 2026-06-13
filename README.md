@@ -1,5 +1,41 @@
 # Woman in Tech - HerAI Fellowship 2026
 
+## Dokumentasi untuk Developer Lanjutan
+
+Dokumen handover terbaru untuk programmer/maintainer ada di:
+
+- `docs/DEVELOPER_HANDOVER_AND_ROADMAP.md`
+
+Dokumen tersebut berisi status fitur terkini, cara menjalankan service, struktur backend/frontend, kontrak database/API, batasan sistem, dan roadmap pengembangan berikutnya.
+
+## QA Automation
+
+Automation smoke QA tersedia di:
+
+- `scripts/qa-smoke.mjs`
+
+Jalankan dari root project:
+
+```bash
+node scripts/qa-smoke.mjs
+```
+
+Output report akan dibuat otomatis ke:
+
+- `reports/qa-report-latest.md`
+- `reports/qa-report-latest.json`
+- `reports/qa-report-<timestamp>.md`
+
+Untuk live endpoint check, nyalakan service lokal atau override URL:
+
+```bash
+QA_FRONTEND_URL=http://127.0.0.1:3000 \
+QA_MESSAGING_URL=http://127.0.0.1:8091 \
+QA_SIGNALING_URL=http://127.0.0.1:8080 \
+GAS_WEB_APP_URL=https://script.google.com/macros/s/.../exec \
+node scripts/qa-smoke.mjs
+```
+
 ## Cara Menjalankan Aplikasi
 
 ### Opsi 1: Menggunakan Live Server (VS Code)

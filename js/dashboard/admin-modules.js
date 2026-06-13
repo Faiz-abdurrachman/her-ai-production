@@ -104,7 +104,7 @@
 
    const ADMIN_ROUTE_ACCESS = {
        superadmin: ['*'],
-       reviewer: ['/dashboard', '/dashboard/seleksi', '/skoring', '/ai-prescreening', '/competency-monitor', '/retest-monitor'],
+       reviewer: ['/dashboard', '/dashboard/seleksi', '/skoring', '/ai-prescreening', '/competency-monitor', '/retest-monitor', '/data-visualization'],
        kurator: ['/dashboard', '/dashboard/seleksi', '/anti-fraud', '/comm-engine', '/assets']
    };
 

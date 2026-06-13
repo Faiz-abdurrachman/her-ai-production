@@ -6,3 +6,7 @@ dist/
 build/
 .env
 .env.*
+messaging/messaging-data.json
+signaling/herai-signaling
+reports/qa-report-*.md
+!reports/qa-report-latest.md

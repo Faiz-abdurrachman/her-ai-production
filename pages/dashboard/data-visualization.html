@@ -1,0 +1,89 @@
+<div class="dashboard-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="main-content data-viz-page">
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1 class="page-title">Visualisasi Data</h1>
+                <p class="page-subtitle">Analitik nilai, demografi, kampus, dan persebaran peserta HerAI Fellowship</p>
+            </div>
+            <div class="topbar-right data-viz-actions">
+                <select id="dataVizScoreSource" class="cyber-select">
+                    <option value="all">Semua Nilai</option>
+                    <option value="competency">Seleksi Tahap 2</option>
+                    <option value="retest">Re-Test</option>
+                    <option value="ai">AI Pre-Screening</option>
+                </select>
+                <button type="button" id="btnRefreshDataViz" class="btn-cyber"><i class="fas fa-sync-alt"></i> Refresh Data</button>
+            </div>
+        </header>
+
+        <section class="data-viz-summary" id="dataVizSummary">
+            <div class="data-viz-loading glass-panel"><i class="fas fa-circle-notch fa-spin"></i> Memuat data visualisasi...</div>
+        </section>
+
+        <section class="data-viz-grid data-viz-grid-featured">
+            <article class="data-viz-card glass-panel data-viz-card-wide">
+                <div class="data-viz-card-header">
+                    <div>
+                        <span>Hasil Nilai</span>
+                        <h3>Raw vs Bobot</h3>
+                    </div>
+                    <i class="fas fa-chart-scatter"></i>
+                </div>
+                <div id="scoreScatterChart" class="data-viz-scatter"></div>
+            </article>
+
+            <article class="data-viz-card glass-panel">
+                <div class="data-viz-card-header">
+                    <div>
+                        <span>Nilai Semua</span>
+                        <h3>Distribusi Skor</h3>
+                    </div>
+                    <i class="fas fa-chart-column"></i>
+                </div>
+                <div id="scoreDistributionChart" class="data-viz-bars"></div>
+            </article>
+
+            <article class="data-viz-card glass-panel">
+                <div class="data-viz-card-header">
+                    <div>
+                        <span>Daftar Kampus</span>
+                        <h3>Top Kampus / Instansi</h3>
+                    </div>
+                    <i class="fas fa-building-columns"></i>
+                </div>
+                <div id="institutionChart" class="data-viz-list"></div>
+            </article>
+
+            <article class="data-viz-card glass-panel">
+                <div class="data-viz-card-header">
+                    <div>
+                        <span>Provinsi Pendaftar</span>
+                        <h3>Ranking Provinsi</h3>
+                    </div>
+                    <i class="fas fa-map-location-dot"></i>
+                </div>
+                <div id="provinceChart" class="data-viz-list"></div>
+            </article>
+
+            <article class="data-viz-card glass-panel data-viz-card-map">
+                <div class="data-viz-card-header">
+                    <div>
+                        <span>Persebaran Titik</span>
+                        <h3>Heatmap Peserta</h3>
+                    </div>
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div id="provinceHeatmap" class="data-viz-heatmap"></div>
+            </article>
+        </section>
+
+        <section class="data-viz-section-title">
+            <h2>15+ Visual Demografi & Operasional</h2>
+            <p>Dipakai untuk membaca kualitas pipeline peserta dari pendaftaran sampai tes.</p>
+        </section>
+
+        <section id="dataVizInsightGrid" class="data-viz-grid data-viz-insight-grid"></section>
+    </main>
+</div>

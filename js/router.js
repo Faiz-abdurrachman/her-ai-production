@@ -23,6 +23,7 @@ const router = {
         "/register": "/pages/frontend/register.html",
         "/profile": "/pages/frontend/profile.html",
         "/meeting": "/pages/frontend/meeting.html",
+        "/messaging": "/pages/frontend/messaging.html",
         "/competency-test": "/pages/frontend/competency-test.html",
         "/retest": "/pages/frontend/retest.html",
         "/dashboard": "/pages/dashboard/dashboard.html",
@@ -38,6 +39,7 @@ const router = {
         "/comm-engine": "/pages/dashboard/comm-engine.html",
         "/competency-monitor": "/pages/dashboard/competency-monitor.html",
         "/retest-monitor": "/pages/dashboard/retest-monitor.html",
+        "/data-visualization": "/pages/dashboard/data-visualization.html",
         "/video-conference": "/pages/dashboard/video-conference.html",
         "/stage-control": "/pages/dashboard/stage-control.html",
         "/bootcamp": "/pages/dashboard/bootcamp.html",
@@ -62,6 +64,7 @@ const router = {
         "/x/r9k2e4": "/register",
         "/x/u3p7v5": "/profile",
         "/x/m7k9p2": "/meeting",
+        "/x/msg2e": "/messaging",
         "/x/t4c8n6": "/competency-test",
         "/x/rt4s8": "/retest",
         "/x/d8s2h5": "/dashboard",
@@ -77,6 +80,7 @@ const router = {
         "/x/cm8e3": "/comm-engine",
         "/x/ct6m2": "/competency-monitor",
         "/x/rtm6q": "/retest-monitor",
+        "/x/dv9q4": "/data-visualization",
         "/x/vc4o9": "/video-conference",
         "/x/sc1t5": "/stage-control",
         "/x/bc9p3": "/bootcamp",
@@ -189,6 +193,7 @@ const router = {
         const appContent = document.getElementById("app-content");
         const navContainer = document.getElementById("navbar-container");
         const footerContainer = document.getElementById("footer-container");
+        const isMessagingPage = path === "/messaging";
         const adminPages = [
             "/dashboard", 
             "/dashboard/seleksi", 
@@ -198,6 +203,7 @@ const router = {
             "/comm-engine", 
             "/competency-monitor",
             "/retest-monitor",
+            "/data-visualization",
             "/video-conference",
             "/stage-control",
             "/bootcamp",
@@ -212,6 +218,8 @@ const router = {
         try {
             // Jika rute tidak terdaftar di routes object
             if (!routeUrl) throw new Error("404");
+
+            document.body.classList.toggle("messaging-page-active", isMessagingPage);
 
             if (adminPages.includes(path) && path !== "/dashboard" && typeof window.canAdminAccessPath === "function" && !window.canAdminAccessPath(path)) {
                 appContent.innerHTML = `
@@ -295,11 +303,13 @@ const router = {
                 // LAYOUT MANAGEMENT: Atur Tampilan Navbar & Footer
                 // ==========================================
                 // Daftar SEMUA halaman Admin Panel yang NGGAK boleh ada Navbar/Footer Publik
-                if (adminPages.includes(path)) {
+                if (adminPages.includes(path) || isMessagingPage) {
                     if (navContainer) navContainer.style.display = "none";
                     if (footerContainer) footerContainer.style.display = "none";
-                    this.hydrateAdminSidebar();
-                    if (typeof window.applyAdminSidebarAccess === "function") window.applyAdminSidebarAccess();
+                    if (adminPages.includes(path)) {
+                        this.hydrateAdminSidebar();
+                        if (typeof window.applyAdminSidebarAccess === "function") window.applyAdminSidebarAccess();
+                    }
                 } else {
                     if (navContainer) navContainer.style.display = "block";
                     if (footerContainer) footerContainer.style.display = "block";
@@ -320,6 +330,8 @@ const router = {
                     window.initCompetencyTest({ mode: "retest" });
                 } else if (path === "/meeting" && typeof window.initMeetingRoom === "function") {
                     window.initMeetingRoom();
+                } else if (path === "/messaging" && typeof window.initMessagingPage === "function") {
+                    window.initMessagingPage();
                 } else if (path === "/projects" && typeof window.initProjectsPage === "function") {
                     window.initProjectsPage();
                 } else if (path === "/twibbon" && typeof window.initTwibbon === "function") {
@@ -347,6 +359,8 @@ const router = {
                     window.initCompetencyMonitor();
                 } else if (path === "/retest-monitor" && typeof window.initReTestMonitor === "function") {
                     window.initReTestMonitor();
+                } else if (path === "/data-visualization" && typeof window.initDataVisualization === "function") {
+                    window.initDataVisualization();
                 } else if (path === "/video-conference" && typeof window.initVideoConference === "function") {
                     window.initVideoConference();
                 } else if (path === "/assets" && typeof window.initAssets === "function") {
@@ -383,11 +397,12 @@ const router = {
             }
 
             // Halaman publik tetap mulai dari atas; halaman admin menjaga konteks panel samping.
-            if (!adminPages.includes(path)) {
+            if (!adminPages.includes(path) && !isMessagingPage) {
                 window.scrollTo({ top: 0, behavior: 'instant' });
             }
 
         } catch (error) {
+            document.body.classList.remove("messaging-page-active");
             console.error("Router Error:", error);
             // Tampilan Halaman 404 Fallback
             appContent.innerHTML = `

@@ -1,0 +1,263 @@
+<section class="messaging-shell">
+    <aside class="messaging-auth-panel" id="messagingAuthPanel">
+        <div class="messaging-auth-hero" aria-hidden="true">
+            <div class="messaging-auth-logo">
+                <img src="/assets/messaging/herai-fellowship-logo.png" alt="">
+            </div>
+            <div class="messaging-hero-orbit">
+                <img class="messaging-hero-persona" src="/assets/messaging/herai-chat-persona.png" alt="">
+            </div>
+            <div class="messaging-trust-chip">
+                <i class="fas fa-shield-alt"></i>
+                <span>Aman & Terenkripsi</span>
+            </div>
+        </div>
+
+        <div class="messaging-auth-content">
+            <div class="messaging-brand">
+                <span><i class="fas fa-lock"></i></span>
+                <div>
+                    <h1>HerAI Secure Chat</h1>
+                    <p>Masuk atau buat akun untuk mulai komunikasi terenkripsi.</p>
+                </div>
+            </div>
+
+            <div class="messaging-auth-tabs" role="tablist" aria-label="Chat auth">
+                <button type="button" class="active" id="messagingRegisterTab" data-auth-tab="register">Daftar</button>
+                <button type="button" id="messagingLoginTab" data-auth-tab="login">Masuk</button>
+            </div>
+
+            <div class="messaging-auth-grid">
+                <form id="messagingLoginForm" class="messaging-form messaging-auth-card" data-auth-panel="login">
+                    <div>
+                        <h2>Masuk Chat</h2>
+                        <p>Gunakan ID yang sudah kamu buat untuk membuka chat.</p>
+                    </div>
+                    <label>ID Pengguna<input id="messagingLoginId" autocomplete="username" placeholder="contoh: chen-fellow"></label>
+                    <label>Password<input id="messagingLoginPassword" type="password" autocomplete="current-password" placeholder="Masukkan password"></label>
+                    <button type="submit"><i class="fas fa-right-to-bracket"></i> Login Chat</button>
+                    <div class="messaging-auth-divider"><span>atau masuk dengan</span></div>
+                    <div class="messaging-social-row">
+                        <button type="button" class="messaging-social-btn" data-oauth-provider="Google"><i class="fab fa-google"></i> Google</button>
+                        <button type="button" class="messaging-social-btn" data-oauth-provider="GitHub"><i class="fab fa-github"></i> GitHub</button>
+                    </div>
+                    <button type="button" id="messagingForgotPasswordBtn" class="messaging-link-btn">Lupa password?</button>
+                </form>
+
+                <form id="messagingRegisterForm" class="messaging-form messaging-auth-card active" data-auth-panel="register">
+                    <div class="messaging-register-intro" data-register-step="account">
+                        <h2>Sign Up</h2>
+                        <p>ID hanya terlihat oleh teman yang kamu tambahkan.</p>
+                    </div>
+                    <div class="messaging-register-intro" data-register-step="role">
+                        <h2>Pilih Peran Kamu</h2>
+                        <p>Pilih peran yang paling sesuai. Kamu bisa mengubahnya nanti di pengaturan.</p>
+                    </div>
+                    <div class="messaging-role-picker" aria-label="Pilih peran" data-register-step="role">
+                        <label class="active">
+                            <input type="radio" name="messagingRegisterRole" value="fellow" checked>
+                            <img src="/assets/messaging/herai-chat-persona.png" alt="">
+                            <span>
+                                <strong>Fellow / Peserta</strong>
+                                <small>Belajar AI, berdiskusi, dan mengerjakan proyek.</small>
+                            </span>
+                        </label>
+                        <label>
+                            <input type="radio" name="messagingRegisterRole" value="mentor">
+                            <span class="messaging-role-icon mentor"><i class="fas fa-chalkboard-user"></i></span>
+                            <span>
+                                <strong>Mentor</strong>
+                                <small>Membimbing dan mendukung para fellow.</small>
+                            </span>
+                        </label>
+                        <label>
+                            <input type="radio" name="messagingRegisterRole" value="volunteer">
+                            <span class="messaging-role-icon volunteer"><i class="fas fa-bullhorn"></i></span>
+                            <span>
+                                <strong>Volunteer</strong>
+                                <small>Berkontribusi dalam kegiatan HerAI.</small>
+                            </span>
+                        </label>
+                        <label>
+                            <input type="radio" name="messagingRegisterRole" value="partner">
+                            <span class="messaging-role-icon partner"><i class="fas fa-handshake-angle"></i></span>
+                            <span>
+                                <strong>Partner / Sponsor</strong>
+                                <small>Berkolaborasi dengan HerAI Fellowship.</small>
+                            </span>
+                        </label>
+                    </div>
+                    <label data-register-step="account">ID Baru<input id="messagingRegisterId" placeholder="nama-unik"></label>
+                    <label data-register-step="account">Nama Tampilan<input id="messagingRegisterName" placeholder="Nama peserta"></label>
+                    <label data-register-step="account">Password<input id="messagingRegisterPassword" type="password" placeholder="Minimal 6 karakter"></label>
+                    <button type="submit" id="messagingRegisterSubmitBtn"><i class="fas fa-user-plus"></i> Daftar Sekarang</button>
+                    <div class="messaging-auth-divider" data-register-step="account"><span>atau daftar dengan</span></div>
+                    <div class="messaging-social-row" data-register-step="account">
+                        <button type="button" class="messaging-social-btn" data-oauth-provider="Google"><i class="fab fa-google"></i> Google</button>
+                        <button type="button" class="messaging-social-btn" data-oauth-provider="GitHub"><i class="fab fa-github"></i> GitHub</button>
+                    </div>
+                </form>
+            </div>
+
+            <p class="messaging-note" id="messagingAuthMessage">Untuk mulai chat, daftar akun lalu tambahkan teman lewat ID pengguna.</p>
+        </div>
+    </aside>
+
+    <section id="messagingForgotPasswordModal" class="messaging-modal" hidden>
+        <div class="messaging-modal-card">
+            <header>
+                <div>
+                    <strong>Lupa Password</strong>
+                    <p>Reset otomatis belum aktif. Simpan ID kamu lalu hubungi admin/panitia untuk verifikasi.</p>
+                </div>
+                <button type="button" data-close-modal="messagingForgotPasswordModal"><i class="fas fa-xmark"></i></button>
+            </header>
+            <form id="messagingForgotPasswordForm" class="messaging-form">
+                <label>ID Pengguna<input id="messagingForgotPasswordId" autocomplete="username" placeholder="contoh: chen-fellow"></label>
+                <button type="submit"><i class="fas fa-headset"></i> Minta Bantuan Reset</button>
+            </form>
+        </div>
+    </section>
+
+    <main class="messaging-app" id="messagingApp" hidden>
+        <div class="messaging-layout">
+            <aside class="messaging-sidebar">
+                <header class="messaging-topbar">
+                    <div class="messaging-current-user">
+                        <span id="messagingCurrentAvatar" class="messaging-avatar">H</span>
+                        <div>
+                            <strong id="messagingCurrentName">-</strong>
+                            <span id="messagingCurrentId">-</span>
+                        </div>
+                    </div>
+                    <div class="messaging-topbar-actions">
+                        <button type="button" id="messagingOpenFriendModalBtn" title="Tambah teman"><i class="fas fa-user-plus"></i></button>
+                        <button type="button" id="messagingOpenRoomModalBtn" title="Buat group"><i class="fas fa-users"></i></button>
+                        <span id="messagingConnectionBadge" class="messaging-badge">offline</span>
+                        <button type="button" id="messagingLogoutBtn" title="Logout"><i class="fas fa-power-off"></i></button>
+                    </div>
+                </header>
+
+                <div class="messaging-sidebar-section">
+                    <div class="messaging-section-heading">
+                        <h2>Chat</h2>
+                        <small id="messagingFriendMessage" class="messaging-inline-message"></small>
+                    </div>
+                    <div id="messagingFriendsList" class="messaging-list"></div>
+                </div>
+
+                <div class="messaging-sidebar-section" id="messagingGroupSection" hidden>
+                    <div class="messaging-section-heading">
+                        <h2>Group</h2>
+                    </div>
+                    <div id="messagingRoomsList" class="messaging-list"></div>
+                </div>
+            </aside>
+
+            <section class="messaging-room">
+                <div class="messaging-room-header">
+                    <div class="messaging-room-persona">
+                        <span id="messagingRoomAvatar" class="messaging-avatar messaging-room-avatar">?</span>
+                        <div>
+                            <h2 id="messagingRoomTitle">Pilih user atau room</h2>
+                            <p id="messagingRoomMeta">Pesan akan dienkripsi sebelum keluar dari browser.</p>
+                        </div>
+                    </div>
+                    <div class="messaging-room-actions">
+                        <span id="messagingTyping"></span>
+                        <button type="button" id="messagingVoiceCallBtn" disabled title="Voice call"><i class="fas fa-phone"></i></button>
+                        <button type="button" id="messagingVideoCallBtn" disabled title="Video call"><i class="fas fa-video"></i></button>
+                    </div>
+                </div>
+
+                <div id="messagingMessages" class="messaging-messages">
+                    <div class="messaging-empty">Mulai direct chat dengan klik user di kiri.</div>
+                </div>
+
+                <form id="messagingSendForm" class="messaging-compose">
+                    <button type="button" id="messagingEmojiBtn" class="messaging-tool-btn" title="Emoji"><i class="far fa-face-smile"></i></button>
+                    <button type="button" id="messagingAttachBtn" class="messaging-tool-btn" title="Lampiran" disabled><i class="fas fa-paperclip"></i></button>
+                    <input id="messagingFileInput" type="file" accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" hidden>
+                    <div id="messagingEmojiPanel" class="messaging-emoji-panel" hidden></div>
+                    <input id="messagingTextInput" placeholder="Tulis pesan terenkripsi..." disabled>
+                    <button type="submit" disabled id="messagingSendBtn"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </section>
+        </div>
+
+        <section id="messagingCallPanel" class="messaging-call-panel" hidden>
+            <div class="messaging-call-card">
+                <header>
+                    <div>
+                        <strong id="messagingCallTitle">Panggilan</strong>
+                        <span id="messagingCallStatus">Menghubungkan...</span>
+                    </div>
+                    <button type="button" id="messagingEndCallBtn"><i class="fas fa-phone-slash"></i></button>
+                </header>
+                <div class="messaging-call-videos">
+                    <video id="messagingRemoteVideo" autoplay playsinline></video>
+                    <video id="messagingLocalVideo" autoplay playsinline muted></video>
+                </div>
+            </div>
+        </section>
+
+        <section id="messagingFilePreviewModal" class="messaging-modal" hidden>
+            <div class="messaging-modal-card">
+                <header>
+                    <strong>Preview Lampiran</strong>
+                    <button type="button" id="messagingCancelFileBtn"><i class="fas fa-xmark"></i></button>
+                </header>
+                <div id="messagingFilePreviewBody" class="messaging-file-preview"></div>
+                <footer>
+                    <button type="button" id="messagingCancelFileFooterBtn">Batal</button>
+                    <button type="button" id="messagingConfirmFileBtn"><i class="fas fa-paper-plane"></i> Kirim</button>
+                </footer>
+            </div>
+        </section>
+
+        <section id="messagingFriendModal" class="messaging-modal" hidden>
+            <div class="messaging-modal-card">
+                <header>
+                    <div>
+                        <strong>Tambah Teman</strong>
+                        <p>Masukkan ID pengguna untuk membuka direct chat.</p>
+                    </div>
+                    <button type="button" data-close-modal="messagingFriendModal"><i class="fas fa-xmark"></i></button>
+                </header>
+                <form id="messagingFriendForm" class="messaging-add-friend">
+                    <input id="messagingFriendId" placeholder="Contoh: chen-fellow" autocomplete="off">
+                    <button type="submit"><i class="fas fa-user-plus"></i> Tambah</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="messagingRoomModal" class="messaging-modal" hidden>
+            <div class="messaging-modal-card">
+                <header>
+                    <div>
+                        <strong>Buat Group Chat</strong>
+                        <p>Tambahkan beberapa ID teman yang sudah dikenal.</p>
+                    </div>
+                    <button type="button" data-close-modal="messagingRoomModal"><i class="fas fa-xmark"></i></button>
+                </header>
+                <form id="messagingRoomForm" class="messaging-add-room">
+                    <input id="messagingRoomTitleInput" placeholder="Judul group">
+                    <input id="messagingRoomMembers" placeholder="ID member, pisahkan koma">
+                    <button type="submit"><i class="fas fa-users"></i> Buat Group</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="messagingIncomingCallModal" class="messaging-modal" hidden>
+            <div class="messaging-modal-card messaging-incoming-card">
+                <div class="messaging-incoming-icon"><i class="fas fa-phone"></i></div>
+                <h2 id="messagingIncomingTitle">Panggilan Masuk</h2>
+                <p id="messagingIncomingMeta">Seseorang memanggil kamu.</p>
+                <footer>
+                    <button type="button" id="messagingRejectCallBtn" class="messaging-danger-btn"><i class="fas fa-phone-slash"></i> Tolak</button>
+                    <button type="button" id="messagingAcceptCallBtn"><i class="fas fa-phone"></i> Terima</button>
+                </footer>
+            </div>
+        </section>
+    </main>
+</section>

@@ -136,13 +136,56 @@ function setupDatabase() {
 }
 
 function setupReTestDatabase() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  [SHEETS.retestAccess, SHEETS.retestSessions].forEach(name => {
-    const sheet = ss.getSheetByName(name) || ss.insertSheet(name);
-    ensureSchemaHeaders(sheet, SCHEMA[name]);
-    sheet.setFrozenRows(1);
+  return withSpreadsheetRetry(function() {
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const accessSheet = ensureReTestSheet(ss, SHEETS.retestAccess);
+    ensureReTestSheet(ss, SHEETS.retestSessions);
+    ensureReTestDemoAccessInSheet(accessSheet);
+    SpreadsheetApp.flush();
+    return { status: 'success', message: 'Database Re-Test siap digunakan.' };
   });
-  ensureReTestDemoAccess();
+}
+
+function ensureReTestSheet(ss, sheetName) {
+  const sheet = ss.getSheetByName(sheetName) || ss.insertSheet(sheetName);
+  ensureSchemaHeaders(sheet, SCHEMA[sheetName]);
+  sheet.setFrozenRows(1);
+  return sheet;
+}
+
+function ensureReTestDemoAccessInSheet(sheet) {
+  const headers = getHeaders(sheet);
+  const accessIdIndex = headers.indexOf('access_id');
+  const values = sheet.getLastRow() > 1 ? sheet.getDataRange().getValues() : [];
+  const accessId = 'rt_demo_3276010101010001';
+  const exists = values.slice(1).some(row => String(row[accessIdIndex]) === accessId);
+  if (exists) return;
+  const now = new Date().toISOString();
+  const demo = {
+    access_id: accessId,
+    nik: '3276010101010001',
+    nama_lengkap: 'Alya Putri Demo',
+    access_code: 'RT-DEMO-2026',
+    status: 'active',
+    notes: 'Akun testing Re-Test',
+    created_at: now,
+    updated_at: now,
+    used_at: ''
+  };
+  sheet.appendRow(headers.map(header => demo[header] !== undefined ? demo[header] : ''));
+}
+
+function withSpreadsheetRetry(callback) {
+  let lastError;
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    try {
+      return callback();
+    } catch (error) {
+      lastError = error;
+      if (attempt < 4) Utilities.sleep(attempt * 1500);
+    }
+  }
+  throw lastError;
 }
 
 function seedDefaults() {
