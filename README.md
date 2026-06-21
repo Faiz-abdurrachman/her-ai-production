@@ -1,33 +1,178 @@
-# Woman in Tech - HerAI Fellowship 2026
+# HerAI Fellowship SuperApp
 
-## Dokumentasi untuk Developer Lanjutan
+Control panel, participant portal, learning dashboard, assessment tools, messaging prototype, and meeting infrastructure for HerAI Fellowship.
 
-Dokumen handover terbaru untuk programmer/maintainer ada di:
+## Current Scope
 
-- `docs/DEVELOPER_HANDOVER_AND_ROADMAP.md`
-- `docs/SECURITY_HARDENING_REPORT.md`
+This repository is the development workspace for the HerAI Fellowship web app. It contains:
 
-Dokumen tersebut berisi status fitur terkini, cara menjalankan service, struktur backend/frontend, kontrak database/API, batasan sistem, roadmap pengembangan berikutnya, dan catatan hardening keamanan.
+- Public SPA pages for registration, announcement, participant login, profile, competency test, re-test, projects, and meetings.
+- Admin dashboard for selection workflow, AI pre-screening, scoring, announcements, global settings, learning content, re-test, and meeting room controls.
+- Participant dashboard with modules, AI Fundamentals learning pages, profile dropdown, masked leaderboard, dynamic dashboard data, and under-development placeholders.
+- Google Apps Script backend contract in `gas/Code.gs`.
+- Node gateway in `server.js` for local proxying, GAS access, and static SPA serving.
+- Go services for messaging/signaling/participant-portal experiments.
+- QA smoke automation and documentation for handover, GAS contracts, and security hardening.
+
+## Repository Map
+
+```text
+.
+├── index.html                         # SPA shell and route registry
+├── server.js                          # Local Node gateway/static server
+├── gas/Code.gs                        # Google Apps Script backend
+├── pages/
+│   ├── dashboard/                     # Admin dashboard pages
+│   └── frontend/                      # Public, participant, meeting, and learning pages
+├── js/
+│   ├── dashboard/                     # Admin-side scripts
+│   └── frontend/                      # Public/participant-side scripts
+├── css/frontend/                      # Frontend and participant dashboard styling
+├── assets/branding/                   # HerAI logo and participant portal visual assets
+├── participant-portal/                # Go service for participant portal settings
+├── messaging/                         # Go messaging prototype
+├── signaling/                         # Go meeting signaling service
+├── docs/                              # Handover, GAS/API contracts, security notes
+├── scripts/qa-smoke.mjs               # Smoke QA automation
+└── reports/                           # Latest QA output
+```
+
+## Main Features
+
+### Admin Dashboard
+
+- Stage control for fellowship workflow.
+- Registration database, anti-duplicate checks, and participant profile popups.
+- AI pre-screening and leaderboard selection workflow.
+- Stage 1, Stage 2 competency test, and re-test monitoring.
+- Manual decision controls for selection results.
+- Announcement configuration and countdown behavior.
+- Global settings for registration, announcement, competency test, participant login, and participant dashboard pages.
+- Learning content management foundation for modules, submodules, lessons, exercises, quizzes, discussion, and publish toggles.
+- Audit trail, RBAC from `dashboard_admin`, asset/link management, bootcamp/final project/certificate placeholders.
+- Meeting room control and server monitor.
+
+### Participant Portal
+
+- Participant login page using NIK and password.
+- Participant dashboard at `#/participant-dashboard`.
+- Sidebar with persistent expand/minimize behavior.
+- Topbar profile dropdown with account settings and logout.
+- Dashboard sections for learning progress, fellowship journey, upcoming events, activity trail, masked leaderboard, and specialization tracks.
+- Under-development page for unfinished features without public navbar/footer.
+- Modules catalog at `#/participant-modules`.
+- AI Fundamentals page at `#/participant-ai-fundamentals`.
+- Intro AI learning flow with separate material, exercise, quiz, and discussion pages.
+
+### Assessment
+
+- Stage 2 competency test flow.
+- Re-test flow with NIK + unique access code.
+- Admin pages for access generation, live monitoring, and visual result summaries.
+- GAS-backed sheets for attempts, answers, weighted scoring, access codes, and logs.
+
+### Communication And Meeting
+
+- Messaging prototype with friend/group concepts, attachment preview, emoji, and call UI foundation.
+- Meeting experience with room code, preview camera/mic, chat, participant list, raise hand, share screen controls, and LiveKit/SFU exploration.
+- `signaling/` keeps the Gorilla WebSocket service for room signaling.
+
+## Local Development
+
+Run the SPA and Node gateway:
+
+```bash
+node server.js
+```
+
+Open:
+
+```text
+http://127.0.0.1:3000/
+```
+
+Common routes:
+
+```text
+http://127.0.0.1:3000/#/dashboard
+http://127.0.0.1:3000/#/participant-login
+http://127.0.0.1:3000/#/participant-dashboard
+http://127.0.0.1:3000/#/participant-modules
+http://127.0.0.1:3000/#/participant-ai-fundamentals
+http://127.0.0.1:3000/#/meeting
+```
+
+Run signaling service if testing local WebRTC signaling:
+
+```bash
+cd signaling
+go mod tidy
+go run .
+```
+
+Default local signaling endpoint:
+
+```text
+ws://127.0.0.1:8080/ws
+```
+
+Run messaging prototype:
+
+```bash
+cd messaging
+go mod tidy
+go run .
+```
+
+## Environment Variables
+
+Set these in local `.env` or deployment dashboard as needed:
+
+```bash
+GAS_WEB_APP_URL=https://script.google.com/macros/s/.../exec
+LIVEKIT_URL=wss://your-livekit-cloud-url
+LIVEKIT_API_KEY=your-livekit-api-key
+LIVEKIT_API_SECRET=your-livekit-api-secret
+```
+
+Notes:
+
+- Do not commit real secrets into the repository.
+- `server.js` exposes `/__gas` as the local gateway to GAS when `GAS_WEB_APP_URL` is configured.
+- If `GAS_WEB_APP_URL` is missing, dashboard/API calls through `/__gas` will fail with configuration errors.
+
+## Google Apps Script Backend
+
+Backend source lives in:
+
+```text
+gas/Code.gs
+```
+
+Recommended flow:
+
+1. Open the target Google Spreadsheet.
+2. Go to `Extensions > Apps Script`.
+3. Paste or update `gas/Code.gs`.
+4. Deploy as Web App.
+5. Put the Web App URL into `GAS_WEB_APP_URL`.
+
+Important GAS documentation:
+
+- `docs/gas-learning-content-contract.md`
+- `docs/gas-participant-dashboard-contract.md`
+
+The GAS layer currently covers registration, admin login/RBAC, AI screening result reads, selection status, competency and re-test data, settings, participant dashboard data, learning content scaffolding, audit trail, and utility setup functions.
 
 ## QA Automation
 
-Automation smoke QA tersedia di:
-
-- `scripts/qa-smoke.mjs`
-
-Jalankan dari root project:
+Smoke QA script:
 
 ```bash
 node scripts/qa-smoke.mjs
 ```
 
-Output report akan dibuat otomatis ke:
-
-- `reports/qa-report-latest.md`
-- `reports/qa-report-latest.json`
-- `reports/qa-report-<timestamp>.md`
-
-Untuk live endpoint check, nyalakan service lokal atau override URL:
+Optional endpoint override:
 
 ```bash
 QA_FRONTEND_URL=http://127.0.0.1:3000 \
@@ -37,225 +182,44 @@ GAS_WEB_APP_URL=https://script.google.com/macros/s/.../exec \
 node scripts/qa-smoke.mjs
 ```
 
-## Cara Menjalankan Aplikasi
+Latest outputs:
 
-### Opsi 1: Menggunakan Live Server (VS Code)
-1. Install ekstensi "Live Server" di VS Code
-2. Klik kanan pada `index.html`
-3. Pilih "Open with Live Server"
+- `reports/qa-report-latest.md`
+- `reports/qa-report-latest.json`
 
-### Opsi 2: Menggunakan Python HTTP Server
-```bash
-# Jalankan di folder root project
-python -m http.server 8000
-```
-Buka browser: `http://localhost:8000`
+## Deployment Notes
 
-### Opsi 3: Menggunakan Node.js http-server
-```bash
-# Install http-server (sekali saja)
-npm install -g http-server
+### Frontend
 
-# Jalankan di folder root project
-http-server -p 8000
-```
-Buka browser: `http://localhost:8000`
+The SPA can be deployed as a static site, but production should preserve hash routing and serve `index.html` for fallback routing.
 
-### Opsi 4: Deploy ke Hosting dengan Apache
-Upload semua file termasuk `.htaccess` ke hosting Anda.
-File `.htaccess` akan menangani routing SPA secara otomatis.
+### Render
 
-## Perbaikan yang Sudah Dilakukan
+`render.yaml` contains service definitions used during development. Ensure every required environment variable is configured in Render before redeploying.
 
-### 1. Dashboard Tidak Muncul ✅
-- Menambahkan delay 100ms untuk memastikan DOM sudah siap
-- Menambahkan console log untuk debugging
-- Memperbaiki selector element dashboard
+### Meeting Services
 
-### 2. Dynamic Field di Register ✅
-- Menggunakan `querySelectorAll` langsung pada parent element
-- Memperbaiki selector dari class ke query yang lebih robust
-- Menambahkan console log untuk debugging
-- Auto-trigger event saat halaman dimuat
+For production meeting usage:
 
-### 3. Refresh 404 ✅
-- Menambahkan `<base href="/">` di index.html
-- Membuat file `.htaccess` untuk Apache server
-- Semua route akan di-redirect ke index.html
+- Use `wss://`, not `ws://`.
+- Avoid `127.0.0.1` in shared links.
+- Host long-running WebSocket/SFU services on infrastructure that supports persistent connections.
+- For LiveKit, keep API key/secret in backend environment variables only.
 
-## Troubleshooting
+## Documentation
 
-### Jika Dashboard Masih Tidak Muncul:
-1. Buka Console Browser (F12)
-2. Lihat log yang dimulai dengan emoji (🔵, ✅, ❌)
-3. Pastikan tidak ada error JavaScript
+Developer-facing documents:
 
-### Jika Dynamic Field Tidak Berfungsi:
-1. Buka Console Browser
-2. Cari log "📝 Register Logic Initialized"
-3. Periksa apakah semua element terdeteksi (true)
+- `docs/DEVELOPER_HANDOVER_AND_ROADMAP.md`
+- `docs/SECURITY_HARDENING_REPORT.md`
+- `docs/gas-learning-content-contract.md`
+- `docs/gas-participant-dashboard-contract.md`
 
-### Jika Masih 404 Saat Refresh:
-- **Python/Node Server**: Tidak support .htaccess, tapi aplikasi tetap berfungsi jika navigasi dari home
-- **Apache Server**: Pastikan file .htaccess ter-upload dan mod_rewrite aktif
-- **Nginx**: Perlu konfigurasi berbeda (lihat dokumentasi Nginx)
+## Development Hygiene
 
-## Struktur File
-```
-woman-in-tech-fix/
-├── .htaccess              # Apache rewrite rules (NEW)
-├── index.html             # Entry point dengan <base href="/">
-├── assets/                # Gambar dan media
-├── components/            # Navbar & Footer
-├── css/                   # Semua stylesheet
-├── js/                    # JavaScript files
-│   ├── router.js          # SPA routing (FIXED)
-│   ├── dashboard.js       # Dashboard logic (FIXED)
-│   ├── register.js        # Register form logic (FIXED)
-│   ├── main.js
-│   ├── twibbon.js
-│   └── data-penduduk.js
-└── pages/                 # HTML pages
-    ├── home.html
-    ├── dashboard.html
-    ├── register.html
-    └── ...
-```
-
-## Fitur Utama
-
-- ✅ Single Page Application (SPA) dengan custom routing
-- ✅ Dashboard admin dengan autentikasi
-- ✅ Stage Control untuk mengatur fase acara end-to-end
-- ✅ Form registrasi dengan validasi NIK otomatis
-- ✅ Dynamic form fields berdasarkan status
-- ✅ Essay word counter (max 500 kata)
-- ✅ Modal Terms & Conditions
-- ✅ Integrasi Google Apps Script
-- ✅ Responsive design
-
-## Modul Control Panel
-
-- Overview
-- Stage Control
-- Seleksi Tahap 1
-- Seleksi Tahap 2 / Competency Test
-- AI Pre-Screening
-- Sistem Skoring
-- Video Conference berbasis WebRTC + Gorilla WebSocket signaling
-- Announcement Manager via Global Settings
-- Communication Engine
-- Bootcamp Control
-- Final Project Tracker
-- Certificate Manager
-- Assets & Links
-- Audit Trail
-- RBAC Admin
-- Global Settings
-
-## Setup Database Google Apps Script
-
-Backend GAS siap pakai ada di `gas/Code.gs`.
-
-1. Buat Google Spreadsheet kosong.
-2. Buka `Extensions > Apps Script`.
-3. Paste isi `gas/Code.gs`.
-4. Isi `SPREADSHEET_ID` dengan ID spreadsheet.
-5. Jalankan `setupDatabase()` sekali untuk membuat sheet:
-   - `Participants`
-   - `Admins`
-   - `AuditTrail`
-   - `Settings`
-   - `Stages`
-   - `BootcampSessions`
-   - `Attendance`
-   - `FinalProjects`
-   - `Certificates`
-   - `Assets`
-6. Deploy sebagai Web App, lalu ganti URL GAS di file JavaScript dashboard/frontend jika URL deployment berubah.
-
-## Setup Video Conference Signaling
-
-Video conference menggunakan WebRTC untuk audio/video peer-to-peer dan service Go kecil untuk signaling room. Service ini memakai `github.com/gorilla/websocket`.
-
-1. Install Go 1.22+.
-2. Jalankan SPA seperti biasa:
-   ```bash
-   node server.js
-   ```
-3. Jalankan signaling server di terminal kedua:
-   ```bash
-   cd signaling
-   go mod tidy
-   go run .
-   ```
-4. Buka dashboard admin:
-   `http://127.0.0.1:3000/#/video-conference`
-5. Pastikan field `Signaling WebSocket URL` mengarah ke:
-   `ws://127.0.0.1:8080/ws`
-6. Klik `Generate Room` untuk membuat kode 12 karakter seperti `ABCD-EFGH-JK2M`.
-7. Klik `Copy Link` dan kirim ke peserta. Peserta juga bisa membuka:
-   `http://127.0.0.1:3000/#/meeting`
-   lalu memasukkan kode room secara manual.
-
-Catatan: untuk produksi HTTPS, WebSocket perlu memakai `wss://` dan signaling server harus berada di domain/sertifikat yang aman.
-
-### Deploy Video Conference
-
-- Frontend SPA bisa dideploy ke Vercel sebagai static app.
-- Link undangan room sekarang ikut membawa parameter `signal`, sehingga admin bisa mengisi `Signaling WebSocket URL` produksi seperti `wss://meet-signal.domainmu.com/ws` sebelum menekan `Copy Link`.
-- Jangan gunakan `ws://127.0.0.1:8080/ws` di production, karena itu hanya menunjuk komputer masing-masing peserta.
-- Vercel Functions/Go Runtime cocok untuk HTTP handler, tetapi WebSocket room membutuhkan koneksi persistent. Jika deploy di Vercel belum menyediakan runtime serverful persistent untuk project ini, taruh service `signaling/` di host yang memang support long-running process/WebSocket seperti Fly.io, Railway, Render, VPS, atau container service, lalu arahkan field `Signaling WebSocket URL` ke endpoint `wss://.../ws`.
-
-### Deploy Signaling ke Render
-
-Repo ini sudah menyediakan `render.yaml` untuk service Go `signaling/`.
-
-1. Push repo ke GitHub/GitLab/Bitbucket.
-2. Buka Render Dashboard.
-3. Pilih `New` -> `Blueprint`, lalu pilih repo ini.
-4. Render akan membaca `render.yaml` dan membuat web service `herai-signaling`.
-5. Setelah deploy selesai, cek:
-   `https://<nama-service>.onrender.com/healthz`
-6. Gunakan endpoint WebSocket ini di dashboard admin:
-   `wss://<nama-service>.onrender.com/ws`
-7. Di halaman `Video Conference`, isi `Signaling WebSocket URL` dengan endpoint `wss://.../ws`, klik `Generate Room`, lalu `Copy Link`.
-
-Catatan: Render free instance bisa sleep saat tidak aktif. Untuk acara live yang penting, gunakan plan berbayar agar signaling tidak cold start saat peserta join.
-
-### Uji Multi-User dengan Ngrok
-
-Untuk uji banyak user sebelum deploy:
-
-1. Jalankan SPA lokal:
-   ```bash
-   node server.js
-   ```
-2. Jalankan signaling:
-   ```bash
-   cd signaling
-   GOCACHE=/private/tmp/go-build GOPATH=/private/tmp/go-path go run .
-   ```
-3. Buat tunnel frontend:
-   ```bash
-   ngrok http 3000
-   ```
-4. Buat tunnel signaling:
-   ```bash
-   ngrok http 8080
-   ```
-5. Di admin `Video Conference`, isi `Signaling WebSocket URL` dengan URL tunnel signaling versi WebSocket:
-   `wss://<domain-ngrok-signaling>/ws`
-6. Klik `Generate Room`, lalu `Copy Link`. Link itu akan membawa room id, judul room, dan URL signaling yang benar untuk peserta eksternal.
-
-## Browser Support
-- Chrome (recommended)
-- Firefox
-- Safari
-- Edge
-
-## Catatan Penting
-- Dashboard memerlukan login (cek file dashboard.js untuk credentials)
-- Form register terhubung ke Google Apps Script
-- Semua navigasi menggunakan JavaScript routing
-- Refresh tetap bekerja dengan .htaccess di Apache server
+- Keep local runtime files out of commits.
+- Do not commit `.env`, secrets, spreadsheet credentials, or PATs.
+- Update `gas/Code.gs` and the matching contract docs together when API actions change.
+- Keep participant dashboard pages under `pages/frontend/fellow-dashboard/`.
+- Keep participant dashboard scripts under `js/frontend/fellow-dashboard/`.
+- Prefer backend/GAS actions for data-sensitive logic; browser JS should remain UI-oriented.
