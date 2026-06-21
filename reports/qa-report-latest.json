@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-13T09:33:29.270Z",
+  "generated_at": "2026-06-14T17:37:02.314Z",
   "summary": {
     "PASS": 44,
     "WARN": 6,
-    "FAIL": 0
+    "FAIL": 1
   },
   "config": {
     "frontendUrl": "http://127.0.0.1:3000",
@@ -95,7 +95,7 @@
       "area": "SPA Routes",
       "check": "Route count",
       "status": "PASS",
-      "detail": "39 routes detected"
+      "detail": "41 routes detected"
     },
     {
       "area": "SPA Routes",
@@ -171,6 +171,12 @@
     },
     {
       "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/settings.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
       "check": "js/frontend/meeting.js",
       "status": "PASS",
       "detail": "Syntax OK"
@@ -232,14 +238,14 @@
     {
       "area": "Go Services",
       "check": "signaling: go test ./...",
-      "status": "PASS",
-      "detail": "?   \therai-signaling\t[no test files]"
+      "status": "FAIL",
+      "detail": "# github.com/pion/webrtc/v4\ncompile: writing output: write $WORK/b190/_pkg_.a: no space left on device"
     },
     {
       "area": "GAS",
       "check": "Sheet registry count",
       "status": "PASS",
-      "detail": "59 sheets detected"
+      "detail": "58 sheets detected"
     },
     {
       "area": "GAS",

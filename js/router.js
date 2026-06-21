@@ -21,9 +21,33 @@ const router = {
         "/leaderboard": "/pages/frontend/leaderboard.html",
         "/graduation": "/pages/frontend/graduation.html",
         "/register": "/pages/frontend/register.html",
-        "/profile": "/pages/frontend/profile.html",
+        "/profile": "/pages/frontend/participant-login.html",
+        "/participant-login": "/pages/frontend/participant-login.html",
+        "/participant-profile": "/pages/frontend/fellow-dashboard/profile.html",
+        "/fellow-dashboard": "/pages/frontend/fellow-dashboard.html",
+        "/participant-dashboard": "/pages/frontend/fellow-dashboard/dashboard.html",
+        "/participant-modules": "/pages/frontend/fellow-dashboard/modules.html",
+        "/participant-ai-fundamentals": "/pages/frontend/fellow-dashboard/ai-fundamentals.html",
+        "/participant-ai-intro": "/pages/frontend/fellow-dashboard/ai-fundamental/01-pengantar-ai/materi.html",
+        "/participant-ai-intro-practice": "/pages/frontend/fellow-dashboard/ai-fundamental/01-pengantar-ai/latihan.html",
+        "/participant-ai-intro-quiz": "/pages/frontend/fellow-dashboard/ai-fundamental/01-pengantar-ai/kuis.html",
+        "/participant-ai-intro-discussion": "/pages/frontend/fellow-dashboard/ai-fundamental/01-pengantar-ai/diskusi.html",
+        "/participant-ai-history": "/pages/frontend/fellow-dashboard/ai-fundamental/01-pengantar-ai/lesson.html",
+        "/participant-ai-types": "/pages/frontend/fellow-dashboard/ai-fundamental/01-pengantar-ai/lesson.html",
+        "/participant-ai-components": "/pages/frontend/fellow-dashboard/ai-fundamental/01-pengantar-ai/lesson.html",
+        "/participant-ai-applications": "/pages/frontend/fellow-dashboard/ai-fundamental/01-pengantar-ai/lesson.html",
+        "/participant-ai-summary": "/pages/frontend/fellow-dashboard/ai-fundamental/01-pengantar-ai/lesson.html",
+        "/participant-mentor": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-tasks": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-projects": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-events": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-community": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-certificates": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-leaderboard": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-help": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-settings": "/pages/frontend/fellow-dashboard/under-development.html",
         "/meeting": "/pages/frontend/meeting.html",
-        "/messaging": "/pages/frontend/messaging.html",
+        "/messaging": "/pages/frontend/messaging-closed.html",
         "/competency-test": "/pages/frontend/competency-test.html",
         "/retest": "/pages/frontend/retest.html",
         "/dashboard": "/pages/dashboard/dashboard.html",
@@ -47,6 +71,7 @@ const router = {
         "/certificates": "/pages/dashboard/certificates.html",
         "/audit-trail": "/pages/dashboard/audit-trail.html",
         "/global-settings": "/pages/dashboard/global-settings.html", 
+        "/learning-content": "/pages/dashboard/learning-content.html",
         "/rbac": "/pages/dashboard/rbac.html",
         "/assets": "/pages/dashboard/assets.html" 
     },
@@ -63,6 +88,29 @@ const router = {
         "/x/g5d1u7": "/graduation",
         "/x/r9k2e4": "/register",
         "/x/u3p7v5": "/profile",
+        "/x/fd6p1/profile": "/participant-profile",
+        "/x/fd6p0": "/fellow-dashboard",
+        "/x/fd6p1": "/participant-dashboard",
+        "/x/fd6p1/m": "/participant-modules",
+        "/x/fd6p1/ai": "/participant-ai-fundamentals",
+        "/x/fd6p1/ai/intro": "/participant-ai-intro",
+        "/x/fd6p1/ai/intro/practice": "/participant-ai-intro-practice",
+        "/x/fd6p1/ai/intro/quiz": "/participant-ai-intro-quiz",
+        "/x/fd6p1/ai/intro/discussion": "/participant-ai-intro-discussion",
+        "/x/fd6p1/ai/history": "/participant-ai-history",
+        "/x/fd6p1/ai/types": "/participant-ai-types",
+        "/x/fd6p1/ai/components": "/participant-ai-components",
+        "/x/fd6p1/ai/applications": "/participant-ai-applications",
+        "/x/fd6p1/ai/summary": "/participant-ai-summary",
+        "/x/fd6p1/mt": "/participant-mentor",
+        "/x/fd6p1/t": "/participant-tasks",
+        "/x/fd6p1/p": "/participant-projects",
+        "/x/fd6p1/e": "/participant-events",
+        "/x/fd6p1/c": "/participant-community",
+        "/x/fd6p1/cert": "/participant-certificates",
+        "/x/fd6p1/l": "/participant-leaderboard",
+        "/x/fd6p1/h": "/participant-help",
+        "/x/fd6p1/s": "/participant-settings",
         "/x/m7k9p2": "/meeting",
         "/x/msg2e": "/messaging",
         "/x/t4c8n6": "/competency-test",
@@ -88,6 +136,7 @@ const router = {
         "/x/cr2t8": "/certificates",
         "/x/at6l4": "/audit-trail",
         "/x/gs3n9": "/global-settings",
+        "/x/lc2m4": "/learning-content",
         "/x/rb8a2": "/rbac",
         "/x/as4e6": "/assets"
     },
@@ -194,6 +243,32 @@ const router = {
         const navContainer = document.getElementById("navbar-container");
         const footerContainer = document.getElementById("footer-container");
         const isMessagingPage = path === "/messaging";
+        const isParticipantLoginPage = path === "/profile" || path === "/participant-login";
+        const participantDashboardPages = [
+            "/participant-dashboard",
+            "/participant-modules",
+            "/participant-ai-fundamentals",
+            "/participant-ai-intro",
+            "/participant-ai-intro-practice",
+            "/participant-ai-intro-quiz",
+            "/participant-ai-intro-discussion",
+            "/participant-ai-history",
+            "/participant-ai-types",
+            "/participant-ai-components",
+            "/participant-ai-applications",
+            "/participant-ai-summary",
+            "/participant-profile",
+            "/participant-mentor",
+            "/participant-tasks",
+            "/participant-projects",
+            "/participant-events",
+            "/participant-community",
+            "/participant-certificates",
+            "/participant-leaderboard",
+            "/participant-help",
+            "/participant-settings"
+        ];
+        const isParticipantDashboardPage = participantDashboardPages.includes(path);
         const adminPages = [
             "/dashboard", 
             "/dashboard/seleksi", 
@@ -211,6 +286,7 @@ const router = {
             "/certificates",
             "/audit-trail", 
             "/global-settings", 
+            "/learning-content",
             "/rbac", 
             "/assets"
         ];
@@ -220,6 +296,8 @@ const router = {
             if (!routeUrl) throw new Error("404");
 
             document.body.classList.toggle("messaging-page-active", isMessagingPage);
+            document.body.classList.toggle("participant-login-active", isParticipantLoginPage);
+            document.body.classList.toggle("participant-dashboard-active", isParticipantDashboardPage);
 
             if (adminPages.includes(path) && path !== "/dashboard" && typeof window.canAdminAccessPath === "function" && !window.canAdminAccessPath(path)) {
                 appContent.innerHTML = `
@@ -270,8 +348,8 @@ const router = {
                     actionHref: "#/home",
                     actionLabel: "Kembali ke Beranda"
                 });
-                if (navContainer) navContainer.style.display = "block";
-                if (footerContainer) footerContainer.style.display = "block";
+                if (navContainer) navContainer.style.display = "none";
+                if (footerContainer) footerContainer.style.display = "none";
                 this.currentPath = path;
                 return;
             }
@@ -303,7 +381,7 @@ const router = {
                 // LAYOUT MANAGEMENT: Atur Tampilan Navbar & Footer
                 // ==========================================
                 // Daftar SEMUA halaman Admin Panel yang NGGAK boleh ada Navbar/Footer Publik
-                if (adminPages.includes(path) || isMessagingPage) {
+                if (adminPages.includes(path) || isMessagingPage || isParticipantDashboardPage || isParticipantLoginPage) {
                     if (navContainer) navContainer.style.display = "none";
                     if (footerContainer) footerContainer.style.display = "none";
                     if (adminPages.includes(path)) {
@@ -322,8 +400,8 @@ const router = {
                 // 1. Logika Register & Twibbon
                 if (path === "/register" && typeof window.initRegisterLogic === "function") {
                     window.initRegisterLogic();
-                } else if (path === "/profile" && typeof window.initParticipantProfile === "function") {
-                    window.initParticipantProfile();
+                } else if ((path === "/profile" || path === "/participant-login") && typeof window.initParticipantLogin === "function") {
+                    window.initParticipantLogin();
                 } else if (path === "/competency-test" && typeof window.initCompetencyTest === "function") {
                     window.initCompetencyTest();
                 } else if (path === "/retest" && typeof window.initCompetencyTest === "function") {
@@ -332,6 +410,21 @@ const router = {
                     window.initMeetingRoom();
                 } else if (path === "/messaging" && typeof window.initMessagingPage === "function") {
                     window.initMessagingPage();
+                } else if (path === "/participant-dashboard" && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("dashboard");
+                } else if (path === "/participant-modules" && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                } else if (path === "/participant-ai-fundamentals" && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                } else if (path === "/participant-ai-intro" && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                } else if ((path === "/participant-ai-intro-practice" || path === "/participant-ai-intro-quiz" || path === "/participant-ai-intro-discussion" || path.startsWith("/participant-ai-")) && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                } else if (path === "/participant-profile" && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("profile");
+                    if (typeof window.initParticipantProfileDashboard === "function") window.initParticipantProfileDashboard();
+                } else if (path.startsWith("/participant-") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("under-development");
                 } else if (path === "/projects" && typeof window.initProjectsPage === "function") {
                     window.initProjectsPage();
                 } else if (path === "/twibbon" && typeof window.initTwibbon === "function") {
@@ -378,6 +471,8 @@ const router = {
                 // 5. Logika System Admin
                 else if (path === "/global-settings" && typeof window.initGlobalSettings === "function") {
                     window.initGlobalSettings();
+                } else if (path === "/learning-content" && typeof window.initLearningContentManager === "function") {
+                    window.initLearningContentManager();
                 } else if (path === "/audit-trail" && typeof window.initAuditTrail === "function") {
                     window.initAuditTrail();
                 } else if (path === "/rbac" && typeof window.initRbac === "function") {
@@ -397,12 +492,14 @@ const router = {
             }
 
             // Halaman publik tetap mulai dari atas; halaman admin menjaga konteks panel samping.
-            if (!adminPages.includes(path) && !isMessagingPage) {
+            if (!adminPages.includes(path) && !isMessagingPage && !isParticipantDashboardPage) {
                 window.scrollTo({ top: 0, behavior: 'instant' });
             }
 
         } catch (error) {
             document.body.classList.remove("messaging-page-active");
+            document.body.classList.remove("participant-login-active");
+            document.body.classList.remove("participant-dashboard-active");
             console.error("Router Error:", error);
             // Tampilan Halaman 404 Fallback
             appContent.innerHTML = `

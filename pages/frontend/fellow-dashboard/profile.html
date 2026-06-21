@@ -1,0 +1,77 @@
+<section class="fellow-dashboard fellow-profile-page" data-fellow-page="profile">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+    </aside>
+
+    <main class="fellow-main">
+        <header class="fellow-topbar">
+            <div>
+                <h1>Profil Peserta</h1>
+                <p>Kelola informasi dasar peserta. Untuk saat ini data detail tetap kami keep dan belum ditampilkan penuh.</p>
+            </div>
+            <div class="fellow-actions">
+                <a href="#/participant-dashboard" class="fellow-icon-button" aria-label="Kembali ke dashboard"><i class="fas fa-house"></i></a>
+                <button type="button" class="fellow-user-button" id="participantProfileLogout">
+                    <span class="avatar-img"></span>
+                    <span><strong id="participantProfileNameTop">Aisyah Putri</strong><small>Logout</small></span>
+                    <i class="fas fa-power-off"></i>
+                </button>
+            </div>
+        </header>
+
+        <section class="participant-profile-shell">
+            <div class="participant-profile-hero">
+                <span class="avatar-img"></span>
+                <div>
+                    <span class="profile-badge">HerAI Fellow Profile</span>
+                    <h2 id="participantProfileName">Aisyah Putri</h2>
+                    <p id="participantProfileMeta">Fellow • Foundation Phase</p>
+                </div>
+            </div>
+            <div class="participant-profile-grid">
+                <article>
+                    <i class="fas fa-id-card"></i>
+                    <span>NIK</span>
+                    <strong id="participantProfileNik">-</strong>
+                </article>
+                <article>
+                    <i class="fas fa-envelope"></i>
+                    <span>Email</span>
+                    <strong id="participantProfileEmail">-</strong>
+                </article>
+                <article>
+                    <i class="fas fa-route"></i>
+                    <span>Status Program</span>
+                    <strong id="participantProfileStage">Registered</strong>
+                </article>
+            </div>
+            <section class="participant-profile-panel">
+                <h3>Informasi Profil</h3>
+                <p>Detail lengkap pendaftaran, task, mentoring, dan dokumen peserta akan disambungkan bertahap dari database peserta. Untuk sekarang halaman ini disiapkan sebagai pusat profil peserta setelah login NIK.</p>
+                <a href="#/participant-modules">Lanjut ke Modul</a>
+            </section>
+        </section>
+    </main>
+</section>

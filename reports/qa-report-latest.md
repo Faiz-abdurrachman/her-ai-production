@@ -1,12 +1,12 @@
 # HerAI QA Smoke Report
 
-Generated: 2026-06-13T09:33:29.270Z
+Generated: 2026-06-14T17:37:02.314Z
 
 ## Summary
 
 - PASS: 44
 - WARN: 6
-- FAIL: 0
+- FAIL: 1
 - Frontend URL: http://127.0.0.1:3000
 - Messaging URL: http://127.0.0.1:8091
 - Signaling URL: http://127.0.0.1:8080
@@ -14,9 +14,14 @@ Generated: 2026-06-13T09:33:29.270Z
 
 ## Release Gate
 
-Status: PASS WITH WARNINGS ALLOWED
+Status: BLOCKED
 
-Tidak ada FAIL pada automation. WARN perlu ditinjau, terutama endpoint yang tidak sedang berjalan saat QA dijalankan.
+Masih ada FAIL yang harus diperbaiki sebelum dianggap aman untuk deploy.
+
+## Failed Checks
+
+- Go Services / signaling: go test ./...: # github.com/pion/webrtc/v4
+compile: writing output: write $WORK/b190/_pkg_.a: no space left on device
 
 ## Warnings
 
@@ -44,7 +49,7 @@ Tidak ada FAIL pada automation. WARN perlu ditinjau, terutama endpoint yang tida
 | Required Files | docs/DEVELOPER_HANDOVER_AND_ROADMAP.md | PASS | Found |
 | Required Files | docs/DEVELOPER_HANDOVER_AND_ROADMAP.pdf | PASS | Found |
 | Required Files | docs/HerAI_Developer_Prompt_Templates.pdf | PASS | Found |
-| SPA Routes | Route count | PASS | 39 routes detected |
+| SPA Routes | Route count | PASS | 41 routes detected |
 | SPA Routes | Every route points to existing HTML | PASS | All route files exist |
 | JavaScript Syntax | js/dashboard/admin-modules.js | PASS | Syntax OK |
 | JavaScript Syntax | js/dashboard/ai-prescreening.js | PASS | Syntax OK |
@@ -57,6 +62,7 @@ Tidak ada FAIL pada automation. WARN perlu ditinjau, terutama endpoint yang tida
 | JavaScript Syntax | js/frontend/announcement.js | PASS | Syntax OK |
 | JavaScript Syntax | js/frontend/competency-test.js | PASS | Syntax OK |
 | JavaScript Syntax | js/frontend/data-penduduk.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/settings.js | PASS | Syntax OK |
 | JavaScript Syntax | js/frontend/meeting.js | PASS | Syntax OK |
 | JavaScript Syntax | js/frontend/messaging.js | PASS | Syntax OK |
 | JavaScript Syntax | js/frontend/profile.js | PASS | Syntax OK |
@@ -67,8 +73,8 @@ Tidak ada FAIL pada automation. WARN perlu ditinjau, terutama endpoint yang tida
 | JavaScript Syntax | js/router.js | PASS | Syntax OK |
 | JavaScript Syntax | server.js | PASS | Syntax OK |
 | Go Services | messaging: go test ./... | PASS | ?   	herai-messaging	[no test files] |
-| Go Services | signaling: go test ./... | PASS | ?   	herai-signaling	[no test files] |
-| GAS | Sheet registry count | PASS | 59 sheets detected |
+| Go Services | signaling: go test ./... | FAIL | # github.com/pion/webrtc/v4<br>compile: writing output: write $WORK/b190/_pkg_.a: no space left on device |
+| GAS | Sheet registry count | PASS | 58 sheets detected |
 | GAS | Action route count | PASS | 44 actions detected |
 | GAS | Duplicate actions | PASS | None |
 | GAS | Critical actions available | PASS | All critical actions found |

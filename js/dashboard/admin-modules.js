@@ -104,8 +104,8 @@
 
    const ADMIN_ROUTE_ACCESS = {
        superadmin: ['*'],
-       reviewer: ['/dashboard', '/dashboard/seleksi', '/skoring', '/ai-prescreening', '/competency-monitor', '/retest-monitor', '/data-visualization'],
-       kurator: ['/dashboard', '/dashboard/seleksi', '/anti-fraud', '/comm-engine', '/assets']
+       reviewer: ['/dashboard', '/dashboard/seleksi', '/skoring', '/ai-prescreening', '/competency-monitor', '/retest-monitor', '/data-visualization', '/learning-content'],
+       kurator: ['/dashboard', '/dashboard/seleksi', '/anti-fraud', '/comm-engine', '/assets', '/learning-content']
    };
 
    function getStoredAdminProfile() {
@@ -141,6 +141,7 @@
    window.canAdminAccessPath = function(path) {
        if (path === '/dashboard') return true;
        if (!localStorage.getItem('adminId') || !sessionStorage.getItem('isAdminLoggedIn')) return false;
+       if (path === '/learning-content') return true;
        const access = window.getCurrentAdminAccess();
        return access.routes.includes('*') || access.routes.includes(path);
    };
@@ -170,6 +171,203 @@
            if (!link) return;
            card.style.display = window.canAdminAccessPath(link.getAttribute('href').slice(1)) ? '' : 'none';
        });
+   };
+
+   const LEARNING_STORAGE_KEY = 'herai_learning_content';
+
+   function defaultLearningContent() {
+       return [
+           {
+               id: 'ai-fundamental-01-intro-materi',
+               course: 'AI Fundamentals & Advanced',
+               module: 'Pengantar AI',
+               lesson: 'Apa itu Artificial Intelligence?',
+               type: 'materi',
+               duration: '45 menit',
+               tag: 'Dasar',
+               description: 'Memahami dasar-dasar Artificial Intelligence dan bagaimana AI bekerja dalam kehidupan sehari-hari.',
+               body: '<h2>Pengantar AI</h2><p>Kecerdasan Buatan adalah cabang ilmu komputer yang berfokus pada sistem yang mampu melakukan tugas yang biasanya memerlukan kecerdasan manusia.</p>',
+               heroImage: '/assets/messaging/herai-chat-persona.png',
+               assetLink: '/Users/marchelandrianshevchenko/Downloads/2024-wttc-introduction-to-ai.pdf',
+               references: 'World Travel & Tourism Council. Introduction to Artificial Intelligence (AI) Technology, January 2024.',
+               published: true,
+               updatedAt: new Date().toISOString()
+           }
+       ];
+   }
+
+   function loadLearningContentLocal() {
+       try {
+           const saved = JSON.parse(localStorage.getItem(LEARNING_STORAGE_KEY) || '[]');
+           return saved.length ? saved : defaultLearningContent();
+       } catch {
+           return defaultLearningContent();
+       }
+   }
+
+   function saveLearningContentLocal(items) {
+       localStorage.setItem(LEARNING_STORAGE_KEY, JSON.stringify(items));
+   }
+
+   window.initLearningContentManager = async function() {
+       if (!window.checkAdminAccess()) return;
+       await window.loadSidebar?.();
+       window.setActiveSidebar?.();
+
+       const list = document.getElementById('learningModuleList');
+       const form = document.getElementById('learningContentForm');
+       if (!list || !form || form.dataset.ready) return;
+       form.dataset.ready = 'true';
+
+       const status = document.getElementById('learningStatus');
+       const fields = {
+           course: document.getElementById('learningCourse'),
+           module: document.getElementById('learningModule'),
+           lesson: document.getElementById('learningLesson'),
+           type: document.getElementById('learningType'),
+           duration: document.getElementById('learningDuration'),
+           tag: document.getElementById('learningTag'),
+           description: document.getElementById('learningDescription'),
+           body: document.getElementById('learningBody'),
+           heroImage: document.getElementById('learningHeroImage'),
+           assetLink: document.getElementById('learningAssetLink'),
+           references: document.getElementById('learningReferences'),
+           published: document.getElementById('learningPublished')
+       };
+       let items = loadLearningContentLocal();
+       let activeId = items[0]?.id || null;
+
+       const setStatus = (message) => {
+           if (status) status.textContent = message;
+       };
+       const activeItem = () => items.find(item => item.id === activeId);
+       const fillForm = (item) => {
+           if (!item) return;
+           Object.keys(fields).forEach((key) => {
+               if (key === 'published') fields[key].checked = !!item[key];
+               else fields[key].value = item[key] || '';
+           });
+           document.getElementById('learningEditorTitle').textContent = `${item.module || 'Modul'} - ${item.type || 'materi'}`;
+           document.getElementById('learningEditorMode').textContent = item.published ? 'Published Content' : 'Draft Editor';
+       };
+       const render = () => {
+           list.innerHTML = items.map(item => `
+               <button type="button" class="${item.id === activeId ? 'active' : ''}" data-learning-id="${escapeAttr(item.id)}">
+                   <strong>${escapeHtml(item.module || 'Untitled Module')} / ${escapeHtml(item.lesson || 'Untitled Lesson')}</strong>
+                   <small>${escapeHtml(item.course || '-')} • ${escapeHtml(item.type || 'materi')} • ${item.published ? 'Published' : 'Draft'}</small>
+               </button>
+           `).join('');
+           list.querySelectorAll('[data-learning-id]').forEach(button => {
+               button.addEventListener('click', () => {
+                   activeId = button.dataset.learningId;
+                   render();
+                   fillForm(activeItem());
+               });
+           });
+       };
+       const collect = () => {
+           const current = activeItem() || {};
+           const now = new Date().toISOString();
+           const idBase = `${fields.course.value}-${fields.module.value}-${fields.lesson.value}-${fields.type.value}`
+               .toLowerCase()
+               .replace(/[^a-z0-9]+/g, '-')
+               .replace(/^-|-$/g, '');
+           return {
+               ...current,
+               id: current.id || idBase || `learning-${Date.now()}`,
+               course: fields.course.value.trim(),
+               module: fields.module.value.trim(),
+               lesson: fields.lesson.value.trim(),
+               type: fields.type.value,
+               duration: fields.duration.value.trim(),
+               tag: fields.tag.value.trim(),
+               description: fields.description.value.trim(),
+               body: fields.body.value,
+               heroImage: fields.heroImage.value.trim(),
+               assetLink: fields.assetLink.value.trim(),
+               references: fields.references.value.trim(),
+               published: fields.published.checked,
+               updatedAt: now
+           };
+       };
+       const persist = (message) => {
+           saveLearningContentLocal(items);
+           render();
+           fillForm(activeItem());
+           setStatus(message);
+       };
+
+       document.getElementById('btnAddLearningModule')?.addEventListener('click', () => {
+           const item = {
+               id: `learning-${Date.now()}`,
+               course: 'AI Fundamentals & Advanced',
+               module: 'Pengantar AI',
+               lesson: 'Materi Baru',
+               type: 'materi',
+               duration: '30 menit',
+               tag: 'Draft',
+               description: '',
+               body: '',
+               heroImage: '/assets/messaging/herai-chat-persona.png',
+               assetLink: '',
+               references: '',
+               published: false,
+               updatedAt: new Date().toISOString()
+           };
+           items.unshift(item);
+           activeId = item.id;
+           persist('Draft baru dibuat.');
+       });
+
+       form.addEventListener('submit', (event) => {
+           event.preventDefault();
+           const payload = collect();
+           const idx = items.findIndex(item => item.id === activeId);
+           if (idx >= 0) items[idx] = payload;
+           else items.unshift(payload);
+           activeId = payload.id;
+           persist('Draft tersimpan lokal.');
+           window.logAdminActivity?.(`Menyimpan learning content ${payload.module} / ${payload.lesson}`).catch(() => {});
+       });
+
+       document.getElementById('btnLearningPublish')?.addEventListener('click', () => {
+           const payload = collect();
+           payload.published = !payload.published;
+           const idx = items.findIndex(item => item.id === activeId);
+           if (idx >= 0) items[idx] = payload;
+           activeId = payload.id;
+           persist(payload.published ? 'Materi dipublish.' : 'Materi dinonaktifkan.');
+       });
+
+       document.getElementById('btnLearningDelete')?.addEventListener('click', () => {
+           if (!activeId || !confirm('Hapus konten pembelajaran ini?')) return;
+           items = items.filter(item => item.id !== activeId);
+           if (!items.length) items = defaultLearningContent();
+           activeId = items[0].id;
+           persist('Konten dihapus.');
+       });
+
+       document.getElementById('btnLearningSync')?.addEventListener('click', async () => {
+           setStatus('Menyinkronkan ke GAS...');
+           try {
+               const response = await fetch(API_URL, {
+                   method: 'POST',
+                   body: JSON.stringify({
+                       action: 'saveLearningContent',
+                       adminId: localStorage.getItem('adminId') || 'unknown-admin',
+                       items
+                   })
+               });
+               const result = await response.json().catch(() => ({}));
+               if (!response.ok || result.status === 'error') throw new Error(result.message || 'GAS belum menerima action saveLearningContent');
+               setStatus('Sinkron GAS berhasil.');
+           } catch (error) {
+               setStatus(`Tersimpan lokal. GAS belum siap: ${error.message}`);
+           }
+       });
+
+       render();
+       fillForm(activeItem());
    };
    
    // PERBAIKAN LOGOUT: Synchronous & Clean
@@ -1128,6 +1326,9 @@
            announcementLaunchAt: document.getElementById('announcementLaunchAt'),
            passedInfoMessage: document.getElementById('msgLolosInfo')
        };
+       const participantDashboardEnabled = document.getElementById('toggleFellowDashboard');
+       const participantPortalApiUrl = document.getElementById('participantPortalApiUrl');
+       const participantPageFields = [...document.querySelectorAll('[data-participant-page-toggle]')];
        const statusText = document.getElementById('globalSettingsStatus');
 
        async function loadSettingsToForm() {
@@ -1144,6 +1345,19 @@
            if (fields.twibbonUrl) fields.twibbonUrl.value = settings.twibbonUrl || '#/twibbon';
            if (fields.announcementLaunchAt) fields.announcementLaunchAt.value = settings.announcementLaunchAt || '';
            if (fields.passedInfoMessage) fields.passedInfoMessage.value = settings.passedInfoMessage || '';
+
+           if (participantPortalApiUrl) {
+               participantPortalApiUrl.value = localStorage.getItem('heraiParticipantPortalApiUrl') || participantPortalApiUrl.value || 'http://127.0.0.1:8092';
+           }
+           const participantSettings = typeof window.getParticipantPortalSettings === 'function'
+               ? await window.getParticipantPortalSettings()
+               : JSON.parse(localStorage.getItem('heraiParticipantPortalSettings') || '{}');
+           const participantPages = participantSettings.pages || {};
+           if (participantDashboardEnabled) participantDashboardEnabled.checked = participantSettings.enabled !== false;
+           participantPageFields.forEach(input => {
+               const key = input.getAttribute('data-participant-page-toggle');
+               input.checked = participantPages[key] !== false;
+           });
        }
 
        function readSettingsFromForm() {
@@ -1163,6 +1377,17 @@
            };
        }
 
+       function readParticipantSettingsFromForm() {
+           const pages = {};
+           participantPageFields.forEach(input => {
+               pages[input.getAttribute('data-participant-page-toggle')] = !!input.checked;
+           });
+           return {
+               enabled: !!participantDashboardEnabled?.checked,
+               pages
+           };
+       }
+
        await loadSettingsToForm();
 
        const btnSave = document.getElementById('btnSaveGlobalSettings');
@@ -1171,9 +1396,15 @@
                window.logAdminActivity("Mengeksekusi penyimpanan perubahan di Global Settings");
                btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menerapkan...';
                btnSave.disabled = true;
-               const settings = typeof window.saveGlobalSettingsAsync === 'function'
+              if (participantPortalApiUrl) {
+                  localStorage.setItem('heraiParticipantPortalApiUrl', participantPortalApiUrl.value.trim() || 'http://127.0.0.1:8092');
+              }
+              const settings = typeof window.saveGlobalSettingsAsync === 'function'
                    ? await window.saveGlobalSettingsAsync(readSettingsFromForm())
                    : window.saveGlobalSettings(readSettingsFromForm());
+              if (typeof window.saveParticipantPortalSettings === 'function') {
+                  await window.saveParticipantPortalSettings(readParticipantSettingsFromForm());
+              }
                setTimeout(() => {
                    btnSave.innerHTML = '<i class="fas fa-check"></i> Pengaturan Diterapkan';
                    btnSave.disabled = false;
@@ -1193,6 +1424,7 @@
        if (btnClearCache) {
            btnClearCache.onclick = () => {
                window.resetGlobalSettings();
+               localStorage.removeItem('heraiParticipantPortalSettings');
                loadSettingsToForm();
                if (statusText) {
                    statusText.textContent = 'Cache pengaturan direset';

@@ -4,6 +4,161 @@
     padding: 150px 20px 90px;
 }
 
+.participant-login-active {
+    overflow: hidden;
+}
+
+.participant-login-active #app-content {
+    height: 100dvh;
+    overflow: hidden;
+}
+
+.participant-login-shell {
+    align-items: center;
+    background:
+        radial-gradient(circle at 12% 12%, rgba(255, 193, 222, 0.45), transparent 28%),
+        linear-gradient(135deg, #fff7fb, #ffe5f1);
+    display: flex;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100dvh;
+    padding: 36px;
+}
+
+.participant-login-card {
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(246, 51, 146, 0.14);
+    border-radius: 28px;
+    box-shadow: 0 26px 80px rgba(170, 52, 104, 0.14);
+    display: grid;
+    grid-template-columns: minmax(520px, 1.12fr) minmax(380px, 0.88fr);
+    margin: 0 auto;
+    max-width: 1280px;
+    min-height: 720px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.participant-login-hero {
+    background: linear-gradient(160deg, #fff, #ffeaf4);
+    display: grid;
+    overflow: hidden;
+    padding: 38px;
+    position: relative;
+}
+
+.participant-login-logo {
+    height: auto;
+    width: 150px;
+}
+
+.participant-login-orbit {
+    align-self: end;
+    justify-self: start;
+    margin-bottom: -40px;
+    margin-left: -72px;
+    position: relative;
+    width: min(760px, 128%);
+}
+
+.participant-login-orbit img {
+    display: block;
+    filter: drop-shadow(0 24px 38px rgba(170, 52, 104, 0.18));
+    max-width: none;
+    width: 112%;
+}
+
+.participant-login-chip {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(246, 51, 146, 0.16);
+    border-radius: 999px;
+    bottom: 34px;
+    color: #d82d82;
+    display: inline-flex;
+    font-size: 0.82rem;
+    font-weight: 900;
+    gap: 10px;
+    left: 38px;
+    padding: 12px 16px;
+    position: absolute;
+}
+
+.participant-login-panel {
+    align-content: center;
+    display: grid;
+    gap: 22px;
+    padding: 58px;
+}
+
+.participant-login-mark {
+    justify-self: end;
+    width: 116px;
+}
+
+.participant-login-panel h1 {
+    color: #161827;
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    letter-spacing: 0;
+    line-height: 1.08;
+    margin: 12px 0;
+}
+
+.participant-login-panel p {
+    color: #697083;
+    font-weight: 650;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.participant-login-form {
+    background: #fff;
+    border: 1px solid rgba(246, 51, 146, 0.14);
+    border-radius: 22px;
+    box-shadow: 0 18px 44px rgba(170, 52, 104, 0.08);
+    padding: 22px;
+}
+
+.participant-password-field {
+    position: relative;
+}
+
+.participant-password-field input {
+    padding-right: 48px;
+}
+
+.participant-password-field button {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: #697083;
+    cursor: pointer;
+    display: inline-flex;
+    height: 42px;
+    justify-content: center;
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+}
+
+.participant-login-note {
+    align-items: center;
+    background: #fff0f7;
+    border: 1px solid #ffd2e5;
+    border-radius: 18px;
+    color: #9d3668;
+    display: flex;
+    font-size: 0.82rem;
+    font-weight: 800;
+    gap: 12px;
+    padding: 16px;
+}
+
+.participant-login-note i {
+    color: var(--primary-pink, #f63392);
+}
+
 .profile-auth-card,
 .profile-hero-card,
 .profile-panel {

@@ -11,6 +11,7 @@
  */
 
 const SPREADSHEET_ID = '120NQtFqErJiIfITlPfVo8wV6G0_79qFKMTaptxNF-RA';
+const PASSWORD_HASH_PREFIX = 'pw$1$';
 
 const SHEETS = {
   participants: 'peserta_tahap_1',
@@ -27,7 +28,13 @@ const SHEETS = {
   aiResults: 'ai-screening-result',
   projects: 'FinalProjects',
   certificates: 'Certificates',
-  assets: 'Assets'
+  assets: 'Assets',
+  participantDashboardModules: 'participant_dashboard_modules',
+  participantDashboardDiscussionTrails: 'participant_dashboard_discussion_trails',
+  participantDashboardTracks: 'participant_dashboard_tracks',
+  participantDashboardJourney: 'participant_dashboard_journey',
+  participantDashboardEvents: 'participant_dashboard_events',
+  participantDashboardLeaderboard: 'participant_dashboard_leaderboard'
 };
 
 const SCHEMA = {
@@ -57,7 +64,13 @@ const SCHEMA = {
   [SHEETS.aiResults]: ['rowId', 'nik', 'nama_lengkap', 'ai_summary', 'ai_skills', 'ai_motivation', 'analyzed_at', 'ai_score'],
   [SHEETS.projects]: ['project_id', 'team_id', 'team_name', 'title', 'members', 'institution', 'track', 'project_title', 'mentor', 'deck_url', 'repo_url', 'demo_url', 'overview', 'details', 'score', 'status', 'notes', 'submitted_at'],
   [SHEETS.certificates]: ['certificate_no', 'participant_rowId', 'nama_lengkap', 'final_score', 'status', 'issued_at', 'certificate_url'],
-  [SHEETS.assets]: ['asset_id', 'title', 'type', 'url', 'visible_to', 'status', 'notes']
+  [SHEETS.assets]: ['asset_id', 'title', 'type', 'url', 'visible_to', 'status', 'notes'],
+  [SHEETS.participantDashboardModules]: ['title', 'subtitle', 'progress', 'icon', 'tone', 'href', 'is_active', 'sort_order'],
+  [SHEETS.participantDashboardDiscussionTrails]: ['actor', 'action', 'topic', 'time_label', 'tone', 'is_active', 'created_at'],
+  [SHEETS.participantDashboardTracks]: ['title', 'subtitle', 'icon', 'is_active', 'sort_order'],
+  [SHEETS.participantDashboardJourney]: ['title', 'subtitle', 'progress', 'icon', 'accent', 'is_active', 'sort_order'],
+  [SHEETS.participantDashboardEvents]: ['day', 'month', 'title', 'time', 'url', 'is_active', 'sort_order'],
+  [SHEETS.participantDashboardLeaderboard]: ['rank', 'nik', 'name', 'points', 'is_active']
 };
 
 function doPost(e) {
@@ -111,7 +124,8 @@ function doPost(e) {
       getCertificates: () => ({ status: 'success', data: getRows(SHEETS.certificates) }),
       generateCertificates: () => generateCertificates(),
       getAssets: () => ({ status: 'success', data: getRows(SHEETS.assets) }),
-      saveAsset: () => upsertByKey(SHEETS.assets, 'asset_id', payload.asset_id, payload)
+      saveAsset: () => upsertByKey(SHEETS.assets, 'asset_id', payload.asset_id, payload),
+      getParticipantDashboardData: () => getParticipantDashboardData(payload)
     };
     const handler = routes[action];
     if (!handler) throw new Error('Unknown action: ' + action);
@@ -123,6 +137,84 @@ function doPost(e) {
 
 function doGet() {
   return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.1' });
+}
+
+function getParticipantDashboardData(payload) {
+  const requesterNik = String(payload.nik || '').replace(/\D/g, '');
+  const activeRows = sheetName => getRows(sheetName)
+    .filter(row => row.is_active === '' || isTruthy(row.is_active))
+    .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
+
+  const modules = activeRows(SHEETS.participantDashboardModules).map(row => ({
+    title: row.title || '',
+    subtitle: row.subtitle || '',
+    progress: Number(row.progress || 0),
+    icon: row.icon || 'fas fa-book-open',
+    tone: row.tone || 'pink',
+    href: row.href || '#/participant-modules'
+  }));
+
+  const discussionTrails = activeRows(SHEETS.participantDashboardDiscussionTrails).map(row => ({
+    actor: row.actor || 'Panitia',
+    action: row.action || 'memperbarui diskusi',
+    topic: row.topic || 'Diskusi',
+    time: row.time_label || formatRelativeTime(row.created_at),
+    tone: row.tone || ''
+  }));
+
+  const tracks = activeRows(SHEETS.participantDashboardTracks).map(row => ({
+    title: row.title || '',
+    subtitle: row.subtitle || '',
+    icon: row.icon || 'fas fa-layer-group'
+  }));
+
+  const journey = activeRows(SHEETS.participantDashboardJourney).map(row => ({
+    title: row.title || '',
+    subtitle: row.subtitle || '',
+    progress: Number(row.progress || 0),
+    icon: row.icon || 'fas fa-book-open',
+    accent: row.accent || '#f63392'
+  }));
+
+  const events = activeRows(SHEETS.participantDashboardEvents).map(row => ({
+    day: row.day || '',
+    month: row.month || '',
+    title: row.title || '',
+    time: row.time || '',
+    url: row.url || '#/participant-events'
+  }));
+
+  const leaderboard = activeRows(SHEETS.participantDashboardLeaderboard).map(row => {
+    const nik = String(row.nik || '').replace(/\D/g, '');
+    const current = requesterNik && nik === requesterNik;
+    return {
+      rank: Number(row.rank || 0),
+      nik: current ? nik : '',
+      name: current ? (row.name || 'Peserta HerAI') : '*********',
+      points: Number(row.points || 0),
+      current
+    };
+  });
+
+  return {
+    status: 'success',
+    data: { modules, discussionTrails, tracks, journey, events, leaderboard }
+  };
+}
+
+function formatRelativeTime(value) {
+  if (!value) return 'Baru saja';
+  try {
+    const date = value instanceof Date ? value : new Date(value);
+    const diffMs = new Date().getTime() - date.getTime();
+    const minutes = Math.max(1, Math.floor(diffMs / 60000));
+    if (minutes < 60) return minutes + ' menit yang lalu';
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return hours + ' jam yang lalu';
+    return Math.floor(hours / 24) + ' hari yang lalu';
+  } catch (error) {
+    return String(value);
+  }
 }
 
 function setupDatabase() {
@@ -191,7 +283,7 @@ function withSpreadsheetRetry(callback) {
 function seedDefaults() {
   upsertByKey(SHEETS.admins, 'id_admin', 'super-admin', {
     id_admin: 'super-admin',
-    password: 'admin123',
+    password: hashPasswordValue('admin123'),
     nama_admin: 'Super Admin',
     peran_admin: 'superadmin',
     permissions: 'all',
@@ -322,9 +414,10 @@ function participantLogin(payload) {
   const participant = findParticipantByNik(payload.nik);
   if (!participant) return { status: 'error', message: 'NIK belum terdaftar.' };
   if (!participant.participant_password) return { status: 'needs_password', message: 'Password belum dibuat.' };
-  if (String(participant.participant_password) !== String(payload.password)) {
+  if (!verifyPasswordValue(participant.participant_password, payload.password)) {
     return { status: 'error', message: 'Password salah.' };
   }
+  migrateParticipantPasswordIfNeeded(participant, payload.password);
   return { status: 'success', profile: stripSensitiveParticipant(participant) };
 }
 
@@ -335,7 +428,7 @@ function setParticipantPassword(payload) {
   if (!participant) return { status: 'error', message: 'NIK belum terdaftar.' };
   if (participant.participant_password) return { status: 'error', message: 'Password sudah dibuat. Silakan login.' };
   updateByKey(SHEETS.participants, 'nik', participant.nik, {
-    participant_password: payload.password,
+    participant_password: hashPasswordValue(payload.password),
     participant_stage: normalizeParticipantStage(participant.participant_stage),
     profile_updated_at: new Date().toISOString()
   });
@@ -348,9 +441,10 @@ function updateParticipantProfile(payload) {
   const participant = findParticipantByNik(payload.nik);
   if (!participant) return { status: 'error', message: 'NIK belum terdaftar.' };
   if (!participant.participant_password) return { status: 'needs_password', message: 'Password belum dibuat.' };
-  if (String(participant.participant_password) !== String(payload.password)) {
+  if (!verifyPasswordValue(participant.participant_password, payload.password)) {
     return { status: 'error', message: 'Session tidak valid. Silakan login ulang.' };
   }
+  migrateParticipantPasswordIfNeeded(participant, payload.password);
   const allowed = {
     nama_lengkap: payload.nama_lengkap,
     email: payload.email,
@@ -368,6 +462,67 @@ function stripSensitiveParticipant(participant) {
   const clone = { ...participant };
   delete clone.participant_password;
   return clone;
+}
+
+function hashPasswordValue(password) {
+  const value = String(password || '');
+  if (!value) return '';
+  if (isPasswordHash(value)) return value;
+  const salt = Utilities.getUuid().replace(/-/g, '');
+  const pepper = PropertiesService.getScriptProperties().getProperty('PASSWORD_PEPPER') || SPREADSHEET_ID;
+  const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, salt + ':' + value + ':' + pepper);
+  return PASSWORD_HASH_PREFIX + salt + '$' + bytesToHex(digest);
+}
+
+function verifyPasswordValue(stored, password) {
+  const current = String(stored || '');
+  const value = String(password || '');
+  if (!current || !value) return false;
+  if (!isPasswordHash(current)) return current === value;
+  const parts = current.split('$');
+  if (parts.length !== 4 || parts[0] !== 'pw' || parts[1] !== '1') return false;
+  const salt = parts[2];
+  const expected = parts[3];
+  const pepper = PropertiesService.getScriptProperties().getProperty('PASSWORD_PEPPER') || SPREADSHEET_ID;
+  const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, salt + ':' + value + ':' + pepper);
+  return safeStringEquals(expected, bytesToHex(digest));
+}
+
+function isPasswordHash(value) {
+  return String(value || '').indexOf(PASSWORD_HASH_PREFIX) === 0;
+}
+
+function migrateParticipantPasswordIfNeeded(participant, password) {
+  if (!participant || isPasswordHash(participant.participant_password)) return;
+  updateByKey(SHEETS.participants, 'nik', participant.nik, {
+    participant_password: hashPasswordValue(password),
+    profile_updated_at: new Date().toISOString()
+  });
+}
+
+function migrateAdminPasswordIfNeeded(admin, password) {
+  if (!admin || isPasswordHash(admin.password)) return;
+  updateByKey(SHEETS.admins, 'id_admin', admin.id_admin || admin.adminId, {
+    password: hashPasswordValue(password)
+  });
+}
+
+function bytesToHex(bytes) {
+  return bytes.map(function(byte) {
+    const value = (byte < 0 ? byte + 256 : byte).toString(16);
+    return value.length === 1 ? '0' + value : value;
+  }).join('');
+}
+
+function safeStringEquals(a, b) {
+  const left = String(a || '');
+  const right = String(b || '');
+  if (left.length !== right.length) return false;
+  let diff = 0;
+  for (let i = 0; i < left.length; i++) {
+    diff |= left.charCodeAt(i) ^ right.charCodeAt(i);
+  }
+  return diff === 0;
 }
 
 function findParticipantByNik(nik) {
@@ -824,9 +979,10 @@ function login(payload) {
   const admin = admins.find(a => {
     const rowId = String(a.id_admin || a.adminId || '');
     const status = String(a.status || 'active').toLowerCase();
-    return rowId === loginId && String(a.password) === String(payload.password) && status !== 'inactive' && status !== 'disabled';
+    return rowId === loginId && verifyPasswordValue(a.password, payload.password) && status !== 'inactive' && status !== 'disabled';
   });
   if (!admin) return { status: 'error', message: 'ID admin atau password salah.' };
+  migrateAdminPasswordIfNeeded(admin, payload.password);
   logActivity({
     adminId: loginId,
     tindakan: 'Melakukan Login Ke Dashboard',
@@ -982,15 +1138,16 @@ function deleteByKey(sheetName, key, value) {
 }
 
 function normalizeAdmin(payload) {
-  return {
+  const admin = {
     id_admin: payload.id_admin || payload.adminId,
-    password: payload.password || '',
     peran_admin: payload.peran_admin || payload.role || 'reviewer',
     nama_admin: payload.nama_admin || payload.name || payload.nama || '',
     permissions: Array.isArray(payload.permissions) ? payload.permissions.join(',') : (payload.permissions || ''),
     status: payload.status || 'active',
     created_at: payload.created_at || new Date().toISOString()
   };
+  if (payload.password) admin.password = hashPasswordValue(payload.password);
+  return admin;
 }
 
 function normalizeAdminForClient(admin) {

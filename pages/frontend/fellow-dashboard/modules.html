@@ -1,0 +1,218 @@
+<section class="fellow-dashboard fellow-modules-page" data-fellow-page="modules">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+
+        <div class="fellow-menu-label">Lainnya</div>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+
+        <div class="invite-card">
+            <div>
+                <strong>Ajak Temanmu!</strong>
+                <p>Dapatkan poin tambahan untuk setiap teman yang bergabung.</p>
+            </div>
+            <button type="button">Undang Sekarang</button>
+        </div>
+    </aside>
+
+    <main class="fellow-main">
+        <header class="fellow-topbar module-topbar">
+            <div>
+                <h1>Modul</h1>
+                <p>Belajar terstruktur dengan 25+ modul yang dirancang untuk membawamu menjadi AI Talent yang siap berdampak.</p>
+            </div>
+            <div class="fellow-actions">
+                <label class="fellow-search">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="search" placeholder="Cari modul...">
+                </label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
+                    <i class="far fa-bell"></i>
+                    <span>5</span>
+                </button>
+                <a href="#/participant-profile" class="fellow-user-button">
+                    <span class="avatar-img"></span>
+                    <span><strong>Aisyah Putri</strong><small>Fellow</small></span>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+            </div>
+        </header>
+
+        <div class="module-layout">
+            <div class="module-content">
+                <div class="module-tabs" role="tablist" aria-label="Navigasi modul">
+                    <button type="button" class="active" data-module-tab="all">Semua Modul</button>
+                    <button type="button" data-module-tab="foundation">Foundation Phase</button>
+                    <button type="button" data-module-tab="specialization">Specialization Track</button>
+                </div>
+
+                <section class="module-stat-grid" aria-label="Ringkasan modul">
+                    <article><i class="fas fa-book-open pink"></i><span>Total Course</span><strong>26</strong><small>Course</small></article>
+                    <article><i class="fas fa-circle-check green"></i><span>Course Selesai</span><strong>8</strong><small>Course</small></article>
+                    <article><i class="fas fa-chart-simple purple"></i><span>Progres Belajar</span><strong>32%</strong><small>Keseluruhan</small></article>
+                    <article><i class="far fa-clock orange"></i><span>Waktu Belajar</span><strong>48</strong><small>Jam</small></article>
+                </section>
+
+                <section class="module-panel ai-lab-catalog" id="moduleCatalogPanel" data-module-section="foundation">
+                    <div class="module-panel-head">
+                        <div>
+                            <h2>AI Lab Course Catalog</h2>
+                            <p>Pilih course untuk membangun fondasi, engineering skill, dan domain AI terapan.</p>
+                        </div>
+                        <button type="button" class="module-collapse-btn" data-collapse-panel="moduleCatalogPanel" aria-label="Minimize AI Lab Course Catalog" aria-expanded="true"><i class="fas fa-chevron-up"></i></button>
+                    </div>
+                    <div class="module-filter-bar" aria-label="Filter katalog AI Lab">
+                        <button type="button" class="active" data-course-filter="all">Semua</button>
+                        <button type="button" data-course-filter="foundation">Foundation</button>
+                        <button type="button" data-course-filter="generative">Generative</button>
+                        <button type="button" data-course-filter="engineering">Engineering</button>
+                        <button type="button" data-course-filter="business">Business</button>
+                    </div>
+                    <div class="course-category">
+                        <div class="course-category-head">
+                            <span>Foundation & Core AI</span>
+                            <small>Fondasi teknis utama</small>
+                        </div>
+                        <div class="course-card-grid" data-course-group="foundation">
+                            <article class="course-card featured"><i class="fas fa-brain pink"></i><span>Core</span><h3>AI Fundamentals & Advanced</h3><p>Konsep AI modern, reasoning, model lifecycle, dan evaluasi sistem cerdas.</p><a href="#/participant-ai-fundamentals">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-square-root-variable green"></i><span>Foundation</span><h3>Math for AI</h3><p>Linear algebra, calculus, probability, optimization, dan statistik untuk AI.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-diagram-project purple"></i><span>Core</span><h3>Machine Learning</h3><p>Supervised learning, unsupervised learning, model tuning, dan evaluasi.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-layer-group blue"></i><span>Core</span><h3>Deep Learning</h3><p>Neural network, CNN, RNN, transformer basics, training, dan regularization.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-gamepad orange"></i><span>Advanced</span><h3>Reinforcement Learning</h3><p>Agent, reward, policy, value function, exploration, dan decision optimization.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                        </div>
+                    </div>
+
+                    <div class="course-category">
+                        <div class="course-category-head">
+                            <span>Generative & Multimodal AI</span>
+                            <small>Model generatif dan interaksi multimodal</small>
+                        </div>
+                        <div class="course-card-grid" data-course-group="generative">
+                            <article class="course-card"><i class="fas fa-wand-magic-sparkles pink"></i><span>GenAI</span><h3>Generative AI</h3><p>Prompting, diffusion, generation pipeline, evaluation, dan creative AI workflow.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-message purple"></i><span>Language</span><h3>LLM</h3><p>Transformer, instruction tuning, RAG, fine-tuning, dan deployment LLM.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-eye blue"></i><span>Vision</span><h3>VLM</h3><p>Vision-language model, image-text alignment, captioning, dan visual reasoning.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-cubes green"></i><span>Multimodal</span><h3>Multimodal LLM</h3><p>Cross-modal learning untuk teks, gambar, audio, video, dan structured context.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-robot orange"></i><span>Agent</span><h3>Agentic AI</h3><p>Tool use, planning, memory, workflow orchestration, dan evaluasi AI agents.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                        </div>
+                    </div>
+
+                    <div class="course-category">
+                        <div class="course-category-head">
+                            <span>Data & Engineering Domains</span>
+                            <small>Skill engineering untuk membangun produk AI</small>
+                        </div>
+                        <div class="course-card-grid compact" data-course-group="engineering">
+                            <article class="course-card"><i class="fas fa-eye pink"></i><span>Vision</span><h3>Computer Vision</h3><p>Image processing, object detection, recognition, dan visual intelligence.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-language purple"></i><span>Language</span><h3>NLP</h3><p>Text processing, semantic understanding, classification, retrieval, dan generation.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-dna green"></i><span>Science</span><h3>Bioinformatics</h3><p>Genomics, protein analysis, computational biology, dan medical AI.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-database blue"></i><span>Data</span><h3>Data Engineering</h3><p>Pipeline, ETL, warehouse, lakehouse, orchestration, dan quality control.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-chart-line orange"></i><span>Data</span><h3>Data Science</h3><p>Analytics, experimentation, visualization, modeling, dan insight generation.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-server purple"></i><span>Infra</span><h3>Infrastructure</h3><p>Cloud, GPU environment, serving stack, observability, dan scaling.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-cloud-arrow-up green"></i><span>Ops</span><h3>Deployment</h3><p>Packaging, API serving, model release, monitoring, dan rollback strategy.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-code blue"></i><span>Product</span><h3>Front-end</h3><p>Interface, dashboard, visualization, accessibility, dan AI product UX.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-gears orange"></i><span>Product</span><h3>Back-end</h3><p>API, database, auth, queues, integration, dan scalable service design.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                        </div>
+                    </div>
+
+                    <div class="course-category">
+                        <div class="course-category-head">
+                            <span>Business & Industry Applications</span>
+                            <small>AI untuk dampak organisasi dan industri</small>
+                        </div>
+                        <div class="course-card-grid compact" data-course-group="business">
+                            <article class="course-card"><i class="fas fa-lightbulb pink"></i><span>Business</span><h3>Business Insight</h3><p>AI analytics, market insight, decision support, dan business intelligence.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-people-group purple"></i><span>Management</span><h3>People & Business Mgt</h3><p>AI adoption, team process, change management, dan operational strategy.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-palette orange"></i><span>Culture</span><h3>AI for Culture</h3><p>AI untuk arsip budaya, kreativitas, bahasa lokal, dan cultural preservation.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-heart-pulse green"></i><span>Health</span><h3>AI for Healthcare</h3><p>Clinical decision support, imaging, patient analytics, dan ethical healthcare AI.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-pen-nib blue"></i><span>Design</span><h3>UI/UX Design Thinking</h3><p>Human-centered AI, prototyping, research, journey mapping, dan usability test.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-industry purple"></i><span>Industry</span><h3>AI for Manufacturing</h3><p>Predictive maintenance, quality inspection, robotics, dan process optimization.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                            <article class="course-card"><i class="fas fa-map-location-dot green"></i><span>Geospatial</span><h3>AI for Geospatial</h3><p>Remote sensing, GIS intelligence, spatial modeling, dan location analytics.</p><a href="#/participant-modules">Mulai <i class="fas fa-arrow-right"></i></a></article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="module-panel specialization-panel" id="specializationTrackPanel" data-module-section="specialization">
+                    <div class="module-panel-head">
+                        <div>
+                            <h2>6 Specialization Tracks</h2>
+                            <p>Pilih satu jalur spesialisasi untuk menguasai domain AI secara mendalam.</p>
+                        </div>
+                        <button type="button" class="module-collapse-btn" data-collapse-panel="specializationTrackPanel" aria-label="Minimize Specialization Track" aria-expanded="true"><i class="fas fa-chevron-up"></i></button>
+                    </div>
+                    <div class="specialization-grid">
+                        <article><i class="fas fa-eye pink"></i><div><span>Vision</span><h3>Computer Vision</h3><p>Image Processing, Object Detection & Recognition.</p><small>OpenCV, YOLO, Transformers</small></div><a href="#/participant-modules">Pilih Track</a></article>
+                        <article><i class="fas fa-wave-square orange"></i><div><span>Speech</span><h3>Speech Recognition</h3><p>Voice Processing, Audio Analysis, ASR, dan TTS.</p><small>ASR, TTS, Whisper, Audio ML</small></div><a href="#/participant-modules">Pilih Track</a></article>
+                        <article><i class="fas fa-message purple"></i><div><span>Language Model</span><h3>NLP & LLM</h3><p>Text Generation, Semantic Understanding, dan RAG.</p><small>GPT, BERT, RAG, Fine-tuning</small></div><a href="#/participant-modules">Pilih Track</a></article>
+                        <article><i class="fas fa-server blue"></i><div><span>Infrastructure</span><h3>MLOps & Deployment</h3><p>Cloud Computing, Model Deployment, dan Scalability.</p><small>Docker, K8s, AWS, Azure</small></div><a href="#/participant-modules">Pilih Track</a></article>
+                        <article><i class="fas fa-cubes green"></i><div><span>Multimodal Interaction</span><h3>Multimodal LLM</h3><p>VLM, Cross-modal Learning, dan World Models.</p><small>CLIP, GPT-4V, Gemini, DALL-E</small></div><a href="#/participant-modules">Pilih Track</a></article>
+                        <article><i class="fas fa-dna pink"></i><div><span>Bioinformatics</span><h3>Medical & Biology AI</h3><p>Genomics, Protein Analysis, dan Computational Biology.</p><small>AlphaFold, DeepVariant, BioML</small></div><a href="#/participant-modules">Pilih Track</a></article>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="module-right">
+                <section class="module-side-card progress-card">
+                    <h2>Ringkasan Progres</h2>
+                    <div class="progress-donut" aria-label="32 persen progres keseluruhan"><strong>32%</strong><span>Progres Keseluruhan</span></div>
+                    <ul>
+                        <li><i class="green"></i><span><strong>Selesai</strong>8 Modul</span></li>
+                        <li><i class="pink"></i><span><strong>Sedang Berlangsung</strong>7 Modul</span></li>
+                        <li><i class="soft"></i><span><strong>Belum Dimulai</strong>12 Modul</span></li>
+                    </ul>
+                </section>
+
+                <section class="module-side-card schedule-card">
+                    <div class="module-side-head">
+                        <h2>Jadwal Belajar</h2>
+                        <a href="#/meeting">Lihat Kalender</a>
+                    </div>
+                    <div class="schedule-empty">
+                        <i class="far fa-calendar-days"></i>
+                        <strong>Konsisten belajar adalah kunci!</strong>
+                        <p>Kamu tidak memiliki jadwal hari ini. Yuk atur jadwal belajarmu!</p>
+                        <button type="button">Atur Jadwal</button>
+                    </div>
+                </section>
+
+                <section class="module-side-card resource-card">
+                    <h2>Sumber Belajar</h2>
+                    <a href="#/participant-modules"><i class="fas fa-book-open"></i><span>Reading Materials</span><b class="fas fa-arrow-right"></b></a>
+                    <a href="#/participant-modules"><i class="far fa-clipboard"></i><span>Cheat Sheet</span><b class="fas fa-arrow-right"></b></a>
+                    <a href="#/participant-modules"><i class="far fa-circle-play"></i><span>Video Playlist</span><b class="fas fa-arrow-right"></b></a>
+                    <a href="#/participant-modules"><i class="fas fa-briefcase"></i><span>Practice Dataset</span><b class="fas fa-arrow-right"></b></a>
+                    <a href="#/participant-modules"><i class="fas fa-toolbox"></i><span>AI Tools Directory</span><b class="fas fa-arrow-right"></b></a>
+                </section>
+
+                <section class="module-help-card">
+                    <div>
+                        <h2>Butuh Bantuan?</h2>
+                        <p>Tanya apapun ke HerAI Assistant tentang modul yang kamu pelajari.</p>
+                        <a href="#/messaging">Chat Sekarang</a>
+                    </div>
+                    <i class="fas fa-robot"></i>
+                </section>
+            </aside>
+        </div>
+    </main>
+</section>

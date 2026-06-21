@@ -20,6 +20,7 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/pion/webrtc/v4"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type SignalMessage struct {
@@ -1252,8 +1253,7 @@ func handleAppAuth(w http.ResponseWriter, r *http.Request) {
 		password = r.FormValue("password")
 	}
 
-	expected := getenv("APP_ACCESS_PASSWORD", "")
-	if expected == "" || !hmac.Equal([]byte(password), []byte(expected)) {
+	if !verifyAppAccessPassword(password) {
 		serveAccessGateWithError(w, r, "Password akses salah.")
 		return
 	}
@@ -1284,7 +1284,7 @@ func handleAppLogout(w http.ResponseWriter, r *http.Request) {
 }
 
 func hasAppAccess(r *http.Request) bool {
-	if getenv("APP_ACCESS_PASSWORD", "") == "" {
+	if appAccessSecret() == "" {
 		return true
 	}
 	cookie, err := r.Cookie("herai_app_access")
@@ -1295,10 +1295,26 @@ func hasAppAccess(r *http.Request) bool {
 }
 
 func appAccessToken() string {
-	secret := getenv("APP_ACCESS_PASSWORD", "")
+	secret := appAccessSecret()
 	mac := hmac.New(sha256.New, []byte(secret))
 	_, _ = mac.Write([]byte("herai-superapp-access-v1"))
 	return hex.EncodeToString(mac.Sum(nil))
+}
+
+func verifyAppAccessPassword(password string) bool {
+	hash := getenv("APP_ACCESS_PASSWORD_HASH", "")
+	if hash != "" {
+		return bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)) == nil
+	}
+	expected := getenv("APP_ACCESS_PASSWORD", "")
+	return expected != "" && hmac.Equal([]byte(password), []byte(expected))
+}
+
+func appAccessSecret() string {
+	if hash := getenv("APP_ACCESS_PASSWORD_HASH", ""); hash != "" {
+		return hash
+	}
+	return getenv("APP_ACCESS_PASSWORD", "")
 }
 
 func serveAccessGate(w http.ResponseWriter, r *http.Request) {

@@ -1,11 +1,14 @@
 .DS_Store
 **/.DS_Store
 .cursor/debug-*.log
+.cursor/*.json
 node_modules/
 dist/
 build/
 .env
 .env.*
+outputs/
+assets/messaging/herai-login-persona*.png
 messaging/messaging-data.json
 signaling/herai-signaling
 reports/qa-report-*.md

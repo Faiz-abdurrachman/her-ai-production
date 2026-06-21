@@ -13,15 +13,17 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
-	ID          string `json:"id"`
-	DisplayName string `json:"display_name"`
-	Password    string `json:"password,omitempty"`
-	PublicKey   string `json:"public_key,omitempty"`
-	Role        string `json:"role,omitempty"`
-	CreatedAt   string `json:"created_at"`
+	ID           string `json:"id"`
+	DisplayName  string `json:"display_name"`
+	Password     string `json:"password,omitempty"`
+	PasswordHash string `json:"password_hash,omitempty"`
+	PublicKey    string `json:"public_key,omitempty"`
+	Role         string `json:"role,omitempty"`
+	CreatedAt    string `json:"created_at"`
 }
 
 type Room struct {
@@ -57,8 +59,9 @@ type Message struct {
 }
 
 type Session struct {
-	Token  string
-	UserID string
+	Token     string
+	UserID    string
+	ExpiresAt time.Time
 }
 
 type Store struct {
@@ -105,11 +108,12 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  4096,
 	WriteBufferSize: 4096,
 	CheckOrigin: func(r *http.Request) bool {
-		return true
+		return isAllowedOrigin(r)
 	},
 }
 
 const maxAttachmentBytes int64 = 8 * 1024 * 1024
+const sessionTTL = 24 * time.Hour
 
 func main() {
 	store := newStore()
@@ -221,12 +225,17 @@ func (s *Store) handleRegister(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusConflict, map[string]any{"ok": false, "message": "ID sudah dipakai."})
 		return
 	}
-	user := User{ID: req.ID, DisplayName: req.DisplayName, Password: req.Password, PublicKey: req.PublicKey, Role: role, CreatedAt: time.Now().UTC().Format(time.RFC3339)}
+	passwordHash, err := hashPassword(req.Password)
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]any{"ok": false, "message": "Gagal mengamankan password."})
+		return
+	}
+	user := User{ID: req.ID, DisplayName: req.DisplayName, PasswordHash: passwordHash, PublicKey: req.PublicKey, Role: role, CreatedAt: time.Now().UTC().Format(time.RFC3339)}
 	s.users[user.ID] = user
 	token := randomID("tok")
-	s.sessions[token] = Session{Token: token, UserID: user.ID}
+	s.sessions[token] = newSession(token, user.ID)
 	s.persistLocked()
-	user.Password = ""
+	user = sanitizeUser(user)
 	writeJSON(w, http.StatusOK, map[string]any{"ok": true, "token": token, "user": user})
 }
 
@@ -247,9 +256,20 @@ func (s *Store) handleLogin(w http.ResponseWriter, r *http.Request) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	user, ok := s.users[req.ID]
-	if !ok || user.Password != req.Password {
+	if !ok || !verifyPassword(user, req.Password) {
 		writeJSON(w, http.StatusUnauthorized, map[string]any{"ok": false, "message": "ID atau password salah."})
 		return
+	}
+	if needsPasswordMigration(user) {
+		passwordHash, err := hashPassword(req.Password)
+		if err != nil {
+			writeJSON(w, http.StatusInternalServerError, map[string]any{"ok": false, "message": "Gagal memigrasikan password."})
+			return
+		}
+		user.PasswordHash = passwordHash
+		user.Password = ""
+		s.users[user.ID] = user
+		s.persistLocked()
 	}
 	if req.PublicKey != "" {
 		user.PublicKey = req.PublicKey
@@ -257,8 +277,8 @@ func (s *Store) handleLogin(w http.ResponseWriter, r *http.Request) {
 		s.persistLocked()
 	}
 	token := randomID("tok")
-	s.sessions[token] = Session{Token: token, UserID: user.ID}
-	user.Password = ""
+	s.sessions[token] = newSession(token, user.ID)
+	user = sanitizeUser(user)
 	writeJSON(w, http.StatusOK, map[string]any{"ok": true, "token": token, "user": user})
 }
 
@@ -371,6 +391,10 @@ func (s *Store) handleRooms(w http.ResponseWriter, r *http.Request, user User) {
 	for _, member := range members {
 		if _, ok := s.users[member]; !ok {
 			writeJSON(w, http.StatusBadRequest, map[string]any{"ok": false, "message": "Member tidak ditemukan: " + member})
+			return
+		}
+		if member != user.ID && !s.areFriendsLocked(user.ID, member) {
+			writeJSON(w, http.StatusForbidden, map[string]any{"ok": false, "message": "Member harus ditambahkan sebagai teman terlebih dahulu: " + member})
 			return
 		}
 	}
@@ -496,9 +520,12 @@ func (h *Hub) add(c *Client) {
 		h.clients[c.userID] = map[*Client]bool{}
 	}
 	h.clients[c.userID][c] = true
-	onlineUsers := make([]string, 0, len(h.clients))
-	for userID := range h.clients {
-		onlineUsers = append(onlineUsers, userID)
+	visible := h.store.visibleUserIDs(c.userID)
+	onlineUsers := make([]string, 0, len(visible))
+	for userID := range visible {
+		if len(h.clients[userID]) > 0 {
+			onlineUsers = append(onlineUsers, userID)
+		}
 	}
 	h.mu.Unlock()
 	payload, _ := json.Marshal(map[string][]string{"users": onlineUsers})
@@ -524,14 +551,12 @@ func (h *Hub) remove(c *Client) {
 
 func (h *Hub) broadcastPresence(userID, status string) {
 	payload, _ := json.Marshal(map[string]string{"user_id": userID, "status": status})
-	h.broadcastAll(WSEvent{Type: "presence.update", UserID: userID, Payload: payload})
-}
-
-func (h *Hub) broadcastAll(event WSEvent) {
+	event := WSEvent{Type: "presence.update", UserID: userID, Payload: payload}
+	visibleRecipients := h.store.visibleUserIDs(userID)
 	h.mu.RLock()
 	defer h.mu.RUnlock()
-	for _, clients := range h.clients {
-		for client := range clients {
+	for recipient := range visibleRecipients {
+		for client := range h.clients[recipient] {
 			client.enqueue(event)
 		}
 	}
@@ -595,6 +620,9 @@ func (c *Client) handle(event WSEvent) {
 		if json.Unmarshal(event.Payload, &req) != nil || req.RoomID == "" || req.Ciphertext == "" || req.Nonce == "" {
 			return
 		}
+		if !c.hub.store.canAccessRoom(req.RoomID, c.userID) {
+			return
+		}
 		if validateMessagePayload(req.Kind, req.FileSize) != "" {
 			return
 		}
@@ -609,12 +637,21 @@ func (c *Client) handle(event WSEvent) {
 		if json.Unmarshal(event.Payload, &req) != nil || req.RoomID == "" || req.MessageID == "" {
 			return
 		}
+		if !c.hub.store.canAccessRoom(req.RoomID, c.userID) {
+			return
+		}
 		c.hub.store.markRead(req.MessageID, c.userID)
 		payload, _ := json.Marshal(map[string]string{"message_id": req.MessageID, "user_id": c.userID, "read_at": time.Now().UTC().Format(time.RFC3339)})
 		c.hub.broadcastRoom(req.RoomID, WSEvent{Type: "receipt.read", RoomID: req.RoomID, UserID: c.userID, Payload: payload})
 	case "typing":
+		if !c.hub.store.canAccessRoom(event.RoomID, c.userID) {
+			return
+		}
 		c.hub.broadcastRoom(event.RoomID, WSEvent{Type: "typing", RoomID: event.RoomID, UserID: c.userID, Payload: event.Payload})
 	case "call.invite", "call.accept", "call.end", "call.signal":
+		if !c.hub.store.canAccessRoom(event.RoomID, c.userID) {
+			return
+		}
 		c.hub.broadcastRoom(event.RoomID, WSEvent{Type: event.Type, RoomID: event.RoomID, UserID: c.userID, Payload: event.Payload})
 	}
 }
@@ -686,6 +723,22 @@ func (s *Store) load() {
 	if data.Friends != nil {
 		s.friends = data.Friends
 	}
+	migrated := false
+	for id, user := range s.users {
+		if user.PasswordHash == "" && user.Password != "" {
+			if passwordHash, err := hashPassword(user.Password); err == nil {
+				user.PasswordHash = passwordHash
+				user.Password = ""
+				s.users[id] = user
+				migrated = true
+			}
+		}
+	}
+	if migrated {
+		s.mu.Lock()
+		s.persistLocked()
+		s.mu.Unlock()
+	}
 }
 
 func (s *Store) persistLocked() {
@@ -710,14 +763,18 @@ func (s *Store) persistLocked() {
 }
 
 func (s *Store) userByToken(token string) (User, bool) {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	session, ok := s.sessions[token]
 	if !ok {
 		return User{}, false
 	}
+	if !session.ExpiresAt.IsZero() && time.Now().After(session.ExpiresAt) {
+		delete(s.sessions, token)
+		return User{}, false
+	}
 	user, ok := s.users[session.UserID]
-	user.Password = ""
+	user = sanitizeUser(user)
 	return user, ok
 }
 
@@ -736,11 +793,26 @@ func (s *Store) auth(next func(http.ResponseWriter, *http.Request, User)) http.H
 
 func cors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+		origin := strings.TrimSpace(r.Header.Get("Origin"))
+		if origin != "" && isAllowedOrigin(r) {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Vary", "Origin")
+		}
 		w.Header().Set("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Authorization")
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
+		w.Header().Set("Permissions-Policy", "geolocation=(), microphone=(), camera=()")
 		if r.Method == http.MethodOptions {
+			if origin != "" && !isAllowedOrigin(r) {
+				w.WriteHeader(http.StatusForbidden)
+				return
+			}
 			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+		if isProtectedBrowserEndpoint(r) && !isAllowedOrigin(r) {
+			writeJSON(w, http.StatusForbidden, map[string]any{"ok": false, "message": "Origin request tidak diizinkan."})
 			return
 		}
 		next.ServeHTTP(w, r)
@@ -787,6 +859,86 @@ func normalizeRole(value string) string {
 	}
 }
 
+func hashPassword(password string) (string, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(hash), nil
+}
+
+func verifyPassword(user User, password string) bool {
+	if user.PasswordHash != "" {
+		return bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)) == nil
+	}
+	return user.Password != "" && user.Password == password
+}
+
+func needsPasswordMigration(user User) bool {
+	return user.PasswordHash == "" && user.Password != ""
+}
+
+func newSession(token, userID string) Session {
+	return Session{Token: token, UserID: userID, ExpiresAt: time.Now().Add(sessionTTL)}
+}
+
+func (s *Store) areFriendsLocked(a, b string) bool {
+	return s.friends[a] != nil && s.friends[a][b]
+}
+
+func (s *Store) canAccessRoom(roomID, userID string) bool {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	room, ok := s.rooms[roomID]
+	return ok && contains(room.Members, userID)
+}
+
+func (s *Store) visibleUserIDs(userID string) map[string]bool {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	visible := map[string]bool{userID: true}
+	for friendID := range s.friends[userID] {
+		visible[friendID] = true
+	}
+	for _, room := range s.rooms {
+		if !contains(room.Members, userID) {
+			continue
+		}
+		for _, member := range room.Members {
+			visible[member] = true
+		}
+	}
+	return visible
+}
+
+func isStateChanging(method string) bool {
+	return method == http.MethodPost || method == http.MethodPut || method == http.MethodPatch || method == http.MethodDelete
+}
+
+func isProtectedBrowserEndpoint(r *http.Request) bool {
+	if r.URL.Path == "/healthz" || r.URL.Path == "/api/config" {
+		return false
+	}
+	return strings.HasPrefix(r.URL.Path, "/api/") || strings.HasPrefix(r.URL.Path, "/ws") || isStateChanging(r.Method)
+}
+
+func isAllowedOrigin(r *http.Request) bool {
+	origin := strings.TrimSpace(r.Header.Get("Origin"))
+	if origin == "" {
+		if getenv("HERAI_STRICT_ORIGIN", "true") == "false" {
+			return true
+		}
+		return r.URL.Path == "/healthz"
+	}
+	allowed := strings.Split(getenv("HERAI_ALLOWED_ORIGINS", "http://127.0.0.1:3000,http://localhost:3000,https://her-ai.data-sorcerers.com,https://herai-signaling.onrender.com"), ",")
+	for _, item := range allowed {
+		if strings.TrimSpace(item) == origin {
+			return true
+		}
+	}
+	return false
+}
+
 func validateMessagePayload(kind string, fileSize int64) string {
 	switch firstNonEmpty(kind, "text") {
 	case "text":
@@ -829,6 +981,7 @@ func contains(values []string, needle string) bool {
 
 func sanitizeUser(user User) User {
 	user.Password = ""
+	user.PasswordHash = ""
 	return user
 }
 

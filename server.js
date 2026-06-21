@@ -5,6 +5,7 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || '127.0.0.1';
@@ -86,6 +87,17 @@ const mimeTypes = {
 const server = http.createServer((req, res) => {
     const requestUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     const pathname = decodeURIComponent(requestUrl.pathname);
+    applySecurityHeaders(res);
+    if (!['GET', 'HEAD', 'POST', 'OPTIONS'].includes(req.method)) {
+        res.writeHead(405, { 'Content-Type': 'text/plain' });
+        res.end('Method Not Allowed');
+        return;
+    }
+    if (req.method === 'OPTIONS') {
+        res.writeHead(isAllowedAppRequest(req) ? 204 : 403);
+        res.end();
+        return;
+    }
     if (isBlockedSourcePath(pathname)) {
         res.writeHead(404, { 'Content-Type': 'text/plain', 'X-Content-Type-Options': 'nosniff' });
         res.end('Not Found');
@@ -93,6 +105,11 @@ const server = http.createServer((req, res) => {
     }
 
     if (req.method === 'POST' && pathname === '/__debug') {
+        if (!isAllowedAppRequest(req)) {
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ ok: false, error: 'forbidden_origin' }));
+            return;
+        }
         let body = '';
         req.on('data', chunk => {
             body += chunk.toString();
@@ -146,6 +163,11 @@ const server = http.createServer((req, res) => {
         }
 
         if (req.method === 'POST') {
+            if (!isAllowedAppRequest(req)) {
+                res.writeHead(403, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ ok: false, error: 'forbidden_origin' }));
+                return;
+            }
             let body = '';
             req.on('data', chunk => {
                 body += chunk.toString();
@@ -183,6 +205,11 @@ const server = http.createServer((req, res) => {
     }
 
     if (req.method === 'POST' && pathname === '/__gas') {
+        if (!isAllowedAppRequest(req)) {
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ status: 'error', message: 'Origin request tidak diizinkan.' }));
+            return;
+        }
         let body = '';
         req.on('data', chunk => {
             body += chunk.toString();
@@ -289,9 +316,44 @@ function proxyGasRequest(body, res) {
 function isBlockedSourcePath(pathname) {
     return pathname.startsWith('/gas/') ||
         pathname.startsWith('/signaling/') ||
+        pathname.startsWith('/messaging/') ||
+        pathname.startsWith('/participant-portal/') ||
+        pathname.startsWith('/.git/') ||
+        pathname.startsWith('/.cursor/') ||
+        pathname.startsWith('/reports/') ||
+        pathname.endsWith('.map') ||
         pathname === '/render.yaml' ||
         pathname === '/server.js' ||
-        pathname === '/.gitignore';
+        pathname === '/.gitignore' ||
+        pathname === '/.env' ||
+        pathname.includes('/.env');
+}
+
+function applySecurityHeaders(res) {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(self), camera=(self), display-capture=(self)');
+    res.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
+}
+
+function isAllowedAppRequest(req) {
+    const allowed = (process.env.HERAI_ALLOWED_ORIGINS || `http://${HOST}:${PORT},http://localhost:${PORT},https://her-ai.data-sorcerers.com,https://herai-signaling.onrender.com`)
+        .split(',')
+        .map(item => item.trim())
+        .filter(Boolean);
+    const origin = req.headers.origin || '';
+    if (origin) return allowed.includes(origin);
+    const referer = req.headers.referer || '';
+    if (referer) {
+        try {
+            const parsed = new URL(referer);
+            return allowed.includes(parsed.origin);
+        } catch {
+            return false;
+        }
+    }
+    return false;
 }
 
 function proxyGasRedirect(location, body, res) {
@@ -348,7 +410,7 @@ function handleLocalGasFallback(body, res) {
             return null;
         },
         login: () => {
-            if (String(payload.id_admin || payload.adminId || '') === 'super-admin' && String(payload.password || '') === 'admin123') {
+            if (String(payload.id_admin || payload.adminId || '') === 'super-admin' && verifyLocalPassword('scrypt$1$5cc57f601af2744773d73cb78e2143e3$3e76ccefc0774e220cc5f72c492c7be226c002b169928ce7c36d9ffd331dfc8e', payload.password || '')) {
                 return { status: 'success', admin: { adminId: 'super-admin', name: 'Super Admin', role: 'super_admin', permissions: 'all', status: 'active' } };
             }
             return { status: 'error', message: 'ID admin atau password salah.' };
@@ -361,10 +423,11 @@ function handleLocalGasFallback(body, res) {
             if (!participant.participant_password && participant.nik !== TEST_PARTICIPANT.nik) {
                 return { status: 'needs_password', message: 'Password belum dibuat.' };
             }
-            const expectedPassword = participant.participant_password || TEST_PASSWORD;
-            if (String(payload.password || '') !== String(expectedPassword)) {
+            const expectedPassword = participant.participant_password || hashLocalPassword(TEST_PASSWORD);
+            if (!verifyLocalPassword(expectedPassword, payload.password || '')) {
                 return { status: 'error', message: 'Password salah.' };
             }
+            migrateLocalParticipantPassword(participant, payload.password || '');
             return { status: 'success', profile: stripLocalParticipantSensitive(participant) };
         },
         setParticipantPassword: () => setLocalParticipantPassword(payload),
@@ -494,7 +557,7 @@ function setLocalParticipantPassword(payload) {
     if (!payload.password || String(payload.password).length < 6) return { status: 'error', message: 'Password minimal 6 karakter.' };
     if (participant.participant_password) return { status: 'error', message: 'Password sudah dibuat. Silakan login.' };
     return updateLocalParticipantByKey('nik', participant.nik, {
-        participant_password: payload.password,
+        participant_password: hashLocalPassword(payload.password),
         participant_stage: participant.participant_stage || 'registered',
         profile_updated_at: new Date().toISOString()
     });
@@ -503,8 +566,9 @@ function setLocalParticipantPassword(payload) {
 function updateLocalParticipantProfile(payload) {
     const participant = findLocalParticipantByNik(payload.nik);
     if (!participant) return { status: 'error', message: 'NIK belum terdaftar.' };
-    const expectedPassword = participant.participant_password || TEST_PASSWORD;
-    if (String(expectedPassword) !== String(payload.password || '')) return { status: 'error', message: 'Session tidak valid. Silakan login ulang.' };
+    const expectedPassword = participant.participant_password || hashLocalPassword(TEST_PASSWORD);
+    if (!verifyLocalPassword(expectedPassword, payload.password || '')) return { status: 'error', message: 'Session tidak valid. Silakan login ulang.' };
+    migrateLocalParticipantPassword(participant, payload.password || '');
     return updateLocalParticipantByKey('nik', participant.nik, {
         nama_lengkap: payload.nama_lengkap || participant.nama_lengkap,
         email: payload.email || participant.email,
@@ -559,6 +623,29 @@ function stripLocalParticipantSensitive(participant) {
     const clone = { ...participant };
     delete clone.participant_password;
     return clone;
+}
+
+function hashLocalPassword(password) {
+    const salt = crypto.randomBytes(16).toString('hex');
+    const derived = crypto.scryptSync(String(password), salt, 32).toString('hex');
+    return `scrypt$1$${salt}$${derived}`;
+}
+
+function verifyLocalPassword(stored, password) {
+    const value = String(stored || '');
+    if (!value.startsWith('scrypt$')) {
+        return value !== '' && value === String(password || '');
+    }
+    const [, version, salt, hash] = value.split('$');
+    if (version !== '1' || !salt || !hash) return false;
+    const derived = crypto.scryptSync(String(password || ''), salt, 32);
+    const expected = Buffer.from(hash, 'hex');
+    return expected.length === derived.length && crypto.timingSafeEqual(expected, derived);
+}
+
+function migrateLocalParticipantPassword(participant, password) {
+    if (!participant?.participant_password || String(participant.participant_password).startsWith('scrypt$')) return;
+    updateLocalParticipantByKey('nik', participant.nik, { participant_password: hashLocalPassword(password) });
 }
 
 function normalizeLocalNik(nik) {

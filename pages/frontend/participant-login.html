@@ -1,0 +1,42 @@
+<section class="participant-login-shell">
+    <div class="participant-login-card">
+        <aside class="participant-login-hero" aria-hidden="true">
+            <img class="participant-login-logo" src="/assets/branding/logo-her-ai-transparent.png" alt="">
+            <div class="participant-login-orbit">
+                <img src="/assets/messaging/herai-chat-persona.png" alt="">
+            </div>
+            <div class="participant-login-chip">
+                <i class="fas fa-shield-heart"></i>
+                <span>Akses khusus peserta HerAI Fellowship</span>
+            </div>
+        </aside>
+
+        <main class="participant-login-panel">
+            <img class="participant-login-mark" src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+            <div>
+                <span class="profile-badge">Participant Portal</span>
+                <h1>Masuk ke Dashboard Peserta</h1>
+                <p>Gunakan NIK dan password peserta untuk membuka beranda, modul, profil, dan informasi fellowship.</p>
+            </div>
+
+            <form id="participantLoginForm" class="profile-form participant-login-form">
+                <label for="profileNik">NIK Peserta</label>
+                <input type="text" id="profileNik" maxlength="16" inputmode="numeric" autocomplete="username" placeholder="16 digit NIK" required>
+
+                <label for="profilePassword">Password</label>
+                <div class="participant-password-field">
+                    <input type="password" id="profilePassword" autocomplete="current-password" placeholder="Password peserta" required>
+                    <button type="button" id="participantTogglePassword" aria-label="Tampilkan password"><i class="far fa-eye"></i></button>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="btnParticipantLogin">Masuk Dashboard</button>
+                <p id="participantLoginMessage" class="profile-message"></p>
+            </form>
+
+            <div class="participant-login-note">
+                <i class="fas fa-lock"></i>
+                <span>NIK bersifat tetap. Jika password belum aktif, hubungi panitia untuk aktivasi akses peserta.</span>
+            </div>
+        </main>
+    </div>
+</section>

@@ -1,0 +1,258 @@
+<div class="dashboard-layout">
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1 class="page-title">Learning Content</h1>
+                <p class="page-subtitle">Kelola modul, submodul, materi, latihan, kuis, diskusi, gambar, dan status publish peserta.</p>
+            </div>
+            <div class="topbar-right">
+                <button class="btn-cyber" id="btnLearningSync" style="background: var(--dark-purple);">
+                    <i class="fas fa-cloud-arrow-up"></i> Sync GAS
+                </button>
+            </div>
+        </header>
+
+        <section class="learning-admin-grid">
+            <aside class="glass-panel learning-admin-list">
+                <div class="learning-admin-head">
+                    <div>
+                        <h2>Struktur Modul</h2>
+                        <p>Folder: AI Fundamental / Pengantar AI / Daftar Materi</p>
+                    </div>
+                    <button type="button" id="btnAddLearningModule"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="learningModuleList" class="learning-tree"></div>
+            </aside>
+
+            <section class="glass-panel learning-editor-panel">
+                <form id="learningContentForm">
+                    <div class="learning-editor-head">
+                        <div>
+                            <span id="learningEditorMode">Draft Editor</span>
+                            <h2 id="learningEditorTitle">Pengantar AI - Materi</h2>
+                        </div>
+                        <label class="learning-publish-toggle">
+                            <input type="checkbox" id="learningPublished">
+                            <span>Published</span>
+                        </label>
+                    </div>
+
+                    <div class="learning-form-grid">
+                        <label>
+                            <span>Course / Modul Utama</span>
+                            <input type="text" id="learningCourse" placeholder="AI Fundamentals & Advanced">
+                        </label>
+                        <label>
+                            <span>Sub Modul</span>
+                            <input type="text" id="learningModule" placeholder="Pengantar AI">
+                        </label>
+                        <label>
+                            <span>Daftar Materi</span>
+                            <input type="text" id="learningLesson" placeholder="Apa itu Artificial Intelligence?">
+                        </label>
+                        <label>
+                            <span>Tipe Halaman</span>
+                            <select id="learningType">
+                                <option value="materi">Materi</option>
+                                <option value="latihan">Latihan</option>
+                                <option value="kuis">Kuis</option>
+                                <option value="diskusi">Diskusi</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span>Estimasi Durasi</span>
+                            <input type="text" id="learningDuration" placeholder="45 menit">
+                        </label>
+                        <label>
+                            <span>Tag</span>
+                            <input type="text" id="learningTag" placeholder="Dasar">
+                        </label>
+                    </div>
+
+                    <label class="learning-full-field">
+                        <span>Ringkasan / Deskripsi</span>
+                        <textarea id="learningDescription" rows="3" placeholder="Deskripsi singkat yang muncul di hero section."></textarea>
+                    </label>
+
+                    <label class="learning-full-field">
+                        <span>Konten Materi (HTML + LaTeX)</span>
+                        <textarea id="learningBody" rows="12" placeholder="Tulis materi. Gunakan HTML ringan, misal <h2>, <p>, <ol>. Untuk LaTeX gunakan \\( y = f(x) + \\epsilon \\)."></textarea>
+                    </label>
+
+                    <div class="learning-form-grid">
+                        <label>
+                            <span>Hero Image URL</span>
+                            <input type="text" id="learningHeroImage" placeholder="/assets/messaging/herai-chat-persona.png">
+                        </label>
+                        <label>
+                            <span>Upload/Asset Link</span>
+                            <input type="text" id="learningAssetLink" placeholder="Google Drive / asset URL">
+                        </label>
+                    </div>
+
+                    <label class="learning-full-field">
+                        <span>Referensi / Sitasi</span>
+                        <textarea id="learningReferences" rows="3" placeholder="World Travel & Tourism Council. Introduction to Artificial Intelligence (AI) Technology, January 2024."></textarea>
+                    </label>
+
+                    <div class="learning-actions">
+                        <button type="submit" class="btn-cyber"><i class="fas fa-floppy-disk"></i> Simpan Draft</button>
+                        <button type="button" id="btnLearningPublish" class="btn-cyber" style="background: var(--primary-pink);"><i class="fas fa-toggle-on"></i> Publish / Unpublish</button>
+                        <button type="button" id="btnLearningDelete" class="btn-cyber danger"><i class="fas fa-trash"></i> Hapus</button>
+                        <span id="learningStatus"></span>
+                    </div>
+                </form>
+            </section>
+        </section>
+
+        <section class="glass-panel learning-gas-contract">
+            <h2>GAS Contract</h2>
+            <p>Frontend akan mencoba memakai action berikut di Web App GAS. Jika belum tersedia, perubahan tetap disimpan lokal dulu.</p>
+            <code>getLearningContent</code>
+            <code>saveLearningContent</code>
+            <code>deleteLearningContent</code>
+        </section>
+    </main>
+</div>
+
+<style>
+    .learning-admin-grid {
+        display: grid;
+        gap: 24px;
+        grid-template-columns: minmax(300px, 390px) minmax(0, 1fr);
+    }
+    .learning-admin-list,
+    .learning-editor-panel,
+    .learning-gas-contract {
+        padding: 24px;
+    }
+    .learning-admin-head,
+    .learning-editor-head,
+    .learning-actions {
+        align-items: center;
+        display: flex;
+        gap: 14px;
+        justify-content: space-between;
+    }
+    .learning-admin-head h2,
+    .learning-editor-head h2,
+    .learning-gas-contract h2 {
+        color: var(--dark-purple);
+        margin: 0;
+    }
+    .learning-admin-head p,
+    .learning-editor-head span,
+    .learning-gas-contract p {
+        color: var(--text-muted);
+        font-size: 0.84rem;
+        margin: 5px 0 0;
+    }
+    .learning-admin-head button {
+        align-items: center;
+        background: var(--primary-pink);
+        border: 0;
+        border-radius: 12px;
+        color: #fff;
+        cursor: pointer;
+        display: inline-flex;
+        height: 42px;
+        justify-content: center;
+        width: 42px;
+    }
+    .learning-tree {
+        display: grid;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    .learning-tree button {
+        background: #fff;
+        border: 1px solid var(--gray-border);
+        border-radius: 12px;
+        color: var(--text-dark);
+        cursor: pointer;
+        display: grid;
+        gap: 4px;
+        padding: 12px;
+        text-align: left;
+    }
+    .learning-tree button.active {
+        border-color: var(--primary-pink);
+        box-shadow: 0 10px 24px rgba(245, 47, 145, 0.12);
+    }
+    .learning-tree small {
+        color: var(--text-muted);
+    }
+    .learning-publish-toggle {
+        align-items: center;
+        display: inline-flex;
+        gap: 9px;
+        font-weight: 800;
+    }
+    .learning-publish-toggle input {
+        accent-color: var(--primary-pink);
+    }
+    .learning-form-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 18px;
+    }
+    .learning-form-grid label,
+    .learning-full-field {
+        display: grid;
+        gap: 8px;
+    }
+    .learning-form-grid span,
+    .learning-full-field span {
+        color: var(--text-muted);
+        font-size: 0.78rem;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    .learning-form-grid input,
+    .learning-form-grid select,
+    .learning-full-field textarea {
+        background: #f8fafc;
+        border: 1px solid var(--gray-border);
+        border-radius: 10px;
+        color: var(--text-dark);
+        font: 500 0.92rem 'Inter', sans-serif;
+        outline: none;
+        padding: 12px;
+        width: 100%;
+    }
+    .learning-full-field {
+        margin-top: 18px;
+    }
+    .learning-actions {
+        justify-content: flex-start;
+        margin-top: 20px;
+    }
+    .learning-actions .danger {
+        background: var(--danger);
+    }
+    #learningStatus {
+        color: var(--text-muted);
+        font-size: 0.86rem;
+        font-weight: 800;
+    }
+    .learning-gas-contract {
+        margin-top: 24px;
+    }
+    .learning-gas-contract code {
+        background: #f8fafc;
+        border: 1px solid var(--gray-border);
+        border-radius: 8px;
+        display: inline-flex;
+        margin: 8px 8px 0 0;
+        padding: 8px 10px;
+    }
+    @media (max-width: 1100px) {
+        .learning-admin-grid,
+        .learning-form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

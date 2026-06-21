@@ -1,9 +1,9 @@
 <div class="dashboard-layout">
-    
+
     <div id="sidebar-container"></div>
 
     <main class="main-content">
-        
+
         <header class="topbar">
             <div class="topbar-left">
                 <h1 class="page-title">Global Settings</h1>
@@ -31,12 +31,12 @@
         </div>
 
         <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px;">
-            
+
             <div class="glass-panel" style="padding: 30px;">
                 <h3 style="display: flex; align-items: center; gap: 10px; color: var(--dark-purple); border-bottom: 1px solid var(--gray-border); padding-bottom: 15px; margin-top: 0;">
                     <i class="fas fa-door-open" style="color: var(--icon-blue);"></i> Kontrol Pendaftaran
                 </h3>
-                
+
                 <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 25px;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div>
@@ -71,7 +71,7 @@
                 <h3 style="display: flex; align-items: center; gap: 10px; color: var(--dark-purple); border-bottom: 1px solid var(--gray-border); padding-bottom: 15px; margin-top: 0;">
                     <i class="fas fa-bullhorn" style="color: var(--primary-pink);"></i> Halaman Pengumuman
                 </h3>
-                
+
                 <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 25px;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div>
@@ -105,7 +105,7 @@
                 <h3 style="display: flex; align-items: center; gap: 10px; color: var(--dark-purple); border-bottom: 1px solid var(--gray-border); padding-bottom: 15px; margin-top: 0;">
                     <i class="fas fa-user-lock" style="color: var(--icon-purple);"></i> Portal Profil Peserta
                 </h3>
-                
+
                 <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 25px;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div>
@@ -122,9 +122,52 @@
 
             <div class="glass-panel" style="padding: 30px;">
                 <h3 style="display: flex; align-items: center; gap: 10px; color: var(--dark-purple); border-bottom: 1px solid var(--gray-border); padding-bottom: 15px; margin-top: 0;">
+                    <i class="fas fa-table-columns" style="color: var(--primary-pink);"></i> Dashboard Peserta
+                </h3>
+
+                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 18px;">
+                        <div>
+                            <h4 style="margin: 0 0 5px 0; color: var(--text-dark);">Aktifkan Dashboard Peserta</h4>
+                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); max-width: 330px;">Master control untuk seluruh halaman peserta seperti Beranda, Modul, Tugas, Proyek, dan Sertifikat.</p>
+                        </div>
+                        <label class="master-switch">
+                            <input type="checkbox" id="toggleFellowDashboard" checked>
+                            <span class="slider-master"></span>
+                        </label>
+                    </div>
+
+                    <div style="background: #f8fafc; border: 1px solid var(--gray-border); border-radius: 14px; padding: 16px;">
+                        <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 14px;">Visibilitas Halaman/Menu Peserta</label>
+                        <div class="participant-page-toggle-grid">
+                            <label><input type="checkbox" data-participant-page-toggle="dashboard" checked> Beranda</label>
+                            <label><input type="checkbox" data-participant-page-toggle="modules" checked> Modul</label>
+                            <label><input type="checkbox" data-participant-page-toggle="chatroom" checked> Chatroom</label>
+                            <label><input type="checkbox" data-participant-page-toggle="mentor" checked> Mentor</label>
+                            <label><input type="checkbox" data-participant-page-toggle="tasks" checked> Tugas</label>
+                            <label><input type="checkbox" data-participant-page-toggle="projects" checked> Proyek</label>
+                            <label><input type="checkbox" data-participant-page-toggle="events" checked> Events</label>
+                            <label><input type="checkbox" data-participant-page-toggle="community" checked> Komunitas</label>
+                            <label><input type="checkbox" data-participant-page-toggle="certificates" checked> Sertifikat</label>
+                            <label><input type="checkbox" data-participant-page-toggle="leaderboard" checked> Leaderboard</label>
+                            <label><input type="checkbox" data-participant-page-toggle="faq" checked> FAQ & Bantuan</label>
+                            <label><input type="checkbox" data-participant-page-toggle="settings" checked> Pengaturan</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Participant Portal API URL</label>
+                        <input type="text" id="participantPortalApiUrl" value="http://127.0.0.1:8092" style="width: 100%; padding: 12px; border: 1px solid var(--gray-border); border-radius: 8px; font-family: 'Inter', sans-serif; outline: none; background: #f8fafc;">
+                        <p style="margin: 8px 0 0; font-size: 0.8rem; color: var(--text-muted);">Local default: <code>http://127.0.0.1:8092</code>. Saat deploy, isi dengan URL service Go participant portal.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="padding: 30px;">
+                <h3 style="display: flex; align-items: center; gap: 10px; color: var(--dark-purple); border-bottom: 1px solid var(--gray-border); padding-bottom: 15px; margin-top: 0;">
                     <i class="fas fa-square-root-variable" style="color: var(--icon-blue);"></i> Seleksi Tahap 2
                 </h3>
-                
+
                 <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 25px;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div>
@@ -146,9 +189,9 @@
                 <h3 style="display: flex; align-items: center; gap: 10px; color: var(--danger); border-bottom: 1px solid rgba(230,57,70,0.2); padding-bottom: 15px; margin-top: 0;">
                     <i class="fas fa-radiation"></i> Danger Zone
                 </h3>
-                
+
                 <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 20px;">
-                    
+
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(230,57,70,0.05); border-radius: 8px; border: 1px dashed rgba(230,57,70,0.3);">
                         <div>
                             <h4 style="margin: 0 0 5px 0; color: var(--danger);">Maintenance Mode</h4>
@@ -193,7 +236,7 @@
         width: 50px;
         height: 28px;
     }
-    .master-switch input { 
+    .master-switch input {
         opacity: 0;
         width: 0;
         height: 0;
@@ -225,14 +268,35 @@
     .master-switch input:checked + .slider-master:before {
         transform: translateX(22px);
     }
-    
+
     /* Warna nyala untuk Danger Zone (Merah) */
     .danger-switch input:checked + .slider-master {
         background-color: var(--danger);
     }
-    
+
     /* Fokus Input */
     input[type="text"]:focus, textarea:focus {
         border-color: var(--icon-blue) !important;
+    }
+    .participant-page-toggle-grid {
+        display: grid;
+        gap: 10px 14px;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    .participant-page-toggle-grid label {
+        align-items: center;
+        background: #fff;
+        border: 1px solid var(--gray-border);
+        border-radius: 10px;
+        color: var(--text-dark);
+        display: flex;
+        font-size: 0.86rem;
+        font-weight: 700;
+        gap: 9px;
+        min-height: 42px;
+        padding: 10px 12px;
+    }
+    .participant-page-toggle-grid input {
+        accent-color: var(--primary-pink);
     }
 </style>

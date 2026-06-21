@@ -5,8 +5,9 @@
 Dokumen handover terbaru untuk programmer/maintainer ada di:
 
 - `docs/DEVELOPER_HANDOVER_AND_ROADMAP.md`
+- `docs/SECURITY_HARDENING_REPORT.md`
 
-Dokumen tersebut berisi status fitur terkini, cara menjalankan service, struktur backend/frontend, kontrak database/API, batasan sistem, dan roadmap pengembangan berikutnya.
+Dokumen tersebut berisi status fitur terkini, cara menjalankan service, struktur backend/frontend, kontrak database/API, batasan sistem, roadmap pengembangan berikutnya, dan catatan hardening keamanan.
 
 ## QA Automation
 

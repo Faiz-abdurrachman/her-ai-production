@@ -25,6 +25,87 @@ window.initParticipantProfile = function() {
     bindParticipantEvents();
 };
 
+window.initParticipantLogin = function() {
+    const loginForm = document.getElementById('participantLoginForm');
+    if (!loginForm) return;
+
+    const existing = readParticipantSession();
+    if (existing?.nik) {
+        window.location.hash = '#/participant-dashboard';
+        return;
+    }
+
+    document.getElementById('participantTogglePassword')?.addEventListener('click', () => {
+        const input = document.getElementById('profilePassword');
+        const icon = document.querySelector('#participantTogglePassword i');
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        icon?.classList.toggle('fa-eye', !show);
+        icon?.classList.toggle('fa-eye-slash', show);
+    });
+
+    loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const nik = document.getElementById('profileNik').value.replace(/\D/g, '');
+        const password = document.getElementById('profilePassword').value;
+        const btn = document.getElementById('btnParticipantLogin');
+        const original = btn.innerHTML;
+
+        if (nik.length !== 16) return setProfileMessage('NIK harus 16 digit.', true);
+        if (!password) return setProfileMessage('Password wajib diisi.', true);
+
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memeriksa...';
+        btn.disabled = true;
+        try {
+            const profile = await loadParticipantProfile(nik, password);
+            saveParticipantSession({ nik, password, name: profile.nama_lengkap || 'Peserta HerAI' });
+            window.__CURRENT_PARTICIPANT_PROFILE__ = profile;
+            window.location.hash = '#/participant-dashboard';
+        } catch (error) {
+            setProfileMessage(error.message || 'NIK atau password tidak valid.', true);
+        } finally {
+            btn.innerHTML = original;
+            btn.disabled = false;
+        }
+    });
+};
+
+window.initParticipantProfileDashboard = async function() {
+    const session = readParticipantSession();
+    if (!session?.nik) {
+        window.location.hash = '#/profile';
+        return;
+    }
+
+    let profile = window.__CURRENT_PARTICIPANT_PROFILE__;
+    if (!profile?.nik && session.password) {
+        try {
+            profile = await loadParticipantProfile(session.nik, session.password);
+        } catch {
+            profile = {
+                nik: session.nik,
+                nama_lengkap: session.name || 'Peserta HerAI',
+                email: '-',
+                participant_stage: 'registered',
+                status_seleksi: 'pending'
+            };
+        }
+    }
+
+    const name = profile?.nama_lengkap || session.name || 'Peserta HerAI';
+    document.getElementById('participantProfileNameTop') && (document.getElementById('participantProfileNameTop').textContent = name);
+    document.getElementById('participantProfileName') && (document.getElementById('participantProfileName').textContent = name);
+    document.getElementById('participantProfileNik') && (document.getElementById('participantProfileNik').textContent = profile?.nik || session.nik || '-');
+    document.getElementById('participantProfileEmail') && (document.getElementById('participantProfileEmail').textContent = profile?.email || '-');
+    document.getElementById('participantProfileStage') && (document.getElementById('participantProfileStage').textContent = profile?.participant_stage || 'registered');
+    document.getElementById('participantProfileMeta') && (document.getElementById('participantProfileMeta').textContent = `Fellow • ${profile?.status_seleksi || 'pending'}`);
+
+    document.getElementById('participantProfileLogout')?.addEventListener('click', () => {
+        sessionStorage.removeItem(PARTICIPANT_SESSION_KEY);
+        window.location.hash = '#/profile';
+    });
+};
+
 function bindParticipantEvents() {
     const loginForm = document.getElementById('participantLoginForm');
     const firstLoginBtn = document.getElementById('btnFirstLoginMode');
