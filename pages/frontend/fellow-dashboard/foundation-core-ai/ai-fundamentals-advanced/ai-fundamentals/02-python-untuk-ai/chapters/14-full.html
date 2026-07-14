@@ -1,0 +1,79 @@
+<h1>Chapter 14 — Pandas: Membaca dan Membersihkan Data Tabular</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Membuat dan membaca DataFrame.</li>
+<li>Memeriksa, memilih, memfilter, dan membersihkan data.</li>
+<li>Melakukan agregasi sederhana dan menyimpan CSV.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Sebagian besar waktu project data dihabiskan untuk memahami dan membersihkan data, bukan membangun model.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Model hanya dapat belajar dari data yang diberikan. Pandas membantu menemukan nilai kosong, duplikat, tipe salah, dan distribusi yang perlu diperiksa sebelum tahap model.</p>
+<h2>Analogi</h2>
+<p>DataFrame seperti spreadsheet yang dapat diberi instruksi melalui kode. Instruksinya dapat diulang pada file baru tanpa mengklik langkah yang sama.</p>
+<h2>Penjelasan Konsep</h2>
+<ul>
+<li><code>DataFrame</code>: tabel dua dimensi.</li>
+<li><code>read_csv()</code>: membaca CSV.</li>
+<li><code>head()</code>, <code>info()</code>, <code>describe()</code>: memahami data.</li>
+<li>Boolean filtering: memilih baris berdasarkan kondisi.</li>
+<li><code>fillna()</code>/<code>dropna()</code>: menangani missing value berdasarkan alasan yang jelas.</li>
+<li><code>groupby()</code>: merangkum per kelompok.</li>
+<li><code>to_csv()</code>: menyimpan hasil.</li>
+</ul>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">CSV → read → inspect → clean → validate → summarize → save
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Kolom nilai berisi satu data kosong dan track peserta perlu dibandingkan.</p>
+<h2>Contoh AI</h2>
+<p>Cleaning yang konsisten menghasilkan dataset yang lebih siap untuk tahap analisis atau model pada modul berikutnya.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">import pandas as pd
+
+data = {
+    &quot;name&quot;: [&quot;Ayu&quot;, &quot;Nisa&quot;, &quot;Rani&quot;, &quot;Sari&quot;],
+    &quot;track&quot;: [&quot;data&quot;, &quot;data&quot;, &quot;product&quot;, &quot;product&quot;],
+    &quot;score&quot;: [88, 91, None, 76],
+}
+
+df = pd.DataFrame(data)
+df[&quot;score&quot;] = df[&quot;score&quot;].fillna(df[&quot;score&quot;].median())
+passed = df[df[&quot;score&quot;] &gt;= 75]
+summary = df.groupby(&quot;track&quot;)[&quot;score&quot;].mean()
+
+passed.to_csv(&quot;participants_clean.csv&quot;, index=False)
+print(summary)
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li>Pandas diimpor sebagai <code>pd</code>.</li>
+<li>Dictionary menyediakan data kolom.</li>
+<li><code>DataFrame</code> mengubahnya menjadi tabel.</li>
+<li>Missing score diisi median sebagai keputusan contoh; pada data nyata keputusan harus dibenarkan.</li>
+<li>Boolean filter memilih nilai minimal 75.</li>
+<li><code>groupby</code> menghitung rata-rata per track.</li>
+<li>Data bersih disimpan tanpa index tambahan.</li>
+<li>Ringkasan ditampilkan.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li>Mengubah data tanpa memeriksa salinan raw.</li>
+<li>Mengisi semua missing value dengan nol.</li>
+<li>Mengabaikan tipe data dan duplikat.</li>
+<li>Menganggap hasil agregasi membuktikan sebab-akibat.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li>Mulai dengan <code>head()</code>, <code>shape</code>, <code>info()</code>, dan pemeriksaan missing value.</li>
+<li>Dokumentasikan setiap keputusan cleaning.</li>
+<li>Simpan output ke file baru.</li>
+<li>Validasi jumlah baris sebelum dan sesudah transformasi.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Tambahkan satu record duplikat. Deteksi dengan <code>duplicated()</code>, hapus dengan <code>drop_duplicates()</code>, lalu bandingkan jumlah baris.</p>
+<h2>Ringkasan</h2>
+<p>Pandas mengubah proses cleaning dan analisis tabel menjadi langkah yang dapat diulang serta diaudit.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Sekarang kita menggabungkan seluruh fondasi menjadi satu mini workflow data berorientasi AI.</p>
+<hr>

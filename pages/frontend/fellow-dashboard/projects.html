@@ -1,0 +1,378 @@
+<section class="fellow-dashboard">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a class="active" href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+
+        <div class="fellow-menu-label">Lainnya</div>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+
+        <div class="invite-card">
+            <p><strong>Ajak Temanmu!</strong><br>Dapatkan poin tambahan untuk setiap teman yang bergabung.</p>
+            <button type="button">Undang Sekarang</button>
+        </div>
+    </aside>
+
+    <main class="fellow-main projects-page">
+        <header class="fellow-topbar">
+            <div>
+                <h1 data-fellow-greeting>Proyek</h1>
+                <p>Bangun solusi nyata dan terapkan ilmu AI yang kamu pelajari.</p>
+            </div>
+            <div class="fellow-actions">
+                <label class="fellow-search">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="search" placeholder="Cari proyek...">
+                </label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
+                    <i class="far fa-bell"></i>
+                    <span class="badge">5</span>
+                </button>
+                <div class="fellow-user-menu">
+                    <button type="button" class="fellow-user-button" data-fellow-user-toggle aria-expanded="false">
+                        <img src="/assets/avatars/user-1.jpg" alt="Aisyah Putri" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
+                        <span><strong>Aisyah Putri</strong><small>Fellow</small></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="projects-layout">
+            <div class="projects-main-column">
+
+                <div class="projects-header-row">
+                    <div class="projects-tabs">
+                        <button class="active">Semua Proyek</button>
+                        <button>Proyek Saya</button>
+                        <button>Proyek Tim</button>
+                        <button>Arsip</button>
+                    </div>
+                    <button class="btn-primary-pink"><i class="fas fa-plus"></i> Buat Proyek Baru</button>
+                </div>
+
+                <div class="projects-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon pink"><i class="far fa-folder-open"></i></div>
+                        <div class="stat-info">
+                            <span>Total Proyek</span>
+                            <strong>24</strong>
+                            <small>Proyek</small>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple"><i class="fas fa-user-group"></i></div>
+                        <div class="stat-info">
+                            <span>Proyek Saya</span>
+                            <strong>6</strong>
+                            <small>Proyek</small>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon yellow"><i class="fas fa-users-rectangle"></i></div>
+                        <div class="stat-info">
+                            <span>Proyek Tim</span>
+                            <strong>8</strong>
+                            <small>Proyek</small>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+                        <div class="stat-info">
+                            <span>Selesai</span>
+                            <strong>10</strong>
+                            <small>Proyek</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="projects-list-header">
+                    <h2>Daftar Proyek</h2>
+                    <div class="projects-filters">
+                        <div class="custom-select">
+                            <select aria-label="Filter status">
+                                <option>Semua Status</option>
+                                <option>Selesai</option>
+                                <option>Sedang Dikerjakan</option>
+                            </select>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="custom-select">
+                            <select aria-label="Urutkan">
+                                <option>Terbaru</option>
+                                <option>Terlama</option>
+                            </select>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <button class="view-toggle" aria-label="Toggle grid view"><i class="fas fa-table-cells"></i></button>
+                    </div>
+                </div>
+
+                <div class="projects-list">
+                    <!-- Project 1 -->
+                    <article class="project-card">
+                        <div class="project-icon pink">
+                            <i class="fas fa-heart-pulse"></i>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-title-row">
+                                <h3>AI Chatbot Kesehatan Mental</h3>
+                                <span class="badge-category pink">Machine Learning</span>
+                            </div>
+                            <p>Chatbot berbasis NLP untuk memberikan dukungan kesehatan mental awal bagi perempuan muda.</p>
+                            <div class="project-footer">
+                                <div class="team-avatars">
+                                    <img src="https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865" alt="Member">
+                                    <img src="https://ui-avatars.com/api/?name=Budi&background=e9d5ff&color=7e22ce" alt="Member">
+                                    <img src="https://ui-avatars.com/api/?name=Citra&background=fef08a&color=a16207" alt="Member">
+                                    <span class="avatar-more">+2</span>
+                                </div>
+                                <span class="project-date">Diperbarui 2 hari yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="project-status-col">
+                            <div class="status-top">
+                                <span class="badge-status green">Selesai</span>
+                                <button class="btn-more"><i class="fas fa-ellipsis"></i></button>
+                            </div>
+                            <div class="status-progress">
+                                <div class="progress-bar-bg"><div class="progress-bar-fill pink" style="width: 100%"></div></div>
+                                <span class="progress-pct">100%</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Project 2 -->
+                    <article class="project-card">
+                        <div class="project-icon purple">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-title-row">
+                                <h3>Prediksi Harga Rumah</h3>
+                                <span class="badge-category purple">Data Analysis</span>
+                            </div>
+                            <p>Model prediksi harga rumah menggunakan algoritma regresi dan feature engineering.</p>
+                            <div class="project-footer">
+                                <div class="team-avatars">
+                                    <img src="https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865" alt="Member">
+                                    <img src="https://ui-avatars.com/api/?name=Citra&background=fef08a&color=a16207" alt="Member">
+                                    <img src="https://ui-avatars.com/api/?name=Diana&background=bbf7d0&color=15803d" alt="Member">
+                                </div>
+                                <span class="project-date">Diperbarui 5 hari yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="project-status-col">
+                            <div class="status-top">
+                                <span class="badge-status orange">Sedang Dikerjakan</span>
+                                <button class="btn-more"><i class="fas fa-ellipsis"></i></button>
+                            </div>
+                            <div class="status-progress">
+                                <div class="progress-bar-bg"><div class="progress-bar-fill pink" style="width: 65%"></div></div>
+                                <span class="progress-pct">65%</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Project 3 -->
+                    <article class="project-card">
+                        <div class="project-icon yellow">
+                            <i class="fas fa-cart-shopping"></i>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-title-row">
+                                <h3>Rekomendasi Produk Skincare</h3>
+                                <span class="badge-category yellow">Recommendation System</span>
+                            </div>
+                            <p>Sistem rekomendasi produk skincare berdasarkan preferensi dan jenis kulit pengguna.</p>
+                            <div class="project-footer">
+                                <div class="team-avatars">
+                                    <img src="https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865" alt="Member">
+                                    <img src="https://ui-avatars.com/api/?name=Budi&background=e9d5ff&color=7e22ce" alt="Member">
+                                    <img src="https://ui-avatars.com/api/?name=Diana&background=bbf7d0&color=15803d" alt="Member">
+                                </div>
+                                <span class="project-date">Diperbarui 1 minggu yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="project-status-col">
+                            <div class="status-top">
+                                <span class="badge-status purple">Review</span>
+                                <button class="btn-more"><i class="fas fa-ellipsis"></i></button>
+                            </div>
+                            <div class="status-progress">
+                                <div class="progress-bar-bg"><div class="progress-bar-fill pink" style="width: 80%"></div></div>
+                                <span class="progress-pct">80%</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Project 4 -->
+                    <article class="project-card">
+                        <div class="project-icon green">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-title-row">
+                                <h3>Deteksi Penyakit Tanaman</h3>
+                                <span class="badge-category green">Computer Vision</span>
+                            </div>
+                            <p>Aplikasi deteksi penyakit pada tanaman menggunakan image classification.</p>
+                            <div class="project-footer">
+                                <div class="team-avatars">
+                                    <img src="https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865" alt="Member">
+                                    <img src="https://ui-avatars.com/api/?name=Budi&background=e9d5ff&color=7e22ce" alt="Member">
+                                    <img src="https://ui-avatars.com/api/?name=Citra&background=fef08a&color=a16207" alt="Member">
+                                </div>
+                                <span class="project-date">Diperbarui 2 minggu yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="project-status-col">
+                            <div class="status-top">
+                                <span class="badge-status gray">Belum Dimulai</span>
+                                <button class="btn-more"><i class="fas fa-ellipsis"></i></button>
+                            </div>
+                            <div class="status-progress">
+                                <div class="progress-bar-bg"><div class="progress-bar-fill pink" style="width: 0%"></div></div>
+                                <span class="progress-pct">0%</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Project 5 -->
+                    <article class="project-card">
+                        <div class="project-icon pink">
+                            <i class="far fa-file-lines"></i>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-title-row">
+                                <h3>Analisis Sentimen Media Sosial</h3>
+                                <span class="badge-category pink">NLP</span>
+                            </div>
+                            <p>Analisis sentimen opini publik terhadap kampanye sosial di media sosial.</p>
+                            <div class="project-footer">
+                                <div class="team-avatars">
+                                    <img src="https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865" alt="Member">
+                                    <img src="https://ui-avatars.com/api/?name=Citra&background=fef08a&color=a16207" alt="Member">
+                                    <img src="https://ui-avatars.com/api/?name=Diana&background=bbf7d0&color=15803d" alt="Member">
+                                </div>
+                                <span class="project-date">Diperbarui 3 minggu yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="project-status-col">
+                            <div class="status-top">
+                                <span class="badge-status orange">Sedang Dikerjakan</span>
+                                <button class="btn-more"><i class="fas fa-ellipsis"></i></button>
+                            </div>
+                            <div class="status-progress">
+                                <div class="progress-bar-bg"><div class="progress-bar-fill pink" style="width: 40%"></div></div>
+                                <span class="progress-pct">40%</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <aside class="projects-widgets">
+                <!-- Aktivitas Terbaru -->
+                <div class="widget-card activity-widget">
+                    <div class="widget-header">
+                        <h3>Aktivitas Terbaru</h3>
+                        <a href="#">Lihat Semua <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon green"><i class="fas fa-check-circle"></i></div>
+                            <div class="activity-info">
+                                <strong>AI Chatbot Kesehatan Mental</strong>
+                                <p>Proyek kamu telah ditandai sebagai selesai</p>
+                                <span>2 hari yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon purple"><i class="fas fa-arrow-up-from-bracket"></i></div>
+                            <div class="activity-info">
+                                <strong>Prediksi Harga Rumah</strong>
+                                <p>Laporan akhir diunggah oleh tim</p>
+                                <span>5 hari yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon yellow"><i class="far fa-comment-dots"></i></div>
+                            <div class="activity-info">
+                                <strong>Rekomendasi Produk Skincare</strong>
+                                <p>Mentor memberikan feedback baru</p>
+                                <span>1 minggu yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon pink"><i class="fas fa-user-plus"></i></div>
+                            <div class="activity-info">
+                                <strong>Deteksi Penyakit Tanaman</strong>
+                                <p>Anggota baru bergabung di proyek</p>
+                                <span>2 minggu yang lalu</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promo Start Project -->
+                <div class="promo-start-card">
+                    <div class="promo-start-header">
+                        <h3>Mulai Proyek Baru</h3>
+                    </div>
+                    <div class="promo-start-content">
+                        <div class="promo-illustration">
+                            <div class="folder-illus"><i class="fas fa-folder-plus"></i></div>
+                        </div>
+                        <div class="promo-text">
+                            <p>Punya ide proyek keren?<br>Mulai proyek baru dan wujudkan ide kamu bersama tim!</p>
+                            <button class="btn-primary-pink"><i class="fas fa-plus"></i> Buat Proyek Baru</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Proyek -->
+                <div class="widget-card tips-widget">
+                    <div class="widget-header">
+                        <h3>Tips Proyek</h3>
+                    </div>
+                    <div class="tips-list">
+                        <div class="tip-item">
+                            <div class="tip-icon"><i class="fas fa-rocket"></i></div>
+                            <p>Pilih topik yang kamu minati dan relevan dengan skill yang kamu pelajari.</p>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-icon"><i class="far fa-comments"></i></div>
+                            <p>Diskusikan ide dengan mentor atau tim sebelum memulai.</p>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-icon"><i class="fas fa-shield-halved"></i></div>
+                            <p>Gunakan data yang berkualitas untuk hasil yang lebih akurat.</p>
+                        </div>
+                    </div>
+                    <a href="#" class="tips-link">Lihat Panduan Proyek <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </aside>
+        </div>
+    </main>
+</section>

@@ -1,0 +1,296 @@
+<section class="fellow-dashboard">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a class="active" href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+
+        <div class="fellow-menu-label">Lainnya</div>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+
+        <div class="invite-card">
+            <p><strong>Ajak Temanmu!</strong><br>Dapatkan poin tambahan untuk setiap teman yang bergabung.</p>
+            <button type="button">Undang Sekarang</button>
+        </div>
+    </aside>
+
+    <main class="fellow-main tasks-page">
+        <header class="fellow-topbar">
+            <div>
+                <h1 data-fellow-greeting>Tugas</h1>
+                <p>Selesaikan tugas untuk mengasah skill dan dapatkan poin!</p>
+            </div>
+            <div class="fellow-actions">
+                <label class="fellow-search tasks-search">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="search" placeholder="Cari tugas...">
+                    <button type="button" class="sync-btn" aria-label="Refresh data"><i class="fas fa-arrows-rotate"></i></button>
+                </label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
+                    <i class="far fa-bell"></i>
+                    <span class="badge">5</span>
+                </button>
+                <div class="fellow-user-menu">
+                    <button type="button" class="fellow-user-button" data-fellow-user-toggle aria-expanded="false">
+                        <img src="/assets/avatars/user-1.jpg" alt="Aisyah Putri" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
+                        <span><strong>Aisyah Putri</strong><small>Fellow</small></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="tasks-layout">
+            <div class="tasks-main-column">
+                <div class="tasks-tabs-container">
+                    <div class="tasks-tabs">
+                        <button class="active">Semua Tugas</button>
+                        <button>Belum Dikerjakan <span class="tab-badge pink">8</span></button>
+                        <button>Sedang Dikerjakan <span class="tab-badge purple">2</span></button>
+                        <button>Sudah Dikumpulkan</button>
+                        <button>Terlambat</button>
+                    </div>
+                </div>
+
+                <div class="tasks-filters">
+                    <div class="custom-select">
+                        <select aria-label="Filter modul">
+                            <option>Semua Modul</option>
+                            <option>Data Analysis</option>
+                            <option>Machine Learning</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-select" style="margin-left: auto;">
+                        <select aria-label="Urutkan berdasar">
+                            <option>Terbaru</option>
+                            <option>Tenggat Terdekat</option>
+                            <option>Poin Tertinggi</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <div class="tasks-list">
+                    <!-- Task 1 -->
+                    <article class="task-card">
+                        <div class="task-icon pink">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="task-content">
+                            <h3>Data Preprocessing dengan Python</h3>
+                            <span class="task-category pink">Data Analysis with Pandas</span>
+                            <p>Lakukan pembersihan dan transformasi data pada dataset yang diberikan menggunakan Python dan Pandas.</p>
+                            <div class="task-meta">
+                                <span><i class="far fa-calendar-alt"></i> Deadline: 25 Mei 2024, 23:59 WIB</span>
+                                <span class="task-points yellow"><i class="fas fa-star"></i> 100 Poin</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <span class="status-badge pink">Belum Dikerjakan</span>
+                            <button class="btn-outline pink">Kerjakan Tugas</button>
+                        </div>
+                    </article>
+
+                    <!-- Task 2 -->
+                    <article class="task-card">
+                        <div class="task-icon purple">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="task-content">
+                            <h3>Eksplorasi Data COVID-19</h3>
+                            <span class="task-category purple">Data Visualization</span>
+                            <p>Buat visualisasi data COVID-19 dan berikan insight dari data tersebut.</p>
+                            <div class="task-meta">
+                                <span><i class="far fa-calendar-alt"></i> Deadline: 28 Mei 2024, 23:59 WIB</span>
+                                <span class="task-points yellow"><i class="fas fa-star"></i> 100 Poin</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <span class="status-badge purple">Sedang Dikerjakan</span>
+                            <button class="btn-outline purple">Lanjutkan</button>
+                            <div class="task-progress">
+                                <span class="progress-text">Progress: 60%</span>
+                                <div class="progress-track"><div class="progress-fill purple" style="width: 60%"></div></div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Task 3 -->
+                    <article class="task-card">
+                        <div class="task-icon yellow">
+                            <i class="far fa-file-alt"></i>
+                        </div>
+                        <div class="task-content">
+                            <h3>Klasifikasi Sentimen dengan Machine Learning</h3>
+                            <span class="task-category yellow">Machine Learning Fundamentals</span>
+                            <p>Bangun model klasifikasi untuk analisis sentimen menggunakan dataset teks yang tersedia.</p>
+                            <div class="task-meta">
+                                <span><i class="far fa-calendar-alt"></i> Deadline: 31 Mei 2024, 23:59 WIB</span>
+                                <span class="task-points yellow"><i class="fas fa-star"></i> 150 Poin</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <span class="status-badge pink">Belum Dikerjakan</span>
+                            <button class="btn-outline pink">Kerjakan Tugas</button>
+                        </div>
+                    </article>
+
+                    <!-- Task 4 -->
+                    <article class="task-card">
+                        <div class="task-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="task-content">
+                            <h3>Mini Project: Prediksi Harga Rumah</h3>
+                            <span class="task-category green">Project Building</span>
+                            <p>Bangun model prediksi harga rumah menggunakan algoritma regresi. Sertakan analisis dan visualisasi hasil.</p>
+                            <div class="task-meta">
+                                <span><i class="far fa-calendar-alt"></i> Deadline: 7 Juni 2024, 23:59 WIB</span>
+                                <span class="task-points yellow"><i class="fas fa-star"></i> 200 Poin</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <span class="status-badge green">Sudah Dikumpulkan</span>
+                            <button class="btn-outline green">Lihat Submission</button>
+                            <div class="graded-status"><i class="fas fa-check-circle"></i> Dinilai</div>
+                        </div>
+                    </article>
+
+                    <!-- Task 5 -->
+                    <article class="task-card">
+                        <div class="task-icon pink">
+                            <i class="far fa-comments"></i>
+                        </div>
+                        <div class="task-content">
+                            <h3>NLP: Text Summarization</h3>
+                            <span class="task-category pink">NLP & LLM</span>
+                            <p>Buat program untuk meringkas teks menggunakan teknik NLP.</p>
+                            <div class="task-meta">
+                                <span><i class="far fa-calendar-alt"></i> Deadline: 10 Juni 2024, 23:59 WIB</span>
+                                <span class="task-points yellow"><i class="fas fa-star"></i> 150 Poin</span>
+                            </div>
+                        </div>
+                        <div class="task-actions">
+                            <span class="status-badge pink">Belum Dikerjakan</span>
+                            <button class="btn-outline pink">Kerjakan Tugas</button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <aside class="tasks-widgets">
+                <!-- Donut Chart -->
+                <div class="widget-card chart-widget">
+                    <h3>Ringkasan Tugas</h3>
+                    <div class="chart-container">
+                        <div class="donut-chart-wrapper">
+                            <div class="donut-chart"></div>
+                            <div class="donut-inner">
+                                <strong>12</strong>
+                                <span>Total Tugas</span>
+                            </div>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item"><span class="dot pink"></span>Belum Dikerjakan <strong>8</strong></div>
+                            <div class="legend-item"><span class="dot purple"></span>Sedang Dikerjakan <strong>2</strong></div>
+                            <div class="legend-item"><span class="dot green"></span>Sudah Dikumpulkan <strong>2</strong></div>
+                            <div class="legend-item"><span class="dot yellow"></span>Terlambat <strong>0</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar -->
+                <div class="widget-card calendar-widget">
+                    <div class="widget-header">
+                        <h3>Kalender Deadline</h3>
+                        <a href="#">Lihat Kalender</a>
+                    </div>
+                    <div class="calendar-nav">
+                        <button><i class="fas fa-chevron-left"></i></button>
+                        <strong>Mei 2024</strong>
+                        <button><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="day-name">Min</div><div class="day-name">Sen</div><div class="day-name">Sel</div><div class="day-name">Rab</div><div class="day-name">Kam</div><div class="day-name">Jum</div><div class="day-name">Sab</div>
+
+                        <div class="day disabled">28</div><div class="day disabled">29</div><div class="day disabled">30</div>
+                        <div class="day">1</div><div class="day">2</div><div class="day">3</div><div class="day">4</div>
+
+                        <div class="day">5</div><div class="day">6</div><div class="day">7</div><div class="day">8</div><div class="day">9</div><div class="day">10</div><div class="day">11</div>
+
+                        <div class="day">12</div><div class="day">13</div><div class="day">14</div><div class="day">15</div><div class="day">16</div><div class="day">17</div><div class="day">18</div>
+
+                        <div class="day">19</div><div class="day">20</div><div class="day">21</div><div class="day">22</div><div class="day">23</div><div class="day">24</div><div class="day has-event pink">25</div>
+
+                        <div class="day">26</div><div class="day">27</div><div class="day has-event purple">28</div><div class="day">29</div><div class="day">30</div><div class="day has-event yellow">31</div><div class="day disabled">1</div>
+                    </div>
+                </div>
+
+                <!-- Deadlines -->
+                <div class="widget-card deadline-widget">
+                    <div class="widget-header">
+                        <h3>Deadline Terdekat</h3>
+                        <a href="#">Lihat Semua</a>
+                    </div>
+                    <div class="deadline-list">
+                        <div class="deadline-item">
+                            <div class="deadline-icon purple"><i class="fas fa-chart-line"></i></div>
+                            <div class="deadline-info">
+                                <strong>Eksplorasi Data COVID-19</strong>
+                                <span>28 Mei 2024, 23:59 WIB</span>
+                            </div>
+                            <div class="deadline-badge purple">3 hari lagi</div>
+                        </div>
+                        <div class="deadline-item">
+                            <div class="deadline-icon yellow"><i class="far fa-file-alt"></i></div>
+                            <div class="deadline-info">
+                                <strong>Klasifikasi Sentimen dengan Machine Learning</strong>
+                                <span>31 Mei 2024, 23:59 WIB</span>
+                            </div>
+                            <div class="deadline-badge yellow">6 hari lagi</div>
+                        </div>
+                        <div class="deadline-item">
+                            <div class="deadline-icon green"><i class="fas fa-check-circle"></i></div>
+                            <div class="deadline-info">
+                                <strong>Mini Project: Prediksi Harga Rumah</strong>
+                                <span>7 Juni 2024, 23:59 WIB</span>
+                            </div>
+                            <div class="deadline-badge green">13 hari lagi</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promo Gamification -->
+                <div class="promo-card">
+                    <div class="promo-content">
+                        <p>Kerjakan tugas secara konsisten dan raih poin untuk naik level!</p>
+                        <button class="btn-outline pink">Lihat Leaderboard</button>
+                    </div>
+                    <div class="promo-trophy">
+                        <div class="trophy-circle"><i class="fas fa-trophy"></i></div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+</section>

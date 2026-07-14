@@ -134,21 +134,53 @@
     align-items: center;
     cursor: pointer;
     display: flex;
-    height: 58px;
+    height: auto;
     justify-content: center;
     margin: 0 auto 8px;
-    overflow: hidden;
+    overflow: visible;
+    position: relative;
     width: 66px;
     transition: width 0.24s ease;
+}
+
+.fellow-logo::after {
+    content: "\f0da";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 0.58rem;
+    color: #c4b5ce;
+    position: absolute;
+    right: -4px;
+    top: -2px;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.24s ease;
+    transform: rotate(0deg);
+}
+
+.fellow-sidebar:not(.is-expanded) .fellow-logo:hover::after,
+.fellow-sidebar:not(.is-expanded) .fellow-logo:focus-visible::after {
+    opacity: 1;
+}
+
+.fellow-sidebar.is-expanded .fellow-logo::after {
+    content: "\f0d9";
+    opacity: 0;
+    right: 4px;
+    top: 4px;
+}
+
+.fellow-sidebar.is-expanded .fellow-logo:hover::after,
+.fellow-sidebar.is-expanded .fellow-logo:focus-visible::after {
+    opacity: 1;
 }
 
 .fellow-logo img {
     display: block;
     height: auto;
-    max-height: 54px;
+    max-height: 64px;
     object-fit: contain;
     object-position: center;
-    width: 58px;
+    width: 66px;
 }
 
 .fellow-sidebar.is-expanded .fellow-logo {
@@ -169,6 +201,7 @@
     gap: 7px;
     min-width: 0;
     width: 100%;
+    flex-shrink: 0;
 }
 
 .fellow-menu a {
@@ -345,9 +378,8 @@
     grid-template-columns: minmax(260px, 1fr) minmax(520px, 0.95fr);
     margin-bottom: 26px;
     padding: 0;
-    position: sticky;
-    top: 24px;
-    z-index: 55;
+    position: relative;
+    z-index: 10;
 }
 
 .fellow-topbar h1 {
@@ -363,6 +395,36 @@
     line-height: 1.55;
     margin: 0;
     max-width: 760px;
+}
+
+@media (min-width: 861px) {
+    .fellow-dashboard > .fellow-main:has(> .fellow-topbar ~ :is(.fellow-grid, .participant-profile-shell, .tasks-layout, .projects-layout, .events-layout, .community-layout, .mentor-layout, .certificates-layout, .settings-layout, .help-layout, .lb-layout)) {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .fellow-dashboard > .fellow-main:has(> .fellow-topbar ~ :is(.fellow-grid, .participant-profile-shell, .tasks-layout, .projects-layout, .events-layout, .community-layout, .mentor-layout, .certificates-layout, .settings-layout, .help-layout, .lb-layout)) > .fellow-topbar,
+    .fellow-dashboard > .fellow-main:has(> .fellow-topbar ~ .lb-layout) > .lb-top-grid {
+        flex: 0 0 auto;
+    }
+
+    .fellow-dashboard > .fellow-main > :is(.fellow-grid, .participant-profile-shell, .tasks-layout, .projects-layout, .events-layout, .community-layout, .mentor-layout, .certificates-layout, .settings-layout, .help-layout, .lb-layout) {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+    }
+
+    .fellow-dashboard > .fellow-main > :is(.fellow-grid, .tasks-layout, .projects-layout, .events-layout, .community-layout, .mentor-layout, .certificates-layout, .help-layout, .lb-layout) > :is(.fellow-right, .tasks-widgets, .projects-widgets, .events-widgets, .community-widgets, .mentor-widgets, .certificates-widgets, .help-widgets, .lb-widgets) {
+        align-self: start;
+        position: sticky;
+        top: 0;
+    }
 }
 
 .fellow-actions {
@@ -1543,6 +1605,7 @@
     .fellow-dashboard {
         display: block;
         padding-bottom: 0;
+        position: relative;
     }
 
     .fellow-menu-toggle {
@@ -1557,7 +1620,7 @@
         height: 46px;
         justify-content: center;
         left: 14px;
-        position: fixed;
+        position: absolute;
         top: 14px;
         width: 46px;
         z-index: 120;
@@ -1677,7 +1740,7 @@
 
     .fellow-main {
         margin-left: 0;
-        padding: 76px 14px 0;
+        padding: 14px 14px 0;
     }
 
     .under-dev-hero {
@@ -1729,11 +1792,24 @@
     }
 
     .fellow-topbar {
-        align-items: start;
-        gap: 18px;
-        margin-bottom: 20px;
+        position: relative;
+        top: 0;
+        margin-bottom: 24px;
         padding: 0;
-        top: 14px;
+        display: grid;
+        grid-template-areas:
+            "empty bell avatar"
+            "greeting greeting greeting"
+            "search search search";
+        grid-template-columns: 1fr 46px 46px;
+        gap: 16px 12px;
+    }
+
+    .fellow-topbar > div:first-child {
+        grid-area: greeting;
+        padding-left: 0;
+        min-height: 0;
+        display: block;
     }
 
     .fellow-topbar h1 {
@@ -1741,11 +1817,11 @@
     }
 
     .fellow-actions {
-        gap: 10px;
-        grid-template-columns: 1fr 46px 46px;
+        display: contents;
     }
 
     .fellow-search {
+        grid-area: search;
         min-height: 48px;
         padding: 0 14px;
     }
@@ -1759,29 +1835,41 @@
         display: none;
     }
 
+    .fellow-user-menu {
+        grid-area: avatar;
+    }
+
     .fellow-user-button .avatar-img,
     .fellow-icon-button {
         height: 46px;
         width: 46px;
     }
 
+    .fellow-icon-button {
+        grid-area: bell;
+    }
+
     .fellow-hero-card {
         grid-template-columns: 1fr;
         min-height: 0;
+        display: flex;
+        flex-direction: column;
     }
 
     .hero-copy {
-        padding: 28px 24px 0;
+        padding: 28px 24px 10px;
     }
 
     .fellow-hero-card h2 {
-        font-size: 1.55rem;
+        font-size: 1.35rem;
     }
 
     .fellow-hero-card img {
-        height: 210px;
+        height: 220px;
         max-height: none;
-        object-position: 50% 24%;
+        object-fit: contain;
+        object-position: center bottom;
+        margin-top: auto;
     }
 
     .module-grid,
@@ -1809,9 +1897,7 @@
 }
 
 @media (max-width: 520px) {
-    .fellow-actions {
-        grid-template-columns: 1fr 44px 44px;
-    }
+    /* Topbar grid is handled flawlessly by the 860px media query */
 
     .panel-heading {
         align-items: flex-start;

@@ -1,0 +1,419 @@
+<h1>Chapter 14 — Pandas: Membaca dan Membersihkan Data Tabular</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Membuat dan membaca DataFrame.</li>
+<li>Memeriksa, memilih, memfilter, dan membersihkan data.</li>
+<li>Melakukan agregasi sederhana dan menyimpan CSV.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Sebagian besar waktu dalam project data—hingga 80% menurut berbagai survei—dihabiskan untuk memahami, membersihkan, dan mempersiapkan data, bukan untuk membangun model. Pandas adalah library paling populer di Python untuk tugas ini. Ia menyediakan struktur DataFrame yang menggabungkan kekuatan array NumPy dengan kemudahan nama kolom dan baris, serta metode bawaan untuk membaca, memfilter, membersihkan, merangkum, dan menyimpan data tabular.</p>
+<p>Setelah mempelajari variabel, collection, control flow, function, dan NumPy, kamu sekarang memiliki semua fondasi yang diperlukan untuk menggunakan Pandas secara efektif. Pandas tidak menggantikan konsep-konsep tersebut—ia membangun di atasnya. DataFrame pada dasarnya adalah koleksi array NumPy yang diberi label, dan operasi di dalamnya menggunakan prinsip vectorized yang sama.</p>
+<p>Yang membedakan Pandas dari NumPy adalah kemampuan untuk bekerja dengan data heterogen: satu kolom bisa berisi angka, kolom lain teks, kolom lain tanggal. NumPy tidak bisa melakukan itu karena semua elemen dalam array harus memiliki tipe yang sama. Pandas bisa, dan inilah yang membuatnya sangat berguna untuk data dunia nyata.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Model AI hanya dapat belajar dari data yang diberikan. Jika data mengandung nilai kosong yang tidak terdeteksi, duplikat yang tidak sengaja menggandakan bobot record tertentu, atau kolom dengan tipe yang salah, hasil model akan menyesatkan—bukan karena modelnya buruk, tetapi karena datanya tidak siap. Pandas adalah alat untuk menemukan dan menangani masalah-masalah ini sebelum data masuk ke tahap model.</p>
+<p>Pada modul ini kita belum masuk ke machine learning. Tapi pipeline cleaning yang kamu bangun dengan Pandas adalah tahap yang selalu mendahului model apa pun. Semakin rapi pipeline cleaning-mu, semakin sedikit waktu yang terbuang untuk debugging di tahap modeling nanti.</p>
+<h2>Analogi</h2>
+<p>DataFrame seperti spreadsheet Excel atau Google Sheets yang dapat diberi instruksi melalui kode. Kamu bisa membaca file, memilih kolom tertentu, memfilter baris berdasarkan kondisi, mengisi nilai kosong, menghitung rata-rata per kelompok, dan menyimpan hasilnya—semuanya dalam script yang dapat dijalankan ulang kapan saja. Berbeda dengan spreadsheet yang diklik manual, script Pandas dapat diulang pada data baru tanpa khawatir ada langkah yang terlewat.</p>
+<p>Perbedaan lain: spreadsheet menyembunyikan proses di balik sel dan formula yang tersebar. Pandas memaksa setiap langkap ditulis secara eksplisit dalam kode. Ini membuat proses lebih transparan dan mudah diaudit.</p>
+<h2>Penjelasan Konsep</h2>
+<p><strong>DataFrame</strong> adalah struktur data dua dimensi dengan baris dan kolom. Setiap kolom memiliki nama (label) dan tipe data yang bisa berbeda antar-kolom. Kamu bisa membayangkan DataFrame sebagai spreadsheet yang berada di dalam memori komputer, siap diproses tanpa harus membuka aplikasi spreadsheet.</p>
+<p><strong>Membaca Data.</strong> <code>pd.read_csv()</code> adalah fungsi yang paling sering digunakan untuk membaca file CSV ke dalam DataFrame. Fungsi ini secara otomatis mendeteksi baris header, tipe data setiap kolom, dan menangani berbagai format delimiter. Untuk file Excel, ada <code>pd.read_excel()</code>, dan untuk JSON ada <code>pd.read_json()</code>.</p>
+<p><strong>Memahami Data.</strong> Setelah data dibaca, langkah pertama adalah memahami strukturnya. <code>df.head()</code> menampilkan beberapa baris pertama, <code>df.info()</code> menunjukkan tipe data dan jumlah non-null per kolom, <code>df.describe()</code> memberikan statistik ringkas untuk kolom numerik. Ketiganya adalah panggilan pertama yang hampir selalu dilakukan dalam sesi eksplorasi data.</p>
+<p><strong>Boolean Filtering.</strong> Dengan NumPy kamu sudah belajar boolean masking. Di Pandas konsepnya sama: <code>df[df["score"] &gt;= 75]</code> memilih semua baris yang memenuhi kondisi. Hasilnya adalah DataFrame baru yang hanya berisi baris-baris terpilih. Filter dapat dikombinasikan dengan operator &gt;, &lt;, ==, dan logika AND (&amp;) serta OR (|).</p>
+<p><strong>Missing Value.</strong> <code>df.isna().sum()</code> menghitung jumlah missing value per kolom. <code>fillna()</code> mengisi nilai kosong dengan nilai tertentu, sementara <code>dropna()</code> membuang baris yang mengandung NaN. Pilihan antara mengisi atau membuang harus didasarkan pada alasan yang jelas, bukan sekadar agar tidak error.</p>
+<p><strong>Agregasi.</strong> <code>df.groupby("track")["score"].mean()</code> mengelompokkan baris berdasarkan kolom "track", lalu menghitung rata-rata score di setiap kelompok. Hasilnya adalah Series (satu kolom) dengan track sebagai index. Groupby adalah operasi yang sangat sering digunakan untuk merangkum data per kategori.</p>
+<p><strong>Menyimpan Hasil.</strong> <code>df.to_csv("output.csv", index=False)</code> menyimpan DataFrame ke file CSV. Parameter index=False mencegah baris index ikut tersimpan sebagai kolom tambahan.</p>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">CSV → read → inspect → clean → validate → summarize → save
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Kolom nilai berisi satu data kosong dan track peserta perlu dibandingkan.</p>
+<h2>Contoh AI</h2>
+<p>Cleaning yang konsisten menghasilkan dataset yang lebih siap untuk tahap analisis atau model pada modul berikutnya.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">import pandas as pd
+
+data = {
+    &quot;name&quot;: [&quot;Ayu&quot;, &quot;Nisa&quot;, &quot;Rani&quot;, &quot;Sari&quot;],
+    &quot;track&quot;: [&quot;data&quot;, &quot;data&quot;, &quot;product&quot;, &quot;product&quot;],
+    &quot;score&quot;: [88, 91, None, 76],
+}
+
+df = pd.DataFrame(data)
+df[&quot;score&quot;] = df[&quot;score&quot;].fillna(df[&quot;score&quot;].median())
+passed = df[df[&quot;score&quot;] &gt;= 75]
+summary = df.groupby(&quot;track&quot;)[&quot;score&quot;].mean()
+
+passed.to_csv(&quot;participants_clean.csv&quot;, index=False)
+print(summary)
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li>Pandas diimpor sebagai <code>pd</code>.</li>
+<li>Dictionary menyediakan data kolom.</li>
+<li><code>DataFrame</code> mengubahnya menjadi tabel.</li>
+<li>Missing score diisi median sebagai keputusan contoh; pada data nyata keputusan harus dibenarkan.</li>
+<li>Boolean filter memilih nilai minimal 75.</li>
+<li><code>groupby</code> menghitung rata-rata per track.</li>
+<li>Data bersih disimpan tanpa index tambahan.</li>
+<li>Ringkasan ditampilkan.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Mengubah data tanpa memeriksa salinan raw.</strong> Setelah data dibersihkan, kamu tidak bisa kembali ke kondisi awal jika tidak menyimpan salinan. Selalu simpan raw data terpisah.</li>
+<li><strong>Mengisi semua missing value dengan nol.</strong> Nol adalah nilai yang memiliki makna. Jika score 0 berarti "tidak mengerjakan" dan score yang hilang berarti "belum dinilai", keduanya adalah kasus berbeda yang memerlukan penanganan berbeda.</li>
+<li><strong>Mengabaikan tipe data dan duplikat.</strong> Kolom score yang terbaca sebagai object (string) tidak dapat dijumlahkan. Kolom duplikat dapat menyebabkan bias agregasi. Periksa kedua hal ini di awal.</li>
+<li><strong>Menganggap hasil agregasi membuktikan sebab-akibat.</strong> Rata-rata score track data lebih tinggi dari track product belum berarti track data lebih mudah. Bisa jadi peserta yang masuk track data memang sudah memiliki skor awal lebih tinggi.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li><strong>Mulai dengan <code>head()</code>, <code>shape</code>, <code>info()</code>, dan pemeriksaan missing value.</strong> Jangan pernah melewati langkah inspeksi awal. Memahami data sebelum membersihkannya adalah aturan nomor satu.</li>
+<li><strong>Dokumentasikan setiap keputusan cleaning.</strong> Catat mengapa suatu baris dihapus, mengapa missing value diisi dengan median, dan transformasi apa yang dilakukan. Dokumentasi ini penting untuk audit dan reproduksi.</li>
+<li><strong>Simpan output ke file baru.</strong> Jangan pernah menimpa file raw. Gunakan nama file yang berbeda, misalnya <code>participants_clean.csv</code>.</li>
+<li><strong>Validasi jumlah baris sebelum dan sesudah transformasi.</strong> Pastikan jumlah baris yang hilang dapat dijelaskan: raw = clean + duplicate + missing + invalid + out-of-range.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Tambahkan satu record duplikat. Deteksi dengan <code>duplicated()</code>, hapus dengan <code>drop_duplicates()</code>, lalu bandingkan jumlah baris.</p>
+<h2>Ringkasan</h2>
+<p>Pandas adalah alat utama untuk data tabular dalam ekosistem Python AI. DataFrame menggabungkan kekuatan array NumPy dengan label kolom dan baris, serta menyediakan metode bawaan untuk membaca, memfilter, membersihkan, merangkum, dan menyimpan data. Empat langkah utama yang selalu diingat: inspeksi (head, info, describe), pembersihan (missing value, duplikat, tipe data), analisis (filter, groupby, agregasi), dan penyimpanan (to_csv dengan file baru). Setiap keputusan cleaning harus didokumentasikan agar pipeline dapat diaudit dan diulang.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Sekarang kita menggabungkan seluruh fondasi menjadi satu mini workflow data berorientasi AI.</p>
+<hr>
+<h1>Chapter 15 — Mini AI Workflow: Dataset Nilai Peserta</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Menghubungkan file, Pandas, NumPy, function, loop, dan error handling.</li>
+<li>Memisahkan tahap load, clean, summarize, dan save.</li>
+<li>Menghasilkan laporan yang dapat digunakan tahap AI berikutnya.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Konsep baru menjadi keterampilan saat dipakai bersama. Chapter ini bukan project Machine Learning; ini simulasi tahap data yang selalu mendahuluinya. Setiap function, loop, penanganan error, operasi NumPy, dan Pandas yang telah kamu pelajari akan dirangkai menjadi satu pipeline yang dapat dijalankan dari awal hingga akhir.</p>
+<p>Pipeline ini bukan sekadar latihan. Pola load → validate → clean → summarize → save adalah pola yang akan kamu temui di hampir setiap project data. Perbedaannya hanya pada skala dan kompleksitas data. Jika kamu bisa menulis pipeline kecil yang rapi, kamu sudah memiliki fondasi untuk membangun pipeline yang melayani ribuan baris data.</p>
+<h2>Hubungan dengan AI</h2>
+<pre><code class="language-text">CSV
+ ↓
+Pandas: load &amp; cleaning
+ ↓
+NumPy: numeric summary
+ ↓
+Function: repeatable pipeline
+ ↓
+Validation &amp; visualization-ready output
+ ↓
+Clean dataset untuk modul model berikutnya
+</code></pre>
+<h2>Analogi</h2>
+<p>Menyiapkan data seperti menyiapkan bahan sebelum memasak. Model secanggih apa pun tidak memperbaiki bahan yang salah label atau tercampur data rusak.</p>
+<h2>Penjelasan Konsep</h2>
+<p>Workflow yang baik memiliki lima komponen: input yang jelas (dari mana data berasal), aturan transformasi yang eksplisit (bagaimana data diubah), validation checkpoint (apakah data memenuhi syarat sebelum lanjut), output yang terpisah dari raw (data bersih disimpan sebagai file baru), dan catatan perubahan (berapa baris hilang dan mengapa). Tanpa kelima komponen ini, pipeline sulit diaudit dan sulit diulang dengan data baru.</p>
+<p>Yang paling penting: raw data tidak boleh ditimpa. Setiap transformasi menghasilkan data turunan, bukan data pengganti. Jika kesalahan dalam cleaning baru diketahui minggu depan, kamu masih bisa kembali ke data mentah dan mengulang proses dari awal.</p>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">participants.csv
+  ├─ schema benar?
+  ├─ missing?
+  ├─ duplicate?
+  ├─ range score valid?
+  └─ output → participants_clean.csv + report.txt
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Panitia menerima file CSV berisi data 200 peserta dengan kolom name, track, dan score. Mereka menemukan beberapa baris duplikat, beberapa nilai score kosong, dan satu nilai yang berada di luar range 0–100. Mereka ingin: (1) dataset bersih tanpa duplikat dan nilai invalid, (2) laporan statistik yang mencakup rata-rata, minimum, maksimum, dan jumlah peserta per track, serta (3) file CSV baru yang siap digunakan untuk tahap analisis berikutnya.</p>
+<p>Pipeline yang akan kamu bangun di chapter ini menyelesaikan ketiga kebutuhan tersebut secara terprogram. Setelah pipeline selesai, panitia cukup menjalankan satu script untuk mendapatkan hasil yang konsisten setiap kali ada data baru.</p>
+<h2>Contoh AI</h2>
+<p>Output bersih dari pipeline ini adalah kandidat input bagi workflow Machine Learning di modul berikutnya. Meskipun belum ada model yang dibangun di sini, setiap baris yang lolos validasi adalah baris yang dapat dipercaya untuk digunakan dalam pelatihan atau evaluasi model nanti. Kebiasaan memvalidasi data sebelum masuk ke model adalah salah satu keterampilan paling penting dalam engineering AI.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+
+REQUIRED_COLUMNS = {&quot;name&quot;, &quot;track&quot;, &quot;score&quot;}
+
+
+def load_data(path):
+    return pd.read_csv(path)
+
+
+def clean_data(df):
+    missing_columns = REQUIRED_COLUMNS - set(df.columns)
+    if missing_columns:
+        raise ValueError(f&quot;Kolom hilang: {sorted(missing_columns)}&quot;)
+
+    clean = df.copy()
+    clean = clean.drop_duplicates()
+    clean[&quot;score&quot;] = pd.to_numeric(clean[&quot;score&quot;], errors=&quot;coerce&quot;)
+    clean = clean.dropna(subset=[&quot;name&quot;, &quot;track&quot;, &quot;score&quot;])
+    clean = clean[clean[&quot;score&quot;].between(0, 100)]
+    return clean
+
+
+def build_report(df):
+    scores = df[&quot;score&quot;].to_numpy()
+    return {
+        &quot;rows&quot;: len(df),
+        &quot;average&quot;: float(np.mean(scores)),
+        &quot;minimum&quot;: float(np.min(scores)),
+        &quot;maximum&quot;: float(np.max(scores)),
+    }
+
+
+def run_pipeline(input_path, output_path):
+    raw = load_data(input_path)
+    clean = clean_data(raw)
+    report = build_report(clean)
+    clean.to_csv(output_path, index=False)
+    return report
+
+
+try:
+    summary = run_pipeline(
+        Path(&quot;participants.csv&quot;),
+        Path(&quot;participants_clean.csv&quot;),
+    )
+    print(summary)
+except FileNotFoundError:
+    print(&quot;File participants.csv belum tersedia&quot;)
+except ValueError as error:
+    print(f&quot;Data tidak valid: {error}&quot;)
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li>Import menyediakan path, komputasi numerik, dan tabel.</li>
+<li><code>REQUIRED_COLUMNS</code> mendefinisikan schema minimum.</li>
+<li><code>load_data</code> hanya bertanggung jawab membaca CSV.</li>
+<li><code>clean_data</code> memeriksa kolom, menyalin data, menghapus duplikat, mengubah score menjadi angka, membuang record tidak lengkap, dan membatasi range.</li>
+<li><code>build_report</code> mengubah kolom score menjadi array dan menghitung statistik.</li>
+<li><code>run_pipeline</code> menghubungkan tahap secara berurutan lalu menyimpan file baru.</li>
+<li>Blok <code>try</code> menjalankan workflow dan menangani file hilang atau schema buruk secara jelas.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li>Menimpa raw dataset.</li>
+<li>Cleaning tanpa mencatat jumlah baris yang hilang.</li>
+<li>Menggabungkan semua tahap dalam satu function.</li>
+<li>Menganggap pipeline sukses hanya karena tidak error.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li>Pisahkan function berdasarkan tanggung jawab.</li>
+<li>Validasi schema dan range.</li>
+<li>Simpan raw dan clean data terpisah.</li>
+<li>Tambahkan test kecil untuk setiap function.</li>
+<li>Laporkan perubahan dan asumsi cleaning.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Tambahkan kolom <code>status</code> menggunakan function, hitung jumlah peserta per track, dan simpan ringkasan sebagai CSV kedua.</p>
+<h2>Ringkasan</h2>
+<p>Mini workflow ini adalah puncak dari seluruh modul Python untuk AI. Semua konsep yang telah dipelajari—variabel dan tipe data, collection, control flow, function, OOP, error handling, file I/O, NumPy, dan Pandas—dirangkai menjadi satu pipeline yang utuh. Pola load → validate → clean → summarize → save adalah pola universal yang akan kamu temui di hampir setiap project data.</p>
+<p>Tiga prinsip utama dari workflow ini: (1) pisahkan tanggung jawab ke dalam function yang terfokus, (2) jangan pernah menimpa raw data, dan (3) dokumentasikan setiap keputusan cleaning agar pipeline dapat diaudit dan diulang. Jika ketiga prinsip ini kamu pegang, pipeline data yang kamu bangun akan dapat dipercaya oleh tim dan dapat dikembangkan untuk menangani dataset yang lebih besar dan kompleks.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Kamu siap masuk ke practice, quiz, dan diskusi sebelum melanjutkan ke konsep AI dan Machine Learning.</p>
+<hr>
+<h1>Practice — Python sebagai Workflow Data</h1>
+<p>Kerjakan bertahap. Setiap latihan menghasilkan komponen untuk project akhir.</p>
+<h2>Latihan 1 — Input, Process, Output</h2>
+<p>Rancang IPO untuk menghitung completion rate peserta. Sertakan kasus data kosong.</p>
+<h2>Latihan 2 — Metadata Dataset</h2>
+<p>Buat variabel nama dataset, versi, jumlah baris, persentase missing value, dan status review.</p>
+<h2>Latihan 3 — Record Peserta</h2>
+<p>Buat list berisi minimal lima dictionary peserta dengan field <code>name</code>, <code>track</code>, dan <code>score</code>.</p>
+<h2>Latihan 4 — Validasi dengan Control Flow</h2>
+<p>Loop seluruh record. Tandai score kosong, di luar 0–100, lulus, atau perlu review.</p>
+<h2>Latihan 5 — Function Pipeline</h2>
+<p>Buat function <code>validate_score</code>, <code>classify_score</code>, dan <code>summarize_scores</code>. Uji boundary 0, 74.9, 75, 100, <code>None</code>, dan teks.</p>
+<h2>Latihan 6 — Generator</h2>
+<p>Buat generator yang menghasilkan hanya record valid satu per satu.</p>
+<h2>Latihan 7 — Object dan Error</h2>
+<p>Buat class <code>DatasetReport</code> sederhana yang menyimpan nama dataset dan summary. Tangani input yang salah.</p>
+<h2>Latihan 8 — File</h2>
+<p>Simpan dataset kecil ke CSV atau siapkan file manual, lalu baca kembali tanpa menimpa raw file.</p>
+<h2>Latihan 9 — NumPy</h2>
+<p>Hitung jumlah data valid, rata-rata, median, minimum, maksimum, dan nilai yang sudah dibagi 100.</p>
+<h2>Latihan 10 — Pandas</h2>
+<p>Baca CSV, periksa shape dan missing value, hapus duplikat, perbaiki tipe score, filter range, agregasi per track, dan simpan output.</p>
+<h2>Latihan 11 — Audit Cleaning</h2>
+<p>Buat laporan jumlah baris raw, duplicate, invalid, missing, dan clean. Pastikan angka dapat direkonsiliasi.</p>
+<h2>Latihan 12 — Workflow Utuh</h2>
+<p>Gabungkan tahap load, validate, clean, summarize, dan save dalam function terpisah. Tambahkan pesan error yang dapat ditindaklanjuti.</p>
+<hr>
+<h1>Mini Project — Analisis Dataset Nilai Workshop AI</h1>
+<h2>Skenario</h2>
+<p>Tim HerAI menerima file nilai peserta. File tersebut memiliki data kosong, duplikat, dan score yang mungkin berada di luar range. Tim membutuhkan dataset bersih dan laporan sebelum data dipakai pada modul analisis berikutnya.</p>
+<h2>Deliverables</h2>
+<ol>
+<li><code>participants.csv</code> sebagai raw input.</li>
+<li>Notebook atau file Python yang dapat dijalankan dari awal.</li>
+<li><code>participants_clean.csv</code> tanpa menimpa raw data.</li>
+<li><code>track_summary.csv</code> berisi jumlah peserta dan rata-rata per track.</li>
+<li><code>report.txt</code> yang menjelaskan perubahan data.</li>
+</ol>
+<h2>Requirement</h2>
+<ul>
+<li>Gunakan minimal tiga function.</li>
+<li>Gunakan Pandas untuk loading dan cleaning.</li>
+<li>Gunakan NumPy untuk minimal dua statistik.</li>
+<li>Tangani file hilang dan schema tidak lengkap.</li>
+<li>Validasi score 0–100.</li>
+<li>Deteksi duplikat dan missing value.</li>
+<li>Tambahkan kolom status.</li>
+<li>Jelaskan keputusan cleaning.</li>
+</ul>
+<h2>Rubrik (100 Poin)</h2>
+<table>
+<thead>
+<tr>
+<th>Dimensi</th>
+<th align="right">Bobot</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Computational thinking dan struktur workflow</td>
+<td align="right">20</td>
+</tr>
+<tr>
+<td>Kebenaran cleaning dan validation</td>
+<td align="right">25</td>
+</tr>
+<tr>
+<td>Function dan keterbacaan kode</td>
+<td align="right">15</td>
+</tr>
+<tr>
+<td>Penggunaan NumPy/Pandas</td>
+<td align="right">20</td>
+</tr>
+<tr>
+<td>Error handling dan keamanan raw data</td>
+<td align="right">10</td>
+</tr>
+<tr>
+<td>Laporan dan refleksi</td>
+<td align="right">10</td>
+</tr>
+</tbody></table>
+<h2>Refleksi Project</h2>
+<ul>
+<li>Baris mana yang berubah atau hilang, dan mengapa?</li>
+<li>Apa risiko jika missing score langsung diisi nol?</li>
+<li>Bagian mana yang harus konsisten ketika workflow menerima dataset baru?</li>
+<li>Mengapa data bersih belum otomatis berarti data adil atau representatif?</li>
+</ul>
+<hr>
+<h1>Quiz — 20 Soal</h1>
+<h2>Soal 1</h2>
+<p>Peran Python dalam workflow AI paling tepat adalah...</p>
+<p>A. AI itu sendiri<br>B. Bahasa yang menghubungkan data, library, eksperimen, dan aplikasi<br>C. Hanya kalkulator<br>D. Pengganti dataset</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 2</h2>
+<p>Kapan notebook lebih cocok daripada file <code>.py</code>?</p>
+<p>A. Eksplorasi bertahap dengan kode dan catatan<br>B. Semua production service<br>C. Menyimpan password<br>D. Menggantikan virtual environment</p>
+<p><strong>Jawaban: A.</strong></p>
+<h2>Soal 3</h2>
+<p>Fungsi utama virtual environment adalah...</p>
+<p>A. Membuat GPU<br>B. Mengisolasi dependency project<br>C. Membersihkan dataset<br>D. Menghapus Python</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 4</h2>
+<p>Dalam IPO, menghitung rata-rata termasuk...</p>
+<p>A. Input<br>B. Process<br>C. Output<br>D. Package</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 5</h2>
+<p>Tipe data yang tepat untuk prompt adalah...</p>
+<p>A. <code>str</code><br>B. <code>int</code><br>C. <code>bool</code><br>D. <code>set</code></p>
+<p><strong>Jawaban: A.</strong></p>
+<h2>Soal 6</h2>
+<p>Struktur yang paling menyerupai object JSON adalah...</p>
+<p>A. Tuple<br>B. Dictionary<br>C. Set<br>D. Float</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 7</h2>
+<p>Mengapa <code>score is None</code> diperiksa sebelum <code>score &gt;= 75</code>?</p>
+<p>A. Agar kode lebih panjang<br>B. <code>None</code> tidak dapat dibandingkan dengan angka<br>C. Semua score adalah None<br>D. Python selalu mengubah None menjadi nol</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 8</h2>
+<p>Perbedaan utama <code>return</code> dan <code>print</code> adalah...</p>
+<p>A. Tidak ada<br>B. <code>return</code> mengirim nilai ke pemanggil, <code>print</code> hanya menampilkan<br>C. <code>print</code> lebih aman<br>D. <code>return</code> hanya untuk string</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 9</h2>
+<p>Kapan lambda sebaiknya digunakan?</p>
+<p>A. Untuk logika panjang<br>B. Untuk ekspresi singkat dan jelas<br>C. Untuk menangani semua error<br>D. Untuk membuka file</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 10</h2>
+<p>Keuntungan generator adalah...</p>
+<p>A. Selalu lebih cepat untuk semua kasus<br>B. Menghasilkan nilai bertahap saat dibutuhkan<br>C. Menyimpan semua data dua kali<br>D. Menggantikan Pandas</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 11</h2>
+<p>Dalam OOP, object adalah...</p>
+<p>A. Blueprint<br>B. Instance dari class<br>C. Error<br>D. Package</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 12</h2>
+<p>Praktik exception handling terbaik adalah...</p>
+<p>A. Menangkap semua error dan diam<br>B. Menangkap exception spesifik dan memberi pesan jelas<br>C. Tidak pernah memakai try<br>D. Melanjutkan data rusak</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 13</h2>
+<p>Mengapa menggunakan <code>with</code> saat membuka file?</p>
+<p>A. File ditutup otomatis<br>B. File menjadi AI<br>C. Tidak perlu path<br>D. Semua error hilang</p>
+<p><strong>Jawaban: A.</strong></p>
+<h2>Soal 14</h2>
+<p>Library yang fokus pada data tabular adalah...</p>
+<p>A. OpenCV<br>B. Pandas<br>C. Matplotlib<br>D. pathlib</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 15</h2>
+<p><code>scores.shape</code> pada NumPy menjelaskan...</p>
+<p>A. Nama file<br>B. Dimensi array<br>C. Missing value<br>D. Versi Python</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 16</h2>
+<p>Apa fungsi <code>np.nanmean()</code>?</p>
+<p>A. Menghapus file<br>B. Menghitung mean sambil mengabaikan NaN<br>C. Mengisi semua NaN dengan nol<br>D. Membuat DataFrame</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 17</h2>
+<p>Langkah pertama setelah membaca CSV sebaiknya...</p>
+<p>A. Langsung membangun model<br>B. Memeriksa shape, kolom, tipe, missing value, dan contoh baris<br>C. Menghapus semua baris<br>D. Menimpa file</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 18</h2>
+<p>Mengapa missing score tidak selalu diisi nol?</p>
+<p>A. Nol tidak ada di Python<br>B. Nol memiliki makna dan dapat mengubah statistik<br>C. Pandas tidak mendukung nol<br>D. CSV tidak mendukung angka</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 19</h2>
+<p><code>groupby(&quot;track&quot;)[&quot;score&quot;].mean()</code> digunakan untuk...</p>
+<p>A. Menghapus track<br>B. Menghitung rata-rata score per track<br>C. Membuat virtual environment<br>D. Mengubah score menjadi string</p>
+<p><strong>Jawaban: B.</strong></p>
+<h2>Soal 20</h2>
+<p>Mengapa raw dataset tidak boleh ditimpa?</p>
+<p>A. Agar transformasi dapat diaudit dan diulang<br>B. Agar folder lebih banyak<br>C. Karena Pandas tidak bisa menulis<br>D. Agar model lebih kompleks</p>
+<p><strong>Jawaban: A.</strong></p>
+<hr>
+<h1>Discussion</h1>
+<h2>Diskusi 1 — Python sebagai Bahasa AI</h2>
+<p>Mengapa Python menjadi dominan dalam AI meskipun bukan selalu bahasa tercepat? Pertimbangkan keterbacaan, ekosistem, komunitas, eksperimen, dan integrasi.</p>
+<h2>Diskusi 2 — Notebook vs Program</h2>
+<p>Kapan notebook membantu pembelajaran dan eksplorasi? Kapan urutan cell tersembunyi, kode duplikat, atau state yang tidak jelas menjadi risiko?</p>
+<h2>Diskusi 3 — Cleaning adalah Keputusan</h2>
+<p>Apakah menghapus missing value selalu benar? Siapa yang seharusnya menentukan aturan cleaning, dan bukti apa yang diperlukan?</p>
+<h2>Diskusi 4 — Siap untuk Machine Learning?</h2>
+<p>Sebuah dataset sudah tidak memiliki nilai kosong. Apakah otomatis siap digunakan? Bahas duplikat, salah label, representasi kelompok, data leakage, range, dan relevansi fitur tanpa masuk ke algoritma model.</p>
+<h2>Prompt Refleksi Utama</h2>
+<p>Setelah mempelajari Python, bagian mana yang paling mengubah cara kamu melihat AI: sintaks, struktur data, function, atau workflow data? Jelaskan mengapa kemampuan memahami data mungkin lebih penting daripada menghafal banyak library.</p>
+<hr>
+<h1>Checklist Kesiapan Peserta</h1>
+<ul>
+<li><input disabled="" type="checkbox"> Saya dapat menjelaskan input, process, dan output.</li>
+<li><input disabled="" type="checkbox"> Saya dapat menjalankan Python di environment terisolasi atau Colab.</li>
+<li><input disabled="" type="checkbox"> Saya memahami variable, collection, control flow, dan function.</li>
+<li><input disabled="" type="checkbox"> Saya dapat membaca error dan menangani kegagalan umum.</li>
+<li><input disabled="" type="checkbox"> Saya dapat membaca file tanpa menimpa raw data.</li>
+<li><input disabled="" type="checkbox"> Saya dapat menjelaskan peran NumPy dan Pandas.</li>
+<li><input disabled="" type="checkbox"> Saya dapat memeriksa shape, tipe, missing value, duplikat, dan range.</li>
+<li><input disabled="" type="checkbox"> Saya dapat memecah workflow menjadi function kecil.</li>
+<li><input disabled="" type="checkbox"> Saya dapat menjelaskan setiap keputusan cleaning.</li>
+<li><input disabled="" type="checkbox"> Saya memahami bahwa Python adalah alat untuk workflow AI, bukan AI itu sendiri.</li>
+</ul>
+<h1>Jembatan ke Modul Berikutnya</h1>
+<p>Fondasi ini mempersiapkan peserta untuk:</p>
+<ul>
+<li><strong>Konsep AI Modern:</strong> memahami bagaimana komponen AI bekerja dalam sistem.</li>
+<li><strong>Math for AI:</strong> merepresentasikan operasi numerik melalui array.</li>
+<li><strong>Machine Learning:</strong> menyiapkan data dan menggunakan API library secara sadar.</li>
+<li><strong>Prompt Engineering:</strong> memperlakukan prompt sebagai data dan membangun eksperimen terstruktur.</li>
+<li><strong>LLM dan AI Agent:</strong> mengorkestrasi input, function, tool, state, dan output.</li>
+</ul>
+<h1>Catatan Desain Kurikulum</h1>
+<p>Modul ini sengaja tidak mengajarkan Neural Network, tensor, gradient, optimizer, Transformer, Attention, algoritma Machine Learning, RAG, atau AI Agent. Nama library lanjutan hanya dikenalkan sebagai peta perjalanan. Kompetensi inti modul adalah computational thinking, Python fundamentals, dan workflow data yang kuat.</p>

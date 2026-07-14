@@ -1,0 +1,241 @@
+<section class="fellow-dashboard">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a class="active" href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+
+        <div class="fellow-menu-label">Lainnya</div>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+    </aside>
+
+    <main class="fellow-main chatroom-container">
+        <div class="chatroom-main">
+            <header class="chatroom-header">
+                <div class="header-info">
+                    <div class="room-icon"><i class="fas fa-user-group"></i></div>
+                    <div>
+                        <h2>General Discussion</h2>
+                        <span><i class="fas fa-user"></i> 126 online</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button aria-label="Cari di obrolan"><i class="fas fa-magnifying-glass"></i></button>
+                    <button aria-label="Pesan disematkan"><i class="fas fa-thumbtack"></i></button>
+                    <button class="hide-on-mobile" aria-label="Anggota"><i class="far fa-user"></i></button>
+                    <button aria-label="Lainnya"><i class="fas fa-ellipsis-vertical"></i></button>
+                </div>
+            </header>
+
+            <div class="chatroom-pinned">
+                <div class="pinned-icon"><i class="fas fa-bullhorn"></i></div>
+                <div class="pinned-content">
+                    <strong>Pengumuman:</strong>
+                    <p>Live Session "Build RAG Chatbot" hari ini jam 19.00 WIB. Jangan lupa join ya!</p>
+                </div>
+                <button class="close-btn"><i class="fas fa-xmark"></i></button>
+            </div>
+
+            <div class="chatroom-history">
+                <div class="chat-separator"><span>Today</span></div>
+
+                <div class="chat-message">
+                    <img src="/assets/avatars/user-2.jpg" alt="Siti Aulia" class="chat-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Siti+Aulia&background=e2e8f0&color=64748b'">
+                    <div class="chat-content">
+                        <div class="chat-meta">
+                            <strong>Siti Aulia</strong> <time>09:15</time>
+                        </div>
+                        <div class="chat-bubble">
+                            Halo semuanya! 👋<br>
+                            Ada yang sudah mencoba fine-tuning LLM dengan dataset sendiri? Kira-kira tipsnya apa ya?
+                        </div>
+                        <div class="chat-reactions">
+                            <button class="reaction-btn active"><span>💗</span> <small>6</small></button>
+                            <button class="reaction-add"><i class="far fa-face-smile"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-message">
+                    <img src="/assets/avatars/mentor-1.jpg" alt="Mentor Rani" class="chat-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Mentor+Rani&background=fecdd3&color=be123c'">
+                    <div class="chat-content">
+                        <div class="chat-meta">
+                            <strong class="mentor-name">Mentor Rani <span class="badge">Mentor</span></strong> <time>09:18</time>
+                        </div>
+                        <div class="chat-bubble pink">
+                            Halo Aulia! Beberapa tips yang bisa dicoba:<br>
+                            1. Pastikan data bersih & relevan<br>
+                            2. Gunakan format yang konsisten<br>
+                            3. Mulai dari model kecil dulu untuk eksperimen<br><br>
+                            Semangat! 💪
+                        </div>
+                        <div class="chat-reactions">
+                            <button class="reaction-btn active"><span>💗</span> <small>10</small></button>
+                            <button class="reaction-add"><i class="far fa-face-smile"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-message">
+                    <img src="/assets/avatars/user-3.jpg" alt="Dewi Lestari" class="chat-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Dewi+Lestari&background=e2e8f0&color=64748b'">
+                    <div class="chat-content">
+                        <div class="chat-meta">
+                            <strong>Dewi Lestari</strong> <time>09:21</time>
+                        </div>
+                        <div class="chat-bubble">
+                            Terima kasih Mentor Rani! 🙌<br>
+                            Aku juga baru selesai coba dengan Llama 3 8B, hasilnya lumayan bagus!
+                        </div>
+                        <div class="chat-reactions">
+                            <button class="reaction-btn active"><span>💗</span> <small>4</small></button>
+                            <button class="reaction-add"><i class="far fa-face-smile"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-message system">
+                    <div class="system-avatar"><i class="fas fa-robot"></i></div>
+                    <div class="chat-content">
+                        <div class="chat-meta">
+                            <strong class="system-name">HerAI Assistant</strong> <time>09:22</time>
+                        </div>
+                        <div class="chat-bubble pink">
+                            Butuh referensi dataset untuk fine-tuning?<br>
+                            Coba cek rekomendasi di sini ya &rarr;<br>
+                            <a href="#">bit.ly/dataset-rekomendasi</a>
+                        </div>
+                        <div class="chat-reactions">
+                            <button class="reaction-btn active"><span>💗</span> <small>5</small></button>
+                            <button class="reaction-add"><i class="far fa-face-smile"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-message me">
+                    <div class="chat-content">
+                        <div class="chat-bubble">
+                            Wah makasih semuaa! Super helpful 💖<br>
+                            Nanti aku coba dan share hasilnya di sini yaa ✨
+                        </div>
+                        <div class="chat-meta right">
+                            <time>09:25 <i class="fas fa-check-double read"></i></time>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chatroom-input">
+                <button class="attach-btn" aria-label="Lampirkan file"><i class="fas fa-paperclip"></i></button>
+                <input type="text" placeholder="Ketik pesan..." aria-label="Input pesan">
+                <button class="send-btn" aria-label="Kirim pesan"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <aside class="chatroom-info">
+            <header class="info-header">
+                <h3>Info Room</h3>
+                <button aria-label="Tutup info"><i class="fas fa-xmark"></i></button>
+            </header>
+
+            <div class="info-hero">
+                <div class="room-icon-large"><i class="fas fa-hashtag"></i></div>
+                <h2>General Discussion</h2>
+                <div class="online-status"><span class="dot"></span> 126 online</div>
+                <p>Tempat untuk berdiskusi, berbagi ilmu, dan saling support satu sama lain 💬</p>
+            </div>
+
+            <div class="info-links">
+                <a href="#"><i class="far fa-image"></i> <span>Media, Link, dan File</span> <small>342 <i class="fas fa-chevron-right"></i></small></a>
+                <a href="#"><i class="far fa-star"></i> <span>Pesan Berbintang</span> <small>12 <i class="fas fa-chevron-right"></i></small></a>
+                <a href="#"><i class="far fa-bell"></i> <span>Pengaturan Notifikasi</span> <small>Semua Pesan <i class="fas fa-chevron-right"></i></small></a>
+            </div>
+
+            <div class="info-members">
+                <div class="members-header">
+                    <h3>Anggota (1.248)</h3>
+                    <a href="#">Lihat Semua</a>
+                </div>
+
+                <div class="member-list">
+                    <article class="member-item">
+                        <img src="/assets/avatars/mentor-1.jpg" alt="Mentor Rani" onerror="this.src='https://ui-avatars.com/api/?name=Mentor+Rani&background=fecdd3&color=be123c'">
+                        <div class="member-detail">
+                            <strong>Mentor Rani <span class="badge">Mentor</span></strong>
+                            <small>Mentor</small>
+                        </div>
+                        <div class="status-wrap">
+                            <span class="status-dot online"></span>
+                            <span class="status-text">Online</span>
+                        </div>
+                    </article>
+                    <article class="member-item">
+                        <img src="/assets/avatars/user-3.jpg" alt="Dewi Lestari" onerror="this.src='https://ui-avatars.com/api/?name=Dewi+Lestari&background=e2e8f0&color=64748b'">
+                        <div class="member-detail">
+                            <strong>Dewi Lestari</strong>
+                            <small>Fellow</small>
+                        </div>
+                        <div class="status-wrap">
+                            <span class="status-dot online"></span>
+                            <span class="status-text">Online</span>
+                        </div>
+                    </article>
+                    <article class="member-item">
+                        <img src="/assets/avatars/user-2.jpg" alt="Siti Aulia" onerror="this.src='https://ui-avatars.com/api/?name=Siti+Aulia&background=e2e8f0&color=64748b'">
+                        <div class="member-detail">
+                            <strong>Siti Aulia</strong>
+                            <small>Fellow</small>
+                        </div>
+                        <div class="status-wrap">
+                            <span class="status-dot online"></span>
+                            <span class="status-text">Online</span>
+                        </div>
+                    </article>
+                    <article class="member-item">
+                        <img src="/assets/avatars/user-1.jpg" alt="Aisyah Putri" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
+                        <div class="member-detail">
+                            <strong>Aisyah Putri (Anda)</strong>
+                            <small>Fellow</small>
+                        </div>
+                        <div class="status-wrap">
+                            <span class="status-dot online"></span>
+                            <span class="status-text">Online</span>
+                        </div>
+                    </article>
+                    <article class="member-item offline">
+                        <img src="/assets/avatars/user-4.jpg" alt="Rizka Amelia" onerror="this.src='https://ui-avatars.com/api/?name=Rizka+Amelia&background=f1f5f9&color=94a3b8'">
+                        <div class="member-detail">
+                            <strong>Rizka Amelia</strong>
+                            <small>Fellow</small>
+                        </div>
+                        <div class="status-wrap">
+                            <span class="status-dot"></span>
+                            <span class="status-text">Offline</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <div class="info-footer">
+                <button class="leave-room-btn"><i class="fas fa-right-from-bracket"></i> Keluar dari Room</button>
+            </div>
+        </aside>
+    </main>
+</section>

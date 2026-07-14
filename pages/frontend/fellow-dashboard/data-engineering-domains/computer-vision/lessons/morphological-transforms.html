@@ -1,0 +1,1295 @@
+<section class="fellow-dashboard fellow-modules-page lesson-detail-page morph-page" data-fellow-page="modules">
+<style>
+  .morph-page{
+    --mbg:#fff7fb; --mbg-2:#fff0f7; --mcard:#ffffff;
+    --mline:rgba(246,51,146,.16); --mline-s:rgba(246,51,146,.24);
+    --mtext:#171827; --mtext-2:#6f7282; --mtext-3:#8e91a0;
+    --maccent:#f63392; --maccent-soft:rgba(246,51,146,.08);
+    --mshadow:0 18px 50px rgba(246,51,146,.08);
+    --mshadow-lg:0 24px 60px rgba(23,24,39,.08);
+    --mradius:20px; --mradius-sm:14px;
+    --mfont-disp:'Plus Jakarta Sans',sans-serif;
+    --mfont-body:'Inter',sans-serif;
+    --mfont-mono:'SF Mono','Space Mono',monospace;
+    --mred:#e11d48; --mgreen:#16a34a; --mblue:#2563eb;
+    background:radial-gradient(circle at top left,rgba(246,51,146,.10),transparent 30%),radial-gradient(circle at 85% 12%,rgba(246,51,146,.06),transparent 22%),var(--mbg);
+    color:var(--mtext); font-family:var(--mfont-body);
+  }
+
+  .morph-page .lesson-topbar{ position:sticky; top:0; z-index:100; padding:0; background:transparent; }
+  .morph-page .lesson-topbar-inner{ max-width:1600px; width:100%; margin:0 auto; display:flex; align-items:center; height:68px; }
+  .morph-page .navbar-left{ flex:0 0 30%; display:flex; align-items:center; padding-left:24px; min-width:0; }
+  .morph-page .navbar-center{ flex:0 0 40%; display:flex; align-items:center; justify-content:center; text-align:center; min-width:0; font-family:var(--mfont-disp); font-size:15px; font-weight:700; color:var(--mtext); }
+  .morph-page .navbar-right{ flex:0 0 30%; display:flex; align-items:center; justify-content:flex-end; padding-right:24px; min-width:0; }
+  .morph-page .lesson-breadcrumb{ display:flex; align-items:center; gap:8px; flex-shrink:0; color:var(--mtext-2); }
+  .morph-page .lesson-breadcrumb a{ display:inline-flex; align-items:center; gap:6px; color:var(--mtext-2); text-decoration:none; transition:color .2s; }
+  .morph-page .lesson-breadcrumb a:hover{ color:var(--maccent); }
+  .morph-page .lesson-breadcrumb-separator{ color:var(--mtext-3); font-size:10px; }
+  .morph-page .fellow-actions{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
+  .morph-page .fellow-search{ display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.95); height:40px; border:1px solid rgba(246,51,146,.12); border-radius:100px; padding:0 16px; transition:all .2s; min-width:200px; }
+  .morph-page .fellow-search i{ color:var(--mtext-3); font-size:14px; }
+  .morph-page .fellow-search input{ border:none; outline:none; background:transparent; font-size:13px; color:var(--mtext); width:120px; font-family:var(--mfont-body); }
+  .morph-page .fellow-search input::placeholder{ color:var(--mtext-3); }
+  .morph-page .fellow-icon-button{ display:flex; align-items:center; justify-content:center; width:40px; height:40px; padding:0; background:rgba(255,255,255,.95); border:1px solid rgba(246,51,146,.12); border-radius:100px; cursor:pointer; position:relative; transition:all .2s; color:var(--mtext-2); }
+  .morph-page .fellow-icon-button:hover{ border-color:rgba(246,51,146,.25); background:#fff; color:var(--mtext); }
+  .morph-page .fellow-icon-button span{ position:absolute; top:-4px; right:-4px; background:var(--maccent); color:#fff; font-size:10px; font-weight:700; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .morph-page .fellow-user-button{ display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.95); border:1px solid rgba(246,51,146,.12); border-radius:100px; padding:5px 12px 5px 6px; text-decoration:none; transition:all .2s; color:var(--mtext); }
+  .morph-page .fellow-user-button:hover{ border-color:rgba(246,51,146,.25); background:#fff; }
+  .morph-page .fellow-user-button .avatar-img{ width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--maccent),#ff8ab7); display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:700; flex-shrink:0; }
+  .morph-page .fellow-user-button strong{ font-size:13px; font-weight:700; display:block; }
+  .morph-page .fellow-user-button small{ font-size:10px; color:var(--mtext-3); display:block; }
+  .morph-page .fellow-user-button>i{ font-size:10px; color:var(--mtext-3); margin-left:2px; }
+  .morph-page .lesson-layout{ display:grid; grid-template-columns:minmax(0,1fr) 320px; gap:24px; align-items:start; max-width:1600px; margin:0 auto; padding:24px 24px 56px; }
+  .morph-page .lesson-main-content{ min-width:0; }
+  .morph-page .lesson-hero{ display:grid; grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr); gap:28px; align-items:center; padding:42px 44px 30px; margin-bottom:20px; border:1px solid var(--mline); border-radius:28px; background:radial-gradient(circle at 0 0,rgba(246,51,146,.10),transparent 38%),linear-gradient(135deg,#fff 0%,var(--mbg) 58%,var(--mbg-2) 100%); box-shadow:var(--mshadow-lg); overflow:hidden; }
+  .morph-page .lesson-hero h1{ font-family:var(--mfont-disp); color:var(--mtext); letter-spacing:-.04em; }
+  .morph-page .lesson-hero p,.morph-page .lesson-meta-row{ color:var(--mtext-2); }
+  .morph-page .lesson-hero img{ max-width:240px; width:100%; justify-self:end; filter:drop-shadow(0 18px 30px rgba(246,51,146,.10)); }
+  .morph-page .lesson-material-panel{ display:grid; gap:18px; }
+  .morph-page .lesson-tabs a{ background:rgba(255,255,255,.92); border:1px solid var(--mline); box-shadow:var(--mshadow); border-radius:var(--mradius-sm); padding:8px 18px; align-self:center; margin:0; }
+  .morph-page .lesson-tabs a.active{ background:var(--maccent-soft); color:var(--maccent); border-color:var(--mline-s); }
+  .morph-page .lesson-article{ max-width:800px; }
+  .morph-page .lesson-sec{ padding-bottom:48px; margin-bottom:8px; border-bottom:1px solid var(--mline); scroll-margin-top:120px; }
+  .morph-page .lesson-sec:last-child{ border-bottom:none; }
+  .morph-page .sec-header{ display:flex; align-items:flex-start; gap:16px; margin-bottom:24px; }
+  .morph-page .sec-num{ font-family:var(--mfont-mono); font-size:12px; color:var(--maccent); padding:4px 0; letter-spacing:.06em; flex-shrink:0; min-width:26px; }
+  .morph-page .sec-title{ font-family:var(--mfont-disp); font-size:clamp(22px,3vw,30px); font-weight:700; letter-spacing:-.02em; color:var(--mtext); margin-bottom:4px; }
+  .morph-page .sec-sub{ font-size:14px; color:var(--mtext-2); }
+  .morph-page .prose{ font-size:15px; color:var(--mtext-2); line-height:1.75; margin-bottom:20px; max-width:640px; }
+  .morph-page .prose strong{ color:var(--mtext); font-weight:500; }
+  .morph-page .prose code{ font-family:var(--mfont-mono); font-size:12.5px; padding:2px 6px; border-radius:4px; color:var(--mtext); }
+  .morph-page .callout{ display:flex; gap:12px; padding:14px 16px; border-radius:14px; margin-bottom:20px; font-size:13.5px; line-height:1.65; color:var(--mtext-2); }
+  .morph-page .callout strong{ color:var(--mtext); }
+  .morph-page .callout-icon{ flex-shrink:0; font-size:16px; line-height:1.5; }
+  .morph-page .callout.info{ background:linear-gradient(135deg,rgba(246,51,146,.05),rgba(255,255,255,.98)); border:1px solid var(--mline); }
+  .morph-page .callout.warn{ background:linear-gradient(135deg,rgba(255,193,7,.08),rgba(255,255,255,.98)); border:1px solid rgba(255,193,7,.25); }
+  .morph-page .callout.danger{ background:linear-gradient(135deg,rgba(246,51,146,.06),rgba(255,255,255,.98)); border:1px solid rgba(246,51,146,.2); }
+  .morph-page .code-block{ background:#fff; border:1px solid var(--mline); border-radius:14px; box-shadow:var(--mshadow); overflow:hidden; margin-bottom:20px; }
+  .morph-page .cb-label{ background:var(--mbg); border-bottom:1px solid var(--mline); padding:8px 16px; font-family:var(--mfont-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--mtext-2); }
+  .morph-page .code-block pre{ padding:18px 20px; overflow-x:auto; margin:0; }
+  .morph-page .code-block code{ font-family:var(--mfont-mono); font-size:13px; line-height:1.75; background:#fff; padding:0; color:var(--mtext); }
+  .morph-page .kw{ color:#db2777; font-weight:600; }
+  .morph-page .fn{ color:#7c3aed; }
+  .morph-page .str{ color:#15803d; }
+  .morph-page .num{ color:#b45309; }
+  .morph-page .op{ color:#667085; }
+  .morph-page .cm{ color:#98a2b3; font-style:italic; }
+  .morph-page .widget-card{ background:rgba(255,255,255,.96); border:1px solid var(--mline); border-radius:var(--mradius); box-shadow:var(--mshadow); padding:20px; margin-bottom:20px; overflow:hidden; }
+  .morph-page .widget-label{ font-family:var(--mfont-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--mtext-3); margin-bottom:16px; }
+  .morph-page .info-card{ background:rgba(255,255,255,.96); border:1px solid var(--mline); border-radius:var(--mradius); padding:20px; }
+  .morph-page .info-card .ic-title{ font-family:var(--mfont-disp); font-size:14px; font-weight:600; color:var(--mtext); margin-bottom:10px; }
+  .morph-page .info-card p{ font-size:13px; color:var(--mtext); line-height:1.7; }
+  .morph-page .info-card code{ color:var(--mtext); background:var(--mbg-2); padding:2px 6px; border-radius:4px; font-family:var(--mfont-mono); font-size:12.5px; }
+  .morph-page .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+  .morph-page .two-col .code-block{ margin-bottom:0; }
+  .morph-page .challenge-card{ display:block; padding:20px; min-height:auto; background:rgba(255,255,255,.96); border:1px solid var(--mline); border-radius:var(--mradius); box-shadow:var(--mshadow); align-items:normal; gap:0; grid-template-columns:none; }
+  .morph-page .challenge-card h2{ font-size:inherit; color:inherit; margin:0; line-height:inherit; }
+  .morph-page .challenge-card p{ font-size:inherit; color:inherit; margin:0; line-height:inherit; }
+  .morph-page .challenge-header{ display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid var(--mline); flex-wrap:wrap; }
+  .morph-page .challenge-badge{ font-family:var(--mfont-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; padding:3px 8px; border-radius:4px; background:rgba(246,51,146,.1); color:var(--maccent); border:1px solid rgba(246,51,146,.2); white-space:nowrap; }
+  .morph-page .challenge-badge.quiz-badge{ background:rgba(246,51,146,.1); color:var(--maccent); border-color:rgba(246,51,146,.2); }
+  .morph-page .challenge-title{ font-size:14px; font-weight:500; color:var(--mtext); }
+  .morph-page .challenge-desc{ padding:12px 18px; font-size:13px; color:var(--mtext-2); line-height:1.6; border-bottom:1px solid var(--mline); }
+  .morph-page .md-col-label{
+    font-family:var(--mfont-mono); font-size:10px; text-transform:uppercase;
+    letter-spacing:.04em; color:var(--mtext-3); margin-bottom:6px;
+  }
+  .morph-page .md-tool{
+    padding:4px 10px; border-radius:6px; border:1px solid var(--mline);
+    background:#fff; cursor:pointer; font-size:12px; color:var(--mtext-2);
+    transition:all .2s; line-height:1.4;
+  }
+  .morph-page .md-tool.active{ background:var(--maccent); color:#fff; border-color:var(--maccent); }
+  .morph-page .md-tool.clear{ color:#e11d48; border-color:rgba(225,29,72,.2); }
+  .morph-page .draw-canvas{ border-radius:6px; border:1px solid var(--mline); display:block; cursor:crosshair; }
+  .morph-page .ops-table{
+    width:100%; border-collapse:collapse; margin-bottom:20px;
+    background:rgba(255,255,255,.96); border:1px solid var(--mline);
+    border-radius:var(--mradius); overflow:hidden;
+  }
+  .morph-page .ot-row{
+    display:grid; grid-template-columns:1fr 1.3fr 1.5fr 1fr; gap:0;
+    border-bottom:1px solid var(--mline); font-size:13px;
+  }
+  .morph-page .ot-row:last-child{ border-bottom:none; }
+  .morph-page .ot-row.ot-header{
+    background:var(--mbg); font-family:var(--mfont-disp); font-weight:700; color:var(--mtext);
+    font-size:12px; text-transform:uppercase;
+  }
+  .morph-page .ot-row > div{ padding:10px 14px; color:var(--mtext); display:flex; align-items:center; }
+  .morph-page .ot-header > div{ color:var(--mtext); }
+  .morph-page .ot-name{ font-weight:600; }
+  .morph-page .ot-name.grad{ color:var(--maccent); }
+  .morph-page .ot-name.tophat{ color:#2563eb; }
+  .morph-page .ot-name.blackhat{ color:#9333ea; }
+  .morph-page .ot-name.hitmiss{ color:#16a34a; }
+  .morph-page .ot-formula{ font-family:var(--mfont-mono); font-size:12px; color:var(--mtext); }
+  .morph-page .ot-const{ font-family:var(--mfont-mono); font-size:11px; color:var(--mtext-3); }
+  .morph-page .adv-ops-demo{ display:flex; flex-direction:row; gap:16px; align-items:flex-start; flex-wrap:wrap; }
+  .morph-page .adv-draw-col{ display:flex; flex-direction:column; gap:8px; align-items:center; }
+  .morph-page .adv-draw-tools{ display:flex; gap:4px; }
+  .morph-page .adv-scene-sel{
+    padding:5px 10px; border-radius:6px; border:1px solid var(--mline);
+    background:#fff; font-size:12px; color:var(--mtext); cursor:pointer;
+  }
+  .morph-page .adv-results-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; flex:1; }
+  .morph-page .adv-result{ text-align:center; }
+  .morph-page .adv-result canvas{ border-radius:6px; border:1px solid var(--mline); display:block; margin:0 auto 4px; }
+  .morph-page .adv-result-name{ font-size:11px; font-weight:600; color:var(--mtext); }
+  .morph-page .adv-result-eq{ font-family:var(--mfont-mono); font-size:9px; color:var(--mtext-3); }
+  .morph-page .adv-result-use{ font-size:10px; color:var(--mtext-2); }
+  .morph-page .adv-se-ctrl{ display:flex; align-items:center; gap:8px; width:100%; font-size:12px; color:var(--mtext); }
+  .morph-page .skeleton-demo{ display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; }
+  .morph-page .sk-left, .morph-page .sk-right{ display:flex; flex-direction:column; gap:8px; }
+  .morph-page .sk-shape-btns{ display:flex; gap:4px; flex-wrap:wrap; }
+  .morph-page .sk-controls{
+    display:flex; align-items:center; gap:8px;
+    width:100%; justify-content:center;
+  }
+  .morph-page .sk-prog-wrap{ flex:1; max-width:150px; height:4px; border-radius:2px; background:rgba(246,51,146,.1); }
+  .morph-page .sk-prog-fill{ height:100%; border-radius:2px; background:linear-gradient(90deg,var(--maccent),#ff8ab7); transition:width .2s; }
+  .morph-page .sk-info{ font-size:12px; color:var(--mtext-2); text-align:center; }
+  .morph-page .recon-demo{
+    display:flex; align-items:center; gap:12px; justify-content:center; flex-wrap:wrap;
+  }
+  .morph-page .recon-item{ text-align:center; }
+  .morph-page .recon-item canvas{ border-radius:6px; border:1px solid var(--mline); display:block; }
+  .morph-page .recon-arrow{ font-size:18px; color:var(--mtext-3); font-weight:700; }
+  .morph-page .ocd-step-label{ font-size:10px; color:var(--mtext-3); margin-top:4px; font-family:var(--mfont-mono); }
+  .morph-page .ocd-scene{
+    padding:5px 12px; border-radius:6px; border:1px solid var(--mline);
+    background:#fff; cursor:pointer; font-size:11px; color:var(--mtext-2); transition:all .2s;
+  }
+  .morph-page .ocd-scene.active{ background:var(--maccent); color:#fff; border-color:var(--maccent); }
+  .morph-page .recon-scene-btns{ display:flex; gap:6px; }
+  .morph-page .sb-demo{ display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; }
+  .morph-page .sb-canvas-wrap{ position:relative; }
+  .morph-page .sb-canvas-wrap canvas{ border-radius:8px; border:1px solid var(--mline); display:block; cursor:crosshair; }
+  .morph-page .sb-controls{ display:flex; flex-direction:column; gap:10px; flex:1; min-width:200px; }
+  .morph-page .sb-ctrl-row{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--mtext); }
+  .morph-page .sb-op-select{
+    padding:6px 12px; border-radius:6px; border:1px solid var(--mline);
+    background:#fff; font-size:12px; color:var(--mtext); cursor:pointer; flex:1;
+  }
+  .morph-page .sb-preset-btns{ display:flex; gap:4px; flex-wrap:wrap; }
+  .morph-page .md-se-btn{ padding:5px 12px; border-radius:6px; border:1px solid var(--mline); background:#fff; cursor:pointer; font-size:12px; color:var(--mtext-2); transition:all .2s; }
+  .morph-page .md-se-btn.active{ background:var(--maccent); color:#fff; border-color:var(--maccent); }
+  .morph-page .se-preset{
+    padding:4px 10px; border-radius:6px; border:1px solid var(--mline);
+    background:#fff; cursor:pointer; font-size:11px; color:var(--mtext-2); transition:all .2s;
+  }
+  .morph-page .se-preset.active{ background:var(--maccent); color:#fff; border-color:var(--maccent); }
+  .morph-page .sb-stats{ display:flex; gap:8px; flex-wrap:wrap; font-size:12px; color:var(--mtext-2); }
+  .morph-page .sb-tools{ display:flex; gap:4px; flex-wrap:wrap; }
+  .morph-page .sb-tool-btn{
+    padding:4px 10px; border-radius:6px; border:1px solid var(--mline);
+    background:#fff; cursor:pointer; font-size:11px; color:var(--mtext-2); transition:all .2s;
+  }
+  .morph-page .sb-tool-btn.active{ background:var(--maccent); color:#fff; border-color:var(--maccent); }
+  .morph-page .sb-tool-btn.clear{ color:#e11d48; border-color:rgba(225,29,72,.2); }
+  .morph-page .se-grid-wrap{
+    background:rgba(255,255,255,.96); border:1px solid var(--mline);
+    border-radius:var(--mradius-sm); padding:16px;
+  }
+  .morph-page .se-cell{
+    width:28px; height:28px; border-radius:4px; border:1px solid var(--mline);
+    background:var(--mbg); cursor:pointer; transition:all .15s;
+  }
+  .morph-page .se-cell.on{ background:var(--maccent); border-color:var(--maccent); }
+  .morph-page .se-info{ font-size:12px; color:var(--mtext); margin-top:8px; }
+  .morph-page .se-info span{ color:var(--maccent); font-weight:600; }
+  .morph-page .adv-result{ background:rgba(255,255,255,.96); border:1px solid var(--mline); border-radius:var(--mradius-sm); padding:8px; }
+  .morph-page .sandbox-card{
+    background:rgba(255,255,255,.96); border:1px solid var(--mline);
+    border-radius:var(--mradius); padding:16px; margin-bottom:16px;
+  }
+  .morph-page .ic-select{
+    padding:6px 12px; border-radius:6px; border:1px solid var(--mline);
+    background:#fff; font-size:12px; color:var(--mtext); cursor:pointer;
+  }
+  .morph-page .sb-op{
+    background:rgba(255,255,255,.96); border:1px solid var(--mline);
+    border-radius:var(--mradius-sm); padding:10px; text-align:center;
+  }
+  .morph-page .sb-size-lbl{ color:var(--maccent); font-weight:600; }
+  .morph-page .ocd-tabs{ display:flex; gap:6px; margin-bottom:12px; }
+  .morph-page .ocd-tab{
+    padding:6px 14px; border-radius:8px; border:1px solid var(--mline);
+    background:#fff; cursor:pointer; font-size:12px; color:var(--mtext-2); transition:all .2s;
+  }
+  .morph-page .ocd-tab.active{ background:var(--maccent); color:#fff; border-color:var(--maccent); }
+  .morph-page .ocd-arrow{ font-size:18px; color:var(--mtext-3); font-weight:700; padding:20px 0; }
+  .morph-page .challenge-editor{ margin-top:12px; }
+  .morph-page .editor-tabs{ display:flex; gap:0; border-bottom:1px solid var(--mline); }
+  .morph-page .editor-tab{ padding:8px 16px; font-family:var(--mfont-mono); font-size:11px; color:var(--mtext-3); background:var(--mbg); border:1px solid var(--mline); border-bottom:none; border-radius:8px 8px 0 0; margin-bottom:-1px; }
+  .morph-page .editor-tab.active{ background:var(--mbg-2); color:var(--mtext); border-bottom-color:var(--mbg-2); }
+  .morph-page .code-editor-wrap{ position:relative; }
+  .morph-page .code-editor{ width:100%; min-height:180px; padding:16px; background:var(--mbg-2); border:1px solid var(--mline); border-top:none; border-radius:0 0 12px 12px; font-size:13px; line-height:1.75; color:var(--mtext); resize:vertical; outline:none; tab-size:2; }
+  .morph-page .editor-actions{ display:flex; gap:8px; margin-top:10px; align-items:center; }
+  .morph-page .run-btn{ padding:8px 18px; border-radius:8px; border:none; background:var(--maccent); color:#fff; font-size:13px; font-weight:600; cursor:pointer; font-family:var(--mfont-body); transition:all .2s; }
+  .morph-page .run-btn:hover{ background:#d42a7d; }
+  .morph-page .run-btn.large{ padding:10px 28px; font-size:14px; }
+  .morph-page .hint-btn,.morph-page .reset-btn{ padding:7px 14px; border-radius:8px; border:1px solid var(--mline); background:#fff; font-size:12px; cursor:pointer; font-family:var(--mfont-body); color:var(--mtext-2); transition:all .2s; }
+  .morph-page .hint-btn:hover,.morph-page .reset-btn:hover{ background:var(--mbg); border-color:var(--mline-s); color:var(--mtext); }
+  .morph-page .hint-box{ margin-top:10px; padding:12px 16px; border-radius:10px; background:var(--mbg); border:1px solid var(--mline); font-size:12.5px; color:var(--mtext-2); line-height:1.65; }
+  .morph-page .output-wrap{ margin-top:10px; border-radius:10px; background:var(--mbg-2); color:var(--mtext); overflow:hidden; border:1px solid rgba(246,51,146,.18); }
+  .morph-page .output-label{ padding:6px 14px; font-family:var(--mfont-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--mtext); background:rgba(246,51,146,.08); }
+  .morph-page .output-pre{ padding:12px 16px; font-size:13px; line-height:1.7; margin:0; color:var(--mtext); white-space:pre-wrap; background:transparent; }
+  .morph-page .check-result{ margin-top:10px; padding:10px 14px; border-radius:10px; font-size:13px; font-weight:500; }
+  .morph-page .check-result.pass{ background:rgba(22,163,74,.08); color:#16a34a; border:1px solid rgba(22,163,74,.2); }
+  .morph-page .check-result.fail{ background:rgba(225,29,72,.08); color:#e11d48; border:1px solid rgba(225,29,72,.2); }
+  .morph-page .expected-box{ margin-top:10px; padding:12px 16px; border-radius:10px; background:var(--mbg); border:1px solid var(--mline); font-size:13px; color:var(--mtext-2); }
+  .morph-page .expected-label{ font-family:var(--mfont-disp); font-size:11px; font-weight:600; color:var(--mtext-3); display:block; margin-bottom:6px; text-transform:uppercase; }
+  .morph-page .expected-box code{ font-size:13px; line-height:1.7; color:var(--mtext); background:transparent; padding:0; }
+  .morph-page .quiz-block-title{ font-family:var(--mfont-disp); font-size:15px; font-weight:700; color:var(--mtext); margin-bottom:20px; padding-top:4px; }
+  .morph-page .quiz-item{ margin-bottom:28px; }
+  .morph-page .quiz-q-num{ font-family:var(--mfont-mono); font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--mtext-3); margin-bottom:8px; }
+  .morph-page .quiz-q-text{ font-size:15px; font-weight:500; color:var(--mtext); margin-bottom:14px; line-height:1.6; }
+  .morph-page .quiz-opts{ display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+  .morph-page .quiz-opt{ display:flex; align-items:flex-start; gap:12px; padding:12px 16px; border-radius:10px; border:1px solid var(--mline); background:#fff; cursor:pointer; font-size:13.5px; color:var(--mtext-2); transition:all .15s; text-align:left; width:100%; font-family:var(--mfont-body); }
+  .morph-page .quiz-opt:hover:not(:disabled){ background:var(--mbg); border-color:var(--mline-s); color:var(--mtext); }
+  .morph-page .quiz-opt.correct{ background:rgba(22,163,74,.06); border-color:rgba(22,163,74,.25); color:#16a34a; }
+  .morph-page .quiz-opt.wrong{ background:rgba(225,29,72,.06); border-color:rgba(225,29,72,.25); color:#e11d48; }
+  .morph-page .quiz-opt.muted{ opacity:.4; }
+  .morph-page .quiz-opt-badge{ width:24px; height:24px; border-radius:50%; background:var(--mbg); display:flex; align-items:center; justify-content:center; font-family:var(--mfont-mono); font-size:11px; color:var(--mtext-3); flex-shrink:0; }
+  .morph-page .quiz-feedback{ padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; display:none; color:var(--mtext-2); }
+  .morph-page .quiz-feedback.show{ display:block; }
+  .morph-page .quiz-feedback.ok{ background:rgba(22,163,74,.06); border:1px solid rgba(22,163,74,.2); color:#16a34a; }
+  .morph-page .quiz-feedback.bad{ background:rgba(225,29,72,.06); border:1px solid rgba(225,29,72,.2); color:#e11d48; }
+  .morph-page .playground-card{ background:rgba(255,255,255,.96); border:1px solid var(--mline); border-radius:var(--mradius); overflow:hidden; margin-top:20px; }
+  .morph-page .playground-toolbar{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; padding:12px 16px; background:var(--mbg); border-bottom:1px solid var(--mline); }
+  .morph-page .pg-title{ font-family:var(--mfont-disp); font-size:13px; font-weight:600; color:var(--mtext); }
+  .morph-page .pg-toolbar-right{ display:flex; gap:6px; flex-wrap:wrap; }
+  .morph-page .pg-snippet-btn{ padding:5px 12px; border-radius:6px; border:1px solid var(--mline); background:#fff; font-size:11px; cursor:pointer; font-family:var(--mfont-mono); color:var(--mtext-2); transition:all .2s; }
+  .morph-page .pg-snippet-btn:hover{ border-color:var(--mline-s); color:var(--mtext); }
+  .morph-page .playground-editor{ background:var(--mbg-2); border:none; border-radius:0; min-height:160px; }
+  .morph-page .playground-actions{ display:flex; gap:8px; padding:12px 16px; align-items:center; border-top:1px solid var(--mline); }
+  .morph-page .pg-note{ margin-left:auto; font-size:11px; color:var(--mtext-3); font-family:var(--mfont-mono); }
+  .morph-page .lesson-nav-footer{ padding:20px 32px; }
+  .morph-page .lesson-nav-footer a{ background:rgba(255,255,255,.92); border:1px solid var(--mline); box-shadow:var(--mshadow); }
+  .morph-page .lesson-nav-footer a:last-child{ background:var(--maccent); color:#fff; border-color:var(--maccent); }
+  .morph-page .lesson-right-panel{ position:sticky; top:88px; align-self:start; display:flex; flex-direction:column; gap:16px; }
+  .morph-page .lesson-right-panel>*{ border-radius:20px; }
+  .morph-page .lesson-list-item{ padding:6px 10px; border-radius:8px; color:var(--mtext); font-size:13px; display:flex; align-items:center; gap:8px; cursor:default; }
+  .morph-page .lesson-list-item.active,.morph-page .lesson-list-item:hover{ background:rgba(246,51,146,.08); color:var(--mtext); }
+  .morph-page .lesson-list-item.active .lli-dot{ background:var(--maccent); }
+  .morph-page .lli-dot{ width:8px; height:8px; border-radius:50%; background:rgba(246,51,146,.2); flex-shrink:0; }
+  .morph-page .lesson-list-item.done .lli-dot{ background:#16a34a; }
+  .morph-page .lpc-meta{ display:flex; gap:12px; font-size:12px; color:var(--mtext-2); margin-top:10px; }
+  .morph-page .lesson-progress-card,
+  .morph-page .lesson-list-card{
+    background:#fff; border:1px solid var(--mline);
+    border-radius:18px; padding:14px;
+  }
+  .morph-page .lpc-header{
+    font-family:var(--mfont-disp); font-size:14px; font-weight:700;
+    color:var(--mtext); margin-bottom:12px;
+  }
+  .morph-page .lesson-list-card h4{
+    font-family:var(--mfont-disp); font-size:14px; font-weight:700;
+    color:var(--mtext); margin-bottom:8px;
+  }
+  .morph-page .final-score-card{ padding:28px; margin-top:24px; text-align:center; }
+  .morph-page .fs-title{ font-family:var(--mfont-disp); font-size:20px; font-weight:700; color:var(--mtext); margin-bottom:16px; }
+  .morph-page .fs-scores{ display:flex; gap:24px; justify-content:center; margin-bottom:12px; flex-wrap:wrap; }
+  .morph-page .fs-msg{ font-size:13px; }
+  .morph-page .next-lesson-cta{ margin-top:32px; padding:32px; text-align:center; }
+  .morph-page .nlc-title{ font-family:var(--mfont-disp); font-size:24px; font-weight:700; color:var(--mtext); letter-spacing:-.01em; margin-bottom:8px; }
+  .morph-page .nlc-btn{ display:inline-block; padding:12px 28px; border-radius:8px; background:var(--maccent); color:#fff; font-weight:600; font-size:14px; text-decoration:none; transition:all .2s; }
+  .morph-page .nlc-btn:hover{ background:#d42a7d; transform:translateY(-1px); }
+  .morph-page input[type=range]{ -webkit-appearance:none; height:4px; border-radius:2px; background:rgba(246,51,146,.12); outline:none; cursor:pointer; }
+  .morph-page input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--maccent); cursor:pointer; border:2px solid #fff; box-shadow:0 2px 8px rgba(246,51,146,.25); transition:transform .15s; }
+  .morph-page input[type=range]::-webkit-slider-thumb:hover{ transform:scale(1.2); }
+  @media(max-width:1200px){ .morph-page .lesson-layout{ grid-template-columns:1fr; } .morph-page .lesson-article{ max-width:none; } .morph-page .lesson-right-panel{ position:static; flex-direction:row; flex-wrap:wrap; } .morph-page .lesson-right-panel>*{ flex:1 1 280px; } }
+  @media(max-width:900px){ .morph-page .lesson-topbar-inner{ height:60px; } .morph-page .navbar-left{ padding-left:16px; } .morph-page .navbar-right{ padding-right:16px; } .morph-page .fellow-search{ min-width:auto; flex:1; } .morph-page .fellow-search input{ width:80px; } .morph-page .fellow-user-button span:not(.avatar-img),.morph-page .fellow-user-button>i{ display:none; } .morph-page .lesson-hero{ grid-template-columns:1fr; padding:28px 24px 24px; } .morph-page .lesson-hero img{ justify-self:center; max-width:210px; } .morph-page .lesson-layout{ padding-inline:16px; } .morph-page .two-col{ grid-template-columns:1fr; } }
+  @media(max-width:600px){ .morph-page .se-presets{ grid-template-columns:1fr; } }
+</style>
+<button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+<div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+<aside class="fellow-sidebar" aria-label="Navigasi peserta">
+<a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
+<nav class="fellow-menu">
+<a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+<a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+<a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+<a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+<a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+<a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+<a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+<a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+</nav>
+<nav class="fellow-menu secondary">
+<a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+<a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+<a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ &amp; Bantuan</span></a>
+<a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+</nav>
+<div class="invite-card course-help-mini">
+<div><strong>Butuh bantuan?</strong><p>Tanya HerAI Assistant tentang modul dan pembelajaran.</p></div>
+<button type="button">Chat Sekarang</button>
+</div>
+</aside>
+<main class="fellow-main">
+ <header class="lesson-topbar">
+<div class="lesson-topbar-inner">
+<div class="navbar-left">
+<nav class="lesson-breadcrumb" aria-label="Breadcrumb materi">
+<a href="#/participant-ai-lab-cv"><i class="fas fa-arrow-left"></i><span>Computer Vision</span></a>
+<span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+</nav>
+</div>
+<div class="navbar-center">Morphological Transforms</div>
+<div class="navbar-right">
+<div class="fellow-actions">
+<label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul, topik, atau materi..."></label>
+<button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+<a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+</div>
+</div>
+</div>
+</header>
+<div class="lesson-layout">
+<div class="lesson-main-content">
+<section class="lesson-hero">
+<div class="lesson-hero-copy">
+<h1>Morphological Transformations</h1>
+<p>Erosi, dilasi, opening, closing, skeletonization — operasi morfologis untuk memanipulasi bentuk dan struktur citra.</p>
+<div class="lesson-meta-row">
+<span><i class="far fa-clock"></i> 50 menit</span>
+<span><i class="fas fa-layer-group"></i> CV &middot; Image Processing</span>
+<b>Intermediate</b>
+</div>
+</div>
+<img src="/assets/messaging/herai-chat-persona.png" alt="HerAI CV learning">
+</section>
+<section class="lesson-material-panel">
+<div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
+<a href="#/participant-ai-lab-cv-morph" class="active"><i class="fas fa-book-open"></i> Materi</a>
+<a href="#/participant-ai-lab-cv"><i class="fas fa-layer-group"></i> Katalog CV</a>
+</div>
+<article class="lesson-article ai-lab-content" id="morph-content">
+      <!-- ═══ SEC 1: STRUCTURING ELEMENT ═══ -->
+      <section class="lesson-sec" id="sec-intro">
+        <div class="sec-header">
+          <span class="sec-num">01</span>
+          <div><h2 class="sec-title">Structuring Element</h2>
+          <p class="sec-sub">The "kernel" of morphological operations — shape defines behavior</p></div>
+        </div>
+        <div class="prose">Morphological operations work on <strong>binary images</strong> (black/white). The <em>structuring element</em> (SE) is a small shape — like a kernel in convolution — that defines which neighbors are examined. But instead of multiplying, morphology uses <strong>set logic</strong>: does the SE fit entirely inside the object? (erosion) Does it touch at all? (dilation).</div>
+
+        <div class="callout info"><span class="callout-icon"><i class="fas fa-cubes"></i></span><div><strong>Structuring element shapes:</strong> Rectangle, ellipse, and cross are the most common. Shape matters — a cross SE preserves diagonal detail better than a rectangle. A larger SE = stronger effect.</div></div>
+
+        <!-- SE designer -->
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Draw your own structuring element — see how shape affects each operation</div>
+          <div class="se-designer">
+            <div class="se-left">
+              <div class="se-header-row">
+                <span class="se-label">Structuring Element</span>
+                <div class="se-preset-btns">
+                  <button class="se-preset active" data-preset="rect3">3×3 Rect</button>
+                  <button class="se-preset" data-preset="rect5">5×5 Rect</button>
+                  <button class="se-preset" data-preset="cross">Cross</button>
+                  <button class="se-preset" data-preset="ellipse">Ellipse</button>
+                  <button class="se-preset" data-preset="custom">Custom</button>
+                </div>
+              </div>
+              <div class="se-grid-wrap">
+                <div id="seGrid" class="se-grid"></div>
+              </div>
+              <div class="se-info" id="seInfo"></div>
+            </div>
+            <div class="se-right">
+              <div class="se-label">Effect on binary shape</div>
+              <div class="se-preview-row">
+                <div class="se-prev-item"><canvas id="seOrigCanvas" width="80" height="80"></canvas><span>Original</span></div>
+                <div class="se-prev-item"><canvas id="seEroCanvas"  width="80" height="80"></canvas><span>Eroded</span></div>
+                <div class="se-prev-item"><canvas id="seDilCanvas"  width="80" height="80"></canvas><span>Dilated</span></div>
+                <div class="se-prev-item"><canvas id="seOpenCanvas" width="80" height="80"></canvas><span>Opened</span></div>
+                <div class="se-prev-item"><canvas id="seCloseCanvas" width="80" height="80"></canvas><span>Closed</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="cb-label">cv2 · getStructuringElement</div>
+<pre><code><span class="kw">import</span> cv2
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># Three built-in shapes:</span>
+se_rect    = cv2.<span class="fn">getStructuringElement</span>(cv2.MORPH_RECT,    (<span class="num">5</span>,<span class="num">5</span>))
+se_ellipse = cv2.<span class="fn">getStructuringElement</span>(cv2.MORPH_ELLIPSE, (<span class="num">5</span>,<span class="num">5</span>))
+se_cross   = cv2.<span class="fn">getStructuringElement</span>(cv2.MORPH_CROSS,   (<span class="num">5</span>,<span class="num">5</span>))
+
+<span class="cm"># Custom SE (any binary numpy array):</span>
+se_custom = np.array([[<span class="num">0</span>,<span class="num">1</span>,<span class="num">0</span>],
+                       [<span class="num">1</span>,<span class="num">1</span>,<span class="num">1</span>],
+                       [<span class="num">0</span>,<span class="num">1</span>,<span class="num">0</span>]], dtype=np.uint8)  <span class="cm"># cross</span>
+
+<span class="cm"># Anchor is center by default: (size//2, size//2)</span></code></pre>
+        </div>
+      </section>
+
+      <!-- ═══ SEC 2: EROSION & DILATION ═══ -->
+      <section class="lesson-sec" id="sec-ero-dil">
+        <div class="sec-header">
+          <span class="sec-num">02</span>
+          <div><h2 class="sec-title">Erosion &amp; Dilation</h2>
+          <p class="sec-sub">The two fundamental building blocks — shrink or grow</p></div>
+        </div>
+        <div class="prose"><strong>Erosion</strong> moves the SE over every pixel. Output = 1 only if the SE fits <em>entirely</em> within the white region. Result: objects shrink, thin protrusions disappear, touching objects separate. <strong>Dilation</strong> is the opposite: output = 1 if the SE touches the white region at all. Result: objects grow, holes fill, broken parts reconnect.</div>
+
+        <!-- Erosion/Dilation live demo -->
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Draw on canvas → see erosion and dilation in real time</div>
+          <div class="morph-demo" id="eroDilDemo">
+            <div class="md-canvas-col">
+              <div class="md-col-label">Draw here <i class="fas fa-pencil"></i></div>
+              <canvas id="drawCanvas" width="180" height="180" class="draw-canvas"></canvas>
+              <div class="md-draw-tools">
+                <button class="md-tool active" data-tool="draw" onclick="setDrawTool(this,'draw')"><i class="fas fa-pencil"></i> Draw</button>
+                <button class="md-tool" data-tool="erase" onclick="setDrawTool(this,'erase')">⬜ Erase</button>
+                <button class="md-tool clear" onclick="clearDraw()"><i class="fas fa-trash"></i> Clear</button>
+                <button class="md-tool" onclick="loadPresetShape('blob')"><i class="fas fa-circle"></i> Blob</button>
+                <button class="md-tool" onclick="loadPresetShape('text')"><i class="fas fa-font"></i> Text</button>
+                <button class="md-tool" onclick="loadPresetShape('noise')"><i class="fas fa-display"></i> Noise</button>
+              </div>
+            </div>
+            <div class="md-canvas-col">
+              <div class="md-col-label">Erosion</div>
+              <canvas id="erosionCanvas" width="180" height="180"></canvas>
+              <div class="md-op-desc">SE must fit entirely inside white region. Shrinks objects, removes small noise, separates touching objects.</div>
+            </div>
+            <div class="md-canvas-col">
+              <div class="md-col-label">Dilation</div>
+              <canvas id="dilationCanvas" width="180" height="180"></canvas>
+              <div class="md-op-desc">SE touches white region at any point. Grows objects, fills small holes, reconnects broken parts.</div>
+            </div>
+            <div class="md-sidebar">
+              <div class="md-se-ctrl">
+                <label class="se-label">SE shape</label>
+                <div class="md-se-btns">
+                  <button class="md-se-btn active" data-shape="rect"    onclick="setDemoSE(this,'rect')">Rect</button>
+                  <button class="md-se-btn"         data-shape="ellipse" onclick="setDemoSE(this,'ellipse')">Ellipse</button>
+                  <button class="md-se-btn"         data-shape="cross"   onclick="setDemoSE(this,'cross')">Cross</button>
+                </div>
+              </div>
+              <div class="md-se-ctrl">
+                <label class="se-label">SE size: <span id="demoSeSize">3</span>×<span id="demoSeSizeB">3</span></label>
+                <input type="range" min="1" max="9" step="2" value="3" id="demoSeSizeSlider" oninput="updateDemoSESize(this.value)">
+              </div>
+              <div class="md-se-ctrl">
+                <label class="se-label">Iterations: <span id="demoIter">1</span></label>
+                <input type="range" min="1" max="5" step="1" value="1" id="demoIterSlider" oninput="updateDemoIter(this.value)">
+              </div>
+              <canvas id="demoSePreview" width="60" height="60" class="se-preview-mini"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="code-block"><div class="cb-label">cv2.erode / cv2.dilate</div>
+<pre><code>gray   = cv2.<span class="fn">imread</span>(<span class="str">'mask.png'</span>, <span class="num">0</span>)
+<span class="cm"># Threshold to binary first</span>
+_, binary = cv2.<span class="fn">threshold</span>(gray, <span class="num">127</span>, <span class="num">255</span>,
+                           cv2.THRESH_BINARY)
+
+se = cv2.<span class="fn">getStructuringElement</span>(
+    cv2.MORPH_RECT, (<span class="num">5</span>, <span class="num">5</span>))
+
+eroded  = cv2.<span class="fn">erode</span>(binary, se,
+                    iterations=<span class="num">1</span>)
+dilated = cv2.<span class="fn">dilate</span>(binary, se,
+                     iterations=<span class="num">2</span>)</code></pre></div>
+          <div class="info-card">
+            <div class="ic-title"><i class="fas fa-ruler-combined"></i> Erosion rule</div>
+            <p>Output pixel = 1 if <em>every</em> pixel covered by SE = 1.<br>
+            Output pixel = 0 if <em>any</em> pixel covered by SE = 0.<br><br>
+            <strong>Dilation rule:</strong><br>
+            Output pixel = 1 if <em>any</em> pixel covered by SE = 1.</p>
+            <p style="margin-top:8px"><strong>Dual relationship:</strong> Erosion of A by SE = complement of (dilation of complement(A) by SE).</p>
+          </div>
+        </div>
+
+        <div class="challenge-card" id="ch-1">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Implement erosion from scratch with NumPy</span></div>
+          <div class="challenge-desc">Apply 3×3 rectangular erosion manually: a pixel stays white only if all 9 pixels in its neighborhood are white. Verify it removes isolated single pixels.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-1" spellcheck="false">import numpy as np
+
+# Binary image: white rectangle with a single noise pixel
+img = np.zeros((10, 10), dtype=np.uint8)
+img[2:8, 2:8] = 255        # white rectangle
+img[1, 1]     = 255        # isolated noise pixel
+
+print("Before erosion (row sums):", img.sum(axis=1).tolist())
+
+def erode_3x3(binary):
+    """3×3 rectangle erosion: keep 255 only if all 9 neighbors are 255."""
+    out    = np.zeros_like(binary)
+    padded = np.pad(binary, 1, mode='constant', constant_values=___)  # pad with 0
+    for y in range(binary.shape[0]):
+        for x in range(binary.shape[1]):
+            neighborhood = padded[y:y+___, x:x+___]  # 3×3 window
+            if neighborhood.___()==___:               # all pixels must be 255
+                out[y, x] = 255
+    return out
+
+eroded = erode_3x3(img)
+print("After  erosion (row sums):", eroded.sum(axis=1).tolist())
+
+# Verify: noise pixel at (1,1) should be gone
+print("Noise removed:", eroded[1, 1] == 0)
+# Verify: rectangle shrunk by 1 pixel on each side
+print("Rectangle still present:", eroded[3, 3] == 255)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-1','out-1','check-1')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-1')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-1',1)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-1" style="display:none"><strong>Hints:</strong><br>• Pad with 0 (constant_values=0) so border pixels erode to 0<br>• Window: <code>padded[y:y+3, x:x+3]</code><br>• All must be 255: <code>neighborhood.min() == 255</code></div>
+          <div class="output-wrap" id="out-1" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-1-pre"></pre></div>
+          <div class="check-result" id="check-1" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Noise removed: True<br>Rectangle still present: True</code></div>
+        </div>
+      </section>
+
+      <!-- ═══ SEC 3: OPENING & CLOSING ═══ -->
+      <section class="lesson-sec" id="sec-open-clo">
+        <div class="sec-header">
+          <span class="sec-num">03</span>
+          <div><h2 class="sec-title">Opening &amp; Closing</h2>
+          <p class="sec-sub">Combining erosion + dilation for noise removal and hole filling</p></div>
+        </div>
+        <div class="prose"><strong>Opening</strong> = Erode → Dilate. The erosion removes small white noise and thin protrusions; the dilation restores the main object size. Net effect: noise is gone, objects unchanged. <strong>Closing</strong> = Dilate → Erode. The dilation bridges small gaps and fills holes; the erosion restores size. Net effect: holes are filled, objects unchanged.</div>
+
+        <div class="callout info"><span class="callout-icon"><i class="fas fa-lightbulb"></i></span><div><strong>Memory trick:</strong> Opening <em>opens up</em> gaps between objects and removes small white blobs. Closing <em>closes</em> holes inside objects and small black gaps.</div></div>
+
+        <!-- Opening/Closing step visualizer -->
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Step through Opening and Closing operations</div>
+          <div class="open-close-demo">
+            <div class="ocd-tabs">
+              <button class="ocd-tab active" onclick="setOCMode(this,'opening')">Opening (Erode→Dilate)</button>
+              <button class="ocd-tab" onclick="setOCMode(this,'closing')">Closing (Dilate→Erode)</button>
+            </div>
+            <div class="ocd-scene-btns">
+              <button class="ocd-scene active" onclick="setOCScene(this,'noise')"><i class="fas fa-display"></i> White noise</button>
+              <button class="ocd-scene" onclick="setOCScene(this,'holes')"><i class="fas fa-circle-dot"></i> Black holes</button>
+              <button class="ocd-scene" onclick="setOCScene(this,'both')">Both</button>
+            </div>
+            <div class="ocd-steps">
+              <div class="ocd-step">
+                <canvas id="ocOrigCanvas"  width="140" height="140"></canvas>
+                <div class="ocd-step-label">Original</div>
+              </div>
+              <div class="ocd-arrow" id="ocArrow1">→</div>
+              <div class="ocd-step">
+                <canvas id="ocStep1Canvas" width="140" height="140"></canvas>
+                <div class="ocd-step-label" id="ocStep1Label">Step 1</div>
+              </div>
+              <div class="ocd-arrow">→</div>
+              <div class="ocd-step">
+                <canvas id="ocStep2Canvas" width="140" height="140"></canvas>
+                <div class="ocd-step-label" id="ocStep2Label">Step 2</div>
+              </div>
+            </div>
+            <div class="ocd-se-ctrl">
+              <label>SE size: <span id="ocSeSize">3</span>×<span id="ocSeSizeB">3</span></label>
+              <input type="range" min="1" max="9" step="2" value="3" id="ocSeSizeSlider" oninput="updateOCSize(this.value)">
+            </div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="cb-label">cv2.morphologyEx — all-in-one</div>
+<pre><code><span class="cm"># Opening: erode → dilate (removes white noise)</span>
+opened = cv2.<span class="fn">morphologyEx</span>(binary, cv2.MORPH_OPEN,  se)
+
+<span class="cm"># Closing: dilate → erode (fills black holes)</span>
+closed = cv2.<span class="fn">morphologyEx</span>(binary, cv2.MORPH_CLOSE, se)
+
+<span class="cm"># Equivalent manual versions:</span>
+opened_manual = cv2.<span class="fn">dilate</span>(cv2.<span class="fn">erode</span>(binary, se), se)
+closed_manual = cv2.<span class="fn">erode</span>(cv2.<span class="fn">dilate</span>(binary, se), se)
+
+<span class="cm"># Rule of thumb for SE size:</span>
+<span class="cm"># SE must be LARGER than noise to remove it</span>
+<span class="cm"># SE must be SMALLER than objects to preserve them</span></code></pre>
+        </div>
+
+        <div class="challenge-card" id="ch-2">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Opening removes noise, Closing fills holes</span></div>
+          <div class="challenge-desc">Apply opening to remove small white noise pixels, then closing to fill small black holes. Verify the main object survives both operations.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-2" spellcheck="false">import numpy as np
+
+def erode(img, se):
+    h, w = img.shape; ks = se.shape[0]; pad = ks//2
+    p   = np.pad(img, pad, mode='constant', constant_values=0)
+    out = np.zeros_like(img)
+    for y in range(h):
+        for x in range(w):
+            region = p[y:y+ks, x:x+ks]
+            if (region * se).min() >= 255 * se.max(): out[y,x] = 255
+    return out
+
+def dilate(img, se):
+    h, w = img.shape; ks = se.shape[0]; pad = ks//2
+    p   = np.pad(img, pad, mode='constant', constant_values=0)
+    out = np.zeros_like(img)
+    for y in range(h):
+        for x in range(w):
+            region = p[y:y+ks, x:x+ks]
+            if (region & (se*255)).max() > 0: out[y,x] = 255
+    return out
+
+se3 = np.ones((3,3), dtype=np.uint8)
+
+# Image with a big rectangle + small noise + internal hole
+img = np.zeros((12,12), dtype=np.uint8)
+img[2:10, 2:10] = 255   # main rectangle
+img[0, 0]  = 255        # noise pixel (outside)
+img[1, 9]  = 255        # noise pixel (outside)
+img[5, 5]  = 0          # hole inside rectangle
+
+print("Noise pixels outside rect:", img[0,0], img[1,9])
+print("Hole inside rect:", img[5,5])
+
+# Opening: remove noise pixels
+opened = dilate(___(img, se3), se3)   # fill in: erode first, then dilate
+print("After opening - noise at (0,0):", opened[0,0])
+print("After opening - main rect at (5,3):", opened[5,3])
+
+# Closing: fill hole
+closed = ___(___(img, se3), se3)      # fill in: dilate first, then erode
+print("After closing - hole filled at (5,5):", closed[5,5])
+print("After closing - main rect intact:", closed[3,3])</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-2','out-2','check-2')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-2')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-2',2)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-2" style="display:none"><strong>Hints:</strong><br>• Opening = dilate(erode(img, se), se) → first argument is erode(img, se3)<br>• Closing = erode(dilate(img, se), se) → dilate first, then erode<br>• Opening removes the 2 isolated noise pixels (they don't survive erosion)<br>• Closing fills the single hole at (5,5)</div>
+          <div class="output-wrap" id="out-2" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-2-pre"></pre></div>
+          <div class="check-result" id="check-2" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>After opening - noise at (0,0): 0<br>After opening - main rect at (5,3): 255<br>After closing - hole filled at (5,5): 255<br>After closing - main rect intact: 255</code></div>
+        </div>
+      </section>
+
+      <!-- ═══ SEC 4: ADVANCED OPS ═══ -->
+      <section class="lesson-sec" id="sec-advanced">
+        <div class="sec-header">
+          <span class="sec-num">04</span>
+          <div><h2 class="sec-title">Advanced Operations</h2>
+          <p class="sec-sub">Gradient · Top-Hat · Black-Hat · Hit-or-Miss</p></div>
+        </div>
+        <div class="prose">Four derived operations built from erosion and dilation combinations. Each extracts different structural information from binary or grayscale images.</div>
+
+        <!-- 4-panel advanced ops demo -->
+        <div class="widget-card">
+          <div class="widget-label">Interactive · See all four advanced operations — paint on canvas</div>
+          <div class="adv-ops-demo">
+            <div class="adv-draw-col">
+              <div class="md-col-label">Input (paint here)</div>
+              <canvas id="advDrawCanvas" width="140" height="140" class="draw-canvas"></canvas>
+              <div class="adv-draw-tools">
+                <button class="md-tool active" onclick="setAdvTool(this,'draw')"><i class="fas fa-pencil"></i></button>
+                <button class="md-tool" onclick="setAdvTool(this,'erase')">⬜</button>
+                <button class="md-tool clear" onclick="clearAdvDraw()"><i class="fas fa-trash"></i></button>
+              </div>
+              <select id="advScene" class="adv-scene-sel" onchange="loadAdvScene(this.value)">
+                <option value="shapes">Shapes</option>
+                <option value="text">Text</option>
+                <option value="lines">Lines</option>
+                <option value="cells">Cells</option>
+              </select>
+            </div>
+            <div class="adv-results-grid">
+              <div class="adv-result">
+                <canvas id="advGradCanvas"   width="100" height="100"></canvas>
+                <div class="adv-result-name">Morphological Gradient</div>
+                <div class="adv-result-eq">Dilation − Erosion</div>
+                <div class="adv-result-use">Object edges / contours</div>
+              </div>
+              <div class="adv-result">
+                <canvas id="advTopHatCanvas" width="100" height="100"></canvas>
+                <div class="adv-result-name">Top-Hat</div>
+                <div class="adv-result-eq">Original − Opening</div>
+                <div class="adv-result-use">Bright details on dark bg</div>
+              </div>
+              <div class="adv-result">
+                <canvas id="advBlkHatCanvas" width="100" height="100"></canvas>
+                <div class="adv-result-name">Black-Hat</div>
+                <div class="adv-result-eq">Closing − Original</div>
+                <div class="adv-result-use">Dark details on bright bg</div>
+              </div>
+              <div class="adv-result">
+                <canvas id="advHitCanvas"    width="100" height="100"></canvas>
+                <div class="adv-result-name">Hit-or-Miss</div>
+                <div class="adv-result-eq">Erosion(A,SE1) ∩ Erosion(Aᶜ,SE2)</div>
+                <div class="adv-result-use">Find specific pattern</div>
+              </div>
+            </div>
+            <div class="adv-se-ctrl">
+              <label>SE: <span id="advSeSize">5</span>×<span id="advSeSizeB">5</span></label>
+              <input type="range" min="3" max="11" step="2" value="5" id="advSeSizeSlider" oninput="updateAdvSE(this.value)">
+            </div>
+          </div>
+        </div>
+
+        <div class="ops-table">
+          <div class="ot-row ot-header"><div>Operation</div><div>Formula</div><div>Primary use case</div><div>cv2 constant</div></div>
+          <div class="ot-row"><div class="ot-name grad">Gradient</div><div class="ot-formula">D(A,SE) − E(A,SE)</div><div>Edge detection without Canny</div><div class="ot-const">MORPH_GRADIENT</div></div>
+          <div class="ot-row"><div class="ot-name tophat">Top-Hat</div><div class="ot-formula">A − Open(A,SE)</div><div>Bright spots on dark background; illumination correction</div><div class="ot-const">MORPH_TOPHAT</div></div>
+          <div class="ot-row"><div class="ot-name blackhat">Black-Hat</div><div class="ot-formula">Close(A,SE) − A</div><div>Dark spots on bright background; find dark defects</div><div class="ot-const">MORPH_BLACKHAT</div></div>
+          <div class="ot-row"><div class="ot-name hitmiss">Hit-or-Miss</div><div class="ot-formula">E(A,SE₁) ∩ E(Aᶜ,SE₂)</div><div>Template matching; corner/endpoint detection</div><div class="ot-const">MORPH_HITMISS</div></div>
+        </div>
+
+        <div class="code-block">
+          <div class="cb-label">cv2.morphologyEx — advanced ops</div>
+<pre><code><span class="cm"># All use cv2.morphologyEx with different flags:</span>
+gradient = cv2.<span class="fn">morphologyEx</span>(img, cv2.MORPH_GRADIENT, se)
+top_hat  = cv2.<span class="fn">morphologyEx</span>(img, cv2.MORPH_TOPHAT,   se)
+black_hat= cv2.<span class="fn">morphologyEx</span>(img, cv2.MORPH_BLACKHAT, se)
+
+<span class="cm"># Hit-or-Miss: find isolated foreground pixels</span>
+<span class="cm"># SE1=foreground pattern, SE2=background pattern</span>
+se_hit  = np.array([[<span class="num">0</span>,<span class="num">1</span>,<span class="num">0</span>],[<span class="num">1</span>,<span class="num">1</span>,<span class="num">1</span>],[<span class="num">0</span>,<span class="num">1</span>,<span class="num">0</span>]], dtype=np.int32)
+se_miss = np.array([[<span class="num">1</span>,<span class="num">0</span>,<span class="num">1</span>],[<span class="num">0</span>,<span class="num">0</span>,<span class="num">0</span>],[<span class="num">1</span>,<span class="num">0</span>,<span class="num">1</span>]], dtype=np.int32)
+pattern = np.where(se_hit><span class="num">0</span>, <span class="num">1</span>, np.where(se_miss><span class="num">0</span>, -<span class="num">1</span>, <span class="num">0</span>)).astype(np.int32)
+result  = cv2.<span class="fn">morphologyEx</span>(binary, cv2.MORPH_HITMISS, pattern)</code></pre>
+        </div>
+
+        <div class="challenge-card" id="ch-3">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Extract edges with Morphological Gradient</span></div>
+          <div class="challenge-desc">Compute the morphological gradient manually: dilate − erode. Compare with Laplacian. The gradient gives thick binary edges proportional to SE size.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-3" spellcheck="false">import numpy as np
+
+def erode_simple(img, ks=3):
+    pad = ks//2
+    p = np.pad(img.astype(float), pad, mode='constant')
+    out = np.zeros_like(img, dtype=float)
+    for y in range(img.shape[0]):
+        for x in range(img.shape[1]):
+            out[y,x] = p[y:y+ks, x:x+ks].min()
+    return out.astype(np.uint8)
+
+def dilate_simple(img, ks=3):
+    pad = ks//2
+    p = np.pad(img.astype(float), pad, mode='constant')
+    out = np.zeros_like(img, dtype=float)
+    for y in range(img.shape[0]):
+        for x in range(img.shape[1]):
+            out[y,x] = p[y:y+ks, x:x+ks].max()
+    return out.astype(np.uint8)
+
+# Binary image: white rectangle
+img = np.zeros((12,12), dtype=np.uint8)
+img[2:10, 2:10] = 255
+
+eroded  = erode_simple(img,  ks=3)
+dilated = dilate_simple(img, ks=3)
+
+# Morphological gradient = dilation - erosion
+gradient = ___                     # fill in: dilated - eroded (use np.clip)
+gradient = np.clip(gradient.astype(int), 0, 255).astype(np.uint8)
+
+print("Gradient non-zero pixels:", int((gradient > 0).sum()))
+
+# Interior pixels should be 0 (not on edge)
+print("Interior pixel (5,5):", gradient[5,5])
+# Border of rectangle should be 255 (on edge)
+print("Edge pixel (2,5):", gradient[2,5])
+print("Edge pixel (5,2):", gradient[5,2])</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-3','out-3','check-3')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-3')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-3',3)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-3" style="display:none"><strong>Hints:</strong><br>• gradient = dilated - eroded (element-wise subtraction)<br>• Use np.clip to prevent negative values<br>• Interior of rectangle: dilate and erode both = 255, so 255-255 = 0 ✓<br>• Edge pixels: dilate=255, erode=0, so 255-0 = 255 ✓</div>
+          <div class="output-wrap" id="out-3" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-3-pre"></pre></div>
+          <div class="check-result" id="check-3" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Interior pixel (5,5): 0<br>Edge pixel (2,5): 255<br>Edge pixel (5,2): 255</code></div>
+        </div>
+      </section>
+
+      <!-- ═══ SEC 5: SKELETON & RECONSTRUCTION ═══ -->
+      <section class="lesson-sec" id="sec-skeleton">
+        <div class="sec-header">
+          <span class="sec-num">05</span>
+          <div><h2 class="sec-title">Skeletonization &amp; Morphological Reconstruction</h2>
+          <p class="sec-sub">Reduce to 1-pixel backbone · Precision object extraction</p></div>
+        </div>
+        <div class="prose"><strong>Skeletonization</strong> repeatedly erodes an object until only a 1-pixel-wide skeleton remains — the topological center line. Useful for shape analysis, OCR, measuring vessel widths. <strong>Morphological Reconstruction</strong> uses a marker + mask to selectively restore or remove objects — perfect for removing objects touching a border or extracting only connected components of specific size.</div>
+
+        <!-- Skeleton live demo -->
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Watch skeletonization progress iteration by iteration</div>
+          <div class="skeleton-demo">
+            <div class="sk-left">
+              <div class="md-col-label">Input shape</div>
+              <canvas id="skInputCanvas" width="140" height="140" class="draw-canvas"></canvas>
+              <div class="sk-shape-btns">
+                <button class="md-tool" onclick="loadSkShape('letter')"><i class="fas fa-font"></i> Letter</button>
+                <button class="md-tool" onclick="loadSkShape('branch')"><i class="fas fa-leaf"></i> Branch</button>
+                <button class="md-tool" onclick="loadSkShape('circle')">⭕ Ring</button>
+                <button class="md-tool" onclick="loadSkShape('rect')"><i class="fas fa-square"></i> Rect</button>
+              </div>
+            </div>
+            <div class="sk-right">
+              <div class="md-col-label">Skeleton (step <span id="skStep">0</span>)</div>
+              <canvas id="skResultCanvas" width="140" height="140"></canvas>
+              <div class="sk-controls">
+                <button class="ctrl-btn" onclick="skStepBack()">← Back</button>
+                <div class="sk-prog-wrap"><div class="sk-prog-fill" id="skProgFill"></div></div>
+                <button class="ctrl-btn play" onclick="skStepFwd()">Next →</button>
+                <button class="ctrl-btn" id="skAutoBtn" onclick="skToggleAuto()">▶ Auto</button>
+              </div>
+              <div class="sk-info" id="skInfo"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reconstruction demo -->
+        <div class="widget-card" style="margin-top:16px">
+          <div class="widget-label">Interactive · Morphological Reconstruction — remove border-touching objects</div>
+          <div class="recon-demo">
+            <div class="recon-item"><canvas id="reconOrigCanvas"   width="120" height="120"></canvas><div class="ocd-step-label">Original</div></div>
+            <div class="recon-arrow">→</div>
+            <div class="recon-item"><canvas id="reconMarkerCanvas" width="120" height="120"></canvas><div class="ocd-step-label">Marker (border=0)</div></div>
+            <div class="recon-arrow">→</div>
+            <div class="recon-item"><canvas id="reconResultCanvas" width="120" height="120"></canvas><div class="ocd-step-label">Result (border objects removed)</div></div>
+          </div>
+          <div class="recon-scene-btns" style="margin-top:10px">
+            <button class="ocd-scene active" onclick="setReconScene(this,'mixed')">Mixed objects</button>
+            <button class="ocd-scene" onclick="setReconScene(this,'cells')">Cells</button>
+            <button class="ocd-scene" onclick="setReconScene(this,'lines')">Lines</button>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="code-block"><div class="cb-label">Skeletonization</div>
+<pre><code><span class="kw">from</span> skimage.morphology <span class="kw">import</span> skeletonize
+
+<span class="cm"># skimage expects bool array</span>
+binary = img > <span class="num">127</span>
+skel   = skeletonize(binary)
+result = skel.astype(np.uint8) * <span class="num">255</span>
+
+<span class="cm"># Manual thinning via Zhang-Suen:</span>
+<span class="cm"># Repeatedly apply hit-or-miss to find</span>
+<span class="cm"># pixels to remove until no change</span>
+thinned = cv2.<span class="fn">ximgproc</span>.<span class="fn">thinning</span>(binary)</code></pre></div>
+          <div class="code-block"><div class="cb-label">Morphological Reconstruction</div>
+<pre><code><span class="kw">from</span> skimage.morphology <span class="kw">import</span> (
+    reconstruction)
+
+<span class="cm"># Remove border-touching objects:</span>
+marker = img.copy()
+marker[<span class="num">1</span>:-<span class="num">1</span>, <span class="num">1</span>:-<span class="num">1</span>] = <span class="num">0</span>  <span class="cm"># only border</span>
+recon  = reconstruction(marker, img)
+result = img - recon.astype(np.uint8)
+
+<span class="cm"># Fill holes (invert, reconstruct, invert):</span>
+seed = np.<span class="fn">copy</span>(img)
+seed[<span class="num">1</span>:-<span class="num">1</span>, <span class="num">1</span>:-<span class="num">1</span>] = <span class="num">255</span>
+filled = reconstruction(
+    <span class="num">255</span>-seed, <span class="num">255</span>-img, method=<span class="str">'erosion'</span>)
+result = <span class="num">255</span> - filled.astype(np.uint8)</code></pre></div>
+        </div>
+      </section>
+
+      <!-- ═══ SEC 6: INTERACTIVE SANDBOX ═══ -->
+      <section class="lesson-sec" id="sec-sandbox">
+        <div class="sec-header">
+          <span class="sec-num">06</span>
+          <div><h2 class="sec-title">Interactive Sandbox</h2>
+          <p class="sec-sub">All 10 operations, live on your drawing — compare side by side</p></div>
+        </div>
+        <div class="prose">Gambar bebas di canvas, pilih operasi, dan lihat hasilnya langsung. Ganti SE, iterations, dan scene untuk eksperimen.</div>
+
+        <div class="sandbox-card">
+          <div class="sb-toolbar">
+            <div class="sb-tools">
+              <button class="sb-tool-btn active" data-tool="draw"  onclick="setSbTool(this,'draw')"><i class="fas fa-pencil"></i> Draw</button>
+              <button class="sb-tool-btn"         data-tool="erase" onclick="setSbTool(this,'erase')">⬜ Erase</button>
+              <button class="sb-tool-btn clear"   onclick="clearSb()"><i class="fas fa-trash"></i> Clear</button>
+            </div>
+            <div class="sb-scenes">
+              <button class="sb-scene-btn" onclick="loadSbScene('defects')">Defects</button>
+              <button class="sb-scene-btn" onclick="loadSbScene('text')">Text</button>
+              <button class="sb-scene-btn" onclick="loadSbScene('cells')">Cells</button>
+              <button class="sb-scene-btn" onclick="loadSbScene('circuit')">Circuit</button>
+            </div>
+            <div class="sb-se-ctrl">
+              <select id="sbSeShape" class="ic-select" onchange="updateSandbox()">
+                <option value="rect">Rect SE</option>
+                <option value="ellipse">Ellipse SE</option>
+                <option value="cross">Cross SE</option>
+              </select>
+              <input type="range" min="1" max="9" step="2" value="3" id="sbSeSize" oninput="updateSandbox(); document.getElementById('sbSeSizeLbl').textContent=this.value+'×'+this.value">
+              <span id="sbSeSizeLbl" class="sb-size-lbl">3×3</span>
+            </div>
+          </div>
+
+          <div class="sb-main">
+            <div class="sb-input-col">
+              <div class="sb-col-label">Input</div>
+              <canvas id="sbInputCanvas" width="200" height="200" class="draw-canvas sb-canvas"></canvas>
+            </div>
+            <div class="sb-ops-grid">
+              <div class="sb-op" data-op="erode">
+                <canvas id="sbErode"   width="110" height="110"></canvas>
+                <div class="sb-op-name">Erosion</div>
+              </div>
+              <div class="sb-op" data-op="dilate">
+                <canvas id="sbDilate"  width="110" height="110"></canvas>
+                <div class="sb-op-name">Dilation</div>
+              </div>
+              <div class="sb-op" data-op="open">
+                <canvas id="sbOpen"    width="110" height="110"></canvas>
+                <div class="sb-op-name">Opening</div>
+              </div>
+              <div class="sb-op" data-op="close">
+                <canvas id="sbClose"   width="110" height="110"></canvas>
+                <div class="sb-op-name">Closing</div>
+              </div>
+              <div class="sb-op" data-op="gradient">
+                <canvas id="sbGrad"    width="110" height="110"></canvas>
+                <div class="sb-op-name">Gradient</div>
+              </div>
+              <div class="sb-op" data-op="tophat">
+                <canvas id="sbTopHat"  width="110" height="110"></canvas>
+                <div class="sb-op-name">Top-Hat</div>
+              </div>
+              <div class="sb-op" data-op="blackhat">
+                <canvas id="sbBlkHat"  width="110" height="110"></canvas>
+                <div class="sb-op-name">Black-Hat</div>
+              </div>
+              <div class="sb-op" data-op="skeleton">
+                <canvas id="sbSkel"    width="110" height="110"></canvas>
+                <div class="sb-op-name">Skeleton</div>
+              </div>
+              <div class="sb-op" data-op="hitmiss">
+                <canvas id="sbHitMiss" width="110" height="110"></canvas>
+                <div class="sb-op-name">Hit-or-Miss</div>
+              </div>
+              <div class="sb-op" data-op="recon">
+                <canvas id="sbRecon"   width="110" height="110"></canvas>
+                <div class="sb-op-name">Recon</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ SEC 7: PLAYGROUND ═══ -->
+      <section class="lesson-sec" id="sec-playground">
+        <div class="sec-header">
+          <span class="sec-num">07</span>
+          <div><h2 class="sec-title">Python Playground</h2>
+          <p class="sec-sub">Eksperimen bebas dengan NumPy — semua operasi morfologi</p></div>
+        </div>
+        <div class="playground-card">
+          <div class="playground-toolbar">
+            <div class="pg-toolbar-left">
+              <span class="pg-title"><i class="fas fa-snake"></i> Python 3.11 · NumPy ready</span>
+              <span class="py-ready-dot" id="pgReadyDot"></span>
+            </div>
+            <div class="pg-toolbar-right">
+              <button class="pg-snippet-btn" onclick="loadSnippet('erode')">erode</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('dilate')">dilate</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('openclose')">open/close</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('gradient')">gradient</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('tophat')">top-hat</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('pipeline')">pipeline</button>
+            </div>
+          </div>
+          <div class="code-editor-wrap">
+            <textarea class="code-editor playground-editor" id="playground-editor" spellcheck="false">import numpy as np
+
+# ── Morphology helper functions ────────────────────────────────
+def make_se(shape='rect', size=3):
+    se = np.zeros((size,size), dtype=np.uint8)
+    c  = size // 2
+    if shape == 'rect':
+        se[:] = 1
+    elif shape == 'cross':
+        se[c, :] = 1; se[:, c] = 1
+    elif shape == 'ellipse':
+        for y in range(size):
+            for x in range(size):
+                if ((y-c)/(c+0.5))**2 + ((x-c)/(c+0.5))**2 <= 1:
+                    se[y,x] = 1
+    return se
+
+def erode(img, se):
+    ks=se.shape[0]; pad=ks//2
+    p = np.pad(img.astype(float), pad, mode='constant')
+    return np.array([[p[y:y+ks,x:x+ks].min()
+                      for x in range(img.shape[1])]
+                     for y in range(img.shape[0])]).astype(np.uint8)
+
+def dilate(img, se):
+    ks=se.shape[0]; pad=ks//2
+    p = np.pad(img.astype(float), pad, mode='constant')
+    return np.array([[p[y:y+ks,x:x+ks].max()
+                      for x in range(img.shape[1])]
+                     for y in range(img.shape[0])]).astype(np.uint8)
+
+se3 = make_se('rect', 3)
+se5 = make_se('cross', 5)
+
+# ── Binary image: rectangle + noise + holes ────────────────────
+img = np.zeros((16,16), dtype=np.uint8)
+img[3:13, 3:13] = 255
+img[0,0] = img[1,14] = img[14,0] = 255  # noise
+img[6,6] = img[7,7] = img[8,8] = 0     # holes
+
+print("Original white pixels:", int((img==255).sum()))
+
+# Operations
+eroded   = erode(img, se3)
+dilated  = dilate(img, se3)
+opened   = dilate(erode(img, se3), se3)
+closed   = erode(dilate(img, se3), se3)
+gradient = np.clip(dilated.astype(int)-eroded.astype(int), 0,255).astype(np.uint8)
+top_hat  = np.clip(img.astype(int)-opened.astype(int), 0,255).astype(np.uint8)
+black_hat= np.clip(closed.astype(int)-img.astype(int), 0,255).astype(np.uint8)
+
+print(f"Eroded   white pixels: {int((eroded==255).sum())}")
+print(f"Dilated  white pixels: {int((dilated==255).sum())}")
+print(f"Opened   white pixels: {int((opened==255).sum())}  (noise removed: {int((img==255).sum()) - int((opened==255).sum())} extra white)")
+print(f"Closed   white pixels: {int((closed==255).sum())}  (holes filled)")
+print(f"Gradient non-zero:     {int((gradient>0).sum())}  (edge pixels)")
+print(f"Top-Hat  non-zero:     {int((top_hat>0).sum())}   (bright details = noise)")
+print(f"Black-Hat non-zero:    {int((black_hat>0).sum())}  (dark details = holes)")
+</textarea>
+          </div>
+          <div class="playground-actions">
+            <button class="run-btn large" onclick="runPlayground()">▶ Run Code</button>
+            <button class="reset-btn" onclick="resetPlayground()">↺ Reset</button>
+            <span class="pg-note">Ctrl+Enter to run</span>
+          </div>
+          <div class="output-wrap" id="pg-output" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="pg-output-pre"></pre></div>
+        </div>
+      </section>
+
+      <!-- ═══ SEC 8: QUIZ ═══ -->
+      <section class="lesson-sec" id="sec-quiz">
+        <div class="sec-header">
+          <span class="sec-num">08</span>
+          <div><h2 class="sec-title">Quiz + Coding Challenge</h2>
+          <p class="sec-sub">Teori + praktik — selesaikan keduanya untuk lulus</p></div>
+        </div>
+        <div class="quiz-block-title">Part A · Multiple Choice</div>
+        <div id="quizContainer"></div>
+
+        <div class="quiz-block-title" style="margin-top:40px">Part B · Coding Challenge</div>
+
+        <div class="challenge-card" id="cq-1">
+          <div class="challenge-header"><span class="challenge-badge quiz-badge"><i class="fas fa-pen-to-square"></i> Coding Quiz 1 · Fix the bug</span><span class="challenge-title">Opening sequence is reversed — fix it</span></div>
+          <div class="challenge-desc">Kode ini menjalankan Closing alih-alih Opening karena urutan erode/dilate terbalik. Fix supaya fungsi <code>opening()</code> benar-benar menghapus noise putih kecil.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">buggy.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="cq-1-editor" spellcheck="false">import numpy as np
+
+def erode(img, ks=3):
+    pad=ks//2; p=np.pad(img.astype(float),pad,mode='constant')
+    return np.array([[p[y:y+ks,x:x+ks].min()
+        for x in range(img.shape[1])] for y in range(img.shape[0])]).astype(np.uint8)
+
+def dilate(img, ks=3):
+    pad=ks//2; p=np.pad(img.astype(float),pad,mode='constant')
+    return np.array([[p[y:y+ks,x:x+ks].max()
+        for x in range(img.shape[1])] for y in range(img.shape[0])]).astype(np.uint8)
+
+# BUG: this is Closing (dilate→erode), not Opening (erode→dilate)
+def opening(img, ks=3):
+    return erode(dilate(img, ks), ks)   # FIX THIS LINE
+
+# Test
+img = np.zeros((10,10), dtype=np.uint8)
+img[2:8, 2:8] = 255   # main rectangle
+img[0,0] = 255        # noise pixel
+
+result = opening(img)
+print("Noise pixel after opening:", result[0,0])   # must be 0
+print("Main rect after opening:", result[4,4])     # must be 255
+print("Opening correct:", result[0,0]==0 and result[4,4]==255)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('cq-1-editor','cq-1-out','cq-1-check')">▶ Run &amp; Check</button>
+              <button class="reset-btn" onclick="resetCodingQuiz(1)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="output-wrap" id="cq-1-out" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="cq-1-out-pre"></pre></div>
+          <div class="check-result" id="cq-1-check" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Noise pixel after opening: 0 &nbsp; Main rect after opening: 255 &nbsp; Opening correct: True</code></div>
+        </div>
+
+        <div class="challenge-card" id="cq-2">
+          <div class="challenge-header"><span class="challenge-badge quiz-badge"><i class="fas fa-pen-to-square"></i> Coding Quiz 2 · Fill in the blank</span><span class="challenge-title">Top-Hat to find bright spots on uneven background</span></div>
+          <div class="challenge-desc">Compute Top-Hat transform to extract small bright spots that are brighter than their local neighborhood (size defined by SE). Verify spots are found.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="cq-2-editor" spellcheck="false">import numpy as np
+
+def erode(img, ks=3):
+    pad=ks//2; p=np.pad(img.astype(float),pad,mode='constant')
+    return np.array([[p[y:y+ks,x:x+ks].min()
+        for x in range(img.shape[1])] for y in range(img.shape[0])]).astype(np.uint8)
+
+def dilate(img, ks=3):
+    pad=ks//2; p=np.pad(img.astype(float),pad,mode='constant')
+    return np.array([[p[y:y+ks,x:x+ks].max()
+        for x in range(img.shape[1])] for y in range(img.shape[0])]).astype(np.uint8)
+
+# Grayscale image: ramp background + 3 bright spots
+np.random.seed(0)
+img = np.zeros((16,16), dtype=np.uint8)
+# Uneven background gradient
+for y in range(16):
+    for x in range(16):
+        img[y,x] = int(y * 10)   # dark at top, bright at bottom
+
+# Add 3 small bright spots
+img[2,2]  = min(255, img[2,2]  + 120)
+img[2,13] = min(255, img[2,13] + 120)
+img[7,7]  = min(255, img[7,7]  + 120)
+
+# Opening = erode then dilate (removes bright peaks, keeps background)
+opened = ___(___(img, 5), 5)      # fill in: dilate(erode(...))
+
+# Top-Hat = original - opening
+top_hat = np.clip(img.astype(int) - ___.astype(int), 0, 255).astype(np.uint8)
+
+# Spots should have high top-hat value
+print("Top-hat at spot (2,2):", top_hat[2,2])
+print("Top-hat at spot (2,13):", top_hat[2,13])
+print("Top-hat at spot (7,7):", top_hat[7,7])
+# Background should have low top-hat value
+print("Top-hat at background (8,2):", top_hat[8,2])
+print("Spots found (>50):", (top_hat > 50).sum())</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('cq-2-editor','cq-2-out','cq-2-check')">▶ Run &amp; Check</button>
+              <button class="reset-btn" onclick="resetCodingQuiz(2)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="output-wrap" id="cq-2-out" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="cq-2-out-pre"></pre></div>
+          <div class="check-result" id="cq-2-check" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Top-hat at spots: &gt;50 each &nbsp; Background: ~0 &nbsp; Spots found: 3</code></div>
+        </div>
+
+        <div class="challenge-card" id="cq-3">
+          <div class="challenge-header"><span class="challenge-badge quiz-badge"><i class="fas fa-pen-to-square"></i> Coding Quiz 3 · Full pipeline</span><span class="challenge-title">Defect detection pipeline using morphological ops</span></div>
+          <div class="challenge-desc">Build a complete defect detection pipeline: opening to remove noise, closing to fill gaps, gradient to extract edges. Count objects that survive cleaning.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="cq-3-editor" spellcheck="false">import numpy as np
+
+def erode(img, ks=3):
+    pad=ks//2; p=np.pad(img.astype(float),pad,mode='constant')
+    return np.array([[p[y:y+ks,x:x+ks].min()
+        for x in range(img.shape[1])] for y in range(img.shape[0])]).astype(np.uint8)
+
+def dilate(img, ks=3):
+    pad=ks//2; p=np.pad(img.astype(float),pad,mode='constant')
+    return np.array([[p[y:y+ks,x:x+ks].max()
+        for x in range(img.shape[1])] for y in range(img.shape[0])]).astype(np.uint8)
+
+np.random.seed(42)
+# Inspection image: 2 real objects + noise
+img = np.zeros((20,20), dtype=np.uint8)
+img[2:7,  2:7]  = 255  # object 1 (5×5)
+img[13:18, 13:18] = 255  # object 2 (5×5)
+img[0, 0] = img[1,18] = img[18,1] = 255  # 3 noise pixels
+img[4,4] = img[14,14] = 0  # holes in objects
+
+print(f"White pixels before: {int((img==255).sum())}")
+
+# Step 1: Opening (remove noise) — SE size 3
+cleaned = ___(___( img, 3), 3)   # erode then dilate
+print(f"White pixels after opening: {int((cleaned==255).sum())}")
+print(f"Noise at (0,0) removed: {cleaned[0,0]==0}")
+
+# Step 2: Closing (fill holes) — SE size 3
+filled = ___(___(cleaned, 3), 3)  # dilate then erode
+print(f"Hole at (4,4) filled: {filled[4,4]==255}")
+print(f"Hole at (14,14) filled: {filled[14,14]==255}")
+
+# Step 3: Morphological gradient (get edges)
+eroded  = erode(filled, 3)
+dilated = dilate(filled, 3)
+gradient = np.clip(dilated.astype(int) - ___.astype(int), 0, 255).astype(np.uint8)
+print(f"Edge pixels: {int((gradient>0).sum())}")
+
+# Interior pixels should not be edges
+print(f"Interior pixel (4,4) is edge: {gradient[4,4]>0}")  # False</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('cq-3-editor','cq-3-out','cq-3-check')">▶ Run &amp; Check</button>
+              <button class="reset-btn" onclick="resetCodingQuiz(3)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="output-wrap" id="cq-3-out" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="cq-3-out-pre"></pre></div>
+          <div class="check-result" id="cq-3-check" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Noise removed: True &nbsp; Holes filled: True &nbsp; Interior pixel is edge: False</code></div>
+        </div>
+
+        <div class="final-score-card" id="finalScore" style="display:none">
+          <div class="fs-title">Lesson Complete! <i class="fas fa-party-horn"></i></div>
+          <div class="fs-scores" id="fsScores"></div>
+          <div class="fs-msg" id="fsMsg"></div>
+        </div>
+        <div class="next-lesson-cta" id="nextLesson" style="display:none">
+          <div class="nlc-inner">
+            <span class="nlc-label">Module 1 Complete!</span>
+            <h3 class="nlc-title">Module 2: Feature Detection →</h3>
+            <p class="nlc-desc">Edges, corners, keypoints, descriptors — Harris, SIFT, ORB.</p>
+            <a href="#/participant-ai-lab-cv" class="nlc-btn">← Back to Computer Vision</a>
+          </div>
+        </div>
+      </section>
+
+</article>
+<footer class="lesson-nav-footer">
+<a href="#/participant-ai-lab-cv-cnn-arch" class="lnf-prev">
+<span class="lnf-label">Lesson sebelumnya</span>
+<span class="lnf-title">Popular Architectures <i class="fas fa-arrow-left"></i></span>
+</a>
+<a href="#/participant-ai-lab-cv-opencv" class="lnf-next">
+<span class="lnf-label">Lesson berikutnya</span>
+<span class="lnf-title">Image Processing with OpenCV <i class="fas fa-arrow-right"></i></span>
+</a>
+</footer>
+</section>
+</div>
+<aside class="lesson-right-panel">
+<div class="lesson-progress-card">
+<div class="lpc-header"><i class="fas fa-chart-simple"></i> Progress CV</div>
+<div class="lpc-ring-wrap"><svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="30" stroke="var(--border)" stroke-width="5" fill="none"/><circle cx="36" cy="36" r="30" stroke="var(--fellow-pink)" stroke-width="5" fill="none" stroke-dasharray="188.5" stroke-dashoffset="37.7" stroke-linecap="round"/></svg><div class="lpc-ring-text"><strong>80%</strong></div></div>
+<div class="lpc-meta"><span><i class="far fa-circle-check"></i> 8/10 selesai</span><span><i class="fas fa-fire"></i> 0 streak</span></div>
+</div>
+<div class="lesson-list-card">
+<h4>CV Course</h4>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 1. Mengapa CNN?</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 2. Introduction to CNNs</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 3. Aktivasi ReLU</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 4. Filtering & Kernels</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 5. FC Layer & Softmax</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 6. Hands-on: CNN Pertama</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 7. Popular Architectures</div>
+<div class="lesson-list-item active"><span class="lli-dot"></span> 8. Morphological Transforms</div>
+</div>
+</aside>
+</div>
+</main>
+</section>

@@ -1,0 +1,1314 @@
+<section class="fellow-dashboard fellow-modules-page lesson-detail-page filtering-kernels-page" data-fellow-page="modules">
+<style>
+  .filtering-kernels-page{
+    --fk-bg:#fff7fb;
+    --fk-bg-2:#fff0f7;
+    --fk-card:#ffffff;
+    --fk-line:rgba(246,51,146,.16);
+    --fk-line-strong:rgba(246,51,146,.24);
+    --fk-text:#171827;
+    --fk-text-2:#6f7282;
+    --fk-text-3:#8e91a0;
+    --fk-accent:#f63392;
+    --fk-accent-soft:rgba(246,51,146,.08);
+    --fk-shadow:0 18px 50px rgba(246,51,146,.08);
+    --fk-shadow-lg:0 24px 60px rgba(23,24,39,.08);
+    --fk-radius:20px;
+    --fk-radius-sm:14px;
+    --fk-font-disp:'Plus Jakarta Sans', sans-serif;
+    --fk-font-body:'Inter', sans-serif;
+    --fk-font-mono:'SF Mono','Space Mono',monospace;
+    --fk-red:#e11d48;
+    --fk-green:#16a34a;
+    --fk-blue:#2563eb;
+    background:radial-gradient(circle at top left, rgba(246,51,146,.10), transparent 30%), radial-gradient(circle at 85% 12%, rgba(246,51,146,.06), transparent 22%), var(--fk-bg);
+    color:var(--fk-text);
+    font-family:var(--fk-font-body);
+  }
+  .filtering-kernels-page .lesson-topbar{ position:sticky; top:0; z-index:100; padding:0; background:transparent; }
+  .filtering-kernels-page .lesson-topbar-inner{ max-width:1600px; width:100%; margin:0 auto; display:flex; align-items:center; height:68px; }
+  .filtering-kernels-page .navbar-left{ flex:0 0 30%; display:flex; align-items:center; padding-left:24px; min-width:0; }
+  .filtering-kernels-page .navbar-center{ flex:0 0 40%; display:flex; align-items:center; justify-content:center; text-align:center; min-width:0; font-family:var(--fk-font-disp); font-size:15px; font-weight:700; color:var(--fk-text); }
+  .filtering-kernels-page .navbar-right{ flex:0 0 30%; display:flex; align-items:center; justify-content:flex-end; padding-right:24px; min-width:0; }
+  .filtering-kernels-page .lesson-breadcrumb{ display:flex; align-items:center; gap:8px; flex-shrink:0; color:var(--fk-text-2); }
+  .filtering-kernels-page .lesson-breadcrumb a{ display:inline-flex; align-items:center; gap:6px; color:var(--fk-text-2); text-decoration:none; transition:color .2s; }
+  .filtering-kernels-page .lesson-breadcrumb a:hover{ color:var(--fk-accent); }
+  .filtering-kernels-page .lesson-breadcrumb-separator{ color:var(--fk-text-3); font-size:10px; }
+  .filtering-kernels-page .fellow-actions{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
+  .filtering-kernels-page .fellow-search{ display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.95); height:40px; border:1px solid rgba(246,51,146,.12); border-radius:100px; padding:0 16px; transition:all .2s; min-width:200px; }
+  .filtering-kernels-page .fellow-search:focus-within{ border-color:rgba(246,51,146,.3); box-shadow:0 0 0 3px rgba(246,51,146,.08); }
+  .filtering-kernels-page .fellow-search i{ color:var(--fk-text-3); font-size:14px; }
+  .filtering-kernels-page .fellow-search input{ border:none; outline:none; background:transparent; font-size:13px; color:var(--fk-text); width:120px; font-family:var(--fk-font-body); }
+  .filtering-kernels-page .fellow-search input::placeholder{ color:var(--fk-text-3); }
+  .filtering-kernels-page .fellow-icon-button{ display:flex; align-items:center; justify-content:center; width:40px; height:40px; padding:0; background:rgba(255,255,255,.95); border:1px solid rgba(246,51,146,.12); border-radius:100px; cursor:pointer; position:relative; transition:all .2s; color:var(--fk-text-2); }
+  .filtering-kernels-page .fellow-icon-button:hover{ border-color:rgba(246,51,146,.25); background:#fff; color:var(--fk-text); }
+  .filtering-kernels-page .fellow-icon-button span{ position:absolute; top:-4px; right:-4px; background:var(--fk-accent); color:#fff; font-size:10px; font-weight:700; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .filtering-kernels-page .fellow-user-button{ display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.95); border:1px solid rgba(246,51,146,.12); border-radius:100px; padding:5px 12px 5px 6px; text-decoration:none; transition:all .2s; color:var(--fk-text); }
+  .filtering-kernels-page .fellow-user-button:hover{ border-color:rgba(246,51,146,.25); background:#fff; box-shadow:0 2px 8px rgba(246,51,146,.06); }
+  .filtering-kernels-page .fellow-user-button .avatar-img{ width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg, var(--fk-accent), #ff8ab7); display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:700; flex-shrink:0; }
+  .filtering-kernels-page .fellow-user-button strong{ font-size:13px; font-weight:700; display:block; }
+  .filtering-kernels-page .fellow-user-button small{ font-size:10px; color:var(--fk-text-3); display:block; }
+  .filtering-kernels-page .fellow-user-button > i{ font-size:10px; color:var(--fk-text-3); margin-left:2px; }
+  .filtering-kernels-page .lesson-layout{ display:grid; grid-template-columns:minmax(0,1fr) 320px; gap:24px; align-items:start; max-width:1600px; margin:0 auto; padding:24px 24px 56px; }
+  .filtering-kernels-page .lesson-main-content{ min-width:0; }
+  .filtering-kernels-page .lesson-hero{ display:grid; grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr); gap:28px; align-items:center; padding:42px 44px 30px; margin-bottom:20px; border:1px solid var(--fk-line); border-radius:28px; background:radial-gradient(circle at 0 0, rgba(246,51,146,.10), transparent 38%), linear-gradient(135deg, #ffffff 0%, var(--fk-bg) 58%, var(--fk-bg-2) 100%); box-shadow:var(--fk-shadow-lg); overflow:hidden; }
+  .filtering-kernels-page .lesson-hero h1{ font-family:var(--fk-font-disp); color:var(--fk-text); letter-spacing:-.04em; }
+  .filtering-kernels-page .lesson-hero p, .filtering-kernels-page .lesson-meta-row{ color:var(--fk-text-2); }
+  .filtering-kernels-page .lesson-hero img{ max-width:240px; width:100%; justify-self:end; filter:drop-shadow(0 18px 30px rgba(246,51,146,.10)); }
+  .filtering-kernels-page .lesson-material-panel{ display:grid; gap:18px; }
+  .filtering-kernels-page .lesson-tabs a{ background:rgba(255,255,255,.92); border:1px solid var(--fk-line); box-shadow:var(--fk-shadow); border-radius:var(--fk-radius-sm); padding:8px 18px; align-self:center; margin:0; }
+  .filtering-kernels-page .lesson-tabs a.active{ background:var(--fk-accent-soft); color:var(--fk-accent); border-color:var(--fk-line-strong); }
+  .filtering-kernels-page .lesson-article{ max-width:800px; }
+  .filtering-kernels-page .lesson-sec{ padding-bottom:48px; margin-bottom:8px; border-bottom:1px solid var(--fk-line); scroll-margin-top:120px; }
+  .filtering-kernels-page .lesson-sec:last-child{ border-bottom:none; }
+  .filtering-kernels-page .sec-header{ display:flex; align-items:flex-start; gap:16px; margin-bottom:24px; }
+  .filtering-kernels-page .sec-num{ font-family:var(--fk-font-mono); font-size:12px; color:var(--fk-accent); padding:4px 0; letter-spacing:.06em; flex-shrink:0; min-width:26px; }
+  .filtering-kernels-page .sec-title{ font-family:var(--fk-font-disp); font-size:clamp(22px,3vw,30px); font-weight:700; letter-spacing:-0.02em; color:var(--fk-text); margin-bottom:4px; }
+  .filtering-kernels-page .sec-sub{ font-size:14px; color:var(--fk-text-2); }
+  .filtering-kernels-page .prose{ font-size:15px; color:var(--fk-text-2); line-height:1.75; margin-bottom:20px; max-width:640px; }
+  .filtering-kernels-page .prose strong{ color:var(--fk-text); font-weight:500; }
+  .filtering-kernels-page .prose code{ font-family:var(--fk-font-mono); font-size:12.5px; padding:2px 6px; border-radius:4px; color:var(--fk-text); background:var(--fk-bg); }
+  .filtering-kernels-page .callout{ display:flex; gap:12px; padding:14px 16px; border-radius:14px; margin-bottom:20px; font-size:13.5px; line-height:1.65; color:var(--fk-text-2); }
+  .filtering-kernels-page .callout strong{ color:var(--fk-text); }
+  .filtering-kernels-page .callout-icon{ flex-shrink:0; font-size:16px; line-height:1.5; }
+  .filtering-kernels-page .callout.info{ background:linear-gradient(135deg, rgba(246,51,146,.05), rgba(255,255,255,.98)); border:1px solid var(--fk-line); }
+  .filtering-kernels-page .callout.warn{ background:linear-gradient(135deg, rgba(255,193,7,.08), rgba(255,255,255,.98)); border:1px solid rgba(255,193,7,.25); }
+  .filtering-kernels-page .callout.danger{ background:linear-gradient(135deg, rgba(246,51,146,.06), rgba(255,255,255,.98)); border:1px solid rgba(246,51,146,.2); }
+  .filtering-kernels-page .code-block{ background:#fff; border:1px solid var(--fk-line); border-radius:14px; box-shadow:var(--fk-shadow); overflow:hidden; margin-bottom:20px; }
+  .filtering-kernels-page .cb-label{ background:var(--fk-bg); border-bottom:1px solid var(--fk-line); padding:8px 16px; font-family:var(--fk-font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--fk-text-2); }
+  .filtering-kernels-page .code-block pre{ padding:18px 20px; overflow-x:auto; margin:0; }
+  .filtering-kernels-page .code-block code{ font-family:var(--fk-font-mono); font-size:13px; line-height:1.75; background:#fff; padding:0; color:var(--fk-text); }
+  .filtering-kernels-page .kw{ color:#db2777; font-weight:600; }
+  .filtering-kernels-page .fn{ color:#7c3aed; }
+  .filtering-kernels-page .str{ color:#15803d; }
+  .filtering-kernels-page .num{ color:#b45309; }
+  .filtering-kernels-page .op{ color:#667085; }
+  .filtering-kernels-page .cm{ color:#98a2b3; font-style:italic; }
+  .filtering-kernels-page .widget-card{ background:rgba(255,255,255,.96); border:1px solid var(--fk-line); border-radius:var(--fk-radius); box-shadow:var(--fk-shadow); padding:20px; margin-bottom:20px; overflow:hidden; }
+  .filtering-kernels-page .widget-label{ font-family:var(--fk-font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--fk-text-3); margin-bottom:16px; }
+  .filtering-kernels-page .challenge-card{ display:block; padding:20px; min-height:auto; background:rgba(255,255,255,.96); border:1px solid var(--fk-line); border-radius:var(--fk-radius); box-shadow:var(--fk-shadow); align-items:normal; gap:0; grid-template-columns:none; }
+  .filtering-kernels-page .challenge-card h2{ font-size:inherit; color:inherit; margin:0; line-height:inherit; }
+  .filtering-kernels-page .challenge-card p{ font-size:inherit; color:inherit; margin:0; line-height:inherit; }
+  .filtering-kernels-page .challenge-header{ display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid var(--fk-line); flex-wrap:wrap; }
+  .filtering-kernels-page .challenge-badge{ font-family:var(--fk-font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; padding:3px 8px; border-radius:4px; background:rgba(246,51,146,.1); color:var(--fk-accent); border:1px solid rgba(246,51,146,.2); white-space:nowrap; }
+  .filtering-kernels-page .challenge-badge.quiz-badge{ background:rgba(246,51,146,.1); color:var(--fk-accent); border-color:rgba(246,51,146,.2); }
+  .filtering-kernels-page .challenge-title{ font-size:14px; font-weight:500; color:var(--fk-text); }
+  .filtering-kernels-page .challenge-desc{ padding:12px 18px; font-size:13px; color:var(--fk-text-2); line-height:1.6; border-bottom:1px solid var(--fk-line); }
+  .filtering-kernels-page .info-card{
+    background:rgba(255,255,255,.96); border:1px solid var(--fk-line);
+    border-radius:var(--fk-radius); padding:20px;
+  }
+  .filtering-kernels-page .info-card .ic-title{
+    font-family:var(--fk-font-disp); font-size:14px; font-weight:600;
+    color:var(--fk-text); margin-bottom:10px;
+  }
+  .filtering-kernels-page .info-card p{ font-size:13px; color:var(--fk-text); line-height:1.7; }
+  .filtering-kernels-page .kg-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px;
+  }
+  .filtering-kernels-page .kg-card{
+    background:rgba(255,255,255,.96); border:1px solid var(--fk-line);
+    border-radius:var(--fk-radius-sm); padding:16px; text-align:center;
+  }
+  .filtering-kernels-page .kg-name{
+    font-family:var(--fk-font-disp); font-size:13px; font-weight:700; color:var(--fk-text); margin-bottom:8px;
+  }
+  .filtering-kernels-page .kg-matrix{
+    font-family:var(--fk-font-mono); font-size:12px; color:var(--fk-text); line-height:1.6; margin-bottom:8px;
+  }
+  .filtering-kernels-page .kg-desc{
+    font-size:12px; color:var(--fk-text-2); line-height:1.5;
+  }
+  .filtering-kernels-page .step-walkthrough{
+    background:rgba(255,255,255,.96); border:1px solid var(--fk-line);
+    border-radius:var(--fk-radius); padding:20px; margin-bottom:20px;
+  }
+  .filtering-kernels-page .sw-title{
+    font-family:var(--fk-font-disp); font-size:15px; font-weight:700;
+    color:var(--fk-text); margin-bottom:16px;
+  }
+  .filtering-kernels-page .sw-steps{ display:flex; flex-direction:column; gap:14px; }
+  .filtering-kernels-page .sw-step{ display:flex; gap:12px; align-items:flex-start; }
+  .filtering-kernels-page .sw-num{
+    width:26px; height:26px; border-radius:50%;
+    background:var(--fk-accent); color:#fff; font-size:13px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .filtering-kernels-page .sw-body{ flex:1; }
+  .filtering-kernels-page .sw-label{
+    font-size:13px; font-weight:600; color:var(--fk-text); margin-bottom:6px;
+  }
+  .filtering-kernels-page .sw-patch,
+  .filtering-kernels-page .sw-sorted,
+  .filtering-kernels-page .sw-result{
+    font-family:var(--fk-font-mono); font-size:13px; color:var(--fk-text); line-height:1.6;
+    padding:8px 12px; background:var(--fk-bg); border-radius:8px;
+  }
+  .filtering-kernels-page .sw-spike{ color:#e11d48; font-weight:700; }
+  .filtering-kernels-page .sw-median{ color:var(--fk-accent); font-weight:700; }
+  .filtering-kernels-page .sw-note{ font-size:12px; color:var(--fk-text-2); font-style:italic; font-family:var(--fk-font-body); }
+  .filtering-kernels-page .mini-table{
+    width:100%; border-collapse:collapse; font-size:13px;
+  }
+  .filtering-kernels-page .mini-table th{
+    text-align:left; padding:6px 10px; border-bottom:2px solid var(--fk-line);
+    font-family:var(--fk-font-disp); color:var(--fk-text); font-weight:700;
+  }
+  .filtering-kernels-page .mini-table td{
+    padding:6px 10px; border-bottom:1px solid var(--fk-line); color:var(--fk-text);
+  }
+  .filtering-kernels-page .green-text{ color:#16a34a; font-weight:600; }
+  .filtering-kernels-page .formula-card{
+    background:rgba(255,255,255,.96); border:1px solid var(--fk-line);
+    border-radius:var(--fk-radius); padding:20px; margin-bottom:20px;
+  }
+  .filtering-kernels-page .fc-title{
+    font-family:var(--fk-font-disp); font-size:15px; font-weight:700;
+    color:var(--fk-text); margin-bottom:14px;
+  }
+  .filtering-kernels-page .fc-eq{
+    font-family:var(--fk-font-mono); font-size:14px; color:var(--fk-text);
+    display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+    padding:12px 16px; background:var(--fk-bg); border-radius:10px;
+    margin-bottom:12px;
+  }
+  .filtering-kernels-page .fce-term{ color:var(--fk-text); }
+  .filtering-kernels-page .fce-term.accent{ color:var(--fk-accent); font-weight:700; }
+  .filtering-kernels-page .fce-term.blue{ color:#2563eb; font-weight:600; }
+  .filtering-kernels-page .fce-term.muted{ color:var(--fk-text-2); }
+  .filtering-kernels-page .fce-op{ color:var(--fk-text-3); }
+  .filtering-kernels-page .fce-paren{ color:var(--fk-text-3); }
+  .filtering-kernels-page .fc-legend{
+    display:flex; flex-direction:column; gap:6px; font-size:12px; color:var(--fk-text-2);
+  }
+  .filtering-kernels-page .fc-legend span{ display:flex; align-items:center; gap:8px; }
+  .filtering-kernels-page .fc-dot{
+    width:8px; height:8px; border-radius:50%; flex-shrink:0;
+  }
+  .filtering-kernels-page .fc-dot.muted{ background:var(--fk-text-3); }
+  .filtering-kernels-page .fc-dot.blue{ background:#2563eb; }
+  .filtering-kernels-page .fc-dot.accent{ background:var(--fk-accent); }
+  .filtering-kernels-page .unsharp-demo{ display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+  .filtering-kernels-page .ud-controls{ display:flex; flex-direction:column; gap:12px; }
+  .filtering-kernels-page .ud-ctrl-row{ display:flex; align-items:center; gap:10px; font-size:13px; color:var(--fk-text); }
+  .filtering-kernels-page .ud-ctrl-row label{ min-width:80px; }
+  .filtering-kernels-page .ud-canvases{ display:flex; gap:10px; flex-wrap:wrap; }
+  .filtering-kernels-page .ud-item{ text-align:center; }
+  .filtering-kernels-page .ud-item canvas{
+    border-radius:6px; border:1px solid var(--fk-line); display:block;
+    image-rendering:pixelated;
+  }
+  .filtering-kernels-page .ud-lbl{
+    display:block; font-family:var(--fk-font-mono); font-size:10px;
+    color:var(--fk-text-3); margin-top:4px;
+  }
+  .filtering-kernels-page .gauss-demo{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+  .filtering-kernels-page .gd-ctrl-row{ font-size:13px; color:var(--fk-text); }
+  .filtering-kernels-page .gd-size-btns{ display:flex; gap:6px; margin-top:6px; }
+  .filtering-kernels-page .gd-btn{
+    padding:5px 12px; border-radius:6px; border:1px solid var(--fk-line);
+    background:#fff; cursor:pointer; font-size:12px; color:var(--fk-text-2);
+    transition:all .2s;
+  }
+  .filtering-kernels-page .gd-btn.active{
+    background:var(--fk-accent); color:#fff; border-color:var(--fk-accent);
+  }
+  .filtering-kernels-page .gd-klabel{
+    font-size:11px; color:var(--fk-text-3); font-family:var(--fk-font-mono);
+    margin-bottom:6px;
+  }
+  .filtering-kernels-page .gauss-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:2px; }
+  .filtering-kernels-page .gauss-stats{ font-size:11px; color:var(--fk-text-2); margin-top:6px; }
+  .filtering-kernels-page #otsuHistCanvas{
+    background:var(--fk-bg); border:1px solid var(--fk-line);
+    border-radius:8px; display:block; width:280px; height:160px;
+  }
+  .filtering-kernels-page .conv-stepper{
+    display:flex; flex-direction:row; gap:16px; align-items:flex-start;
+    margin-bottom:16px; flex-wrap:wrap;
+  }
+  .filtering-kernels-page .cs-panel{
+    flex:1; min-width:180px;
+  }
+  .filtering-kernels-page .cs-panel-label{
+    font-family:var(--fk-font-mono); font-size:10px; text-transform:uppercase;
+    letter-spacing:.04em; color:var(--fk-text-3); margin-bottom:8px;
+  }
+  .filtering-kernels-page .cs-grid{
+    display:grid; grid-template-columns:repeat(5,1fr); gap:2px; margin-bottom:8px;
+  }
+  .filtering-kernels-page .cs-kernel-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+  .filtering-kernels-page .cs-kernel-btns{
+    display:flex; gap:4px; flex-wrap:wrap; margin-bottom:8px;
+  }
+  .filtering-kernels-page .ks-btn{
+    padding:3px 8px; border-radius:4px; border:1px solid var(--fk-line);
+    background:#fff; cursor:pointer; font-size:10px; font-family:var(--fk-font-mono);
+    color:var(--fk-text-2); transition:all .2s;
+  }
+  .filtering-kernels-page .ks-btn.active{
+    background:var(--fk-accent); color:#fff; border-color:var(--fk-accent);
+  }
+  .filtering-kernels-page .cs-math{
+    font-family:var(--fk-font-mono); font-size:11px; color:var(--fk-text-2);
+    line-height:1.6; padding:6px 8px; background:var(--fk-bg);
+    border-radius:6px; white-space:pre-wrap; word-break:break-all;
+  }
+  .filtering-kernels-page .cs-out{ text-align:center; }
+  .filtering-kernels-page .cs-output-val{
+    font-family:var(--fk-font-disp); font-size:28px; font-weight:800;
+    color:var(--fk-accent); line-height:1.2;
+  }
+  .filtering-kernels-page .cs-output-sub{
+    font-size:11px; color:var(--fk-text-3); margin-bottom:8px;
+  }
+  .filtering-kernels-page .cs-pos{
+    font-family:var(--fk-font-mono); font-size:10px; color:var(--fk-text-3);
+  }
+  .filtering-kernels-page .cs-controls{
+    display:flex; align-items:center; gap:8px;
+    width:100%; justify-content:center;
+  }
+  .filtering-kernels-page .ctrl-btn{
+    padding:8px 16px; border-radius:8px; border:1px solid var(--fk-line);
+    background:#fff; cursor:pointer; font-size:12px; font-weight:600;
+    color:var(--fk-text-2); transition:all .2s; font-family:var(--fk-font-body);
+  }
+  .filtering-kernels-page .ctrl-btn:hover{
+    border-color:var(--fk-line-strong); color:var(--fk-text);
+  }
+  .filtering-kernels-page .ctrl-btn.play{
+    background:var(--fk-accent); color:#fff; border-color:var(--fk-accent);
+  }
+  .filtering-kernels-page .ctrl-btn.play:hover{ background:#d42a7d; }
+  .filtering-kernels-page .cs-prog-wrap{
+    flex:1; max-width:200px; height:4px; border-radius:2px;
+    background:rgba(246,51,146,.1);
+  }
+  .filtering-kernels-page .cs-prog-fill{
+    height:100%; border-radius:2px;
+    background:linear-gradient(90deg, var(--fk-accent), #ff8ab7);
+    transition:width .2s;
+  }
+  .filtering-kernels-page .challenge-editor{ margin-top:12px; }
+  .filtering-kernels-page .editor-tabs{ display:flex; gap:0; border-bottom:1px solid var(--fk-line); }
+  .filtering-kernels-page .editor-tab{ padding:8px 16px; font-family:var(--fk-font-mono); font-size:11px; color:var(--fk-text-3); background:var(--fk-bg); border:1px solid var(--fk-line); border-bottom:none; border-radius:8px 8px 0 0; margin-bottom:-1px; }
+  .filtering-kernels-page .editor-tab.active{ background:var(--fk-bg-2); color:var(--fk-text); border-bottom-color:var(--fk-bg-2); }
+  .filtering-kernels-page .code-editor-wrap{ position:relative; }
+  .filtering-kernels-page .code-editor{ width:100%; min-height:180px; padding:16px; background:var(--fk-bg-2); border:1px solid var(--fk-line); border-top:none; border-radius:0 0 12px 12px; font-size:13px; line-height:1.75; color:var(--fk-text); resize:vertical; outline:none; tab-size:2; }
+  .filtering-kernels-page .editor-actions{ display:flex; gap:8px; margin-top:10px; align-items:center; }
+  .filtering-kernels-page .run-btn{ padding:8px 18px; border-radius:8px; border:none; background:var(--fk-accent); color:#fff; font-size:13px; font-weight:600; cursor:pointer; font-family:var(--fk-font-body); transition:all .2s; }
+  .filtering-kernels-page .run-btn:hover{ background:#d42a7d; }
+  .filtering-kernels-page .run-btn.large{ padding:10px 28px; font-size:14px; }
+  .filtering-kernels-page .hint-btn, .filtering-kernels-page .reset-btn{ padding:7px 14px; border-radius:8px; border:1px solid var(--fk-line); background:#fff; font-size:12px; cursor:pointer; font-family:var(--fk-font-body); color:var(--fk-text-2); transition:all .2s; }
+  .filtering-kernels-page .hint-btn:hover, .filtering-kernels-page .reset-btn:hover{ background:var(--fk-bg); border-color:var(--fk-line-strong); color:var(--fk-text); }
+  .filtering-kernels-page .hint-box{ margin-top:10px; padding:12px 16px; border-radius:10px; background:var(--fk-bg); border:1px solid var(--fk-line); font-size:12.5px; color:var(--fk-text-2); line-height:1.65; }
+  .filtering-kernels-page .output-wrap{ margin-top:10px; border-radius:10px; background:var(--fk-bg-2); color:var(--fk-text); overflow:hidden; border:1px solid rgba(246,51,146,.18); }
+  .filtering-kernels-page .output-label{ padding:6px 14px; font-family:var(--fk-font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--fk-text); background:rgba(246,51,146,.08); }
+  .filtering-kernels-page .output-pre{ padding:12px 16px; font-size:13px; line-height:1.7; margin:0; color:var(--fk-text); white-space:pre-wrap; background:transparent; }
+  .filtering-kernels-page .output-wrap.is-error{ background:#fce4f0; border-color:rgba(246,51,146,.3); }
+  .filtering-kernels-page .check-result{ margin-top:10px; padding:10px 14px; border-radius:10px; font-size:13px; font-weight:500; }
+  .filtering-kernels-page .check-result.pass{ background:rgba(22,163,74,.08); color:#16a34a; border:1px solid rgba(22,163,74,.2); }
+  .filtering-kernels-page .check-result.fail{ background:rgba(225,29,72,.08); color:#e11d48; border:1px solid rgba(225,29,72,.2); }
+  .filtering-kernels-page .expected-box{ margin-top:10px; padding:12px 16px; border-radius:10px; background:var(--fk-bg); border:1px solid var(--fk-line); font-size:13px; color:var(--fk-text-2); }
+  .filtering-kernels-page .expected-label{ font-family:var(--fk-font-disp); font-size:11px; font-weight:600; color:var(--fk-text-3); display:block; margin-bottom:6px; text-transform:uppercase; }
+  .filtering-kernels-page .expected-box code{ font-size:13px; line-height:1.7; color:var(--fk-text); background:transparent; padding:0; }
+  .filtering-kernels-page .quiz-block-title{ font-family:var(--fk-font-disp); font-size:15px; font-weight:700; color:var(--fk-text); margin-bottom:20px; padding-top:4px; }
+  .filtering-kernels-page .quiz-item{ margin-bottom:28px; }
+  .filtering-kernels-page .quiz-q-num{ font-family:var(--fk-font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--fk-text-3); margin-bottom:8px; }
+  .filtering-kernels-page .quiz-q-text{ font-size:15px; font-weight:500; color:var(--fk-text); margin-bottom:14px; line-height:1.6; }
+  .filtering-kernels-page .quiz-opts{ display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+  .filtering-kernels-page .quiz-opt{ display:flex; align-items:flex-start; gap:12px; padding:12px 16px; border-radius:10px; border:1px solid var(--fk-line); background:#fff; cursor:pointer; font-size:13.5px; color:var(--fk-text-2); transition:all .15s; text-align:left; width:100%; font-family:var(--fk-font-body); }
+  .filtering-kernels-page .quiz-opt:hover:not(:disabled){ background:var(--fk-bg); border-color:var(--fk-line-strong); color:var(--fk-text); }
+  .filtering-kernels-page .quiz-opt.correct{ background:rgba(22,163,74,.06); border-color:rgba(22,163,74,.25); color:#16a34a; }
+  .filtering-kernels-page .quiz-opt.wrong{ background:rgba(225,29,72,.06); border-color:rgba(225,29,72,.25); color:#e11d48; }
+  .filtering-kernels-page .quiz-opt.muted{ opacity:.4; }
+  .filtering-kernels-page .quiz-opt-badge{ width:24px; height:24px; border-radius:50%; background:var(--fk-bg); display:flex; align-items:center; justify-content:center; font-family:var(--fk-font-mono); font-size:11px; color:var(--fk-text-3); flex-shrink:0; }
+  .filtering-kernels-page .quiz-feedback{ padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; display:none; color:var(--fk-text-2); }
+  .filtering-kernels-page .quiz-feedback.show{ display:block; }
+  .filtering-kernels-page .quiz-feedback.ok{ background:rgba(22,163,74,.06); border:1px solid rgba(22,163,74,.2); color:#16a34a; }
+  .filtering-kernels-page .quiz-feedback.bad{ background:rgba(225,29,72,.06); border:1px solid rgba(225,29,72,.2); color:#e11d48; }
+  .filtering-kernels-page .playground-card{ background:rgba(255,255,255,.96); border:1px solid var(--fk-line); border-radius:var(--fk-radius); overflow:hidden; margin-top:20px; }
+  .filtering-kernels-page .playground-toolbar{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; padding:12px 16px; background:var(--fk-bg); border-bottom:1px solid var(--fk-line); }
+  .filtering-kernels-page .pg-title{ font-family:var(--fk-font-disp); font-size:13px; font-weight:600; color:var(--fk-text); }
+  .filtering-kernels-page .py-ready-dot{ width:8px; height:8px; border-radius:50%; background:#16a34a; flex-shrink:0; }
+  .filtering-kernels-page .pg-toolbar-right{ display:flex; gap:6px; flex-wrap:wrap; }
+  .filtering-kernels-page .pg-snippet-btn{ padding:5px 12px; border-radius:6px; border:1px solid var(--fk-line); background:#fff; font-size:11px; cursor:pointer; font-family:var(--fk-font-mono); color:var(--fk-text-2); transition:all .2s; }
+  .filtering-kernels-page .pg-snippet-btn:hover{ border-color:var(--fk-line-strong); color:var(--fk-text); }
+  .filtering-kernels-page .playground-editor{ background:var(--fk-bg-2); border:none; border-radius:0; min-height:160px; }
+  .filtering-kernels-page .playground-actions{ display:flex; gap:8px; padding:12px 16px; align-items:center; border-top:1px solid var(--fk-line); }
+  .filtering-kernels-page .pg-note{ margin-left:auto; font-size:11px; color:var(--fk-text-3); font-family:var(--fk-font-mono); }
+  .filtering-kernels-page .final-score-card{ padding:28px; margin-top:24px; text-align:center; background:rgba(255,255,255,.96); border:1px solid var(--fk-line); border-radius:var(--fk-radius); box-shadow:var(--fk-shadow); }
+  .filtering-kernels-page .fs-title{ font-family:var(--fk-font-disp); font-size:20px; font-weight:700; color:var(--fk-text); margin-bottom:16px; }
+  .filtering-kernels-page .fs-scores{ display:flex; gap:24px; justify-content:center; margin-bottom:12px; flex-wrap:wrap; }
+  .filtering-kernels-page .fs-msg{ font-size:13px; color:var(--fk-text-2); }
+  .filtering-kernels-page .next-lesson-cta{ margin-top:32px; padding:32px; text-align:center; background:rgba(255,255,255,.96); border:1px solid var(--fk-line); border-radius:var(--fk-radius); box-shadow:var(--fk-shadow); }
+  .filtering-kernels-page .lesson-right-panel{ position:sticky; top:88px; align-self:start; display:flex; flex-direction:column; gap:16px; }
+  .filtering-kernels-page .lesson-right-panel > *{ border-radius:20px; }
+  .filtering-kernels-page .lesson-list-item{ padding:6px 10px; border-radius:8px; color:var(--fk-text); font-size:13px; display:flex; align-items:center; gap:8px; cursor:default; }
+  .filtering-kernels-page .lesson-list-item.active, .filtering-kernels-page .lesson-list-item:hover{ background:rgba(246,51,146,.08); color:var(--fk-text); }
+  .filtering-kernels-page .lesson-list-item.active .lli-dot{ background:var(--fk-accent); }
+  .filtering-kernels-page .lli-dot{ width:8px; height:8px; border-radius:50%; background:rgba(246,51,146,.2); flex-shrink:0; }
+  .filtering-kernels-page .lesson-list-item.done .lli-dot{ background:#16a34a; }
+  .filtering-kernels-page .lpc-meta{ display:flex; gap:12px; font-size:12px; color:var(--fk-text-2); margin-top:10px; }
+  .filtering-kernels-page .lesson-nav-footer a:last-child{ background:var(--fk-accent); color:#fff; border-color:var(--fk-accent); }
+  .filtering-kernels-page input[type="range"]{ -webkit-appearance:none; height:4px; border-radius:2px; background:rgba(246,51,146,.12); outline:none; cursor:pointer; }
+  .filtering-kernels-page input[type="range"]::-webkit-slider-thumb{ -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--fk-accent); cursor:pointer; border:2px solid #fff; box-shadow:0 2px 8px rgba(246,51,146,.25); transition:transform .15s; }
+  .filtering-kernels-page input[type="range"]::-webkit-slider-thumb:hover{ transform:scale(1.2); }
+  @media (max-width: 1200px){
+    .filtering-kernels-page .lesson-layout{ grid-template-columns:1fr; }
+    .filtering-kernels-page .lesson-article{ max-width:none; }
+    .filtering-kernels-page .lesson-right-panel{ position:static; flex-direction:row; flex-wrap:wrap; }
+    .filtering-kernels-page .lesson-right-panel > *{ flex:1 1 280px; }
+  }
+  @media (max-width: 900px){
+    .filtering-kernels-page .lesson-topbar-inner{ height:60px; }
+    .filtering-kernels-page .navbar-left{ padding-left:16px; }
+    .filtering-kernels-page .navbar-right{ padding-right:16px; }
+    .filtering-kernels-page .fellow-search{ min-width:auto; flex:1; }
+    .filtering-kernels-page .fellow-search input{ width:80px; }
+    .filtering-kernels-page .fellow-user-button span:not(.avatar-img), .filtering-kernels-page .fellow-user-button > i{ display:none; }
+    .filtering-kernels-page .lesson-hero{ grid-template-columns:1fr; padding:28px 24px 24px; }
+    .filtering-kernels-page .lesson-hero img{ justify-self:center; max-width:210px; }
+    .filtering-kernels-page .lesson-layout{ padding-inline:16px; }
+    .filtering-kernels-page .kg-grid{ grid-template-columns:repeat(2,1fr); }
+    .filtering-kernels-page .gauss-demo{ grid-template-columns:1fr; }
+    .filtering-kernels-page .unsharp-demo{ grid-template-columns:1fr; }
+  }
+  @media (max-width: 600px){
+    .filtering-kernels-page .calc-results{ grid-template-columns:1fr; }
+    .filtering-kernels-page .px-stats{ grid-template-columns:1fr; }
+    .filtering-kernels-page .kg-grid{ grid-template-columns:1fr; }
+  }
+</style>
+<button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+<div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+<aside class="fellow-sidebar" aria-label="Navigasi peserta">
+<a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
+<nav class="fellow-menu">
+<a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+<a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+<a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+<a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+<a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+<a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+<a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+<a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+</nav>
+<nav class="fellow-menu secondary">
+<a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+<a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+<a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ &amp; Bantuan</span></a>
+<a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+</nav>
+<div class="invite-card course-help-mini">
+<div><strong>Butuh bantuan?</strong><p>Tanya HerAI Assistant tentang modul dan pembelajaran.</p></div>
+<button type="button">Chat Sekarang</button>
+</div>
+</aside>
+<main class="fellow-main">
+ <header class="lesson-topbar">
+<div class="lesson-topbar-inner">
+<div class="navbar-left">
+<nav class="lesson-breadcrumb" aria-label="Breadcrumb materi">
+<a href="#/participant-ai-lab-cv"><i class="fas fa-arrow-left"></i><span>Computer Vision</span></a>
+<span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+</nav>
+</div>
+<div class="navbar-center">Filtering &amp; Kernels</div>
+<div class="navbar-right">
+<div class="fellow-actions">
+<label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul, topik, atau materi..."></label>
+<button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+<a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+</div>
+</div>
+</div>
+</header>
+<div class="lesson-layout">
+<div class="lesson-main-content">
+<section class="lesson-hero">
+<div class="lesson-hero-copy">
+<h1>Filtering & Kernels</h1>
+<p>Operasi konvolusi dengan berbagai kernel: Gaussian blur, median filter, unsharp mask, dan thresholding Otsu.</p>
+<div class="lesson-meta-row">
+<span><i class="far fa-clock"></i> 45 menit</span>
+<span><i class="fas fa-layer-group"></i> CV &middot; Image Processing</span>
+<b>Intermediate</b>
+</div>
+</div>
+<img src="/assets/messaging/herai-chat-persona.png" alt="HerAI CV learning">
+</section>
+<section class="lesson-material-panel">
+<div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
+<a href="#/participant-ai-lab-cv-filtering-kernels" class="active"><i class="fas fa-book-open"></i> Materi</a>
+<a href="#/participant-ai-lab-cv"><i class="fas fa-layer-group"></i> Katalog CV</a>
+</div>
+<article class="lesson-article ai-lab-content" id="filtering-kernels-content">
+
+      <!-- ─── SEC 1: SPATIAL CONVOLUTION ─── -->
+      <section class="lesson-sec" id="sec-conv">
+        <div class="sec-header">
+          <span class="sec-num">01</span>
+          <div><h2 class="sec-title">Spatial Convolution</h2><p class="sec-sub">What actually happens when you apply a filter — pixel by pixel math</p></div>
+        </div>
+        <div class="prose">Every image filter — blur, sharpen, edge detect — boils down to <strong>spatial convolution</strong>: slide a small weight matrix (the <em>kernel</em>) over every pixel, multiply element-wise with the local neighborhood, sum to get one output value. The kernel defines what the filter does.</div>
+
+        <div class="callout info"><span class="callout-icon"><i class="fas fa-ruler-combined"></i></span><div><strong>Kernel = filter = mask</strong> — all three terms mean the same thing. A 3×3 kernel examines 9 pixels at once. Kernel weights summing to 1 = neutral brightness; &gt;1 brightens; &lt;1 darkens.</div></div>
+
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Step through convolution — watch one output pixel being computed</div>
+          <div class="conv-stepper">
+            <div class="cs-panel">
+              <div class="cs-panel-label">Input patch (5×5)</div>
+              <div class="cs-grid" id="convInputGrid"></div>
+            </div>
+            <div class="cs-panel cs-mid">
+              <div class="cs-panel-label">Kernel (3×3)</div>
+              <div class="cs-kernel-btns" id="kernelBtns">
+                <button class="ks-btn active" data-k="blur">Avg</button>
+                <button class="ks-btn" data-k="sharpen">Sharp</button>
+                <button class="ks-btn" data-k="edge">Edge</button>
+                <button class="ks-btn" data-k="sobelx">Sobel X</button>
+                <button class="ks-btn" data-k="emboss">Emboss</button>
+              </div>
+              <div class="cs-grid cs-kernel-grid" id="convKernelGrid"></div>
+              <div class="cs-math" id="convMath"></div>
+            </div>
+            <div class="cs-panel cs-out">
+              <div class="cs-panel-label">Output value</div>
+              <div class="cs-output-val" id="convOutputVal">—</div>
+              <div class="cs-output-sub">center pixel result</div>
+              <div class="cs-pos" id="convPosInfo">position (0, 0)</div>
+            </div>
+          </div>
+          <div class="cs-controls">
+            <button class="ctrl-btn" onclick="FK_convStep(-1)">← Prev</button>
+            <div class="cs-prog-wrap"><div class="cs-prog-fill" id="convProgFill"></div></div>
+            <button class="ctrl-btn play" onclick="FK_convStep(1)">Next →</button>
+            <button class="ctrl-btn" id="convAutoBtn" onclick="convToggleAuto()">▶ Auto</button>
+          </div>
+        </div>
+
+        <div class="kernel-gallery">
+          <div class="kg-title">Common kernels</div>
+          <div class="kg-grid">
+            <div class="kg-card"><div class="kg-name">Box Blur</div><div class="kg-matrix">1/9 &nbsp;1/9 &nbsp;1/9<br>1/9 &nbsp;1/9 &nbsp;1/9<br>1/9 &nbsp;1/9 &nbsp;1/9</div><div class="kg-desc">Equal weight, sum=1. Fast but unnatural-looking blur.</div></div>
+            <div class="kg-card"><div class="kg-name">Sharpen</div><div class="kg-matrix">0 &nbsp;−1 &nbsp; 0<br>−1 &nbsp; 5 &nbsp;−1<br>0 &nbsp;−1 &nbsp; 0</div><div class="kg-desc">Center×5 minus neighbors. Sum=1, no brightness change.</div></div>
+            <div class="kg-card"><div class="kg-name">Laplacian</div><div class="kg-matrix">0 &nbsp; 1 &nbsp; 0<br>1 &nbsp;−4 &nbsp; 1<br>0 &nbsp; 1 &nbsp; 0</div><div class="kg-desc">Second derivative — detects edges in all 4 directions.</div></div>
+            <div class="kg-card"><div class="kg-name">Sobel X</div><div class="kg-matrix">−1 &nbsp; 0 &nbsp; 1<br>−2 &nbsp; 0 &nbsp; 2<br>−1 &nbsp; 0 &nbsp; 1</div><div class="kg-desc">Gradient in X direction. Detects vertical edges.</div></div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="cb-label">cv2 · filter2D — apply any kernel</div>
+<pre><code><span class="kw">import</span> cv2
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># Box blur: 3×3 averaging</span>
+k_box = np.<span class="fn">ones</span>((<span class="num">3</span>,<span class="num">3</span>), dtype=np.float32) / <span class="num">9</span>
+blurred = cv2.<span class="fn">filter2D</span>(img, -<span class="num">1</span>, k_box)
+
+<span class="cm"># Sharpen</span>
+k_sharp = np.array([[ <span class="num">0</span>,-<span class="num">1</span>, <span class="num">0</span>],
+                    [-<span class="num">1</span>, <span class="num">5</span>,-<span class="num">1</span>],
+                    [ <span class="num">0</span>,-<span class="num">1</span>, <span class="num">0</span>]], dtype=np.float32)
+sharp = cv2.<span class="fn">filter2D</span>(img, -<span class="num">1</span>, k_sharp)
+
+<span class="cm"># Sobel X (vertical edges)</span>
+k_sx = np.array([[-<span class="num">1</span>,<span class="num">0</span>,<span class="num">1</span>],[-<span class="num">2</span>,<span class="num">0</span>,<span class="num">2</span>],[-<span class="num">1</span>,<span class="num">0</span>,<span class="num">1</span>]], dtype=np.float32)
+edges_x = cv2.<span class="fn">filter2D</span>(img, -<span class="num">1</span>, k_sx)</code></pre>
+        </div>
+
+        <div class="challenge-card" id="ch-1">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Apply a 3×3 box blur kernel manually</span></div>
+          <div class="challenge-desc">Compute the convolution output for the center pixel of a 5×5 patch using a 3×3 box blur kernel. Verify it equals the mean of the 9 center neighbors.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-1" spellcheck="false">import numpy as np
+
+patch = np.array([
+    [ 10,  20,  30,  40,  50],
+    [ 60,  70,  80,  90, 100],
+    [110, 120, 130, 140, 150],
+    [160, 170, 180, 190, 200],
+    [210, 220, 230, 240, 250],
+], dtype=np.float32)
+
+# 3×3 box blur kernel: equal weights, sum = 1
+kernel = np.ones((___, ___), dtype=np.float32) / ___
+
+# Extract 3×3 neighborhood centered at (2,2)
+neighborhood = patch[___:___, ___:___]
+
+# Convolution = element-wise multiply + sum
+result = np.sum(neighborhood * kernel)
+print("Convolution output:", round(result, 2))
+
+expected = np.mean(patch[1:4, 1:4])
+print("Mean of 3×3 center:", round(expected, 2))
+print("Match:", abs(result - expected) < 0.001)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-1','out-1','check-1')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-1')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-1',1)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-1" style="display:none"><strong>Hints:</strong><br>• <code>np.ones((3,3)) / 9</code> — nine values of 1/9<br>• Center of 5×5 at index (2,2): neighborhood is <code>patch[1:4, 1:4]</code><br>• Result = mean of 70,80,90,120,130,140,170,180,190 = 130.0</div>
+          <div class="output-wrap" id="out-1" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-1-pre"></pre></div>
+          <div class="check-result" id="check-1" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Convolution output: 130.0<br>Mean of 3×3 center: 130.0<br>Match: True</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 2: GAUSSIAN BLUR ─── -->
+      <section class="lesson-sec" id="sec-gaussian">
+        <div class="sec-header">
+          <span class="sec-num">02</span>
+          <div><h2 class="sec-title">Gaussian Blur</h2><p class="sec-sub">Noise removal with weighted averaging — nearby pixels matter more</p></div>
+        </div>
+        <div class="prose">Box blur weights all neighbors equally — unnatural, because a pixel 2 hops away shouldn't matter as much as an adjacent one. <strong>Gaussian blur</strong> uses the 2D Gaussian function: the center pixel gets the highest weight, dropping smoothly with distance. The result looks natural, no box-shaped artifacts.</div>
+
+        <div class="callout warn"><span class="callout-icon">⚠️</span><div><strong>Kernel size must be odd</strong> — OpenCV requires (3,3), (5,5), (7,7)... Pass <code>(0,0)</code> to let OpenCV auto-compute size from sigma. Rule of thumb: ksize ≈ 6σ + 1.</div></div>
+
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Tune sigma and kernel size — see kernel weights and effect</div>
+          <div class="gaussian-demo">
+            <div class="gd-left">
+              <div class="gd-ctrl-row">
+                <label>Kernel size</label>
+                <div class="gd-size-btns">
+                  <button class="gd-btn active" onclick="setGaussSize(this,3)">3×3</button>
+                  <button class="gd-btn" onclick="setGaussSize(this,5)">5×5</button>
+                  <button class="gd-btn" onclick="setGaussSize(this,7)">7×7</button>
+                </div>
+              </div>
+              <div class="gd-ctrl-row" style="margin-top:12px">
+                <label>σ = <span id="sigmaVal">1.0</span></label>
+                <input type="range" min="1" max="50" value="10" id="sigmaSlider" oninput="updateGaussian()">
+              </div>
+              <div class="gd-klabel" style="margin-top:16px">Kernel weights</div>
+              <div id="gaussKernelGrid" class="gauss-grid"></div>
+            </div>
+            <div class="gd-right">
+              <div class="gd-klabel">1D cross-section through center row</div>
+              <canvas id="gaussCurveCanvas" width="260" height="120"></canvas>
+              <div id="gaussStats" class="gauss-stats"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="code-block"><div class="cb-label">cv2.GaussianBlur</div>
+<pre><code><span class="cm"># ksize must be (odd, odd)</span>
+blur = cv2.<span class="fn">GaussianBlur</span>(img,
+    (<span class="num">5</span>, <span class="num">5</span>),    <span class="cm"># kernel size (odd!)</span>
+    sigmaX=<span class="num">1.5</span>
+)
+
+<span class="cm"># Auto-compute ksize from sigma</span>
+blur = cv2.<span class="fn">GaussianBlur</span>(img, (<span class="num">0</span>,<span class="num">0</span>),
+    sigmaX=<span class="num">2.0</span>)
+
+<span class="cm"># Anisotropic: blur more in X than Y</span>
+blur = cv2.<span class="fn">GaussianBlur</span>(img, (<span class="num">0</span>,<span class="num">0</span>),
+    sigmaX=<span class="num">5.0</span>, sigmaY=<span class="num">0.5</span>)</code></pre></div>
+          <div class="info-card">
+            <div class="ic-title"><i class="fas fa-chart-simple"></i> Sigma rules of thumb</div>
+            <table class="mini-table">
+              <thead><tr><th>σ</th><th>Effect</th><th>Use</th></tr></thead>
+              <tbody>
+                <tr><td>0.5–1</td><td>Barely visible</td><td>Pre-sharpen</td></tr>
+                <tr><td>1–2</td><td>Light smoothing</td><td>JPEG noise</td></tr>
+                <tr><td>3–5</td><td>Visible blur</td><td>DOF effect</td></tr>
+                <tr><td>10+</td><td>Heavy blur</td><td>Glow / haze</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="challenge-card" id="ch-2">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Build a Gaussian kernel from scratch</span></div>
+          <div class="challenge-desc">Implement the 1D Gaussian and build a 5×5 2D kernel via outer product. Verify it sums to 1.0 and the center has the highest weight.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-2" spellcheck="false">import numpy as np
+
+def gaussian_1d(size, sigma):
+    """1D Gaussian array normalized to sum = 1."""
+    center = size // 2
+    x = np.arange(size) - center   # e.g. [-2,-1,0,1,2] for size=5
+    g = np.exp(-x**2 / (2 * sigma**2))
+    return g / g.sum()
+
+sigma = 1.0
+g1 = gaussian_1d(___, sigma)           # size = 5
+print("1D kernel:", np.round(g1, 4).tolist())
+print("1D sum:",    round(g1.sum(), 6))  # must be 1.0
+
+# 2D kernel = outer product of 1D with itself
+g2 = np.outer(___, ___)                # g1 ⊗ g1
+print("2D shape:", g2.shape)           # (5, 5)
+print("2D sum:",   round(g2.sum(), 6)) # must be 1.0
+print("Center weight:", round(g2[2,2], 4))  # highest
+print("Corner weight:", round(g2[0,0], 4))  # lowest</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-2','out-2','check-2')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-2')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-2',2)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-2" style="display:none"><strong>Hints:</strong><br>• Size 5: <code>gaussian_1d(5, sigma)</code><br>• 2D = <code>np.outer(g1, g1)</code> — produces (5,5) matrix<br>• Center [2,2] ≈ 0.1409, corner [0,0] ≈ 0.0030 for σ=1</div>
+          <div class="output-wrap" id="out-2" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-2-pre"></pre></div>
+          <div class="check-result" id="check-2" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>1D sum: 1.0 &nbsp;&nbsp;2D sum: 1.0<br>2D shape: (5, 5)<br>Center weight &gt; Corner weight</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 3: MEDIAN FILTER ─── -->
+      <section class="lesson-sec" id="sec-median">
+        <div class="sec-header">
+          <span class="sec-num">03</span>
+          <div><h2 class="sec-title">Median Filter</h2><p class="sec-sub">Salt-and-pepper noise removal — sort the neighborhood, pick the middle</p></div>
+        </div>
+        <div class="prose">Gaussian blur averages its neighborhood — a salt spike at 255 bleeds into surrounding pixels. The <strong>median filter</strong> is non-linear: it sorts all neighborhood values and returns the middle one. An outlier of 255 ends up last in a sorted list of ~80s and never reaches the output.</div>
+
+        <div class="callout info"><span class="callout-icon"><i class="fas fa-pepper-hot"></i></span><div><strong>Salt-and-pepper noise</strong>: random pixels set to 0 (pepper) or 255 (salt). Common from cheap sensors, transmission errors, old scans. Gaussian spreads the outlier; median eliminates it entirely.</div></div>
+
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Compare Gaussian vs Median on salt-and-pepper noise</div>
+          <div class="median-demo">
+            <div class="md-controls">
+              <div class="md-ctrl-row"><label>Noise level: <span id="noiseVal">10</span>%</label><input type="range" min="1" max="40" value="10" id="noiseSlider" oninput="updateMedianDemo()"></div>
+              <div class="md-ctrl-row">
+                <label>Kernel size</label>
+                <div class="gd-size-btns">
+                  <button class="gd-btn active" onclick="setMedianSize(this,3)">3×3</button>
+                  <button class="gd-btn" onclick="setMedianSize(this,5)">5×5</button>
+                  <button class="gd-btn" onclick="setMedianSize(this,7)">7×7</button>
+                </div>
+              </div>
+            </div>
+            <div class="md-canvases">
+              <div class="md-item"><canvas id="mdOriginal" width="148" height="111"></canvas><span class="md-lbl">Original</span></div>
+              <div class="md-item"><canvas id="mdNoisy"    width="148" height="111"></canvas><span class="md-lbl">+ Salt &amp; Pepper</span></div>
+              <div class="md-item"><canvas id="mdGaussian" width="148" height="111"></canvas><span class="md-lbl">Gaussian blur</span></div>
+              <div class="md-item"><canvas id="mdMedian"   width="148" height="111"></canvas><span class="md-lbl">Median filter ✓</span></div>
+            </div>
+            <div id="mdStatsRow" class="md-stats"></div>
+          </div>
+        </div>
+
+        <div class="step-walkthrough">
+          <div class="sw-title">How median filter works — step by step</div>
+          <div class="sw-steps">
+            <div class="sw-step"><div class="sw-num">1</div><div class="sw-body"><div class="sw-label">3×3 neighborhood with a salt spike (255) at center</div><div class="sw-patch">82 &nbsp;90 &nbsp;88 &nbsp;/ &nbsp;85 &nbsp;<strong class="sw-spike">255</strong> &nbsp;91 &nbsp;/ &nbsp;79 &nbsp;87 &nbsp;83</div></div></div>
+            <div class="sw-step"><div class="sw-num">2</div><div class="sw-body"><div class="sw-label">Sort all 9 values ascending</div><div class="sw-sorted">79 · 82 · 83 · 85 · <strong class="sw-median">87</strong> · 88 · 90 · 91 · <span class="sw-spike">255</span></div></div></div>
+            <div class="sw-step"><div class="sw-num">3</div><div class="sw-body"><div class="sw-label">Pick the middle value (index 4 of 9) — spike is gone</div><div class="sw-result">Output = <strong>87</strong> &nbsp;<span class="sw-note">noise eliminated without blurring neighbors</span></div></div></div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="code-block"><div class="cb-label">cv2.medianBlur</div>
+<pre><code><span class="cm"># ksize must be odd ≥ 1</span>
+clean = cv2.<span class="fn">medianBlur</span>(noisy, <span class="num">3</span>)
+clean = cv2.<span class="fn">medianBlur</span>(noisy, <span class="num">5</span>)  <span class="cm"># stronger</span>
+
+<span class="cm"># Add salt-and-pepper noise manually</span>
+noisy = img.copy()
+n     = <span class="fn">int</span>(img.size * <span class="num">0.05</span>)
+flat  = noisy.<span class="fn">reshape</span>(-<span class="num">1</span>, <span class="num">3</span>)
+flat[np.random.<span class="fn">choice</span>(<span class="fn">len</span>(flat), n)] = <span class="num">255</span>
+flat[np.random.<span class="fn">choice</span>(<span class="fn">len</span>(flat), n)] = <span class="num">0</span></code></pre></div>
+          <div class="info-card">
+             <div class="ic-title"><i class="fas fa-bolt"></i> Which filter for which noise?</div>
+            <table class="mini-table">
+              <thead><tr><th>Noise type</th><th>Best filter</th></tr></thead>
+              <tbody>
+                <tr><td>Gaussian (sensor)</td><td class="green-text">Gaussian blur</td></tr>
+                <tr><td>Salt-and-pepper</td><td class="green-text">Median ✓</td></tr>
+                <tr><td>Uniform random</td><td>Box blur</td></tr>
+                <tr><td>Structured stripes</td><td>Bilateral / FFT</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="challenge-card" id="ch-3">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Implement 1D median filter from scratch</span></div>
+          <div class="challenge-desc">Apply a sliding 3-point median to a 1D signal with salt-and-pepper spikes. After filtering, all 0s and 255s should be gone.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-3" spellcheck="false">import numpy as np
+
+signal = np.array([80, 82, 255, 85, 83, 0, 88, 90, 87, 255, 84],
+                  dtype=np.float32)
+print("Noisy: ", signal.astype(int).tolist())
+
+def median_filter_1d(sig, window=3):
+    pad    = window // 2
+    padded = np.pad(sig, pad, mode='edge')  # replicate edges
+    result = np.zeros_like(sig)
+    for i in range(len(sig)):
+        neighborhood = padded[___:___]   # window of 3 centered at i
+        result[i]    = np.___(___)       # median of neighborhood
+    return result
+
+filtered = median_filter_1d(signal)
+print("Filtered:", filtered.astype(int).tolist())
+
+spikes_before = int(np.sum((signal == 0) | (signal == 255)))
+spikes_after  = int(np.sum((filtered == 0) | (filtered == 255)))
+print(f"Spikes before: {spikes_before}, after: {spikes_after}")
+print("All spikes removed:", spikes_after == 0)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-3','out-3','check-3')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-3')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-3',3)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-3" style="display:none"><strong>Hints:</strong><br>• After <code>np.pad(sig, 1, 'edge')</code>, index i corresponds to <code>padded[i:i+3]</code><br>• Median: <code>np.median(neighborhood)</code><br>• All 3 spikes (two 255s + one 0) should be removed</div>
+          <div class="output-wrap" id="out-3" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-3-pre"></pre></div>
+          <div class="check-result" id="check-3" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Spikes before: 3, after: 0<br>All spikes removed: True</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 4: UNSHARP MASKING ─── -->
+      <section class="lesson-sec" id="sec-sharpen">
+        <div class="sec-header">
+          <span class="sec-num">04</span>
+          <div><h2 class="sec-title">Unsharp Masking</h2><p class="sec-sub">Sharpen by adding back the high-frequency detail you subtracted</p></div>
+        </div>
+        <div class="prose">Despite the name, unsharp masking <em>sharpens</em>. Blur the image → subtract it from the original → what remains is <strong>the detail</strong> (edges, texture) that blur removed. Add that back, amplified. The "mask" is the blurred version used to isolate what to enhance.</div>
+
+        <div class="formula-card">
+          <div class="fc-title">Unsharp Mask Formula</div>
+          <div class="fc-eq">
+            <span class="fce-term accent">output</span>
+            <span class="fce-op">=</span>
+            <span class="fce-term">original</span>
+            <span class="fce-op">+</span>
+            <span class="fce-term blue">amount</span>
+            <span class="fce-op">×</span>
+            <span class="fce-paren">(</span><span class="fce-term">original</span>
+            <span class="fce-op">−</span>
+            <span class="fce-term muted">blurred</span><span class="fce-paren">)</span>
+          </div>
+          <div class="fc-legend">
+            <span><span class="fc-dot muted"></span>blurred = GaussianBlur(original)</span>
+            <span><span class="fc-dot blue"></span>amount = sharpening strength (0.5–2.0)</span>
+            <span><span class="fc-dot accent"></span>(original − blurred) = the detail mask</span>
+          </div>
+        </div>
+
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Tune blur radius and amount — watch detail mask and sharpened result</div>
+          <div class="unsharp-demo">
+            <div class="ud-controls">
+              <div class="ud-ctrl-row"><label>Blur σ = <span id="unsharpSigmaVal">1.0</span></label><input type="range" min="1" max="40" value="10" id="unsharpSigma" oninput="updateUnsharp()"></div>
+              <div class="ud-ctrl-row"><label>Amount = <span id="unsharpAmountVal">1.0</span></label><input type="range" min="1" max="40" value="10" id="unsharpAmount" oninput="updateUnsharp()"></div>
+            </div>
+            <div class="ud-canvases">
+              <div class="ud-item"><canvas id="udOriginal"  width="148" height="111"></canvas><span class="ud-lbl">Original</span></div>
+              <div class="ud-item"><canvas id="udMask"      width="148" height="111"></canvas><span class="ud-lbl">Detail mask (orig−blur)</span></div>
+              <div class="ud-item"><canvas id="udSharpened" width="148" height="111"></canvas><span class="ud-lbl">Sharpened</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="code-block"><div class="cb-label">unsharp masking</div>
+<pre><code><span class="cm"># Manual (most readable)</span>
+blur   = cv2.<span class="fn">GaussianBlur</span>(img, (<span class="num">0</span>,<span class="num">0</span>), sigmaX=<span class="num">2</span>)
+mask   = img.astype(np.float32) - blur
+amount = <span class="num">1.5</span>
+sharp  = np.<span class="fn">clip</span>(img + amount * mask,
+                 <span class="num">0</span>, <span class="num">255</span>).<span class="fn">astype</span>(np.uint8)
+
+<span class="cm"># addWeighted shortcut:</span>
+sharp = cv2.<span class="fn">addWeighted</span>(
+    img,  <span class="num">1</span> + amount,
+    blur, -amount, <span class="num">0</span>
+)</code></pre></div>
+          <div class="info-card">
+            <div class="ic-title"><i class="fas fa-sliders"></i> Amount vs Radius guide</div>
+            <ul class="ic-list">
+              <li><strong>Small σ + high amount</strong> → crisp edges, but adds texture noise</li>
+              <li><strong>Large σ + low amount</strong> → wider contrast boost, fewer artifacts</li>
+              <li><strong>amount &gt; 2.0</strong> → halos appear around edges</li>
+              <li><strong>Typical:</strong> σ = 1–2, amount = 0.5–1.5</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="challenge-card" id="ch-4">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Implement unsharp masking on a 1D signal</span></div>
+          <div class="challenge-desc">Apply the unsharp formula to a 1D step edge. Verify that the sharpened signal is more extreme at the edge transition than the original.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-4" spellcheck="false">import numpy as np
+
+signal = np.array([50, 50, 52, 50, 100, 150, 150, 148, 150, 150],
+                  dtype=np.float32)
+
+def box_blur_1d(s, k=3):
+    padded = np.pad(s, k//2, mode='edge')
+    return np.array([padded[i:i+k].mean() for i in range(len(s))])
+
+blurred = box_blur_1d(signal)
+print("Original:", signal.astype(int).tolist())
+print("Blurred: ", blurred.round(1).tolist())
+
+# Step 1: detail mask
+mask = ___ - ___        # signal - blurred
+
+# Step 2: add amplified mask
+amount    = 1.5
+sharpened = ___ + ___ * ___   # signal + amount * mask
+
+# Step 3: clip
+sharpened = np.clip(sharpened, ___, ___)
+
+print("Sharpened:", sharpened.astype(int).tolist())
+# Index 4 (dark side of edge) should drop lower; index 5 should go higher
+print("Edge amplified:", sharpened[4] <= signal[4] and sharpened[5] >= signal[5])</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-4','out-4','check-4')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-4')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-4',4)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-4" style="display:none"><strong>Hints:</strong><br>• mask = signal - blurred<br>• sharpened = signal + amount * mask<br>• np.clip(..., 0, 255)<br>• At the step edge, blur smooths → mask amplifies the contrast</div>
+          <div class="output-wrap" id="out-4" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-4-pre"></pre></div>
+          <div class="check-result" id="check-4" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Edge amplified: True<br>Values clipped to [0, 255]</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 5: OTSU ─── -->
+      <section class="lesson-sec" id="sec-otsu">
+        <div class="sec-header">
+          <span class="sec-num">05</span>
+          <div><h2 class="sec-title">Otsu's Adaptive Binarization</h2><p class="sec-sub">Let the histogram find the optimal threshold automatically</p></div>
+        </div>
+        <div class="prose">Binary thresholding turns grayscale → black/white: pixels above threshold T become 255, below become 0. The problem: which T? A fixed T breaks under different lighting. <strong>Otsu's method</strong> scans all 256 T values, computes how well each separates the histogram into two clusters, and picks the T that minimizes intra-class variance.</div>
+
+        <div class="callout info"><span class="callout-icon"><i class="fas fa-chart-simple"></i></span><div><strong>Otsu works best on bimodal histograms</strong> — two clear peaks (dark background + bright foreground). For uneven lighting, use <code>cv2.adaptiveThreshold()</code> which computes a local T per region.</div></div>
+
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Drag the manual threshold — see how Otsu's automatic choice compares</div>
+          <div class="otsu-demo">
+            <div class="otsu-left">
+              <div class="otsu-scene-btns">
+                <button class="otsu-btn active" onclick="setOtsuScene(this,'bimodal')">Bimodal</button>
+                <button class="otsu-btn"        onclick="setOtsuScene(this,'skewed')">Skewed</button>
+                <button class="otsu-btn"        onclick="setOtsuScene(this,'flat')">Flat</button>
+              </div>
+              <canvas id="otsuHistCanvas" width="280" height="160"></canvas>
+              <div class="otsu-ctrl-row">
+                <label>Manual T = <span id="manualThreshVal">128</span></label>
+                <input type="range" min="0" max="255" value="128" id="manualThresh" oninput="updateOtsu()">
+              </div>
+            </div>
+            <div class="otsu-right">
+              <div class="otsu-scores">
+                <div class="os-row"><span class="os-label">Otsu threshold</span>   <span class="os-val accent"      id="otsuThreshDisplay">—</span></div>
+                <div class="os-row"><span class="os-label">Otsu score (↓ better)</span><span class="os-val green-text" id="otsuScoreDisplay">—</span></div>
+                <div class="os-row"><span class="os-label">Manual score</span>      <span class="os-val"             id="manualScoreDisplay">—</span></div>
+              </div>
+              <div class="otsu-canvases">
+                <div class="otsu-c"><canvas id="otsuImgOrig"   width="116" height="87"></canvas><span class="md-lbl">Original</span></div>
+                <div class="otsu-c"><canvas id="otsuImgOtsu"   width="116" height="87"></canvas><span class="md-lbl">Otsu binary</span></div>
+                <div class="otsu-c"><canvas id="otsuImgManual" width="116" height="87"></canvas><span class="md-lbl">Manual binary</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-walkthrough">
+          <div class="sw-title">Otsu's algorithm — three steps</div>
+          <div class="sw-steps">
+            <div class="sw-step"><div class="sw-num">1</div><div class="sw-body"><div class="sw-label">Build normalized histogram: p[i] = fraction of pixels at intensity i</div><div class="sw-code">hist, _ = np.histogram(gray.ravel(), 256, [0,256])<br>p = hist / hist.sum()   # sum = 1.0</div></div></div>
+            <div class="sw-step"><div class="sw-num">2</div><div class="sw-body"><div class="sw-label">For each t, compute between-class variance (higher = better separation)</div><div class="sw-code">w0 = p[:t].sum() &nbsp;&nbsp;&nbsp;&nbsp;w1 = 1 − w0<br>μ0 = (i·p[:t]).sum()/w0 &nbsp;&nbsp;&nbsp;&nbsp;μ1 = (i·p[t:]).sum()/w1<br>σ²_between = w0 · w1 · (μ0 − μ1)²</div></div></div>
+            <div class="sw-step"><div class="sw-num">3</div><div class="sw-body"><div class="sw-label">Pick t* = argmax σ²_between — OpenCV does this in one call</div><div class="sw-code">t, binary = cv2.threshold(gray, 0, 255,<br>&nbsp;&nbsp;&nbsp;cv2.THRESH_BINARY + cv2.THRESH_OTSU)</div></div></div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="code-block"><div class="cb-label">cv2 · Otsu threshold</div>
+<pre><code>gray = cv2.<span class="fn">cvtColor</span>(img, cv2.COLOR_BGR2GRAY)
+
+<span class="cm"># Fixed threshold</span>
+_, b_fixed = cv2.<span class="fn">threshold</span>(
+    gray, <span class="num">127</span>, <span class="num">255</span>, cv2.THRESH_BINARY)
+
+<span class="cm"># Otsu: T=0 tells OpenCV to auto-find it</span>
+t_otsu, b_otsu = cv2.<span class="fn">threshold</span>(
+    gray, <span class="num">0</span>, <span class="num">255</span>,
+    cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+print(f<span class="str">"Otsu T = {t_otsu}"</span>)
+
+<span class="cm"># Blur first for noisy images</span>
+blr = cv2.<span class="fn">GaussianBlur</span>(gray, (<span class="num">5</span>,<span class="num">5</span>), <span class="num">0</span>)
+t2, b2 = cv2.<span class="fn">threshold</span>(blr, <span class="num">0</span>, <span class="num">255</span>,
+    cv2.THRESH_BINARY + cv2.THRESH_OTSU)</code></pre></div>
+          <div class="code-block"><div class="cb-label">Adaptive threshold (uneven lighting)</div>
+<pre><code><span class="cm"># When Otsu fails (shadows, gradients)</span>
+adaptive = cv2.<span class="fn">adaptiveThreshold</span>(
+    gray,
+    <span class="num">255</span>,
+    cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+    cv2.THRESH_BINARY,
+    blockSize=<span class="num">11</span>,  <span class="cm"># local region (odd)</span>
+    C=<span class="num">2</span>            <span class="cm"># constant subtracted</span>
+)
+<span class="cm"># blockSize: how local the threshold is</span>
+<span class="cm"># C=2 avoids noise becoming foreground</span></code></pre></div>
+        </div>
+
+        <div class="challenge-card" id="ch-5">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Implement Otsu's threshold search from scratch</span></div>
+          <div class="challenge-desc">Iterate over all 256 possible thresholds, maximize between-class variance, and find the optimal T. Verify it falls between the two intensity peaks.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-5" spellcheck="false">import numpy as np
+
+np.random.seed(0)
+dark   = np.random.normal(60,  15, 3000).clip(0,255).astype(np.uint8)
+bright = np.random.normal(180, 20, 2000).clip(0,255).astype(np.uint8)
+pixels = np.concatenate([dark, bright])
+
+hist, _ = np.histogram(pixels, bins=256, range=(0, 256))
+p = hist / hist.sum()
+
+best_t   = 0
+best_var = 0.0
+
+for t in range(1, 256):
+    w0 = p[:t].sum()
+    w1 = ___                            # 1 - w0
+    if w0 == 0 or w1 == 0: continue
+
+    ix  = np.arange(256)
+    mu0 = (ix[:t] * p[:t]).sum() / w0  # mean of class 0
+    mu1 = ___                           # mean of class 1
+
+    between_var = ___ * ___ * (mu0 - mu1)**2   # w0 * w1 * (mu0-mu1)^2
+
+    if between_var > best_var:
+        best_var = between_var
+        best_t   = t
+
+print(f"Otsu threshold: {best_t}")
+print(f"Dark mean:  {dark.mean():.1f}")
+print(f"Bright mean:{bright.mean():.1f}")
+print(f"T between peaks: {float(dark.mean()) < best_t < float(bright.mean())}")</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-5','out-5','check-5')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-5')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-5',5)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-5" style="display:none"><strong>Hints:</strong><br>• w1 = 1 - w0<br>• mu1 = (ix[t:] * p[t:]).sum() / w1<br>• between_var = w0 * w1 * (mu0 - mu1)**2<br>• Expect T around 110–130 (between 60 and 180)</div>
+          <div class="output-wrap" id="out-5" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-5-pre"></pre></div>
+          <div class="check-result" id="check-5" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Otsu threshold: ~110–130<br>T between peaks: True</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 6: PLAYGROUND ─── -->
+      <section class="lesson-sec" id="sec-playground">
+        <div class="sec-header">
+          <span class="sec-num">06</span>
+          <div><h2 class="sec-title">Full Python Playground</h2><p class="sec-sub">Eksplorasi bebas — gabungkan semua filter yang sudah dipelajari</p></div>
+        </div>
+        <div class="prose">Python 3.11 + NumPy langsung di browser via <strong>Pyodide</strong>. Coba pipeline lengkap denoising → sharpening → binarization, atau uji kernel buatanmu sendiri.</div>
+
+        <div class="playground-card">
+          <div class="playground-toolbar">
+            <div class="pg-toolbar-left">
+              <span class="pg-title"><i class="fas fa-snake"></i> Python 3.11 · NumPy ready</span>
+              <span class="py-ready-dot" id="pgReadyDot"></span>
+            </div>
+            <div class="pg-toolbar-right">
+              <button class="pg-snippet-btn" onclick="loadSnippet('gaussian')">gaussian</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('median')">median</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('unsharp')">unsharp</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('otsu')">otsu</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('pipeline')">full pipeline</button>
+            </div>
+          </div>
+          <div class="code-editor-wrap">
+            <textarea class="code-editor playground-editor" id="playground-editor" spellcheck="false">import numpy as np
+
+# ── Simulate a noisy grayscale image ───────────────────────────
+np.random.seed(42)
+img = np.random.randint(40, 200, (64, 64), dtype=np.uint8)
+
+# Add 5% salt-and-pepper noise
+noisy = img.copy()
+n = int(img.size * 0.05)
+noisy.flat[np.random.choice(img.size, n, replace=False)] = 255
+noisy.flat[np.random.choice(img.size, n, replace=False)] = 0
+print("Noise spikes:", int(np.sum((noisy==0)|(noisy==255))))
+
+# ── Gaussian 3×3 blur ────────────────────────────────────────
+def gaussian_3x3(image):
+    k = np.array([[1,2,1],[2,4,2],[1,2,1]], dtype=np.float32) / 16
+    p = np.pad(image.astype(float), 1, mode='reflect')
+    return np.array([[
+        (p[y:y+3,x:x+3]*k).sum()
+        for x in range(image.shape[1])]
+        for y in range(image.shape[0])]).clip(0,255).astype(np.uint8)
+
+# ── Median 3×3 filter ────────────────────────────────────────
+def median_3x3(image):
+    p = np.pad(image.astype(float), 1, mode='reflect')
+    return np.array([[
+        np.median(p[y:y+3,x:x+3])
+        for x in range(image.shape[1])]
+        for y in range(image.shape[0])]).astype(np.uint8)
+
+gauss  = gaussian_3x3(noisy)
+median = median_3x3(noisy)
+print("After Gaussian — spikes:", int(np.sum((gauss==0)|(gauss==255))))
+print("After Median   — spikes:", int(np.sum((median==0)|(median==255))))
+
+# ── Unsharp mask on denoised image ───────────────────────────
+blurred   = gaussian_3x3(median)
+mask      = median.astype(float) - blurred
+sharpened = np.clip(median + 1.2 * mask, 0, 255).astype(np.uint8)
+print(f"\nStd before sharpen: {median.std():.2f}")
+print(f"Std after  sharpen: {sharpened.std():.2f}  (higher = more contrast)")
+
+# ── Otsu threshold ────────────────────────────────────────────
+hist, _ = np.histogram(sharpened.ravel(), 256, [0,256])
+p_h = hist / hist.sum()
+best_t, best_v = 0, 0.0
+for t in range(1, 256):
+    w0 = p_h[:t].sum(); w1 = 1-w0
+    if w0==0 or w1==0: continue
+    ix = np.arange(256)
+    mu0 = (ix[:t]*p_h[:t]).sum()/w0
+    mu1 = (ix[t:]*p_h[t:]).sum()/w1
+    bv  = w0*w1*(mu0-mu1)**2
+    if bv>best_v: best_v,best_t=bv,t
+
+binary = (sharpened >= best_t).astype(np.uint8) * 255
+print(f"\nOtsu T = {best_t}")
+print(f"Foreground pixels: {int((binary==255).sum())} / {binary.size}")
+</textarea>
+          </div>
+          <div class="playground-actions">
+            <button class="run-btn large" onclick="runPlayground()">▶ Run Code</button>
+            <button class="reset-btn" onclick="resetPlayground()">↺ Reset</button>
+            <span class="pg-note">Ctrl+Enter to run</span>
+          </div>
+          <div class="output-wrap" id="pg-output" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="pg-output-pre"></pre></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 7: QUIZ ─── -->
+      <section class="lesson-sec" id="sec-quiz">
+        <div class="sec-header">
+          <span class="sec-num">07</span>
+          <div><h2 class="sec-title">Quiz + Coding Challenge</h2><p class="sec-sub">Teori + praktik — selesaikan keduanya untuk lulus</p></div>
+        </div>
+
+        <div class="quiz-block-title">Part A · Multiple Choice</div>
+        <div id="quizContainer"></div>
+
+        <div class="quiz-block-title" style="margin-top:40px">Part B · Coding Challenge</div>
+        <div class="prose" style="margin-bottom:20px">3 soal coding — fix the bug, fill in blanks, dan full pipeline.</div>
+
+        <div class="challenge-card" id="cq-1">
+          <div class="challenge-header"><span class="challenge-badge quiz-badge"><i class="fas fa-pen-to-square"></i> Coding Quiz 1 · Fix the bug</span><span class="challenge-title">Gaussian kernel doesn't sum to 1 — brightness will shift</span></div>
+          <div class="challenge-desc">Kode ini membuat kernel 3×3 tapi lupa normalisasi. Tambahkan satu baris: bagi kernel dengan jumlah semua elemennya sehingga <code>kernel.sum() == 1.0</code>.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">buggy.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="cq-1-editor" spellcheck="false">import numpy as np
+
+# BUG: kernel is not normalized — fix it so kernel.sum() == 1.0
+kernel = np.array([[1, 2, 1],
+                   [2, 4, 2],
+                   [1, 2, 1]], dtype=np.float32)
+# Add one line here to normalize ↓
+
+patch  = np.full((3, 3), 100.0)  # flat patch, all pixels = 100
+result = float(np.sum(patch * kernel))
+
+print("Kernel sum:", round(float(kernel.sum()), 4))  # must be 1.0
+print("Output on flat patch:", round(result, 2))      # must be 100.0
+print("Correct:", abs(result - 100.0) < 0.01)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('cq-1-editor','cq-1-out','cq-1-check')">▶ Run &amp; Check</button>
+              <button class="reset-btn" onclick="resetCodingQuiz(1)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="output-wrap" id="cq-1-out" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="cq-1-out-pre"></pre></div>
+          <div class="check-result" id="cq-1-check" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Kernel sum: 1.0 &nbsp; Output on flat patch: 100.0 &nbsp; Correct: True</code></div>
+        </div>
+
+        <div class="challenge-card" id="cq-2">
+          <div class="challenge-header"><span class="challenge-badge quiz-badge"><i class="fas fa-pen-to-square"></i> Coding Quiz 2 · Fill in the blank</span><span class="challenge-title">Denoise with median, then sharpen with unsharp mask</span></div>
+          <div class="challenge-desc">Complete the two-stage pipeline: median filter to remove salt-and-pepper, then unsharp mask to recover sharpness.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="cq-2-editor" spellcheck="false">import numpy as np
+np.random.seed(5)
+
+img = np.random.randint(30, 220, (20, 20), dtype=np.uint8)
+
+# Add 10% salt-and-pepper noise
+noisy = img.copy().ravel().astype(float)
+n = int(len(noisy) * 0.1)
+noisy[np.random.choice(len(noisy), n, replace=False)] = 255
+noisy[np.random.choice(len(noisy), n, replace=False)] = 0
+noisy = noisy.reshape(20, 20).astype(np.uint8)
+print("Spikes in noisy:", int(np.sum((noisy==0)|(noisy==255))))
+
+# Stage 1: median filter (per-row 3-point sliding window)
+def median_rows(image, w=3):
+    p   = np.pad(image.astype(float), ((0,0),(w//2,w//2)), mode='edge')
+    out = np.array([[np.median(p[y, x:x+w])
+                     for x in range(image.shape[1])]
+                    for y in range(image.shape[0])])
+    return out.astype(np.uint8)
+
+denoised = median_rows(noisy)
+print("Spikes after median:", int(np.sum((denoised==0)|(denoised==255))))
+
+# Stage 2: unsharp mask
+def row_blur(img, k=3):
+    p = np.pad(img.astype(float), ((0,0),(k//2,k//2)), mode='edge')
+    return np.array([[p[y,x:x+k].mean()
+                      for x in range(img.shape[1])]
+                     for y in range(img.shape[0])])
+
+blurred   = row_blur(denoised)
+mask      = denoised.astype(float) - ___          # detail mask
+amount    = 1.2
+sharpened = np.clip(denoised.astype(float) + ___ * mask, 0, 255).astype(np.uint8)
+
+print("Std before sharpen:", round(float(denoised.std()), 2))
+print("Std after  sharpen:", round(float(sharpened.std()), 2))
+print("Sharpening worked:", sharpened.std() >= denoised.std() * 0.98)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('cq-2-editor','cq-2-out','cq-2-check')">▶ Run &amp; Check</button>
+              <button class="reset-btn" onclick="resetCodingQuiz(2)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="output-wrap" id="cq-2-out" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="cq-2-out-pre"></pre></div>
+          <div class="check-result" id="cq-2-check" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Spikes after median: 0 &nbsp; Sharpening worked: True</code></div>
+        </div>
+
+        <div class="challenge-card" id="cq-3">
+          <div class="challenge-header"><span class="challenge-badge quiz-badge"><i class="fas fa-pen-to-square"></i> Coding Quiz 3 · Full pipeline</span><span class="challenge-title">Noise → median → Otsu binarization</span></div>
+          <div class="challenge-desc">Complete the full pipeline: add noise, median denoise, then Otsu binarization. Verify the threshold lands between the two peaks and the foreground block is classified correctly.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="cq-3-editor" spellcheck="false">import numpy as np
+np.random.seed(7)
+
+img = np.random.randint(40, 80, (30, 30), dtype=np.uint8)
+img[10:20, 10:20] = np.random.randint(160, 200, (10,10), dtype=np.uint8)
+
+# Step 1: add 6% salt-and-pepper
+noisy = img.copy().ravel().astype(float)
+n = int(len(noisy) * 0.06)
+noisy[np.random.choice(len(noisy), n, replace=False)] = 255
+noisy[np.random.choice(len(noisy), n, replace=False)] = 0
+noisy = noisy.reshape(30,30).astype(np.uint8)
+
+# Step 2: 3×3 median denoise
+p = np.pad(noisy.astype(float), 1, mode='reflect')
+denoised = np.array([[np.median(p[y:y+3, x:x+3])
+                      for x in range(30)]
+                     for y in range(30)]).astype(np.uint8)
+print("Spikes after median:", int(np.sum((denoised==0)|(denoised==255))))
+
+# Step 3: Otsu threshold search
+hist, _ = np.histogram(denoised.ravel(), 256, [0,256])
+p_h = hist / hist.sum()
+best_t, best_v = 0, 0.0
+for t in range(1, 256):
+    w0 = p_h[:t].sum()
+    w1 = ___                              # fill: 1 - w0
+    if w0==0 or w1==0: continue
+    ix  = np.arange(256)
+    mu0 = (ix[:t]*p_h[:t]).sum()/w0
+    mu1 = ___                             # fill: (ix[t:]*p_h[t:]).sum()/w1
+    bv  = w0*w1*(mu0-mu1)**2
+    if bv>best_v: best_v,best_t=bv,t
+
+# Step 4: apply threshold
+binary = (denoised >= ___).astype(np.uint8) * 255   # fill: best_t
+
+dark_mean   = float(img[img < 120].mean())
+bright_mean = float(img[img >= 120].mean())
+print(f"Otsu T: {best_t}")
+print(f"T between peaks: {dark_mean < best_t < bright_mean}")
+fg_white = (binary[10:20, 10:20] == 255).mean()
+print(f"Foreground white: {fg_white:.0%}  (expect ≥90%)")</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('cq-3-editor','cq-3-out','cq-3-check')">▶ Run &amp; Check</button>
+              <button class="reset-btn" onclick="resetCodingQuiz(3)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="output-wrap" id="cq-3-out" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="cq-3-out-pre"></pre></div>
+          <div class="check-result" id="cq-3-check" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Spikes after median: 0 &nbsp; T between peaks: True &nbsp; Foreground white: ≥90%</code></div>
+        </div>
+
+        <div class="final-score-card" id="finalScore" style="display:none">
+          <div class="fs-title">Lesson Complete! <i class="fas fa-party-horn"></i></div>
+          <div class="fs-scores" id="fsScores"></div>
+          <div class="fs-msg" id="fsMsg"></div>
+        </div>
+        <div class="next-lesson-cta" id="nextLesson" style="display:none">
+          <div class="nlc-inner">
+            <span class="nlc-label">Next lesson</span>
+            <h3 class="nlc-title">Morphological Transforms →</h3>
+            <p class="nlc-desc">Erosion, dilation, opening, closing — structural operations that reshape binary masks.</p>
+            <a href="#" class="nlc-btn">Continue</a>
+          </div>
+        </div>
+      </section>
+
+</article>
+<footer class="lesson-nav-footer">
+<a href="#/participant-ai-lab-cv-cnn-relu" class="lnf-prev">
+<span class="lnf-label">Lesson sebelumnya</span>
+<span class="lnf-title">Aktivasi ReLU <i class="fas fa-arrow-left"></i></span>
+</a>
+<a href="#/participant-ai-lab-cv-cnn-morph" class="lnf-next">
+<span class="lnf-label">Lesson berikutnya</span>
+<span class="lnf-title">Morphological Transforms <i class="fas fa-arrow-right"></i></span>
+</a>
+</footer>
+</section>
+</div>
+<aside class="lesson-right-panel">
+<div class="lesson-progress-card">
+<div class="lpc-header"><i class="fas fa-chart-simple"></i> Progress CV</div>
+<div class="lpc-ring-wrap"><svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="30" stroke="var(--border)" stroke-width="5" fill="none"/><circle cx="36" cy="36" r="30" stroke="var(--fellow-pink)" stroke-width="5" fill="none" stroke-dasharray="188.5" stroke-dashoffset="131.9" stroke-linecap="round"/></svg><div class="lpc-ring-text"><strong>30%</strong></div></div>
+<div class="lpc-meta"><span><i class="far fa-circle-check"></i> 4/10 selesai</span><span><i class="fas fa-fire"></i> 0 streak</span></div>
+</div>
+<div class="lesson-list-card">
+<h4>CV Course</h4>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 1. Mengapa CNN?</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 2. Introduction to CNNs</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 3. Aktivasi ReLU</div>
+<div class="lesson-list-item active"><span class="lli-dot"></span> 4. Filtering & Kernels</div>
+<div class="lesson-list-item locked"><span class="lli-dot"></span> 5. Hands-on: CNN Pertama</div>
+<div class="lesson-list-item locked"><span class="lli-dot"></span> 6. Popular Architectures</div>
+</div>
+</aside>
+</div>
+</main>
+</section>

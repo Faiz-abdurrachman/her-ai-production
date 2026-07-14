@@ -1,0 +1,400 @@
+<section class="fellow-dashboard">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a class="active" href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+
+        <div class="fellow-menu-label">Lainnya</div>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+
+        <div class="invite-card">
+            <p><strong>Ajak Temanmu!</strong><br>Dapatkan poin tambahan untuk setiap teman yang bergabung.</p>
+            <button type="button">Undang Sekarang</button>
+        </div>
+    </aside>
+
+    <main class="fellow-main events-page">
+        <header class="fellow-topbar">
+            <div>
+                <h1 data-fellow-greeting>Events</h1>
+                <p>Ikuti berbagai acara seru untuk menambah wawasan, relasi, dan pengalamanmu.</p>
+            </div>
+            <div class="fellow-actions">
+                <label class="fellow-search events-search">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="search" placeholder="Cari event, topik, atau pembicara...">
+                </label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
+                    <i class="far fa-bell"></i>
+                    <span class="badge">5</span>
+                </button>
+                <div class="fellow-user-menu">
+                    <button type="button" class="fellow-user-button" data-fellow-user-toggle aria-expanded="false">
+                        <img src="/assets/avatars/user-1.jpg" alt="Aisyah Putri" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
+                        <span><strong>Aisyah Putri</strong><small>Fellow</small></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="events-layout">
+            <div class="events-main-column">
+                <div class="events-tabs-container">
+                    <div class="events-tabs">
+                        <button class="active">Semua Events</button>
+                        <button>Webinar</button>
+                        <button>Workshop</button>
+                        <button>Mentor Session</button>
+                        <button>Komunitas</button>
+                        <button>Lomba</button>
+                        <button>Career</button>
+                    </div>
+                </div>
+
+                <div class="events-filters">
+                    <div class="custom-select">
+                        <select aria-label="Filter kategori">
+                            <option>Semua Kategori</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="events-filter-input">
+                        <i class="far fa-calendar"></i>
+                        <input type="text" placeholder="Tanggal" readonly>
+                    </div>
+                    <div class="custom-select">
+                        <select aria-label="Filter format">
+                            <option>Format</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-select">
+                        <select aria-label="Filter tipe">
+                            <option>Online & Offline</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-select" style="margin-left: auto;">
+                        <select aria-label="Urutkan berdasar">
+                            <option>Terbaru</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <div class="events-section-header">
+                    <h2>Event Mendatang <span class="badge-count">5</span></h2>
+                    <a href="#" class="events-link-all">Lihat Semua <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="events-list">
+                    <!-- Event 1 -->
+                    <article class="event-card">
+                        <div class="event-thumb pink-gradient">
+                            <i class="fas fa-robot"></i>
+                            <span class="live-badge">LIVE SESSION</span>
+                        </div>
+                        <div class="event-content">
+                            <span class="event-badge pink">Webinar</span>
+                            <h3>Build RAG Chatbot with LangChain</h3>
+                            <p>Pelajari cara membangun chatbot cerdas dengan Retrieval Augmented Generation menggunakan LangChain.</p>
+                            <div class="event-host">
+                                <img src="https://ui-avatars.com/api/?name=Dewi+Lestari&background=fce7f3&color=be185d" alt="Dewi Lestari">
+                                <div>
+                                    <strong>Dewi Lestari</strong>
+                                    <span>AI Engineer at TechNova</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-actions-col">
+                            <div class="event-date-block pink-text">
+                                <strong>22</strong>
+                                <span>MEI</span>
+                            </div>
+                            <div class="event-time-loc">
+                                <span>10.00 - 12.00 WIB</span>
+                                <span>Online</span>
+                            </div>
+                            <div class="event-buttons">
+                                <div class="event-registered">
+                                    <button class="btn-outline pink">Daftar</button>
+                                    <span class="registered-count"><strong>120</strong> peserta terdaftar</span>
+                                </div>
+                                <button class="btn-bookmark" aria-label="Simpan event"><i class="far fa-bookmark"></i></button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Event 2 -->
+                    <article class="event-card">
+                        <div class="event-thumb purple-gradient">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="event-content">
+                            <span class="event-badge purple">Workshop</span>
+                            <h3>Data Visualization with Python</h3>
+                            <p>Buat visualisasi data yang informatif dan menarik menggunakan Matplotlib, Seaborn, dan Plotly.</p>
+                            <div class="event-host">
+                                <img src="https://ui-avatars.com/api/?name=Rizka+Amelia&background=f3e8ff&color=7e22ce" alt="Rizka Amelia">
+                                <div>
+                                    <strong>Rizka Amelia</strong>
+                                    <span>Data Scientist</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-actions-col">
+                            <div class="event-date-block purple-text">
+                                <strong>25</strong>
+                                <span>MEI</span>
+                            </div>
+                            <div class="event-time-loc">
+                                <span>13.00 - 16.00 WIB</span>
+                                <span>Online</span>
+                            </div>
+                            <div class="event-buttons">
+                                <div class="event-registered">
+                                    <button class="btn-outline pink">Daftar</button>
+                                    <span class="registered-count"><strong>86</strong> peserta terdaftar</span>
+                                </div>
+                                <button class="btn-bookmark" aria-label="Simpan event"><i class="far fa-bookmark"></i></button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Event 3 -->
+                    <article class="event-card">
+                        <div class="event-thumb orange-gradient">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="event-content">
+                            <span class="event-badge orange">Mentor Session</span>
+                            <h3>Career in AI: Ask Me Anything</h3>
+                            <p>Sesi tanya jawab bersama mentor berpengalaman seputar karier di bidang AI/ML.</p>
+                            <div class="event-host">
+                                <img src="https://ui-avatars.com/api/?name=Mentor+Rani&background=ffedd5&color=c2410c" alt="Mentor Rani">
+                                <div>
+                                    <strong>Mentor Rani</strong>
+                                    <span>ML Lead at Inovasi AI</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-actions-col">
+                            <div class="event-date-block orange-text">
+                                <strong>30</strong>
+                                <span>MEI</span>
+                            </div>
+                            <div class="event-time-loc">
+                                <span>19.00 - 20.30 WIB</span>
+                                <span>Online</span>
+                            </div>
+                            <div class="event-buttons">
+                                <div class="event-registered">
+                                    <button class="btn-outline pink">Daftar</button>
+                                    <span class="registered-count"><strong>64</strong> peserta terdaftar</span>
+                                </div>
+                                <button class="btn-bookmark" aria-label="Simpan event"><i class="far fa-bookmark"></i></button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Event 4 -->
+                    <article class="event-card">
+                        <div class="event-thumb green-gradient">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="event-content">
+                            <span class="event-badge green">Lomba</span>
+                            <h3>AI Project Challenge 2024</h3>
+                            <p>Tunjukkan ide dan kreasimu! Kompetisi proyek AI untuk semua Fellow HerAI.</p>
+                        </div>
+                        <div class="event-actions-col">
+                            <div class="event-date-block green-text">
+                                <strong>5</strong>
+                                <span>JUN</span>
+                            </div>
+                            <div class="event-time-loc">
+                                <span>23.59 WIB</span>
+                                <span>Deadline Pengumpulan</span>
+                            </div>
+                            <div class="event-buttons">
+                                <div class="event-registered">
+                                    <button class="btn-outline pink">Ikut Lomba</button>
+                                    <span class="registered-count"><strong>35</strong> tim terdaftar</span>
+                                </div>
+                                <button class="btn-bookmark" aria-label="Simpan event"><i class="far fa-bookmark"></i></button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Event 5 -->
+                    <article class="event-card">
+                        <div class="event-thumb blue-gradient">
+                            <i class="fas fa-people-group"></i>
+                        </div>
+                        <div class="event-content">
+                            <span class="event-badge blue">Komunitas</span>
+                            <h3>Data Talk: Sharing & Networking</h3>
+                            <p>Diskusi santai seputar tren data dan AI sambil memperluas jaringan.</p>
+                        </div>
+                        <div class="event-actions-col">
+                            <div class="event-date-block blue-text">
+                                <strong>8</strong>
+                                <span>JUN</span>
+                            </div>
+                            <div class="event-time-loc">
+                                <span>15.00 - 17.00 WIB</span>
+                                <span>Offline - Jakarta</span>
+                            </div>
+                            <div class="event-buttons">
+                                <div class="event-registered">
+                                    <button class="btn-outline pink">Daftar</button>
+                                    <span class="registered-count"><strong>45</strong> peserta terdaftar</span>
+                                </div>
+                                <button class="btn-bookmark" aria-label="Simpan event"><i class="far fa-bookmark"></i></button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- RIGHT WIDGET COLUMN -->
+            <aside class="events-widgets">
+                <!-- Kalender -->
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Kalender Events</h3>
+                        <a href="#">Lihat Kalender</a>
+                    </div>
+                    <div class="calendar-nav">
+                        <button type="button"><i class="fas fa-chevron-left"></i></button>
+                        <span>Mei 2024</span>
+                        <button type="button"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="cal-day-name">Min</div>
+                        <div class="cal-day-name">Sen</div>
+                        <div class="cal-day-name">Sel</div>
+                        <div class="cal-day-name">Rab</div>
+                        <div class="cal-day-name">Kam</div>
+                        <div class="cal-day-name">Jum</div>
+                        <div class="cal-day-name">Sab</div>
+
+                        <div class="cal-day prev-month">28</div>
+                        <div class="cal-day prev-month">29</div>
+                        <div class="cal-day prev-month">30</div>
+                        <div class="cal-day">1</div>
+                        <div class="cal-day">2</div>
+                        <div class="cal-day">3</div>
+                        <div class="cal-day">4</div>
+
+                        <div class="cal-day">5</div>
+                        <div class="cal-day">6</div>
+                        <div class="cal-day">7</div>
+                        <div class="cal-day">8</div>
+                        <div class="cal-day">9</div>
+                        <div class="cal-day">10</div>
+                        <div class="cal-day">11</div>
+
+                        <div class="cal-day">12</div>
+                        <div class="cal-day">13</div>
+                        <div class="cal-day">14</div>
+                        <div class="cal-day">15</div>
+                        <div class="cal-day">16</div>
+                        <div class="cal-day">17</div>
+                        <div class="cal-day">18</div>
+
+                        <div class="cal-day">19</div>
+                        <div class="cal-day">20</div>
+                        <div class="cal-day">21</div>
+                        <div class="cal-day has-event event-pink">22</div>
+                        <div class="cal-day">23</div>
+                        <div class="cal-day">24</div>
+                        <div class="cal-day has-event event-purple">25</div>
+
+                        <div class="cal-day">26</div>
+                        <div class="cal-day">27</div>
+                        <div class="cal-day">28</div>
+                        <div class="cal-day">29</div>
+                        <div class="cal-day has-event event-orange">30</div>
+                        <div class="cal-day">31</div>
+                        <div class="cal-day next-month">1</div>
+                    </div>
+                </div>
+
+                <!-- Events Terdaftar -->
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Event yang Kamu Ikuti</h3>
+                        <a href="#">Lihat Semua</a>
+                    </div>
+                    <div class="registered-list">
+                        <div class="reg-item">
+                            <div class="reg-icon pink-light"><i class="fas fa-robot"></i></div>
+                            <div class="reg-info">
+                                <strong>Build RAG Chatbot with LangChain</strong>
+                                <span>22 Mei 2024, 10.00 WIB</span>
+                            </div>
+                            <span class="reg-badge">Terdaftar</span>
+                        </div>
+                        <div class="reg-item">
+                            <div class="reg-icon purple-light"><i class="fas fa-code"></i></div>
+                            <div class="reg-info">
+                                <strong>Data Visualization with Python</strong>
+                                <span>25 Mei 2024, 13.00 WIB</span>
+                            </div>
+                            <span class="reg-badge">Terdaftar</span>
+                        </div>
+                        <div class="reg-item">
+                            <div class="reg-icon orange-light"><i class="fas fa-users"></i></div>
+                            <div class="reg-info">
+                                <strong>Career in AI: Ask Me Anything</strong>
+                                <span>30 Mei 2024, 19.00 WIB</span>
+                            </div>
+                            <span class="reg-badge">Terdaftar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promo Event -->
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Jangan Lewatkan!</h3>
+                        <a href="#">Lihat Semua</a>
+                    </div>
+                    <div class="promo-event-card">
+                        <div class="promo-event-thumb">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="promo-event-info">
+                            <h4>AI for Social Good Hackathon</h4>
+                            <p>Buat solusi AI untuk masalah sosial dan menangkan total hadiah jutaan rupiah!</p>
+                            <span>15 - 16 Juni 2024</span>
+                            <button class="btn-primary-pink">Lihat Detail</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+</section>

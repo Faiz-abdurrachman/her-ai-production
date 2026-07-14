@@ -1,0 +1,387 @@
+<section class="fellow-dashboard fellow-modules-page ai-lab-overview" data-fellow-page="modules">
+<button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+<div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+<aside class="fellow-sidebar" aria-label="Navigasi peserta">
+<a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
+<nav class="fellow-menu">
+<a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+<a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+<a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+<a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+<a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+<a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+<a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+<a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+</nav>
+<nav class="fellow-menu secondary">
+<a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+<a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+<a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+<a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+</nav>
+</aside>
+
+<main class="fellow-main">
+<header class="lesson-topbar">
+<nav class="lesson-breadcrumb" aria-label="Breadcrumb">
+<a href="#/participant-modules"><i class="fas fa-arrow-left"></i><span>Modul</span></a>
+<span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+<span>NLP</span>
+</nav>
+<div class="fellow-actions">
+<label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul..."></label>
+<button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+<a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+</div>
+</header>
+
+<div class="ai-overview-progress" id="nlpProgressBar"><b id="nlpProgressFill"></b></div>
+
+<section class="lesson-hero">
+<div class="lesson-hero-copy">
+<h1>Natural Language Processing</h1>
+<p>Kurikulum lengkap untuk membangun kecerdasan bahasa — dari teks mentah ke makna.</p>
+<div class="lesson-meta-row">
+<span><i class="far fa-clock"></i> 6 Modul</span>
+<span><i class="fas fa-layer-group"></i> 38+ Topik</span>
+<b><i class="fas fa-flask"></i> AI Lab · Marchel Andrian Shevchenko</b>
+</div>
+</div>
+<img src="/assets/messaging/herai-chat-persona.png" alt="HerAI NLP learning">
+</section>
+
+<div class="ai-overview-layout">
+<div class="ai-overview-content" id="nlpContent">
+
+<section class="ai-module" id="m1" data-color="#f63392">
+<div class="ai-module-head">
+<span class="ai-module-num">01</span>
+<div><span class="ai-module-tag">Foundation</span><h2>Text Fundamentals</h2><p>Sebelum menyentuh model apapun, pahami dulu apa itu teks — dan tantangan yang dihadapi mesin saat membacanya.</p></div>
+</div>
+<div class="ai-topic-list">
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-scissors"></i></div>
+<div class="ai-topic-body">
+<h3><a href="#/participant-ai-lab-tokenization">Tokenization</a></h3>
+<p>Langkah pertama setiap pipeline NLP. Memotong dokumen jadi unit kecil (token) — mencakup word-level, subword (BPE, WordPiece, SentencePiece), dan character-level strategies.</p>
+<div class="ai-topic-tags"><span>BPE</span><span>WordPiece</span><span>SentencePiece</span><span>NLTK</span><span>spaCy</span></div>
+<div class="topic-code">
+<pre><code><span class="c-kw">from</span> transformers <span class="c-kw">import</span> AutoTokenizer
+tok = AutoTokenizer.<span class="c-fn">from_pretrained</span>(
+  <span class="c-str">"bert-base-uncased"</span>)
+ids = tok.<span class="c-fn">encode</span>(
+  <span class="c-str">"Hello, world!"</span>, add_special_tokens=<span class="c-kw">True</span>)
+<span class="c-cmt"># [101, 7592, 1010, 2088, 999, 102]</span></code></pre>
+</div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-filter-circle-xmark"></i></div>
+<div class="ai-topic-body">
+<h3><a href="#/participant-ai-lab-preprocessing">Basic Preprocessing</a></h3>
+<p>Case-folding mengecilkan ukuran vocab. Stop word removal menghilangkan noise frekuensi tinggi. Stemming memotong sufiks. Lemmatization menggunakan vocabulary dan morfologi — lebih lambat tapi lebih akurat.</p>
+<div class="ai-topic-tags"><span>Case-folding</span><span>Stop Words</span><span>Stemming</span><span>Lemmatization</span><span>NLTK</span></div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-tag"></i></div>
+<div class="ai-topic-body">
+<h3><a href="#/participant-ai-lab-pos-ner">POS &amp; NER</a></h3>
+<p>POS tagging menandai peran gramatikal token. Named Entity Recognition (NER) mengekstrak orang, tempat, organisasi. Dependency parsing memetakan hubungan sintaksis.</p>
+<div class="ai-topic-tags"><span>POS Tagging</span><span>NER</span><span>Dependency Parse</span><span>spaCy</span></div>
+<div class="topic-code">
+<pre><code><span class="c-kw">import</span> spacy
+nlp = spacy.<span class="c-fn">load</span>(<span class="c-str">"en_core_web_sm"</span>)
+doc = <span class="c-fn">nlp</span>(<span class="c-str">"Apple is in Cupertino."</span>)
+<span class="c-kw">for</span> ent <span class="c-kw">in</span> doc.ents:
+  <span class="c-fn">print</span>(ent.text, ent.label_)
+<span class="c-cmt"># Apple ORG   Cupertino GPE</span></code></pre>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="ai-module" id="m2" data-color="#22c55e">
+<div class="ai-module-head">
+<span class="ai-module-num">02</span>
+<div><span class="ai-module-tag">Core</span><h2>Text Representations</h2><p>Mengubah token menjadi representasi numerik — langkah kritis sebelum pemodelan.</p></div>
+</div>
+<div class="ai-topic-list">
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-cube"></i></div>
+<div class="ai-topic-body">
+<h3><a href="#/participant-ai-lab-bow">Bag-of-Words (BoW)</a></h3>
+<p>Representasi paling sederhana: hitung frekuensi kata per dokumen. Kehilangan urutan kata, tapi cepat dan efektif untuk text classification dasar.</p>
+<div class="ai-topic-tags"><span>Vectorization</span><span>CountVectorizer</span><span>Cosine Similarity</span></div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-chart-simple"></i></div>
+<div class="ai-topic-body">
+<h3><a href="#/participant-ai-lab-tfidf">TF-IDF</a></h3>
+<p>Memberikan bobot pada kata — kata yang sering muncul di seluruh dokumen dianggap kurang penting, kata yang spesifik per dokumen lebih berbobot.</p>
+<div class="ai-topic-tags"><span>Term Frequency</span><span>IDF</span><span>Vector Space Model</span></div>
+<div class="topic-code">
+<pre><code><span class="c-kw">from</span> sklearn.feature_extraction.text <span class="c-kw">import</span> TfidfVectorizer
+<span class="c-kw">from</span> sklearn.metrics.pairwise <span class="c-kw">import</span> cosine_similarity
+
+vec  = <span class="c-fn">TfidfVectorizer</span>()
+X    = vec.<span class="c-fn">fit_transform</span>(corpus)
+sims = <span class="c-fn">cosine_similarity</span>(query_vec, X)</code></pre>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="ai-module" id="m3" data-color="#f59e0b">
+<div class="ai-module-head">
+<span class="ai-module-num">03</span>
+<div><span class="ai-module-tag">Classical</span><h2>Classical NLP Models</h2><p>Naive Bayes, Logistic Regression, SVM — pendekatan klasik yang masih relevan untuk baseline dan production.</p></div>
+</div>
+
+<div class="compare-grid">
+  <div class="compare-card">
+    <div class="ccard-title">Precision</div>
+    <div class="ccard-desc">Dari prediksi positif, berapa yang benar?</div>
+    <ul class="ccard-list">
+      <li>TP / (TP + FP)</li>
+      <li>Mencegah salah duga</li>
+      <li>Gunakan jika FP mahal</li>
+    </ul>
+    <span class="ccard-badge">Spam filter</span>
+  </div>
+  <div class="compare-vs">VS</div>
+  <div class="compare-card">
+    <div class="ccard-title">Recall</div>
+    <div class="ccard-desc">Dari seluruh kasus asli, berapa yang ditangkap?</div>
+    <ul class="ccard-list">
+      <li>TP / (TP + FN)</li>
+      <li>Mencegah kasus terlewat</li>
+      <li>Gunakan jika FN mahal</li>
+    </ul>
+    <span class="ccard-badge real">Medical NLP</span>
+  </div>
+</div>
+
+<div class="ai-topic-list">
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-calculator"></i></div>
+<div class="ai-topic-body">
+<h3>Naive Bayes untuk Teks</h3>
+<p>Asumsi independence antar fitur. Cepat, interpretable, dan sangat efektif untuk spam detection dan sentiment analysis dengan data kecil.</p>
+<div class="topic-code">
+<pre><code><span class="c-kw">from</span> sklearn.naive_bayes <span class="c-kw">import</span> MultinomialNB
+<span class="c-kw">from</span> sklearn.pipeline <span class="c-kw">import</span> make_pipeline
+
+clf = <span class="c-fn">make_pipeline</span>(
+  <span class="c-fn">TfidfVectorizer</span>(),
+  <span class="c-fn">MultinomialNB</span>(alpha=<span class="c-num">1.0</span>))
+clf.<span class="c-fn">fit</span>(X_train, y_train)</code></pre>
+</div>
+</div>
+</div>
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-chart-line"></i></div>
+<div class="ai-topic-body"><h3>Logistic Regression &amp; SVM</h3><p>Model linear dengan regularisasi L1/L2. SVM dengan kernel trick untuk decision boundary non-linear. Fondasi untuk memahami model yang lebih kompleks.</p></div>
+</div>
+</div>
+</section>
+
+<section class="ai-module" id="m4" data-color="#38bdf8">
+<div class="ai-module-head">
+<span class="ai-module-num">04</span>
+<div><span class="ai-module-tag">Deep</span><h2>Deep Learning for NLP</h2><p>Word embeddings, dense representations, dan arsitektur neural pertama untuk teks.</p></div>
+</div>
+
+<div class="arch-timeline">
+  <div class="arch-node">
+    <div class="arch-year">Classic</div>
+    <div class="arch-name">BoW / TF-IDF</div>
+    <div class="arch-note">Sparse vectors</div>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-node">
+    <div class="arch-year">2013</div>
+    <div class="arch-name">Word2Vec</div>
+    <div class="arch-note">Dense embeddings</div>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-node">
+    <div class="arch-year">2014-17</div>
+    <div class="arch-name">LSTM / GRU</div>
+    <div class="arch-note">Sequential memory</div>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-node">
+    <div class="arch-year">2017</div>
+    <div class="arch-name">Attention</div>
+    <div class="arch-note">Seq2Seq boost</div>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-node">
+    <div class="arch-year">2017+</div>
+    <div class="arch-name">Transformer</div>
+    <div class="arch-note">Attention only</div>
+  </div>
+</div>
+
+<div class="ai-topic-list">
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-hashtag"></i></div>
+<div class="ai-topic-body"><h3>Word Embeddings</h3><p>Word2Vec, GloVe, FastText — mengubah kata menjadi vektor dense yang menangkap hubungan semantik. king - man + woman ≈ queen.</p></div>
+</div>
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-brain"></i></div>
+<div class="ai-topic-body">
+<h3>Feed-Forward + CNN untuk Teks</h3>
+<p>Arsitektur neural sederhana untuk text classification. CNN 1D untuk menangkap n-gram patterns tanpa rekurensi.</p>
+<div class="topic-code">
+<pre><code><span class="c-kw">import</span> torch
+<span class="c-kw">from</span> torch <span class="c-kw">import</span> nn
+
+optimizer = torch.optim.<span class="c-fn">AdamW</span>(
+  model.<span class="c-fn">parameters</span>(),
+  lr=<span class="c-num">2e-5</span>, weight_decay=<span class="c-num">0.01</span>)
+scheduler = <span class="c-fn">get_linear_schedule_with_warmup</span>(
+  optimizer, num_warmup_steps=<span class="c-num">100</span>,
+  num_training_steps=total_steps)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="ai-module" id="m5" data-color="#a855f7">
+<div class="ai-module-head">
+<span class="ai-module-num">05</span>
+<div><span class="ai-module-tag">Sequential</span><h2>Sequential Models</h2><p>RNN, LSTM, GRU — arsitektur yang didesain untuk memahami urutan dan konteks temporal dalam teks.</p></div>
+</div>
+<div class="ai-topic-list">
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-rotate"></i></div>
+<div class="ai-topic-body">
+<h3>RNN &amp; LSTM</h3>
+<p>Recurrent Neural Networks memproses teks secara sekuensial. LSTM menambahkan forget gate untuk mengatasi vanishing gradient dan menangkap long-term dependencies.</p>
+<div class="topic-code">
+<pre><code><span class="c-kw">class</span> <span class="c-fn">LSTMClassifier</span>(nn.Module):
+  <span class="c-kw">def</span> <span class="c-fn">__init__</span>(<span class="c-kw">self</span>, vocab, emb, hid):
+    <span class="c-fn">super</span>().<span class="c-fn">__init__</span>()
+    <span class="c-kw">self</span>.emb  = nn.<span class="c-fn">Embedding</span>(vocab, emb)
+    <span class="c-kw">self</span>.lstm = nn.<span class="c-fn">LSTM</span>(emb, hid,
+                         batch_first=<span class="c-kw">True</span>)
+    <span class="c-kw">self</span>.fc   = nn.<span class="c-fn">Linear</span>(hid, <span class="c-num">2</span>)</code></pre>
+</div>
+</div>
+</div>
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-bolt"></i></div>
+<div class="ai-topic-body"><h3>Encoder-Decoder + Attention</h3><p>Arsitektur sequence-to-sequence dengan attention mechanism — dasar dari terjemahan mesin modern sebelum era Transformer.</p></div>
+</div>
+</div>
+</section>
+
+<section class="ai-module" id="m6" data-color="#f63392">
+<div class="ai-module-head">
+<span class="ai-module-num">06</span>
+<div><span class="ai-module-tag">Modern</span><h2>Transformers &amp; Modern NLP</h2><p>Self-attention, BERT, GPT, fine-tuning, RAG, dan evaluasi model bahasa modern.</p></div>
+</div>
+
+<div class="deploy-pipeline">
+  <div class="dp-step">
+    <span class="dp-icon"><i class="fas fa-file-lines"></i></span>
+    <span class="dp-label">Documents</span>
+  </div>
+  <div class="dp-arrow">→</div>
+  <div class="dp-step">
+    <span class="dp-icon"><i class="fas fa-scissors"></i></span>
+    <span class="dp-label">Chunk</span>
+  </div>
+  <div class="dp-arrow">→</div>
+  <div class="dp-step">
+    <span class="dp-icon"><i class="fas fa-hashtag"></i></span>
+    <span class="dp-label">Embed</span>
+  </div>
+  <div class="dp-arrow">→</div>
+  <div class="dp-step">
+    <span class="dp-icon"><i class="fas fa-magnifying-glass"></i></span>
+    <span class="dp-label">Retrieve</span>
+  </div>
+  <div class="dp-arrow">→</div>
+  <div class="dp-step">
+    <span class="dp-icon"><i class="fas fa-wand-magic-sparkles"></i></span>
+    <span class="dp-label">Generate</span>
+  </div>
+</div>
+
+
+<div class="ai-topic-list">
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-bullseye"></i></div>
+<div class="ai-topic-body">
+<h3>Self-Attention &amp; Multi-Head Attention</h3>
+<p>Mekanisme inti Transformer. Setiap token "melihat" semua token lain dalam sekuens. Scaled dot-product attention.</p>
+<div class="topic-code">
+<pre><code><span class="c-kw">from</span> transformers <span class="c-kw">import</span> AutoModelForQA
+<span class="c-kw">import</span> torch
+
+model = AutoModelForQA.<span class="c-fn">from_pretrained</span>(
+  <span class="c-str">"deepset/roberta-base-squad2"</span>)
+outputs = <span class="c-fn">model</span>(input_ids=ids,
+               attention_mask=mask)
+start = outputs.start_logits.<span class="c-fn">argmax</span>()</code></pre>
+</div>
+</div>
+</div>
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-robot"></i></div>
+<div class="ai-topic-body"><h3>BERT &amp; Fine-tuning</h3><p>Pre-training + fine-tuning paradigm. Masked Language Modeling. Transfer learning untuk downstream tasks — klasifikasi, QA, NER.</p></div>
+</div>
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-rocket"></i></div>
+<div class="ai-topic-body">
+<h3>RAG &amp; Modern Applications</h3>
+<p>Retrieval-Augmented Generation — menggabungkan LLM dengan knowledge base eksternal. Prompt engineering, chain-of-thought, dan evaluasi output.</p>
+<div class="topic-code">
+<pre><code><span class="c-kw">from</span> langchain.vectorstores <span class="c-kw">import</span> Chroma
+<span class="c-kw">from</span> langchain.embeddings <span class="c-kw">import</span> OpenAIEmbeddings
+
+db  = Chroma.<span class="c-fn">from_documents</span>(
+       docs, <span class="c-fn">OpenAIEmbeddings</span>())
+ret = db.<span class="c-fn">as_retriever</span>(search_k=<span class="c-num">4</span>)
+chain = <span class="c-fn">RetrievalQA</span>.<span class="c-fn">from_chain_type</span>(
+          llm, retriever=ret)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</div>
+
+<aside class="ai-overview-toc" id="nlpToc">
+<p class="ai-toc-label">Isi Materi</p>
+<ul class="ai-toc-list">
+<li><a href="#m1" class="ai-toc-link active" data-module="m1"><span class="ai-toc-num">01</span>Text Fundamentals</a></li>
+<li><a href="#m2" class="ai-toc-link" data-module="m2"><span class="ai-toc-num">02</span>Text Representations</a></li>
+<li><a href="#m3" class="ai-toc-link" data-module="m3"><span class="ai-toc-num">03</span>Classical NLP Models</a></li>
+<li><a href="#m4" class="ai-toc-link" data-module="m4"><span class="ai-toc-num">04</span>Deep Learning for NLP</a></li>
+<li><a href="#m5" class="ai-toc-link" data-module="m5"><span class="ai-toc-num">05</span>Sequential Models</a></li>
+<li><a href="#m6" class="ai-toc-link" data-module="m6"><span class="ai-toc-num">06</span>Transformers &amp; Modern NLP</a></li>
+</ul>
+<div class="ai-toc-progress">
+<span>Progress</span><span id="tocProgressPct">0%</span>
+<b><i id="tocProgressFill"></i></b>
+</div>
+</aside>
+</div>
+</main>
+</section>

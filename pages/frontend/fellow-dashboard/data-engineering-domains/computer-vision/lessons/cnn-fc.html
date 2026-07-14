@@ -1,0 +1,508 @@
+<section class="fellow-dashboard fellow-modules-page lesson-detail-page" data-fellow-page="modules">
+<button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+<div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+<aside class="fellow-sidebar" aria-label="Navigasi peserta">
+<a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
+<nav class="fellow-menu">
+<a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+<a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+<a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+<a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+<a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+<a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+<a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+<a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+</nav>
+<nav class="fellow-menu secondary">
+<a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+<a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+<a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ &amp; Bantuan</span></a>
+<a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+</nav>
+<div class="invite-card course-help-mini">
+<div><strong>Butuh bantuan?</strong><p>Tanya HerAI Assistant tentang modul dan pembelajaran.</p></div>
+<button type="button">Chat Sekarang</button>
+</div>
+</aside>
+<main class="fellow-main">
+<header class="lesson-topbar">
+<nav class="lesson-breadcrumb" aria-label="Breadcrumb materi">
+<a href="#/participant-ai-lab-cv"><i class="fas fa-arrow-left"></i><span>Computer Vision</span></a>
+<span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+<span>FC Layer &amp; Softmax</span>
+</nav>
+<div class="fellow-actions">
+<label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul, topik, atau materi..."></label>
+<button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+<a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+</div>
+</header>
+<div class="lesson-layout">
+<div class="lesson-main-content">
+<section class="lesson-hero">
+<div class="lesson-hero-copy">
+<h1>FC Layer &amp; Softmax</h1>
+<p>Dari feature map ke probabilitas kelas — bagaimana CNN mengubah fitur visual menjadi keputusan klasifikasi.</p>
+<div class="lesson-meta-row">
+<span><i class="far fa-clock"></i> 35 menit</span>
+<span><i class="fas fa-layer-group"></i> CV &middot; Introduction to CNNs</span>
+<b>Intermediate</b>
+</div>
+</div>
+<img src="/assets/messaging/herai-chat-persona.png" alt="HerAI CV learning">
+</section>
+<section class="lesson-material-panel">
+<div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
+<a href="#/participant-ai-lab-cv-cnn-fc" class="active"><i class="fas fa-book-open"></i> Materi</a>
+<a href="#/participant-ai-lab-cv"><i class="fas fa-layer-group"></i> Katalog CV</a>
+</div>
+<article class="lesson-article ai-lab-content" id="cnn-fc-content">
+
+      <!-- ═══ SEC 1: PERAN FC LAYER ═══ -->
+      <section class="lesson-sec" id="sec-peran">
+        <div class="sec-header">
+          <span class="sec-num">01</span>
+          <div>
+            <h2 class="sec-title">Peran Fully Connected Layer</h2>
+            <p class="sec-sub">Dari feature map ke keputusan klasifikasi — langkah terakhir CNN</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          Setelah beberapa layer Conv+ReLU+Pooling, CNN menghasilkan feature map berisi representasi abstrak
+          dari gambar. <strong>Fully Connected (FC) layer</strong> bertugas menggabungkan semua representasi
+          tersebut dan membuat keputusan final: gambar ini adalah kucing, anjing, atau pesawat?
+        </div>
+
+        <div class="problem-overview">
+          <div class="prob-card">
+            <div class="prob-icon"><i class="fas fa-map"></i></div>
+            <div class="prob-num">Input</div>
+            <div class="prob-title">Feature Maps</div>
+            <div class="prob-desc">Tensor 3D — misal 7×7×512 setelah beberapa Conv+Pool. Menyimpan "di mana" dan "apa" fitur terdeteksi.</div>
+          </div>
+          <div class="prob-arrow">→</div>
+          <div class="prob-card">
+            <div class="prob-icon"><i class="fas fa-chart-simple"></i></div>
+            <div class="prob-num">Output</div>
+            <div class="prob-title">Skor Kelas</div>
+            <div class="prob-desc">Vektor 1D dengan panjang = jumlah kelas. Misal 1000 angka untuk ImageNet. Softmax ubah menjadi probabilitas.</div>
+          </div>
+        </div>
+
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-ruler-combined"></i> Kalkulasi FC Layer</div>
+          <div class="wb-title">Dimensi output VGG-16 sebelum FC</div>
+          <div class="calc-chain">
+            <div class="calc-step">
+              <div class="cs-num-circle">1</div>
+              <div class="cs-content">
+                <div class="cs-label">Input gambar dan setelah Conv+Pool bertingkat</div>
+                <div class="math-line">
+                  Input: <span class="math-term blue">224×224×3</span>
+                  <span class="math-op">→</span>
+                  setelah 5 MaxPool(2×2):
+                  <span class="math-result">7×7×512</span>
+                </div>
+              </div>
+            </div>
+            <div class="calc-step">
+              <div class="cs-num-circle">2</div>
+              <div class="cs-content">
+                <div class="cs-label">Flatten ke vektor 1D</div>
+                <div class="math-line">
+                  <span class="math-term blue">7</span> <span class="math-op">×</span>
+                  <span class="math-term blue">7</span> <span class="math-op">×</span>
+                  <span class="math-term blue">512</span>
+                  <span class="math-op">=</span>
+                  <span class="math-result">25,088 neuron</span>
+                </div>
+              </div>
+            </div>
+            <div class="calc-step">
+              <div class="cs-num-circle">3</div>
+              <div class="cs-content">
+                <div class="cs-label">FC Layer 1: 25,088 → 4,096 neuron</div>
+                <div class="math-line">
+                  params = <span class="math-term blue">25,088</span> <span class="math-op">×</span>
+                  <span class="math-term purple">4,096</span> + <span class="math-term purple">4,096</span>
+                  <span class="math-op">=</span>
+                  <span class="math-result red">102,764,544</span>
+                  <span class="math-comment"> ← 78% total params VGG!</span>
+                </div>
+              </div>
+            </div>
+            <div class="calc-step">
+              <div class="cs-num-circle">4</div>
+              <div class="cs-content">
+                <div class="cs-label">FC Layer 2: 4,096 → 4,096, lalu → 1,000 (output)</div>
+                <div class="math-line">
+                  Total FC params ≈ <span class="math-result red">119 juta</span>
+                  <span class="math-comment"> dari total 138 juta VGG-16</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ SEC 2: GLOBAL POOLING VS FLATTEN ═══ -->
+      <section class="lesson-sec" id="sec-flatten">
+        <div class="sec-header">
+          <span class="sec-num">02</span>
+          <div>
+            <h2 class="sec-title">Global Pooling vs Flatten</h2>
+            <p class="sec-sub">Arsitektur modern mengganti flatten + FC besar dengan Global Average Pooling</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          VGG menggunakan flatten → FC besar, tapi ini sangat boros parameter.
+          Arsitektur modern seperti ResNet, MobileNet, dan EfficientNet menggunakan
+          <strong>Global Average Pooling (GAP)</strong> — jauh lebih efisien.
+        </div>
+
+        <div class="comparison-table-wrap">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Pendekatan</th>
+                <th>Cara Kerja</th>
+                <th>Params ke Classifier</th>
+                <th>Contoh Model</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="bad-row">
+                <td>Flatten + FC</td>
+                <td>7×7×512 → 25088 → 4096 → 1000</td>
+                <td class="red-num">~103 juta</td>
+                <td>VGG-16</td>
+              </tr>
+              <tr class="good-row">
+                <td>Global Avg Pool</td>
+                <td>7×7×512 → rata-rata → 512 → 1000</td>
+                <td class="green-num">512,000</td>
+                <td>ResNet, MobileNet</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="table-note">GAP mengurangi params classifier 200× — dan sering menghasilkan akurasi lebih baik karena lebih sedikit overfit.</div>
+        </div>
+
+        <div class="formula-box">
+          <div class="fb-title">Global Average Pooling — Formula</div>
+          <div class="fb-eq">
+            GAP(<span class="feq-var blue">F<sub>k</sub></span>)
+            <span class="feq-op">=</span>
+            <span class="feq-op">1/(H×W)</span>
+            <span class="feq-op">·</span>
+            <span class="feq-var purple">∑<sub>i,j</sub> F<sub>k</sub>(i,j)</span>
+          </div>
+          <div class="fb-legend">
+            <div class="fb-leg-item"><span class="fb-sym blue">F<sub>k</sub></span><span class="fb-desc">feature map channel ke-k</span></div>
+            <div class="fb-leg-item"><span class="fb-sym purple">H×W</span><span class="fb-desc">dimensi spasial feature map</span></div>
+          </div>
+          <div class="fb-note">Setiap channel feature map dikompresi menjadi satu angka — rata-rata aktivasinya.</div>
+        </div>
+      </section>
+
+      <!-- ═══ SEC 3: SOFTMAX ═══ -->
+      <section class="lesson-sec" id="sec-softmax">
+        <div class="sec-header">
+          <span class="sec-num">03</span>
+          <div>
+            <h2 class="sec-title">Softmax &amp; Distribusi Probabilitas</h2>
+            <p class="sec-sub">Mengubah skor mentah (logits) menjadi probabilitas yang menjumlah ke 1</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          Output layer terakhir CNN menghasilkan <strong>logits</strong> — vektor skor mentah,
+          bisa negatif, positif, tidak perlu menjumlah ke 1.
+          <strong>Softmax</strong> mengubah logits ini menjadi distribusi probabilitas yang proper.
+        </div>
+
+        <div class="formula-box">
+          <div class="fb-title">Fungsi Softmax</div>
+          <div class="fb-eq">
+            P(<span class="feq-var blue">y<sub>i</sub></span>)
+            <span class="feq-op">=</span>
+            e<sup><span class="feq-var blue">z<sub>i</sub></span></sup>
+            <span class="feq-op">/</span>
+            ∑<sub>j</sub> e<sup><span class="feq-var purple">z<sub>j</sub></span></sup>
+          </div>
+          <div class="fb-legend">
+            <div class="fb-leg-item"><span class="fb-sym blue">z<sub>i</sub></span><span class="fb-desc">logit untuk kelas ke-i</span></div>
+            <div class="fb-leg-item"><span class="fb-sym purple">∑ e<sup>z<sub>j</sub></sup></span><span class="fb-desc">normalisasi: jumlah semua exp logits</span></div>
+          </div>
+        </div>
+
+        <!-- Interactive softmax -->
+        <div class="worked-box" id="softmaxCalc">
+          <div class="wb-badge"><i class="fas fa-sliders"></i> Interactive · Edit logit untuk lihat perubahan probabilitas</div>
+          <div class="wb-title">Softmax Real-time Calculator (3 kelas)</div>
+
+          <div class="softmax-inputs" id="softmaxInputs">
+            <div class="sm-row">
+              <span class="sm-label">Kucing (z₀)</span>
+              <input type="range" class="sm-slider" id="slZ0" min="-4" max="4" step="0.1" value="2.5">
+              <span class="sm-val" id="valZ0">2.5</span>
+              <span class="sm-prob" id="probZ0">—</span>
+            </div>
+            <div class="sm-row">
+              <span class="sm-label">Anjing (z₁)</span>
+              <input type="range" class="sm-slider" id="slZ1" min="-4" max="4" step="0.1" value="1.0">
+              <span class="sm-val" id="valZ1">1.0</span>
+              <span class="sm-prob" id="probZ1">—</span>
+            </div>
+            <div class="sm-row">
+              <span class="sm-label">Burung (z₂)</span>
+              <input type="range" class="sm-slider" id="slZ2" min="-4" max="4" step="0.1" value="-0.5">
+              <span class="sm-val" id="valZ2">-0.5</span>
+              <span class="sm-prob" id="probZ2">—</span>
+            </div>
+          </div>
+
+          <div class="softmax-bars" id="softmaxBars">
+            <!-- filled by JS -->
+          </div>
+
+          <div class="softmax-sum" id="softmaxSum">∑ = —</div>
+        </div>
+
+        <div class="calc-chain">
+          <div class="calc-step">
+            <div class="cs-num-circle">1</div>
+            <div class="cs-content">
+              <div class="cs-label">Hitung exp dari setiap logit</div>
+              <div class="math-line">
+                e<sup>2.5</sup> = <span class="math-result">12.18</span>
+                &nbsp;·&nbsp;
+                e<sup>1.0</sup> = <span class="math-result">2.72</span>
+                &nbsp;·&nbsp;
+                e<sup>-0.5</sup> = <span class="math-result">0.61</span>
+              </div>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num-circle">2</div>
+            <div class="cs-content">
+              <div class="cs-label">Jumlahkan semua exp</div>
+              <div class="math-line">
+                12.18 + 2.72 + 0.61 = <span class="math-result">15.51</span>
+              </div>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num-circle">3</div>
+            <div class="cs-content">
+              <div class="cs-label">Bagi tiap exp dengan total</div>
+              <div class="math-line">
+                P(kucing) = 12.18/15.51 = <span class="math-result green">78.5%</span>
+                &nbsp;·&nbsp;
+                P(anjing) = 2.72/15.51 = <span class="math-result">17.5%</span>
+                &nbsp;·&nbsp;
+                P(burung) = 0.61/15.51 = <span class="math-result">3.9%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ SEC 4: CROSS-ENTROPY LOSS ═══ -->
+      <section class="lesson-sec" id="sec-loss">
+        <div class="sec-header">
+          <span class="sec-num">04</span>
+          <div>
+            <h2 class="sec-title">Cross-Entropy Loss</h2>
+            <p class="sec-sub">Fungsi loss untuk training klasifikasi — mengukur "seberapa salah" prediksi</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          Setelah Softmax menghasilkan probabilitas, kita butuh satu angka yang mengukur seberapa
+          jauh prediksi dari label sebenarnya. <strong>Cross-entropy loss</strong> adalah pilihan
+          standar untuk task klasifikasi.
+        </div>
+
+        <div class="formula-box">
+          <div class="fb-title">Cross-Entropy Loss</div>
+          <div class="fb-eq">
+            L <span class="feq-op">=</span>
+            −<span class="feq-op">∑</span><sub>i</sub>
+            <span class="feq-var blue">y<sub>i</sub></span>
+            · log(<span class="feq-var purple">ŷ<sub>i</sub></span>)
+          </div>
+          <div class="fb-legend">
+            <div class="fb-leg-item"><span class="fb-sym blue">y<sub>i</sub></span><span class="fb-desc">label sebenarnya (one-hot: 1 untuk kelas benar, 0 untuk lainnya)</span></div>
+            <div class="fb-leg-item"><span class="fb-sym purple">ŷ<sub>i</sub></span><span class="fb-desc">probabilitas prediksi dari Softmax</span></div>
+          </div>
+          <div class="fb-note">Karena y<sub>i</sub> = 0 untuk semua kelas yang salah, hanya satu term yang tersisa: −log(P(kelas benar))</div>
+        </div>
+
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-sliders"></i> Interactive · Lihat bagaimana loss berubah</div>
+          <div class="wb-title">Cross-Entropy Loss Calculator</div>
+
+          <div class="ce-demo">
+            <div class="ce-row">
+              <label class="pe-slider-label">P(kelas benar)</label>
+              <div class="pe-slider-track">
+                <input type="range" id="slProb" min="0.01" max="0.99" step="0.01" value="0.8">
+                <div class="pe-slider-ticks">
+                  <span>0.01</span><span>0.25</span><span>0.5</span><span>0.75</span><span>0.99</span>
+                </div>
+              </div>
+              <div class="pe-slider-val"><span id="valProb">0.80</span></div>
+            </div>
+            <div class="ce-result">
+              <div class="calc-total">
+                <div class="ct-label">Cross-Entropy Loss</div>
+                <div class="ct-math" id="ceMath">−log(0.80)</div>
+                <div class="ct-result" id="ceResult">= 0.223</div>
+                <div class="ct-note" id="ceNote">Prediksi cukup baik.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="insight-callout">
+          <div class="ic-icon"><i class="fas fa-brain"></i></div>
+          <div class="ic-body">
+            <strong>Intuisi:</strong> −log(p) mendekati 0 ketika p mendekati 1 (prediksi sempurna),
+            dan mendekati ∞ ketika p mendekati 0 (prediksi sangat salah). Ini persis yang kita inginkan
+            dari fungsi loss — semakin salah semakin besar penaltinya.
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ SEC 5: ARSITEKTUR LENGKAP ═══ -->
+      <section class="lesson-sec" id="sec-arsitektur">
+        <div class="sec-header">
+          <span class="sec-num">05</span>
+          <div>
+            <h2 class="sec-title">Arsitektur CNN Lengkap — Semuanya Bersama</h2>
+            <p class="sec-sub">Pipeline lengkap dari piksel input hingga keputusan klasifikasi</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          Sekarang kita sudah punya semua bahan: Konvolusi, ReLU, Pooling, FC Layer, dan Softmax.
+          Inilah bagaimana semuanya bekerja bersama dalam pipeline klasifikasi gambar.
+        </div>
+
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-cubes"></i> Pipeline CNN Klasifikasi</div>
+          <div class="wb-title">Contoh: CIFAR-10 (32×32×3, 10 kelas)</div>
+          <div class="calc-chain">
+            <div class="calc-step">
+              <div class="cs-num-circle">1</div>
+              <div class="cs-content">
+                <div class="cs-label">Input</div>
+                <div class="math-line">
+                  <span class="math-term blue">32×32×3</span> = 3072 nilai piksel
+                </div>
+              </div>
+            </div>
+            <div class="calc-step">
+              <div class="cs-num-circle">2</div>
+              <div class="cs-content">
+                <div class="cs-label">Conv2D(32 filters, 3×3) + ReLU + MaxPool(2×2)</div>
+                <div class="math-line">
+                  <span class="math-term blue">32×32×3</span>
+                  <span class="math-op">→</span>
+                  <span class="math-result">16×16×32</span>
+                  <span class="math-comment"> params: 896 (Conv) + 0 (Pool)</span>
+                </div>
+              </div>
+            </div>
+            <div class="calc-step">
+              <div class="cs-num-circle">3</div>
+              <div class="cs-content">
+                <div class="cs-label">Conv2D(64 filters, 3×3) + ReLU + MaxPool(2×2)</div>
+                <div class="math-line">
+                  <span class="math-result">16×16×32</span>
+                  <span class="math-op">→</span>
+                  <span class="math-result">8×8×64</span>
+                  <span class="math-comment"> params: 18,496</span>
+                </div>
+              </div>
+            </div>
+            <div class="calc-step">
+              <div class="cs-num-circle">4</div>
+              <div class="cs-content">
+                <div class="cs-label">Global Average Pooling</div>
+                <div class="math-line">
+                  <span class="math-result">8×8×64</span>
+                  <span class="math-op">→</span>
+                  <span class="math-result">64</span>
+                  <span class="math-comment"> rata-rata per channel</span>
+                </div>
+              </div>
+            </div>
+            <div class="calc-step">
+              <div class="cs-num-circle">5</div>
+              <div class="cs-content">
+                <div class="cs-label">FC Layer + Softmax</div>
+                <div class="math-line">
+                  <span class="math-result">64</span>
+                  <span class="math-op">→</span>
+                  <span class="math-result green">10 probabilitas</span>
+                  <span class="math-comment"> params: 650</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="calc-total" style="margin-top:12px;">
+            <div class="ct-label">Total Parameter</div>
+            <div class="ct-math">896 + 18,496 + 640 + 10 (bias)</div>
+            <div class="ct-result" style="color:#34c759">≈ 20,042 parameter</div>
+            <div class="ct-note">Jauh lebih kecil dari MLP setara — dan jauh lebih akurat!</div>
+          </div>
+        </div>
+
+        <!-- Final CTA -->
+        <div class="next-lesson-cta">
+          <div class="nlc-inner">
+            <span class="nlc-label">Lesson berikutnya</span>
+            <h3 class="nlc-title">Hands-on: CNN Pertamamu →</h3>
+            <p class="nlc-desc">Teori sudah cukup. Saatnya implementasi CNN dari scratch menggunakan PyTorch — lengkap dengan training loop, evaluasi, dan visualisasi.</p>
+            <a href="#/participant-ai-lab-cv-cnn-hands" class="nlc-btn">Mulai Hands-on</a>
+          </div>
+        </div>
+      </section>
+
+</article>
+<footer class="lesson-nav-footer">
+<a href="#/participant-ai-lab-cv-cnn-relu" class="lnf-prev">
+<span class="lnf-label">Lesson sebelumnya</span>
+<span class="lnf-title">Aktivasi ReLU <i class="fas fa-arrow-left"></i></span>
+</a>
+<a href="#/participant-ai-lab-cv-cnn-hands" class="lnf-next">
+<span class="lnf-label">Lesson berikutnya</span>
+<span class="lnf-title">Hands-on: CNN Pertama <i class="fas fa-arrow-right"></i></span>
+</a>
+</footer>
+</section>
+</div>
+<aside class="lesson-right-panel">
+<div class="lesson-progress-card">
+<div class="lpc-header"><i class="fas fa-chart-simple"></i> Progress CV</div>
+<div class="lpc-ring-wrap"><svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="30" stroke="var(--border)" stroke-width="5" fill="none"/><circle cx="36" cy="36" r="30" stroke="var(--fellow-pink)" stroke-width="5" fill="none" stroke-dasharray="188.5" stroke-dashoffset="94.2" stroke-linecap="round"/></svg><div class="lpc-ring-text"><strong>50%</strong></div></div>
+<div class="lpc-meta"><span><i class="far fa-circle-check"></i> 5/10 selesai</span><span><i class="fas fa-fire"></i> 0 streak</span></div>
+</div>
+<div class="lesson-list-card">
+<h4>CV Course</h4>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 1. Mengapa CNN?</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 2. Introduction to CNNs</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 3. Aktivasi ReLU</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 4. Filtering & Kernels</div>
+<div class="lesson-list-item active"><span class="lli-dot"></span> 5. FC Layer & Softmax</div>
+<div class="lesson-list-item locked"><span class="lli-dot"></span> 6. Hands-on: CNN Pertama</div>
+</div>
+</aside>
+</div>
+</main>
+</section>

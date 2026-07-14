@@ -1,0 +1,269 @@
+<section class="fellow-dashboard">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a class="active" href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+
+        <div class="fellow-menu-label">Lainnya</div>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+    </aside>
+
+    <main class="fellow-main mentor-page">
+        <header class="fellow-topbar">
+            <div>
+                <h1 data-fellow-greeting>Jejaring Mentor</h1>
+                <p>Temui para ahli AI dan jadwalkan sesi bimbingan eksklusif Anda.</p>
+            </div>
+            <div class="fellow-actions">
+                <label class="fellow-search topbar-search">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="search" placeholder="Cari nama mentor atau keahlian...">
+                </label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
+                    <i class="far fa-bell"></i>
+                    <span class="badge">5</span>
+                </button>
+                <div class="fellow-user-menu">
+                    <button type="button" class="fellow-user-button" data-fellow-user-toggle aria-expanded="false">
+                        <img src="/assets/avatars/user-1.jpg" alt="Aisyah Putri" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
+                        <span><strong>Aisyah Putri</strong><small>Fellow</small></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="mentor-layout">
+
+            <div class="mentor-main-column">
+
+                <!-- MY MENTOR CARD (HERO) -->
+                <div class="section-header">
+                    <h2>Mentor Utama Anda</h2>
+                </div>
+
+                <div class="my-mentor-hero">
+                    <div class="mentor-bg-pattern"></div>
+                    <div class="mentor-hero-content">
+                        <div class="mentor-profile-large">
+                            <div class="mentor-avatar-wrap">
+                                <img src="/assets/avatars/user-10.jpg" alt="Dr. Sarah Wijaya" onerror="this.src='https://ui-avatars.com/api/?name=Sarah+Wijaya&background=random'">
+                                <span class="status-indicator online"></span>
+                            </div>
+                            <div class="mentor-hero-info">
+                                <div class="mentor-badges">
+                                    <span class="badge-role">Lead Mentor</span>
+                                    <span class="badge-tech"><i class="fas fa-brain"></i> Machine Learning</span>
+                                </div>
+                                <h3>Dr. Sarah Wijaya</h3>
+                                <p class="mentor-headline">Senior AI Research Scientist di TechCorp Indonesia</p>
+                                <p class="mentor-bio">Spesialisasi di NLP dan Large Language Models. Berpengalaman 8 tahun dalam membimbing talenta wanita di bidang teknologi. Siap membantu Anda merancang Final Project yang berstandar industri.</p>
+
+                                <div class="mentor-hero-actions">
+                                    <button class="btn-primary-pink"><i class="far fa-calendar-alt"></i> Jadwalkan 1-on-1</button>
+                                    <button class="btn-outline-white"><i class="far fa-comment-dots"></i> Kirim Pesan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIRECTORY SECTION -->
+                <div class="section-header directory-header">
+                    <h2>Direktori Expert</h2>
+                    <div class="mentor-filters">
+                        <select class="custom-select-small">
+                            <option>Semua Keahlian</option>
+                            <option>Data Science</option>
+                            <option>Computer Vision</option>
+                            <option>NLP</option>
+                            <option>Career Prep</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mentor-grid">
+
+                    <!-- Mentor 1 -->
+                    <div class="mentor-card">
+                        <div class="card-cover bg-gradient-1"></div>
+                        <div class="card-avatar">
+                            <img src="/assets/avatars/user-2.jpg" alt="Nadia Putri" onerror="this.src='https://ui-avatars.com/api/?name=Nadia+Putri&background=random'">
+                        </div>
+                        <div class="card-body">
+                            <h4>Nadia Putri</h4>
+                            <p class="mentor-title">Data Scientist di FinTech Group</p>
+                            <div class="skills-tags">
+                                <span>Data Analysis</span>
+                                <span>Python</span>
+                                <span>SQL</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-outline-pink">Lihat Profil</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mentor 2 -->
+                    <div class="mentor-card">
+                        <div class="card-cover bg-gradient-2"></div>
+                        <div class="card-avatar">
+                            <img src="/assets/avatars/user-5.jpg" alt="Budi Santoso" onerror="this.src='https://ui-avatars.com/api/?name=Budi+Santoso&background=random'">
+                        </div>
+                        <div class="card-body">
+                            <h4>Budi Santoso</h4>
+                            <p class="mentor-title">Computer Vision Engineer</p>
+                            <div class="skills-tags">
+                                <span>PyTorch</span>
+                                <span>OpenCV</span>
+                                <span>Deep Learning</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-outline-pink">Lihat Profil</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mentor 3 -->
+                    <div class="mentor-card">
+                        <div class="card-cover bg-gradient-3"></div>
+                        <div class="card-avatar">
+                            <img src="/assets/avatars/user-8.jpg" alt="Linda Kusumawati" onerror="this.src='https://ui-avatars.com/api/?name=Linda+Kusumawati&background=random'">
+                        </div>
+                        <div class="card-body">
+                            <h4>Linda Kusumawati</h4>
+                            <p class="mentor-title">AI Product Manager</p>
+                            <div class="skills-tags">
+                                <span>Product Strategy</span>
+                                <span>Career Prep</span>
+                                <span>Agile</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-outline-pink">Lihat Profil</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mentor 4 -->
+                    <div class="mentor-card">
+                        <div class="card-cover bg-gradient-4"></div>
+                        <div class="card-avatar">
+                            <img src="/assets/avatars/user-4.jpg" alt="Deni Setiawan" onerror="this.src='https://ui-avatars.com/api/?name=Deni+Setiawan&background=random'">
+                        </div>
+                        <div class="card-body">
+                            <h4>Deni Setiawan</h4>
+                            <p class="mentor-title">Senior Data Engineer</p>
+                            <div class="skills-tags">
+                                <span>Big Data</span>
+                                <span>Cloud Computing</span>
+                                <span>ETL</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-outline-pink">Lihat Profil</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="load-more-container">
+                    <button class="btn-load-more">Muat Lebih Banyak Mentor <i class="fas fa-chevron-down"></i></button>
+                </div>
+
+            </div>
+
+            <!-- RIGHT WIDGETS -->
+            <aside class="mentor-widgets">
+
+                <!-- Jadwal Saya -->
+                <div class="widget-card schedule-card">
+                    <div class="widget-header">
+                        <h3>Sesi Mendatang</h3>
+                        <a href="#" class="view-all">Kalender <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="schedule-list">
+
+                        <div class="schedule-item urgent">
+                            <div class="s-date">
+                                <span class="s-month">JUM</span>
+                                <span class="s-day">26</span>
+                            </div>
+                            <div class="s-info">
+                                <strong>1-on-1: Final Project Review</strong>
+                                <span><i class="far fa-clock"></i> 15:00 - 16:00 WIB</span>
+                                <span><i class="fas fa-video"></i> Google Meet (Dr. Sarah)</span>
+                            </div>
+                        </div>
+
+                        <div class="schedule-item">
+                            <div class="s-date">
+                                <span class="s-month">MING</span>
+                                <span class="s-day">28</span>
+                            </div>
+                            <div class="s-info">
+                                <strong>Group Mentoring: NLP Basics</strong>
+                                <span><i class="far fa-clock"></i> 10:00 - 12:00 WIB</span>
+                                <span><i class="fas fa-video"></i> Zoom (Gabungan)</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <button class="btn-full-width pink-bg-light">Ajukan Sesi Baru</button>
+                </div>
+
+                <!-- Tips Mentoring -->
+                <div class="widget-card tips-card">
+                    <div class="widget-header">
+                        <h3>Panduan Mentoring</h3>
+                    </div>
+                    <div class="tips-content">
+                        <div class="tip-item">
+                            <div class="tip-icon"><i class="fas fa-list-check"></i></div>
+                            <div class="tip-text">
+                                <strong>Siapkan Daftar Pertanyaan</strong>
+                                <p>Tulis poin-poin yang ingin didiskusikan sebelum sesi dimulai agar waktu efektif.</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-icon"><i class="fas fa-laptop-code"></i></div>
+                            <div class="tip-text">
+                                <strong>Bawa Progress Project</strong>
+                                <p>Mentor lebih mudah membantu jika Anda menunjukkan kode atau hasil kerja Anda.</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-icon"><i class="far fa-clock"></i></div>
+                            <div class="tip-text">
+                                <strong>Tepat Waktu</strong>
+                                <p>Hadir 5 menit sebelum jadwal. Pembatalan maksimal H-1 sesi.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </aside>
+
+        </div>
+    </main>
+</section>

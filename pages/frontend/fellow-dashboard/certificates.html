@@ -1,0 +1,433 @@
+<section class="fellow-dashboard">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+
+        <div class="fellow-menu-label">Lainnya</div>
+        <nav class="fellow-menu secondary">
+            <a class="active" href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+
+        <div class="invite-card">
+            <p><strong>Ajak Temanmu!</strong><br>Dapatkan poin tambahan untuk setiap teman yang bergabung.</p>
+            <button type="button">Undang Sekarang</button>
+        </div>
+    </aside>
+
+    <main class="fellow-main certificates-page">
+        <header class="fellow-topbar">
+            <div>
+                <h1 data-fellow-greeting>Sertifikat</h1>
+                <p>Kumpulkan sertifikat dari setiap pencapaian belajar dan kegiatanmu.</p>
+            </div>
+            <div class="fellow-actions">
+                <label class="fellow-search cert-top-search">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="search" placeholder="Cari sertifikat, modul, atau event...">
+                </label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
+                    <i class="far fa-bell"></i>
+                    <span class="badge">5</span>
+                </button>
+                <div class="fellow-user-menu">
+                    <button type="button" class="fellow-user-button" data-fellow-user-toggle aria-expanded="false">
+                        <img src="/assets/avatars/user-1.jpg" alt="Aisyah Putri" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
+                        <span><strong>Aisyah Putri</strong><small>Fellow</small></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="certificates-layout">
+            <div class="certificates-main-column">
+
+                <div class="cert-tabs-container">
+                    <div class="cert-tabs">
+                        <button class="active">Semua Sertifikat</button>
+                        <button>Pencapaian Modul</button>
+                        <button>Event & Workshop</button>
+                        <button>Proyek</button>
+                        <button>Komunitas</button>
+                    </div>
+                </div>
+
+                <div class="cert-stats-grid">
+                    <div class="c-stat-card">
+                        <div class="c-icon pink"><i class="fas fa-award"></i></div>
+                        <div class="c-info">
+                            <span>Total Sertifikat</span>
+                            <strong>12</strong>
+                            <small>Sertifikat</small>
+                        </div>
+                    </div>
+                    <div class="c-stat-card">
+                        <div class="c-icon green"><i class="far fa-circle-check"></i></div>
+                        <div class="c-info">
+                            <span>Sertifikat Terselesaikan</span>
+                            <strong>10</strong>
+                            <small>Sertifikat</small>
+                        </div>
+                    </div>
+                    <div class="c-stat-card">
+                        <div class="c-icon orange"><i class="far fa-clock"></i></div>
+                        <div class="c-info">
+                            <span>Sedang Diproses</span>
+                            <strong>2</strong>
+                            <small>Sertifikat</small>
+                        </div>
+                    </div>
+                    <div class="c-stat-card">
+                        <div class="c-icon purple"><i class="fas fa-trophy"></i></div>
+                        <div class="c-info">
+                            <span>Total Poin dari Sertifikat</span>
+                            <strong>1.250</strong>
+                            <small>Poin</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-controls">
+                    <div class="custom-select cert-sort">
+                        <select aria-label="Urutkan">
+                            <option>Terbaru</option>
+                            <option>Terlama</option>
+                            <option>A-Z</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="cert-controls-right">
+                        <label class="fellow-search cert-inline-search">
+                            <i class="fas fa-magnifying-glass"></i>
+                            <input type="search" placeholder="Cari sertifikat...">
+                        </label>
+                        <button class="btn-grid-toggle active" aria-label="Tampilan Grid"><i class="fas fa-border-all"></i></button>
+                    </div>
+                </div>
+
+                <div class="certificates-grid">
+                    <!-- Cert 1 -->
+                    <article class="cert-card">
+                        <div class="cert-thumb pink-theme">
+                            <div class="cert-badge pink"><i class="fas fa-award"></i></div>
+                            <div class="cert-content">
+                                <h3 class="cert-head">SERTIFIKAT</h3>
+                                <p class="cert-sub">DIBERIKAN KEPADA</p>
+                                <h2 class="cert-name">Aisyah Putri</h2>
+                                <p class="cert-desc">atas pencapaian dalam menyelesaikan</p>
+                                <h4 class="cert-course">Python for AI Beginner</h4>
+                                <div class="cert-seal pink"><i class="fas fa-ribbon"></i></div>
+                            </div>
+                            <div class="cert-footer">
+                                <div class="cert-sig">
+                                    <span class="sig-herai">HerAI Team</span>
+                                </div>
+                                <div class="cert-sig">
+                                    <span class="sig-script">Mei 2024</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cert-details">
+                            <h4>Python for AI Beginner</h4>
+                            <p>Modul &bull; Foundation Phase</p>
+                            <div class="cert-meta">
+                                <span>25 Mei 2024</span>
+                                <strong class="pink-text"><i class="far fa-star"></i> 100 Poin</strong>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Cert 2 -->
+                    <article class="cert-card">
+                        <div class="cert-thumb purple-theme">
+                            <div class="cert-badge purple"><i class="fas fa-award"></i></div>
+                            <div class="cert-content">
+                                <h3 class="cert-head">SERTIFIKAT</h3>
+                                <p class="cert-sub">DIBERIKAN KEPADA</p>
+                                <h2 class="cert-name">Aisyah Putri</h2>
+                                <p class="cert-desc">atas pencapaian dalam menyelesaikan</p>
+                                <h4 class="cert-course">Machine Learning Fundamentals</h4>
+                                <div class="cert-seal purple"><i class="fas fa-award"></i></div>
+                            </div>
+                            <div class="cert-footer">
+                                <div class="cert-sig">
+                                    <span class="sig-herai">HerAI Team</span>
+                                </div>
+                                <div class="cert-sig">
+                                    <span class="sig-script">Juni 2024</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cert-details">
+                            <h4>Machine Learning Fundamentals</h4>
+                            <p>Modul &bull; Foundation Phase</p>
+                            <div class="cert-meta">
+                                <span>15 Juni 2024</span>
+                                <strong class="purple-text"><i class="far fa-star"></i> 150 Poin</strong>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Cert 3 -->
+                    <article class="cert-card">
+                        <div class="cert-thumb orange-theme">
+                            <div class="cert-badge orange"><i class="far fa-calendar-alt"></i></div>
+                            <div class="cert-content">
+                                <h3 class="cert-head">SERTIFIKAT</h3>
+                                <p class="cert-sub">DIBERIKAN KEPADA</p>
+                                <h2 class="cert-name">Aisyah Putri</h2>
+                                <p class="cert-desc">atas partisipasi sebagai peserta</p>
+                                <h4 class="cert-course">Data Visualization with Python<br>Workshop</h4>
+                                <div class="cert-seal orange"><i class="fas fa-award"></i></div>
+                            </div>
+                            <div class="cert-footer">
+                                <div class="cert-sig">
+                                    <span class="sig-herai">HerAI Team</span>
+                                </div>
+                                <div class="cert-sig">
+                                    <span class="sig-script">Mei 2024</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cert-details">
+                            <h4>Data Visualization with Python</h4>
+                            <p>Event &bull; Workshop</p>
+                            <div class="cert-meta">
+                                <span>25 Mei 2024</span>
+                                <strong class="orange-text"><i class="far fa-star"></i> 75 Poin</strong>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Cert 4 -->
+                    <article class="cert-card">
+                        <div class="cert-thumb green-theme">
+                            <div class="cert-badge green"><i class="fas fa-laptop-code"></i></div>
+                            <div class="cert-content">
+                                <h3 class="cert-head">SERTIFIKAT</h3>
+                                <p class="cert-sub">DIBERIKAN KEPADA</p>
+                                <h2 class="cert-name">Aisyah Putri</h2>
+                                <p class="cert-desc">atas pencapaian dalam menyelesaikan</p>
+                                <h4 class="cert-course">Data Analysis with Pandas</h4>
+                                <div class="cert-seal green"><i class="fas fa-award"></i></div>
+                            </div>
+                            <div class="cert-footer">
+                                <div class="cert-sig">
+                                    <span class="sig-herai">HerAI Team</span>
+                                </div>
+                                <div class="cert-sig">
+                                    <span class="sig-script">Juni 2024</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cert-details">
+                            <h4>Data Analysis with Pandas</h4>
+                            <p>Modul &bull; Foundation Phase</p>
+                            <div class="cert-meta">
+                                <span>10 Juni 2024</span>
+                                <strong class="green-text"><i class="far fa-star"></i> 125 Poin</strong>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Cert 5 -->
+                    <article class="cert-card">
+                        <div class="cert-thumb blue-theme">
+                            <div class="cert-badge blue"><i class="fas fa-trophy"></i></div>
+                            <div class="cert-content">
+                                <h3 class="cert-head">SERTIFIKAT</h3>
+                                <p class="cert-sub">DIBERIKAN KEPADA</p>
+                                <h2 class="cert-name">Aisyah Putri</h2>
+                                <p class="cert-desc">atas partisipasi sebagai peserta</p>
+                                <h4 class="cert-course">AI for Social Good Hackathon</h4>
+                                <div class="cert-seal blue"><i class="fas fa-award"></i></div>
+                            </div>
+                            <div class="cert-footer">
+                                <div class="cert-sig">
+                                    <span class="sig-herai">HerAI Team</span>
+                                </div>
+                                <div class="cert-sig">
+                                    <span class="sig-script">Juni 2024</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cert-details">
+                            <h4>AI for Social Good Hackathon</h4>
+                            <p>Event &bull; Hackathon</p>
+                            <div class="cert-meta">
+                                <span>8 Juni 2024</span>
+                                <strong class="blue-text"><i class="far fa-star"></i> 200 Poin</strong>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Cert 6 -->
+                    <article class="cert-card">
+                        <div class="cert-thumb red-theme">
+                            <div class="cert-badge red"><i class="fas fa-users"></i></div>
+                            <div class="cert-content">
+                                <h3 class="cert-head">SERTIFIKAT</h3>
+                                <p class="cert-sub">DIBERIKAN KEPADA</p>
+                                <h2 class="cert-name">Aisyah Putri</h2>
+                                <p class="cert-desc">atas kontribusinya sebagai</p>
+                                <h4 class="cert-course">Top Contributor Komunitas</h4>
+                                <div class="cert-seal red"><i class="fas fa-award"></i></div>
+                            </div>
+                            <div class="cert-footer">
+                                <div class="cert-sig">
+                                    <span class="sig-herai">HerAI Team</span>
+                                </div>
+                                <div class="cert-sig">
+                                    <span class="sig-script">Mei 2024</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cert-details">
+                            <h4>Top Contributor Komunitas</h4>
+                            <p>Komunitas &bull; Pencapaian</p>
+                            <div class="cert-meta">
+                                <span>18 Mei 2024</span>
+                                <strong class="red-text"><i class="far fa-star"></i> 50 Poin</strong>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT WIDGET COLUMN -->
+            <aside class="certificates-widgets">
+
+                <!-- Chart Pencapaian -->
+                <div class="widget-card">
+                    <div class="widget-header border-bottom">
+                        <h3>Ringkasan Pencapaian</h3>
+                    </div>
+                    <div class="chart-container-flex">
+                        <div class="donut-chart-wrapper">
+                            <svg viewBox="0 0 100 100" class="donut-svg">
+                                <circle cx="50" cy="50" r="40" class="donut-hole"></circle>
+                                <circle cx="50" cy="50" r="40" class="donut-ring"></circle>
+                                <!-- Modul (Pink) -->
+                                <circle cx="50" cy="50" r="40" class="donut-segment pink-stroke" stroke-dasharray="200 51" stroke-dashoffset="0"></circle>
+                                <!-- Event (Purple) -->
+                                <circle cx="50" cy="50" r="40" class="donut-segment purple-stroke" stroke-dasharray="50 201" stroke-dashoffset="-200"></circle>
+                                <!-- Proyek (Orange) -->
+                                <circle cx="50" cy="50" r="40" class="donut-segment orange-stroke" stroke-dasharray="15 236" stroke-dashoffset="-250"></circle>
+                                <!-- Komunitas (Green) -->
+                                <circle cx="50" cy="50" r="40" class="donut-segment green-stroke" stroke-dasharray="15 236" stroke-dashoffset="-265"></circle>
+                            </svg>
+                            <div class="donut-text">
+                                <strong>12</strong>
+                                <span>Total</span>
+                            </div>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <span class="dot pink-dot"></span><span>Modul</span><strong>7</strong>
+                            </div>
+                            <div class="legend-item">
+                                <span class="dot purple-dot"></span><span>Event</span><strong>3</strong>
+                            </div>
+                            <div class="legend-item">
+                                <span class="dot orange-dot"></span><span>Proyek</span><strong>1</strong>
+                            </div>
+                            <div class="legend-item">
+                                <span class="dot green-dot"></span><span>Komunitas</span><strong>1</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Widget -->
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Filter Sertifikat</h3>
+                        <a href="#" class="reset-link">Reset</a>
+                    </div>
+                    <div class="filter-dropdowns">
+                        <div class="custom-select">
+                            <select aria-label="Kategori">
+                                <option>Semua Kategori</option>
+                            </select>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="custom-select">
+                            <select aria-label="Sumber">
+                                <option>Semua Sumber</option>
+                            </select>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="custom-select">
+                            <select aria-label="Status">
+                                <option>Semua Status</option>
+                            </select>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="custom-select">
+                            <select aria-label="Tahun">
+                                <option>Semua Tahun</option>
+                            </select>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status Sertifikat -->
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Status Sertifikat</h3>
+                    </div>
+                    <div class="status-list">
+                        <div class="status-item">
+                            <div class="status-label"><i class="far fa-circle-check green-text"></i> <span>Terselesaikan</span></div>
+                            <strong>10</strong>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-label"><i class="far fa-clock orange-text"></i> <span>Sedang Diproses</span></div>
+                            <strong>2</strong>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-label"><i class="far fa-calendar-alt pink-text"></i> <span>Akan Kedaluwarsa</span></div>
+                            <strong>0</strong>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-label"><i class="far fa-clock text-muted"></i> <span>Kedaluwarsa</span></div>
+                            <strong>0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Banner Bantuan -->
+                <div class="help-banner pink-gradient-bg">
+                    <div class="help-content">
+                        <h3>Butuh Bantuan?</h3>
+                        <p>Punya pertanyaan tentang sertifikatmu? Hubungi HerAI Assistant sekarang!</p>
+                        <button class="btn-primary-pink">Chat Sekarang</button>
+                    </div>
+                    <i class="fas fa-robot bot-icon"></i>
+                </div>
+            </aside>
+        </div>
+    </main>
+</section>

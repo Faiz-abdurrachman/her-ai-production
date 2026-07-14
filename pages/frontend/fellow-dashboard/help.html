@@ -1,0 +1,218 @@
+<section class="fellow-dashboard">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+
+        <div class="fellow-menu-label">Lainnya</div>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a class="active" href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+    </aside>
+
+    <main class="fellow-main help-page">
+        <header class="fellow-topbar">
+            <div>
+                <h1 data-fellow-greeting>FAQ & Bantuan</h1>
+                <p>Temukan jawaban cepat atau hubungi tim dukungan kami.</p>
+            </div>
+            <div class="fellow-actions">
+                <div class="topbar-spacer"></div>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
+                    <i class="far fa-bell"></i>
+                    <span class="badge">5</span>
+                </button>
+                <div class="fellow-user-menu">
+                    <button type="button" class="fellow-user-button" data-fellow-user-toggle aria-expanded="false">
+                        <img src="/assets/avatars/user-1.jpg" alt="Aisyah Putri" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
+                        <span><strong>Aisyah Putri</strong><small>Fellow</small></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="help-layout">
+            <div class="help-main-column">
+
+                <div class="help-search-container">
+                    <div class="search-box-large">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" placeholder="Ketik kata kunci pertanyaan Anda di sini...">
+                        <button class="btn-search">Cari</button>
+                    </div>
+                    <div class="search-tags">
+                        <span>Pencarian populer:</span>
+                        <span class="tag">Sertifikat NVIDIA</span>
+                        <span class="tag">Jadwal Mentoring</span>
+                        <span class="tag">Sistem Poin</span>
+                    </div>
+                </div>
+
+                <div class="faq-section">
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+
+                    <div class="faq-category-tabs">
+                        <button class="active">Semua</button>
+                        <button>Program & Kelas</button>
+                        <button>Sistem Penilaian</button>
+                        <button>Teknis Akun</button>
+                    </div>
+
+                    <div class="faq-grid">
+                        <div class="faq-card">
+                            <div class="faq-card-num">01</div>
+                            <h4>Apakah program ini berbayar?</h4>
+                            <p>Tidak. Program ini 100% Gratis bagi peserta yang lolos seleksi.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">02</div>
+                            <h4>Harus background IT?</h4>
+                            <p>Tidak wajib, namun memiliki minat yang kuat dan komitmen tinggi sangat diutamakan.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">03</div>
+                            <h4>Apa itu Jalur Afirmasi 3T?</h4>
+                            <p>Kuota khusus (30%) untuk pendaftar dari 122 kabupaten tertinggal (3T) di Indonesia.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">04</div>
+                            <h4>Bagaimana sistem belajarnya?</h4>
+                            <p>Intensif 8 minggu yang terbagi menjadi 3 fase: Foundation, Specialization, dan Application.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">05</div>
+                            <h4>Sertifikasi resmi NVIDIA?</h4>
+                            <p>Ya, peserta yang lulus ujian akan mendapatkan sertifikasi resmi global dari NVIDIA.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">06</div>
+                            <h4>Mentoring di Weekday?</h4>
+                            <p>Tidak, seluruh sesi mentoring dan kelas akan dilaksanakan setiap weekend.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">07</div>
+                            <h4>Bentuk Tes Kompetensi?</h4>
+                            <p>Tes seputar logika dasar, pengetahuan umum tentang data, dan matematika.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">08</div>
+                            <h4>Belum pernah belajar AI?</h4>
+                            <p>Tentu bisa! Fase Foundation akan mengajarkan dari nol (Math & Data Fundamental).</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">09</div>
+                            <h4>Benefit Awardee HerAI?</h4>
+                            <p>2 sertifikasi, networking expert, akses Woman Hub, dan akselerasi karir.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">10</div>
+                            <h4>Boleh mundur di tengah jalan?</h4>
+                            <p>Diharapkan komitmen penuh karena kuota beasiswa ini sangat terbatas.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">11</div>
+                            <h4>Apakah ada sesi mentorship?</h4>
+                            <p>Ya, bimbingan langsung eksklusif dari para expert Data Sorcerers.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">12</div>
+                            <h4>Online atau Offline?</h4>
+                            <p>Program dilakukan secara Online, bisa diikuti dari mana saja di seluruh Indonesia.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">13</div>
+                            <h4>Apakah ada batasan domisili?</h4>
+                            <p>Tidak, terbuka untuk seluruh perempuan warga negara Indonesia.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">14</div>
+                            <h4>Boleh ikut jika kerja full-time?</h4>
+                            <p>Boleh, asalkan bisa mengatur waktu untuk jadwal intensif weekend.</p>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-card-num">15</div>
+                            <h4>Kendala saat mendaftar?</h4>
+                            <p>Hubungi CP di Project Deck atau DM Instagram Woman Hub / Data Sorcerers.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT WIDGETS -->
+            <aside class="help-widgets">
+
+                <!-- AI Assistant Widget -->
+                <div class="support-card pink-gradient-bg">
+                    <div class="bot-bg-icon"><i class="fas fa-robot"></i></div>
+                    <div class="support-content">
+                        <h3>HerAI Assistant</h3>
+                        <p>Tanya jawab instan dengan asisten cerdas kami. Tersedia 24/7 untuk membantu Anda.</p>
+                        <button class="btn-support">Mulai Chat <i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+
+                <!-- Contact Widget -->
+                <div class="widget-card contact-card">
+                    <div class="widget-header">
+                        <h3>Hubungi Tim Kami</h3>
+                    </div>
+                    <p class="contact-desc">Masih bingung atau memiliki kendala teknis? Tim dukungan kami siap membantu Anda di jam kerja.</p>
+
+                    <div class="contact-list">
+                        <a href="#" class="contact-item">
+                            <div class="c-icon"><i class="fab fa-whatsapp"></i></div>
+                            <div class="c-text">
+                                <strong>WhatsApp Support</strong>
+                                <span>Respon dalam 1-2 jam</span>
+                            </div>
+                        </a>
+                        <a href="#" class="contact-item">
+                            <div class="c-icon"><i class="far fa-envelope"></i></div>
+                            <div class="c-text">
+                                <strong>Email Bantuan</strong>
+                                <span>support@herai.womanhub.id</span>
+                            </div>
+                        </a>
+                        <a href="#" class="contact-item">
+                            <div class="c-icon"><i class="fab fa-discord"></i></div>
+                            <div class="c-text">
+                                <strong>Discord Server</strong>
+                                <span>Masuk ke channel #helpdesk</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Community Help -->
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Bantuan Komunitas</h3>
+                    </div>
+                    <p class="contact-desc">Tanyakan pada sesama Fellow dan Mentor di forum diskusi terbuka kami.</p>
+                    <a href="#/participant-community" class="btn-outline-full">Buka Forum Komunitas</a>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+</section>

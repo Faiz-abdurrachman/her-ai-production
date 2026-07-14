@@ -12,9 +12,11 @@ const HOST = process.env.HOST || '127.0.0.1';
 const DEBUG_LOG_PATH = path.join(__dirname, '.cursor', 'debug-86a842.log');
 const SETTINGS_PATH = path.join(__dirname, '.cursor', 'global-settings.json');
 const PARTICIPANTS_PATH = path.join(__dirname, '.cursor', 'participants.json');
+const PARTICIPANT_ACCOUNTS_PATH = path.join(__dirname, '.cursor', 'participant-accounts.json');
+const PARTICIPANT_ACTIVITY_PATH = path.join(__dirname, '.cursor', 'participant-activity.json');
 const COMPETENCY_SESSIONS_PATH = path.join(__dirname, '.cursor', 'competency-sessions.json');
 const PROJECT_SUBMISSIONS_PATH = path.join(__dirname, '.cursor', 'project-submissions.json');
-const GAS_WEB_APP_URL = process.env.GAS_WEB_APP_URL || 'https://script.google.com/macros/s/AKfycbxivp4g8mVai8rZcei4w9pblh8s2Kks84CnRshveD_IR69erw_Ffbn_TwithrpNTEj_yw/exec';
+const GAS_WEB_APP_URL = process.env.GAS_WEB_APP_URL || '';
 const PUBLIC_PARTICIPANTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/120NQtFqErJiIfITlPfVo8wV6G0_79qFKMTaptxNF-RA/export?format=csv';
 
 const TEST_PARTICIPANT = {
@@ -221,10 +223,10 @@ const server = http.createServer((req, res) => {
     }
 
     let filePath = path.join(__dirname, pathname);
-    
+
     // SPA Routing: jika bukan file static, serve index.html
     let ext = path.extname(filePath);
-    
+
     // Jika tidak ada extension, kemungkinan ini route SPA
     if (!ext && pathname !== '/') {
         filePath = path.join(__dirname, 'index.html');
@@ -238,7 +240,7 @@ const server = http.createServer((req, res) => {
 
     // Recompute extension after potential SPA path rewrite.
     ext = path.extname(filePath);
-    
+
     // Baca file
     fs.readFile(filePath, (err, content) => {
         if (err) {
@@ -273,7 +275,15 @@ function proxyGasRequest(body, res) {
         res.end(JSON.stringify({ status: 'error', message: 'GAS_WEB_APP_URL belum dikonfigurasi.' }));
         return;
     }
-    const target = new URL(GAS_WEB_APP_URL);
+    let target;
+    try {
+        target = new URL(GAS_WEB_APP_URL);
+    } catch {
+        if (handleLocalGasFallback(body, res)) return;
+        res.writeHead(502, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'error', message: 'GAS_WEB_APP_URL tidak valid.' }));
+        return;
+    }
     const request = https.request({
         hostname: target.hostname,
         path: target.pathname + target.search,
@@ -420,6 +430,9 @@ function handleLocalGasFallback(body, res) {
             if (!participant) {
                 return { status: 'error', message: 'NIK belum terdaftar.' };
             }
+            if (!isLocalParticipantEligibleForPortal(participant)) {
+                return { status: 'error', message: 'Akses peserta belum aktif untuk akun ini.' };
+            }
             if (!participant.participant_password && participant.nik !== TEST_PARTICIPANT.nik) {
                 return { status: 'needs_password', message: 'Password belum dibuat.' };
             }
@@ -428,10 +441,21 @@ function handleLocalGasFallback(body, res) {
                 return { status: 'error', message: 'Password salah.' };
             }
             migrateLocalParticipantPassword(participant, payload.password || '');
+            recordLocalParticipantActivity({
+                nik: participant.nik,
+                nama_lengkap: participant.nama_lengkap,
+                activity_type: 'login',
+                page: 'participant-login',
+                activity: 'Peserta login ke dashboard',
+                user_agent: payload.user_agent || payload.userAgent || ''
+            });
             return { status: 'success', profile: stripLocalParticipantSensitive(participant) };
         },
         setParticipantPassword: () => setLocalParticipantPassword(payload),
         updateParticipantProfile: () => updateLocalParticipantProfile(payload),
+        provisionParticipantAccounts: () => provisionLocalParticipantAccounts(payload),
+        getParticipantAccounts: () => ({ status: 'success', accounts: readLocalParticipantAccounts() }),
+        recordParticipantActivity: () => recordLocalParticipantActivity(payload),
         updateStatus: () => updateLocalParticipantByKey('rowId', payload.rowId, {
             status_seleksi: payload.status || payload.newStatus,
             participant_stage: (payload.status || payload.newStatus) === 'lolos' ? 'accepted_stage_1' : 'rejected_stage_1'
@@ -577,6 +601,139 @@ function updateLocalParticipantProfile(payload) {
         cv_link: payload.cv_link || participant.cv_link,
         profile_updated_at: new Date().toISOString()
     });
+}
+
+function readLocalParticipantAccounts() {
+    try {
+        return JSON.parse(fs.readFileSync(PARTICIPANT_ACCOUNTS_PATH, 'utf8') || '[]');
+    } catch {
+        return [];
+    }
+}
+
+function writeLocalParticipantAccounts(accounts) {
+    fs.mkdirSync(path.dirname(PARTICIPANT_ACCOUNTS_PATH), { recursive: true });
+    fs.writeFileSync(PARTICIPANT_ACCOUNTS_PATH, JSON.stringify(accounts, null, 2));
+}
+
+function provisionLocalParticipantAccounts(payload = {}) {
+    const forceReset = payload.forceReset === true || payload.force === true;
+    const participants = readLocalParticipants().filter(isLocalParticipantEligibleForPortal);
+    const accounts = readLocalParticipantAccounts();
+    const skipped = [];
+    const resultAccounts = [];
+    const now = new Date().toISOString();
+
+    participants.forEach(participant => {
+        const nik = normalizeLocalNik(participant.nik);
+        if (!nik || nik.length < 8) {
+            skipped.push({ rowId: participant.rowId, nama_lengkap: participant.nama_lengkap || '', reason: 'NIK kosong/tidak valid' });
+            return;
+        }
+        const existingIndex = accounts.findIndex(account => normalizeLocalNik(account.nik || account.username) === nik);
+        const existing = existingIndex >= 0 ? accounts[existingIndex] : {};
+        const isTestSeed = participant.rowId === TEST_PARTICIPANT.rowId && nik === normalizeLocalNik(TEST_PARTICIPANT.nik);
+        const shouldGenerate = !isTestSeed && (forceReset || !participant.participant_password || !existing.generated_password);
+        const password = isTestSeed ? TEST_PASSWORD : (shouldGenerate ? generateLocalParticipantPassword(12) : existing.generated_password);
+
+        if (shouldGenerate) {
+            updateLocalParticipantByKey('nik', participant.nik, {
+                participant_password: hashLocalPassword(password),
+                participant_stage: participant.participant_stage || 'accepted_stage_1',
+                profile_updated_at: now
+            });
+        }
+
+        const account = {
+            account_id: existing.account_id || `pa_${crypto.randomUUID()}`,
+            nik,
+            username: nik,
+            generated_password: password,
+            password_status: isTestSeed ? 'seed' : (shouldGenerate ? 'generated' : 'existing'),
+            nama_lengkap: participant.nama_lengkap || '',
+            email: participant.email || '',
+            whatsapp: participant.whatsapp || '',
+            participant_rowId: participant.rowId,
+            participant_stage: participant.participant_stage || '',
+            status_seleksi: participant.status_seleksi || '',
+            created_at: existing.created_at || now,
+            updated_at: now,
+            created_by: payload.adminId || payload.created_by || 'local-dev'
+        };
+        if (existingIndex >= 0) accounts[existingIndex] = account;
+        else accounts.push(account);
+        resultAccounts.push(account);
+    });
+
+    writeLocalParticipantAccounts(accounts);
+    return {
+        status: 'success',
+        generated: resultAccounts.filter(account => account.password_status === 'generated').length,
+        total: resultAccounts.length,
+        skipped,
+        accounts: resultAccounts
+    };
+}
+
+function isLocalParticipantEligibleForPortal(participant) {
+    const selection = String(participant.status_seleksi || '').toLowerCase();
+    const stage = String(participant.participant_stage || '').toLowerCase();
+    const stage2 = String(participant.status_tahap_2 || participant.competency_status || '').toLowerCase();
+    const finalStatus = String(participant.status_final || participant.final_status || '').toLowerCase();
+    return selection === 'lolos'
+        || stage.startsWith('accepted')
+        || stage.startsWith('bootcamp')
+        || stage === 'competency_submitted'
+        || stage === 'graduated'
+        || stage2 === 'lolos'
+        || finalStatus === 'lolos'
+        || finalStatus === 'accepted';
+}
+
+function generateLocalParticipantPassword(length = 12) {
+    const groups = ['ABCDEFGHJKLMNPQRSTUVWXYZ', 'abcdefghijkmnopqrstuvwxyz', '23456789', '!@#$%?_-+='];
+    const all = groups.join('');
+    const chars = groups.map(group => group[crypto.randomInt(group.length)]);
+    while (chars.length < Math.max(12, length)) chars.push(all[crypto.randomInt(all.length)]);
+    for (let i = chars.length - 1; i > 0; i--) {
+        const j = crypto.randomInt(i + 1);
+        [chars[i], chars[j]] = [chars[j], chars[i]];
+    }
+    return chars.join('').slice(0, Math.max(12, length));
+}
+
+function readLocalParticipantActivity() {
+    try {
+        return JSON.parse(fs.readFileSync(PARTICIPANT_ACTIVITY_PATH, 'utf8') || '[]');
+    } catch {
+        return [];
+    }
+}
+
+function recordLocalParticipantActivity(payload = {}) {
+    const nik = normalizeLocalNik(payload.nik);
+    const participant = nik ? findLocalParticipantByNik(nik) : null;
+    const activity = {
+        activity_id: payload.activity_id || `act_${crypto.randomUUID()}`,
+        timestamp: payload.timestamp || new Date().toISOString(),
+        nik,
+        nama_lengkap: payload.nama_lengkap || participant?.nama_lengkap || '',
+        activity_type: payload.activity_type || payload.type || 'activity',
+        page: payload.page || '',
+        module_id: payload.module_id || payload.moduleId || '',
+        lesson_id: payload.lesson_id || payload.lessonId || '',
+        activity: payload.activity || '',
+        score: payload.score ?? '',
+        total: payload.total ?? '',
+        payload_json: JSON.stringify(payload.details || payload.payload || {}),
+        user_agent: payload.user_agent || payload.userAgent || '',
+        session_id: payload.session_id || payload.sessionId || ''
+    };
+    const activities = readLocalParticipantActivity();
+    activities.push(activity);
+    fs.mkdirSync(path.dirname(PARTICIPANT_ACTIVITY_PATH), { recursive: true });
+    fs.writeFileSync(PARTICIPANT_ACTIVITY_PATH, JSON.stringify(activities, null, 2));
+    return { status: 'success', activity };
 }
 
 function runLocalAiAnalysis(payload) {

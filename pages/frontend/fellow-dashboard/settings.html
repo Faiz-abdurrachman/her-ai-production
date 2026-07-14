@@ -1,0 +1,150 @@
+<section class="fellow-dashboard">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+
+        <div class="fellow-menu-label">Lainnya</div>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a class="active" href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+    </aside>
+
+    <main class="fellow-main settings-page">
+        <header class="fellow-topbar">
+            <div>
+                <h1 data-fellow-greeting>Pengaturan</h1>
+                <p>Kelola profil, preferensi notifikasi, dan keamanan akun Anda.</p>
+            </div>
+            <div class="fellow-actions">
+                <div class="topbar-spacer"></div>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
+                    <i class="far fa-bell"></i>
+                    <span class="badge">5</span>
+                </button>
+                <div class="fellow-user-menu">
+                    <button type="button" class="fellow-user-button" data-fellow-user-toggle aria-expanded="false">
+                        <img src="/assets/avatars/user-1.jpg" alt="Aisyah Putri" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
+                        <span><strong>Aisyah Putri</strong><small>Fellow</small></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="settings-layout">
+
+            <aside class="settings-sidebar-nav">
+                <nav class="s-nav-list">
+                    <button class="active"><i class="far fa-user"></i> Profil Publik</button>
+                    <button><i class="fas fa-shield-alt"></i> Keamanan Akun</button>
+                    <button><i class="far fa-bell"></i> Preferensi Notifikasi</button>
+                    <button><i class="fas fa-laptop-code"></i> Tampilan & Aksesibilitas</button>
+                    <button class="btn-danger"><i class="fas fa-sign-out-alt"></i> Keluar Akun</button>
+                </nav>
+            </aside>
+
+            <div class="settings-content-area">
+
+                <div class="settings-card">
+                    <div class="card-header">
+                        <h2>Profil Publik</h2>
+                        <p>Informasi ini akan ditampilkan secara publik di forum komunitas dan leaderboard.</p>
+                    </div>
+
+                    <div class="card-body">
+                        <!-- Avatar Upload -->
+                        <div class="avatar-upload-section">
+                            <img src="/assets/avatars/user-1.jpg" alt="Aisyah Putri" class="large-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
+                            <div class="avatar-actions">
+                                <div class="btn-group">
+                                    <button class="btn-upload"><i class="fas fa-upload"></i> Unggah Foto Baru</button>
+                                    <button class="btn-remove">Hapus</button>
+                                </div>
+                                <span>Format yang didukung: JPG, PNG, atau GIF. Ukuran maksimal 2MB.</span>
+                            </div>
+                        </div>
+
+                        <hr class="s-divider">
+
+                        <!-- Profile Form -->
+                        <form class="settings-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Nama Lengkap</label>
+                                    <input type="text" value="Aisyah Putri">
+                                </div>
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    <div class="input-with-prefix">
+                                        <span class="prefix">@</span>
+                                        <input type="text" value="aisyahputri">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Email Terdaftar <span class="badge-verified"><i class="fas fa-check-circle"></i> Terverifikasi</span></label>
+                                    <input type="email" value="aisyah.putri@example.com" disabled>
+                                    <small>Gunakan menu Keamanan Akun untuk mengubah email.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nomor WhatsApp</label>
+                                    <input type="tel" value="+62 812 3456 7890">
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label>Bio Singkat</label>
+                                <textarea rows="4" placeholder="Tulis sedikit tentang dirimu...">Mahasiswi Ilmu Komputer semester 6 yang sangat antusias mendalami Artificial Intelligence dan Data Science. Bercita-cita menjadi AI Engineer wanita yang berkontribusi bagi Indonesia.</textarea>
+                                <small>Bio ini akan muncul di halaman profil komunitas Anda. (Maksimal 200 karakter)</small>
+                            </div>
+
+                            <h3 class="sub-heading">Tautan Sosial & Portfolio</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label><i class="fab fa-linkedin"></i> LinkedIn URL</label>
+                                    <input type="url" value="https://linkedin.com/in/aisyahputri">
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fab fa-github"></i> GitHub URL</label>
+                                    <input type="url" value="https://github.com/aisyahputri">
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <label><i class="fas fa-globe"></i> Website Personal / Portfolio</label>
+                                <input type="url" placeholder="https://">
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn-cancel">Batal</button>
+                                <button type="button" class="btn-save">Simpan Perubahan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+</section>

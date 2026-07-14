@@ -5,12 +5,12 @@
 }
 
 .participant-login-active {
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .participant-login-active #app-content {
-    height: 100dvh;
-    overflow: hidden;
+    min-height: 100dvh;
 }
 
 .participant-login-shell {
@@ -725,5 +725,83 @@
 
     .competency-left-nav {
         position: static;
+    }
+}
+
+/* ==========================================
+   Responsive Participant Login Card
+   ========================================== */
+@media (max-width: 992px) {
+    .participant-login-shell {
+        padding: 24px;
+    }
+    .participant-login-card {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+    .participant-login-hero {
+        padding: 24px;
+        min-height: 280px;
+        align-content: start;
+        text-align: center;
+    }
+    .participant-login-orbit {
+        width: 280px;
+        margin: 20px auto -30px;
+        align-self: end;
+        justify-self: center;
+    }
+    .participant-login-orbit img {
+        width: 100%;
+        margin-left: 0;
+    }
+    .participant-login-chip {
+        display: none;
+    }
+    .participant-login-logo {
+        margin: 0 auto;
+    }
+    .participant-login-panel {
+        padding: 40px 32px;
+    }
+    .participant-login-mark {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .participant-login-shell {
+        padding: 16px;
+    }
+    .participant-login-hero {
+        display: none;
+    }
+    .participant-login-mark {
+        display: block;
+        margin: 0 auto;
+        justify-self: center;
+        width: 100px;
+    }
+    .participant-login-panel {
+        padding: 32px 20px;
+    }
+    .participant-login-panel h1 {
+        font-size: 1.75rem;
+        text-align: center;
+    }
+    .participant-login-panel p,
+    .profile-badge {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+    .participant-login-form {
+        padding: 20px;
+    }
+    .participant-login-note {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
     }
 }

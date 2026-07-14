@@ -1,0 +1,101 @@
+<h1>Chapter 5 — Collection: Wadah Data</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Menggunakan list, tuple, dictionary, dan set.</li>
+<li>Memilih collection berdasarkan kebutuhan.</li>
+<li>Memodelkan baris dataset dan payload JSON sederhana.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Data nyata terdiri dari banyak observasi. Collection memungkinkan kita menyimpan dan mengorganisasi data tersebut.</p>
+<h2>Hubungan dengan AI</h2>
+<p>List dapat menyimpan kumpulan label, dictionary menyerupai object JSON dari API, tuple cocok untuk pasangan tetap, dan set berguna mencari kategori unik.</p>
+<h2>Analogi</h2>
+<p>List seperti antrean yang dapat berubah. Tuple seperti koordinat yang strukturnya tetap. Dictionary seperti kartu identitas dengan label field. Set seperti daftar tamu unik tanpa duplikasi.</p>
+<h2>Penjelasan Konsep</h2>
+<table>
+<thead>
+<tr>
+<th>Collection</th>
+<th align="right">Berurutan</th>
+<th align="right">Dapat diubah</th>
+<th align="right">Duplikat</th>
+<th>Penggunaan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>List</td>
+<td align="right">Ya</td>
+<td align="right">Ya</td>
+<td align="right">Ya</td>
+<td>Kumpulan record/nilai</td>
+</tr>
+<tr>
+<td>Tuple</td>
+<td align="right">Ya</td>
+<td align="right">Tidak</td>
+<td align="right">Ya</td>
+<td>Struktur tetap</td>
+</tr>
+<tr>
+<td>Dictionary</td>
+<td align="right">Key order terjaga</td>
+<td align="right">Ya</td>
+<td align="right">Key unik</td>
+<td>Metadata/JSON</td>
+</tr>
+<tr>
+<td>Set</td>
+<td align="right">Tidak untuk indexing</td>
+<td align="right">Ya</td>
+<td align="right">Tidak</td>
+<td>Nilai unik</td>
+</tr>
+</tbody></table>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">participant = {
+  &quot;name&quot;: &quot;Ayu&quot;,
+  &quot;scores&quot;: [80, 90, 85],
+  &quot;location&quot;: (&quot;Jakarta&quot;, &quot;ID&quot;)
+}
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Satu peserta memiliki nama dan beberapa nilai. Banyak peserta menjadi list berisi dictionary.</p>
+<h2>Contoh AI</h2>
+<p>Respons API sering direpresentasikan sebagai dictionary bersarang yang dapat diubah menjadi JSON.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">participants = [
+    {&quot;name&quot;: &quot;Ayu&quot;, &quot;score&quot;: 88, &quot;track&quot;: &quot;data&quot;},
+    {&quot;name&quot;: &quot;Nisa&quot;, &quot;score&quot;: 91, &quot;track&quot;: &quot;data&quot;},
+]
+
+tracks = {item[&quot;track&quot;] for item in participants}
+print(participants[0][&quot;name&quot;])
+print(tracks)
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li><code>participants</code> adalah list.</li>
+<li>Setiap item adalah dictionary dengan schema yang sama.</li>
+<li>Set comprehension mengambil track unik.</li>
+<li>Index <code>0</code> memilih peserta pertama; key <code>name</code> memilih field nama.</li>
+<li>Set track ditampilkan.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li>Mengakses index yang tidak ada.</li>
+<li>Mengakses key yang salah eja.</li>
+<li>Mengubah list saat sedang di-loop tanpa rencana.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li>Gunakan struktur konsisten untuk setiap record.</li>
+<li>Pakai <code>.get()</code> jika key boleh tidak tersedia.</li>
+<li>Jangan memakai set ketika urutan atau duplikat bermakna.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Tambahkan satu peserta, ambil semua nilai menjadi list baru, dan tampilkan track unik.</p>
+<h2>Ringkasan</h2>
+<p>Collection mengubah nilai terpisah menjadi struktur data yang dapat diproses sebagai dataset kecil.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Berikutnya kita membuat program mengambil keputusan dan mengulang proses pada setiap record.</p>
+<hr>

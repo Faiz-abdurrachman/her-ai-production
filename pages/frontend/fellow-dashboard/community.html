@@ -1,0 +1,403 @@
+<section class="fellow-dashboard">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a class="active" href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+
+        <div class="fellow-menu-label">Lainnya</div>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+
+        <div class="invite-card">
+            <p><strong>Ajak Temanmu!</strong><br>Dapatkan poin tambahan untuk setiap teman yang bergabung.</p>
+            <button type="button">Undang Sekarang</button>
+        </div>
+    </aside>
+
+    <main class="fellow-main community-page">
+        <header class="fellow-topbar">
+            <div>
+                <h1 data-fellow-greeting>Komunitas</h1>
+                <p>Berkolaborasi, berbagi ilmu, dan tumbuh bersama komunitas HerAI Fellowship.</p>
+            </div>
+            <div class="fellow-actions">
+                <label class="fellow-search community-search">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="search" placeholder="Cari komunitas, topik, atau anggota...">
+                </label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
+                    <i class="far fa-bell"></i>
+                    <span class="badge">5</span>
+                </button>
+                <div class="fellow-user-menu">
+                    <button type="button" class="fellow-user-button" data-fellow-user-toggle aria-expanded="false">
+                        <img src="/assets/avatars/user-1.jpg" alt="Aisyah Putri" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
+                        <span><strong>Aisyah Putri</strong><small>Fellow</small></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="community-layout">
+            <div class="community-main-column">
+                <div class="community-tabs-container">
+                    <div class="community-tabs">
+                        <button class="active">Untukmu</button>
+                        <button>Grup</button>
+                        <button>Diskusi</button>
+                        <button>Mentor Corner</button>
+                        <button>Pengumuman</button>
+                    </div>
+                </div>
+
+                <div class="community-hero">
+                    <div class="hero-content">
+                        <h2>Bergabung dan tumbuh<br>bersama komunitas AI wanita<br>terbesar di Indonesia!</h2>
+                        <p>Temukan teman, mentor, dan peluang baru.</p>
+                        <button class="btn-primary-pink"><i class="fas fa-pen-to-square"></i> Buat Postingan</button>
+                    </div>
+                    <img src="/assets/referensi/persona2.png" alt="HerAI Community" class="hero-illustration">
+                </div>
+
+                <div class="section-header">
+                    <h3>Grup Populer</h3>
+                    <a href="#" class="link-all">Lihat Semua <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="popular-groups-container">
+                    <div class="popular-groups">
+                        <!-- Group 1 -->
+                        <div class="group-card">
+                            <div class="group-icon pink-gradient">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h4>AI & Machine Learning Indonesia</h4>
+                            <span class="member-count">12.4K anggota</span>
+                            <p>Diskusi seputar AI, ML, dan perkembangannya di Indonesia.</p>
+                            <button class="btn-outline pink">Bergabung</button>
+                        </div>
+
+                        <!-- Group 2 -->
+                        <div class="group-card">
+                            <div class="group-icon purple-gradient">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h4>Data Scientist Community</h4>
+                            <span class="member-count">8.7K anggota</span>
+                            <p>Belajar dan berbagi seputar data science, analisis, dan visualisasi.</p>
+                            <button class="btn-outline pink">Bergabung</button>
+                        </div>
+
+                        <!-- Group 3 -->
+                        <div class="group-card">
+                            <div class="group-icon orange-gradient">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4>NLP Enthusiast</h4>
+                            <span class="member-count">6.1K anggota</span>
+                            <p>Membahas Natural Language Processing dan aplikasinya.</p>
+                            <button class="btn-outline pink">Bergabung</button>
+                        </div>
+
+                        <!-- Group 4 -->
+                        <div class="group-card">
+                            <div class="group-icon green-gradient">
+                                <i class="fas fa-id-card-clip"></i>
+                            </div>
+                            <h4>Project Collaborators</h4>
+                            <span class="member-count">5.3K anggota</span>
+                            <p>Cari partner untuk mengerjakan proyek AI bersama.</p>
+                            <button class="btn-outline pink">Bergabung</button>
+                        </div>
+
+                        <!-- Explore More -->
+                        <div class="group-card explore-card">
+                            <div class="group-icon outline-dash">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <h4>Lihat Semua Grup</h4>
+                            <p>Temukan lebih banyak grup yang sesuai denganmu.</p>
+                            <button class="btn-outline pink">Jelajahi</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-header discussion-header">
+                    <h3>Diskusi Terbaru</h3>
+                    <div class="inline-tabs">
+                        <button class="active">Terbaru</button>
+                        <button>Populer</button>
+                        <button>Mengikuti</button>
+                    </div>
+                </div>
+
+                <div class="discussion-list">
+                    <!-- Discussion 1 -->
+                    <div class="discussion-item">
+                        <img src="https://ui-avatars.com/api/?name=Siti+Aulia&background=fce7f3&color=be185d" alt="Siti Aulia" class="discuss-avatar">
+                        <div class="discuss-content">
+                            <div class="discuss-title-row">
+                                <h4>Tips belajar Python untuk pemula di bidang AI</h4>
+                                <span class="badge-tag pink">Pemula</span>
+                            </div>
+                            <div class="discuss-meta">
+                                <strong>Siti Aulia</strong> &bull; <span>2 jam yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="discuss-actions">
+                            <button><i class="far fa-comment"></i> 24</button>
+                            <button><i class="far fa-heart"></i> 128</button>
+                            <button><i class="far fa-bookmark"></i></button>
+                            <button><i class="fas fa-ellipsis"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Discussion 2 -->
+                    <div class="discussion-item">
+                        <img src="https://ui-avatars.com/api/?name=Dewi+Lestari&background=f3e8ff&color=7e22ce" alt="Dewi Lestari" class="discuss-avatar">
+                        <div class="discuss-content">
+                            <div class="discuss-title-row">
+                                <h4>Rekomendasi dataset untuk project NLP</h4>
+                                <span class="badge-tag purple">NLP</span>
+                            </div>
+                            <div class="discuss-meta">
+                                <strong>Dewi Lestari</strong> &bull; <span>5 jam yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="discuss-actions">
+                            <button><i class="far fa-comment"></i> 18</button>
+                            <button><i class="far fa-heart"></i> 96</button>
+                            <button><i class="far fa-bookmark"></i></button>
+                            <button><i class="fas fa-ellipsis"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Discussion 3 -->
+                    <div class="discussion-item">
+                        <img src="https://ui-avatars.com/api/?name=Rani+Mentari&background=dcfce7&color=16a34a" alt="Rani Mentari" class="discuss-avatar">
+                        <div class="discuss-content">
+                            <div class="discuss-title-row">
+                                <h4>Pengalaman ikut AI Hackathon pertama kali 🚀</h4>
+                                <span class="badge-tag green">Pengalaman</span>
+                            </div>
+                            <div class="discuss-meta">
+                                <strong>Rani Mentari</strong> &bull; <span>1 hari yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="discuss-actions">
+                            <button><i class="far fa-comment"></i> 32</button>
+                            <button><i class="far fa-heart"></i> 156</button>
+                            <button><i class="far fa-bookmark"></i></button>
+                            <button><i class="fas fa-ellipsis"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Discussion 4 -->
+                    <div class="discussion-item">
+                        <img src="/assets/avatars/user-1.jpg" alt="Aisyah Putri" class="discuss-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
+                        <div class="discuss-content">
+                            <div class="discuss-title-row">
+                                <h4>Cara membangun portofolio AI yang menarik</h4>
+                                <span class="badge-tag orange">Karier</span>
+                            </div>
+                            <div class="discuss-meta">
+                                <strong>Aisyah Putri</strong> &bull; <span>2 hari yang lalu</span>
+                            </div>
+                        </div>
+                        <div class="discuss-actions">
+                            <button><i class="far fa-comment"></i> 27</button>
+                            <button><i class="far fa-heart"></i> 134</button>
+                            <button><i class="far fa-bookmark"></i></button>
+                            <button><i class="fas fa-ellipsis"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discuss-footer">
+                    <a href="#" class="link-all">Lihat Semua Diskusi <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <!-- RIGHT WIDGET COLUMN -->
+            <aside class="community-widgets">
+                <!-- Top Kontributor -->
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Top Kontributor</h3>
+                        <a href="#">Lihat Semua <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="contributors-list">
+                        <div class="contributor-item">
+                            <span class="rank rank-1">1</span>
+                            <img src="https://ui-avatars.com/api/?name=Dewi+Lestari&background=f3e8ff&color=7e22ce" alt="Dewi" class="contributor-avatar">
+                            <div class="contributor-info">
+                                <strong>Dewi Lestari</strong>
+                                <span>@dewilestari</span>
+                            </div>
+                            <div class="contributor-points">
+                                <span>2,450 poin</span>
+                                <i class="fas fa-medal gold"></i>
+                            </div>
+                        </div>
+                        <div class="contributor-item active">
+                            <span class="rank rank-2">2</span>
+                            <img src="/assets/avatars/user-1.jpg" alt="Aisyah" class="contributor-avatar" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
+                            <div class="contributor-info">
+                                <strong class="pink-text">Aisyah Putri (Kamu)</strong>
+                                <span>@aisyahputri</span>
+                            </div>
+                            <div class="contributor-points">
+                                <span>2,120 poin</span>
+                                <i class="fas fa-medal silver"></i>
+                            </div>
+                        </div>
+                        <div class="contributor-item">
+                            <span class="rank rank-3">3</span>
+                            <img src="https://ui-avatars.com/api/?name=Siti+Aulia&background=fce7f3&color=be185d" alt="Siti" class="contributor-avatar">
+                            <div class="contributor-info">
+                                <strong>Siti Aulia</strong>
+                                <span>@sitiaulia</span>
+                            </div>
+                            <div class="contributor-points">
+                                <span>1,890 poin</span>
+                                <i class="fas fa-medal bronze"></i>
+                            </div>
+                        </div>
+                        <div class="contributor-item">
+                            <span class="rank">4</span>
+                            <img src="https://ui-avatars.com/api/?name=Rani+Mentari&background=dcfce7&color=16a34a" alt="Rani" class="contributor-avatar">
+                            <div class="contributor-info">
+                                <strong>Rani Mentari</strong>
+                                <span>@ranimentari</span>
+                            </div>
+                            <div class="contributor-points">
+                                <span>1,450 poin</span>
+                                <i class="fas fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                        <div class="contributor-item">
+                            <span class="rank">5</span>
+                            <img src="https://ui-avatars.com/api/?name=Nadia+Putri&background=ffedd5&color=ea580c" alt="Nadia" class="contributor-avatar">
+                            <div class="contributor-info">
+                                <strong>Nadia Putri</strong>
+                                <span>@nadiaputri</span>
+                            </div>
+                            <div class="contributor-points">
+                                <span>1,230 poin</span>
+                                <i class="fas fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Community Events -->
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Upcoming Community Events</h3>
+                        <a href="#">Lihat Semua <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="comm-events-list">
+                        <div class="comm-event-item">
+                            <div class="comm-event-date pink-text">
+                                <strong>24</strong>
+                                <span>MEI</span>
+                            </div>
+                            <div class="comm-event-info">
+                                <h4>Community Study: LangChain untuk Pemula</h4>
+                                <span>Sab, 24 Mei 2024 • 10.00 WIB</span>
+                            </div>
+                            <button class="btn-outline pink sm">Gabung</button>
+                        </div>
+                        <div class="comm-event-item">
+                            <div class="comm-event-date pink-text">
+                                <strong>31</strong>
+                                <span>MEI</span>
+                            </div>
+                            <div class="comm-event-info">
+                                <h4>Data Talk: Tren AI 2024</h4>
+                                <span>Sab, 31 Mei 2024 • 13.00 WIB</span>
+                            </div>
+                            <button class="btn-outline pink sm">Gabung</button>
+                        </div>
+                        <div class="comm-event-item">
+                            <div class="comm-event-date pink-text">
+                                <strong>7</strong>
+                                <span>JUN</span>
+                            </div>
+                            <div class="comm-event-info">
+                                <h4>AI Project Showcase</h4>
+                                <span>Jum, 7 Juni 2024 • 19.00 WIB</span>
+                            </div>
+                            <button class="btn-outline pink sm">Gabung</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topik Populer -->
+                <div class="widget-card">
+                    <div class="widget-header">
+                        <h3>Topik Populer</h3>
+                        <a href="#">Lihat Semua <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="topics-grid">
+                        <div class="topic-pill">
+                            <i class="fas fa-hashtag purple-text"></i>
+                            <div class="topic-info">
+                                <strong>MachineLearning</strong>
+                                <span>1.9K posts</span>
+                            </div>
+                        </div>
+                        <div class="topic-pill">
+                            <i class="fas fa-hashtag purple-text"></i>
+                            <div class="topic-info">
+                                <strong>NLP</strong>
+                                <span>654 posts</span>
+                            </div>
+                        </div>
+                        <div class="topic-pill">
+                            <i class="fas fa-hashtag purple-text"></i>
+                            <div class="topic-info">
+                                <strong>Python</strong>
+                                <span>980 posts</span>
+                            </div>
+                        </div>
+                        <div class="topic-pill">
+                            <i class="fas fa-hashtag purple-text"></i>
+                            <div class="topic-info">
+                                <strong>AIProject</strong>
+                                <span>543 posts</span>
+                            </div>
+                        </div>
+                        <div class="topic-pill">
+                            <i class="fas fa-hashtag purple-text"></i>
+                            <div class="topic-info">
+                                <strong>DataScience</strong>
+                                <span>876 posts</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+</section>

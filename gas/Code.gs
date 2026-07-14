@@ -12,6 +12,108 @@
 
 const SPREADSHEET_ID = '120NQtFqErJiIfITlPfVo8wV6G0_79qFKMTaptxNF-RA';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
+const TARGET_PARTICIPANT_PORTAL_EMAILS = [
+  'sulyastrianggai@gmail.com',
+  'rlputeri228@gmail.com',
+  'sitisyahlahseptiyani@gmail.com',
+  'anisahlathifah1453@gmail.com',
+  'loveinaevelyn@gmail.com',
+  'salmaninda28@gmail.com',
+  'anazzdeapita@gmail.com',
+  'anugerahfeliany@gmail.com',
+  'sustrisimamora0413@gmail.com',
+  'astriainun93@gmail.com',
+  'shelawdya44@gmail.com',
+  'celinapinonkuan26@gmail.com',
+  'dianlekatompessy12@gmail.com',
+  'ademegalia23@gmail.com',
+  'auliapadzila@gmail.com',
+  'nafeesahasnaputribimantari@gmail.com',
+  'zanetacc36b@gmail.com',
+  'kemilausenjasenandung@gmail.com',
+  'virarahman04@gmail.com',
+  'fajardindawati@gmail.com',
+  'asyifaarianti279@gmail.com',
+  'angelitaroselya123@gmail.com',
+  'saharasaputri79@gmail.com',
+  'larasqatrunnada@gmail.com',
+  '22090124.berliani@student.poltekharber.ac.id',
+  'fildzahizzati28@gmail.com',
+  'nuraidah.pknstan@gmail.com',
+  'salsadarlena70@gmail.com',
+  'fatiyalabibah17@gmail.com',
+  'hiy.karenina@gmail.com',
+  'badariandini.fitria@gmail.com',
+  'andrya.listy@gmail.com',
+  'ayuhalimatus08@gmail.com',
+  'dhestayy@gmail.com',
+  'dwianggaraarsellya@gmail.com',
+  'a3cryspy17@gmail.com',
+  '1mustikaaulia@gmail.com',
+  'salamasandihaqq@gmail.com',
+  'widiawatywine@gmail.com',
+  'silvanyafrizli@gmail.com',
+  'naooo.riaaa@gmail.com',
+  'salwanurul2612@gmail.com',
+  'firdiyanti.education@gmail.com',
+  'faustineftinegann@gmail.com',
+  'auliapw85@gmail.com',
+  'chayrunnisyasalsabilapj@gmail.com',
+  'salsabila.mahdi@gmail.com',
+  'octaviana.og@gmail.com',
+  'annisa.einfadh@gmail.com',
+  'ellsasania66@gmail.com',
+  'aksaradenawa11@gmail.com',
+  'gitagirsang27@gmail.com',
+  'shfaa.salsabila@gmail.com',
+  'rianadth1101@gmail.com',
+  'salmaakhoirunn@gmail.com',
+  'kellypatricias2004@gmail.com',
+  'nura28523@gmail.com',
+  'devilam1807@gmail.com',
+  'ciciramadhani398@gmail.com',
+  'syhdrs83@gmail.com',
+  'nanasep2409@gmail.com',
+  'laurathea397@gmail.com',
+  'gereycie@gmail.com',
+  'pradnyaanc@gmail.com',
+  'angelhutajulu2@gmail.com',
+  'ryhnkhlilahptri@gmail.com',
+  'nazwaakeyla07@gmail.com',
+  'shafiranurrr2005@gmail.com',
+  'jennyagustinar@gmail.com',
+  'ansyari.atikah@gmail.com',
+  'nailakesmas@gmail.com',
+  'salwa.adhani12@gmail.com',
+  'muthmainnahzxc@gmail.com',
+  'farahkirana08@gmail.com',
+  'amarodesignid@gmail.com',
+  'lestianaanggun7@gmail.com',
+  'gheacitramel@gmail.com',
+  'nazlahaulia84@gmail.com',
+  'nerismaeka26@gmail.com',
+  'ameliaamanatulislam22@gmail.com',
+  'khairunnisa01040623@gmail.com',
+  'vovifathonah@gmail.com',
+  '250202082@student.ar-raniry.ac.id',
+  'zaharachairani78@gmail.com',
+  'vannya.a.gun@gmail.com',
+  'pratamaputrinaylha@gmail.com',
+  'annisaariyanti1@gmail.com',
+  'tirtamahayogi@gmail.com',
+  'tebiaryo@gmail.com',
+  'khairanifajriyah1@gmail.com',
+  'ike.marlina111@gmail.com',
+  'elfilia.angelina@gmail.com',
+  'sekarayuri@gmail.com',
+  'destyarosa@gmail.com',
+  'essyananike@gmail.com',
+  'hilmkmlh@gmail.com',
+  'krinazzhra@gmail.com',
+  'mayaworkishere@gmail.com',
+  'lismatulroqmah@gmail.com',
+  'ariellacahyani@gmail.com'
+];
 
 const SHEETS = {
   participants: 'peserta_tahap_1',
@@ -34,7 +136,9 @@ const SHEETS = {
   participantDashboardTracks: 'participant_dashboard_tracks',
   participantDashboardJourney: 'participant_dashboard_journey',
   participantDashboardEvents: 'participant_dashboard_events',
-  participantDashboardLeaderboard: 'participant_dashboard_leaderboard'
+  participantDashboardLeaderboard: 'participant_dashboard_leaderboard',
+  participantAccounts: 'ParticipantAccounts',
+  participantActivity: 'ParticipantActivity'
 };
 
 const SCHEMA = {
@@ -70,7 +174,9 @@ const SCHEMA = {
   [SHEETS.participantDashboardTracks]: ['title', 'subtitle', 'icon', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardJourney]: ['title', 'subtitle', 'progress', 'icon', 'accent', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardEvents]: ['day', 'month', 'title', 'time', 'url', 'is_active', 'sort_order'],
-  [SHEETS.participantDashboardLeaderboard]: ['rank', 'nik', 'name', 'points', 'is_active']
+  [SHEETS.participantDashboardLeaderboard]: ['rank', 'nik', 'name', 'points', 'is_active'],
+  [SHEETS.participantAccounts]: ['account_id', 'nik', 'username', 'generated_password', 'password_status', 'nama_lengkap', 'email', 'whatsapp', 'participant_rowId', 'participant_stage', 'status_seleksi', 'created_at', 'updated_at', 'created_by'],
+  [SHEETS.participantActivity]: ['activity_id', 'timestamp', 'nik', 'nama_lengkap', 'activity_type', 'page', 'module_id', 'lesson_id', 'activity', 'score', 'total', 'payload_json', 'user_agent', 'session_id']
 };
 
 function doPost(e) {
@@ -82,6 +188,9 @@ function doPost(e) {
       participantLogin: () => participantLogin(payload),
       setParticipantPassword: () => setParticipantPassword(payload),
       updateParticipantProfile: () => updateParticipantProfile(payload),
+      provisionParticipantAccounts: () => provisionParticipantAccounts(payload),
+      getParticipantAccounts: () => ({ status: 'success', accounts: getRows(SHEETS.participantAccounts) }),
+      recordParticipantActivity: () => recordParticipantActivity(payload),
       getData: () => getParticipants(),
       updateStatus: () => updateParticipantStatus(payload),
       updateScore: () => updateScore(payload),
@@ -225,6 +334,58 @@ function setupDatabase() {
     sheet.setFrozenRows(1);
   });
   seedDefaults();
+}
+
+function setupParticipantBackend() {
+  ensureParticipantBackendSchema();
+  return logAndReturnParticipantProvisionResult(provisionParticipantAccounts({
+    adminId: 'setupParticipantBackend',
+    forceReset: false,
+    limit: 40
+  }));
+}
+
+function ensureParticipantBackendSchema() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  [SHEETS.participants, SHEETS.participantAccounts, SHEETS.participantActivity].forEach(function(name) {
+    const sheet = ss.getSheetByName(name) || ss.insertSheet(name);
+    ensureSchemaHeaders(sheet, SCHEMA[name]);
+    sheet.setFrozenRows(1);
+  });
+  SpreadsheetApp.flush();
+  return { status: 'success', message: 'Participant backend schema ready.' };
+}
+
+function generateParticipantAccountsBatch1() {
+  ensureParticipantBackendSchema();
+  return logAndReturnParticipantProvisionResult(provisionParticipantAccounts({ adminId: 'generateParticipantAccountsBatch1', forceReset: false, offset: 0, limit: 40 }));
+}
+
+function generateParticipantAccountsBatch2() {
+  ensureParticipantBackendSchema();
+  return logAndReturnParticipantProvisionResult(provisionParticipantAccounts({ adminId: 'generateParticipantAccountsBatch2', forceReset: false, offset: 40, limit: 40 }));
+}
+
+function generateParticipantAccountsBatch3() {
+  ensureParticipantBackendSchema();
+  return logAndReturnParticipantProvisionResult(provisionParticipantAccounts({ adminId: 'generateParticipantAccountsBatch3', forceReset: false, offset: 80, limit: 40 }));
+}
+
+function generateSelectedParticipantAccountsBatch1() {
+  return generateParticipantAccountsBatch1();
+}
+
+function generateSelectedParticipantAccountsBatch2() {
+  return generateParticipantAccountsBatch2();
+}
+
+function generateSelectedParticipantAccountsBatch3() {
+  return generateParticipantAccountsBatch3();
+}
+
+function logAndReturnParticipantProvisionResult(result) {
+  Logger.log(JSON.stringify(result, null, 2));
+  return result;
 }
 
 function setupReTestDatabase() {
@@ -413,12 +574,182 @@ function getParticipants() {
 function participantLogin(payload) {
   const participant = findParticipantByNik(payload.nik);
   if (!participant) return { status: 'error', message: 'NIK belum terdaftar.' };
+  if (!isParticipantEligibleForPortal(participant)) return { status: 'error', message: 'Akses peserta belum aktif untuk akun ini.' };
   if (!participant.participant_password) return { status: 'needs_password', message: 'Password belum dibuat.' };
   if (!verifyPasswordValue(participant.participant_password, payload.password)) {
     return { status: 'error', message: 'Password salah.' };
   }
   migrateParticipantPasswordIfNeeded(participant, payload.password);
+  recordParticipantActivity({
+    nik: participant.nik,
+    nama_lengkap: participant.nama_lengkap,
+    activity_type: 'login',
+    page: 'participant-login',
+    activity: 'Peserta login ke dashboard',
+    user_agent: payload.user_agent || payload.userAgent || ''
+  });
   return { status: 'success', profile: stripSensitiveParticipant(participant) };
+}
+
+function provisionParticipantAccounts(payload) {
+  const forceReset = payload.forceReset === true || payload.force === true;
+  const createdBy = payload.adminId || payload.created_by || 'system';
+  const limit = Math.max(1, Number(payload.limit || 40));
+  const offset = Math.max(0, Number(payload.offset || 0));
+  const targetEmailSet = getTargetParticipantPortalEmailSet();
+  const eligible = getRows(SHEETS.participants).filter(function(participant) {
+    return isTargetParticipantForPortal(participant, targetEmailSet);
+  });
+  const participants = eligible.slice(offset, offset + limit);
+  const matchedEmails = {};
+  eligible.forEach(function(participant) {
+    const email = normalizeEmail(participant.email);
+    if (email) matchedEmails[email] = true;
+  });
+  const missingTargets = TARGET_PARTICIPANT_PORTAL_EMAILS.filter(function(email) {
+    return !matchedEmails[normalizeEmail(email)];
+  });
+  const existingAccounts = getRows(SHEETS.participantAccounts);
+  const accountByNik = {};
+  existingAccounts.forEach(function(account) {
+    const key = String(account.nik || account.username || '').replace(/\D/g, '');
+    if (key) accountByNik[key] = account;
+  });
+  const accounts = [];
+  const skipped = [];
+  participants.forEach(function(participant) {
+    const nik = String(participant.nik || '').replace(/\D/g, '');
+    if (!nik || nik.length < 8) {
+      skipped.push({ rowId: participant.rowId, nama_lengkap: participant.nama_lengkap || '', reason: 'NIK kosong/tidak valid' });
+      return;
+    }
+
+    const existing = accountByNik[nik] || {};
+    const shouldGenerate = forceReset || !participant.participant_password || !existing.generated_password;
+    const password = shouldGenerate ? generateParticipantPassword(12) : existing.generated_password;
+    const now = new Date().toISOString();
+
+    if (shouldGenerate) {
+      updateByKey(SHEETS.participants, 'rowId', participant.rowId, {
+        participant_password: hashPasswordValue(password),
+        participant_stage: normalizeParticipantStage(participant.participant_stage),
+        profile_updated_at: now
+      });
+    }
+
+    const account = {
+      account_id: existing.account_id || ('pa_' + Utilities.getUuid()),
+      nik: nik,
+      username: nik,
+      generated_password: password,
+      password_status: shouldGenerate ? 'generated' : 'existing',
+      nama_lengkap: participant.nama_lengkap || '',
+      email: participant.email || '',
+      whatsapp: participant.whatsapp || '',
+      participant_rowId: participant.rowId,
+      participant_stage: participant.participant_stage || '',
+      status_seleksi: participant.status_seleksi || '',
+      created_at: existing.created_at || now,
+      updated_at: now,
+      created_by: createdBy
+    };
+    upsertByKey(SHEETS.participantAccounts, 'nik', nik, account);
+    accounts.push(account);
+  });
+
+  return {
+    status: 'success',
+    generated: accounts.filter(account => account.password_status === 'generated').length,
+    total: accounts.length,
+    eligible_total: eligible.length,
+    target_total: TARGET_PARTICIPANT_PORTAL_EMAILS.length,
+    matched_total: eligible.length,
+    missing_targets: missingTargets,
+    offset: offset,
+    limit: limit,
+    has_more: offset + limit < eligible.length,
+    next_offset: offset + limit,
+    skipped: skipped,
+    accounts: accounts
+  };
+}
+
+function findParticipantAccount(nik) {
+  const cleanNik = String(nik || '').replace(/\D/g, '');
+  return getRows(SHEETS.participantAccounts).find(function(account) {
+    return String(account.nik || account.username || '').replace(/\D/g, '') === cleanNik;
+  }) || {};
+}
+
+function normalizeEmail(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function getTargetParticipantPortalEmailSet() {
+  const emailSet = {};
+  TARGET_PARTICIPANT_PORTAL_EMAILS.forEach(function(email) {
+    const clean = normalizeEmail(email);
+    if (clean) emailSet[clean] = true;
+  });
+  return emailSet;
+}
+
+function isTargetParticipantForPortal(participant, targetEmailSet) {
+  const emailSet = targetEmailSet || getTargetParticipantPortalEmailSet();
+  const email = normalizeEmail(participant && participant.email);
+  return !!(email && emailSet[email]);
+}
+
+function isParticipantEligibleForPortal(participant) {
+  if (isTargetParticipantForPortal(participant)) return true;
+  const selection = String(participant.status_seleksi || '').toLowerCase();
+  const stage = String(participant.participant_stage || '').toLowerCase();
+  const stage2 = String(participant.status_tahap_2 || participant.competency_status || '').toLowerCase();
+  const finalStatus = String(participant.status_final || participant.final_status || '').toLowerCase();
+  return selection === 'lolos'
+    || stage.indexOf('accepted') === 0
+    || stage.indexOf('bootcamp') === 0
+    || stage === 'competency_submitted'
+    || stage === 'graduated'
+    || stage2 === 'lolos'
+    || finalStatus === 'lolos'
+    || finalStatus === 'accepted';
+}
+
+function generateParticipantPassword(length) {
+  const size = Math.max(12, Number(length || 12));
+  const groups = ['ABCDEFGHJKLMNPQRSTUVWXYZ', 'abcdefghijkmnopqrstuvwxyz', '23456789', '!@#$%?_-+='];
+  let password = groups.map(group => group.charAt(Math.floor(Math.random() * group.length))).join('');
+  const all = groups.join('');
+  while (password.length < size) {
+    password += all.charAt(Math.floor(Math.random() * all.length));
+  }
+  return password.split('').sort(function() {
+    return Math.random() - 0.5;
+  }).join('').slice(0, size);
+}
+
+function recordParticipantActivity(payload) {
+  const nik = String(payload.nik || '').replace(/\D/g, '');
+  const participant = nik ? findParticipantByNik(nik) : null;
+  const details = payload.details || payload.payload || {};
+  addRowObject(SHEETS.participantActivity, {
+    activity_id: payload.activity_id || ('act_' + Utilities.getUuid()),
+    timestamp: payload.timestamp || new Date().toISOString(),
+    nik: nik,
+    nama_lengkap: payload.nama_lengkap || (participant && participant.nama_lengkap) || '',
+    activity_type: payload.activity_type || payload.type || 'activity',
+    page: payload.page || '',
+    module_id: payload.module_id || payload.moduleId || '',
+    lesson_id: payload.lesson_id || payload.lessonId || '',
+    activity: payload.activity || '',
+    score: payload.score !== undefined ? payload.score : '',
+    total: payload.total !== undefined ? payload.total : '',
+    payload_json: JSON.stringify(details),
+    user_agent: payload.user_agent || payload.userAgent || '',
+    session_id: payload.session_id || payload.sessionId || ''
+  });
+  return { status: 'success' };
 }
 
 function setParticipantPassword(payload) {

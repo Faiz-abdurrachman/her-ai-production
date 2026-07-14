@@ -1,0 +1,1607 @@
+<section class="fellow-dashboard fellow-modules-page lesson-detail-page opencv-page" data-fellow-page="modules">
+<style>
+  .opencv-page{
+    --px-bg:#fff7fb; --px-bg-2:#fff0f7; --px-card:#ffffff;
+    --px-line:rgba(246,51,146,.16); --px-line-strong:rgba(246,51,146,.24);
+    --px-text:#171827; --px-text-2:#6f7282; --px-text-3:#6f7282;
+    --px-accent:#f63392; --px-accent-soft:rgba(246,51,146,.08);
+    --px-shadow:0 18px 50px rgba(246,51,146,.08);
+    --px-shadow-lg:0 24px 60px rgba(23,24,39,.08);
+    --px-radius:20px; --px-radius-sm:14px;
+    --px-font-disp:'Plus Jakarta Sans', sans-serif;
+    --px-font-body:'Inter', sans-serif;
+    --px-font-mono:'SF Mono','Space Mono',monospace;
+    --px-red:#e11d48; --px-green:#16a34a; --px-blue:#2563eb;
+    background:
+      radial-gradient(circle at top left, rgba(246,51,146,.10), transparent 30%),
+      radial-gradient(circle at 85% 12%, rgba(246,51,146,.06), transparent 22%),
+      var(--px-bg);
+    color:var(--px-text); font-family:var(--px-font-body);
+  }
+
+  /* ── Topbar ────────────────────────────────────── */
+  .opencv-page .lesson-topbar{
+    position:sticky; top:0; z-index:100;
+    padding:0; background:transparent;
+  }
+  .opencv-page .lesson-topbar-inner{
+    max-width:1600px; width:100%; margin:0 auto;
+    display:flex; align-items:center; height:68px;
+  }
+  .opencv-page .navbar-left{
+    flex:0 0 30%; display:flex; align-items:center;
+    padding-left:24px; min-width:0;
+  }
+  .opencv-page .navbar-center{
+    flex:0 0 40%; display:flex; align-items:center; justify-content:center;
+    text-align:center; min-width:0;
+    font-family:var(--px-font-disp); font-size:15px; font-weight:700;
+    color:var(--px-text);
+  }
+  .opencv-page .navbar-right{
+    flex:0 0 30%; display:flex; align-items:center; justify-content:flex-end;
+    padding-right:24px; min-width:0;
+  }
+  .opencv-page .lesson-breadcrumb{
+    display:flex; align-items:center; gap:8px; flex-shrink:0;
+    color:var(--px-text-2);
+  }
+  .opencv-page .lesson-breadcrumb a{
+    display:inline-flex; align-items:center; gap:6px;
+    color:var(--px-text-2); text-decoration:none; transition:color .2s;
+  }
+  .opencv-page .lesson-breadcrumb a:hover{ color:var(--px-accent); }
+  .opencv-page .lesson-breadcrumb-separator{ color:var(--px-text-3); font-size:10px; }
+  .opencv-page .lesson-breadcrumb > span:last-child{ font-weight:600; color:var(--px-text); }
+  .opencv-page .fellow-actions{
+    display:flex; align-items:center; gap:10px; flex-shrink:0;
+  }
+  .opencv-page .fellow-search{
+    display:flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,.95); height:40px;
+    border:1px solid rgba(246,51,146,.12);
+    border-radius:100px; padding:0 16px;
+    transition:all .2s; min-width:200px;
+  }
+  .opencv-page .fellow-search:focus-within{
+    border-color:rgba(246,51,146,.3);
+    box-shadow:0 0 0 3px rgba(246,51,146,.08);
+  }
+  .opencv-page .fellow-search i{ color:var(--px-text-3); font-size:14px; }
+  .opencv-page .fellow-search input{
+    border:none; outline:none; background:transparent;
+    font-size:13px; color:var(--px-text); width:120px;
+    font-family:var(--px-font-body);
+  }
+  .opencv-page .fellow-search input::placeholder{ color:var(--px-text-3); }
+  .opencv-page .fellow-icon-button{
+    display:flex; align-items:center; justify-content:center;
+    width:40px; height:40px; padding:0;
+    background:rgba(255,255,255,.95); border:1px solid rgba(246,51,146,.12);
+    border-radius:100px; cursor:pointer; position:relative;
+    transition:all .2s; color:var(--px-text-2);
+  }
+  .opencv-page .fellow-icon-button:hover{
+    border-color:rgba(246,51,146,.25);
+    background:#fff; color:var(--px-text);
+  }
+  .opencv-page .fellow-icon-button span{
+    position:absolute; top:-4px; right:-4px;
+    background:var(--px-accent); color:#fff; font-size:10px; font-weight:700;
+    width:18px; height:18px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .opencv-page .fellow-user-button{
+    display:flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,.95); border:1px solid rgba(246,51,146,.12);
+    border-radius:100px; padding:5px 12px 5px 6px;
+    text-decoration:none; transition:all .2s; color:var(--px-text);
+  }
+  .opencv-page .fellow-user-button:hover{
+    border-color:rgba(246,51,146,.25);
+    background:#fff;
+  }
+  .opencv-page .fellow-user-button .avatar-img{
+    width:30px; height:30px; border-radius:50%;
+    background:linear-gradient(135deg, var(--px-accent), #ff8ab7);
+  }
+  .opencv-page .fellow-user-button strong{ font-size:13px; font-weight:700; display:block; }
+  .opencv-page .fellow-user-button small{ font-size:10px; color:var(--px-text-3); display:block; }
+  .opencv-page .fellow-user-button > i{ font-size:10px; color:var(--px-text-3); margin-left:2px; }
+
+  /* ── Layout ────────────────────────────────── */
+  .opencv-page .lesson-layout{
+    display:grid; grid-template-columns:minmax(0,1fr) 320px;
+    gap:24px; align-items:start;
+    max-width:1600px; margin:0 auto;
+    padding:24px 24px 56px;
+  }
+  .opencv-page .lesson-main-content{ min-width:0; }
+
+  /* ── Hero ──────────────────────────────────── */
+  .opencv-page .lesson-hero{
+    display:grid; grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr);
+    gap:28px; align-items:center;
+    padding:42px 44px 30px; margin-bottom:20px;
+    border:1px solid var(--px-line); border-radius:28px;
+    background:
+      radial-gradient(circle at 0 0, rgba(246,51,146,.10), transparent 38%),
+      linear-gradient(135deg, #ffffff 0%, #fff7fb 58%, #fff0f7 100%);
+    box-shadow:var(--px-shadow-lg); overflow:hidden;
+  }
+  .opencv-page .lesson-hero h1{ font-family:var(--px-font-disp); color:var(--px-text); letter-spacing:-.04em; }
+  .opencv-page .lesson-hero p,
+  .opencv-page .lesson-meta-row{ color:var(--px-text-2); }
+  .opencv-page .lesson-hero img{
+    max-width:240px; width:100%; justify-self:end;
+    filter:drop-shadow(0 18px 30px rgba(246,51,146,.10));
+  }
+  .opencv-page .lesson-material-panel{ display:grid; gap:18px; }
+  .opencv-page .lesson-tabs a{
+    background:rgba(255,255,255,.92); border:1px solid var(--px-line);
+    box-shadow:var(--px-shadow); border-radius:var(--px-radius-sm);
+    padding:8px 18px; align-self:center; margin:0;
+  }
+  .opencv-page .lesson-tabs a.active{
+    background:var(--px-accent-soft); color:var(--px-accent);
+    border-color:var(--px-line-strong);
+  }
+  .opencv-page .lesson-article{ max-width:800px; }
+
+  /* ── Sections ──────────────────────────────── */
+  .opencv-page .lesson-sec{
+    padding-bottom:48px; margin-bottom:8px;
+    border-bottom:1px solid var(--px-line);
+    scroll-margin-top:120px;
+  }
+  .opencv-page .lesson-sec:last-child{ border-bottom:none; }
+  .opencv-page .sec-header{
+    display:flex; align-items:flex-start; gap:16px; margin-bottom:24px;
+  }
+  .opencv-page .sec-num{
+    font-family:var(--px-font-mono); font-size:12px; color:var(--px-accent);
+    padding:4px 0; letter-spacing:.06em; flex-shrink:0; min-width:26px;
+  }
+  .opencv-page .sec-title{
+    font-family:var(--px-font-disp); font-size:clamp(22px,3vw,30px);
+    font-weight:700; letter-spacing:-.02em; color:var(--px-text); margin-bottom:4px;
+  }
+  .opencv-page .sec-sub{ font-size:14px; color:var(--px-text-2); }
+
+  /* ── Prose ──────────────────────────────────── */
+  .opencv-page .prose{
+    font-size:15px; color:var(--px-text-2); line-height:1.75;
+    margin-bottom:20px; max-width:640px;
+  }
+  .opencv-page .prose strong{ color:var(--px-text); font-weight:500; }
+  .opencv-page .prose code{
+    font-family:var(--px-font-mono); font-size:12.5px;
+    padding:2px 6px; border-radius:4px; color:var(--px-text);
+  }
+
+  /* ── Callouts ──────────────────────────────── */
+  .opencv-page .callout{
+    display:flex; gap:12px; padding:14px 16px;
+    border-radius:14px; margin-bottom:20px;
+    font-size:13.5px; line-height:1.65; color:var(--px-text-2);
+  }
+  .opencv-page .callout strong{ color:var(--px-text); }
+  .opencv-page .callout-icon{ flex-shrink:0; font-size:16px; line-height:1.5; }
+  .opencv-page .callout.info{
+    background:linear-gradient(135deg, rgba(246,51,146,.05), rgba(255,255,255,.98));
+    border:1px solid var(--px-line);
+  }
+  .opencv-page .callout.warn{
+    background:linear-gradient(135deg, rgba(255,193,7,.08), rgba(255,255,255,.98));
+    border:1px solid rgba(255,193,7,.25);
+  }
+  .opencv-page .callout.danger{
+    background:linear-gradient(135deg, rgba(246,51,146,.06), rgba(255,255,255,.98));
+    border:1px solid rgba(246,51,146,.2);
+  }
+
+  /* ── Code blocks ──────────────────────────── */
+  .opencv-page .code-block{
+    background:#fff; border:1px solid var(--px-line);
+    border-radius:14px; box-shadow:var(--px-shadow); overflow:hidden; margin-bottom:20px;
+  }
+  .opencv-page .cb-label{
+    background:var(--px-bg); border-bottom:1px solid var(--px-line);
+    padding:8px 16px; font-family:var(--px-font-mono);
+    font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--px-text-2);
+  }
+  .opencv-page .code-block pre{ padding:18px 20px; overflow-x:auto; margin:0; }
+  .opencv-page .code-block code{
+    font-family:var(--px-font-mono); font-size:13px; line-height:1.75;
+    background:#fff; padding:0; color:var(--px-text);
+  }
+  .opencv-page .kw{ color:#db2777; font-weight:600; }
+  .opencv-page .fn{ color:#7c3aed; }
+  .opencv-page .str{ color:#15803d; }
+  .opencv-page .num{ color:#b45309; }
+  .opencv-page .op{ color:#667085; }
+  .opencv-page .cm{ color:#98a2b3; font-style:italic; }
+
+  /* ── Widget cards ─────────────────────────── */
+  .opencv-page .widget-card{
+    background:rgba(255,255,255,.96);
+    border:1px solid var(--px-line); border-radius:var(--px-radius);
+    box-shadow:var(--px-shadow); padding:20px; margin-bottom:20px; overflow:hidden;
+  }
+  .opencv-page .widget-label{
+    font-family:var(--px-font-mono); font-size:10px; text-transform:uppercase;
+    letter-spacing:.06em; color:var(--px-text-3); margin-bottom:16px;
+  }
+
+  /* ── Two columns + info card ──────────────── */
+  .opencv-page .two-col{
+    display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;
+  }
+  .opencv-page .two-col .code-block{ margin-bottom:0; }
+  .opencv-page .info-card{
+    background:rgba(255,255,255,.96); border:1px solid var(--px-line);
+    border-radius:var(--px-radius); padding:20px;
+  }
+  .opencv-page .info-card .ic-title{
+    font-family:var(--px-font-disp); font-size:14px; font-weight:600;
+    color:var(--px-text); margin-bottom:10px;
+  }
+  .opencv-page .info-card p{ font-size:13px; color:var(--px-text); line-height:1.7; }
+  .opencv-page .info-card p strong{ color:var(--px-text); font-weight:600; }
+  .opencv-page .info-card code{
+    color:var(--px-text); background:var(--px-bg-2);
+    padding:2px 6px; border-radius:4px; font-family:var(--px-font-mono); font-size:12.5px;
+  }
+
+  /* ── Challenge cards ───────────────────────── */
+  .opencv-page .challenge-card{
+    display:block; padding:20px; min-height:auto;
+    background:rgba(255,255,255,.96);
+    border:1px solid var(--px-line);
+    border-radius:var(--px-radius);
+    box-shadow:var(--px-shadow);
+    align-items:normal; gap:0;
+    grid-template-columns:none;
+  }
+  .opencv-page .challenge-card h2{ font-size:inherit; color:inherit; margin:0; line-height:inherit; }
+  .opencv-page .challenge-card p{ font-size:inherit; color:inherit; margin:0; line-height:inherit; }
+  .opencv-page .challenge-header{
+    display:flex; align-items:center; gap:10px; padding:14px 18px;
+    border-bottom:1px solid var(--px-line); flex-wrap:wrap;
+  }
+  .opencv-page .challenge-badge{
+    font-family:var(--px-font-mono); font-size:10px; text-transform:uppercase;
+    letter-spacing:.06em; padding:3px 8px; border-radius:4px;
+    background:rgba(246,51,146,.1); color:var(--px-accent);
+    border:1px solid rgba(246,51,146,.2); white-space:nowrap;
+  }
+  .opencv-page .challenge-title{ font-size:14px; font-weight:500; color:var(--px-text); }
+  .opencv-page .challenge-desc{ padding:12px 18px; font-size:13px; color:var(--px-text-2); line-height:1.6; border-bottom:1px solid var(--px-line); }
+  .opencv-page .challenge-editor{ margin-top:12px; }
+  .opencv-page .editor-tabs{
+    display:flex; gap:0; border-bottom:1px solid var(--px-line);
+  }
+  .opencv-page .editor-tab{
+    padding:8px 16px; font-family:var(--px-font-mono); font-size:11px;
+    color:var(--px-text-3); background:var(--px-bg);
+    border:1px solid var(--px-line); border-bottom:none;
+    border-radius:8px 8px 0 0; margin-bottom:-1px;
+  }
+  .opencv-page .editor-tab.active{
+    background:var(--px-bg-2); color:var(--px-text); border-bottom-color:var(--px-bg-2);
+  }
+  .opencv-page .code-editor-wrap{ position:relative; }
+  .opencv-page .code-editor{
+    width:100%; min-height:180px; padding:16px;
+    background:var(--px-bg-2); border:1px solid var(--px-line);
+    border-top:none; border-radius:0 0 12px 12px;
+    font-size:13px; line-height:1.75; color:var(--px-text);
+    resize:vertical; outline:none; tab-size:2;
+  }
+  .opencv-page .editor-actions{
+    display:flex; gap:8px; margin-top:10px; align-items:center;
+  }
+  .opencv-page .run-btn{
+    padding:8px 18px; border-radius:8px; border:none;
+    background:var(--px-accent); color:#fff; font-size:13px; font-weight:600;
+    cursor:pointer; font-family:var(--px-font-body); transition:all .2s;
+  }
+  .opencv-page .run-btn:hover{ background:#d42a7d; }
+  .opencv-page .hint-btn, .opencv-page .reset-btn{
+    padding:7px 14px; border-radius:8px;
+    border:1px solid var(--px-line); background:#fff;
+    font-size:12px; cursor:pointer; font-family:var(--px-font-body);
+    color:var(--px-text-2); transition:all .2s;
+  }
+  .opencv-page .hint-btn:hover, .opencv-page .reset-btn:hover{
+    background:var(--px-bg); border-color:var(--px-line-strong); color:var(--px-text);
+  }
+  .opencv-page .hint-box{
+    margin-top:10px; padding:12px 16px; border-radius:10px;
+    background:var(--px-bg); border:1px solid var(--px-line);
+    font-size:12.5px; color:var(--px-text-2); line-height:1.65;
+  }
+
+  /* ── Output wrap ──────────────────────────── */
+  .opencv-page .output-wrap{
+    margin-top:10px; border-radius:10px;
+    background:#fff0f7; color:#171827; overflow:hidden;
+    border:1px solid rgba(246,51,146,.18);
+  }
+  .opencv-page .output-label{
+    padding:6px 14px; font-family:var(--px-font-mono); font-size:10px;
+    text-transform:uppercase; letter-spacing:.06em;
+    color:#171827; background:rgba(246,51,146,.08);
+  }
+  .opencv-page .output-pre{
+    padding:12px 16px; font-size:13px; line-height:1.7; margin:0;
+    color:#171827; white-space:pre-wrap; background:transparent;
+  }
+  .opencv-page .output-wrap.is-error{
+    background:#fce4f0; border-color:rgba(246,51,146,.3);
+  }
+  .opencv-page .check-result{
+    margin-top:10px; padding:10px 14px; border-radius:10px; font-size:13px; font-weight:500;
+  }
+  .opencv-page .check-result.pass{ background:rgba(22,163,74,.08); color:#16a34a; border:1px solid rgba(22,163,74,.2); }
+  .opencv-page .check-result.fail{ background:rgba(225,29,72,.08); color:#e11d48; border:1px solid rgba(225,29,72,.2); }
+  .opencv-page .expected-box{
+    margin-top:10px; padding:12px 16px; border-radius:10px;
+    background:var(--px-bg); border:1px solid var(--px-line);
+    font-size:13px; color:var(--px-text-2);
+  }
+  .opencv-page .expected-label{
+    font-family:var(--px-font-disp); font-size:11px; font-weight:600;
+    color:var(--px-text-3); display:block; margin-bottom:6px; text-transform:uppercase;
+  }
+  .opencv-page .expected-box code{
+    font-size:13px; line-height:1.7; color:var(--px-text); background:transparent; padding:0;
+  }
+
+  /* ── Right panel ──────────────────────────── */
+  .opencv-page .lesson-nav-footer a,
+  .opencv-page .lesson-list-card,
+  .opencv-page .lesson-progress-card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--px-line); box-shadow:var(--px-shadow);
+  }
+  .opencv-page .lesson-list-card h4,
+  .opencv-page .lpc-header{ font-family:var(--px-font-disp); }
+  .opencv-page .lesson-list-item{
+    padding:6px 10px; border-radius:8px; color:var(--px-text); font-size:13px;
+    display:flex; align-items:center; gap:8px; cursor:default;
+  }
+  .opencv-page .lesson-list-item.active,
+  .opencv-page .lesson-list-item:hover{
+    background:rgba(246,51,146,.08); color:var(--px-text);
+  }
+  .opencv-page .lesson-list-item.active .lli-dot{ background:var(--px-accent); }
+  .opencv-page .lli-dot{
+    width:8px; height:8px; border-radius:50%; background:rgba(246,51,146,.2); flex-shrink:0;
+  }
+  .opencv-page .lesson-list-item.done .lli-dot{ background:#16a34a; }
+  .opencv-page .lpc-meta{
+    display:flex; gap:12px; font-size:12px; color:var(--px-text-2); margin-top:10px;
+  }
+  .opencv-page .lesson-nav-footer a:last-child{
+    background:var(--px-accent); color:#fff; border-color:var(--px-accent);
+  }
+  .opencv-page .lesson-right-panel{
+    position:sticky; top:88px; align-self:start;
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .opencv-page .lesson-right-panel > *{ border-radius:20px; }
+
+  /* ── OpenCV-specific widgets ──────────────── */
+  .opencv-page canvas{
+    border-radius:8px; border:1px solid var(--px-line); display:block;
+  }
+  .opencv-page .imread-demo{
+    display:grid; grid-template-columns:240px 1fr; gap:20px; align-items:start;
+  }
+  .opencv-page .imread-info{ display:flex; flex-direction:column; gap:8px; }
+  .opencv-page .imd-row{
+    display:flex; justify-content:space-between; padding:4px 8px;
+    background:var(--px-bg); border-radius:6px; font-size:12px;
+  }
+  .opencv-page .imd-key{ font-family:var(--px-font-mono); color:var(--px-accent); }
+  .opencv-page .imd-val{ color:var(--px-text); font-weight:600; }
+  .opencv-page .imd-val.mono{ font-family:var(--px-font-mono); }
+  .opencv-page .imd-divider{ height:1px; background:var(--px-line); margin:4px 0; }
+  .opencv-page .imd-note{ font-size:11px; color:var(--px-text-3); font-style:italic; }
+  .opencv-page .imd-channels{ display:flex; flex-direction:column; gap:6px; }
+  .opencv-page .imd-ch{
+    display:flex; align-items:center; gap:8px;
+  }
+  .opencv-page .ch-letter{
+    font-family:var(--px-font-mono); font-size:12px; font-weight:700; min-width:12px;
+  }
+  .opencv-page .ch-letter.b{ color:var(--px-blue); }
+  .opencv-page .ch-letter.g{ color:var(--px-green); }
+  .opencv-page .ch-letter.r{ color:var(--px-red); }
+  .opencv-page .imd-bar-track{
+    flex:1; height:8px; background:rgba(246,51,146,.10); border-radius:4px; overflow:hidden;
+  }
+  .opencv-page .imd-bar-fill{
+    height:100%; border-radius:4px; background:var(--c,var(--px-accent));
+    width:0%; transition:width .12s ease;
+  }
+  .opencv-page .imd-ch-num{
+    font-family:var(--px-font-mono); font-size:12px; color:var(--px-text-2); min-width:28px; text-align:right;
+  }
+  .opencv-page .resize-demo{
+    display:grid; grid-template-columns:1fr 1fr; gap:16px;
+  }
+  .opencv-page .resize-canvas-wrap{ position:relative; }
+  .opencv-page .resize-overlay{
+    position:absolute; top:0; left:0; right:0; bottom:0;
+    pointer-events:none; border:2px solid var(--px-accent); border-radius:8px;
+    opacity:0; transition:opacity .2s;
+  }
+  .opencv-page .resize-controls{ display:flex; flex-direction:column; gap:12px; }
+  .opencv-page .rc-row{
+    display:flex; align-items:center; gap:12px;
+  }
+  .opencv-page .rc-label{ font-size:12px; color:var(--px-text-2); min-width:40px; }
+  .opencv-page .rc-val{
+    font-family:var(--px-font-mono); font-size:12px; color:var(--px-text-2); min-width:44px; text-align:right;
+  }
+  .opencv-page .interp-btns{
+    display:flex; gap:6px; flex-wrap:wrap;
+  }
+  .opencv-page .interp-btn{
+    padding:4px 10px; border-radius:6px; border:1px solid var(--px-line);
+    background:#fff; font-size:10px; font-family:var(--px-font-mono);
+    cursor:pointer; color:var(--px-text-2); transition:all .2s;
+  }
+  .opencv-page .interp-btn.active{
+    background:var(--px-accent); color:#fff; border-color:var(--px-accent);
+  }
+  .opencv-page .interp-btn:hover:not(.active){
+    border-color:var(--px-line-strong); color:var(--px-text);
+  }
+  .opencv-page .resize-stats{
+    display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;
+  }
+  .opencv-page .rs-item{
+    background:var(--px-bg); border-radius:6px; padding:8px; text-align:center;
+  }
+  .opencv-page .rs-label{ font-size:10px; color:var(--px-text-3); display:block; margin-bottom:4px; }
+  .opencv-page .rs-val{ font-size:13px; color:var(--px-text); font-weight:600; font-family:var(--px-font-mono); }
+  .opencv-page .interp-table{
+    margin-bottom:20px; border-radius:14px; overflow:hidden;
+    border:1px solid var(--px-line);
+  }
+  .opencv-page .it-header{
+    display:grid; grid-template-columns:1fr 1.5fr 80px 80px;
+    gap:0; background:var(--px-bg); border-bottom:1px solid var(--px-line);
+  }
+  .opencv-page .it-header > div{
+    padding:10px 14px; font-family:var(--px-font-disp); font-size:11px;
+    font-weight:700; color:var(--px-text); text-transform:uppercase; letter-spacing:.04em;
+  }
+  .opencv-page .it-row{
+    display:grid; grid-template-columns:1fr 1.5fr 80px 80px;
+    gap:0; background:#fff; border-bottom:1px solid var(--px-line);
+  }
+  .opencv-page .it-row.accent{ background:var(--px-bg); }
+  .opencv-page .it-row > div{
+    padding:10px 14px; font-size:12px; color:var(--px-text-2); display:flex; align-items:center;
+  }
+  .opencv-page .it-name{ font-family:var(--px-font-mono); color:var(--px-text); font-weight:500; }
+  .opencv-page .it-speed{ justify-content:center; }
+  .opencv-page .it-q{ justify-content:center; }
+  .opencv-page .crop-demo{
+    display:grid; grid-template-columns:320px 1fr; gap:20px; align-items:start;
+  }
+  .opencv-page .crop-canvas-wrap{ position:relative; }
+  .opencv-page .crop-info-panel{
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .opencv-page .crop-coords{
+    display:grid; grid-template-columns:1fr 1fr; gap:6px;
+  }
+  .opencv-page .cc-row{
+    display:flex; align-items:center; gap:6px;
+    padding:4px 8px; background:var(--px-bg); border-radius:6px;
+  }
+  .opencv-page .cc-label{
+    font-family:var(--px-font-mono); font-size:11px; color:var(--px-accent); min-width:16px;
+  }
+  .opencv-page .cc-val{
+    font-family:var(--px-font-mono); font-size:12px; color:var(--px-text); font-weight:600;
+  }
+  .opencv-page .crop-code-live{
+    padding:8px 12px; background:var(--px-bg-2); border-radius:8px;
+    font-family:var(--px-font-mono); font-size:12px; color:var(--px-text);
+  }
+  .opencv-page .cl-prompt{ color:var(--px-text-3); }
+  .opencv-page #ccSlice{ color:var(--px-accent); font-weight:700; }
+  .opencv-page .crop-size-info{ font-size:12px; color:var(--px-text-3); }
+  .opencv-page .crop-btn{
+    padding:6px 16px; border-radius:8px; border:1px solid var(--px-line);
+    background:#fff; cursor:pointer; font-size:12px; color:var(--px-text-2); transition:all .2s;
+  }
+  .opencv-page .crop-btn:hover{
+    border-color:var(--px-line-strong); color:var(--px-text);
+  }
+  .opencv-page .flip-demo{
+    display:flex; flex-direction:row; align-items:center; justify-content:center;
+    gap:20px;
+  }
+  .opencv-page .flip-demo canvas,
+  .opencv-page #flipSrc, .opencv-page #flipDst{
+    width:200px; height:150px; flex-shrink:0;
+    border-radius:8px; border:1px solid var(--px-line);
+    display:block;
+  }
+  .opencv-page .flip-controls{
+    display:flex; flex-direction:column; gap:6px; align-items:center;
+  }
+  .opencv-page .flip-btn{
+    padding:8px 16px; border-radius:8px; border:1px solid var(--px-line);
+    background:#fff; cursor:pointer; font-size:12px; font-family:var(--px-font-body);
+    color:var(--px-text-2); text-align:center; line-height:1.3; transition:all .2s;
+    width:120px; white-space:nowrap;
+  }
+  .opencv-page .flip-btn.active{
+    background:var(--px-accent); color:#fff; border-color:var(--px-accent);
+  }
+  .opencv-page .flip-btn.rot{ background:var(--px-bg); }
+  .opencv-page .flip-btn.rot.active{ background:var(--px-accent); }
+  .opencv-page .flip-btn:hover:not(.active){
+    border-color:var(--px-line-strong); color:var(--px-text);
+  }
+  .opencv-page .flip-code{
+    display:block; font-family:var(--px-font-mono); font-size:9px; opacity:.7;
+  }
+  .opencv-page .flip-labels{
+    display:flex; gap:16px; margin-top:8px;
+  }
+  .opencv-page .flip-labels span{
+    flex:1; text-align:center; font-family:var(--px-font-mono); font-size:11px; color:var(--px-text-3);
+  }
+  .opencv-page .bitwise-demo{
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .opencv-page .bw-canvas-row{
+    display:flex; flex-direction:row; align-items:center; justify-content:center;
+    gap:20px; flex-wrap:wrap;
+  }
+  .opencv-page .bw-item{
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+  }
+  .opencv-page .bw-item canvas{
+    width:120px; height:120px; flex-shrink:0;
+    border-radius:8px; border:1px solid var(--px-line);
+    display:block;
+  }
+  .opencv-page .bw-item .bw-lbl,
+  .opencv-page .bw-lbl{
+    font-family:var(--px-font-mono); font-size:10px; color:var(--px-text-3);
+    text-transform:uppercase; letter-spacing:.04em;
+  }
+  .opencv-page .bw-op-select select{
+    padding:8px 14px; border-radius:8px; border:1px solid var(--px-line);
+    background:#fff; font-size:13px; font-weight:600; cursor:pointer;
+    font-family:var(--px-font-body); color:var(--px-text);
+    min-width:90px; text-align:center;
+    transition:all .2s;
+  }
+  .opencv-page .bw-op-select select:hover{
+    border-color:var(--px-line-strong);
+  }
+  .opencv-page .bw-eq{
+    font-family:var(--px-font-disp); font-size:24px; font-weight:700;
+    color:var(--px-text-3); line-height:1;
+  }
+  .opencv-page .bw-desc{
+    padding:14px 18px; border-radius:12px;
+    background:var(--px-bg); font-size:13px; color:var(--px-text-2); line-height:1.6;
+  }
+  .opencv-page .usecase-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;
+  }
+  .opencv-page .uc-card{
+    background:rgba(255,255,255,.96); border:1px solid var(--px-line);
+    border-radius:var(--px-radius-sm); padding:18px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .opencv-page .uc-icon{ font-size:20px; color:var(--px-accent); }
+  .opencv-page .uc-title{
+    font-family:var(--px-font-disp); font-size:14px; font-weight:700; color:var(--px-text);
+  }
+  .opencv-page .uc-desc{ font-size:13px; color:var(--px-text-2); line-height:1.6; }
+  .opencv-page .playground-editor{
+    background:var(--px-bg-2); border:none; border-radius:0; min-height:160px;
+  }
+  .opencv-page .playground-card{
+    background:rgba(255,255,255,.96); border:1px solid var(--px-line);
+    border-radius:var(--px-radius); overflow:hidden; margin-top:20px;
+  }
+  .opencv-page .playground-toolbar{
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:10px; padding:12px 16px;
+    background:var(--px-bg); border-bottom:1px solid var(--px-line);
+  }
+  .opencv-page .pg-title{
+    font-family:var(--px-font-disp); font-size:13px; font-weight:600; color:var(--px-text);
+  }
+  .opencv-page .py-ready-dot{
+    width:8px; height:8px; border-radius:50%; background:#16a34a; flex-shrink:0;
+  }
+  .opencv-page .pg-toolbar-right{ display:flex; gap:6px; flex-wrap:wrap; }
+  .opencv-page .pg-snippet-btn{
+    padding:5px 12px; border-radius:6px; border:1px solid var(--px-line);
+    background:#fff; font-size:11px; cursor:pointer;
+    font-family:var(--px-font-mono); color:var(--px-text-2); transition:all .2s;
+  }
+  .opencv-page .pg-snippet-btn:hover{ border-color:var(--px-line-strong); color:var(--px-text); }
+  .opencv-page .playground-actions{
+    display:flex; gap:8px; padding:12px 16px; align-items:center;
+    border-top:1px solid var(--px-line);
+  }
+  .opencv-page .pg-note{
+    margin-left:auto; font-size:11px; color:var(--px-text-3);
+    font-family:var(--px-font-mono);
+  }
+  .opencv-page .quiz-block-title{
+    font-family:var(--px-font-disp); font-size:15px; font-weight:700;
+    color:var(--px-text); margin-bottom:20px; padding-top:4px;
+  }
+  .opencv-page .quiz-item{ margin-bottom:28px; }
+  .opencv-page .quiz-q-num{
+    font-family:var(--px-font-mono); font-size:10px;
+    text-transform:uppercase; letter-spacing:.08em; color:var(--px-text-3); margin-bottom:8px;
+  }
+  .opencv-page .quiz-q-text{
+    font-size:15px; font-weight:500; color:var(--px-text); margin-bottom:14px; line-height:1.6;
+  }
+  .opencv-page .quiz-opts{ display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+  .opencv-page .quiz-opt{
+    display:flex; align-items:flex-start; gap:12px;
+    padding:12px 16px; border-radius:10px;
+    border:1px solid var(--px-line); background:#fff;
+    cursor:pointer; font-size:13.5px; color:var(--px-text-2);
+    transition:all .15s; text-align:left; width:100%; font-family:var(--px-font-body);
+  }
+  .opencv-page .quiz-opt:hover:not(:disabled){
+    background:var(--px-bg); border-color:var(--px-line-strong); color:var(--px-text);
+  }
+  .opencv-page .quiz-opt.correct{
+    background:rgba(22,163,74,.06); border-color:rgba(22,163,74,.25); color:#16a34a;
+  }
+  .opencv-page .quiz-opt.wrong{
+    background:rgba(225,29,72,.06); border-color:rgba(225,29,72,.25); color:#e11d48;
+  }
+  .opencv-page .quiz-opt.muted{ opacity:.4; }
+  .opencv-page .quiz-opt-badge{
+    width:24px; height:24px; border-radius:50%;
+    background:var(--px-bg); display:flex; align-items:center; justify-content:center;
+    font-family:var(--px-font-mono); font-size:11px; color:var(--px-text-3); flex-shrink:0;
+  }
+  .opencv-page .quiz-feedback{
+    padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; display:none; color:var(--px-text-2);
+  }
+  .opencv-page .quiz-feedback.show{ display:block; }
+  .opencv-page .quiz-feedback.ok{
+    background:rgba(22,163,74,.06); border:1px solid rgba(22,163,74,.2); color:#16a34a;
+  }
+  .opencv-page .quiz-feedback.bad{
+    background:rgba(225,29,72,.06); border:1px solid rgba(225,29,72,.2); color:#e11d48;
+  }
+  .opencv-page .final-score-card{ padding:28px; margin-top:24px; text-align:center; }
+  .opencv-page .fs-title{
+    font-family:var(--px-font-disp); font-size:20px; font-weight:700; color:var(--px-text); margin-bottom:16px;
+  }
+  .opencv-page .fs-scores{
+    display:flex; gap:24px; justify-content:center; margin-bottom:12px; flex-wrap:wrap;
+  }
+  .opencv-page .fs-msg{ font-size:13px; }
+  .opencv-page .next-lesson-cta{
+    margin-top:32px; padding:32px; text-align:center;
+  }
+  .opencv-page .paint-canvas-wrap{ position:relative; }
+  .opencv-page .paint-controls{
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .opencv-page .pc-row{
+    display:flex; align-items:center; gap:10px;
+  }
+  .opencv-page .pc-label{ font-size:12px; color:var(--px-text-2); min-width:50px; }
+  .opencv-page .color-options{
+    display:flex; gap:6px; flex-wrap:wrap;
+  }
+  .opencv-page .color-opt{
+    width:28px; height:28px; border-radius:50%; border:2px solid var(--px-line);
+    cursor:pointer; transition:all .2s;
+  }
+  .opencv-page .color-opt.active{ border-color:var(--px-text); transform:scale(1.15); }
+  .opencv-page .brush-sizes{
+    display:flex; gap:6px; align-items:center;
+  }
+  .opencv-page .brush-size{
+    border-radius:50%; border:2px solid var(--px-line);
+    cursor:pointer; transition:all .2s; background:#fff;
+  }
+  .opencv-page .brush-size.active{ border-color:var(--px-accent); }
+  .opencv-page .paint-code-live{
+    padding:6px 10px; background:var(--px-bg-2); border-radius:6px;
+    font-family:var(--px-font-mono); font-size:11px; color:var(--px-text-2);
+    margin-top:4px;
+  }
+  .opencv-page input[type="range"]{
+    -webkit-appearance:none; height:4px; border-radius:2px;
+    background:rgba(246,51,146,.12); outline:none; cursor:pointer; flex:1;
+  }
+  .opencv-page input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:16px; height:16px; border-radius:50%;
+    background:var(--px-accent); cursor:pointer;
+    border:2px solid #fff; box-shadow:0 2px 8px rgba(246,51,146,.25);
+    transition:transform .15s;
+  }
+  .opencv-page input[type="range"]::-webkit-slider-thumb:hover{ transform:scale(1.2); }
+
+  /* ── Responsive ──────────────────────────── */
+  @media (max-width: 1200px){
+    .opencv-page .lesson-layout{ grid-template-columns:1fr; }
+    .opencv-page .lesson-article{ max-width:none; }
+    .opencv-page .lesson-right-panel{ position:static; flex-direction:row; flex-wrap:wrap; }
+    .opencv-page .lesson-right-panel > *{ flex:1 1 280px; }
+    .opencv-page .imread-demo{ grid-template-columns:1fr; }
+    .opencv-page .resize-demo{ grid-template-columns:1fr; }
+    .opencv-page .crop-demo{ grid-template-columns:1fr; }
+    .opencv-page .bitwise-demo{ grid-template-columns:1fr; }
+  }
+  @media (max-width: 900px){
+    .opencv-page .lesson-topbar-inner{ height:60px; }
+    .opencv-page .navbar-left{ padding-left:16px; }
+    .opencv-page .navbar-right{ padding-right:16px; }
+    .opencv-page .lesson-hero{ grid-template-columns:1fr; padding:28px 24px 24px; }
+    .opencv-page .lesson-hero img{ justify-self:center; max-width:210px; }
+    .opencv-page .lesson-layout{ padding-inline:16px; }
+    .opencv-page .flip-demo{ flex-direction:column; align-items:center; }
+    .opencv-page #flipSrc, .opencv-page #flipDst{ width:200px; height:150px; }
+    .opencv-page .two-col{ grid-template-columns:1fr; }
+    .opencv-page .crop-demo{ grid-template-columns:1fr; }
+    .opencv-page .resize-stats{ grid-template-columns:1fr 1fr; }
+    .opencv-page .interp-table{ overflow-x:auto; }
+  }
+  @media (max-width: 600px){
+    .opencv-page .bitwise-demo{ flex-direction:column; align-items:center; }
+    .opencv-page .bw-canvas-row{ flex-direction:column; gap:12px; }
+    .opencv-page .bw-item canvas{ width:100px; height:100px; }
+    .opencv-page .usecase-grid{ grid-template-columns:1fr; }
+    .opencv-page .flip-demo canvas{ width:140px; height:105px; }
+    .opencv-page .flip-btn{ width:100px; font-size:11px; padding:6px 10px; }
+  }
+</style>
+<button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+<div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+<aside class="fellow-sidebar" aria-label="Navigasi peserta">
+<a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
+<nav class="fellow-menu">
+<a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+<a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+<a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+<a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+<a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+<a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+<a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+<a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+</nav>
+<nav class="fellow-menu secondary">
+<a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+<a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+<a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ &amp; Bantuan</span></a>
+<a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+</nav>
+<div class="invite-card course-help-mini">
+<div><strong>Butuh bantuan?</strong><p>Tanya HerAI Assistant tentang modul dan pembelajaran.</p></div>
+<button type="button">Chat Sekarang</button>
+</div>
+</aside>
+<main class="fellow-main">
+ <header class="lesson-topbar">
+<div class="lesson-topbar-inner">
+<div class="navbar-left">
+<nav class="lesson-breadcrumb" aria-label="Breadcrumb materi">
+<a href="#/participant-ai-lab-cv"><i class="fas fa-arrow-left"></i><span>Computer Vision</span></a>
+<span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+</nav>
+</div>
+<div class="navbar-center">Image Processing with OpenCV</div>
+<div class="navbar-right">
+<div class="fellow-actions">
+<label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul, topik, atau materi..."></label>
+<button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+<a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+</div>
+</div>
+</div>
+</header>
+<div class="lesson-layout">
+<div class="lesson-main-content">
+<section class="lesson-hero">
+<div class="lesson-hero-copy">
+<h1>Image Processing with OpenCV</h1>
+<p>Operasi dasar OpenCV: membaca gambar, resize, crop, flip, rotate, dan bitwise operations.</p>
+<div class="lesson-meta-row">
+<span><i class="far fa-clock"></i> 45 menit</span>
+<span><i class="fas fa-layer-group"></i> CV &middot; Image Processing</span>
+<b>Praktik</b>
+</div>
+</div>
+<img src="/assets/messaging/herai-chat-persona.png" alt="HerAI CV learning">
+</section>
+<section class="lesson-material-panel">
+<div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
+<a href="#/participant-ai-lab-cv-opencv" class="active"><i class="fas fa-book-open"></i> Materi</a>
+<a href="#/participant-ai-lab-cv"><i class="fas fa-layer-group"></i> Katalog CV</a>
+</div>
+<article class="lesson-article ai-lab-content" id="opencv-content">
+
+      <!-- ─── SEC 1: Loading ─── -->
+      <section class="lesson-sec" id="sec-load">
+        <div class="sec-header">
+          <span class="sec-num">01</span>
+          <div><h2 class="sec-title">Loading images with OpenCV</h2><p class="sec-sub">Reading, displaying, and understanding what cv2.imread actually returns</p></div>
+        </div>
+        <div class="prose">OpenCV's <code>cv2.imread()</code> is the entry point for almost every CV pipeline. It decodes an image file and returns a <strong>NumPy array</strong> — ready for manipulation without any extra conversion step.</div>
+        <div class="callout danger"><span class="callout-icon"><i class="fas fa-triangle-exclamation"></i></span><div><strong>Critical gotcha:</strong> OpenCV loads images in <strong>BGR</strong> order, not RGB. If you pass a cv2 image directly to matplotlib or a neural network expecting RGB, colors will be wrong.</div></div>
+
+        <!-- Interactive: imread visualizer -->
+        <div class="widget-card">
+          <div class="widget-label">Interactive · What does imread return?</div>
+          <div class="imread-demo">
+            <canvas id="imreadCanvas" width="240" height="180"></canvas>
+            <div class="imread-info">
+              <div class="imd-row"><span class="imd-key">img.shape</span><span class="imd-val" id="imdShape">(180, 240, 3)</span></div>
+              <div class="imd-row"><span class="imd-key">img.dtype</span><span class="imd-val" id="imdDtype">uint8</span></div>
+              <div class="imd-row"><span class="imd-key">img.ndim</span><span class="imd-val" id="imdNdim">3</span></div>
+              <div class="imd-row"><span class="imd-key">img.size</span><span class="imd-val" id="imdSize">129,600</span></div>
+              <div class="imd-row"><span class="imd-key">pixel[0,0]</span><span class="imd-val mono" id="imdPixel">[B, G, R]</span></div>
+              <div class="imd-divider"></div>
+              <div class="imd-note">Hover over the image to inspect any pixel →</div>
+              <div class="imd-channels">
+                <div class="imd-ch"><span class="ch-letter b">B</span><div class="imd-bar-track"><div class="imd-bar-fill" id="barB" style="--c:#3b82f6"></div></div><span class="imd-ch-num" id="numB">0</span></div>
+                <div class="imd-ch"><span class="ch-letter g">G</span><div class="imd-bar-track"><div class="imd-bar-fill" id="barG" style="--c:#22c55e"></div></div><span class="imd-ch-num" id="numG">0</span></div>
+                <div class="imd-ch"><span class="ch-letter r">R</span><div class="imd-bar-track"><div class="imd-bar-fill" id="barR" style="--c:#ef4444"></div></div><span class="imd-ch-num" id="numR">0</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="cb-label">cv2 · imread basics</div>
+<pre><code><span class="kw">import</span> cv2
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># Load an image (BGR format by default)</span>
+img = cv2.<span class="fn">imread</span>(<span class="str">"photo.jpg"</span>)           <span class="cm"># color (BGR)</span>
+gray = cv2.<span class="fn">imread</span>(<span class="str">"photo.jpg"</span>, <span class="num">0</span>)       <span class="cm"># grayscale</span>
+unchanged = cv2.<span class="fn">imread</span>(<span class="str">"icon.png"</span>, <span class="num">-1</span>) <span class="cm"># keep alpha</span>
+
+print(img.shape)   <span class="cm"># (height, width, 3)</span>
+print(img.dtype)   <span class="cm"># uint8</span>
+
+<span class="cm"># Convert BGR → RGB for matplotlib / PyTorch</span>
+rgb = cv2.<span class="fn">cvtColor</span>(img, cv2.COLOR_BGR2RGB)
+
+<span class="cm"># Save result</span>
+cv2.<span class="fn">imwrite</span>(<span class="str">"output.jpg"</span>, img)</code></pre>
+        </div>
+
+        <div class="callout info"><span class="callout-icon"><i class="fas fa-lightbulb"></i></span><div>When <code>cv2.imread()</code> fails (file not found, bad path), it silently returns <code>None</code> instead of raising an error. Always check for <code>None</code> before proceeding.</div></div>
+
+        <div class="challenge-card" id="ch-1">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Simulate imread and inspect properties</span></div>
+          <div class="challenge-desc">We don't have a real image file here, so simulate what imread returns using NumPy. Then print the correct shape, dtype, and check how to access a pixel value.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-1" spellcheck="false">import numpy as np
+
+# Simulate what cv2.imread returns for a 480x640 color image
+# OpenCV stores as (height, width, channels) in BGR order
+img = np.random.randint(0, 256, (___, ___, ___), dtype=np.uint8)
+
+# Print the shape
+print("Shape:", img.shape)
+
+# Print the dtype
+print("Dtype:", img.dtype)
+
+# Access the pixel at row=10, col=20 (returns [B, G, R])
+pixel = img[___, ___]
+print("Pixel [B,G,R]:", pixel)
+
+# How many total elements (pixels * channels)?
+print("Total elements:", img.size)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-1','out-1','check-1')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-1')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-1',1)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-1" style="display:none"><strong>Hints:</strong><br>• Shape order is <code>(height, width, channels)</code> → (480, 640, 3)<br>• Access pixel at row=10, col=20 → <code>img[10, 20]</code><br>• <code>img.size</code> = height × width × channels</div>
+          <div class="output-wrap" id="out-1" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-1-pre"></pre></div>
+          <div class="check-result" id="check-1" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Shape: (480, 640, 3)<br>Dtype: uint8<br>Pixel [B,G,R]: [...] (3 values, 0-255 range)<br>Total elements: 921600</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 2: Resize ─── -->
+      <section class="lesson-sec" id="sec-resize">
+        <div class="sec-header">
+          <span class="sec-num">02</span>
+          <div><h2 class="sec-title">Resize &amp; scale</h2><p class="sec-sub">Exact dimensions vs aspect-ratio-preserving scale factors</p></div>
+        </div>
+        <div class="prose"><code>cv2.resize()</code> is one of the most frequently called functions in any CV pipeline. You need to choose the right <strong>interpolation method</strong> depending on whether you're upscaling or downscaling.</div>
+
+        <!-- Interactive resize demo -->
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Drag the slider to resize</div>
+          <div class="resize-demo">
+            <div class="resize-canvas-wrap">
+              <canvas id="resizeCanvas" width="300" height="225"></canvas>
+              <div class="resize-overlay" id="resizeOverlay"></div>
+            </div>
+            <div class="resize-controls">
+              <div class="rc-row">
+                <span class="rc-label">Scale</span>
+                <input type="range" min="10" max="200" value="100" id="scaleSlider" oninput="updateResize()">
+                <span class="rc-val" id="scaleVal">100%</span>
+              </div>
+              <div class="interp-btns">
+                <button class="interp-btn active" data-interp="NEAREST" onclick="setInterp(this)">NEAREST</button>
+                <button class="interp-btn" data-interp="LINEAR" onclick="setInterp(this)">LINEAR</button>
+                <button class="interp-btn" data-interp="CUBIC" onclick="setInterp(this)">CUBIC</button>
+                <button class="interp-btn" data-interp="AREA" onclick="setInterp(this)">AREA</button>
+              </div>
+              <div class="resize-stats">
+                <div class="rs-item"><span class="rs-label">Original</span><span class="rs-val" id="rsOrig">300 × 225</span></div>
+                <div class="rs-item"><span class="rs-label">Result</span><span class="rs-val" id="rsResult">300 × 225</span></div>
+                <div class="rs-item"><span class="rs-label">Pixels</span><span class="rs-val" id="rsPixels">67,500</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interpolation comparison table -->
+        <div class="interp-table">
+          <div class="it-header">
+            <div>Method</div>
+            <div>Best for</div>
+            <div>Speed</div>
+            <div>Quality</div>
+          </div>
+          <div class="it-row">
+            <div class="it-name mono">INTER_NEAREST</div>
+            <div class="it-desc">Pixel art, mask labels</div>
+            <div class="it-speed fast">⚡ Fast</div>
+            <div class="it-q low">Low</div>
+          </div>
+          <div class="it-row">
+            <div class="it-name mono">INTER_LINEAR</div>
+            <div class="it-desc">General upscaling (default)</div>
+            <div class="it-speed mid">● Mid</div>
+            <div class="it-q mid">Good</div>
+          </div>
+          <div class="it-row">
+            <div class="it-name mono">INTER_CUBIC</div>
+            <div class="it-desc">High-quality upscaling</div>
+            <div class="it-speed slow">◎ Slow</div>
+            <div class="it-q high">High</div>
+          </div>
+          <div class="it-row accent">
+            <div class="it-name mono">INTER_AREA</div>
+            <div class="it-desc">Downscaling (anti-alias)</div>
+            <div class="it-speed mid">● Mid</div>
+            <div class="it-q high">Best ↓</div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="cb-label">cv2 · resize</div>
+<pre><code><span class="kw">import</span> cv2
+
+img = cv2.<span class="fn">imread</span>(<span class="str">"photo.jpg"</span>)
+
+<span class="cm"># Exact dimensions</span>
+resized = cv2.<span class="fn">resize</span>(img, (<span class="num">640</span>, <span class="num">480</span>))  <span class="cm"># (width, height)!</span>
+
+<span class="cm"># Scale factor (0.5 = half size)</span>
+half = cv2.<span class="fn">resize</span>(img, None, fx=<span class="num">0.5</span>, fy=<span class="num">0.5</span>,
+                  interpolation=cv2.INTER_AREA)
+
+<span class="cm"># Preserve aspect ratio</span>
+h, w = img.shape[:<span class="num">2</span>]
+target_w = <span class="num">800</span>
+scale = target_w / w
+new_h = <span class="fn">int</span>(h * scale)
+resized_ar = cv2.<span class="fn">resize</span>(img, (target_w, new_h),
+                         interpolation=cv2.INTER_LINEAR)</code></pre>
+        </div>
+        <div class="callout warn"><span class="callout-icon"><i class="fas fa-triangle-exclamation"></i></span><div><strong>Width vs height order:</strong> <code>cv2.resize()</code> takes <code>(width, height)</code> as the destination size — the opposite of NumPy's <code>.shape</code> which returns <code>(height, width, channels)</code>. This trips up everyone at first.</div></div>
+
+        <div class="challenge-card" id="ch-2">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Resize while preserving aspect ratio</span></div>
+          <div class="challenge-desc">Given an image of unknown size, compute the correct target dimensions so the width becomes 512 without distorting the image.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-2" spellcheck="false">import numpy as np
+
+# Simulate a 1080x1920 image (portrait phone photo)
+img = np.zeros((1080, 1920, 3), dtype=np.uint8)
+
+h, w = img.shape[___]   # get height and width only
+print(f"Original: {w} × {h}")
+
+TARGET_W = 512
+
+# Compute scale factor
+scale = ___ / ___        # target_width / original_width
+
+# Compute new height (preserve ratio)
+new_h = int(___ * scale)
+new_w = TARGET_W
+
+print(f"Scale factor: {scale:.4f}")
+print(f"Resized: {new_w} × {new_h}")
+
+# Verify ratio is preserved (should be equal)
+orig_ratio = round(w / h, 4)
+new_ratio  = round(new_w / new_h, 4)
+print(f"Aspect ratio preserved: {orig_ratio == new_ratio}")</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-2','out-2','check-2')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-2')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-2',2)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-2" style="display:none"><strong>Hints:</strong><br>• <code>img.shape[:2]</code> returns <code>(height, width)</code> — assign as <code>h, w = ...</code><br>• scale = 512 / w (width you want / original width)<br>• new_h = h * scale, then convert to int</div>
+          <div class="output-wrap" id="out-2" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-2-pre"></pre></div>
+          <div class="check-result" id="check-2" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Original: 1920 × 1080<br>Scale factor: 0.2667<br>Resized: 512 × 288<br>Aspect ratio preserved: True</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 3: Crop ─── -->
+      <section class="lesson-sec" id="sec-crop">
+        <div class="sec-header">
+          <span class="sec-num">03</span>
+          <div><h2 class="sec-title">Cropping &amp; ROI</h2><p class="sec-sub">NumPy slicing as the native crop operation</p></div>
+        </div>
+        <div class="prose">In OpenCV, cropping is just <strong>NumPy array slicing</strong> — no special function needed. A Region of Interest (ROI) is a sub-array view. The syntax is <code>img[y1:y2, x1:x2]</code>, not <code>(x, y, w, h)</code>.</div>
+
+        <!-- Interactive crop demo -->
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Drag to define a crop region</div>
+          <div class="crop-demo">
+            <div class="crop-canvas-wrap">
+              <canvas id="cropCanvas" width="320" height="240" style="cursor:crosshair"></canvas>
+              <canvas id="roiCanvas" width="320" height="240" style="display:none"></canvas>
+            </div>
+            <div class="crop-info-panel">
+              <div class="crop-coords" id="cropCoords">
+                <div class="cc-row"><span class="cc-label">y1</span><span class="cc-val" id="ccY1">—</span></div>
+                <div class="cc-row"><span class="cc-label">y2</span><span class="cc-val" id="ccY2">—</span></div>
+                <div class="cc-row"><span class="cc-label">x1</span><span class="cc-val" id="ccX1">—</span></div>
+                <div class="cc-row"><span class="cc-label">x2</span><span class="cc-val" id="ccX2">—</span></div>
+              </div>
+              <div class="crop-code-live" id="cropCodeLive">
+                <span class="cl-prompt">roi = img[</span><span id="ccSlice">—:—, —:—</span><span class="cl-prompt">]</span>
+              </div>
+              <div class="crop-size-info"><span id="cropSizeInfo">Draw a region on the image</span></div>
+              <button class="crop-btn" onclick="showROI()" id="showROIBtn" style="display:none">Preview ROI →</button>
+              <button class="crop-btn" onclick="resetCrop()" id="resetCropBtn" style="display:none">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="code-block"><div class="cb-label">cropping</div>
+<pre><code><span class="cm"># Crop: img[y1:y2, x1:x2]</span>
+roi = img[<span class="num">50</span>:<span class="num">200</span>, <span class="num">100</span>:<span class="num">350</span>]
+
+<span class="cm"># Crop with bbox [x,y,w,h]</span>
+x, y, w, h = <span class="num">100</span>, <span class="num">50</span>, <span class="num">250</span>, <span class="num">150</span>
+roi = img[y:y+h, x:x+w]
+
+<span class="cm"># Center crop to 224×224</span>
+H, W = img.shape[:<span class="num">2</span>]
+cy, cx = H//<span class="num">2</span>, W//<span class="num">2</span>
+roi = img[cy-<span class="num">112</span>:cy+<span class="num">112</span>,
+          cx-<span class="num">112</span>:cx+<span class="num">112</span>]</code></pre></div>
+          <div class="info-card">
+             <div class="ic-title"><i class="fas fa-triangle-exclamation"></i> View, not copy</div>
+            <p>NumPy slices are <strong>views</strong> into the original array. Modifying <code>roi</code> modifies <code>img</code> too. Use <code>roi = img[...].copy()</code> to make an independent copy.</p>
+          </div>
+        </div>
+
+        <div class="challenge-card" id="ch-3">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Crop the center region of an image</span></div>
+          <div class="challenge-desc">Extract the center 200×200 region from a 480×640 image. Then draw a white rectangle into the original image's ROI zone (set pixels to 255).</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-3" spellcheck="false">import numpy as np
+
+# 480x640 random image
+np.random.seed(7)
+img = np.random.randint(50, 200, (480, 640, 3), dtype=np.uint8)
+
+H, W = img.shape[:2]
+cy, cx = H // 2, W // 2   # center pixel
+
+# Crop 200×200 center (100px from center in each direction)
+roi = img[cy-___:cy+___, cx-___:cx+___]
+print("ROI shape:", roi.shape)
+
+# Draw a white border on the TOP row of the ROI (set to 255)
+# Hint: the ROI is a view, so this modifies img directly
+roi[___, :] = 255    # top row
+
+# Verify: check the top-left pixel of the ROI
+print("ROI top-left pixel:", roi[0, 0])
+
+# Also print mean pixel value of the roi
+print("ROI mean:", round(float(roi.mean()), 2))</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-3','out-3','check-3')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-3')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-3',3)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-3" style="display:none"><strong>Hints:</strong><br>• 200×200 centered → offsets of 100 from center: <code>cy-100:cy+100, cx-100:cx+100</code><br>• Top row of ROI = index 0 → <code>roi[0, :]</code><br>• After setting top row to 255, ROI mean will be higher than ~125</div>
+          <div class="output-wrap" id="out-3" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-3-pre"></pre></div>
+          <div class="check-result" id="check-3" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>ROI shape: (200, 200, 3)<br>ROI top-left pixel: [255 255 255]<br>ROI mean: (value higher than 125)</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 4: Flip ─── -->
+      <section class="lesson-sec" id="sec-flip">
+        <div class="sec-header">
+          <span class="sec-num">04</span>
+          <div><h2 class="sec-title">Flipping &amp; rotating</h2><p class="sec-sub">cv2.flip and getRotationMatrix2D for geometric transforms</p></div>
+        </div>
+        <div class="prose">Flipping and rotation are the simplest forms of <strong>data augmentation</strong> — free labels, instant dataset expansion. Understanding the geometry helps you apply them correctly in production pipelines.</div>
+
+        <!-- Interactive flip demo -->
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Apply geometric transforms</div>
+          <div class="flip-demo">
+            <canvas id="flipSrc" width="200" height="150"></canvas>
+            <div class="flip-controls">
+              <button class="flip-btn active" onclick="applyFlip(this, 0)">↕ Vertical<br><span class="flip-code">flipCode=0</span></button>
+              <button class="flip-btn" onclick="applyFlip(this, 1)">↔ Horizontal<br><span class="flip-code">flipCode=1</span></button>
+              <button class="flip-btn" onclick="applyFlip(this, -1)">↕↔ Both<br><span class="flip-code">flipCode=-1</span></button>
+              <button class="flip-btn rot" onclick="applyRotate(this, 90)">↻ 90°<br><span class="flip-code">rotate</span></button>
+              <button class="flip-btn rot" onclick="applyRotate(this, 45)">↻ 45°<br><span class="flip-code">rotate</span></button>
+            </div>
+            <canvas id="flipDst" width="200" height="150"></canvas>
+          </div>
+          <div class="flip-labels"><span>Original</span><span>Result</span></div>
+        </div>
+
+        <div class="two-col">
+          <div class="code-block"><div class="cb-label">cv2.flip</div>
+<pre><code><span class="cm"># 0  = vertical flip (top↔bottom)</span>
+<span class="cm"># 1  = horizontal flip (left↔right)</span>
+<span class="cm"># -1 = both axes</span>
+flipped = cv2.<span class="fn">flip</span>(img, <span class="num">1</span>)
+
+<span class="cm"># Rotation around center</span>
+h, w = img.shape[:<span class="num">2</span>]
+M = cv2.<span class="fn">getRotationMatrix2D</span>(
+    (w//<span class="num">2</span>, h//<span class="num">2</span>),  <span class="cm"># center (cx,cy)</span>
+    <span class="num">45</span>,              <span class="cm"># angle degrees CCW</span>
+    <span class="num">1.0</span>              <span class="cm"># scale</span>
+)
+rot = cv2.<span class="fn">warpAffine</span>(img, M, (w, h))</code></pre></div>
+          <div class="code-block"><div class="cb-label">data augmentation</div>
+<pre><code><span class="kw">import</span> random
+
+<span class="kw">def</span> <span class="fn">augment</span>(img):
+    <span class="cm"># 50% chance horizontal flip</span>
+    <span class="kw">if</span> random.<span class="fn">random</span>() > <span class="num">0.5</span>:
+        img = cv2.<span class="fn">flip</span>(img, <span class="num">1</span>)
+
+    <span class="cm"># Random rotation ±15°</span>
+    angle = random.<span class="fn">uniform</span>(-<span class="num">15</span>, <span class="num">15</span>)
+    h, w = img.shape[:<span class="num">2</span>]
+    M = cv2.<span class="fn">getRotationMatrix2D</span>(
+            (w//<span class="num">2</span>, h//<span class="num">2</span>), angle, <span class="num">1.0</span>)
+    img = cv2.<span class="fn">warpAffine</span>(img, M, (w, h))
+    <span class="kw">return</span> img</code></pre></div>
+        </div>
+
+        <div class="challenge-card" id="ch-4">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Simulate flip operations with NumPy</span></div>
+          <div class="challenge-desc">Implement horizontal and vertical flips manually using NumPy slicing — no cv2 allowed. This mirrors exactly what cv2.flip does internally.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-4" spellcheck="false">import numpy as np
+
+img = np.array([
+    [[10, 20, 30], [40, 50, 60], [70, 80, 90]],
+    [[11, 21, 31], [41, 51, 61], [71, 81, 91]],
+    [[12, 22, 32], [42, 52, 62], [72, 82, 92]],
+], dtype=np.uint8)  # shape: (3, 3, 3)
+
+# Horizontal flip: reverse columns (axis=1)
+# Hint: img[:, ::-1] reverses columns
+h_flip = img[___, ___]
+print("Horizontal flip top-left pixel:", h_flip[0, 0])
+
+# Vertical flip: reverse rows (axis=0)
+# Hint: img[::-1, :] reverses rows
+v_flip = img[___, ___]
+print("Vertical flip top-left pixel:", v_flip[0, 0])
+
+# Both axes: reverse rows AND columns
+both_flip = img[___, ___]
+print("Both axes flip top-left pixel:", both_flip[0, 0])</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-4','out-4','check-4')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-4')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-4',4)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-4" style="display:none"><strong>Hints:</strong><br>• Horizontal flip (left↔right) = reverse columns: <code>img[:, ::-1]</code><br>• Vertical flip (top↔bottom) = reverse rows: <code>img[::-1, :]</code><br>• Both axes: <code>img[::-1, ::-1]</code></div>
+          <div class="output-wrap" id="out-4" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-4-pre"></pre></div>
+          <div class="check-result" id="check-4" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Horizontal flip top-left pixel: [70 80 90]<br>Vertical flip top-left pixel: [12 22 32]<br>Both axes flip top-left pixel: [72 82 92]</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 5: Bitwise ─── -->
+      <section class="lesson-sec" id="sec-bitwise">
+        <div class="sec-header">
+          <span class="sec-num">05</span>
+          <div><h2 class="sec-title">Bitwise operations</h2><p class="sec-sub">AND, OR, XOR, NOT — pixel-level binary logic</p></div>
+        </div>
+        <div class="prose">Bitwise operations work on each bit of each pixel channel independently. They are the core of <strong>masking</strong> — selectively showing or hiding parts of an image. Mastering them is essential for background removal, image compositing, and ROI selection.</div>
+
+        <!-- Interactive bitwise demo -->
+        <div class="widget-card">
+          <div class="widget-label">Interactive · See bitwise ops on two shapes</div>
+          <div class="bitwise-demo">
+            <div class="bw-canvas-row">
+              <div class="bw-item">
+                <canvas id="bwA" width="120" height="120"></canvas>
+                <span class="bw-lbl">Image A</span>
+              </div>
+              <div class="bw-op-select">
+                <select id="bwOpSelect" onchange="updateBitwise()">
+                  <option value="and">AND</option>
+                  <option value="or">OR</option>
+                  <option value="xor">XOR</option>
+                  <option value="not">NOT (A)</option>
+                </select>
+              </div>
+              <div class="bw-item">
+                <canvas id="bwB" width="120" height="120"></canvas>
+                <span class="bw-lbl">Image B</span>
+              </div>
+              <div class="bw-eq">=</div>
+              <div class="bw-item">
+                <canvas id="bwResult" width="120" height="120"></canvas>
+                <span class="bw-lbl" id="bwResultLbl">AND result</span>
+              </div>
+            </div>
+            <div class="bw-desc" id="bwDesc">AND: keeps pixels where BOTH images are white (255). Used to apply a binary mask.</div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="cb-label">cv2 · bitwise ops</div>
+<pre><code><span class="kw">import</span> cv2
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># Create a binary mask (white circle on black bg)</span>
+mask = np.<span class="fn">zeros</span>((<span class="num">200</span>, <span class="num">200</span>), dtype=np.uint8)
+cv2.<span class="fn">circle</span>(mask, (<span class="num">100</span>, <span class="num">100</span>), <span class="num">80</span>, <span class="num">255</span>, -<span class="num">1</span>)
+
+<span class="cm"># AND: keep only the masked region</span>
+result = cv2.<span class="fn">bitwise_and</span>(img, img, mask=mask)
+
+<span class="cm"># NOT: invert the mask</span>
+inv_mask = cv2.<span class="fn">bitwise_not</span>(mask)
+
+<span class="cm"># OR: combine two images</span>
+combined = cv2.<span class="fn">bitwise_or</span>(img_a, img_b)
+
+<span class="cm"># XOR: show differences</span>
+diff = cv2.<span class="fn">bitwise_xor</span>(img_a, img_b)</code></pre>
+        </div>
+
+        <!-- Use case cards -->
+        <div class="usecase-grid">
+          <div class="uc-card">
+            <div class="uc-icon"><i class="fas fa-masks-theater"></i></div>
+            <div class="uc-title">Background removal</div>
+            <div class="uc-desc">Create a binary mask of the foreground, then use AND to keep only the subject.</div>
+          </div>
+          <div class="uc-card">
+            <div class="uc-icon"><i class="fas fa-image"></i></div>
+            <div class="uc-title">Image compositing</div>
+            <div class="uc-desc">Place a logo on an image: AND the logo region out, OR the logo in.</div>
+          </div>
+          <div class="uc-card">
+            <div class="uc-icon"><i class="fas fa-magnifying-glass"></i></div>
+            <div class="uc-title">Change detection</div>
+            <div class="uc-desc">XOR two frames to reveal exactly which pixels changed between them.</div>
+          </div>
+          <div class="uc-card">
+            <div class="uc-icon"><i class="fas fa-puzzle-piece"></i></div>
+            <div class="uc-title">ROI selection</div>
+            <div class="uc-desc">Use NOT to invert a mask and selectively apply different processing to foreground vs background.</div>
+          </div>
+        </div>
+
+        <div class="challenge-card" id="ch-5">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Apply a binary mask with bitwise AND</span></div>
+          <div class="challenge-desc">Create a circular mask and use bitwise AND to keep only the circular region of an image. Then verify that pixels outside the circle are 0.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-5" spellcheck="false">import numpy as np
+
+# 100×100 image, all pixels = 200
+img = np.full((100, 100, 3), 200, dtype=np.uint8)
+
+# Create a circular mask: 1 inside circle, 0 outside
+# Circle centered at (50,50) with radius 40
+mask = np.zeros((100, 100), dtype=np.uint8)
+y_coords, x_coords = np.ogrid[:100, :100]
+circle = (x_coords - 50)**2 + (y_coords - 50)**2 <= 40**2
+mask[circle] = ___         # set inside circle to 255
+
+# Apply mask: keep pixels where mask=255, zero elsewhere
+# Replicate mask to 3 channels, then multiply
+mask_3ch = np.stack([___, ___, ___], axis=-1)   # shape (100,100,3)
+result = img * (mask_3ch // 255)
+
+# Verify: corner pixel (0,0) should be 0 (outside circle)
+print("Corner pixel:", result[0, 0])
+
+# Verify: center pixel (50,50) should be [200,200,200] (inside)
+print("Center pixel:", result[50, 50])
+
+# Count how many pixels are inside (non-zero)
+inside_count = np.count_nonzero(result[:,:,0])
+print("Pixels inside circle:", inside_count)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-5','out-5','check-5')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-5')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-5',5)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-5" style="display:none"><strong>Hints:</strong><br>• Set inside circle to 255: <code>mask[circle] = 255</code><br>• Stack mask 3 times: <code>np.stack([mask, mask, mask], axis=-1)</code><br>• Divide by 255 to get 0/1, multiply with img to zero out pixels outside</div>
+          <div class="output-wrap" id="out-5" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-5-pre"></pre></div>
+          <div class="check-result" id="check-5" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Corner pixel: [0 0 0]<br>Center pixel: [200 200 200]<br>Pixels inside circle: 5017</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 6: PLAYGROUND ─── -->
+      <section class="lesson-sec" id="sec-playground">
+        <div class="sec-header">
+          <span class="sec-num">06</span>
+          <div><h2 class="sec-title">Full Python Playground</h2><p class="sec-sub">Eksperimen bebas — tulis Python apapun</p></div>
+        </div>
+        <div class="prose">Python 3.11 + NumPy langsung di browser via <strong>Pyodide</strong>. Coba sendiri semua operasi yang sudah dipelajari hari ini.</div>
+        <div class="playground-card">
+          <div class="playground-toolbar">
+            <div class="pg-toolbar-left">
+              <span class="pg-title"><i class="fas fa-snake"></i> Python 3.11 · NumPy ready</span>
+              <span class="py-ready-dot" id="pgReadyDot"></span>
+            </div>
+            <div class="pg-toolbar-right">
+              <button class="pg-snippet-btn" onclick="loadSnippet('imread')">imread</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('resize')">resize</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('crop')">crop</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('flip')">flip</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('bitwise')">bitwise</button>
+            </div>
+          </div>
+          <div class="code-editor-wrap">
+            <textarea class="code-editor playground-editor" id="playground-editor" spellcheck="false">import numpy as np
+
+# ── Simulate a 480×640 BGR image ──
+img = np.random.randint(0, 256, (480, 640, 3), dtype=np.uint8)
+print("Original shape:", img.shape)
+print("dtype:", img.dtype)
+
+# ── Resize to half using scale factor ──
+scale = 0.5
+new_h = int(img.shape[0] * scale)
+new_w = int(img.shape[1] * scale)
+resized = img[:new_h*2:2, :new_w*2:2]   # simple sub-sampling
+print("Resized shape:", resized.shape)
+
+# ── Crop center 200×200 ──
+h, w = img.shape[:2]
+cy, cx = h//2, w//2
+roi = img[cy-100:cy+100, cx-100:cx+100]
+print("ROI shape:", roi.shape)
+
+# ── Horizontal flip ──
+h_flip = img[:, ::-1]
+print("Flipped shape:", h_flip.shape)
+
+# ── Simple mask: keep top-left quadrant ──
+mask = np.zeros_like(img)
+mask[:h//2, :w//2] = 255
+result = img * (mask // 255)
+nonzero = np.count_nonzero(result[:,:,0])
+print("Visible pixels after mask:", nonzero)
+print("Expected:", (h//2)*(w//2))</textarea>
+          </div>
+          <div class="playground-actions">
+            <button class="run-btn large" onclick="runPlayground()">▶ Run Code</button>
+            <button class="reset-btn" onclick="resetPlayground()">↺ Reset</button>
+            <span class="pg-note">Ctrl+Enter to run</span>
+          </div>
+          <div class="output-wrap" id="pg-output" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="pg-output-pre"></pre></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 7: QUIZ ─── -->
+      <section class="lesson-sec" id="sec-quiz">
+        <div class="sec-header">
+          <span class="sec-num">07</span>
+          <div><h2 class="sec-title">Quiz + Coding Challenge</h2><p class="sec-sub">Teori + praktik — selesaikan keduanya untuk lulus</p></div>
+        </div>
+
+        <div class="quiz-block-title">Part A · Multiple Choice</div>
+        <div id="quizContainer"></div>
+
+        <div class="quiz-block-title" style="margin-top:40px">Part B · Coding Challenge</div>
+        <div class="prose" style="margin-bottom:20px">3 soal coding — fix the bug, fill in the blank, dan gabungan operasi.</div>
+
+        <!-- CQ 1 -->
+        <div class="challenge-card" id="cq-1">
+          <div class="challenge-header"><span class="challenge-badge quiz-badge"><i class="fas fa-pen-to-square"></i> Coding Quiz 1 · Fix the bug</span><span class="challenge-title">cv2.resize dimension order is wrong — fix it</span></div>
+          <div class="challenge-desc">Kode ini mau resize ke 640px wide dan 360px tall, tapi dimensinya tertukar. Perbaiki argumen <code>cv2.resize</code>.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">buggy.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="cq-1-editor" spellcheck="false">import numpy as np
+
+img = np.zeros((1080, 1920, 3), dtype=np.uint8)
+
+# BUG: dimensions are (height, width) but cv2.resize needs (width, height)
+# Fix the tuple below
+target = (360, 640)  # WRONG ORDER — fix this
+
+# Simulate resize by simply slicing (no cv2 in playground)
+new_h, new_w = target  # after fix this should be new_h=360, new_w=640
+result = np.zeros((new_h, new_w, 3), dtype=np.uint8)
+
+print("Result shape:", result.shape)
+print("Expected: (360, 640, 3)")</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('cq-1-editor','cq-1-out','cq-1-check')">▶ Run &amp; Check</button>
+              <button class="reset-btn" onclick="resetCodingQuiz(1)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="output-wrap" id="cq-1-out" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="cq-1-out-pre"></pre></div>
+          <div class="check-result" id="cq-1-check" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Result shape: (360, 640, 3)<br>Expected: (360, 640, 3)</code></div>
+        </div>
+
+        <!-- CQ 2 -->
+        <div class="challenge-card" id="cq-2">
+          <div class="challenge-header"><span class="challenge-badge quiz-badge"><i class="fas fa-pen-to-square"></i> Coding Quiz 2 · Fill in the blank</span><span class="challenge-title">Extract and analyze a ROI</span></div>
+          <div class="challenge-desc">Crop the bottom-right quadrant of the image and compute its mean pixel value.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="cq-2-editor" spellcheck="false">import numpy as np
+
+np.random.seed(99)
+img = np.random.randint(0, 256, (200, 300, 3), dtype=np.uint8)
+
+H, W = img.shape[:2]
+
+# Crop the bottom-right quadrant
+# Rows: from H//2 to end, Cols: from W//2 to end
+roi = img[___:___, ___:___]
+
+print("ROI shape:", roi.shape)            # should be (100, 150, 3)
+print("ROI mean:", round(float(roi.mean()), 2))  # some value ~127
+print("ROI min:", int(roi.min()))
+print("ROI max:", int(roi.max()))</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('cq-2-editor','cq-2-out','cq-2-check')">▶ Run &amp; Check</button>
+              <button class="reset-btn" onclick="resetCodingQuiz(2)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="output-wrap" id="cq-2-out" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="cq-2-out-pre"></pre></div>
+          <div class="check-result" id="cq-2-check" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>ROI shape: (100, 150, 3)<br>ROI mean: 127.19<br>ROI min: 0<br>ROI max: 255</code></div>
+        </div>
+
+        <!-- CQ 3 -->
+        <div class="challenge-card" id="cq-3">
+          <div class="challenge-header"><span class="challenge-badge quiz-badge"><i class="fas fa-pen-to-square"></i> Coding Quiz 3 · Combined ops</span><span class="challenge-title">Pipeline: resize → crop → flip → mask</span></div>
+          <div class="challenge-desc">Apply a full pipeline: simulate resize to 50%, crop the top-left 100×100, flip it horizontally, then zero-out the top 10 rows.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="cq-3-editor" spellcheck="false">import numpy as np
+
+np.random.seed(42)
+img = np.random.randint(0, 256, (200, 200, 3), dtype=np.uint8)
+
+# Step 1: Resize to 50% via sub-sampling
+step1 = img[___::2, ___::2]       # take every 2nd row and col from start
+print("After resize:", step1.shape)
+
+# Step 2: Crop top-left 100×100
+step2 = step1[___:___, ___:___]
+print("After crop:", step2.shape)
+
+# Step 3: Horizontal flip
+step3 = step2[___, ___]
+print("After flip:", step3.shape)
+
+# Step 4: Zero-out top 10 rows
+step4 = step3.copy()
+step4[___:___, :] = 0
+print("Top-left after zeroing:", step4[0, 0])
+print("Row 10 pixel:", step4[10, 0])</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('cq-3-editor','cq-3-out','cq-3-check')">▶ Run &amp; Check</button>
+              <button class="reset-btn" onclick="resetCodingQuiz(3)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="output-wrap" id="cq-3-out" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="cq-3-out-pre"></pre></div>
+          <div class="check-result" id="cq-3-check" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>After resize: (100, 100, 3)<br>After crop: (100, 100, 3)<br>After flip: (100, 100, 3)<br>Top-left after zeroing: [0 0 0]<br>Row 10 pixel: (some non-zero value)</code></div>
+        </div>
+
+        <div class="final-score-card" id="finalScore" style="display:none">
+          <div class="fs-title">Lesson Complete! <i class="fas fa-party-horn"></i></div>
+          <div class="fs-scores" id="fsScores"></div>
+          <div class="fs-msg" id="fsMsg"></div>
+        </div>
+
+        <div class="next-lesson-cta" id="nextLesson" style="display:none">
+          <div class="nlc-inner">
+            <span class="nlc-label">Next lesson</span>
+            <h3 class="nlc-title">Filtering &amp; Kernels →</h3>
+            <p class="nlc-desc">Gaussian blur, Median filter, Otsu's thresholding, and spatial convolution.</p>
+            <a href="#" class="nlc-btn">Continue</a>
+          </div>
+        </div>
+      </section>
+
+</article>
+<footer class="lesson-nav-footer">
+<a href="#/participant-ai-lab-cv-morph" class="lnf-prev">
+<span class="lnf-label">Lesson sebelumnya</span>
+<span class="lnf-title">Morphological Transforms <i class="fas fa-arrow-left"></i></span>
+</a>
+<a href="#/participant-ai-lab-cv-pixel" class="lnf-next">
+<span class="lnf-label">Lesson berikutnya</span>
+<span class="lnf-title">Pixel Anatomy <i class="fas fa-arrow-right"></i></span>
+</a>
+</footer>
+</section>
+</div>
+<aside class="lesson-right-panel">
+<div class="lesson-progress-card">
+<div class="lpc-header"><i class="fas fa-chart-simple"></i> Progress CV</div>
+<div class="lpc-ring-wrap"><svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="30" stroke="var(--border)" stroke-width="5" fill="none"/><circle cx="36" cy="36" r="30" stroke="var(--fellow-pink)" stroke-width="5" fill="none" stroke-dasharray="188.5" stroke-dashoffset="18.8" stroke-linecap="round"/></svg><div class="lpc-ring-text"><strong>90%</strong></div></div>
+<div class="lpc-meta"><span><i class="far fa-circle-check"></i> 9/10 selesai</span><span><i class="fas fa-fire"></i> 0 streak</span></div>
+</div>
+<div class="lesson-list-card">
+<h4>CV Course</h4>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 1-7. Done</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 8. Morphological</div>
+<div class="lesson-list-item active"><span class="lli-dot"></span> 9. Image Processing</div>
+<div class="lesson-list-item locked"><span class="lli-dot"></span> 10. Pixel Anatomy</div>
+</div>
+</aside>
+</div>
+</main>
+</section>

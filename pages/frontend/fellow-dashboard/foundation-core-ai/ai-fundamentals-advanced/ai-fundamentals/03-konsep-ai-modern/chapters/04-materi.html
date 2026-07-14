@@ -1,0 +1,140 @@
+<div class="chapter-content fade-in ai-modern-chapter">
+    <header class="ai-modern-chapter-hero">
+        <span>Topik 4 · 35 menit</span>
+        <h2>Sistem AI Masa Kini: Model, Data, Tools, Infrastruktur, dan Human Oversight</h2>
+        <p>Sistem AI modern tidak dinilai dari modelnya saja. Kualitasnya lahir dari arsitektur end-to-end: context, retrieval, tools, guardrails, evaluation, infrastructure, dan proses manusia.</p>
+        <div class="ai-modern-objectives">
+            <strong>Tujuan pembelajaran</strong>
+            <ul>
+                <li>Membaca arsitektur end-to-end sistem AI modern.</li>
+                <li>Membedakan model layer, context layer, retrieval, tools, orchestration, evaluation, dan infrastructure.</li>
+                <li>Merancang sistem dengan safety, privacy, cost, latency, reliability, dan human oversight.</li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="ai-modern-section">
+        <div class="ai-modern-question"><i class="fas fa-circle-question"></i><p><strong>Pertanyaan pemantik:</strong> Jika modelnya kuat tetapi API key bocor di frontend, retrieval salah sumber, dan tidak ada approval untuk tool berbahaya, apakah sistemnya layak dipakai?</p></div>
+        <pre class="ai-modern-code"><code>Modern AI System =
+Model
++ Instructions
++ Context
++ Retrieval
++ Tools
++ State
++ Guardrails
++ Evaluation
++ Infrastructure
++ Human Oversight</code></pre>
+        <p>Model adalah komponen penting, tetapi bukan seluruh sistem. Aplikasi production harus mengatur siapa yang boleh mengakses data, sumber mana yang boleh diambil, tool apa yang bisa dijalankan, bagaimana output divalidasi, kapan manusia harus menyetujui, dan bagaimana insiden dicatat.</p>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>End-to-End Architecture</h3>
+        <div class="ai-modern-architecture ai-modern-wide-architecture">
+            <span>User Interface</span><span>API / Backend</span><span>Auth & Policy</span><span>Prompt / Context Builder</span><span>Model Gateway</span><span>Retrieval / Tools</span><span>Output Validation</span><span>Human Approval</span><span>Response</span><span>Logs / Traces / Evaluation</span>
+        </div>
+        <p><strong>Context engineering</strong> mengatur system instruction, user input, retrieved documents, tool results, conversation history, memory, examples, context prioritization, token budget, dan batas prompt injection. Context bukan tempat membuang semua data; ia perlu prioritas.</p>
+        <div class="ai-modern-callout"><i class="fas fa-lightbulb"></i><div><strong>Analogi sederhana</strong><p>Model seperti konsultan pintar. Sistem AI modern adalah kantor lengkap: resepsionis, arsip, aturan akses, alat kerja, supervisor, catatan kerja, dan proses audit.</p></div></div>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>Retrieval-Augmented Generation secara Proporsional</h3>
+        <div class="ai-modern-pipeline"><span>Documents</span><span>Chunking</span><span>Embeddings</span><span>Vector index</span><span>Retrieval</span><span>Context assembly</span><span>Generation</span><span>Citation</span></div>
+        <p>RAG berguna ketika pengetahuan sering berubah, perlu sumber eksplisit, atau data internal tidak ada dalam training model. Namun untuk data terstruktur seperti status pembayaran atau jadwal spesifik, query database biasa sering lebih tepat daripada vector retrieval.</p>
+        <div class="ai-modern-comparison">
+            <article><strong>Retrieval quality</strong><span>Chunking, metadata, reranking, dan access control menentukan dokumen yang masuk konteks.</span></article>
+            <article><strong>Grounding</strong><span>Jawaban harus menunjukkan sumber, bukan sekadar terdengar yakin.</span></article>
+            <article><strong>Stale index</strong><span>Dokumen berubah tetapi index belum diperbarui dapat membuat jawaban salah.</span></article>
+            <article><strong>Prompt injection</strong><span>Dokumen yang diambil bisa membawa instruksi jahat dan harus dibatasi.</span></article>
+        </div>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>Model Routing, Caching, Evaluation, dan Observability</h3>
+        <p>Model routing memilih model berdasarkan tugas: cepat vs capable, text vs vision, hosted vs local, fallback, cost-aware routing, dan risk-aware routing. Confidence bukan satu-satunya dasar routing; risiko tindakan dan kebutuhan audit juga penting.</p>
+        <p>Caching dapat berupa response cache, embedding cache, prompt cache, semantic cache, streaming, batching, atau parallel tool calls. Tujuannya menurunkan latency dan biaya, tetapi cache yang salah bisa menyajikan jawaban usang.</p>
+        <p>Evaluation dan observability menghubungkan module ini dengan module Evaluation: offline eval, pre-deployment test, production monitoring, trace, user feedback, incident review, drift, regression, cost monitoring, dan safety event.</p>
+        <blockquote class="ai-modern-quote">"manage risks and promote trustworthy AI" <cite>NIST, 2023</cite></blockquote>
+        <p>Maknanya: sistem AI modern harus dirancang sebagai sistem risiko, bukan hanya demo model.</p>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>Security, Privacy, dan Deployment Patterns</h3>
+        <div class="ai-modern-table-wrap">
+            <table class="ai-modern-table">
+                <thead><tr><th>Pola deployment</th><th>Kelebihan</th><th>Risiko</th></tr></thead>
+                <tbody>
+                    <tr><td>Managed API</td><td>Setup cepat, scaling dan maintenance model lebih ringan</td><td>Vendor dependency, governance data, biaya variabel</td></tr>
+                    <tr><td>Managed cloud AI platform</td><td>Model catalog, agent service, retrieval, governance, observability</td><td>Kompleksitas cloud, region, integrasi enterprise</td></tr>
+                    <tr><td>Self-hosted inference</td><td>Kontrol infra dan data lebih besar</td><td>GPU, serving, autoscaling, patching, security</td></tr>
+                    <tr><td>Local development</td><td>Prototyping cepat, offline, privasi lokal</td><td>Hardware limit, quantization, belum otomatis production-ready</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="ai-modern-warning"><i class="fas fa-triangle-exclamation"></i><span><strong>Security baseline:</strong> jangan simpan API key di frontend, gunakan least privilege, redaksi PII, retention policy, logging sensitif, tenant isolation, tool permission, dan approval untuk side effect.</span></div>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>Multimodal, Human Oversight, dan Failure Taxonomy</h3>
+        <p>Sistem multimodal dengan teks, gambar, audio, video, atau dokumen membutuhkan preprocessing, validation khusus modalitas, storage, latency budget, dan accessibility. Gambar bisa butuh OCR; audio butuh transkripsi; dokumen butuh parsing; video butuh sampling frame.</p>
+        <div class="ai-modern-comparison">
+            <article><strong>Human-in-the-loop</strong><span>Manusia menyetujui sebelum aksi penting dilakukan.</span></article>
+            <article><strong>Human-on-the-loop</strong><span>Sistem berjalan, manusia memantau dan bisa intervensi.</span></article>
+            <article><strong>Human-out-of-the-loop</strong><span>Sistem otomatis penuh; hanya cocok untuk risiko rendah dan terukur.</span></article>
+        </div>
+        <div class="ai-modern-table-wrap">
+            <table class="ai-modern-table">
+                <thead><tr><th>Layer</th><th>Contoh kegagalan</th></tr></thead>
+                <tbody>
+                    <tr><td>Input</td><td>Data tidak lengkap</td></tr>
+                    <tr><td>Prompt</td><td>Instruksi ambigu</td></tr>
+                    <tr><td>Retrieval</td><td>Dokumen salah</td></tr>
+                    <tr><td>Model</td><td>Halusinasi</td></tr>
+                    <tr><td>Tool</td><td>API error</td></tr>
+                    <tr><td>Agent</td><td>Loop atau tindakan salah</td></tr>
+                    <tr><td>Validation</td><td>Output buruk lolos</td></tr>
+                    <tr><td>Infrastructure</td><td>Timeout</td></tr>
+                    <tr><td>Governance</td><td>Akses tidak sah</td></tr>
+                    <tr><td>Human process</td><td>Approval hanya formalitas</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>Studi Kasus Akhir</h3>
+        <p>Bangun AI assistant fellowship yang menjawab pertanyaan peserta, membaca pedoman internal, mengecek jadwal, dan membantu membuat draft pesan. Sistem tidak boleh mengubah data peserta atau mengirim pesan tanpa approval staf.</p>
+        <div class="ai-modern-card-grid">
+            <article><h4>Komponen</h4><p>UI, backend, auth, context builder, model gateway, retrieval, tools, validation, logs.</p></article>
+            <article><h4>Permission</h4><p>Read-only untuk jadwal; draft-only untuk pesan; approval wajib untuk pengiriman.</p></article>
+            <article><h4>Evaluation</h4><p>Factuality, groundedness, latency, cost, tool success, safety event.</p></article>
+            <article><h4>Fallback</h4><p>Jika sumber tidak ditemukan, jawab tidak tahu dan eskalasi ke staf.</p></article>
+        </div>
+    </section>
+
+    <section class="ai-modern-active" data-modern-check="system-risk">
+        <div><span>Belajar Aktif</span><h3>Quick Check: cari bottleneck</h3><p>Arsitektur memiliki API key di frontend, satu model untuk semua tugas, retrieval tanpa access control, tool delete tanpa approval, tanpa logging, dan tanpa evaluation set. Apa risikonya?</p></div>
+        <button type="button" data-modern-reveal>Tampilkan feedback</button>
+        <p class="ai-modern-feedback" hidden>Risikonya mencakup kebocoran secret, biaya tidak terkendali, akses data salah, tindakan destruktif tanpa approval, tidak bisa audit insiden, dan regression tidak terdeteksi.</p>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>Mini Challenge</h3>
+        <pre class="ai-modern-code"><code>Use case:
+Model approach:
+Hosted/open/local:
+Retrieval:
+Tools:
+Human approval:
+Privacy:
+Evaluation:
+Observability:
+Cost controls:
+Failure fallback:</code></pre>
+        <div class="ai-modern-summary"><strong>Ringkasan:</strong> sistem AI modern adalah susunan komponen teknis dan manusia. Model kuat tetap membutuhkan security, retrieval, tools, evaluasi, observability, dan approval gate.</div>
+        <dl class="ai-modern-glossary"><dt>Context engineering</dt><dd>Pengaturan konteks yang diberikan ke model.</dd><dt>Model gateway</dt><dd>Layer yang memilih dan memanggil model sesuai tugas.</dd><dt>Human oversight</dt><dd>Peran manusia dalam approval, monitoring, dan escalation.</dd></dl>
+        <p class="ai-modern-references"><strong>Referensi:</strong> Lewis et al. (2020), Liang et al. (2022), NIST AI RMF (2023), AWS Bedrock documentation, Microsoft/Azure AI documentation, NVIDIA NIM documentation, Ollama documentation.</p>
+        <a class="ai-modern-cta" href="#/participant-ai-modern-practice">Lanjut ke Latihan <i class="fas fa-arrow-right"></i></a>
+    </section>
+</div>

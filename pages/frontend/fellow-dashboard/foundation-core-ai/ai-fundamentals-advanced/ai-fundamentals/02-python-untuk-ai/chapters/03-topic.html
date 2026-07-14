@@ -1,0 +1,73 @@
+<h1>Chapter 6 — Control Flow: Keputusan dan Perulangan</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Menggunakan <code>if</code>, <code>for</code>, dan <code>while</code>.</li>
+<li>Memproses banyak record dengan aturan konsisten.</li>
+<li>Menentukan kondisi berhenti yang aman.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Program yang hanya menjalankan instruksi lurus dari atas ke bawah sangat terbatas. Dalam workflow data nyata, kamu hampir tidak pernah tahu persis nilai apa yang akan diterima program. Sebuah kolom score dapat berisi angka yang valid, teks yang tidak bisa dikonversi, nilai yang tidak masuk akal seperti -1 atau 200, atau bahkan data kosong sama sekali. Tanpa control flow, program akan crash pada record pertama yang bermasalah atau—lebih berbahaya—diam-diam memproses data rusak seolah-olah semuanya normal.</p>
+<p>Control flow memberi program kemampuan untuk mengambil keputusan: "Jika nilai ini kosong, lewati. Jika di bawah threshold, tandai untuk review. Jika valid, lanjutkan." Keputusan-keputusan kecil ini, ketika diterapkan secara konsisten pada ribuan record, menentukan apakah laporan akhir dapat dipercaya atau menyesatkan. Sebuah pipeline data yang baik bukan hanya menghasilkan output, tetapi juga mencatat setiap record yang ditolak dan alasan penolakannya.</p>
+<p>Di sisi lain, perulangan memungkinkan program menerapkan aturan yang sama pada seluruh kumpulan data tanpa menulis ulang kode untuk setiap baris. Kombinasi keputusan dan perulangan adalah inti dari hampir semua proses data: validasi, cleansing, transformasi, dan agregasi semuanya bergantung pada kemampuan memeriksa dan mengulang.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Sebelum data mencapai model AI, hampir selalu ada tahap preprocessing yang menerapkan aturan pada setiap baris dataset. Tahap ini melakukan hal-hal seperti melewati baris dengan nilai kosong, mengubah format tanggal yang tidak konsisten, memberi label sementara berdasarkan range nilai, atau menggabungkan beberapa sumber data. Semua langkah ini membutuhkan control flow—biasanya dalam bentuk loop yang memproses baris demi baris dan kondisi yang memutuskan tindakan apa yang diambil.</p>
+<p>Pada modul ini kamu belum membangun model. Tapi setiap latihan control flow yang kamu kerjakan sekarang adalah fondasi untuk pipeline preprocessing yang akan kamu tulis nanti. Bedanya, pipeline produksi akan memproses jutaan baris, bukan tiga atau empat record contoh. Oleh karena itu kebiasaan menulis guard condition, mencatat record yang ditolak, dan menguji boundary harus sudah terbentuk sejak sekarang.</p>
+<h2>Analogi</h2>
+<p>Bayangkan seorang petugas registrasi di sebuah acara besar. Setiap peserta datang dengan formulir pendaftaran. Petugas memeriksa satu per satu: jika nama dan nomor identitas lengkap, peserta dipersilakan masuk. Jika ada data yang kosong, petugas meminta peserta melengkapi. Jika nilai tidak sah—misalnya usia ditulis "seratus" bukan angka—petugas mencatat untuk diperbaiki nanti. Proses "periksa satu per satu, putuskan tindakan, lanjutkan ke berikutnya" persis seperti yang dilakukan loop dan kondisi pada data.</p>
+<p>Perbedaan utama: komputer tidak memiliki intuisi seperti petugas manusia. Jika petugas melihat field usia kosong, ia secara alami akan bertanya. Komputer tidak melakukan itu—ia hanya menjalankan instruksi yang ditulis. Jika tidak ada instruksi untuk menangani data kosong, komputer akan mencoba memprosesnya dan menghasilkan error, atau lebih buruk, menyimpan data rusak tanpa memberi tahu siapa pun. Di sinilah letak pentingnya menulis kondisi yang eksplisit untuk setiap skenario yang mungkin terjadi.</p>
+<h2>Penjelasan Konsep</h2>
+<p>Control flow dalam Python bekerja dengan mengevaluasi ekspresi boolean—ekspresi yang menghasilkan True atau False—dan memutuskan langkah selanjutnya berdasarkan hasil evaluasi tersebut. Setiap keputusan dan perulangan pada akhirnya kembali ke pertanyaan sederhana: "Apakah kondisi ini terpenuhi?" Memahami urutan evaluasi dan indentation (tanda blok) adalah kunci untuk menulis control flow yang benar.</p>
+<p><strong>if/elif/else</strong> digunakan ketika program perlu memilih satu dari beberapa cabang eksekusi. Kondisi diperiksa dari atas ke bawah; cabang pertama yang True akan dijalankan, sisanya dilewati. Urutan kondisi sangat penting: tempatkan guard condition (seperti pengecekan None atau tipe data) sebelum operasi yang membutuhkan data valid. Sebagai contoh, memeriksa apakah score is None harus dilakukan sebelum membandingkan score >= 75, karena None tidak dapat dibandingkan dengan angka.</p>
+<p><strong>for loop</strong> digunakan untuk mengulang setiap elemen dalam sebuah collection—list, tuple, dictionary, atau generator. Loop ini adalah pilihan default ketika kamu ingin memproses setiap item dalam kumpulan data. Jumlah iterasi ditentukan oleh panjang collection, sehingga risiko infinite loop sangat kecil selama collection tidak dimodifikasi selama loop berjalan.</p>
+<p><strong>while loop</strong> mengulang selama sebuah kondisi bernilai True. Berbeda dengan for, while tidak secara otomatis berhenti—ia bergantung pada perubahan kondisi di dalam blok. Jika kondisi tidak pernah berubah menjadi False, loop akan berjalan selamanya. While berguna ketika jumlah iterasi tidak diketahui sebelumnya, misalnya membaca data sampai file habis atau menunggu input pengguna. Pastikan selalu ada jalur yang membuat kondisi berubah menjadi False.</p>
+<p><strong>break</strong> menghentikan loop sepenuhnya, sedangkan <strong>continue</strong> melewati sisa iterasi saat ini dan langsung melanjutkan ke iterasi berikutnya. Dalam pipeline data, continue berguna untuk melewati record yang tidak valid tanpa menghentikan seluruh proses, sementara break dapat digunakan ketika kondisi tertentu terpenuhi—misalnya menemukan record pertama yang memenuhi kriteria.</p>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">Ambil record → nilai tersedia? → ya → proses
+                         └───── tidak → tandai
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Seorang panitia memiliki daftar 200 nilai peserta. Aturannya: nilai minimal 75 dinyatakan lulus, nilai di bawah 75 perlu remedial, dan data kosong tidak diikutsertakan. Tanpa program, panitia harus memeriksa satu per satu secara manual—melelahkan dan rawan salah. Dengan loop Python, program memeriksa seluruh daftar dalam hitungan detik, mencatat jumlah lulus, jumlah remedial, dan jumlah data kosong secara otomatis.</p>
+<p>Kunci dari proses ini bukan kecepatan eksekusi, melainkan konsistensi. Program tidak pernah "lelah" dan tidak pernah melewatkan record karena terburu-buru. Selama aturan ditulis dengan benar, setiap record mendapat perlakuan yang persis sama.</p>
+<h2>Contoh AI</h2>
+<p>Dalam workflow AI, tahap preprocessing hampir selalu melibatkan loop untuk memvalidasi setiap baris dataset. Sebagai contoh, sebelum data numerik digunakan sebagai fitur model, program perlu memeriksa apakah setiap baris memiliki nilai yang valid, apakah ada outlier yang melebihi batas wajar, dan apakah format data konsisten di seluruh baris. Control flow memungkinkan pemeriksaan ini dilakukan secara otomatis dan sistematis.</p>
+<p>Pada tahap ini kita belum masuk ke model AI. Tapi kebiasaan menulis validasi berbasis kondisi dan loop akan langsung terpakai ketika kamu mulai membangun pipeline preprocessing yang sesungguhnya.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">scores = [88, None, 62, 91]
+
+for score in scores:
+    if score is None:
+        print("Data kosong")
+        continue
+
+    if score >= 75:
+        print("Lulus")
+    else:
+        print("Perlu belajar ulang")
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li>List berisi angka dan satu nilai kosong.</li>
+<li><code>for</code> mengambil satu score setiap iterasi.</li>
+<li><code>is None</code> memeriksa data kosong sebagai guard condition pertama.</li>
+<li><code>continue</code> mencegah perbandingan angka dengan <code>None</code> yang akan menyebabkan TypeError.</li>
+<li>Kondisi <code>score >= 75</code> baru dieksekusi setelah guard condition terpenuhi.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Salah indentasi.</strong> Python menggunakan indentasi untuk menentukan blok kode. Satu spasi yang salah dapat mengubah logika program secara drastis—misalnya kode yang seharusnya di dalam kondisi malah dieksekusi setiap saat. Gunakan 4 spasi secara konsisten dan pastikan editor-mu menampilkan indentasi secara visual.</li>
+<li><strong>Loop <code>while</code> tanpa perubahan kondisi sehingga tidak berhenti.</strong> Jika kondisi awal True dan tidak pernah berubah di dalam loop, program akan berjalan selamanya dan membekukan sistem. Selalu pastikan ada pernyataan di dalam while yang mengubah kondisi menuju False, atau gunakan break dengan alasan yang jelas.</li>
+<li><strong>Membandingkan <code>None</code> dengan angka.</strong> None mewakili ketiadaan nilai, bukan angka nol. Operasi seperti <code>None > 75</code> akan menghasilkan TypeError. Selalu periksa None terlebih dahulu sebelum operasi numerik.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li><strong>Gunakan <code>for</code> ketika memproses collection.</strong> For loop lebih aman daripada while karena jumlah iterasi ditentukan oleh panjang collection. Gunakan while hanya jika kamu benar-benar tidak tahu kapan loop harus berhenti.</li>
+<li><strong>Pakai <code>while</code> hanya jika kondisi berhenti jelas dan dapat dicapai.</strong> Setiap while loop harus memiliki kondisi yang berubah seiring iterasi. Jika kondisi tetap True selamanya, program tidak akan pernah berhenti.</li>
+<li><strong>Tangani nilai kosong sebelum operasi utama.</strong> Letakkan guard condition di awal blok kode. Ini memisahkan "apa yang tidak boleh diproses" dari "apa yang harus diproses" dan membuat kode lebih mudah dibaca serta diuji.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Hitung jumlah peserta lulus dan jumlah data kosong dari list contoh.</p>
+<h2>Ringkasan</h2>
+<p>Control flow adalah mekanisme yang membuat program mampu mengambil keputusan dan mengulang proses secara konsisten. Dengan if/elif/else, program dapat memilih tindakan berdasarkan kondisi data. Dengan for dan while, program dapat menerapkan aturan yang sama pada seluruh collection tanpa menulis ulang kode. Kombinasi keduanya—loop yang berisi kondisi—adalah pola yang paling sering muncul dalam pipeline data, validasi, dan preprocessing. Pastikan setiap kondisi memiliki guard yang memadai dan setiap loop memiliki jalan menuju terminasi.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Aturan yang sering digunakan perlu dibungkus menjadi function agar tidak diduplikasi dan mudah diuji secara terpisah.</p>
+<hr>

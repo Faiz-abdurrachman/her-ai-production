@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="/"> 
-    
+    <base href="/">
+
     <title>HerAI Fellowship 2026 | Data Sorcerers x Womanhub.id</title>
     <meta name="title" content="HerAI Fellowship 2026 | Data Sorcerers x Womanhub.id">
     <meta name="description" content="Beasiswa digital untuk 100 perempuan Indonesia. Pelatihan intensif AI, mentorship, dan sertifikasi global. Built by Her, Powered by AI.">
@@ -34,9 +34,20 @@
     <link rel="stylesheet" href="/css/frontend/graduation.css?v=20260520-2">
     <link rel="stylesheet" href="/css/frontend/register.css?v=20260520-2">
     <link rel="stylesheet" href="/css/frontend/profile.css?v=20260619-login-hero-dashboard">
-    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/dashboard.css?v=20260620-dashboard-compact-cards">
-    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/modules.css?v=20260619-breadcrumb-tight">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/dashboard.css?v=20260629-sidebar-fix">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/tasks.css?v=20260624-tugas-fix">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/projects.css?v=20260624-proyek-fix">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/events.css?v=20260624-event-fix">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/community.css?v=20260624-komunitas-fix">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/certificates.css?v=20260624-sertif">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/leaderboard.css?v=20260624-leaderboard">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/mentor.css?v=20260624-mentor">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/help.css?v=20260624-help-grid">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/settings.css?v=20260624-settings">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/modules.css?v=20260713-ai-intro-interactive">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/ai-lab-lesson.css?v=20260701">
     <link rel="stylesheet" href="/css/frontend/messaging.css?v=20260619-chat-closed">
+    <link rel="stylesheet" href="/css/frontend/fellow-dashboard/chatroom.css?v=20260624-new-ui">
     <link rel="stylesheet" href="/css/frontend/dashboard.css?v=20260601-data-viz">
     <link rel="stylesheet" href="/css/frontend/twibbon.css?v=20260520-2">
     <link rel="stylesheet" href="/css/frontend/about-us.css?v=20260520-2">
@@ -63,8 +74,40 @@
 
     <script src="/js/frontend/data-penduduk.js?v=20260520-2"></script>
     <script src="/js/frontend/register.js?v=20260520-2"></script>
-    <script src="/js/frontend/profile.js?v=20260619-participant-login"></script>
-    <script src="/js/frontend/fellow-dashboard/settings.js?v=20260621-topbar-dropdown"></script>
+    <script src="/js/frontend/profile.js?v=20260713-participant-backend"></script>
+    <script src="/js/frontend/fellow-dashboard/settings.js?v=20260713-participant-backend"></script>
+    <script src="/js/frontend/fellow-dashboard/course-placeholder.js?v=20260710-reasoning-module-v2"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-reasoning.js?v=20260712-reasoning-final-v35"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-python.js?v=20260712-python-v9"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-ml-basic.js?v=20260709-ml-canonical-path"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-modern.js?v=20260712-ai-modern-final-v4"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-evaluation.js?v=20260712-reasoning-shell-v2"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-evolution.js?v=20260712-reasoning-shell-v2"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-math-for-ai.js?v=20260710-math-active"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/tokenization.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/preprocessing.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/pos-ner.js?v=20260701-quiz"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/bow.js?v=20260701-bowv3"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/tfidf.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/nlp-overview.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/ml-overview.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/cv-overview.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/cnn-intro.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/cnn-why.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/cnn-relu.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/filtering-kernels.js?v=20260701-fkquiz"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/cnn-fc.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/cnn-hands.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/cnn-arch.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/morphological-transforms.js?v=20260701-mquiz"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/image-processing-opencv.js?v=20260701-oquiz"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/pixel-anatomy.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/cnn-arch-builder.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/gen-overview.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/ml-intro.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/ml-hypothesis.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/ml-vc-dim.js?v=20260701-token"></script>
+    <script src="/js/frontend/fellow-dashboard/ai-lab/ml-bias-variance.js?v=20260701-token"></script>
     <script src="/js/frontend/meeting.js?v=20260520-2"></script>
     <script src="/js/frontend/messaging.js?v=20260613-backend-logic"></script>
     <script src="/js/frontend/competency-test.js?v=20260601-retest"></script>
@@ -72,7 +115,7 @@
     <script src="/js/dashboard/dashboard.js?v=20260601-rbac-score"></script>
     <script src="/js/frontend/twibbon.js?v=20260520-2"></script>
     <script src="/js/main.js?v=20260601-rbac-score"></script>
-    <script src="/js/router.js?v=20260619-learning-content"></script>
+    <script src="/js/router.js?v=20260713-participant-backend" defer></script>
     <script src="/js/dashboard/skoring.js?v=20260520-2"></script>
     <script src="/js/dashboard/ai-prescreening.js?v=20260520-2"></script>
     <script src="/js/dashboard/admin-modules.js?v=20260619-learning-content-3"></script>
@@ -81,6 +124,7 @@
     <script src="/js/dashboard/data-visualization.js?v=20260601-data-viz"></script>
     <script src="/js/frontend/announcement.js?v=20260520-2"></script>
     <script src="/js/dashboard/audit-trail.js?v=20260520-2"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
 
 </body>
 </html>

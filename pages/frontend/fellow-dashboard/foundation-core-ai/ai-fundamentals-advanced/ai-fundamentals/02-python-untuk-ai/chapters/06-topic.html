@@ -1,0 +1,134 @@
+<h1>Chapter 10 — Error Handling: Program yang Tahan Gangguan</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Membaca error sebagai informasi.</li>
+<li>Menggunakan <code>try</code>, <code>except</code>, <code>else</code>, dan <code>finally</code>.</li>
+<li>Menangkap exception secara spesifik.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Dalam workflow data nyata, hampir tidak pernah semuanya berjalan mulus. File yang seharusnya ada ternyata hilang. Kolom yang seharusnya berisi angka ternyata berisi teks. Koneksi ke database terputus di tengah proses. Program yang tidak siap menghadapi situasi ini akan crash—dan jika crash terjadi di tengah pipeline yang memproses ribuan baris, kamu bisa kehilangan semua hasil yang sudah dikerjakan.</p>
+<p>Error handling bukan tentang menyembunyikan masalah. Justru sebaliknya: ia membuat masalah terlihat, tercatat, dan dapat ditindaklanjuti. Program yang baik memberi pesan error yang jelas—"File participants.csv tidak ditemukan di folder data/"—bukan hanya "Something went wrong" tanpa petunjuk apa pun. Lebih penting lagi, program yang baik tahu kapan harus berhenti (jika data inti rusak) dan kapan harus melanjutkan (jika satu record invalid bisa dilewati).</p>
+<p>Keputusan antara "hentikan proses" dan "lewati dan catat" adalah keputusan domain, bukan keputusan teknis. Error handling membantumu mengekspresikan keputusan tersebut dalam kode.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Pipeline data untuk AI sering melibatkan banyak tahap: load, validate, clean, transform, dan save. Setiap tahap bisa gagal karena alasan berbeda. Error handling memastikan bahwa kegagalan di satu tahap tidak merusak data mentah atau menghasilkan output yang menyesatkan tanpa peringatan. Jika data yang buruk lolos tanpa terdeteksi, model yang dilatih di atasnya akan belajar dari data yang salah—dan hasilnya tidak dapat dipercaya.</p>
+<h2>Analogi</h2>
+<p>Error handling seperti sabuk pengaman dan airbag di mobil. Sabuk pengaman tidak mencegah tabrakan, tetapi mengurangi dampak ketika tabrakan terjadi. Demikian pula try/except tidak mencegah error, tetapi memastikan program merespons error dengan cara yang terkendali. Tanpa sabuk pengaman, tabrakan kecil dapat berakibat fatal. Tanpa error handling, error kecil (seperti satu file hilang) dapat menghentikan seluruh pipeline tanpa pesan yang jelas.</p>
+<h2>Penjelasan Konsep</h2>
+<p>Blok <code>try</code> berisi kode yang berpotensi menghasilkan error. Jika error terjadi, eksekusi segera melompat ke blok <code>except</code> yang sesuai—kode di dalam try setelah titik error tidak akan dijalankan. <code>except</code> dapat menangkap jenis error tertentu (misalnya ValueError, FileNotFoundError) atau semua error. Menangkap error spesifik jauh lebih baik karena memberikan kesempatan untuk memberikan respons yang tepat sesuai jenis kegagalan.</p>
+<p><code>else</code> berjalan hanya jika blok try tidak menghasilkan error apa pun. Ini berguna untuk kode yang hanya boleh dieksekusi ketika operasi utama berhasil—misalnya menyimpan log "proses berhasil". <code>finally</code> selalu berjalan, baik terjadi error maupun tidak. Ini biasanya digunakan untuk membersihkan resource seperti menutup file atau koneksi database.</p>
+<p>Penting untuk diingat: exception adalah mekanisme untuk menangani situasi luar biasa, bukan untuk alur normal. Jika suatu kondisi dapat diperiksa dengan if sederhana—misalnya memeriksa apakah file ada sebelum membaca—gunakan if, bukan try/except. Exception handling lebih mahal secara komputasi dan menyembunyikan alur program jika digunakan secara berlebihan.</p>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">Try process → sukses → else
+       └────→ error spesifik → except
+                    ↓
+                 finally
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Panitia menerima input nilai dari form web. Input masih berupa teks: "88", "tujuh puluh", "", "91". Tanpa error handling, konversi "tujuh puluh" ke float akan membuat program crash dan menghentikan seluruh proses. Dengan try/except, program dapat menangkap ValueError, mencatat bahwa satu record gagal dikonversi, dan melanjutkan ke record berikutnya.</p>
+<h2>Contoh AI</h2>
+<p>Sebelum data diproses oleh model, pipeline memvalidasi tipe dan range setiap kolom. Record yang gagal validasi tidak otomatis dihapus—mereka dicatat dalam log agar tim data dapat memeriksa apakah ada pola dalam kegagalan tersebut. Error handling di sini berfungsi sebagai jaring pengaman yang memisahkan "data yang bisa diproses" dari "data yang perlu diperiksa manual".</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">raw_score = "88"
+
+try:
+    score = float(raw_score)
+except ValueError:
+    print("Nilai harus berupa angka")
+else:
+    print(f"Nilai valid: {score}")
+finally:
+    print("Validasi selesai")
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li>Input awal masih bertipe string.</li>
+<li><code>try</code> mencoba mengubahnya menjadi float.</li>
+<li><code>ValueError</code> ditangani jika format tidak sesuai angka.</li>
+<li><code>else</code> hanya berjalan saat konversi berhasil.</li>
+<li><code>finally</code> selalu dieksekusi sebagai penutup proses validasi.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Memakai <code>except:</code> yang menangkap semua error.</strong> Ini menyembunyikan bug yang tidak terduga. Selalu tangkap exception spesifik seperti ValueError, FileNotFoundError, atau TypeError. Jika memang perlu menangkap semua error, setidaknya catat traceback-nya.</li>
+<li><strong>Mengabaikan error tanpa log atau pesan.</strong> <code>except: pass</code> adalah salah satu pola paling berbahaya. Error tetap terjadi, tetapi program diam-diam melanjutkan seolah tidak ada masalah. Data yang dihasilkan bisa rusak tanpa ada yang tahu.</li>
+<li><strong>Menggunakan exception untuk alur normal yang mudah diperiksa dengan <code>if</code>.</strong> Jika suatu kondisi dapat dicegah sebelum terjadi—seperti memeriksa apakah file ada—gunakan if, bukan try/except. Exception handling bukan pengganti validasi biasa.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li><strong>Tangkap exception paling spesifik.</strong> ValueError untuk masalah konversi, FileNotFoundError untuk file hilang, TypeError untuk operasi dengan tipe salah. Ini membuat pesan error lebih bermakna.</li>
+<li><strong>Berikan pesan yang membantu tindakan berikutnya.</strong> "File tidak ditemukan. Periksa path dan coba lagi" lebih baik daripada "Error terjadi".</li>
+<li><strong>Jangan melanjutkan pipeline dengan data rusak tanpa keputusan eksplisit.</strong> Jika data tidak valid, putuskan: lewati, isi dengan default (dengan catatan), atau hentikan proses. Jangan biarkan program berjalan tanpa menyadari bahwa data yang diproses mungkin tidak akurat.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Buat function <code>parse_score(value)</code> yang mengembalikan float atau <code>None</code> dengan pesan yang jelas.</p>
+<h2>Ringkasan</h2>
+<p>Error handling mengubah kegagalan program dari "diam-diam menghasilkan output salah" menjadi "berhenti dengan pesan jelas" atau "lewati dengan catatan". Gunakan try/except untuk kode yang berpotensi gagal, tangkap exception spesifik, dan berikan pesan yang membantu perbaikan. Jangan gunakan exception sebagai pengganti validasi if yang sederhana, dan jangan pernah mengabaikan error dengan except: pass tanpa setidaknya mencatatnya.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Berikutnya kita membawa program keluar dari memori dengan membaca dan menulis file.</p>
+<hr>
+<h1>Chapter 11 — File I/O: Bertemu Dataset</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Membaca dan menulis file teks serta CSV dasar.</li>
+<li>Menggunakan context manager <code>with</code>.</li>
+<li>Memahami path, encoding, dan schema sederhana.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Selama ini data yang kita proses berada di dalam kode: list yang ditulis manual, dictionary yang dibuat di tempat. Di dunia nyata, data datang dari file: CSV dari spreadsheet, JSON dari API, log dari server, atau teks dari laporan. File I/O adalah jembatan pertama antara program Python dan dataset nyata. Tanpa kemampuan membaca dan menulis file, Python hanya bisa memproses data yang diketik langsung oleh programmer—sangat terbatas dan tidak praktis.</p>
+<p>Lebih dari sekadar membaca, File I/O juga berarti menyimpan hasil. Pipeline data yang membersihkan ribuan baris perlu menyimpan output-nya ke file baru tanpa menimpa data mentah. Kemampuan memisahkan input, output, dan dokumentasi perubahan adalah ciri workflow data yang profesional dan dapat diaudit.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Dataset untuk proyek AI hampir selalu disimpan dalam file: CSV untuk data tabular, JSON untuk data terstruktur, teks untuk korpus, atau format biner untuk data terlatih. Mampu membaca file dengan encoding yang benar (UTF-8 untuk teks Indonesia) dan menyimpan hasil tanpa kehilangan informasi adalah prerequisite sebelum masuk ke tahap analisis atau modeling. Pada modul ini kita hanya membaca dan menulis CSV dan teks; format yang lebih kompleks akan diperkenalkan di modul lanjutan.</p>
+<h2>Analogi</h2>
+<p>Program Python adalah pekerja di meja kerja; file adalah lemari arsip di sebelahnya. Membuka file berarti mengambil arsip dari lemari, membaca atau mengubah isinya, lalu menutup lemari kembali. Jika kamu lupa menutup lemari (file), lama-kelamaan meja akan penuh dengan arsip terbuka dan sistem akan kehabisan tempat. Context manager <code>with</code> memastikan file selalu ditutup secara otomatis, seperti lemari yang tertutup sendiri setelah kamu selesai.</p>
+<h2>Penjelasan Konsep</h2>
+<p>Mode utama membuka file: <code>r</code> untuk membaca (read), <code>w</code> untuk menulis ulang (write—hati-hati, ini akan menghapus isi file yang sudah ada), dan <code>a</code> untuk menambah (append—menambahkan ke akhir file tanpa menghapus isi yang sudah ada). Mode <code>w</code> sangat berguna untuk menyimpan output baru, tetapi sangat berbahaya jika digunakan pada file yang masih diperlukan—gunakan pada file output, bukan file input mentah.</p>
+<p><strong>Context manager <code>with</code></strong> memastikan file ditutup secara otomatis setelah blok kode selesai, bahkan jika terjadi error di dalamnya. Ini adalah cara yang direkomendasikan untuk semua operasi file. <strong>Encoding UTF-8</strong> penting untuk teks Indonesia yang mengandung huruf seperti é, ü, atau tanda petik khusus. Tanpa encoding yang tepat, karakter tersebut akan tampil sebagai simbol yang tidak terbaca atau menyebabkan error.</p>
+<p><strong>pathlib.Path</strong> adalah cara modern untuk menangani path file. Path lebih portabel daripada string biasa (tidak perlu khawatir dengan perbedaan slash di Windows vs Linux) dan menyediakan method yang nyaman seperti <code>.exists()</code>, <code>.read_text()</code>, dan <code>.write_text()</code>.</p>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">participants.csv → open/read → Python → process → report.txt
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Panitia menyimpan nilai peserta dalam CSV. Program membaca CSV tersebut, menghitung rata-rata dan jumlah peserta per track, lalu menyimpan laporan ke file teks terpisah. Data mentah tetap aman; output baru disimpan sebagai file yang berbeda. Jika ada kesalahan dalam perhitungan, cukup jalankan ulang program tanpa harus memperbaiki data mentah.</p>
+<h2>Contoh AI</h2>
+<p>CSV yang dibaca dengan Pandas (nanti di chapter 14) adalah format yang sama. Kemampuan membaca CSV dengan Python dasar membantumu memahami apa yang sebenarnya terjadi di belakang layar ketika library seperti Pandas membaca file. Di tahap ini kita hanya fokus pada mekanisme file I/O; Pandas akan menambahkan layer kemudahan di atasnya.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">from pathlib import Path
+
+report_path = Path("report.txt")
+
+with report_path.open("w", encoding="utf-8") as file:
+    file.write("Rata-rata nilai: 84.5\n")
+
+with report_path.open("r", encoding="utf-8") as file:
+    report = file.read()
+
+print(report)
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li><code>Path</code> dari pathlib membantu mengelola lokasi file secara portabel.</li>
+<li>Path output <code>report.txt</code> ditentukan.</li>
+<li>File dibuka dalam mode tulis dengan encoding UTF-8. Jika file belum ada, file akan dibuat.</li>
+<li>Teks dan newline ditulis ke file.</li>
+<li>File dibuka kembali dalam mode baca.</li>
+<li>Seluruh isi file disimpan ke variabel <code>report</code> dan ditampilkan.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Memakai <code>w</code> lalu tidak sengaja menimpa file.</strong> Mode write menghapus isi file yang sudah ada. Selalu gunakan nama file output yang berbeda dari file input mentah.</li>
+<li><strong>Mengandalkan working directory tanpa memahami path.</strong> Program mencari file di direktori kerja saat ini, yang mungkin berbeda dari lokasi script. Gunakan path absolut atau path relatif yang eksplisit.</li>
+<li><strong>Tidak menentukan encoding.</strong> Tanpa encoding yang jelas, Python menggunakan encoding default sistem yang mungkin tidak mendukung karakter tertentu. Selalu tentukan <code>encoding="utf-8"</code>.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li><strong>Gunakan <code>with</code> dan <code>pathlib.Path</code>.</strong> Context manager menutup file otomatis; Path membuat pengelolaan path lebih aman dan portabel.</li>
+<li><strong>Pisahkan folder data mentah dan output.</strong> Struktur folder yang rapi mencegah penimpaan tidak sengaja dan memudahkan audit.</li>
+<li><strong>Jangan menimpa raw dataset; simpan hasil sebagai file baru.</strong> Data mentah adalah satu-satunya referensi yang dapat dipercaya. Semua transformasi harus menghasilkan file baru agar transformasi dapat diperiksa dan diulang.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Tulis tiga baris ringkasan ke <code>summary.txt</code>, baca kembali, dan tampilkan.</p>
+<h2>Ringkasan</h2>
+<p>File I/O adalah jembatan antara program dan dataset nyata. Context manager <code>with</code> memastikan file dikelola dengan aman. Mode <code>r</code>, <code>w</code>, dan <code>a</code> memberikan kontrol atas bagaimana file dibaca atau ditulis. Encoding UTF-8 dan pathlib.Path adalah standar yang harus digunakan sejak awal. Prinsip paling penting: jangan pernah menimpa data mentah—simpan hasil transformasi sebagai file baru agar seluruh proses dapat diaudit dan diulang.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Python dasar dapat melakukan banyak hal, tetapi library membuat pekerjaan data jauh lebih efisien. Kita mulai menjelajahi ekosistem Python untuk AI.</p>
+<hr>

@@ -1,0 +1,70 @@
+<h1>Chapter 9 — Object-Oriented Programming Dasar</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Memahami class, object, attribute, dan method.</li>
+<li>Membuat class kecil dengan tanggung jawab jelas.</li>
+<li>Mengetahui kapan OOP tidak diperlukan.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Seiring bertambahnya ukuran program, data dan function yang saling terkait perlu diorganisasi supaya tidak tersebar di berbagai variabel global. OOP adalah salah satu cara organisasi tersebut—bukan satu-satunya cara, dan bukan cara yang selalu tepat. Tujuan chapter ini bukan menjadikanmu "pemrogram OOP", melainkan membekali kemampuan membaca dan menggunakan object ketika library atau tim memakainya.</p>
+<p>Dalam workflow data skala kecil—misalnya satu script preprocessing—function sudah cukup. Namun ketika program mulai memiliki beberapa komponen yang masing-masing menyimpan state dan perilaku—seperti reader, transformer, dan reporter—class membantu menjaga agar kode tetap terstruktur dan dapat diuji secara terpisah.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Hampir semua library Python untuk AI menggunakan object. Dataset di PyTorch adalah object; model di Scikit-learn adalah object; tokenizer di Hugging Face adalah object. Pola interaksinya biasanya konsisten: buat object dengan konfigurasi tertentu, lalu panggil method seperti <code>.fit()</code>, <code>.transform()</code>, atau <code>.predict()</code>. Kamu tidak perlu menghafal setiap detail class-library tersebut sekarang; cukup pahami bahwa object menggabungkan data (konfigurasi) dan perilaku (method) dalam satu kesatuan.</p>
+<p>Penting untuk dicatat: di chapter ini kita tidak membangun model AI. Kita hanya berlatih membuat class sederhana agar pola <code>object.method()</code> terasa alami ketika kamu menjumpainya di library sungguhan.</p>
+<h2>Analogi</h2>
+<p>Class seperti blueprint formulir pendaftaran kosong: ia menentukan field apa saja yang ada (nama, score, track) dan aturan pengisiannya. Object adalah satu formulir yang sudah diisi dengan data peserta tertentu: "Ayu, 88, data". Kamu dapat membuat banyak object dari satu class yang sama, masing-masing dengan data berbeda, tetapi semuanya mengikuti struktur dan perilaku yang sama.</p>
+<p>Perbedaan penting: jika kamu hanya perlu menyimpan data tanpa perilaku khusus, dictionary sudah cukup. Gunakan class ketika data dan perilaku saling terkait erat—misalnya setiap kali data berubah, ada aturan yang harus dijalankan secara otomatis.</p>
+<h2>Penjelasan Konsep</h2>
+<p><strong>Class</strong> adalah cetak biru yang mendefinisikan attribute (data apa yang dimiliki) dan method (perilaku apa yang dapat dilakukan). <strong>Object</strong> atau <strong>instance</strong> adalah wujud nyata dari class tersebut, dengan attribute yang sudah diisi nilai konkret. Sebuah class dapat memiliki banyak instance, masing-masing dengan data berbeda tetapi method yang sama.</p>
+<p><strong>__init__</strong> adalah method khusus yang dipanggil secara otomatis ketika object dibuat. Di sinilah attribute pertama kali diisi. Parameter pertama dari setiap method dalam class adalah <strong>self</strong>, yang merujuk pada object yang sedang aktif. self memungkinkan method mengakses attribute instance yang sama—tanpa self, method tidak tahu data object mana yang harus digunakan.</p>
+<p>Kapan OOP tidak diperlukan? Jika programmu hanya berupa beberapa function yang menerima input dan mengembalikan output tanpa menyimpan state, class hanya akan menambah kompleksitas tanpa manfaat. Untuk data sederhana, dictionary dengan function utility sudah lebih dari cukup. Jangan membuat class hanya karena "terlihat lebih profesional".</p>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">Participant (class)
+├── name, score (attributes)
+└── status() (method)
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Setiap peserta dalam program fellowship memiliki nama, nilai, dan aturan status yang sama. Daripada menulis function terpisah <code>get_status(name, score)</code> yang menerima data dari variabel global, kamu dapat membuat class Participant yang menyimpan data dan method status dalam satu tempat. Ini membuat kode lebih mudah diubah: jika aturan status berubah, kamu hanya mengedit method di dalam class, bukan mencarinya di berbagai function.</p>
+<h2>Contoh AI</h2>
+<p>Library machine learning seperti Scikit-learn menggunakan pola <code>model.fit(X, y)</code> untuk melatih dan <code>model.predict(X_new)</code> untuk memprediksi. Di sini model adalah object yang menyimpan state internal (parameter yang dipelajari) dan perilaku (fit, predict). Pada tahap ini kita belum masuk ke model tersebut; fokusnya adalah memahami pola interaksi object agar ketika kamu menjumpainya, sintaksnya tidak terasa asing.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">class Participant:
+    def __init__(self, name, score):
+        self.name = name
+        self.score = score
+
+    def status(self):
+        return "pass" if self.score >= 75 else "review"
+
+
+ayu = Participant("Ayu", 88)
+print(ayu.status())
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li><code>class Participant</code> membuat blueprint.</li>
+<li><code>__init__</code> berjalan saat object dibuat; ia menerima name dan score.</li>
+<li>Attribute <code>self.name</code> dan <code>self.score</code> menyimpan data pada instance.</li>
+<li>Method <code>status</code> menggunakan data yang tersimpan di instance untuk menentukan hasil.</li>
+<li><code>ayu = Participant("Ayu", 88)</code> membuat satu instance dengan data spesifik.</li>
+<li><code>ayu.status()</code> memanggil method pada instance tersebut.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Membuat class untuk satu function sederhana.</strong> Jika class hanya memiliki satu method selain __init__, pertimbangkan apakah function biasa sudah cukup. Class menambah overhead kognitif tanpa manfaat jika tidak ada state yang perlu dijaga.</li>
+<li><strong>Lupa <code>self</code> sebagai parameter pertama.</strong> Semua method dalam class harus menerima self sebagai parameter pertama. Tanpa self, Python akan menganggap method tersebut sebagai function biasa dan tidak dapat mengakses attribute instance.</li>
+<li><strong>Menaruh terlalu banyak tanggung jawab dalam satu class.</strong> Satu class idealnya memiliki satu alasan untuk berubah. Jika class Participant tiba-tiba juga menulis file dan mengirim email, ia sudah kehilangan fokus. Pisahkan tanggung jawab ke class yang lebih kecil.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li><strong>Mulai dengan function; gunakan class jika data dan perilaku benar-benar menyatu.</strong> Jangan memaksakan OOP. Untuk dataset kecil, function yang menerima dictionary sudah cukup bersih dan mudah diuji.</li>
+<li><strong>Beri class satu peran jelas.</strong> Nama class harus mencerminkan tanggung jawabnya. Jika sulit menemukan nama yang tepat, mungkin class tersebut mencoba melakukan terlalu banyak hal.</li>
+<li><strong>Hindari inheritance kompleks pada tahap pemula.</strong> Pewarisan (inheritance) adalah fitur OOP tingkat lanjut. Pada tahap ini, cukup fokus pada class mandiri yang tidak mewarisi dari class lain.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Tambahkan method <code>summary()</code> yang mengembalikan teks berisi nama, nilai, dan status peserta.</p>
+<h2>Ringkasan</h2>
+<p>OOP adalah alat organisasi kode, bukan tujuan. Class menyatukan data (attribute) dan perilaku (method) dalam satu blueprint. Object adalah instance nyata dari class tersebut dengan data konkret. Gunakan class ketika state dan perilaku saling terkait dan program mulai memiliki beberapa komponen yang perlu diorganisasi. Untuk kasus sederhana, function dan dictionary sudah lebih dari cukup. Tujuan utama chapter ini adalah membekali kemampuan membaca dan menggunakan object—bukan menjadikanmu arsitek OOP.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Data dan file tidak selalu bersih. Berikutnya kita membuat program gagal dengan aman melalui error handling.</p>
+<hr>

@@ -1,0 +1,1294 @@
+<section class="fellow-dashboard fellow-modules-page lesson-detail-page pixel-anatomy-page" data-fellow-page="modules">
+<style>
+  .pixel-anatomy-page{
+    --px-bg:#fff7fb;
+    --px-bg-2:#fff0f7;
+    --px-card:#ffffff;
+    --px-line:rgba(246,51,146,.16);
+    --px-line-strong:rgba(246,51,146,.24);
+    --px-text:#171827;
+    --px-text-2:#6f7282;
+    --px-text-3:#6f7282;
+    --px-accent:#f63392;
+    --px-accent-soft:rgba(246,51,146,.08);
+    --px-shadow:0 18px 50px rgba(246,51,146,.08);
+    --px-shadow-lg:0 24px 60px rgba(23,24,39,.08);
+    --px-radius:20px;
+    --px-radius-sm:14px;
+    --px-font-disp:'Plus Jakarta Sans', sans-serif;
+    --px-font-body:'Inter', sans-serif;
+    --px-font-mono:'SF Mono','Space Mono',monospace;
+    --px-red:#e11d48;
+    --px-green:#16a34a;
+    --px-blue:#2563eb;
+    background:
+      radial-gradient(circle at top left, rgba(246,51,146,.10), transparent 30%),
+      radial-gradient(circle at 85% 12%, rgba(246,51,146,.06), transparent 22%),
+      var(--px-bg);
+    color:var(--px-text);
+    font-family:var(--px-font-body);
+  }
+
+  /* ── Topbar ────────────────────────────────────── */
+  .pixel-anatomy-page .lesson-topbar{
+    position:sticky; top:0; z-index:100;
+    padding:0; background:transparent;
+  }
+  .pixel-anatomy-page .lesson-topbar-inner{
+    max-width:1600px; width:100%; margin:0 auto;
+    display:flex; align-items:center;
+    height:68px;
+  }
+  .pixel-anatomy-page .navbar-left{
+    flex:0 0 30%; display:flex; align-items:center;
+    padding-left:24px; min-width:0;
+  }
+  .pixel-anatomy-page .navbar-center{
+    flex:0 0 40%; display:flex; align-items:center; justify-content:center;
+    text-align:center; min-width:0;
+    font-family:var(--px-font-disp); font-size:15px; font-weight:700;
+    color:var(--px-text);
+  }
+  .pixel-anatomy-page .navbar-right{
+    flex:0 0 30%; display:flex; align-items:center; justify-content:flex-end;
+    padding-right:24px; min-width:0;
+  }
+  .pixel-anatomy-page .lesson-breadcrumb{
+    display:flex; align-items:center; gap:8px; flex-shrink:0;
+    color:var(--px-text-2);
+  }
+  .pixel-anatomy-page .lesson-breadcrumb a{
+    display:inline-flex; align-items:center; gap:6px;
+    color:var(--px-text-2); text-decoration:none;
+    transition:color .2s;
+  }
+  .pixel-anatomy-page .lesson-breadcrumb a:hover{ color:var(--px-accent); }
+  .pixel-anatomy-page .lesson-breadcrumb-separator{ color:var(--px-text-3); font-size:10px; }
+  .pixel-anatomy-page .lesson-breadcrumb > span:last-child{
+    font-weight:600; color:var(--px-text);
+  }
+  .pixel-anatomy-page .fellow-actions{
+    display:flex; align-items:center; gap:10px; flex-shrink:0;
+  }
+  .pixel-anatomy-page .fellow-search{
+    display:flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,.95); height:40px;
+    border:1px solid rgba(246,51,146,.12);
+    border-radius:100px; padding:0 16px;
+    transition:all .2s; min-width:200px;
+  }
+  .pixel-anatomy-page .fellow-search:focus-within{
+    border-color:rgba(246,51,146,.3);
+    box-shadow:0 0 0 3px rgba(246,51,146,.08);
+  }
+  .pixel-anatomy-page .fellow-search i{ color:var(--px-text-3); font-size:14px; }
+  .pixel-anatomy-page .fellow-search input{
+    border:none; outline:none; background:transparent;
+    font-size:13px; color:var(--px-text); width:120px;
+    font-family:var(--px-font-body);
+  }
+  .pixel-anatomy-page .fellow-search input::placeholder{ color:var(--px-text-3); }
+  .pixel-anatomy-page .fellow-icon-button{
+    display:flex; align-items:center; justify-content:center;
+    width:40px; height:40px; padding:0;
+    background:rgba(255,255,255,.95); border:1px solid rgba(246,51,146,.12);
+    border-radius:100px; cursor:pointer; position:relative;
+    transition:all .2s; color:var(--px-text-2);
+  }
+  .pixel-anatomy-page .fellow-icon-button:hover{
+    border-color:rgba(246,51,146,.25);
+    background:#fff; color:var(--px-text);
+  }
+  .pixel-anatomy-page .fellow-icon-button span{
+    position:absolute; top:-4px; right:-4px;
+    background:var(--px-accent); color:#fff; font-size:10px; font-weight:700;
+    width:18px; height:18px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pixel-anatomy-page .fellow-user-button{
+    display:flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,.95); border:1px solid rgba(246,51,146,.12);
+    border-radius:100px; padding:5px 12px 5px 6px;
+    text-decoration:none; transition:all .2s; color:var(--px-text);
+  }
+  .pixel-anatomy-page .fellow-user-button:hover{
+    border-color:rgba(246,51,146,.25);
+    background:#fff; box-shadow:0 2px 8px rgba(246,51,146,.06);
+  }
+  .pixel-anatomy-page .fellow-user-button .avatar-img{
+    width:30px; height:30px; border-radius:50%;
+    background:linear-gradient(135deg, var(--px-accent), #ff8ab7);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:12px; font-weight:700; flex-shrink:0;
+  }
+  .pixel-anatomy-page .fellow-user-button strong{ font-size:13px; font-weight:700; display:block; }
+  .pixel-anatomy-page .fellow-user-button small{ font-size:10px; color:var(--px-text-3); display:block; }
+  .pixel-anatomy-page .fellow-user-button > i{ font-size:10px; color:var(--px-text-3); margin-left:2px; }
+
+  /* ── Layout grid ─────────────────────────────── */
+  .pixel-anatomy-page .lesson-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 320px;
+    gap:24px; align-items:start;
+    max-width:1600px; margin:0 auto;
+    padding:24px 24px 56px;
+  }
+  .pixel-anatomy-page .lesson-main-content{ min-width:0; }
+
+  /* ── Hero ────────────────────────────────────── */
+  .pixel-anatomy-page .lesson-hero{
+    display:grid;
+    grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr);
+    gap:28px; align-items:center;
+    padding:42px 44px 30px; margin-bottom:20px;
+    border:1px solid var(--px-line); border-radius:28px;
+    background:
+      radial-gradient(circle at 0 0, rgba(246,51,146,.10), transparent 38%),
+      linear-gradient(135deg, #ffffff 0%, #fff7fb 58%, #fff0f7 100%);
+    box-shadow:var(--px-shadow-lg); overflow:hidden;
+  }
+  .pixel-anatomy-page .lesson-hero h1{ font-family:var(--px-font-disp); color:var(--px-text); letter-spacing:-.04em; }
+  .pixel-anatomy-page .lesson-hero p,
+  .pixel-anatomy-page .lesson-meta-row{ color:var(--px-text-2); }
+  .pixel-anatomy-page .lesson-hero img{
+    max-width:240px; width:100%; justify-self:end;
+    filter:drop-shadow(0 18px 30px rgba(246,51,146,.10));
+  }
+
+  /* ── Content area — centered like reference ──── */
+  .pixel-anatomy-page .lesson-material-panel{ display:grid; gap:18px; }
+  .pixel-anatomy-page .lesson-article{ max-width:800px; }
+  /* ── Fix global .challenge-card grid clash ──────── */
+  .pixel-anatomy-page .challenge-card{
+    display:block; padding:0; min-height:auto;
+    align-items:normal; gap:0;
+    grid-template-columns:none;
+  }
+  .pixel-anatomy-page .challenge-card h2{ font-size:inherit; color:inherit; margin:0; line-height:inherit; }
+  .pixel-anatomy-page .challenge-card p{ font-size:inherit; color:inherit; margin:0; line-height:inherit; }
+
+  .pixel-anatomy-page .lesson-tabs a{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--px-line);
+    box-shadow:var(--px-shadow);
+    border-radius:var(--px-radius-sm);
+    padding:8px 18px; align-self:center; margin:0;
+  }
+  .pixel-anatomy-page .lesson-tabs a.active{
+    background:var(--px-accent-soft);
+    color:var(--px-accent);
+    border-color:var(--px-line-strong);
+  }
+  .pixel-anatomy-page .lesson-nav-footer a,
+  .pixel-anatomy-page .lesson-list-card,
+  .pixel-anatomy-page .lesson-progress-card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--px-line);
+    box-shadow:var(--px-shadow);
+  }
+  .pixel-anatomy-page .lesson-tabs a.active{
+    background:var(--px-accent-soft); color:var(--px-accent);
+    border-color:var(--px-line-strong);
+  }
+
+  /* ── Right panel ─────────────────────────────── */
+  .pixel-anatomy-page .lesson-list-card h4,
+  .pixel-anatomy-page .lpc-header{ font-family:var(--px-font-disp); }
+  .pixel-anatomy-page .lesson-right-panel{
+    position:sticky; top:88px; align-self:start;
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .pixel-anatomy-page .lesson-right-panel > *{ border-radius:20px; }
+  .pixel-anatomy-page .lesson-list-item{
+    padding:6px 10px; border-radius:8px; color:var(--px-text); font-size:13px;
+    display:flex; align-items:center; gap:8px; cursor:default;
+  }
+  .pixel-anatomy-page .lesson-list-item.active,
+  .pixel-anatomy-page .lesson-list-item:hover{
+    background:rgba(246,51,146,.08); color:var(--px-text);
+  }
+  .pixel-anatomy-page .lesson-list-item.active .lli-dot{ background:var(--px-accent); }
+  .pixel-anatomy-page .lli-dot{
+    width:8px; height:8px; border-radius:50%; background:rgba(246,51,146,.2); flex-shrink:0;
+  }
+  .pixel-anatomy-page .lesson-list-item.done .lli-dot{ background:#16a34a; }
+  .pixel-anatomy-page .lpc-meta{
+    display:flex; gap:12px; font-size:12px; color:var(--px-text-2); margin-top:10px;
+  }
+  .pixel-anatomy-page .lesson-nav-footer a:last-child{
+    background:var(--px-accent); color:#fff; border-color:var(--px-accent);
+  }
+
+  /* ── Sections ────────────────────────────────── */
+  .pixel-anatomy-page .lesson-sec{
+    padding-bottom:48px; margin-bottom:8px;
+    border-bottom:1px solid var(--px-line);
+    scroll-margin-top:120px;
+  }
+  .pixel-anatomy-page .lesson-sec:last-child{ border-bottom:none; }
+  .pixel-anatomy-page .sec-header{
+    display:flex; align-items:flex-start; gap:16px; margin-bottom:24px;
+  }
+  .pixel-anatomy-page .sec-num{
+    font-family:var(--px-font-mono); font-size:12px; color:var(--px-accent);
+    padding:4px 0; letter-spacing:.06em; flex-shrink:0; min-width:26px;
+  }
+  .pixel-anatomy-page .sec-title{
+    font-family:var(--px-font-disp); font-size:clamp(22px,3vw,28px); font-weight:700;
+    color:var(--px-text); letter-spacing:-.04em; margin-bottom:4px;
+  }
+  .pixel-anatomy-page .sec-sub,
+  .pixel-anatomy-page .prose,
+  .pixel-anatomy-page .info-card p,
+  .pixel-anatomy-page .cs-desc,
+  .pixel-anatomy-page .challenge-desc,
+  .pixel-anatomy-page .coord-readout,
+  .pixel-anatomy-page .expected-box,
+  .pixel-anatomy-page .fs-msg{ color:var(--px-text-2); }
+
+  /* ── Prose & inline code ─────────────────────── */
+  .pixel-anatomy-page .prose{
+    font-size:15px; color:var(--px-text-2); line-height:1.75; margin-bottom:20px; max-width:640px;
+  }
+  .pixel-anatomy-page .prose strong{ color:var(--px-text); font-weight:600; }
+  .pixel-anatomy-page .prose code,
+  .pixel-anatomy-page code{
+    font-family:var(--px-font-mono); font-size:12.5px;
+    background:rgba(246,51,146,.06); padding:2px 6px; border-radius:4px; color:var(--px-accent);
+  }
+  .pixel-anatomy-page .callout strong{ color:var(--px-text); }
+
+  /* ── Callouts ────────────────────────────────── */
+  .pixel-anatomy-page .callout{
+    display:flex; gap:12px; padding:14px 16px;
+    border-radius:14px; margin-bottom:20px;
+    font-size:13.5px; line-height:1.65; color:var(--px-text-2);
+    background:#fff; border:1px solid var(--px-line); box-shadow:var(--px-shadow);
+  }
+  .pixel-anatomy-page .callout-icon{ flex-shrink:0; font-size:16px; line-height:1.5; }
+  .pixel-anatomy-page .callout.info{
+    background:linear-gradient(135deg, rgba(246,51,146,.05), rgba(255,255,255,.98));
+    border-color:rgba(246,51,146,.18);
+  }
+  .pixel-anatomy-page .callout.warn{
+    background:linear-gradient(135deg, rgba(255,193,7,.08), rgba(255,255,255,.98));
+    border-color:rgba(255,193,7,.18);
+  }
+  .pixel-anatomy-page .callout.danger{
+    background:linear-gradient(135deg, rgba(225,29,72,.08), rgba(255,255,255,.98));
+    border-color:rgba(225,29,72,.18);
+  }
+
+  /* ── Widget card ─────────────────────────────── */
+  .pixel-anatomy-page .widget-card,
+  .pixel-anatomy-page .info-card,
+  .pixel-anatomy-page .cs-card,
+  .pixel-anatomy-page .challenge-card,
+  .pixel-anatomy-page .playground-card,
+  .pixel-anatomy-page .final-score-card,
+  .pixel-anatomy-page .next-lesson-cta{
+    background:rgba(255,255,255,.96);
+    border:1px solid var(--px-line);
+    border-radius:var(--px-radius);
+    box-shadow:var(--px-shadow);
+  }
+  .pixel-anatomy-page .widget-card{
+    padding:20px; margin-bottom:20px; overflow:hidden;
+  }
+  .pixel-anatomy-page .widget-label{
+    font-family:var(--px-font-disp); font-size:11px;
+    text-transform:uppercase; letter-spacing:.06em;
+    color:var(--px-text-3); margin-bottom:16px;
+  }
+
+  /* ── Pixel inspector ─────────────────────────── */
+  .pixel-anatomy-page .pixel-inspector{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:20px; align-items:start;
+  }
+  .pixel-anatomy-page #pixelCanvas{
+    border-radius:8px; border:1px solid var(--px-line-strong);
+    cursor:crosshair; image-rendering:pixelated;
+    width:280px; height:280px; display:block;
+  }
+  .pixel-anatomy-page .px-info-panel{ display:flex; flex-direction:column; gap:12px; }
+  .pixel-anatomy-page .px-swatch{
+    width:100%; height:56px; border-radius:8px;
+    border:1px solid var(--px-line); background:#eee;
+    transition:background .15s;
+  }
+  .pixel-anatomy-page .px-stats{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .pixel-anatomy-page .px-stat{
+    background:var(--px-bg); border:1px solid var(--px-line);
+    border-radius:8px; padding:8px;
+    display:flex; flex-direction:column; gap:2px;
+  }
+  .pixel-anatomy-page .px-stat-label{
+    font-family:var(--px-font-mono); font-size:9px;
+    text-transform:uppercase; letter-spacing:.08em; color:var(--px-text-3);
+  }
+  .pixel-anatomy-page .px-stat-val{ font-size:15px; font-weight:500; color:var(--px-text); }
+  .pixel-anatomy-page .px-stat-val.mono{ font-family:var(--px-font-mono); font-size:12px; }
+  .pixel-anatomy-page .px-stat-sub{ font-size:10px; color:var(--px-text-3); }
+
+  /* ── Channel bars ────────────────────────────── */
+  .pixel-anatomy-page .ch-bars{ display:flex; flex-direction:column; gap:8px; }
+  .pixel-anatomy-page .ch-row{ display:flex; align-items:center; gap:10px; }
+  .pixel-anatomy-page .ch-lbl{
+    font-family:var(--px-font-mono); font-size:12px; font-weight:700; min-width:14px;
+  }
+  .pixel-anatomy-page .ch-lbl.red{ color:var(--px-red); }
+  .pixel-anatomy-page .ch-lbl.green{ color:var(--px-green); }
+  .pixel-anatomy-page .ch-lbl.blue{ color:var(--px-blue); }
+  .pixel-anatomy-page .ch-track{
+    flex:1; height:8px; background:rgba(246,51,146,.08);
+    border-radius:4px; overflow:hidden;
+  }
+  .pixel-anatomy-page .ch-fill{
+    height:100%; border-radius:4px;
+    background:var(--c, var(--px-accent)); width:0%;
+    transition:width .12s ease;
+  }
+  .pixel-anatomy-page .ch-num{
+    font-family:var(--px-font-mono); font-size:12px;
+    color:var(--px-text-2); min-width:28px; text-align:right;
+  }
+
+  /* ── Coord readout ───────────────────────────── */
+  .pixel-anatomy-page .coord-readout{
+    margin-top:12px; font-size:13px; color:var(--px-text-2);
+  }
+
+  /* ── RGB channel labels ──────────────────────── */
+  .pixel-anatomy-page .rgb-labels{
+    display:grid; grid-template-columns:repeat(4,1fr);
+    gap:8px; margin-top:8px; text-align:center;
+  }
+  .pixel-anatomy-page .rgb-labels span{
+    font-family:var(--px-font-mono); font-size:11px; color:var(--px-text-3); font-weight:700;
+  }
+
+  /* ── Code blocks ─────────────────────────────── */
+  .pixel-anatomy-page .code-block{
+    background:#fff; border:1px solid var(--px-line);
+    border-radius:14px; box-shadow:var(--px-shadow);
+    overflow:hidden; margin-bottom:20px;
+  }
+  .pixel-anatomy-page .cb-label{
+    background:#fff4f9; border-bottom:1px solid var(--px-line);
+    padding:8px 16px; font-family:var(--px-font-disp);
+    font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--px-text-2);
+  }
+  .pixel-anatomy-page .code-block pre{ padding:18px 20px; overflow-x:auto; margin:0; }
+  .pixel-anatomy-page .code-block code,
+  .pixel-anatomy-page .hint-box,
+  .pixel-anatomy-page .expected-box code,
+  .pixel-anatomy-page .output-pre,
+  .pixel-anatomy-page .code-editor{
+    font-family:var(--px-font-mono);
+  }
+  .pixel-anatomy-page .code-block code{
+    font-size:13px; line-height:1.75;
+    background:#fff; padding:0; color:var(--px-text);
+  }
+  .pixel-anatomy-page .kw{ color:#db2777; font-weight:600; }
+  .pixel-anatomy-page .fn{ color:#7c3aed; }
+  .pixel-anatomy-page .str{ color:#15803d; }
+  .pixel-anatomy-page .num{ color:#b45309; }
+  .pixel-anatomy-page .op{ color:#667085; }
+  .pixel-anatomy-page .cm{ color:#98a2b3; font-style:italic; }
+
+  /* ── Two column layout ───────────────────────── */
+  .pixel-anatomy-page .two-col{
+    display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;
+  }
+  .pixel-anatomy-page .two-col .code-block{ margin-bottom:0; }
+  .pixel-anatomy-page .info-card{ padding:20px; }
+  .pixel-anatomy-page .ic-title{
+    font-family:var(--px-font-disp); font-size:14px; font-weight:600;
+    color:var(--px-text); margin-bottom:10px;
+  }
+  .pixel-anatomy-page .info-card p{ font-size:13px; line-height:1.7; }
+  .pixel-anatomy-page .info-card p strong{ color:var(--px-text); font-weight:500; }
+
+  /* ── Color space cards ───────────────────────── */
+  .pixel-anatomy-page .cs-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+  .pixel-anatomy-page .cs-card{
+    padding:18px; border-top:2px solid var(--cs-accent, var(--px-accent));
+    transition:border-color .2s;
+  }
+  .pixel-anatomy-page .cs-card-top{
+    display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px;
+  }
+  .pixel-anatomy-page .cs-name{
+    font-family:var(--px-font-disp); font-size:18px; font-weight:700; color:var(--px-text);
+  }
+  .pixel-anatomy-page .cs-use{
+    font-family:var(--px-font-mono); font-size:10px; color:var(--px-text-3); letter-spacing:.04em;
+  }
+  .pixel-anatomy-page .cs-channels{ display:flex; gap:8px; margin-bottom:12px; }
+  .pixel-anatomy-page .cs-ch{
+    display:flex; flex-direction:column; gap:2px;
+    background:var(--px-bg); border:1px solid var(--px-line);
+    border-radius:6px; padding:6px 10px; min-width:48px;
+  }
+  .pixel-anatomy-page .cs-ch span:first-child{
+    font-family:var(--px-font-mono); font-size:12px; font-weight:700;
+    color:var(--cs-accent, var(--px-accent));
+  }
+  .pixel-anatomy-page .cs-ch span:last-child{
+    font-family:var(--px-font-mono); font-size:10px; color:var(--px-text-3);
+  }
+  .pixel-anatomy-page .cs-desc{ font-size:12.5px; line-height:1.65; margin-bottom:12px; }
+  .pixel-anatomy-page .cs-code{
+    font-family:var(--px-font-mono); font-size:11px; color:var(--px-text-3);
+    background:var(--px-bg); padding:4px 8px; border-radius:4px; display:block;
+  }
+
+  /* ── Calc widget ─────────────────────────────── */
+  .pixel-anatomy-page .calc-preview{
+    width:100%; height:60px; border-radius:8px;
+    border:1px solid var(--px-line); margin-bottom:16px; transition:background .1s;
+  }
+  .pixel-anatomy-page .calc-sliders{ display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+  .pixel-anatomy-page .csl-row{ display:flex; align-items:center; gap:12px; }
+  .pixel-anatomy-page .csl-lbl{
+    font-family:var(--px-font-mono); font-size:13px; font-weight:700; min-width:14px;
+  }
+  .pixel-anatomy-page .csl-lbl.red{ color:var(--px-red); }
+  .pixel-anatomy-page .csl-lbl.green{ color:var(--px-green); }
+  .pixel-anatomy-page .csl-lbl.blue{ color:var(--px-blue); }
+  .pixel-anatomy-page .csl-row input[type="range"]{ flex:1; }
+  .pixel-anatomy-page .csl-val{
+    font-family:var(--px-font-mono); font-size:12px;
+    color:var(--px-text-2); min-width:28px; text-align:right;
+  }
+  .pixel-anatomy-page .calc-results{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .pixel-anatomy-page .cr-item{
+    background:var(--px-bg); border:1px solid var(--px-line);
+    border-radius:8px; padding:10px 12px;
+  }
+  .pixel-anatomy-page .cr-label{
+    font-family:var(--px-font-mono); font-size:10px;
+    text-transform:uppercase; letter-spacing:.06em; color:var(--px-text-3); margin-bottom:6px;
+  }
+  .pixel-anatomy-page .cr-val{
+    font-family:var(--px-font-mono); font-size:13px; color:var(--px-text); font-weight:500;
+  }
+
+  /* ── Challenge cards ─────────────────────────── */
+  .pixel-anatomy-page .challenge-card{ padding:20px; margin-bottom:20px; }
+  .pixel-anatomy-page .challenge-header{ margin-bottom:14px; }
+  .pixel-anatomy-page .challenge-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--px-font-disp); font-size:11px; font-weight:600;
+    color:var(--px-accent); background:var(--px-accent-soft);
+    padding:4px 12px; border-radius:20px; margin-bottom:8px;
+  }
+  .pixel-anatomy-page .quiz-badge{ color:var(--px-accent); background:rgba(246,51,146,.1); border-color:rgba(246,51,146,.25); }
+  .pixel-anatomy-page .challenge-title{
+    font-family:var(--px-font-disp); font-size:16px; font-weight:700; color:var(--px-text);
+  }
+  .pixel-anatomy-page .challenge-desc{
+    font-size:13.5px; line-height:1.65; margin-bottom:16px;
+  }
+  .pixel-anatomy-page .challenge-editor{ margin-top:12px; }
+  .pixel-anatomy-page .editor-tabs{
+    display:flex; gap:0; border-bottom:1px solid var(--px-line);
+  }
+  .pixel-anatomy-page .editor-tab{
+    padding:8px 16px; font-family:var(--px-font-mono); font-size:11px;
+    color:var(--px-text-3); background:var(--px-bg);
+    border:1px solid var(--px-line); border-bottom:none;
+    border-radius:8px 8px 0 0; margin-bottom:-1px;
+  }
+  .pixel-anatomy-page .editor-tab.active{
+    background:var(--px-bg-2); color:var(--px-text); border-bottom-color:var(--px-bg-2);
+  }
+  .pixel-anatomy-page .code-editor-wrap{ position:relative; }
+  .pixel-anatomy-page .code-editor{
+    width:100%; min-height:180px; padding:16px;
+    background:var(--px-bg-2); border:1px solid var(--px-line);
+    border-top:none; border-radius:0 0 12px 12px;
+    font-size:13px; line-height:1.75; color:var(--px-text);
+    resize:vertical; outline:none; tab-size:2;
+  }
+  .pixel-anatomy-page .editor-actions{
+    display:flex; gap:8px; margin-top:10px; align-items:center;
+  }
+  .pixel-anatomy-page .run-btn{
+    padding:8px 18px; border-radius:8px; border:none;
+    background:var(--px-accent); color:#fff;
+    font-size:13px; font-weight:600; cursor:pointer;
+    font-family:var(--px-font-body);
+    transition:all .2s;
+  }
+  .pixel-anatomy-page .run-btn:hover{ background:#d42a7d; }
+  .pixel-anatomy-page .run-btn.large{ padding:10px 28px; font-size:14px; }
+  .pixel-anatomy-page .hint-btn,
+  .pixel-anatomy-page .reset-btn{
+    padding:7px 14px; border-radius:8px;
+    border:1px solid var(--px-line); background:#fff;
+    font-size:12px; cursor:pointer; font-family:var(--px-font-body);
+    color:var(--px-text-2); transition:all .2s;
+  }
+  .pixel-anatomy-page .hint-btn:hover,
+  .pixel-anatomy-page .reset-btn:hover{
+    background:var(--px-bg); border-color:var(--px-line-strong); color:var(--px-text);
+  }
+  .pixel-anatomy-page .hint-box{
+    margin-top:10px; padding:12px 16px; border-radius:10px;
+    background:var(--px-bg); border:1px solid var(--px-line);
+    font-size:12.5px; color:var(--px-text-2); line-height:1.65;
+  }
+  .pixel-anatomy-page .output-wrap{
+    margin-top:10px; border-radius:10px;
+    background:#fff0f7; color:#171827; overflow:hidden;
+    border:1px solid rgba(246,51,146,.18);
+  }
+  .pixel-anatomy-page .output-pre{
+    padding:12px 16px; font-size:13px; line-height:1.7; margin:0;
+    color:#171827; white-space:pre-wrap; background:transparent;
+  }
+  .pixel-anatomy-page .output-label{
+    padding:6px 14px; font-family:var(--px-font-mono); font-size:10px;
+    text-transform:uppercase; letter-spacing:.06em;
+    color:#171827; background:rgba(246,51,146,.08);
+  }
+  .pixel-anatomy-page .output-wrap.is-error{
+    background:#fce4f0;
+    border-color:rgba(246,51,146,.3);
+  }
+  .pixel-anatomy-page .output-wrap.is-error{
+    background:#fce4f0;
+    border-color:rgba(246,51,146,.3);
+  }
+  .pixel-anatomy-page .check-result{
+    margin-top:10px; padding:10px 14px; border-radius:10px; font-size:13px; font-weight:500;
+  }
+  .pixel-anatomy-page .check-result.pass{ background:rgba(22,163,74,.08); color:#16a34a; border:1px solid rgba(22,163,74,.2); }
+  .pixel-anatomy-page .check-result.fail{ background:rgba(225,29,72,.08); color:#e11d48; border:1px solid rgba(225,29,72,.2); }
+  .pixel-anatomy-page .expected-box{
+    margin-top:10px; padding:12px 16px; border-radius:10px;
+    background:var(--px-bg); border:1px solid var(--px-line);
+    font-size:13px; color:var(--px-text-2);
+  }
+  .pixel-anatomy-page .expected-label{
+    font-family:var(--px-font-disp); font-size:11px; font-weight:600;
+    color:var(--px-text-3); display:block; margin-bottom:6px; text-transform:uppercase;
+  }
+  .pixel-anatomy-page .expected-box code{
+    font-size:13px; line-height:1.7; color:var(--px-text); background:transparent; padding:0;
+  }
+
+  /* ── Quiz ────────────────────────────────────── */
+  .pixel-anatomy-page .quiz-block-title{
+    font-family:var(--px-font-disp); font-size:15px; font-weight:700;
+    color:var(--px-text); margin-bottom:20px; padding-top:4px;
+  }
+  .pixel-anatomy-page .quiz-item{ margin-bottom:28px; }
+  .pixel-anatomy-page .quiz-q-num{
+    font-family:var(--px-font-mono); font-size:10px;
+    text-transform:uppercase; letter-spacing:.08em; color:var(--px-text-3); margin-bottom:8px;
+  }
+  .pixel-anatomy-page .quiz-q-text{
+    font-size:15px; font-weight:500; color:var(--px-text); margin-bottom:14px; line-height:1.6;
+  }
+  .pixel-anatomy-page .quiz-opts{ display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+  .pixel-anatomy-page .quiz-opt{
+    display:flex; align-items:flex-start; gap:12px;
+    padding:12px 16px; border-radius:10px;
+    border:1px solid var(--px-line); background:#fff;
+    cursor:pointer; font-size:13.5px; color:var(--px-text-2);
+    transition:all .15s; text-align:left; width:100%; font-family:var(--px-font-body);
+  }
+  .pixel-anatomy-page .quiz-opt:hover:not(:disabled){
+    background:var(--px-bg); border-color:var(--px-line-strong); color:var(--px-text);
+  }
+  .pixel-anatomy-page .quiz-opt.correct{
+    background:rgba(22,163,74,.06); border-color:rgba(22,163,74,.25); color:#16a34a;
+  }
+  .pixel-anatomy-page .quiz-opt.wrong{
+    background:rgba(225,29,72,.06); border-color:rgba(225,29,72,.25); color:#e11d48;
+  }
+  .pixel-anatomy-page .quiz-opt.muted{ opacity:.4; }
+  .pixel-anatomy-page .quiz-opt-badge{
+    width:24px; height:24px; border-radius:50%;
+    background:var(--px-bg); display:flex; align-items:center; justify-content:center;
+    font-family:var(--px-font-mono); font-size:11px; color:var(--px-text-3); flex-shrink:0;
+  }
+  .pixel-anatomy-page .quiz-feedback{
+    padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; display:none; color:var(--px-text-2);
+  }
+  .pixel-anatomy-page .quiz-feedback.show{ display:block; }
+  .pixel-anatomy-page .quiz-feedback.ok{
+    background:rgba(22,163,74,.06); border:1px solid rgba(22,163,74,.2); color:#16a34a;
+  }
+  .pixel-anatomy-page .quiz-feedback.bad{
+    background:rgba(225,29,72,.06); border:1px solid rgba(225,29,72,.2); color:#e11d48;
+  }
+
+  /* ── Playground ──────────────────────────────── */
+  .pixel-anatomy-page .playground-card{ padding:0; overflow:hidden; margin-top:20px; }
+  .pixel-anatomy-page .playground-toolbar{
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:10px; padding:12px 16px;
+    background:var(--px-bg); border-bottom:1px solid var(--px-line);
+    font-family:var(--px-font-body);
+  }
+  .pixel-anatomy-page .pg-toolbar-left{ display:flex; align-items:center; gap:8px; }
+  .pixel-anatomy-page .pg-title{
+    font-family:var(--px-font-disp); font-size:13px; font-weight:600; color:var(--px-text);
+  }
+  .pixel-anatomy-page .py-ready-dot{
+    width:8px; height:8px; border-radius:50%; background:#16a34a; flex-shrink:0;
+  }
+  .pixel-anatomy-page .pg-toolbar-right{ display:flex; gap:6px; flex-wrap:wrap; }
+  .pixel-anatomy-page .pg-snippet-btn{
+    padding:5px 12px; border-radius:6px; border:1px solid var(--px-line);
+    background:#fff; font-size:11px; cursor:pointer;
+    font-family:var(--px-font-mono); color:var(--px-text-2); transition:all .2s;
+  }
+  .pixel-anatomy-page .pg-snippet-btn:hover{ border-color:var(--px-line-strong); color:var(--px-text); }
+  .pixel-anatomy-page .playground-editor{ min-height:160px; border:none; border-radius:0; }
+  .pixel-anatomy-page .playground-actions{
+    display:flex; gap:8px; padding:12px 16px; align-items:center;
+    border-top:1px solid var(--px-line);
+  }
+  .pixel-anatomy-page .pg-note{
+    margin-left:auto; font-size:11px; color:var(--px-text-3);
+    font-family:var(--px-font-mono);
+  }
+
+  /* ── Final score card ────────────────────────── */
+  .pixel-anatomy-page .final-score-card{ padding:28px; margin-top:24px; text-align:center; }
+  .pixel-anatomy-page .fs-title{
+    font-family:var(--px-font-disp); font-size:20px; font-weight:700; color:var(--px-text); margin-bottom:16px;
+  }
+  .pixel-anatomy-page .fs-scores{
+    display:flex; gap:24px; justify-content:center; margin-bottom:12px; flex-wrap:wrap;
+  }
+  .pixel-anatomy-page .fs-msg{ font-size:13px; }
+
+  /* ── Next lesson CTA ─────────────────────────── */
+  .pixel-anatomy-page .next-lesson-cta{
+    margin-top:32px; padding:32px; text-align:center;
+    background:linear-gradient(135deg, #fff, #fff7fb);
+  }
+  .pixel-anatomy-page .nlc-inner{}
+  .pixel-anatomy-page .nlc-label{
+    font-family:var(--px-font-mono); font-size:10px;
+    text-transform:uppercase; letter-spacing:.1em; color:var(--px-text-3);
+    margin-bottom:8px; display:block;
+  }
+  .pixel-anatomy-page .nlc-title{
+    font-family:var(--px-font-disp); font-size:22px; font-weight:700;
+    color:var(--px-text); letter-spacing:-.01em; margin-bottom:8px;
+  }
+  .pixel-anatomy-page .nlc-desc{ font-size:14px; margin-bottom:20px; color:var(--px-text-2); }
+  .pixel-anatomy-page .nlc-btn{
+    display:inline-block; padding:12px 28px; border-radius:8px;
+    background:var(--px-accent); color:#fff; font-weight:600; font-size:14px;
+    text-decoration:none; transition:all .2s;
+  }
+  .pixel-anatomy-page .nlc-btn:hover{ background:#d42a7d; transform:translateY(-1px); }
+
+  /* ── Nav footer ──────────────────────────────── */
+  .pixel-anatomy-page .lesson-nav-footer a:hover{
+    border-color:var(--px-line-strong); transform:translateY(-1px);
+  }
+
+  /* ── Range inputs ────────────────────────────── */
+  .pixel-anatomy-page input[type="range"]{
+    -webkit-appearance:none; height:4px; border-radius:2px;
+    background:rgba(246,51,146,.12); outline:none; cursor:pointer;
+  }
+  .pixel-anatomy-page input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:16px; height:16px; border-radius:50%;
+    background:var(--px-accent); cursor:pointer;
+    border:2px solid #fff; box-shadow:0 2px 8px rgba(246,51,146,.25);
+    transition:transform .15s;
+  }
+  .pixel-anatomy-page input[type="range"]::-webkit-slider-thumb:hover{ transform:scale(1.2); }
+
+  /* ── Responsive ──────────────────────────────── */
+  @media (max-width: 1200px){
+    .pixel-anatomy-page .lesson-layout{ grid-template-columns:1fr; }
+    .pixel-anatomy-page .lesson-article{ max-width:none; }
+    .pixel-anatomy-page .lesson-right-panel{ position:static; flex-direction:row; flex-wrap:wrap; }
+    .pixel-anatomy-page .lesson-right-panel > *{ flex:1 1 280px; }
+  }
+  @media (max-width: 900px){
+    .pixel-anatomy-page .lesson-topbar-inner{ height:60px; }
+    .pixel-anatomy-page .navbar-left{ padding-left:16px; }
+    .pixel-anatomy-page .navbar-right{ padding-right:16px; }
+    .pixel-anatomy-page .fellow-search{ min-width:auto; flex:1; }
+    .pixel-anatomy-page .fellow-search input{ width:80px; }
+    .pixel-anatomy-page .fellow-user-button span:not(.avatar-img),
+    .pixel-anatomy-page .fellow-user-button > i{ display:none; }
+    .pixel-anatomy-page .lesson-hero{ grid-template-columns:1fr; padding:28px 24px 24px; }
+    .pixel-anatomy-page .lesson-hero img{ justify-self:center; max-width:210px; }
+    .pixel-anatomy-page .lesson-layout{ padding-inline:16px; }
+    .pixel-anatomy-page .pixel-inspector{ grid-template-columns:1fr; }
+    .pixel-anatomy-page #pixelCanvas{ width:100% !important; height:auto !important; }
+    .pixel-anatomy-page .two-col{ grid-template-columns:1fr; }
+    .pixel-anatomy-page .cs-grid{ grid-template-columns:1fr; }
+    .pixel-anatomy-page .calc-results{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width: 600px){
+    .pixel-anatomy-page .calc-results{ grid-template-columns:1fr; }
+    .pixel-anatomy-page .px-stats{ grid-template-columns:1fr; }
+    .pixel-anatomy-page .rgb-labels{ grid-template-columns:repeat(2,1fr); }
+    .pixel-anatomy-page .playground-toolbar{ flex-direction:column; align-items:flex-start; }
+  }
+</style>
+<button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+<div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+<aside class="fellow-sidebar" aria-label="Navigasi peserta">
+<a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
+<nav class="fellow-menu">
+<a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+<a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+<a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+<a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+<a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+<a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+<a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+<a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+</nav>
+<nav class="fellow-menu secondary">
+<a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+<a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+<a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ &amp; Bantuan</span></a>
+<a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+</nav>
+<div class="invite-card course-help-mini">
+<div><strong>Butuh bantuan?</strong><p>Tanya HerAI Assistant tentang modul dan pembelajaran.</p></div>
+<button type="button">Chat Sekarang</button>
+</div>
+</aside>
+<main class="fellow-main">
+ <header class="lesson-topbar">
+<div class="lesson-topbar-inner">
+<div class="navbar-left">
+<nav class="lesson-breadcrumb" aria-label="Breadcrumb materi">
+<a href="#/participant-ai-lab-cv"><i class="fas fa-arrow-left"></i><span>Computer Vision</span></a>
+<span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+</nav>
+</div>
+<div class="navbar-center">Pixel Anatomy</div>
+<div class="navbar-right">
+<div class="fellow-actions">
+<label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul, topik, atau materi..."></label>
+<button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+<a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+</div>
+</div>
+</div>
+</header>
+<div class="lesson-layout">
+<div class="lesson-main-content">
+<section class="lesson-hero">
+<div class="lesson-hero-copy">
+<h1>Pixel Anatomy</h1>
+<p>Anatomi piksel — apa itu piksel, sistem koordinat, RGB channels, color spaces, dan matematika di baliknya.</p>
+<div class="lesson-meta-row">
+<span><i class="far fa-clock"></i> 30 menit</span>
+<span><i class="fas fa-layer-group"></i> CV &middot; Image Processing</span>
+<b>Fondasi</b>
+</div>
+</div>
+<img src="/assets/messaging/herai-chat-persona.png" alt="HerAI CV learning">
+</section>
+<section class="lesson-material-panel">
+<div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
+<a href="#/participant-ai-lab-cv-pixel" class="active"><i class="fas fa-book-open"></i> Materi</a>
+<a href="#/participant-ai-lab-cv"><i class="fas fa-layer-group"></i> Katalog CV</a>
+</div>
+<article class="lesson-article ai-lab-content" id="pixel-content">
+
+      <!-- ─── SEC 1 ─── -->
+      <section class="lesson-sec" id="sec-what">
+        <div class="sec-header">
+          <span class="sec-num">01</span>
+          <div><h2 class="sec-title">What is a pixel?</h2><p class="sec-sub">The atomic unit of every digital image</p></div>
+        </div>
+        <div class="prose">An image is nothing magical — it is a <strong>2D array (matrix) of pixels</strong>. Each pixel stores intensity values as integers from <code>0</code> to <code>255</code>.</div>
+        <div class="callout info"><span class="callout-icon"><i class="fas fa-lightbulb"></i></span><div>A 1920×1080 Full HD image contains <strong>2,073,600 pixels</strong>. With 3 channels, that's over <strong>6.2 million numbers</strong>.</div></div>
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Hover or tap any pixel to inspect it</div>
+          <div class="pixel-inspector">
+            <canvas id="pixelCanvas" width="280" height="280"></canvas>
+            <div class="px-info-panel">
+              <div class="px-swatch" id="pxSwatch"></div>
+              <div class="px-stats">
+                <div class="px-stat"><span class="px-stat-label">Position</span><span class="px-stat-val" id="pxPos">(—, —)</span><span class="px-stat-sub">col, row</span></div>
+                <div class="px-stat"><span class="px-stat-label">Hex</span><span class="px-stat-val mono" id="pxHex">#——</span></div>
+                <div class="px-stat"><span class="px-stat-label">Grayscale</span><span class="px-stat-val" id="pxGray">—</span><span class="px-stat-sub">0–255</span></div>
+              </div>
+              <div class="ch-bars">
+                <div class="ch-row"><span class="ch-lbl red">R</span><div class="ch-track"><div class="ch-fill" id="chR" style="--c:#ef4444"></div></div><span class="ch-num" id="chRv">0</span></div>
+                <div class="ch-row"><span class="ch-lbl green">G</span><div class="ch-track"><div class="ch-fill" id="chG" style="--c:#22c55e"></div></div><span class="ch-num" id="chGv">0</span></div>
+                <div class="ch-row"><span class="ch-lbl blue">B</span><div class="ch-track"><div class="ch-fill" id="chB" style="--c:#3b82f6"></div></div><span class="ch-num" id="chBv">0</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="cb-label">numpy</div>
+<pre><code><span class="kw">import</span> numpy <span class="kw">as</span> np
+img = np.<span class="fn">zeros</span>((<span class="num">480</span>, <span class="num">640</span>, <span class="num">3</span>), dtype=np.uint8)
+print(img.shape)   <span class="cm"># (480, 640, 3)</span>
+print(img.dtype)   <span class="cm"># uint8</span>
+pixel = img[<span class="num">80</span>, <span class="num">120</span>]  <span class="cm"># [B, G, R]</span></code></pre>
+        </div>
+        <div class="challenge-card" id="ch-1">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Create an image array and inspect it</span></div>
+          <div class="challenge-desc">Complete the blanks to create a 100×200 image with 3 channels and print its shape, dtype, and total pixels.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-1" spellcheck="false">import numpy as np
+
+# Create a 100×200 color image (height=100, width=200)
+img = np.zeros((___, ___, ___), dtype=np.uint8)
+
+# Print the shape
+print("Shape:", ___.shape)
+
+# Print the dtype
+print("Dtype:", ___.___)
+
+# Total number of pixels?
+total_pixels = ___ * ___
+print("Total pixels:", total_pixels)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-1','out-1','check-1')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-1')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-1',1)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-1" style="display:none"><strong>Hints:</strong><br>• <code>np.zeros((height, width, channels))</code> — order matters!<br>• height=100, width=200, channels=3<br>• <code>img.shape</code> returns a tuple, <code>img.dtype</code> returns dtype</div>
+          <div class="output-wrap" id="out-1" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-1-pre"></pre></div>
+          <div class="check-result" id="check-1" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Shape: (100, 200, 3)<br>Dtype: uint8<br>Total pixels: 20000</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 2 ─── -->
+      <section class="lesson-sec" id="sec-coords">
+        <div class="sec-header">
+          <span class="sec-num">02</span>
+          <div><h2 class="sec-title">Coordinate system</h2><p class="sec-sub">Top-left origin, row-major indexing</p></div>
+        </div>
+        <div class="prose">Unlike Cartesian math, image coordinates use a <strong>top-left origin</strong>. NumPy indexes as <code>img[row, col]</code> — reversing the usual x,y order.</div>
+        <div class="callout warn"><span class="callout-icon">⚠️</span><div>OpenCV uses <code>img[y, x]</code> but many geometry functions take <code>(x, y)</code> tuples. Always check the convention.</div></div>
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Move cursor over the grid</div>
+          <canvas id="coordCanvas" style="width:100%;display:block;cursor:crosshair;border-radius:8px"></canvas>
+          <div class="coord-readout mono" id="coordReadout">img[y=—, x=—]   →   pixel coordinates</div>
+        </div>
+        <div class="two-col">
+          <div class="code-block"><div class="cb-label">indexing</div>
+<pre><code><span class="cm"># top-left</span>
+top_left = img[<span class="num">0</span>, <span class="num">0</span>]
+<span class="cm"># bottom-right</span>
+h, w = img.shape[:<span class="num">2</span>]
+br = img[h<span class="op">-</span><span class="num">1</span>, w<span class="op">-</span><span class="num">1</span>]
+<span class="cm"># region of interest</span>
+roi = img[<span class="num">50</span>:<span class="num">150</span>, <span class="num">100</span>:<span class="num">200</span>]</code></pre></div>
+          <div class="info-card"><div class="ic-title">Memory layout</div><p>Images are stored in <strong>row-major order</strong>. Iterating rows is cache-friendly; columns is not.</p></div>
+        </div>
+        <div class="challenge-card" id="ch-2">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Access specific pixels by coordinate</span></div>
+          <div class="challenge-desc">Access the correct pixels using NumPy row-column indexing.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-2" spellcheck="false">import numpy as np
+
+img = np.arange(300, dtype=np.uint8).reshape(10, 10, 3)
+
+# Access pixel at column=3, row=2 (img[row, col])
+pixel = img[___, ___]
+print("Pixel at (col=3, row=2):", pixel)
+
+# Get height and width
+h, w = img.shape[___]
+print(f"Height: {h}, Width: {w}")
+
+# Access center pixel (row=5, col=5)
+center = img[___, ___]
+print("Center pixel:", center)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-2','out-2','check-2')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-2')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-2',2)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-2" style="display:none"><strong>Hints:</strong><br>• <code>img[row, col]</code> — row dulu, baru col<br>• col=3, row=2 → <code>img[2, 3]</code><br>• <code>img.shape[:2]</code> ambil (height, width) saja</div>
+          <div class="output-wrap" id="out-2" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-2-pre"></pre></div>
+          <div class="check-result" id="check-2" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Pixel at (col=3, row=2): [60 61 62]<br>Height: 10, Width: 10<br>Center pixel: [150 151 152]</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 3 ─── -->
+      <section class="lesson-sec" id="sec-rgb">
+        <div class="sec-header">
+          <span class="sec-num">03</span>
+          <div><h2 class="sec-title">RGB channels</h2><p class="sec-sub">Three matrices stacked into one 3D array</p></div>
+        </div>
+        <div class="prose">A color image is actually <strong>three separate grayscale matrices</strong> — R, G, B — stacked into shape <code>(H, W, 3)</code>.</div>
+        <div class="widget-card">
+          <div class="widget-label">Interactive · The same image split across 3 channels</div>
+          <canvas id="rgbCanvas" style="width:100%;display:block;border-radius:8px"></canvas>
+          <div class="rgb-labels"><span>Original</span><span style="color:#ef4444">R channel</span><span style="color:#22c55e">G channel</span><span style="color:#3b82f6">B channel</span></div>
+        </div>
+        <div class="callout danger"><span class="callout-icon"><i class="fas fa-triangle-exclamation"></i></span><div><strong>Critical:</strong> OpenCV loads as <strong>BGR</strong> not RGB. Index 0=Blue, 1=Green, 2=Red.</div></div>
+        <div class="code-block"><div class="cb-label">channels</div>
+<pre><code>r_channel = img[:, :, <span class="num">2</span>]  <span class="cm"># BGR: index 2 = Red</span>
+g_channel = img[:, :, <span class="num">1</span>]
+b_channel = img[:, :, <span class="num">0</span>]</code></pre></div>
+        <div class="challenge-card" id="ch-3">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Split and manipulate RGB channels</span></div>
+          <div class="challenge-desc">Create pure color pixels and extract channels from a mixed color.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-3" spellcheck="false">import numpy as np
+
+# Pure red pixel [R, G, B]
+red_pixel = np.array([___, ___, ___], dtype=np.uint8)
+print("Red pixel:", red_pixel)
+
+# Pure green pixel
+green_pixel = np.array([___, ___, ___], dtype=np.uint8)
+print("Green pixel:", green_pixel)
+
+# Mixed pixel R=100, G=150, B=200
+pixel = np.array([100, 150, 200], dtype=np.uint8)
+r = pixel[___]
+g = pixel[___]
+b = pixel[___]
+print(f"R={r}, G={g}, B={b}")
+
+# Grayscale
+gray = int(0.299 * r + 0.587 * g + 0.114 * b)
+print("Grayscale:", gray)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-3','out-3','check-3')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-3')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-3',3)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-3" style="display:none"><strong>Hints:</strong><br>• Pure red → <code>[255, 0, 0]</code><br>• Pure green → <code>[0, 255, 0]</code><br>• Channel index (RGB array): R=0, G=1, B=2</div>
+          <div class="output-wrap" id="out-3" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-3-pre"></pre></div>
+          <div class="check-result" id="check-3" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Red pixel: [255   0   0]<br>Green pixel: [  0 255   0]<br>R=100, G=150, B=200<br>Grayscale: 152</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 4 ─── -->
+      <section class="lesson-sec" id="sec-colorspaces">
+        <div class="sec-header">
+          <span class="sec-num">04</span>
+          <div><h2 class="sec-title">Color spaces</h2><p class="sec-sub">Different coordinate systems for the same color</p></div>
+        </div>
+        <div class="prose">A color space is a <strong>mathematical coordinate system</strong> for describing colors — each optimized for a different task.</div>
+        <div class="cs-grid">
+          <div class="cs-card" style="--cs-accent:#ef4444"><div class="cs-card-top"><span class="cs-name">RGB</span><span class="cs-use">Screens</span></div><div class="cs-channels"><div class="cs-ch"><span>R</span><span>0–255</span></div><div class="cs-ch"><span>G</span><span>0–255</span></div><div class="cs-ch"><span>B</span><span>0–255</span></div></div><div class="cs-desc">Additive model — mixes light.</div><code class="cs-code">cv2.COLOR_BGR2RGB</code></div>
+          <div class="cs-card" style="--cs-accent:#f59e0b"><div class="cs-card-top"><span class="cs-name">HSV</span><span class="cs-use">Color tracking</span></div><div class="cs-channels"><div class="cs-ch"><span>H</span><span>0–179°</span></div><div class="cs-ch"><span>S</span><span>0–255</span></div><div class="cs-ch"><span>V</span><span>0–255</span></div></div><div class="cs-desc">Separates hue from brightness.</div><code class="cs-code">cv2.COLOR_BGR2HSV</code></div>
+          <div class="cs-card" style="--cs-accent:#8b5cf6"><div class="cs-card-top"><span class="cs-name">LAB</span><span class="cs-use">Color diff</span></div><div class="cs-channels"><div class="cs-ch"><span>L</span><span>0–100</span></div><div class="cs-ch"><span>a</span><span>±128</span></div><div class="cs-ch"><span>b</span><span>±128</span></div></div><div class="cs-desc">Perceptually uniform.</div><code class="cs-code">cv2.COLOR_BGR2LAB</code></div>
+          <div class="cs-card" style="--cs-accent:#6b7280"><div class="cs-card-top"><span class="cs-name">Grayscale</span><span class="cs-use">Classical CV</span></div><div class="cs-channels"><div class="cs-ch"><span>L</span><span>0–255</span></div></div><div class="cs-desc">Single channel. Reduces data 3×.</div><code class="cs-code">cv2.COLOR_BGR2GRAY</code></div>
+        </div>
+        <div class="challenge-card" id="ch-4">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Implement RGB → Grayscale manually</span></div>
+          <div class="challenge-desc">Implement the ITU-R BT.601 formula without any library functions.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-4" spellcheck="false">def rgb_to_gray(r, g, b):
+    """
+    Formula: gray = 0.299*R + 0.587*G + 0.114*B
+    Returns an integer (0-255).
+    """
+    gray = ___ * r + ___ * g + ___ * b
+    return int(gray)
+
+print(rgb_to_gray(255, 0, 0))     # Pure red
+print(rgb_to_gray(0, 255, 0))     # Pure green
+print(rgb_to_gray(0, 0, 255))     # Pure blue
+print(rgb_to_gray(255, 255, 255)) # White
+print(rgb_to_gray(0, 0, 0))       # Black
+print(rgb_to_gray(100, 150, 200)) # Mixed</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-4','out-4','check-4')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-4')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-4',4)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-4" style="display:none"><strong>Hints:</strong><br>• <code>gray = 0.299*R + 0.587*G + 0.114*B</code><br>• Green diberi bobot tertinggi — mata paling sensitif ke hijau</div>
+          <div class="output-wrap" id="out-4" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-4-pre"></pre></div>
+          <div class="check-result" id="check-4" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>76<br>149<br>29<br>255<br>0<br>152</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 5 ─── -->
+      <section class="lesson-sec" id="sec-math">
+        <div class="sec-header">
+          <span class="sec-num">05</span>
+          <div><h2 class="sec-title">The math — live calculator</h2><p class="sec-sub">Adjust RGB and watch every formula compute in real time</p></div>
+        </div>
+        <div class="widget-card">
+          <div class="widget-label">Interactive · Adjust RGB sliders</div>
+          <div class="calc-preview" id="calcPreview"></div>
+          <div class="calc-sliders">
+            <div class="csl-row"><span class="csl-lbl red">R</span><input type="range" min="0" max="255" value="64" id="slR" oninput="updateCalc()"><span class="csl-val" id="svR">64</span></div>
+            <div class="csl-row"><span class="csl-lbl green">G</span><input type="range" min="0" max="255" value="128" id="slG" oninput="updateCalc()"><span class="csl-val" id="svG">128</span></div>
+            <div class="csl-row"><span class="csl-lbl blue">B</span><input type="range" min="0" max="255" value="200" id="slB" oninput="updateCalc()"><span class="csl-val" id="svB">200</span></div>
+          </div>
+          <div class="calc-results" id="calcResults"></div>
+        </div>
+        <div class="widget-card" style="margin-top:16px">
+          <div class="widget-label">Step-by-step: grayscale conversion</div>
+          <div class="code-block" style="margin:0"><pre><code id="mathSteps">—</code></pre></div>
+        </div>
+        <div class="challenge-card" id="ch-5">
+          <div class="challenge-header"><span class="challenge-badge"><i class="fas fa-snake"></i> Mini Challenge</span><span class="challenge-title">Build RGB → HSV converter</span></div>
+          <div class="challenge-desc">Implement RGB to HSV conversion. H in degrees (0–360), S and V are 0–1.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="ce-5" spellcheck="false">def rgb_to_hsv(r, g, b):
+    r, g, b = r/255, g/255, b/255
+    cmax = max(r, g, b)
+    cmin = min(r, g, b)
+    delta = ___ - ___       # cmax - cmin
+
+    v = ___                 # just cmax
+    s = 0 if cmax == 0 else ___ / ___   # delta / cmax
+
+    if delta == 0:
+        h = 0
+    elif cmax == r:
+        h = 60 * (((g - b) / delta) % 6)
+    elif cmax == g:
+        h = 60 * (((b - r) / delta) + ___)  # + 2
+    else:
+        h = 60 * (((r - g) / delta) + ___)  # + 4
+
+    return round(h, 1), round(s, 3), round(v, 3)
+
+print(rgb_to_hsv(255, 0, 0))    # Red
+print(rgb_to_hsv(0, 255, 0))    # Green
+print(rgb_to_hsv(0, 0, 255))    # Blue
+print(rgb_to_hsv(255, 255, 0))  # Yellow</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('ce-5','out-5','check-5')">▶ Run</button>
+              <button class="hint-btn" onclick="toggleHint('hint-5')"><i class="fas fa-lightbulb"></i> Hint</button>
+              <button class="reset-btn" onclick="resetChallenge('ce-5',5)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="hint-box" id="hint-5" style="display:none"><strong>Hints:</strong><br>• <code>delta = cmax - cmin</code>, <code>v = cmax</code>, <code>s = delta/cmax</code><br>• Green branch: +2, Blue branch: +4</div>
+          <div class="output-wrap" id="out-5" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="out-5-pre"></pre></div>
+          <div class="check-result" id="check-5" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>(0.0, 1.0, 1.0)<br>(120.0, 1.0, 1.0)<br>(240.0, 1.0, 1.0)<br>(60.0, 1.0, 1.0)</code></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 6: PLAYGROUND ─── -->
+      <section class="lesson-sec" id="sec-playground">
+        <div class="sec-header">
+          <span class="sec-num">06</span>
+          <div><h2 class="sec-title">Full Python Playground</h2><p class="sec-sub">Eksperimen bebas — tulis Python apapun</p></div>
+        </div>
+        <div class="prose">Python 3.11 + NumPy langsung di browser via <strong>Pyodide</strong>. Tidak ada batas — explore sesukamu.</div>
+        <div class="playground-card">
+          <div class="playground-toolbar">
+            <div class="pg-toolbar-left">
+              <span class="pg-title"><i class="fas fa-snake"></i> Python 3.11 · NumPy ready</span>
+              <span class="py-ready-dot" id="pgReadyDot"></span>
+            </div>
+            <div class="pg-toolbar-right">
+              <button class="pg-snippet-btn" onclick="loadSnippet('pixels')">Pixels</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('channels')">Channels</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('grayscale')">Grayscale</button>
+              <button class="pg-snippet-btn" onclick="loadSnippet('stats')">Stats</button>
+            </div>
+          </div>
+          <div class="code-editor-wrap">
+            <textarea class="code-editor playground-editor" id="playground-editor" spellcheck="false">import numpy as np
+
+# Create a sample 5x5 RGB image
+img = np.random.randint(0, 256, (5, 5, 3), dtype=np.uint8)
+
+print("Image shape:", img.shape)
+print("Image dtype:", img.dtype)
+print("\nFirst row of pixels:")
+print(img[0])
+print("\nPixel at center (row=2, col=2):")
+print(img[2, 2])
+
+r_mean = img[:,:,0].mean()
+g_mean = img[:,:,1].mean()
+b_mean = img[:,:,2].mean()
+print(f"\nChannel means — R:{r_mean:.1f} G:{g_mean:.1f} B:{b_mean:.1f}")</textarea>
+          </div>
+          <div class="playground-actions">
+            <button class="run-btn large" onclick="runPlayground()">▶ Run Code</button>
+            <button class="reset-btn" onclick="resetPlayground()">↺ Reset</button>
+            <span class="pg-note">Ctrl+Enter to run</span>
+          </div>
+          <div class="output-wrap" id="pg-output" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="pg-output-pre"></pre></div>
+        </div>
+      </section>
+
+      <!-- ─── SEC 7: QUIZ ─── -->
+      <section class="lesson-sec" id="sec-quiz">
+        <div class="sec-header">
+          <span class="sec-num">07</span>
+          <div><h2 class="sec-title">Quiz + Coding Challenge</h2><p class="sec-sub">Teori + praktik — selesaikan keduanya untuk lulus</p></div>
+        </div>
+
+        <div class="quiz-block-title">Part A · Multiple Choice</div>
+        <div id="quizContainer"></div>
+
+        <div class="quiz-block-title" style="margin-top:40px">Part B · Coding Challenge</div>
+        <div class="prose" style="margin-bottom:20px">3 soal coding — fill in the blank, fix the bug, dan vectorized operation.</div>
+
+        <!-- CQ 1 -->
+        <div class="challenge-card" id="cq-1">
+          <div class="challenge-header"><span class="challenge-badge quiz-badge"><i class="fas fa-pen-to-square"></i> Coding Quiz 1 · Fix the bug</span><span class="challenge-title">Wrong pixel access — fix the coordinates</span></div>
+          <div class="challenge-desc">Kode ini mengakses pixel yang salah karena row dan col tertukar. Perbaiki.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">buggy.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="cq-1-editor" spellcheck="false">import numpy as np
+
+img = np.zeros((10, 10, 3), dtype=np.uint8)
+img[3, 5] = [255, 0, 0]   # Red at row=3, col=5
+img[7, 2] = [0, 255, 0]   # Green at row=7, col=2
+
+# BUG: row and col are swapped — fix these two lines
+red_pixel   = img[5, 3]
+green_pixel = img[2, 7]
+
+print("Red pixel:", red_pixel)
+print("Green pixel:", green_pixel)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('cq-1-editor','cq-1-out','cq-1-check')">▶ Run &amp; Check</button>
+              <button class="reset-btn" onclick="resetCodingQuiz(1)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="output-wrap" id="cq-1-out" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="cq-1-out-pre"></pre></div>
+          <div class="check-result" id="cq-1-check" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Red pixel: [255   0   0]<br>Green pixel: [  0 255   0]</code></div>
+        </div>
+
+        <!-- CQ 2 -->
+        <div class="challenge-card" id="cq-2">
+          <div class="challenge-header"><span class="challenge-badge quiz-badge"><i class="fas fa-pen-to-square"></i> Coding Quiz 2 · Fill in the blank</span><span class="challenge-title">Compute image statistics</span></div>
+          <div class="challenge-desc">Lengkapi kode untuk menghitung statistik dasar dari sebuah image array.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="cq-2-editor" spellcheck="false">import numpy as np
+
+np.random.seed(42)
+img = np.random.randint(0, 256, (100, 100, 3), dtype=np.uint8)
+
+# Total pixels (height * width)
+total = ___ * ___
+print("Total pixels:", total)
+
+# Mean value of entire image
+mean_val = round(float(img.___()),  2)
+print("Mean value:", mean_val)
+
+print("Min:", int(img.___()))
+print("Max:", int(img.___()))
+
+# Shape of red channel (index 0 for RGB array)
+r_shape = img[:, :, ___].shape
+print("Red channel shape:", r_shape)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('cq-2-editor','cq-2-out','cq-2-check')">▶ Run &amp; Check</button>
+              <button class="reset-btn" onclick="resetCodingQuiz(2)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="output-wrap" id="cq-2-out" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="cq-2-out-pre"></pre></div>
+          <div class="check-result" id="cq-2-check" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>Total pixels: 10000<br>Mean value: 127.51<br>Min: 0<br>Max: 255<br>Red channel shape: (100, 100)</code></div>
+        </div>
+
+        <!-- CQ 3 -->
+        <div class="challenge-card" id="cq-3">
+          <div class="challenge-header"><span class="challenge-badge quiz-badge"><i class="fas fa-pen-to-square"></i> Coding Quiz 3 · Vectorized</span><span class="challenge-title">Apply grayscale to full image — no loops</span></div>
+          <div class="challenge-desc">Apply grayscale formula ke seluruh image sekaligus menggunakan NumPy vectorized operations.</div>
+          <div class="challenge-editor">
+            <div class="editor-tabs"><span class="editor-tab active">solution.py</span></div>
+            <div class="code-editor-wrap"><textarea class="code-editor" id="cq-3-editor" spellcheck="false">import numpy as np
+
+img = np.array([
+    [[255, 0,   0  ], [0,   255, 0  ], [0,   0,   255]],
+    [[255, 255, 0  ], [0,   255, 255], [255, 0,   255]],
+    [[255, 255, 255], [128, 128, 128], [0,   0,   0  ]]
+], dtype=np.float32)
+
+# Vectorized grayscale: 0.299*R + 0.587*G + 0.114*B
+# img[:,:,0]=R  img[:,:,1]=G  img[:,:,2]=B
+gray = (___ * img[:,:,0] + ___ * img[:,:,1] + ___ * img[:,:,2])
+gray = gray.astype(np.uint8)
+print(gray)</textarea></div>
+            <div class="editor-actions">
+              <button class="run-btn" onclick="runChallenge('cq-3-editor','cq-3-out','cq-3-check')">▶ Run &amp; Check</button>
+              <button class="reset-btn" onclick="resetCodingQuiz(3)">↺ Reset</button>
+            </div>
+          </div>
+          <div class="output-wrap" id="cq-3-out" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="cq-3-out-pre"></pre></div>
+          <div class="check-result" id="cq-3-check" style="display:none"></div>
+          <div class="expected-box"><span class="expected-label">Expected:</span><code>[[ 76 149  29]<br> [226 178 105]<br> [255 128   0]]</code></div>
+        </div>
+
+        <div class="final-score-card" id="finalScore" style="display:none">
+          <div class="fs-title">Lesson Complete! <i class="fas fa-party-horn"></i></div>
+          <div class="fs-scores" id="fsScores"></div>
+          <div class="fs-msg" id="fsMsg"></div>
+        </div>
+
+        <div class="next-lesson-cta" id="nextLesson" style="display:none">
+          <div class="nlc-inner">
+            <span class="nlc-label">Next lesson</span>
+            <h3 class="nlc-title">Image Processing with OpenCV →</h3>
+            <p class="nlc-desc">Loading, resizing, cropping, and bitwise operations.</p>
+            <a href="#" class="nlc-btn">Continue</a>
+          </div>
+        </div>
+      </section>
+
+</article>
+<footer class="lesson-nav-footer">
+<a href="#/participant-ai-lab-cv-opencv" class="lnf-prev">
+<span class="lnf-label">Lesson sebelumnya</span>
+<span class="lnf-title">Image Processing with OpenCV <i class="fas fa-arrow-left"></i></span>
+</a>
+<a href="#/participant-ai-lab-cv" class="lnf-next">
+<span class="lnf-label">Kembali ke</span>
+<span class="lnf-title">Katalog Computer Vision <i class="fas fa-arrow-right"></i></span>
+</a>
+</footer>
+</section>
+</div>
+<aside class="lesson-right-panel">
+<div class="lesson-progress-card">
+<div class="lpc-header"><i class="fas fa-chart-simple"></i> Progress CV</div>
+<div class="lpc-ring-wrap"><svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="30" stroke="var(--border)" stroke-width="5" fill="none"/><circle cx="36" cy="36" r="30" stroke="var(--fellow-pink)" stroke-width="5" fill="none" stroke-dasharray="188.5" stroke-dashoffset="0" stroke-linecap="round"/></svg><div class="lpc-ring-text"><strong>100%</strong></div></div>
+<div class="lpc-meta"><span><i class="far fa-circle-check"></i> 10/10 selesai</span><span><i class="fas fa-fire"></i> 0 streak</span></div>
+</div>
+<div class="lesson-list-card">
+<h4>CV Course</h4>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 1-8. Done</div>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 9. Image Processing</div>
+<div class="lesson-list-item active"><span class="lli-dot"></span> 10. Pixel Anatomy</div>
+</div>
+</aside>
+</div>
+</main>
+</section>

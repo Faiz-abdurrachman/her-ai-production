@@ -222,7 +222,7 @@ function showParticipantDashboard(profile) {
 
 async function loadParticipantProfile(nik, password) {
     try {
-        const result = await postProfileApi({ action: 'participantLogin', nik, password });
+        const result = await postProfileApi({ action: 'participantLogin', nik, password, user_agent: navigator.userAgent });
         if (result.status === 'success') return hydrateProfileFromParticipantData(nik, result.profile);
         throw new Error(result.message || 'Profil tidak ditemukan atau password salah.');
     } catch (error) {

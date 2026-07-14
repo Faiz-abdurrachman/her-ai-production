@@ -1,0 +1,85 @@
+<div class="chapter-content fade-in ai-modern-chapter">
+    <header class="ai-modern-chapter-hero">
+        <span>Topik 2 · 30 menit</span>
+        <h2>Transformer: Mesin di Balik Model Modern</h2>
+        <p>Transformer membuat model modern dapat membaca relasi antar token secara paralel, menjaga konteks, dan menghasilkan output token demi token.</p>
+        <div class="ai-modern-objectives">
+            <strong>Tujuan pembelajaran</strong>
+            <ul>
+                <li>Menjelaskan token, embedding, positional information, attention, dan feed-forward network.</li>
+                <li>Membedakan encoder, decoder, dan encoder-decoder.</li>
+                <li>Memahami context window, generation controls, KV cache, dan batas attention.</li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="ai-modern-section">
+        <div class="ai-modern-question"><i class="fas fa-circle-question"></i><p><strong>Pertanyaan pemantik:</strong> Mengapa model modern bisa menghubungkan kata yang berjauhan dalam prompt panjang, tetapi tetap bisa kehilangan fakta penting di tengah konteks?</p></div>
+        <p>Pada pendekatan sekuensial lama, urutan kata dibaca langkah demi langkah. Ini membuat konteks jauh sulit dipertahankan dan training sulit diparalelkan. Transformer mengubah fokusnya: setiap token dapat menimbang hubungan dengan token lain melalui attention.</p>
+        <div class="ai-modern-callout"><i class="fas fa-lightbulb"></i><div><strong>Analogi forum diskusi</strong><p>Saat membaca thread panjang, kamu tidak membaca semua komentar dengan bobot sama. Kamu mencari siapa bertanya apa, jawaban mana yang relevan, dan detail mana yang mengubah makna. Attention bekerja mirip: memberi bobot berbeda pada informasi di konteks.</p></div></div>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>Tokenization, Embedding, dan Posisi</h3>
+        <p><strong>Token</strong> bukan selalu kata. Kalimat Indonesia seperti "Peserta fellowship mengunggah ulang tugasnya" bisa dipecah secara ilustratif menjadi potongan seperti `Peserta`, ` fellowship`, ` meng`, `unggah`, ` ulang`, ` tugas`, `nya`. Hasil persis bergantung tokenizer model.</p>
+        <div class="ai-modern-flow"><span>Teks</span><i class="fas fa-arrow-right"></i><span>Token ID</span><i class="fas fa-arrow-right"></i><span>Embedding vector</span><i class="fas fa-arrow-right"></i><span>Attention context</span><i class="fas fa-arrow-right"></i><span>Output token</span></div>
+        <p>Embedding mengubah token ID menjadi vektor yang membawa representasi makna. Token embedding di dalam model berbeda dari embedding model untuk retrieval; embedding retrieval biasanya dipakai untuk mencari dokumen dengan kemiripan semantik.</p>
+        <p>Attention sendiri tidak otomatis tahu urutan. Karena itu model menambahkan positional information melalui positional encoding, learned position embedding, atau rotary position embedding. Detail matematisnya berbeda, tetapi tujuannya sama: memberi petunjuk urutan.</p>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>Query, Key, Value, dan Multi-Head Attention</h3>
+        <div class="ai-modern-flow ai-modern-flow-vertical">
+            <span>Token</span><span>Query: apa yang dicari?</span><span>Key: informasi apa yang tersedia?</span><span>Value: isi informasi</span><span>Attention score</span><span>Weighted context</span>
+        </div>
+        <pre class="ai-modern-code"><code>Attention(Q, K, V) = softmax(QK^T / sqrt(d)) V</code></pre>
+        <p>Q adalah pertanyaan yang dibawa token, K adalah label informasi yang dimiliki token lain, V adalah isi yang akan diambil, dan `softmax` mengubah skor menjadi bobot. Multi-head attention menjalankan beberapa pola attention sekaligus. Namun, jangan menganggap setiap head selalu punya fungsi linguistik yang jelas; sering kali perilakunya tersebar dan sulit diberi nama sederhana.</p>
+        <div class="ai-modern-architecture">
+            <span>Input embedding</span><span>Self-attention</span><span>Residual + normalization</span><span>Feed-forward network</span><span>Residual + normalization</span><span>Layer output</span>
+        </div>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>Encoder, Decoder, dan Autoregressive Generation</h3>
+        <div class="ai-modern-table-wrap">
+            <table class="ai-modern-table">
+                <thead><tr><th>Arsitektur</th><th>Cocok untuk</th><th>Contoh penggunaan</th></tr></thead>
+                <tbody>
+                    <tr><td>Encoder-style</td><td>Understanding dan embedding</td><td>Klasifikasi, NER, retrieval</td></tr>
+                    <tr><td>Decoder-style</td><td>Autoregressive generation</td><td>Chat, coding, structured output</td></tr>
+                    <tr><td>Encoder-decoder</td><td>Sequence-to-sequence</td><td>Translasi, summarization tertentu</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="ai-modern-pipeline"><span>Prompt</span><span>Prediksi token berikutnya</span><span>Token ditambahkan</span><span>Prediksi berikutnya</span><span>Stop condition</span></div>
+        <p>Generation controls mengubah karakter output. Temperature rendah membuat output lebih stabil; top-p rendah membatasi pilihan token; stop sequence menghentikan output pada pola tertentu; structured output memaksa format agar mudah diproses sistem.</p>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>Context Window Bukan Long-Term Memory</h3>
+        <p>Context window adalah batas token yang dapat diproses dalam satu request. Ia bukan memori jangka panjang. Riwayat percakapan, retrieval, summarization, session memory, database, dan user profile tetap perlu dirancang eksplisit. Context panjang juga punya biaya: latency, token cost, dan risiko informasi penting tenggelam di tengah.</p>
+        <div class="ai-modern-warning"><i class="fas fa-triangle-exclamation"></i><span><strong>Keterbatasan:</strong> attention cost, hallucination, lost-in-the-middle, data staleness, sensitivity terhadap prompt, dan model tidak otomatis memiliki database atau tools terbaru.</span></div>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>Studi Platform dan Kutipan</h3>
+        <p>Hugging Face Transformers membantu mempelajari tokenizer, pipeline, pretrained models, `generate`, inference, dan training. API-hosted platform berguna untuk memahami workflow generation tanpa mengelola bobot model sendiri, tetapi jangan pernah menaruh API key atau secret di frontend.</p>
+        <blockquote class="ai-modern-quote">"dispensing with recurrence and convolutions entirely" <cite>Vaswani et al., 2017</cite></blockquote>
+        <p>Maknanya: Transformer mengurangi ketergantungan pada pembacaan urutan langkah demi langkah dan convolution, lalu mengandalkan attention sebagai mekanisme utama.</p>
+    </section>
+
+    <section class="ai-modern-active" data-modern-check="attention-focus">
+        <div><span>Belajar Aktif</span><h3>Quick Check: bobot attention</h3><p>Pada kalimat "Mentor mengirim jadwal kepada peserta karena mereka meminta revisi", token "mereka" sebaiknya memberi perhatian besar ke bagian mana?</p></div>
+        <button type="button" data-modern-reveal>Tampilkan feedback</button>
+        <p class="ai-modern-feedback" hidden>Jawaban kuat mengaitkan "mereka" dengan "peserta" dan konteks "meminta revisi", bukan sekadar token paling dekat. Attention membantu model menimbang relasi seperti ini.</p>
+    </section>
+
+    <section class="ai-modern-section">
+        <h3>Mini Challenge</h3>
+        <p>Bandingkan dua konfigurasi generation: A memakai temperature rendah dan top-p rendah; B memakai temperature lebih tinggi dan top-p lebih luas. Prediksi hasilnya untuk ringkasan kebijakan, caption kreatif, dan jawaban faktual.</p>
+        <div class="ai-modern-summary"><strong>Ringkasan:</strong> Transformer mengubah token menjadi representasi, menimbang relasi melalui attention, lalu menghasilkan output dengan kontrol generation. Kekuatan ini tetap punya batas biaya, konteks, dan reliability.</div>
+        <dl class="ai-modern-glossary"><dt>Token</dt><dd>Potongan teks yang diproses model.</dd><dt>Attention</dt><dd>Mekanisme pembobotan hubungan antar token.</dd><dt>Context window</dt><dd>Batas token yang dapat dibaca dalam satu request.</dd></dl>
+        <p class="ai-modern-references"><strong>Referensi:</strong> Vaswani et al. (2017), Hugging Face Transformers documentation, Brown et al. (2020).</p>
+        <a class="ai-modern-cta" href="javascript:void(0)" onclick="window.loadModernChapter(3)">Lanjut ke AI Agents <i class="fas fa-arrow-right"></i></a>
+    </section>
+</div>

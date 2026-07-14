@@ -13,3 +13,8 @@ messaging/messaging-data.json
 signaling/herai-signaling
 reports/qa-report-*.md
 !reports/qa-report-latest.md
+Website-Portofolio-Chen/
+docs-faiz/
+# Docs - jangan di-push ke GitHub
+docs-faiz/
+docs-nazril/

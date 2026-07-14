@@ -1,0 +1,213 @@
+<h1>Chapter 1 — Kenapa Python untuk AI?</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Menjelaskan alasan Python populer dalam pekerjaan AI.</li>
+<li>Memetakan peran Python dari dataset sampai deployment.</li>
+<li>Membedakan bahasa Python dan library yang berjalan di atasnya.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Setiap tahun muncul bahasa pemrograman baru yang menjanjikan kecepatan lebih tinggi atau sintaks lebih modern. Namun Python tetap menjadi bahasa utama di dunia AI dan data science. Bukan karena Python adalah bahasa tercepat — faktanya Python lebih lambat dibanding C++ atau Rust dalam eksekusi murni — tetapi karena Python memecahkan masalah yang lebih mendasar: bagaimana seorang peneliti atau praktisi AI dapat mengubah ide menjadi eksperimen dalam hitungan menit, bukan hari.</p>
+<p>Tanpa memahami posisi Python dalam ekosistem AI, peserta mudah terjebak dalam dua kesalahan umum. Pertama, menganggap Python adalah AI itu sendiri — seolah menulis kode Python otomatis menghasilkan sistem cerdas. Kedua, menghafal sintaks tanpa memahami masalah apa yang sedang dipecahkan. Chapter ini membangun peta mental: Python adalah alat orkestrasi, model AI adalah hasil dari data, proses, dan evaluasi yang dirangkai melalui kode.</p>
+<p>Setelah menyelesaikan chapter ini, setiap konsep sintaks yang dipelajari nanti akan memiliki tujuan yang jelas. Bukan sekadar "belajar Python", melainkan "menggunakan Python untuk menyelesaikan masalah data dan AI".</p>
+<h2>Hubungan dengan AI</h2>
+<p>Workflow AI modern jarang dimulai dari model. Sebelum model menyentuh data, ada rangkaian tahap yang harus dilalui: dataset mentah perlu dibaca, diperiksa, dibersihkan, dan dieksplorasi. Baru setelah data cukup dipahami, tahap pemodelan dimulai. Setelah model menghasilkan output, hasilnya perlu dievaluasi dan disajikan.</p>
+<p>Python menjadi benang merah yang menghubungkan seluruh tahap tersebut:</p>
+<pre><code class="language-text">Dataset → Python → Cleaning → Exploration → Model → Evaluation → Deployment
+</code></pre>
+<p>Python membaca data dari CSV, JSON, atau database. Python memanggil library seperti Pandas untuk membersihkan nilai kosong dan NumPy untuk komputasi numerik. Python mengatur eksperimen, mencatat parameter, dan menyimpan hasil. Pada modul ini kita fokus sampai tahap cleaning dan exploration — fondasi yang paling sering menghabiskan sebagian besar waktu dalam project data nyata.</p>
+<p>Penting untuk dicatat bahwa Python bukan satu-satunya bahasa dalam workflow AI. Operasi berat seperti training model skala besar sering dijalankan oleh library yang ditulis dalam C++ atau CUDA, sementara Python berada di atasnya sebagai lapisan kontrol yang ekspresif dan mudah diuji.</p>
+<h2>Analogi</h2>
+<p>Bayangkan dapur profesional. Python adalah area dapurnya — tempat semua persiapan dan perakitan terjadi. NumPy, Pandas, PyTorch, dan library lain adalah peralatan khusus: pisau, blender, oven, masing-masing dirancang untuk tugas tertentu. Data adalah bahan mentah yang perlu dicuci, dipotong, dan diukur sebelum dimasak. Model AI adalah resep lanjutan yang hanya dapat berhasil jika bahan sudah siap.</p>
+<p>Dapur yang baik tidak otomatis menghasilkan makanan lezat. Ia menyediakan alur kerja yang teratur: bahan diterima, disimpan, disiapkan, dimasak, dan disajikan. Demikian pula Python: ia tidak menggantikan pemahaman tentang data atau algoritma, tetapi membuat seluruh proses dapat dilakukan, diulang, dan diperiksa oleh orang lain.</p>
+<p>Analogi ini juga menjelaskan mengapa Python mendominasi meskipun bukan bahasa tercepat. Dalam dapur profesional, kecepatan pisau tidak sepenting konsistensi teknik memotong dan kemampuan mengatur banyak bahan secara bersamaan. Python memberikan konsistensi dan keterbacaan yang memungkinkan tim bekerja sama pada pipeline yang sama.</p>
+<h2>Penjelasan Konsep</h2>
+<p>Python lahir pada tahun 1991 dengan filosofi yang berbeda dari bahasa lain: keterbacaan kode adalah prioritas utama. Indentasi wajib memaksa penulisan yang rapi. Tipe data dinamis memungkinkan eksperimen cepat tanpa deklarasi panjang. Ekosistem library-nya tumbuh secara organik karena komunitas data dan AI memilih Python sebagai bahasa bersama.</p>
+<p>Sintaks Python dirancang agar mirip dengan bahasa Inggris sehari-hari. Sebuah loop <code>for participant in participants</code> dapat dibaca oleh orang yang tidak pernah belajar coding. Kemampuan ini mengurangi gesekan antara anggota tim non-teknis — seperti domain expert atau manajer produk — dan implementasi teknis. Dalam project AI yang melibatkan banyak peran, keterbacaan ini adalah keunggulan kompetitif.</p>
+<p>Python bukan AI itu sendiri. Menulis <code>import torch</code> atau <code>from sklearn import model</code> tidak otomatis membuat sistem cerdas. Python adalah alat untuk mengekspresikan proses: membaca data, menerapkan transformasi, menjalankan evaluasi, dan menyajikan hasil. Model AI tetap membutuhkan data yang tepat, arsitektur yang sesuai, dan evaluasi yang ketat — Python hanya menyediakan bahasa untuk merangkai semuanya.</p>
+<p>Python dapat digunakan dalam dua mode utama. Mode interaktif melalui notebook (Jupyter, Google Colab) cocok untuk eksplorasi bertahap: menulis kode, melihat hasil langsung, menulis catatan, dan mengulang. Mode program melalui file <code>.py</code> cocok untuk workflow yang perlu dijalankan ulang secara konsisten, seperti pipeline cleaning atau skrip evaluasi. Kedua mode ini saling melengkapi, bukan bersaing.</p>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">Pertanyaan → Data → Kode Python → Informasi → Keputusan
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Panitia fellowship ingin mengetahui rata-rata nilai 500 peserta. Tanpa Python, seseorang harus membuka spreadsheet, memeriksa setiap baris, mencari nilai kosong, menghitung manual, dan menyimpan hasil — proses yang lambat dan rawan salah ketik. Dengan Python, panitia dapat menulis program yang membaca file, membersihkan nilai kosong dengan aturan tertentu, menghitung rata-rata, dan menyimpan laporan dalam waktu beberapa detik. Jika data berubah, program cukup dijalankan ulang tanpa mengulang klik manual.</p>
+<h2>Contoh AI</h2>
+<p>Sebelum data digunakan untuk melatih model AI, Python memeriksa format setiap kolom, mendeteksi nilai yang hilang, memastikan label kelas seimbang, dan memverifikasi tidak ada data duplikat. Pemeriksaan ini ditulis sebagai skrip yang sama persis setiap kali dataset baru tiba, sehingga konsistensi terjaga dan keputusan cleaning dapat diaudit oleh anggota tim lain.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">module_name = "Python untuk AI"
+participant_count = 500
+
+print(module_name)
+print(participant_count)
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li><code>module_name</code> menyimpan teks nama modul.</li>
+<li><code>participant_count</code> menyimpan jumlah peserta sebagai angka.</li>
+<li><code>print()</code> menampilkan informasi agar dapat dilihat pengguna.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Mengira Python dan AI adalah hal yang sama.</strong> Kesalahan ini menyebabkan ekspektasi tidak realistis: seseorang berpikir "saya bisa Python, berarti saya bisa bikin AI". Padahal Python hanya alat; pemahaman data, algoritma, dan evaluasi tetap harus dikuasai secara terpisah.</li>
+<li><strong>Menghafal sintaks tanpa memahami masalah.</strong> Menghafal nama function tidak berguna jika tidak tahu kapan dan kenapa function itu dipakai. Fokus pada pola pikir memecahkan masalah, bukan daftar API.</li>
+<li><strong>Memasang banyak library sebelum tahu kegunaannya.</strong> Memasang puluhan package "agar siap" membuat environment sulit dikelola, meningkatkan risiko konflik versi, dan membingungkan pemula ketika error muncul dari library yang tidak digunakan.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li><strong>Mulai dari pertanyaan, bukan library.</strong> Tentukan dulu masalah yang ingin diselesaikan — "Saya ingin menghitung rata-rata nilai dari file CSV" — baru pilih alat yang tepat. Pendekatan ini mencegah belajar library tanpa arah.</li>
+<li><strong>Gunakan nama variabel yang menjelaskan isi.</strong> Nama seperti <code>average_score</code> atau <code>participant_list</code> membuat kode dapat dibaca tanpa komentar tambahan. Nama seperti <code>x</code> atau <code>data1</code> memaksa pembaca menebak makna.</li>
+<li><strong>Bangun workflow kecil yang dapat diperiksa.</strong> Mulai dari satu langkah yang menghasilkan output terlihat, lalu tambahkan langkah berikutnya secara bertahap. Pendekatan ini membuat debugging lebih mudah karena setiap tahap dapat diuji secara terpisah.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Buat dua variabel untuk nama dataset dan jumlah baris, lalu tampilkan keduanya.</p>
+<h2>Ringkasan</h2>
+<p>Python adalah bahasa orkestrasi utama dalam workflow AI, bukan karena kecepatan eksekusinya, tetapi karena keterbacaan, ekosistem data yang matang, dan kemampuan menghubungkan berbagai tahap dari dataset mentah hingga hasil evaluasi. Python bukan AI itu sendiri — ia adalah alat untuk mengekspresikan proses secara konsisten dan dapat diulang. Setiap konsep sintaks yang akan dipelajari di chapter berikutnya memiliki tujuan yang jelas dalam pipeline data dan AI.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Setelah memahami posisi Python, langkah berikutnya adalah menyiapkan ruang kerja yang konsisten. Kita akan belajar tentang environment, virtual environment, notebook, dan cara mengelola package — fondasi teknis agar kode dapat berjalan di mana pun.</p>
+<hr>
+<h1>Chapter 2 — Development Environment</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Mengenali Python, terminal, VS Code, virtual environment, Jupyter, dan Colab.</li>
+<li>Menjalankan program <code>.py</code> dan cell notebook.</li>
+<li>Mengelola package dasar dengan <code>pip</code> dan <code>requirements.txt</code>.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Kode yang benar secara logika tetap tidak berjalan jika environment salah. Ini adalah sumber frustrasi paling umum bagi pemula Python: mereka menulis kode yang seharusnya bekerja, tetapi muncul error <code>ModuleNotFoundError</code> karena package terpasang di interpreter berbeda, atau error sintaks karena versi Python tidak sesuai. Banyak pemula mengira error instalasi adalah kegagalan coding, padahal masalahnya hanya lokasi file, interpreter yang salah, atau package yang belum terinstal di environment aktif.</p>
+<p>Lingkungan pengembangan yang rapi tidak hanya mencegah error, tetapi juga memastikan reproduktibilitas. Dalam project AI, kode yang berhasil di satu laptop sering gagal di laptop lain karena perbedaan versi library. Mengelola environment sejak awal menghemat waktu berjam-jam yang seharusnya bisa dipakai untuk menganalisis data atau membangun model.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Project AI menggunakan banyak library dengan versi yang spesifik. Versi Pandas yang berbeda dapat mengubah perilaku function yang sama. Versi PyTorch atau TensorFlow yang berbeda dapat menghasilkan output numerik yang tidak persis sama meskipun kode identik. Environment menjaga setiap project memiliki ruang sendiri sehingga upgrade satu eksperimen tidak merusak eksperimen lain yang berjalan bersamaan.</p>
+<p>Konsep ini analog dengan containerisasi pada deployment: environment lokal yang terisolasi adalah langkah pertama menuju pipeline yang dapat dijalankan di server produksi tanpa konfigurasi ulang.</p>
+<h2>Analogi</h2>
+<p>Virtual environment seperti kotak alat khusus untuk satu project. Bayangkan seorang mekanik yang menangani mobil balap dan sepeda motor secara bergantian. Jika semua alat tercampur dalam satu kotak besar, ia akan kesulitan menemukan kunci pas yang tepat — dan mungkin secara tidak sengaja menggunakan oli yang salah. Virtual environment memisahkan "kotak alat" setiap project: package NumPy versi 1.24 untuk project A dan NumPy versi 2.0 untuk project B dapat hidup berdampingan tanpa konflik.</p>
+<p>Jika project A membutuhkan Pandas versi tertentu dan project B membutuhkan versi yang lebih baru, environment terpisah memungkinkan keduanya berjalan di komputer yang sama tanpa saling merusak. Inilah mengapa virtual environment adalah praktik standar, bukan opsional.</p>
+<h2>Penjelasan Konsep</h2>
+<p>Environment kerja Python terdiri dari beberapa lapisan yang perlu dipahami secara terpisah:</p>
+<ul>
+<li><strong>Python interpreter:</strong> program yang menjalankan kode. Bisa Python 3.10, 3.11, atau 3.12 — setiap versi memiliki perbedaan sintaks dan dukungan library. Mengetahui versi Python aktif adalah langkah pertama sebelum debugging.</li>
+<li><strong>Terminal atau command prompt:</strong> antarmuka teks untuk memberi perintah kepada sistem operasi. Di sinilah kita menjalankan <code>python</code>, <code>pip</code>, dan <code>git</code>.</li>
+<li><strong>VS Code atau editor teks:</strong> tempat menulis dan mengedit file <code>.py</code>. Editor modern menyediakan syntax highlighting, auto-completion, dan integrated terminal yang mempercepat pengembangan.</li>
+<li><strong>Virtual environment:</strong> direktori terisolasi yang berisi Python interpreter dan package khusus untuk satu project. Dibuat dengan <code>python -m venv .venv</code> dan diaktifkan dengan perintah <code>source .venv/bin/activate</code> (Linux/macOS) atau <code>.venv\Scripts\Activate.ps1</code> (Windows PowerShell).</li>
+<li><strong>Package manager (<code>pip</code>):</strong> alat untuk memasang, memperbarui, dan menghapus library Python. <code>pip install numpy</code> memasang NumPy ke environment yang sedang aktif.</li>
+<li><strong>Jupyter Notebook dan Google Colab:</strong> lingkungan interaktif berbasis browser. Notebook menggabungkan kode, output, dan catatan dalam satu dokumen — ideal untuk eksplorasi dan visualisasi bertahap. Colab adalah notebook di cloud dengan environment siap pakai dan akselerator GPU (meskipun GPU belum diperlukan di modul ini).</li>
+</ul>
+<p>Perbedaan antara file <code>.py</code> dan notebook perlu dipahami sejak awal. File <code>.py</code> adalah program utuh yang dijalankan dari awal hingga akhir — cocok untuk workflow yang perlu diulang secara konsisten. Notebook adalah dokumen campuran yang dieksekusi per cell — cocok untuk eksplorasi, tetapi memerlukan disiplin karena cell dapat dijalankan dalam urutan berbeda, menghasilkan state yang sulit dilacak.</p>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">Folder project
+├── .venv/            environment lokal
+├── data/             dataset
+├── notebooks/        eksplorasi
+├── src/              file .py
+└── requirements.txt  daftar package
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Seorang peserta mengerjakan tugas kelas yang membutuhkan Pandas versi 1.5 untuk membaca file Excel. Dua minggu kemudian, ia memulai project baru yang membutuhkan Pandas versi 2.0 untuk fitur terbaru. Tanpa virtual environment, meng-upgrade Pandas untuk project baru akan merusak project lama. Dengan virtual environment, kedua project tetap berjalan — masing-masing dengan versi Pandas yang sesuai — tanpa saling memengaruhi.</p>
+<h2>Contoh AI</h2>
+<p>Dalam project AI, notebook sering digunakan untuk mengeksplorasi dataset baru: melihat distribusi nilai, mendeteksi missing value, dan menguji ide cleaning. Namun, setelah eksplorasi selesai, langkah-langkah yang sudah stabil perlu dipindahkan ke file <code>.py</code> agar dapat dijalankan secara otomatis sebagai pipeline. Notebook menyimpan catatan dan visualisasi; file <code>.py</code> menyimpan logika yang dapat diuji dan diulang.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-bash">python -m venv .venv
+
+# macOS/Linux
+source .venv/bin/activate
+
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
+
+python -m pip install numpy pandas
+python -m pip freeze &gt; requirements.txt
+python app.py
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li><code>python -m venv .venv</code> membuat environment bernama <code>.venv</code> di folder saat ini.</li>
+<li>Perintah <code>activate</code> mengalihkan interpreter ke environment tersebut — semua perintah <code>python</code> dan <code>pip</code> selanjutnya akan menggunakan environment ini.</li>
+<li><code>python -m pip install</code> memasang package pada interpreter yang sedang aktif.</li>
+<li><code>pip freeze &gt; requirements.txt</code> mencatat semua package beserta versinya ke file teks — file ini dapat dibagikan agar orang lain dapat membangun environment yang sama persis.</li>
+<li><code>python app.py</code> menjalankan file program menggunakan interpreter environment saat ini.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Menjalankan <code>pip</code> dari interpreter berbeda.</strong> Memasang package dengan <code>pip install</code> tanpa mengaktifkan environment terlebih dahulu akan memasang package ke interpreter global — package tidak akan tersedia saat environment aktif. Selalu periksa (<code>which python</code>) interpreter mana yang sedang digunakan.</li>
+<li><strong>Meng-commit folder <code>.venv</code> ke git.</strong> Folder environment bersifat lokal dan spesifik untuk sistem operasi. Cukup commit file <code>requirements.txt</code>; orang lain akan membuat environment mereka sendiri dari daftar tersebut.</li>
+<li><strong>Menganggap cell notebook selalu berjalan dari atas ke bawah.</strong> Notebook memungkinkan cell dieksekusi dalam urutan apa pun. Jika cell di tengah diubah dan dijalankan ulang tanpa menjalankan cell sebelumnya, state program menjadi tidak konsisten. Jalankan "Restart &amp; Run All" secara berkala untuk memastikan hasil dapat direproduksi dari awal.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li><strong>Gunakan satu virtual environment per project.</strong> Setiap project memiliki kebutuhan dependency yang berbeda. Mencampurnya dalam satu environment global adalah resep konflik versi.</li>
+<li><strong>Jalankan notebook dari awal secara berkala.</strong> Menggunakan "Restart &amp; Run All" memastikan tidak ada cell yang bergantung pada state tersembunyi. Jika kode gagal dijalankan dari awal, maka urutan atau dependensi antar-cell perlu diperbaiki.</li>
+<li><strong>Simpan dependency penting dalam <code>requirements.txt</code>.</strong> File ini adalah kontrak reproduktibilitas. Pastikan untuk memperbaruinya setiap kali menambah atau mengubah package.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Buat folder project, virtual environment, file <code>hello.py</code> yang mencetak <code>"Environment siap"</code>, lalu jalankan dari terminal. Jika memakai Colab, buat notebook baru dan jalankan <code>print("Environment siap")</code> untuk memverifikasi runtime berfungsi.</p>
+<h2>Ringkasan</h2>
+<p>Environment yang rapi adalah fondasi dari eksperimen yang dapat diulang. Virtual environment, package manager, dan pilihan antara file <code>.py</code> dan notebook bukanlah detail teknis yang dapat diabaikan — mereka adalah alat yang memastikan kode yang berhasil hari ini tetap berhasil minggu depan di laptop yang berbeda. Menguasai environment sejak awal menghemat waktu debugging yang jauh lebih besar di kemudian hari.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Setelah ruang kerja siap, langkah selanjutnya adalah mengubah cara berpikir. Sebelum menulis satu baris kode, kita perlu belajar memecah masalah seperti komputer: input, process, dan output.</p>
+<hr>
+<h1>Chapter 3 — Computational Thinking</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Memetakan masalah menjadi input, process, dan output.</li>
+<li>Menulis langkah solusi sebelum sintaks.</li>
+<li>Membedakan data, aturan proses, dan hasil.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Kesalahan paling umum pemula bukanlah salah menulis kode, tetapi menulis kode untuk masalah yang belum dipahami. Mereka melihat soal, langsung mengetik <code>if</code> dan <code>for</code>, lalu bingung ketika hasilnya salah. Program yang baik dimulai dari cara berpikir, bukan dari mengetik. Jika proses belum jelas, kode hanya membuat kebingungan berjalan lebih cepat.</p>
+<p>Computational thinking adalah kemampuan memecah masalah menjadi langkah-langkah yang cukup kecil dan eksplisit sehingga komputer dapat menjalankannya. Kemampuan ini tidak tergantung pada bahasa pemrograman — ia berlaku di Python, JavaScript, atau bahasa apa pun. Inilah mengapa computational thinking diajarkan sebelum sintaks: sintaks berubah, tetapi cara berpikir ini bertahan.</p>
+<p>Dalam konteks AI, computational thinking menjadi semakin penting. Pipeline AI tidak pernah berupa satu langkah besar; ia terdiri dari puluhan langkah kecil: membaca data, memvalidasi format, membersihkan missing value, mengekstrak fitur, melatih model, mengevaluasi, dan menyajikan hasil. Setiap langkah harus didefinisikan secara eksplisit dengan input, proses, output, dan failure case masing-masing.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Pipeline AI adalah contoh sempurna dari computational thinking dalam skala besar. Sebuah sistem rekomendasi tidak langsung memberikan rekomendasi — ia menerima input (riwayat pengguna, katalog produk), menjalankan serangkaian proses (filter, skor, peringkat), dan menghasilkan output (daftar rekomendasi). Jika salah satu langkah menerima data yang tidak sesuai format, seluruh pipeline dapat menghasilkan output yang salah tanpa peringatan.</p>
+<p>Cara berpikir input-proses-output berlaku dari preprocessing data yang paling sederhana — membersihkan string — sampai inference model yang kompleks. Memahami hal ini membantu peserta melihat bahwa AI bukanlah kotak hitam, melainkan rangkaian proses yang dapat dipecah, diperiksa, dan diperbaiki satu per satu.</p>
+<h2>Analogi</h2>
+<p>Mesin jus menerima buah sebagai input, memotong dan memblender sebagai process, lalu menghasilkan jus sebagai output. Mesin tidak akan bekerja jika inputnya berupa batu — tetapi komputer juga tidak akan "tahu" bahwa batu bukanlah buah. Komputer membutuhkan instruksi yang eksplisit: "periksa apakah input adalah buah, tolak jika bukan, baru proses."</p>
+<p>Manusia dapat mengerti maksud dari perintah yang kabur — "hitung rata-rata nilai" — dan secara otomatis menangani kasus khusus seperti data kosong. Komputer tidak memiliki kemampuan ini. Ia menjalankan instruksi sesuai urutan dan data yang diberikan, tanpa interpretasi. Inilah mengapa setiap proses harus didefinisikan dengan batas yang jelas: apa yang masuk, apa yang terjadi, apa yang keluar, dan apa yang dilakukan jika terjadi kondisi tidak terduga.</p>
+<h2>Penjelasan Konsep</h2>
+<p>Computational thinking terdiri dari empat pilar yang saling melengkapi. <strong>Decomposition</strong> adalah kemampuan memecah masalah besar menjadi bagian kecil yang dapat dikelola — misalnya, menghitung rata-rata nilai dapat dipecah menjadi: baca data, jumlahkan semua nilai, hitung jumlah data, bagi total dengan jumlah. <strong>Pattern recognition</strong> adalah kemampuan melihat kesamaan antar-masalah — misalnya, menghitung rata-rata dan menghitung persentase keduanya membutuhkan operasi pembagian. <strong>Abstraction</strong> adalah kemampuan memilah informasi yang relevan dan mengabaikan sisanya — untuk menghitung rata-rata, nama peserta tidak relevan; hanya nilai numerik yang diperlukan. <strong>Algorithmic thinking</strong> adalah kemampuan menyusun langkah-langkah dalam urutan yang deterministik dan dapat diulang.</p>
+<p>Komputer tidak "mengerti maksud" seperti rekan manusia. Ia menjalankan instruksi sesuai urutan dan data yang diberikan. Jika program meminta <code>total_scores / len(scores)</code> ketika <code>scores</code> kosong, komputer akan menghasilkan error — bukan "menyadari" bahwa seharusnya tidak melakukan pembagian. Menulis pseudocode dalam bahasa biasa sebelum coding membantu mendeteksi kelemahan logika lebih awal. Pseudocode adalah versi kasar dari solusi yang ditulis dalam bahasa manusia, bukan bahasa pemrograman:</p>
+<pre><code class="language-text">Input: daftar nilai peserta
+Proses:
+  1. Jika daftar kosong, kembalikan pesan "belum ada data"
+  2. Jumlahkan semua nilai
+  3. Hitung jumlah peserta
+  4. Bagi total dengan jumlah peserta
+Output: rata-rata nilai atau pesan error
+</code></pre>
+<p>Pendekatan ini memisahkan dua keahlian yang berbeda: merancang solusi (computational thinking) dan menerjemahkannya ke sintaks (coding). Dengan memisahkan keduanya, peserta dapat menguji logika solusi tanpa terganggu oleh error sintaks, dan sebaliknya.</p>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">Nilai peserta → validasi → hitung rata-rata → status kelulusan
+     input          process                 output
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Input: harga barang (Rp 20.000) dan jumlah barang (3). Process: kalikan harga dengan jumlah, lalu jumlahkan semua total. Output: total belanja (Rp 60.000). Contoh ini terlihat sepele, tetapi mengandung keputusan desain: apakah jumlah barang selalu bilangan bulat? Apa yang terjadi jika harga tidak tersedia? Keputusan-keputusan kecil inilah yang membedakan program yang robust dari program yang mudah crash.</p>
+<h2>Contoh AI</h2>
+<p>Input dapat berupa dataset teks mentah. Process awal dapat berupa pembersihan teks: menghapus tanda baca, mengubah ke huruf kecil, menghapus kata yang tidak bermakna (stop words). Outputnya adalah dataset bersih yang siap dipelajari oleh model pada modul berikutnya. Setiap langkah pembersihan harus didefinisikan sebagai proses yang eksplisit — bukan "bersihkan teks", melainkan "hapus karakter kecuali huruf dan spasi, lalu ubah ke lowercase".</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">scores = [80, 90, 70]
+average = sum(scores) / len(scores)
+print(average)
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li><code>scores</code> adalah input berupa tiga nilai numerik dalam list.</li>
+<li><code>sum(scores)</code> menjumlahkan seluruh nilai dan <code>len(scores)</code> menghitung jumlah data — keduanya adalah proses.</li>
+<li>Hasil proses disimpan dalam variabel <code>average</code>.</li>
+<li><code>print()</code> menampilkan output agar dapat dilihat oleh pengguna.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Coding sebelum mengetahui output yang diinginkan.</strong> Tanpa tujuan yang jelas, kode cenderung berkembang tanpa arah. Tentukan output yang diharapkan — "saya ingin angka rata-rata" — baru tulis langkah untuk mencapainya.</li>
+<li><strong>Tidak mempertimbangkan input kosong atau salah format.</strong> Program yang hanya berhasil pada data ideal akan gagal di dunia nyata. Data bisa kosong, berisi tipe yang salah, atau memiliki nilai di luar batas yang wajar.</li>
+<li><strong>Menggabungkan semua proses dalam satu langkah besar.</strong> Satu baris kode yang melakukan banyak hal sulit diperiksa dan sulit diperbaiki. Pecah menjadi beberapa baris atau function agar setiap langkah dapat diuji.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li><strong>Tulis contoh input dan expected output.</strong> Sebelum coding, tentukan satu kasus sederhana beserta hasil yang diharapkan. Ini menjadi test case yang memandu implementasi.</li>
+<li><strong>Pecah proses menjadi langkah kecil.</strong> Satu langkah = satu transformasi. Jika sebuah langkah masih terasa rumit, pecah lagi hingga setiap bagian dapat dijelaskan dalam satu kalimat.</li>
+<li><strong>Uji dengan kasus normal dan kasus tidak biasa.</strong> Kasus normal memastikan program bekerja. Kasus tidak biasa — data kosong, data negatif, data sangat besar — memastikan program tidak crash diam-diam.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Tuliskan input-process-output untuk program yang menghitung persentase kehadiran peserta, termasuk keputusan yang diambil jika total pertemuan adalah nol.</p>
+<h2>Ringkasan</h2>
+<p>Computational thinking adalah keterampilan yang memisahkan perancang solusi dari penulis kode. Dengan memecah masalah menjadi input, proses, dan output, serta mempertimbangkan kasus khusus sejak awal, peserta membangun fondasi yang berlaku di bahasa pemrograman mana pun. Kemampuan ini adalah investasi jangka panjang: sintask Python mungkin berubah, tetapi cara berpikir terstruktur tetap relevan di setiap pipeline data dan AI.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Sekarang kita telah memiliki cara berpikir yang terstruktur, langkah selanjutnya adalah menerjemahkan alur tersebut menjadi sintaks Python yang nyata — variabel, tipe data, dan operasi dasar.</p>
+<hr>
