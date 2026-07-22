@@ -298,7 +298,13 @@ const router = {
 
     readParticipantSession() {
         try {
-            return JSON.parse(sessionStorage.getItem("heraiParticipantSession") || "null");
+            const session = JSON.parse(sessionStorage.getItem("heraiParticipantSession") || "null");
+            const expired = session?.expiresAt && new Date(session.expiresAt).getTime() <= Date.now();
+            if (!session?.token || expired) {
+                sessionStorage.removeItem("heraiParticipantSession");
+                return null;
+            }
+            return session;
         } catch {
             return null;
         }
@@ -582,7 +588,7 @@ const router = {
                 return;
             }
 
-            if (path === "/profile" && globalSettings.participantPortalOpen !== true) {
+            if ((path === "/profile" || path === "/participant-login") && globalSettings.participantPortalOpen !== true) {
                 appContent.innerHTML = window.renderPublicNotice({
                     icon: "fa-user-lock",
                     title: "Portal Peserta Belum Dibuka",

@@ -81,7 +81,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-const defaultGASWebAppURL = "https://script.google.com/macros/s/AKfycbxivp4g8mVai8rZcei4w9pblh8s2Kks84CnRshveD_IR69erw_Ffbn_TwithrpNTEj_yw/exec"
+const defaultGASWebAppURL = "https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec"
 
 func main() {
 	defaultPort := getenv("PORT", "8080")

@@ -1,4 +1,4 @@
-const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxivp4g8mVai8rZcei4w9pblh8s2Kks84CnRshveD_IR69erw_Ffbn_TwithrpNTEj_yw/exec';
+const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec';
 
 function sendJson(res, status, payload) {
   res.status(status).setHeader('Content-Type', 'application/json; charset=utf-8');

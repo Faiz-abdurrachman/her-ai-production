@@ -122,13 +122,17 @@ async function checkParticipantStatus(nik, email, btnElement) {
         const response = await fetch(ANNOUNCEMENT_API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: 'getData' }) 
+            body: JSON.stringify({
+                action: 'getPublicParticipantResult',
+                nik,
+                email
+            })
         });
         
         const result = await response.json();
         
         if (result.status === 'success') {
-            const participant = result.data.find(p => String(p.nik || '') == nik && String(p.email || '').toLowerCase() == email);
+            const participant = result.participant;
             
             // Efek deg-degan 2 detik
             setTimeout(() => {

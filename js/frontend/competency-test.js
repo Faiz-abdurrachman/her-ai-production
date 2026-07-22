@@ -18,6 +18,7 @@ const COMPETENCY_API_URL = '/__gas';
 
     let testMode = 'competency';
     let participant = null;
+    let participantToken = '';
     let sessionId = null;
     let questions = [];
     let sections = {};
@@ -44,6 +45,7 @@ const COMPETENCY_API_URL = '/__gas';
 
     function resetRuntime() {
         participant = null;
+        participantToken = '';
         sessionId = null;
         questions = [];
         sections = {};
@@ -77,6 +79,8 @@ const COMPETENCY_API_URL = '/__gas';
                     ? { action: 'retestLogin', nik, access_code: password }
                     : { action: 'participantLogin', nik, password });
                 participant = login.profile;
+                participantToken = login.token || '';
+                if (!participantToken) throw new Error('Backend belum menerbitkan token tes. Deploy Code.gs terbaru.');
                 if (!isReTest() && !['lolos', 'accepted', 'accepted_stage_1'].includes(String(participant.status_seleksi || '').toLowerCase()) &&
                     !['accepted_stage_1', 'competency_test', 'competency_submitted'].includes(String(participant.participant_stage || '').toLowerCase())) {
                     throw new Error('Tes kompetensi hanya untuk peserta yang lolos tahap 1.');
@@ -447,10 +451,13 @@ const COMPETENCY_API_URL = '/__gas';
     }
 
     async function postCompetencyApi(payload) {
+        const authenticatedPayload = participantToken && !payload.participantToken
+            ? { ...payload, participantToken }
+            : payload;
         const response = await fetch(COMPETENCY_API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(authenticatedPayload)
         });
         if (!response.ok) throw new Error('Server tes tidak merespons.');
         const result = await response.json();

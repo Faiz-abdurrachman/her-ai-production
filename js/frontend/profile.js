@@ -6,6 +6,7 @@ const PARTICIPANT_PROFILE_API = '/__gas';
 const PARTICIPANT_SESSION_KEY = 'heraiParticipantSession';
 const PARTICIPANT_LOCAL_KEY = 'heraiParticipantProfiles';
 const PARTICIPANT_PROFILE_DETAILS_VISIBLE = false;
+let latestParticipantAuth = null;
 
 window.initParticipantProfile = function() {
     const authView = document.getElementById('participantAuthView');
@@ -13,10 +14,10 @@ window.initParticipantProfile = function() {
     if (!authView || !dashboardView) return;
 
     const session = readParticipantSession();
-    if (session?.nik) {
-        loadParticipantProfile(session.nik, session.password).then(profile => {
-            if (profile) showParticipantDashboard(profile);
-            else showAuthView();
+    if (session?.nik && session?.token) {
+        showParticipantDashboard(session.profile || {
+            nik: session.nik,
+            nama_lengkap: session.name || 'Peserta HerAI'
         });
     } else {
         showAuthView();
@@ -30,7 +31,7 @@ window.initParticipantLogin = function() {
     if (!loginForm) return;
 
     const existing = readParticipantSession();
-    if (existing?.nik) {
+    if (existing?.nik && existing?.token) {
         window.location.hash = '#/participant-dashboard';
         return;
     }
@@ -58,7 +59,14 @@ window.initParticipantLogin = function() {
         btn.disabled = true;
         try {
             const profile = await loadParticipantProfile(nik, password);
-            saveParticipantSession({ nik, password, name: profile.nama_lengkap || 'Peserta HerAI' });
+            if (!latestParticipantAuth?.token) throw new Error('Backend belum menerbitkan sesi peserta. Deploy Code.gs terbaru.');
+            saveParticipantSession({
+                nik,
+                token: latestParticipantAuth.token,
+                expiresAt: latestParticipantAuth.expiresAt,
+                name: profile.nama_lengkap || 'Peserta HerAI',
+                profile
+            });
             window.__CURRENT_PARTICIPANT_PROFILE__ = profile;
             window.location.hash = '#/participant-dashboard';
         } catch (error) {
@@ -72,25 +80,16 @@ window.initParticipantLogin = function() {
 
 window.initParticipantProfileDashboard = async function() {
     const session = readParticipantSession();
-    if (!session?.nik) {
+    if (!session?.nik || !session?.token || isParticipantSessionExpired(session)) {
+        sessionStorage.removeItem(PARTICIPANT_SESSION_KEY);
         window.location.hash = '#/profile';
         return;
     }
 
-    let profile = window.__CURRENT_PARTICIPANT_PROFILE__;
-    if (!profile?.nik && session.password) {
-        try {
-            profile = await loadParticipantProfile(session.nik, session.password);
-        } catch {
-            profile = {
-                nik: session.nik,
-                nama_lengkap: session.name || 'Peserta HerAI',
-                email: '-',
-                participant_stage: 'registered',
-                status_seleksi: 'pending'
-            };
-        }
-    }
+    const profile = window.__CURRENT_PARTICIPANT_PROFILE__ || session.profile || {
+        nik: session.nik,
+        nama_lengkap: session.name || 'Peserta HerAI'
+    };
 
     const name = profile?.nama_lengkap || session.name || 'Peserta HerAI';
     document.getElementById('participantProfileNameTop') && (document.getElementById('participantProfileNameTop').textContent = name);
@@ -132,12 +131,20 @@ function bindParticipantEvents() {
         btn.disabled = true;
 
         try {
-            const profile = isFirstLogin
-                ? await setParticipantPassword(nik, password)
-                : await loadParticipantProfile(nik, password);
+            if (isFirstLogin) {
+                throw new Error('Pembuatan password mandiri dinonaktifkan. Gunakan password dari panitia.');
+            }
+            const profile = await loadParticipantProfile(nik, password);
 
             if (!profile) throw new Error('Profil tidak ditemukan atau password salah.');
-            saveParticipantSession({ nik, password });
+            if (!latestParticipantAuth?.token) throw new Error('Sesi peserta tidak diterbitkan oleh backend.');
+            saveParticipantSession({
+                nik,
+                token: latestParticipantAuth.token,
+                expiresAt: latestParticipantAuth.expiresAt,
+                name: profile.nama_lengkap || 'Peserta HerAI',
+                profile
+            });
             showParticipantDashboard(profile);
         } catch (error) {
             setProfileMessage(error.message || 'Gagal masuk profil.', true);
@@ -157,11 +164,10 @@ function bindParticipantEvents() {
     document.getElementById('participantProfileForm')?.addEventListener('submit', async (event) => {
         event.preventDefault();
         const session = readParticipantSession();
-        if (!session?.nik || !session?.password) return showAuthView();
+        if (!session?.nik || !session?.token) return showAuthView();
 
         const updates = {
             nik: session.nik,
-            password: session.password,
             nama_lengkap: document.getElementById('editName').value,
             email: document.getElementById('editEmail').value,
             whatsapp: document.getElementById('editWhatsapp').value,
@@ -170,6 +176,11 @@ function bindParticipantEvents() {
         };
         try {
             const profile = await updateParticipantProfile(updates);
+            saveParticipantSession({
+                ...session,
+                name: profile.nama_lengkap || session.name || 'Peserta HerAI',
+                profile
+            });
             showParticipantDashboard(profile);
             alert('Profil berhasil diperbarui.');
         } catch (error) {
@@ -223,24 +234,17 @@ function showParticipantDashboard(profile) {
 async function loadParticipantProfile(nik, password) {
     try {
         const result = await postProfileApi({ action: 'participantLogin', nik, password, user_agent: navigator.userAgent });
-        if (result.status === 'success') return hydrateProfileFromParticipantData(nik, result.profile);
+        if (result.status === 'success') {
+            latestParticipantAuth = {
+                token: result.token || '',
+                expiresAt: result.expires_at || ''
+            };
+            return hydrateProfileFromParticipantData(nik, result.profile);
+        }
         throw new Error(result.message || 'Profil tidak ditemukan atau password salah.');
     } catch (error) {
         if (error?.isApiError) throw error;
-        const local = getLocalProfiles()[nik];
-        if (local?.password && local.password === password) return hydrateProfileFromParticipantData(nik, stripLocalPassword(local));
         throw new Error('Tidak bisa memuat profil dari database. Pastikan koneksi dan password benar.');
-    }
-}
-
-async function setParticipantPassword(nik, password) {
-    try {
-        const result = await postProfileApi({ action: 'setParticipantPassword', nik, password });
-        if (result.status === 'success') return hydrateProfileFromParticipantData(nik, result.profile);
-        throw new Error(result.message);
-    } catch (error) {
-        if (error?.isApiError) throw error;
-        throw new Error('Password belum bisa dibuat karena database peserta tidak dapat diakses.');
     }
 }
 
@@ -272,18 +276,7 @@ async function postProfileApi(payload) {
 }
 
 async function hydrateProfileFromParticipantData(nik, baseProfile = {}) {
-    const normalizedNik = normalizeNik(nik || baseProfile.nik);
-    try {
-        const result = await postProfileApi({ action: 'getData' });
-        const participants = Array.isArray(result.data) ? result.data : [];
-        const participant = participants.find(item => normalizeNik(item.nik) === normalizedNik);
-        if (participant) {
-            return normalizeParticipantProfile({ ...baseProfile, ...participant });
-        }
-    } catch (error) {
-        console.warn('Gagal hydrate data pendaftaran, memakai data login.', error);
-    }
-    return normalizeParticipantProfile(baseProfile);
+    return normalizeParticipantProfile({ ...baseProfile, nik: normalizeNik(nik || baseProfile.nik) });
 }
 
 function normalizeParticipantProfile(profile = {}) {
@@ -313,10 +306,9 @@ function getLocalProfiles() {
     }
 }
 
-function createLocalPlaceholder(nik, password, persist = true) {
+function createLocalPlaceholder(nik, persist = true) {
     const profile = {
         nik,
-        password,
         nama_lengkap: 'Peserta HerAI',
         email: '',
         whatsapp: '',
@@ -343,6 +335,10 @@ function stripLocalPassword(profile) {
 
 function saveParticipantSession(session) {
     sessionStorage.setItem(PARTICIPANT_SESSION_KEY, JSON.stringify(session));
+}
+
+function isParticipantSessionExpired(session) {
+    return Boolean(session?.expiresAt && new Date(session.expiresAt).getTime() <= Date.now());
 }
 
 function readParticipantSession() {

@@ -8,6 +8,39 @@
     'use strict';
 
     const GLOBAL_SETTINGS_KEY = 'heraiGlobalSettings';
+    const PARTICIPANT_SESSION_KEY = 'heraiParticipantSession';
+
+    installGasParticipantAuthTransport();
+
+    function installGasParticipantAuthTransport() {
+        if (window.__HERAI_GAS_PARTICIPANT_AUTH_FETCH_INSTALLED__) return;
+        window.__HERAI_GAS_PARTICIPANT_AUTH_FETCH_INSTALLED__ = true;
+        const nativeFetch = window.fetch.bind(window);
+
+        window.fetch = function(input, options = {}) {
+            try {
+                const requestUrl = new URL(typeof input === 'string' ? input : input.url, window.location.href);
+                const method = String(options.method || (typeof input !== 'string' && input.method) || 'GET').toUpperCase();
+                if (requestUrl.pathname !== '/__gas' || method !== 'POST' || typeof options.body !== 'string') {
+                    return nativeFetch(input, options);
+                }
+                const payload = JSON.parse(options.body || '{}');
+                let participantSession = null;
+                try {
+                    participantSession = JSON.parse(sessionStorage.getItem(PARTICIPANT_SESSION_KEY) || 'null');
+                } catch {
+                    participantSession = null;
+                }
+                if (participantSession?.token && !payload.participantToken) {
+                    payload.participantToken = participantSession.token;
+                }
+                return nativeFetch(input, { ...options, body: JSON.stringify(payload) });
+            } catch {
+                return nativeFetch(input, options);
+            }
+        };
+    }
+
     const DEFAULT_GLOBAL_SETTINGS = {
         registrationOpen: true,
         afirmasiOpen: true,

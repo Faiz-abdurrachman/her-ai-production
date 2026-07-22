@@ -7,6 +7,11 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
+// Load the local .env without requiring an extra dependency. This keeps
+// `node server.js` usable directly while allowing shell environment variables
+// to take precedence over values from the file.
+loadDotEnv(path.join(__dirname, '.env'));
+
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || '127.0.0.1';
 const DEBUG_LOG_PATH = path.join(__dirname, '.cursor', 'debug-86a842.log');
@@ -17,7 +22,8 @@ const PARTICIPANT_ACTIVITY_PATH = path.join(__dirname, '.cursor', 'participant-a
 const COMPETENCY_SESSIONS_PATH = path.join(__dirname, '.cursor', 'competency-sessions.json');
 const PROJECT_SUBMISSIONS_PATH = path.join(__dirname, '.cursor', 'project-submissions.json');
 const GAS_WEB_APP_URL = process.env.GAS_WEB_APP_URL || '';
-const PUBLIC_PARTICIPANTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/120NQtFqErJiIfITlPfVo8wV6G0_79qFKMTaptxNF-RA/export?format=csv';
+const ENABLE_LOCAL_GAS_FALLBACK = process.env.HERAI_ENABLE_LOCAL_GAS_FALLBACK === 'true';
+const PUBLIC_PARTICIPANTS_CSV_URL = process.env.PUBLIC_PARTICIPANTS_CSV_URL || '';
 
 const TEST_PARTICIPANT = {
     rowId: 'TEST-001',
@@ -67,6 +73,27 @@ const TEST_PARTICIPANT = {
 const TEST_PASSWORD = 'herai2026';
 
 const TEST_COMPETENCY_QUESTIONS = buildTestCompetencyQuestions();
+
+function loadDotEnv(filePath) {
+    try {
+        const content = fs.readFileSync(filePath, 'utf8');
+        for (const rawLine of content.split(/\r?\n/)) {
+            const line = rawLine.trim();
+            if (!line || line.startsWith('#')) continue;
+            const separator = line.indexOf('=');
+            if (separator <= 0) continue;
+            const key = line.slice(0, separator).trim();
+            let value = line.slice(separator + 1).trim();
+            if ((value.startsWith('"') && value.endsWith('"')) ||
+                (value.startsWith("'") && value.endsWith("'"))) {
+                value = value.slice(1, -1);
+            }
+            if (process.env[key] === undefined) process.env[key] = value;
+        }
+    } catch (error) {
+        if (error.code !== 'ENOENT') console.warn(`⚠️ Gagal membaca .env: ${error.message}`);
+    }
+}
 
 // MIME types
 const mimeTypes = {
@@ -270,7 +297,7 @@ const server = http.createServer((req, res) => {
 
 function proxyGasRequest(body, res) {
     if (!GAS_WEB_APP_URL) {
-        if (handleLocalGasFallback(body, res)) return;
+        if (ENABLE_LOCAL_GAS_FALLBACK && handleLocalGasFallback(body, res)) return;
         res.writeHead(502, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ status: 'error', message: 'GAS_WEB_APP_URL belum dikonfigurasi.' }));
         return;
@@ -279,7 +306,7 @@ function proxyGasRequest(body, res) {
     try {
         target = new URL(GAS_WEB_APP_URL);
     } catch {
-        if (handleLocalGasFallback(body, res)) return;
+        if (ENABLE_LOCAL_GAS_FALLBACK && handleLocalGasFallback(body, res)) return;
         res.writeHead(502, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ status: 'error', message: 'GAS_WEB_APP_URL tidak valid.' }));
         return;
@@ -303,7 +330,7 @@ function proxyGasRequest(body, res) {
                 return;
             }
             if (!looksLikeJson(responseBody)) {
-                if (handleLocalGasFallback(body, res)) return;
+                if (ENABLE_LOCAL_GAS_FALLBACK && handleLocalGasFallback(body, res)) return;
             }
             res.writeHead(gasRes.statusCode || 200, {
                 'Content-Type': gasRes.headers['content-type'] || 'application/json',
@@ -314,7 +341,7 @@ function proxyGasRequest(body, res) {
     });
 
     request.on('error', error => {
-        if (handleLocalGasFallback(body, res)) return;
+        if (ENABLE_LOCAL_GAS_FALLBACK && handleLocalGasFallback(body, res)) return;
         res.writeHead(502, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ status: 'error', message: error.message }));
     });
@@ -379,7 +406,7 @@ function proxyGasRedirect(location, body, res) {
         });
         redirectRes.on('end', () => {
             if (!looksLikeJson(responseBody)) {
-                if (handleLocalGasFallback(body, res)) return;
+                if (ENABLE_LOCAL_GAS_FALLBACK && handleLocalGasFallback(body, res)) return;
             }
             res.writeHead(redirectRes.statusCode || 200, {
                 'Content-Type': redirectRes.headers['content-type'] || 'application/json',

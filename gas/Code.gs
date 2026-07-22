@@ -10,8 +10,18 @@
  * 6. Deploy -> Web app -> Execute as Me -> Anyone with link.
  */
 
-const SPREADSHEET_ID = '120NQtFqErJiIfITlPfVo8wV6G0_79qFKMTaptxNF-RA';
+const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
+const AUTH_TOKEN_TTL_SECONDS = {
+  participant: 12 * 60 * 60,
+  retest: 4 * 60 * 60
+};
+const LEGACY_PASSWORD_PEPPERS = [
+  '120NQtFqErJiIfITlPfVo8wV6G0_79qFKMTaptxNF-RA',
+  '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w'
+];
+// Legacy cohort reference from the senior handoff. Existing ParticipantAccounts
+// remain authoritative and are never deactivated merely for not being in this list.
 const TARGET_PARTICIPANT_PORTAL_EMAILS = [
   'sulyastrianggai@gmail.com',
   'rlputeri228@gmail.com',
@@ -175,7 +185,7 @@ const SCHEMA = {
   [SHEETS.participantDashboardJourney]: ['title', 'subtitle', 'progress', 'icon', 'accent', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardEvents]: ['day', 'month', 'title', 'time', 'url', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardLeaderboard]: ['rank', 'nik', 'name', 'points', 'is_active'],
-  [SHEETS.participantAccounts]: ['account_id', 'nik', 'username', 'generated_password', 'password_status', 'nama_lengkap', 'email', 'whatsapp', 'participant_rowId', 'participant_stage', 'status_seleksi', 'created_at', 'updated_at', 'created_by'],
+  [SHEETS.participantAccounts]: ['account_id', 'nik', 'username', 'generated_password', 'password_hash', 'password_status', 'access_status', 'nama_lengkap', 'email', 'whatsapp', 'participant_rowId', 'participant_stage', 'status_seleksi', 'created_at', 'updated_at', 'created_by', 'last_login_at', 'password_changed_at'],
   [SHEETS.participantActivity]: ['activity_id', 'timestamp', 'nik', 'nama_lengkap', 'activity_type', 'page', 'module_id', 'lesson_id', 'activity', 'score', 'total', 'payload_json', 'user_agent', 'session_id']
 };
 
@@ -183,15 +193,16 @@ function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents || '{}');
     const action = payload.action || 'register';
+    authorizeGasAction(action, payload);
     const routes = {
       register: () => registerParticipant(payload),
       participantLogin: () => participantLogin(payload),
-      setParticipantPassword: () => setParticipantPassword(payload),
       updateParticipantProfile: () => updateParticipantProfile(payload),
       provisionParticipantAccounts: () => provisionParticipantAccounts(payload),
       getParticipantAccounts: () => ({ status: 'success', accounts: getRows(SHEETS.participantAccounts) }),
       recordParticipantActivity: () => recordParticipantActivity(payload),
       getData: () => getParticipants(),
+      getPublicParticipantResult: () => getPublicParticipantResult(payload),
       updateStatus: () => updateParticipantStatus(payload),
       updateScore: () => updateScore(payload),
       runAiAnalysis: () => runAiAnalysis(payload),
@@ -246,6 +257,97 @@ function doPost(e) {
 
 function doGet() {
   return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.1' });
+}
+
+function authorizeGasAction(action, payload) {
+  const participantActions = [
+    'updateParticipantProfile',
+    'recordParticipantActivity',
+    'getParticipantDashboardData',
+    'startCompetencySession',
+    'heartbeatCompetencySession',
+    'saveCompetencyAnswer',
+    'submitCompetencyTest',
+    'startReTestSession',
+    'heartbeatReTestSession',
+    'saveReTestAnswer',
+    'submitReTest'
+  ];
+  if (participantActions.indexOf(action) >= 0) {
+    const claims = requireParticipantToken(payload);
+    const retestActions = ['startReTestSession', 'heartbeatReTestSession', 'saveReTestAnswer', 'submitReTest'];
+    const normalActions = ['updateParticipantProfile', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest'];
+    if (retestActions.indexOf(action) >= 0 && claims.scope !== 'retest') {
+      throw new Error('Sesi Re-Test tidak valid. Silakan login ulang.');
+    }
+    if (normalActions.indexOf(action) >= 0 && claims.scope !== 'participant') {
+      throw new Error('Sesi peserta tidak valid. Silakan login ulang.');
+    }
+    const requestedNik = String(payload.nik || '').replace(/\D/g, '');
+    if (requestedNik && requestedNik !== String(claims.sub || '')) {
+      throw new Error('Sesi tidak cocok dengan NIK yang diminta.');
+    }
+    payload.nik = String(claims.sub || '');
+    payload.__auth = claims;
+    return;
+  }
+}
+
+function requireParticipantToken(payload) {
+  const claims = verifyAuthToken(payload.participantToken || payload.authToken || '');
+  if (!claims || claims.type !== 'participant') {
+    throw new Error('Sesi peserta tidak valid atau sudah kedaluwarsa.');
+  }
+  return claims;
+}
+
+function issueAuthToken(type, subject, details, ttlSeconds) {
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  const claims = Object.assign({
+    type: type,
+    sub: String(subject || ''),
+    iat: nowSeconds,
+    exp: nowSeconds + Number(ttlSeconds || AUTH_TOKEN_TTL_SECONDS[type] || 3600),
+    nonce: Utilities.getUuid()
+  }, details || {});
+  const encoded = Utilities.base64EncodeWebSafe(JSON.stringify(claims), Utilities.Charset.UTF_8).replace(/=+$/g, '');
+  const signature = bytesToHex(Utilities.computeHmacSha256Signature(encoded, getAuthTokenSecret()));
+  return {
+    token: encoded + '.' + signature,
+    expires_at: new Date(claims.exp * 1000).toISOString()
+  };
+}
+
+function verifyAuthToken(token) {
+  const parts = String(token || '').split('.');
+  if (parts.length !== 2) return null;
+  const expected = bytesToHex(Utilities.computeHmacSha256Signature(parts[0], getAuthTokenSecret()));
+  if (!safeStringEquals(expected, parts[1])) return null;
+  try {
+    const claims = JSON.parse(Utilities.newBlob(Utilities.base64DecodeWebSafe(parts[0])).getDataAsString());
+    if (!claims.sub || Number(claims.exp || 0) <= Math.floor(Date.now() / 1000)) return null;
+    return claims;
+  } catch (error) {
+    return null;
+  }
+}
+
+function getAuthTokenSecret() {
+  const properties = PropertiesService.getScriptProperties();
+  let secret = properties.getProperty('AUTH_TOKEN_SECRET');
+  if (secret) return secret;
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    secret = properties.getProperty('AUTH_TOKEN_SECRET');
+    if (!secret) {
+      secret = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
+      properties.setProperty('AUTH_TOKEN_SECRET', secret);
+    }
+    return secret;
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function getParticipantDashboardData(payload) {
@@ -354,6 +456,119 @@ function ensureParticipantBackendSchema() {
   });
   SpreadsheetApp.flush();
   return { status: 'success', message: 'Participant backend schema ready.' };
+}
+
+/**
+ * Jalankan sekali dari Apps Script editor setelah deploy versi auth terbaru.
+ * Fungsi ini TIDAK membuat atau mengganti password. Password existing di
+ * ParticipantAccounts hanya di-hash ulang ke pepper stabil dan disinkronkan
+ * ke baris peserta yang sudah ditautkan.
+ */
+function migrateExistingParticipantAccountCredentials() {
+  ensureParticipantBackendSchema();
+  getPasswordPepper();
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const accountSheet = getSheet(SHEETS.participantAccounts);
+    const participantSheet = getSheet(SHEETS.participants);
+    const accountValues = accountSheet.getDataRange().getValues();
+    const participantValues = participantSheet.getDataRange().getValues();
+    if (accountValues.length <= 1) {
+      return { status: 'success', migrated: 0, activated: 0, skipped: 0, total: 0 };
+    }
+
+    const accountHeaders = accountValues[0];
+    const participantHeaders = participantValues[0];
+    const accountIndex = indexHeaders(accountHeaders);
+    const participantIndex = indexHeaders(participantHeaders);
+    const participantByRowId = {};
+    const participantByNik = {};
+    participantValues.slice(1).forEach(function(row, index) {
+      const sheetRowIndex = index + 1;
+      const rowId = String(row[participantIndex.rowId] || '');
+      const nik = String(row[participantIndex.nik] || '').replace(/\D/g, '');
+      if (rowId) participantByRowId[rowId] = sheetRowIndex;
+      if (nik && participantByNik[nik] === undefined) participantByNik[nik] = sheetRowIndex;
+    });
+
+    const passwordHashColumn = accountValues.slice(1).map(function(row) {
+      return [row[accountIndex.password_hash] || ''];
+    });
+    const accessStatusColumn = accountValues.slice(1).map(function(row) {
+      return [row[accountIndex.access_status] || ''];
+    });
+    const accountUpdatedColumn = accountValues.slice(1).map(function(row) {
+      return [row[accountIndex.updated_at] || ''];
+    });
+    const participantPasswordColumn = participantValues.slice(1).map(function(row) {
+      return [row[participantIndex.participant_password] || ''];
+    });
+    const participantUpdatedColumn = participantValues.slice(1).map(function(row) {
+      return [row[participantIndex.profile_updated_at] || ''];
+    });
+
+    let migrated = 0;
+    let activated = 0;
+    let skipped = 0;
+    const now = new Date().toISOString();
+    accountValues.slice(1).forEach(function(row, index) {
+      const nik = String(row[accountIndex.nik] || row[accountIndex.username] || '').replace(/\D/g, '');
+      const linkedRowId = String(row[accountIndex.participant_rowId] || '');
+      const participantRowIndex = participantByRowId[linkedRowId] !== undefined
+        ? participantByRowId[linkedRowId]
+        : participantByNik[nik];
+      if (participantRowIndex === undefined) {
+        skipped += 1;
+        return;
+      }
+      if (!String(row[accountIndex.access_status] || '').trim()) {
+        accessStatusColumn[index][0] = 'active';
+        activated += 1;
+      }
+      const password = String(row[accountIndex.generated_password] || '');
+      if (password) {
+        const stableHash = hashPasswordValue(password);
+        passwordHashColumn[index][0] = stableHash;
+        participantPasswordColumn[participantRowIndex - 1][0] = stableHash;
+        participantUpdatedColumn[participantRowIndex - 1][0] = now;
+        migrated += 1;
+      }
+      accountUpdatedColumn[index][0] = now;
+    });
+
+    setColumnValues(accountSheet, accountIndex.password_hash, passwordHashColumn);
+    setColumnValues(accountSheet, accountIndex.access_status, accessStatusColumn);
+    setColumnValues(accountSheet, accountIndex.updated_at, accountUpdatedColumn);
+    if (participantValues.length > 1) {
+      setColumnValues(participantSheet, participantIndex.participant_password, participantPasswordColumn);
+      setColumnValues(participantSheet, participantIndex.profile_updated_at, participantUpdatedColumn);
+    }
+    SpreadsheetApp.flush();
+    const result = {
+      status: 'success',
+      migrated: migrated,
+      activated: activated,
+      skipped: skipped,
+      total: accountValues.length - 1
+    };
+    Logger.log(JSON.stringify(result));
+    return result;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function indexHeaders(headers) {
+  return headers.reduce(function(index, header, position) {
+    index[String(header || '')] = position;
+    return index;
+  }, {});
+}
+
+function setColumnValues(sheet, zeroBasedColumnIndex, values) {
+  if (zeroBasedColumnIndex === undefined || zeroBasedColumnIndex < 0 || !values.length) return;
+  sheet.getRange(2, zeroBasedColumnIndex + 1, values.length, 1).setValues(values);
 }
 
 function generateParticipantAccountsBatch1() {
@@ -529,12 +744,15 @@ function buildCompetencyQuestionBank() {
 }
 
 function registerParticipant(payload) {
+  const nik = String(payload.nik || '').replace(/\D/g, '');
+  if (!nik || nik.length !== 16) return { status: 'error', message: 'NIK harus 16 digit.' };
+  if (findParticipantByNik(nik)) return { status: 'error', message: 'NIK sudah terdaftar.' };
   const rowId = Date.now();
   addRowObject(SHEETS.participants, {
     rowId,
     created_at: new Date().toISOString(),
     nama_lengkap: payload.nama_lengkap,
-    nik: payload.nik,
+    nik: nik,
     tempat_lahir: payload.tempat_lahir,
     tanggal_lahir: payload.tanggal_lahir,
     whatsapp: payload.whatsapp,
@@ -568,18 +786,71 @@ function registerParticipant(payload) {
 }
 
 function getParticipants() {
-  return { status: 'success', data: mergeAiScreeningResults(getRows(SHEETS.participants)) };
+  const participants = mergeAiScreeningResults(getRows(SHEETS.participants)).map(stripSensitiveParticipant);
+  return { status: 'success', data: participants };
+}
+
+function getPublicParticipantResult(payload) {
+  const nik = String(payload.nik || '').replace(/\D/g, '');
+  const email = normalizeEmail(payload.email);
+  if (nik.length !== 16 || !email) {
+    return { status: 'error', message: 'NIK dan email wajib diisi dengan benar.' };
+  }
+  enforceAttemptLimit('announcement:' + nik, 12, 10 * 60);
+  const participant = getRows(SHEETS.participants).find(function(row) {
+    return String(row.nik || '').replace(/\D/g, '') === nik && normalizeEmail(row.email) === email;
+  });
+  if (!participant) {
+    return { status: 'error', message: 'Data tidak ditemukan. Pastikan NIK dan email sesuai.' };
+  }
+  clearAttemptLimit('announcement:' + nik);
+  return {
+    status: 'success',
+    participant: {
+      rowId: participant.rowId,
+      nama_lengkap: participant.nama_lengkap || '',
+      nik: nik,
+      email: participant.email || '',
+      status_seleksi: participant.status_seleksi || 'pending',
+      participant_stage: participant.participant_stage || 'registered',
+      status_tahap_2: participant.status_tahap_2 || participant.competency_status || 'pending',
+      competency_status: participant.competency_status || participant.status_tahap_2 || 'pending',
+      status_final: participant.status_final || participant.final_status || 'pending',
+      final_status: participant.final_status || participant.status_final || 'pending'
+    }
+  };
 }
 
 function participantLogin(payload) {
-  const participant = findParticipantByNik(payload.nik);
-  if (!participant) return { status: 'error', message: 'NIK belum terdaftar.' };
-  if (!isParticipantEligibleForPortal(participant)) return { status: 'error', message: 'Akses peserta belum aktif untuk akun ini.' };
-  if (!participant.participant_password) return { status: 'needs_password', message: 'Password belum dibuat.' };
-  if (!verifyPasswordValue(participant.participant_password, payload.password)) {
-    return { status: 'error', message: 'Password salah.' };
+  const nik = String(payload.nik || '').replace(/\D/g, '');
+  if (nik.length !== 16) return { status: 'error', message: 'NIK atau password tidak valid.' };
+  enforceAttemptLimit('participant-login:' + nik, 8, 10 * 60);
+  const account = findParticipantAccount(payload.nik);
+  if (!account || !account.account_id) {
+    return { status: 'error', message: 'NIK atau password tidak valid.' };
   }
-  migrateParticipantPasswordIfNeeded(participant, payload.password);
+  if (!isParticipantAccountActive(account)) {
+    return { status: 'error', message: 'Akses akun peserta sedang tidak aktif.' };
+  }
+  const participant = findParticipantForPortalLogin(payload.nik, account);
+  if (!participant) return { status: 'error', message: 'NIK atau password tidak valid.' };
+  const password = String(payload.password || '');
+  const accountHashMatches = verifyPasswordValue(account.password_hash, password);
+  const participantPasswordMatches = verifyPasswordValue(participant.participant_password, password);
+  const accountPasswordMatches = !!(
+    account.generated_password
+    && ['changed', 'revoked'].indexOf(String(account.password_status || '').toLowerCase()) === -1
+    && safeStringEquals(account.generated_password, password)
+  );
+  if (!accountHashMatches && !participantPasswordMatches && !accountPasswordMatches) {
+    return { status: 'error', message: 'NIK atau password tidak valid.' };
+  }
+  synchronizeParticipantCredentials(participant, account, password);
+  clearAttemptLimit('participant-login:' + nik);
+  const auth = issueAuthToken('participant', nik, {
+    scope: 'participant',
+    rowId: String(account.participant_rowId || participant.rowId || '')
+  }, AUTH_TOKEN_TTL_SECONDS.participant);
   recordParticipantActivity({
     nik: participant.nik,
     nama_lengkap: participant.nama_lengkap,
@@ -588,7 +859,12 @@ function participantLogin(payload) {
     activity: 'Peserta login ke dashboard',
     user_agent: payload.user_agent || payload.userAgent || ''
   });
-  return { status: 'success', profile: stripSensitiveParticipant(participant) };
+  return {
+    status: 'success',
+    profile: stripSensitiveParticipant(participant),
+    token: auth.token,
+    expires_at: auth.expires_at
+  };
 }
 
 function provisionParticipantAccounts(payload) {
@@ -597,9 +873,33 @@ function provisionParticipantAccounts(payload) {
   const limit = Math.max(1, Number(payload.limit || 40));
   const offset = Math.max(0, Number(payload.offset || 0));
   const targetEmailSet = getTargetParticipantPortalEmailSet();
-  const eligible = getRows(SHEETS.participants).filter(function(participant) {
+  const existingAccounts = getRows(SHEETS.participantAccounts);
+  const accountByNik = {};
+  existingAccounts.forEach(function(account) {
+    const key = String(account.nik || account.username || '').replace(/\D/g, '');
+    if (key) accountByNik[key] = account;
+  });
+  const eligibleRows = getRows(SHEETS.participants).filter(function(participant) {
     return isTargetParticipantForPortal(participant, targetEmailSet);
   });
+  const eligibleByNik = {};
+  const duplicateCandidates = [];
+  eligibleRows.forEach(function(participant) {
+    const nik = String(participant.nik || '').replace(/\D/g, '');
+    if (!nik) {
+      eligibleByNik['row:' + String(participant.rowId || Utilities.getUuid())] = participant;
+      return;
+    }
+    const existing = accountByNik[nik] || {};
+    const current = eligibleByNik[nik];
+    if (!current || String(existing.participant_rowId || '') === String(participant.rowId || '')) {
+      if (current) duplicateCandidates.push(current);
+      eligibleByNik[nik] = participant;
+    } else {
+      duplicateCandidates.push(participant);
+    }
+  });
+  const eligible = Object.keys(eligibleByNik).map(function(key) { return eligibleByNik[key]; });
   const participants = eligible.slice(offset, offset + limit);
   const matchedEmails = {};
   eligible.forEach(function(participant) {
@@ -609,14 +909,14 @@ function provisionParticipantAccounts(payload) {
   const missingTargets = TARGET_PARTICIPANT_PORTAL_EMAILS.filter(function(email) {
     return !matchedEmails[normalizeEmail(email)];
   });
-  const existingAccounts = getRows(SHEETS.participantAccounts);
-  const accountByNik = {};
-  existingAccounts.forEach(function(account) {
-    const key = String(account.nik || account.username || '').replace(/\D/g, '');
-    if (key) accountByNik[key] = account;
-  });
   const accounts = [];
-  const skipped = [];
+  const skipped = duplicateCandidates.map(function(participant) {
+    return {
+      rowId: participant.rowId,
+      nama_lengkap: participant.nama_lengkap || '',
+      reason: 'NIK duplikat; akun existing/record utama dipertahankan'
+    };
+  });
   participants.forEach(function(participant) {
     const nik = String(participant.nik || '').replace(/\D/g, '');
     if (!nik || nik.length < 8) {
@@ -625,11 +925,12 @@ function provisionParticipantAccounts(payload) {
     }
 
     const existing = accountByNik[nik] || {};
-    const shouldGenerate = forceReset || !participant.participant_password || !existing.generated_password;
-    const password = shouldGenerate ? generateParticipantPassword(12) : existing.generated_password;
+    const hasExistingCredential = !!(existing.generated_password || existing.password_hash);
+    const shouldGenerate = forceReset || !hasExistingCredential;
+    const password = shouldGenerate ? generateParticipantPassword(12) : String(existing.generated_password || '');
     const now = new Date().toISOString();
 
-    if (shouldGenerate) {
+    if (password && (shouldGenerate || !verifyPasswordValueCurrent(participant.participant_password, password))) {
       updateByKey(SHEETS.participants, 'rowId', participant.rowId, {
         participant_password: hashPasswordValue(password),
         participant_stage: normalizeParticipantStage(participant.participant_stage),
@@ -642,7 +943,11 @@ function provisionParticipantAccounts(payload) {
       nik: nik,
       username: nik,
       generated_password: password,
-      password_status: shouldGenerate ? 'generated' : 'existing',
+      password_hash: password && (shouldGenerate || !verifyPasswordValueCurrent(existing.password_hash, password))
+        ? hashPasswordValue(password)
+        : (existing.password_hash || ''),
+      password_status: shouldGenerate ? 'generated' : (existing.password_status || 'existing'),
+      access_status: existing.access_status || 'active',
       nama_lengkap: participant.nama_lengkap || '',
       email: participant.email || '',
       whatsapp: participant.whatsapp || '',
@@ -651,7 +956,9 @@ function provisionParticipantAccounts(payload) {
       status_seleksi: participant.status_seleksi || '',
       created_at: existing.created_at || now,
       updated_at: now,
-      created_by: createdBy
+      created_by: createdBy,
+      last_login_at: existing.last_login_at || '',
+      password_changed_at: shouldGenerate ? now : (existing.password_changed_at || '')
     };
     upsertByKey(SHEETS.participantAccounts, 'nik', nik, account);
     accounts.push(account);
@@ -674,11 +981,78 @@ function provisionParticipantAccounts(payload) {
   };
 }
 
+function provisionParticipantAccountsForApi(payload) {
+  const result = provisionParticipantAccounts(payload);
+  return Object.assign({}, result, {
+    accounts: (result.accounts || []).map(stripParticipantAccountSensitive)
+  });
+}
+
+function getParticipantAccountsForApi() {
+  return {
+    status: 'success',
+    accounts: getRows(SHEETS.participantAccounts).map(stripParticipantAccountSensitive)
+  };
+}
+
+function stripParticipantAccountSensitive(account) {
+  const clone = Object.assign({}, account || {});
+  delete clone.generated_password;
+  delete clone.password_hash;
+  return clone;
+}
+
 function findParticipantAccount(nik) {
   const cleanNik = String(nik || '').replace(/\D/g, '');
   return getRows(SHEETS.participantAccounts).find(function(account) {
     return String(account.nik || account.username || '').replace(/\D/g, '') === cleanNik;
   }) || {};
+}
+
+function findParticipantForPortalLogin(nik, account) {
+  const participants = getRows(SHEETS.participants);
+  const participantRowId = String(account && account.participant_rowId || '');
+  if (participantRowId) {
+    const linkedParticipant = participants.find(function(participant) {
+      return String(participant.rowId || '') === participantRowId;
+    });
+    if (linkedParticipant) return linkedParticipant;
+  }
+  const cleanNik = String(nik || '').replace(/\D/g, '');
+  return participants.find(function(participant) {
+    return String(participant.nik || '').replace(/\D/g, '') === cleanNik;
+  }) || null;
+}
+
+function synchronizeParticipantCredentials(participant, account, password) {
+  const now = new Date().toISOString();
+  const stableHash = hashPasswordValue(password);
+  const participantRowId = String(account && account.participant_rowId || participant.rowId || '');
+  if (!verifyPasswordValueCurrent(participant.participant_password, password)) {
+    const result = participantRowId
+      ? updateByKey(SHEETS.participants, 'rowId', participantRowId, {
+        participant_password: stableHash,
+        profile_updated_at: now
+      })
+      : updateByKey(SHEETS.participants, 'nik', participant.nik, {
+        participant_password: stableHash,
+        profile_updated_at: now
+      });
+    if (result.status !== 'success') {
+      throw new Error('Password akun valid, tetapi sinkronisasi profil peserta gagal.');
+    }
+  }
+  updateByKey(SHEETS.participantAccounts, 'nik', String(account.nik || account.username || ''), {
+    password_hash: verifyPasswordValueCurrent(account.password_hash, password) ? account.password_hash : stableHash,
+    access_status: account.access_status || 'active',
+    last_login_at: now,
+    updated_at: now
+  });
+}
+
+function isParticipantAccountActive(account) {
+  const status = String(account && account.access_status || 'active').trim().toLowerCase();
+  return status === '' || status === 'active' || status === 'enabled';
 }
 
 function normalizeEmail(value) {
@@ -718,15 +1092,22 @@ function isParticipantEligibleForPortal(participant) {
 
 function generateParticipantPassword(length) {
   const size = Math.max(12, Number(length || 12));
-  const groups = ['ABCDEFGHJKLMNPQRSTUVWXYZ', 'abcdefghijkmnopqrstuvwxyz', '23456789', '!@#$%?_-+='];
-  let password = groups.map(group => group.charAt(Math.floor(Math.random() * group.length))).join('');
+  const groups = ['ABCDEFGHJKLMNPQRSTUVWXYZ', 'abcdefghijkmnopqrstuvwxyz', '23456789', '!#$%?_'];
   const all = groups.join('');
+  const seed = Utilities.getUuid() + Utilities.getUuid() + new Date().getTime();
+  const bytes = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, seed).map(function(value) {
+    return value < 0 ? value + 256 : value;
+  });
+  let password = 'H';
+  groups.forEach(function(group, index) {
+    password += group.charAt(bytes[index] % group.length);
+  });
+  let cursor = groups.length;
   while (password.length < size) {
-    password += all.charAt(Math.floor(Math.random() * all.length));
+    password += all.charAt(bytes[cursor % bytes.length] % all.length);
+    cursor += 1;
   }
-  return password.split('').sort(function() {
-    return Math.random() - 0.5;
-  }).join('').slice(0, size);
+  return password.slice(0, size);
 }
 
 function recordParticipantActivity(payload) {
@@ -768,14 +1149,14 @@ function setParticipantPassword(payload) {
 }
 
 function updateParticipantProfile(payload) {
-  if (!payload.nik) return { status: 'error', message: 'NIK wajib diisi.' };
-  const participant = findParticipantByNik(payload.nik);
+  const claims = payload.__auth || requireParticipantToken(payload);
+  const participants = getRows(SHEETS.participants);
+  const participant = participants.find(function(row) {
+    return claims.rowId && String(row.rowId || '') === String(claims.rowId);
+  }) || participants.find(function(row) {
+    return String(row.nik || '').replace(/\D/g, '') === String(claims.sub || '');
+  });
   if (!participant) return { status: 'error', message: 'NIK belum terdaftar.' };
-  if (!participant.participant_password) return { status: 'needs_password', message: 'Password belum dibuat.' };
-  if (!verifyPasswordValue(participant.participant_password, payload.password)) {
-    return { status: 'error', message: 'Session tidak valid. Silakan login ulang.' };
-  }
-  migrateParticipantPasswordIfNeeded(participant, payload.password);
   const allowed = {
     nama_lengkap: payload.nama_lengkap,
     email: payload.email,
@@ -784,8 +1165,10 @@ function updateParticipantProfile(payload) {
     cv_link: payload.cv_link,
     profile_updated_at: new Date().toISOString()
   };
-  updateByKey(SHEETS.participants, 'nik', participant.nik, allowed);
-  const updated = findParticipantByNik(payload.nik);
+  updateByKey(SHEETS.participants, 'rowId', participant.rowId, allowed);
+  const updated = getRows(SHEETS.participants).find(function(row) {
+    return String(row.rowId || '') === String(participant.rowId || '');
+  });
   return { status: 'success', profile: stripSensitiveParticipant(updated) };
 }
 
@@ -800,7 +1183,7 @@ function hashPasswordValue(password) {
   if (!value) return '';
   if (isPasswordHash(value)) return value;
   const salt = Utilities.getUuid().replace(/-/g, '');
-  const pepper = PropertiesService.getScriptProperties().getProperty('PASSWORD_PEPPER') || SPREADSHEET_ID;
+  const pepper = getPasswordPepper();
   const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, salt + ':' + value + ':' + pepper);
   return PASSWORD_HASH_PREFIX + salt + '$' + bytesToHex(digest);
 }
@@ -814,9 +1197,44 @@ function verifyPasswordValue(stored, password) {
   if (parts.length !== 4 || parts[0] !== 'pw' || parts[1] !== '1') return false;
   const salt = parts[2];
   const expected = parts[3];
-  const pepper = PropertiesService.getScriptProperties().getProperty('PASSWORD_PEPPER') || SPREADSHEET_ID;
-  const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, salt + ':' + value + ':' + pepper);
-  return safeStringEquals(expected, bytesToHex(digest));
+  const peppers = [getPasswordPepper()].concat(LEGACY_PASSWORD_PEPPERS).filter(function(pepper, index, values) {
+    return pepper && values.indexOf(pepper) === index;
+  });
+  return peppers.some(function(pepper) {
+    const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, salt + ':' + value + ':' + pepper);
+    return safeStringEquals(expected, bytesToHex(digest));
+  });
+}
+
+function verifyPasswordValueCurrent(stored, password) {
+  const current = String(stored || '');
+  const value = String(password || '');
+  if (!current || !value || !isPasswordHash(current)) return false;
+  const parts = current.split('$');
+  if (parts.length !== 4 || parts[0] !== 'pw' || parts[1] !== '1') return false;
+  const digest = Utilities.computeDigest(
+    Utilities.DigestAlgorithm.SHA_256,
+    parts[2] + ':' + value + ':' + getPasswordPepper()
+  );
+  return safeStringEquals(parts[3], bytesToHex(digest));
+}
+
+function getPasswordPepper() {
+  const properties = PropertiesService.getScriptProperties();
+  let pepper = properties.getProperty('PASSWORD_PEPPER');
+  if (pepper) return pepper;
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    pepper = properties.getProperty('PASSWORD_PEPPER');
+    if (!pepper) {
+      pepper = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
+      properties.setProperty('PASSWORD_PEPPER', pepper);
+    }
+    return pepper;
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function isPasswordHash(value) {
@@ -824,7 +1242,7 @@ function isPasswordHash(value) {
 }
 
 function migrateParticipantPasswordIfNeeded(participant, password) {
-  if (!participant || isPasswordHash(participant.participant_password)) return;
+  if (!participant || verifyPasswordValueCurrent(participant.participant_password, password)) return;
   updateByKey(SHEETS.participants, 'nik', participant.nik, {
     participant_password: hashPasswordValue(password),
     profile_updated_at: new Date().toISOString()
@@ -854,6 +1272,20 @@ function safeStringEquals(a, b) {
     diff |= left.charCodeAt(i) ^ right.charCodeAt(i);
   }
   return diff === 0;
+}
+
+function enforceAttemptLimit(key, maxAttempts, ttlSeconds) {
+  const cache = CacheService.getScriptCache();
+  const cacheKey = 'attempt:' + String(key || '').slice(0, 180);
+  const attempts = Number(cache.get(cacheKey) || 0);
+  if (attempts >= Number(maxAttempts || 8)) {
+    throw new Error('Terlalu banyak percobaan. Silakan tunggu beberapa menit.');
+  }
+  cache.put(cacheKey, String(attempts + 1), Number(ttlSeconds || 600));
+}
+
+function clearAttemptLimit(key) {
+  CacheService.getScriptCache().remove('attempt:' + String(key || '').slice(0, 180));
 }
 
 function findParticipantByNik(nik) {
@@ -961,6 +1393,7 @@ function retestLogin(payload) {
   const accessCode = String(payload.access_code || payload.code || '').trim().toUpperCase();
   if (nik.length !== 16) return { status: 'error', message: 'NIK harus 16 digit.' };
   if (!accessCode) return { status: 'error', message: 'Kode unik wajib diisi.' };
+  enforceAttemptLimit('retest-login:' + nik, 8, 10 * 60);
   const access = getRows(SHEETS.retestAccess).find(row =>
     String(row.nik || '').replace(/\D/g, '') === nik &&
     String(row.access_code || '').trim().toUpperCase() === accessCode &&
@@ -968,8 +1401,15 @@ function retestLogin(payload) {
   );
   if (!access) return { status: 'error', message: 'NIK atau kode unik Re-Test tidak valid.' };
   updateByKey(SHEETS.retestAccess, 'access_id', access.access_id, { used_at: new Date().toISOString() });
+  clearAttemptLimit('retest-login:' + nik);
+  const auth = issueAuthToken('participant', nik, {
+    scope: 'retest',
+    accessId: String(access.access_id || '')
+  }, AUTH_TOKEN_TTL_SECONDS.retest);
   return {
     status: 'success',
+    token: auth.token,
+    expires_at: auth.expires_at,
     profile: {
       nik,
       nama_lengkap: access.nama_lengkap || 'Peserta Re-Test',
@@ -982,6 +1422,7 @@ function startCompetencySession(payload, sessionSheet) {
   sessionSheet = sessionSheet || SHEETS.competencySessions;
   const prefix = sessionSheet === SHEETS.retestSessions ? 'rt' : 'ct';
   const sessionId = payload.session_id || [prefix, payload.nik, Date.now()].join('_');
+  assertCompetencySessionOwner(sessionSheet, sessionId, payload.nik);
   const now = new Date().toISOString();
   const session = {
     session_id: sessionId,
@@ -1014,6 +1455,7 @@ function startCompetencySession(payload, sessionSheet) {
 function heartbeatCompetencySession(payload, sessionSheet) {
   sessionSheet = sessionSheet || SHEETS.competencySessions;
   if (!payload.session_id) return { status: 'error', message: 'session_id wajib diisi.' };
+  assertCompetencySessionOwner(sessionSheet, payload.session_id, payload.nik);
   const updates = {
     status: payload.status || 'started',
     camera_status: payload.camera_status || 'unknown',
@@ -1044,6 +1486,7 @@ function submitCompetencyTest(payload, sessionSheet, options) {
   sessionSheet = sessionSheet || SHEETS.competencySessions;
   options = options || {};
   if (!payload.session_id) return { status: 'error', message: 'session_id wajib diisi.' };
+  assertCompetencySessionOwner(sessionSheet, payload.session_id, payload.nik);
   const now = new Date().toISOString();
   const scoreResult = calculateCompetencyScores(payload);
   const updates = {
@@ -1077,6 +1520,18 @@ function submitCompetencyTest(payload, sessionSheet, options) {
     });
   }
   return { status: 'success', session: { session_id: payload.session_id, ...updates } };
+}
+
+function assertCompetencySessionOwner(sessionSheet, sessionId, nik) {
+  const existing = getRows(sessionSheet).find(function(row) {
+    return String(row.session_id || '') === String(sessionId || '');
+  });
+  if (!existing) return;
+  const existingNik = String(existing.nik || '').replace(/\D/g, '');
+  const requesterNik = String(nik || '').replace(/\D/g, '');
+  if (!requesterNik || existingNik !== requesterNik) {
+    throw new Error('Sesi tes tidak cocok dengan peserta yang sedang login.');
+  }
 }
 
 function calculateCompetencyScores(payload) {
@@ -1438,10 +1893,12 @@ function updateByKey(sheetName, key, value, updates) {
     const cellValue = keyIndex >= 0 ? values[i][keyIndex] : '';
     const rowNumberFallback = sheetName === SHEETS.participants && key === 'rowId' && String(i + 1) === String(value);
     if (String(cellValue) === String(value) || rowNumberFallback) {
+      const newRow = values[i].slice();
       Object.keys(updates).forEach(updateKey => {
         const col = headers.indexOf(updateKey);
-        if (col >= 0) sheet.getRange(i + 1, col + 1).setValue(getObjectValueForHeader(sheetName, updateKey, updates));
+        if (col >= 0) newRow[col] = getObjectValueForHeader(sheetName, updateKey, updates);
       });
+      sheet.getRange(i + 1, 1, 1, newRow.length).setValues([newRow]);
       return { status: 'success' };
     }
   }
@@ -1501,6 +1958,7 @@ function getSheet(name) {
 }
 
 function getHeaders(sheet) {
+  if (sheet.getLastColumn() === 0) return [];
   return sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
 }
 
@@ -1572,7 +2030,7 @@ function mergeAiScreeningResults(participants) {
 }
 
 function getObjectValueForHeader(sheetName, header, obj) {
-  if (obj[header] !== undefined) return obj[header];
+  if (obj[header] !== undefined) return protectSpreadsheetCell(obj[header]);
   if (sheetName !== SHEETS.participants) return '';
   const aliases = {
     jalur_pendaftaran: 'jalur',
@@ -1583,7 +2041,12 @@ function getObjectValueForHeader(sheetName, header, obj) {
     link_cv: 'cv_link'
   };
   const canonical = aliases[header];
-  return canonical && obj[canonical] !== undefined ? obj[canonical] : '';
+  return canonical && obj[canonical] !== undefined ? protectSpreadsheetCell(obj[canonical]) : '';
+}
+
+function protectSpreadsheetCell(value) {
+  if (typeof value !== 'string') return value;
+  return /^[=+\-@]/.test(value) ? "'" + value : value;
 }
 
 function isTruthy(value) {

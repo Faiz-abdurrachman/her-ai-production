@@ -3,6 +3,7 @@
 .cursor/debug-*.log
 .cursor/*.json
 node_modules/
+.playwright-mcp/
 dist/
 build/
 .env
@@ -18,3 +19,4 @@ docs-faiz/
 # Docs - jangan di-push ke GitHub
 docs-faiz/
 docs-nazril/
+.omo/
