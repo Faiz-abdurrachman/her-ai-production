@@ -8,10 +8,6 @@
     {
       "source": "/__settings",
       "destination": "/api/settings"
-    },
-    {
-      "source": "/((?!api|css|js|assets|components|gas|materi|pages|scripts).*)$",
-      "destination": "/index.html"
     }
   ]
 }
