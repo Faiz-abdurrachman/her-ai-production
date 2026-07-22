@@ -1,5 +1,4 @@
 {
-  "cleanUrls": true,
   "rewrites": [
     {
       "source": "/__gas",
@@ -8,6 +7,10 @@
     {
       "source": "/__settings",
       "destination": "/api/settings"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/index.html"
     }
   ]
 }
