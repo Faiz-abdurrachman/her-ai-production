@@ -9068,7 +9068,10 @@
 #pyodideStatus.ready i { color: #2e7d32; }
 
 /* Konsep AI Modern — source-as-main learning studio */
-.ai-modern-page {
+.ai-modern-page,
+.ai-reasoning-page,
+.ai-evaluation-page,
+.ai-evolution-page {
     --modern-ink: #171827;
     --modern-copy: #51596d;
     --modern-muted: #6f7282;
@@ -9135,6 +9138,7 @@
 }
 
 .ai-modern-chapter-hero > span,
+.ai-modern-learning-nav > span,
 .ai-modern-section > h3,
 .ai-modern-active > div > span,
 .ai-modern-practice-item .reasoning-practice-copy > span,
@@ -11076,6 +11080,21 @@
     display: grid;
     gap: 8px;
     list-style: none;
+}
+
+/* ========================================================================== */
+/* Python untuk AI scoped variables                                           */
+/* ========================================================================== */
+.ai-python-page {
+    --python-ink: #171827;
+    --python-copy: #51596d;
+    --python-muted: #6f7282;
+    --python-pink: #f63392;
+    --python-pink-deep: #d91d78;
+    --python-pink-soft: #fff0f7;
+    --python-surface: #fffcfd;
+    --python-surface-soft: #fff7fb;
+    --python-line: rgba(244, 143, 188, .28);
 }
 
 .ai-python-page .python-deep-dive-grid > article > span {
