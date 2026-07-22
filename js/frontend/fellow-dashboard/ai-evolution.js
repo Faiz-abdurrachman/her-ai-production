@@ -276,7 +276,7 @@
     }
 
     function renderHookSection(hook) {
-        return '<section class="reasoning-hook-section" data-python-injected data-section="hook">\n' +
+        return '<section class="reasoning-hook-section" data-evolution-injected data-section="hook">\n' +
                '    <div class="reasoning-hook-head"><i class="fas fa-hand-pointer" aria-hidden="true"></i><div><span>Pembuka</span><h3>' + escapeHtml(hook.question) + '</h3></div></div>\n' +
                '    <div class="reasoning-hook-options">\n' +
                '        <button type="button" class="reasoning-hook-card" data-hook-option="a">\n' +
@@ -459,8 +459,12 @@
         if (!container) return;
         var saved = safeJsonParse(localStorage.getItem(STORAGE.practice), {});
         var items = EXERCISES.filter(function (item) { return item.module === module.slug; });
-        container.innerHTML = `<form class="ai-evolution-practice" id="aiEvolutionPracticeForm">
-            <h2>Latihan: ${escapeHtml(module.title)}</h2>
+        container.innerHTML = '<header class="ai-modern-chapter-hero" data-evolution-injected>\n' +
+            '    <span>Latihan & Kasus</span>\n' +
+            '    <h2>' + escapeHtml(module.title) + '</h2>\n' +
+            '    <p>Terapkan teori ke dalam arsitektur nyata.</p>\n' +
+            '</header>\n' + 
+            `<form class="ai-evolution-practice" id="aiEvolutionPracticeForm">
             <p>Isi jawaban singkat terstruktur. Semua jawaban tersimpan lokal di browser ini.</p>
             ${items.map(function (item) {
                 return `<article>
@@ -498,8 +502,12 @@
         var doneMap = safeJsonParse(localStorage.getItem(STORAGE.quizDone), {});
         var answerMap = safeJsonParse(localStorage.getItem(STORAGE.quizAnswers), {});
         var isDone = !!doneMap[module.slug];
-        container.innerHTML = `<form class="ai-evolution-quiz ${isDone ? "is-locked" : ""}" id="aiEvolutionQuizForm">
-            <h2>Kuis: ${escapeHtml(module.title)}</h2>
+        container.innerHTML = '<header class="ai-modern-chapter-hero" data-evolution-injected>\n' +
+            '    <span>Kuis Modul</span>\n' +
+            '    <h2>' + escapeHtml(module.title) + '</h2>\n' +
+            '    <p>Uji pemahaman arsitektur dan kapabilitas sistem.</p>\n' +
+            '</header>\n' +
+            `<form class="ai-evolution-quiz ${isDone ? "is-locked" : ""}" id="aiEvolutionQuizForm">
             <p>Passing score ${PASSING_SCORE}%. ${isDone ? "Attempt module ini sudah terkunci." : "Pilih satu jawaban terbaik untuk tiap soal."}</p>
             ${questions.map(function (q, index) {
                 return `<fieldset>
@@ -557,8 +565,12 @@
         var container = document.getElementById("aiEvolutionActivity");
         if (!container) return;
         var saved = safeJsonParse(localStorage.getItem(STORAGE.discussion), {});
-        container.innerHTML = `<form class="ai-evolution-discussion" id="aiEvolutionDiscussionForm">
-            <h2>Refleksi: ${escapeHtml(module.title)}</h2>
+        container.innerHTML = '<header class="ai-modern-chapter-hero" data-evolution-injected>\n' +
+            '    <span>Diskusi Reflektif</span>\n' +
+            '    <h2>' + escapeHtml(module.title) + '</h2>\n' +
+            '    <p>Refleksikan dampak evolusi AI ini terhadap peran dan sistem di masa depan.</p>\n' +
+            '</header>\n' +
+            `<form class="ai-evolution-discussion" id="aiEvolutionDiscussionForm">
             <p>${escapeHtml(DISCUSSIONS[module.slug])}</p>
             <label for="evolutionReflection">Tulis refleksimu</label>
             <textarea id="evolutionReflection" rows="7">${escapeHtml(saved[module.slug] || "")}</textarea>

@@ -485,11 +485,17 @@
 
     function renderPractice(module) {
         var container = document.getElementById("aiEvaluationActivity");
-        var saved = safeJsonParse(localStorage.getItem(STORAGE.practice), {});
+        var saved = getSaved();
         var items = EXERCISES.filter(function (item) { return item.module === module.slug; });
-        container.innerHTML = `<form class="ai-evaluation-practice" id="aiEvaluationPracticeForm">
-            <h2>Latihan: ${escapeHtml(module.title)}</h2>
-            ${items.map(function (item) {
+        var parts = [
+            '<header class="ai-modern-chapter-hero" data-evaluation-injected>',
+            '    <span>Latihan & Kasus</span>',
+            '    <h2>' + escapeHtml(module.title) + '</h2>',
+            '    <p>Terapkan pemahaman evaluasi pada skenario nyata.</p>',
+            '</header>',
+            '<div class="reasoning-challenge-workspace" style="margin-bottom:20px;">'
+        ];
+        parts.push(items.map(function (item) {
                 return `<article>
                     <span>${escapeHtml(item.title)}</span>
                     <p><strong>Skenario:</strong> ${escapeHtml(item.scenario)}</p>
@@ -497,9 +503,10 @@
                     <textarea id="${item.id}" name="${item.id}" rows="5">${escapeHtml(saved[item.id] || "")}</textarea>
                     <div class="ai-evaluation-feedback" data-feedback="${item.id}" hidden><strong>Model feedback:</strong> ${escapeHtml(item.modelAnswer)}</div>
                 </article>`;
-            }).join("")}
-            <div class="ai-evaluation-actions"><button type="submit"><i class="fas fa-floppy-disk"></i> Simpan latihan</button><span id="aiEvaluationPracticeStatus" aria-live="polite"></span></div>
-        </form>`;
+            }).join(""));
+        parts.push('</div>');
+        container.innerHTML = '<form class="ai-evaluation-practice" id="aiEvaluationPracticeForm">' + parts.join("") +
+            '<div class="ai-evaluation-actions"><button type="submit"><i class="fas fa-floppy-disk"></i> Simpan latihan</button><span id="aiEvaluationPracticeStatus" aria-live="polite"></span></div></form>';
         var form = document.getElementById("aiEvaluationPracticeForm");
         form.addEventListener("submit", function (event) {
             event.preventDefault();
@@ -517,12 +524,17 @@
 
     function renderQuiz(module) {
         var container = document.getElementById("aiEvaluationActivity");
+        var saved = getSaved();
         var questions = QUIZ.filter(function (item) { return item.module === module.slug; });
         var doneMap = safeJsonParse(localStorage.getItem(STORAGE.quizDone), {});
         var answerMap = safeJsonParse(localStorage.getItem(STORAGE.quizAnswers), {});
         var isDone = !!doneMap[module.slug];
-        container.innerHTML = `<form class="ai-evaluation-quiz ${isDone ? "is-locked" : ""}" id="aiEvaluationQuizForm">
-            <h2>Kuis: ${escapeHtml(module.title)}</h2>
+        var header = '<header class="ai-modern-chapter-hero" data-evaluation-injected>' +
+            '    <span>Kuis Modul</span>' +
+            '    <h2>' + escapeHtml(module.title) + '</h2>' +
+            '    <p>Uji pemahaman tentang metrik, reliabilitas, dan bias dalam evaluasi AI.</p>' +
+            '</header>';
+        container.innerHTML = header + `<form class="ai-evaluation-quiz ${isDone ? "is-locked" : ""}" id="aiEvaluationQuizForm">
             <p>Passing score ${PASSING_SCORE}%. ${isDone ? "Attempt module ini sudah terkunci." : "Pilih satu jawaban terbaik untuk tiap soal."}</p>
             ${questions.map(function (q, index) {
                 return `<fieldset>
@@ -579,14 +591,18 @@
 
     function renderDiscussion(module) {
         var container = document.getElementById("aiEvaluationActivity");
-        var saved = safeJsonParse(localStorage.getItem(STORAGE.discussion), {});
-        container.innerHTML = `<form class="ai-evaluation-discussion" id="aiEvaluationDiscussionForm">
-            <h2>Refleksi: ${escapeHtml(module.title)}</h2>
-            <p>${escapeHtml(DISCUSSIONS[module.slug])}</p>
-            <label for="evaluationReflection">Tulis refleksimu</label>
-            <textarea id="evaluationReflection" rows="7">${escapeHtml(saved[module.slug] || "")}</textarea>
-            <div class="ai-evaluation-actions"><button type="submit"><i class="fas fa-floppy-disk"></i> Simpan refleksi</button><span id="aiEvaluationDiscussionStatus" aria-live="polite"></span></div>
-        </form>`;
+        var saved = getSaved();
+        container.innerHTML = '<header class="ai-modern-chapter-hero" data-evaluation-injected>\n' +
+               '    <span>Diskusi Reflektif</span>\n' +
+               '    <h2>' + escapeHtml(module.title) + '</h2>\n' +
+               '    <p>Refleksikan dilema evaluasi dan tradeoff antara metrik teknis dengan fairness di dunia nyata.</p>\n' +
+               '</header>\n' +
+               '<form class="ai-evaluation-discussion" id="aiEvaluationDiscussionForm">' +
+            '<p>' + escapeHtml(DISCUSSIONS[module.slug]) + '</p>' +
+            '<label for="evaluationReflection">Tulis refleksimu</label>' +
+            '<textarea id="evaluationReflection" rows="7">' + escapeHtml(saved[module.slug] || "") + '</textarea>' +
+            '<div class="ai-evaluation-actions"><button type="submit"><i class="fas fa-floppy-disk"></i> Simpan refleksi</button><span id="aiEvaluationDiscussionStatus" aria-live="polite"></span></div>' +
+        '</form>';
         document.getElementById("aiEvaluationDiscussionForm").addEventListener("submit", function (event) {
             event.preventDefault();
             saved[module.slug] = document.getElementById("evaluationReflection").value.trim();
