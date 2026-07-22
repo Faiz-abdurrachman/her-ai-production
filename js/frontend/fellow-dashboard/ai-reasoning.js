@@ -1236,7 +1236,7 @@
 
         // Tambah data-section="konsep" ke source H2s agar nav chip bisa scroll ke sana
         container.querySelectorAll("h2").forEach(function (h2) {
-            if (!h2.closest(".reasoning-end-of-chapter, .reasoning-scaffold-module-meta")) {
+            if (!h2.closest(".reasoning-end-of-chapter, .ai-modern-chapter-hero")) {
                 h2.setAttribute("data-section", "konsep");
             }
         });
@@ -1425,7 +1425,32 @@
     }
 
     function renderOrientationAndNav(module, chapterNum, total) {
-        return '<section class="reasoning-scaffold-module-meta reasoning-final-meta" data-section="orientation">\n            <div class="reasoning-scaffold-module-meta-head">\n                <i class="' + escapeHtml(module.icon) + '" aria-hidden="true"></i>\n                <div>\n                    <span>Topik ' + chapterNum + ' dari ' + total + '</span>\n                    <h2>' + escapeHtml(module.title) + '</h2>\n                    <p>' + escapeHtml(module.summary) + '</p>\n                </div>\n            </div>\n            <div class="reasoning-meta-row"><strong><i class="far fa-clock" aria-hidden="true"></i> Durasi</strong> <span>' + escapeHtml(module.duration) + '</span></div>\n            <div class="reasoning-meta-row"><strong><i class="fas fa-bullseye" aria-hidden="true"></i> Learning Objectives</strong>' + renderList(module.objectives) + '</div>\n            ' + (module.analogy ? '<div class="reasoning-scaffold-callout reasoning-analogy-callout"><i class="fas fa-lightbulb" aria-hidden="true"></i><p><strong>Analogi:</strong> ' + escapeHtml(module.analogy) + '</p></div>' : "") + '\n        </section>\n\n        <nav class="reasoning-source-jumps reasoning-visual-nav" id="reasoning-visual-nav" aria-label="Tahapan belajar">\n            <span>Tahapan:</span>\n            <button type="button" data-jump="hook">Pembuka</button>\n            <button type="button" data-jump="konsep">Konsep</button>\n            <button type="button" data-jump="contoh">Contoh & Latihan</button>\n            <button type="button" data-jump="check">Uji Pemahaman</button>\n            <button type="button" data-jump="ringkasan">Ringkasan</button>\n        </nav>';
+        var objectivesHtml = (module.objectives || []).map(function(obj) {
+            return '<li><span class="ai-modern-objective-copy">' + escapeHtml(obj) + '</span></li>';
+        }).join("");
+        
+        var analogyHtml = module.analogy ? '<div class="reasoning-scaffold-callout reasoning-analogy-callout" style="margin-top: 15px;"><i class="fas fa-lightbulb" aria-hidden="true"></i><p><strong>Analogi:</strong> ' + escapeHtml(module.analogy) + '</p></div>' : '';
+
+        var heroHtml = '<header class="ai-modern-chapter-hero" data-reasoning-injected data-section="orientation">' +
+            '<span>Topik ' + chapterNum + ' · ' + escapeHtml(module.duration) + '</span>' +
+            '<h2>' + escapeHtml(module.title) + '</h2>' +
+            '<p>' + escapeHtml(module.summary) + '</p>' +
+            '<div class="ai-modern-objectives">' +
+                '<strong>Tujuan pembelajaran</strong>' +
+                '<ul>' + objectivesHtml + '</ul>' +
+            '</div>' + analogyHtml +
+        '</header>';
+
+        var navHtml = '<nav class="reasoning-source-jumps reasoning-visual-nav ai-modern-learning-nav" data-reasoning-injected id="reasoning-visual-nav" aria-label="Tahapan Topik ' + chapterNum + ' dari ' + total + '">' +
+            '<span><i class="' + escapeHtml(module.icon) + '"></i> Jelajahi:</span>' +
+            '<button type="button" data-jump="hook">Pembuka</button>' +
+            '<button type="button" data-jump="konsep">Konsep</button>' +
+            '<button type="button" data-jump="contoh">Contoh & Latihan</button>' +
+            '<button type="button" data-jump="check">Uji Pemahaman</button>' +
+            '<button type="button" data-jump="ringkasan">Ringkasan</button>' +
+        '</nav>';
+
+        return heroHtml + '\n' + navHtml;
     }
 
     function renderEndOfChapter(module, chapterNum, total, visualConfig) {
@@ -1518,9 +1543,7 @@
     }
 
     function finalRenderQuickCheckSection(qc) {
-        return '<section class="reasoning-quick-check" data-section="check" data-check-answer="' + qc.answer + '">\n                <div class="reasoning-quick-head"><i class="fas fa-circle-question" aria-hidden="true"></i><div><span>Quick Check</span><h3>' + escapeHtml(qc.question) + '</h3></div></div>\n                <div class="reasoning-check-options">\n                    ' + qc.options.map(function (option, index) {
-                        return '<button type="button" data-check-option="' + index + '"><b>' + String.fromCharCode(65 + index) + '</b><span>' + escapeHtml(option) + '</span></button>';
-                    }).join("") + '\n                </div>\n                <div class="reasoning-check-actions">\n                    <button type="button" class="reasoning-check-submit" data-check-submit><i class="fas fa-check" aria-hidden="true"></i> Periksa Jawaban</button>\n                    <button type="button" class="reasoning-check-retry" data-check-retry hidden><i class="fas fa-rotate-left" aria-hidden="true"></i> Coba Lagi</button>\n                </div>\n                <p class="reasoning-check-feedback" hidden></p>\n            </section>';
+        return '<section class="reasoning-quick-check reasoning-qc-enhanced" data-reasoning-injected data-section="check" data-check-answer="' + qc.answer + '" data-check-correct="' + escapeHtml(qc.explanationCorrect || "") + '" data-check-wrong="' + escapeHtml(qc.explanationWrong || "") + '"><div class="reasoning-quick-head"><i class="fas fa-circle-question" aria-hidden="true"></i><div><span>Quick Check</span><h3>' + escapeHtml(qc.question) + '</h3></div></div><div class="reasoning-check-options">' + qc.options.map(function (option, index) { return '<button type="button" data-check-option="' + index + '"><b>' + String.fromCharCode(65 + index) + '</b><span>' + escapeHtml(option) + '</span></button>'; }).join("") + '</div><div class="reasoning-check-actions"><button type="button" class="reasoning-scaffold-check-button" data-check-submit><i class="fas fa-check"></i> Periksa Jawaban</button><button type="button" class="reasoning-scaffold-reveal-button reasoning-check-retry" data-check-retry hidden><i class="fas fa-rotate-left"></i> Coba Lagi</button></div><p class="reasoning-check-feedback" aria-live="polite" hidden></p></section>';
     }
 
     function finalRenderChallengeSection(challenge, chapterNumber) {
