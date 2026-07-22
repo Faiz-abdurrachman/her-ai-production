@@ -1,0 +1,169 @@
+# Chapter 6 — Control Flow: Keputusan dan Perulangan
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/06-full.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+### Chapter 6 — Control Flow: Keputusan dan Perulangan
+
+#### Learning Objectives
+
+-   Menggunakan `if`, `for`, dan `while`.
+-   Memproses banyak record dengan aturan konsisten.
+-   Menentukan kondisi berhenti yang aman.
+
+#### Kenapa Materi Ini Penting?
+
+Program perlu memilih tindakan dan mengulang proses. Tanpa control flow, Python hanya menjalankan daftar instruksi lurus.
+
+#### Hubungan dengan AI
+
+Preprocessing sering menerapkan aturan yang sama pada setiap baris: melewati data kosong, mengubah format, atau memberi kategori sementara.
+
+#### Analogi
+
+Petugas registrasi memeriksa setiap peserta. Jika datanya lengkap, lanjut; jika tidak, tandai untuk diperbaiki. Itulah `for` dan `if`.
+
+#### Penjelasan Konsep
+
+-   `if/elif/else`: memilih cabang.
+-   `for`: mengulang koleksi.
+-   `while`: mengulang selama kondisi benar.
+-   `break`: menghentikan loop.
+-   `continue`: melewati iterasi aktif.
+
+#### Visual Thinking
+
+    Ambil record → nilai tersedia? → ya → proses
+                             └───── tidak → tandai
+
+#### Contoh Nyata
+
+Sistem memberikan status “lulus” jika nilai minimal 75.
+
+#### Contoh AI
+
+Sebelum data digunakan dalam workflow AI, setiap record dapat divalidasi menggunakan loop dan kondisi.
+
+#### Kode Python
+
+    scores = [88, None, 62, 91]
+
+    for score in scores:
+        if score is None:
+            print("Data kosong")
+            continue
+
+        if score >= 75:
+            print("Lulus")
+        else:
+            print("Perlu belajar ulang")
+
+#### Penjelasan Kode Baris per Baris
+
+1.  List berisi angka dan satu nilai kosong.
+2.  `for` mengambil satu score setiap iterasi.
+3.  `is None` memeriksa data kosong.
+4.  `continue` mencegah perbandingan angka dengan `None`.
+5.  Kondisi nilai menentukan status.
+
+#### Common Mistakes
+
+-   Salah indentasi.
+-   Loop `while` tanpa perubahan kondisi sehingga tidak berhenti.
+-   Membandingkan `None` dengan angka.
+
+#### Best Practices
+
+-   Gunakan `for` ketika memproses collection.
+-   Pakai `while` hanya jika kondisi berhenti jelas.
+-   Tangani nilai kosong sebelum operasi utama.
+
+#### Mini Challenge
+
+Hitung jumlah peserta lulus dan jumlah data kosong dari list contoh.
+
+#### Ringkasan
+
+Control flow membuat program mampu menerapkan keputusan yang konsisten pada banyak data.
+
+#### Persiapan Chapter Berikutnya
+
+Aturan yang sering digunakan perlu dibungkus menjadi function agar tidak diduplikasi.
+
+* * * * *
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<h1>Chapter 6 — Control Flow: Keputusan dan Perulangan</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Menggunakan <code>if</code>, <code>for</code>, dan <code>while</code>.</li>
+<li>Memproses banyak record dengan aturan konsisten.</li>
+<li>Menentukan kondisi berhenti yang aman.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Program perlu memilih tindakan dan mengulang proses. Tanpa control flow, Python hanya menjalankan daftar instruksi lurus.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Preprocessing sering menerapkan aturan yang sama pada setiap baris: melewati data kosong, mengubah format, atau memberi kategori sementara.</p>
+<h2>Analogi</h2>
+<p>Petugas registrasi memeriksa setiap peserta. Jika datanya lengkap, lanjut; jika tidak, tandai untuk diperbaiki. Itulah <code>for</code> dan <code>if</code>.</p>
+<h2>Penjelasan Konsep</h2>
+<ul>
+<li><code>if/elif/else</code>: memilih cabang.</li>
+<li><code>for</code>: mengulang koleksi.</li>
+<li><code>while</code>: mengulang selama kondisi benar.</li>
+<li><code>break</code>: menghentikan loop.</li>
+<li><code>continue</code>: melewati iterasi aktif.</li>
+</ul>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">Ambil record → nilai tersedia? → ya → proses
+                         └───── tidak → tandai
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Sistem memberikan status “lulus” jika nilai minimal 75.</p>
+<h2>Contoh AI</h2>
+<p>Sebelum data digunakan dalam workflow AI, setiap record dapat divalidasi menggunakan loop dan kondisi.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">scores = [88, None, 62, 91]
+
+for score in scores:
+    if score is None:
+        print(&quot;Data kosong&quot;)
+        continue
+
+    if score &gt;= 75:
+        print(&quot;Lulus&quot;)
+    else:
+        print(&quot;Perlu belajar ulang&quot;)
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li>List berisi angka dan satu nilai kosong.</li>
+<li><code>for</code> mengambil satu score setiap iterasi.</li>
+<li><code>is None</code> memeriksa data kosong.</li>
+<li><code>continue</code> mencegah perbandingan angka dengan <code>None</code>.</li>
+<li>Kondisi nilai menentukan status.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li>Salah indentasi.</li>
+<li>Loop <code>while</code> tanpa perubahan kondisi sehingga tidak berhenti.</li>
+<li>Membandingkan <code>None</code> dengan angka.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li>Gunakan <code>for</code> ketika memproses collection.</li>
+<li>Pakai <code>while</code> hanya jika kondisi berhenti jelas.</li>
+<li>Tangani nilai kosong sebelum operasi utama.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Hitung jumlah peserta lulus dan jumlah data kosong dari list contoh.</p>
+<h2>Ringkasan</h2>
+<p>Control flow membuat program mampu menerapkan keputusan yang konsisten pada banyak data.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Aturan yang sering digunakan perlu dibungkus menjadi function agar tidak diduplikasi.</p>
+<hr>
+
+````

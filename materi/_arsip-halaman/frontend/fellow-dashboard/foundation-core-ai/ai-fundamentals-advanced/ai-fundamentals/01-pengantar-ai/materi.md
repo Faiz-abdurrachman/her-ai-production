@@ -1,0 +1,702 @@
+# Topik 1: Kecerdasan Buatan di Sekitar Kita
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/01-pengantar-ai/materi.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+##### ** Topik 1: Kecerdasan Buatan di Sekitar Kita
+
+Goal: Memahami AI secara akurat tanpa terjebak gambaran robot fiksi ilmiah.
+
+Alur Belajar
+
+##### Baca AI sebagai sistem, bukan sebagai tokoh fiksi.
+
+Gunakan urutan ini setiap kali kamu melihat fitur otomatis. Kita mulai dari hal yang dioptimalkan, lalu menelusuri data, pola, output, dan titik pemeriksaan manusia.
+
+** Framework 5 langkah ini akan dipakai lagi di latihan, kuis, dan diskusi.
+
+1.  ****Tujuan**Apa yang dioptimalkan?
+2.  ****Data**Contoh apa yang dipelajari?
+3.  ****Pola**Korelasi apa yang ditemukan?
+4.  ****Output**Prediksi, label, atau rekomendasi?
+5.  ****Human check**Kapan perlu diverifikasi?
+
+![HerAI Buddy](/assets/messaging/herai-chat-persona.png)
+
+###### Mulai dari hal yang dekat
+
+AI sering terasa jauh dan rumit karena film menggambarkannya sebagai robot sadar diri. Dalam kehidupan nyata, AI lebih sering hadir sebagai sistem prediktif: merekomendasikan lagu, menyaring spam, menerjemahkan kalimat, atau menyarankan rute agar perjalanan lebih cepat.
+
+##### 1.1 Mendefinisikan Ulang AI
+
+**Kecerdasan Buatan (Artificial Intelligence)** adalah sistem berbasis mesin yang menggunakan input untuk menyimpulkan cara menghasilkan output seperti prediksi, rekomendasi, konten, atau keputusan. Definisi ini lebih aman daripada mengatakan AI adalah mesin yang berpikir seperti manusia, karena sistem hari ini tidak memiliki kesadaran atau pemahaman manusiawi.
+
+Dalam bahasa sederhana, AI adalah kumpulan teknik yang membantu komputer menjalankan tugas yang biasanya membutuhkan kecerdasan manusia: mengenali pola, memprediksi kemungkinan, memahami bahasa, melihat gambar, atau membantu menyaring pilihan yang kompleks.
+
+Modul ini sengaja tidak memulai dari kode, rumus, transformer, atau metrik evaluasi. Fokus awalnya adalah membangun cara berpikir: ketika sebuah sistem otomatis memberi saran, label, prediksi, atau jawaban, kita perlu tahu apa yang mungkin menjadi tujuan sistem, data apa yang masuk, pola apa yang dipelajari, dan kapan manusia harus memeriksa ulang.
+
+Interactive Lens
+
+###### Bongkar definisi AI menjadi 4 pertanyaan.
+
+Klik setiap lensa untuk melihat bagaimana cara membacanya dalam kasus nyata.
+
+** Tujuan
+
+** Data
+
+** Pola
+
+** Risiko
+
+**Tujuan sistem**
+
+AI tidak netral dari tujuan. Sistem rekomendasi bisa mengoptimalkan waktu tonton, pembelian, akurasi, efisiensi, atau keselamatan. Tujuan yang berbeda akan menghasilkan perilaku yang berbeda.
+
+###### ** Fokus AI modern
+
+Bukan menyalin seluruh otak manusia, melainkan membantu sistem mencapai tujuan tertentu melalui pola data.
+
+###### ** Kekuatan utama
+
+AI unggul dalam menemukan keteraturan statistik dari data yang terlalu besar untuk dibaca manual.
+
+###### ** Setelah topik ini, kamu diharapkan mampu
+
+-   Menjelaskan AI sebagai sistem berbasis input dan output, bukan makhluk yang punya pikiran manusia.
+-   Membedakan software biasa yang mengikuti aturan kaku dari sistem AI yang belajar dari pola data.
+-   Mengenali contoh AI di sekitar kita, termasuk rekomendasi konten, filter spam, peta, penerjemah, dan chatbot.
+-   Membiasakan pemeriksaan manusia ketika output AI terdengar meyakinkan tetapi berpotensi salah.
+
+##### 1.2 Software Biasa vs Sistem AI
+
+Tidak semua aplikasi digital adalah AI. Kalkulator, validasi formulir yang hanya mengecek simbol @, atau tombol yang menjalankan instruksi tetap adalah software biasa. Program seperti itu mengikuti aturan eksplisit yang sudah ditulis pemrogram.
+
+Sistem AI berbeda karena menggunakan data historis untuk menemukan korelasi. Penyaring spam, misalnya, tidak hanya menjalankan aturan kaku. Ia melihat banyak contoh email lama, menemukan pola, lalu memprediksi status email baru.
+
+###### ** Software Biasa vs AI
+
+Software biasa seperti buku resep: semua langkah harus ditulis jelas dari awal. AI lebih seperti pekerja magang: ia diperlihatkan banyak contoh pekerjaan terdahulu, lalu belajar mengenali pola untuk membantu tugas baru.
+
+###### ** Software biasa
+
+Berjalan dengan aturan eksplisit: jika A terjadi, lakukan B. Ia tidak otomatis membaik hanya karena melihat banyak contoh baru.
+
+-   Kalkulator menghitung rumus yang pasti.
+-   Form email mengecek simbol @.
+-   Tombol submit menjalankan instruksi yang sudah ditulis.
+
+###### ** Sistem AI
+
+Mencari pola dari banyak contoh, lalu memakai pola itu untuk memprediksi kasus baru yang belum pernah dilihat.
+
+-   Filter spam membaca pola email penipuan.
+-   Rekomendasi musik membaca riwayat dengar.
+-   Peta digital membaca pola lalu lintas dan laporan pengguna.
+
+Mini Check
+
+###### Menurutmu ini software biasa atau AI?
+
+Pilih satu contoh. Perhatikan apakah sistem hanya menjalankan aturan tetap atau memakai pola dari data.
+
+**Kalkulator rumus
+
+**Filter spam
+
+**Playlist personal
+
+**Validasi email @
+
+**Klik salah satu contoh**
+
+Jawabannya akan muncul di sini bersama alasan singkatnya.
+
+##### 1.3 Analogi: Buku Resep dan Pekerja Magang
+
+Bayangkan kamu ingin membuat kue. Jika kamu memakai buku resep, semua langkah harus ditulis sangat jelas: berapa gram tepung, berapa lama dipanggang, suhu oven berapa, dan kapan adonan harus diaduk. Ini mirip software biasa. Pemrogram harus menuliskan aturan satu per satu.
+
+AI lebih mirip pekerja magang yang diberi ribuan contoh dokumen pekerjaan. Ia membaca dokumen lama, melihat mana yang dianggap baik, mana yang dianggap salah, lalu mulai mengenali pola. Ketika ada dokumen baru, ia mencoba menebak keputusan yang paling mungkin berdasarkan pengalaman dari contoh-contoh itu.
+
+Analogi ini penting karena menunjukkan kekuatan sekaligus risiko AI. Jika contoh lama berkualitas, sistem bisa membantu. Tetapi jika contoh lama bias, tidak lengkap, atau keliru, sistem juga bisa mewarisi masalah tersebut.
+
+**
+
+###### Buku Resep
+
+Software biasa mengikuti instruksi eksplisit.
+
+**Contoh**
+
+Jika tombol diklik, buka halaman. Jika input tidak punya @, tampilkan pesan error.
+
+**
+
+###### Pekerja Magang
+
+AI belajar dari banyak contoh dan pola.
+
+**Contoh**
+
+Setelah melihat ribuan email, sistem menebak email baru termasuk spam atau bukan.
+
+**
+
+###### Kualitas Contoh
+
+Data latihan memengaruhi perilaku sistem.
+
+**Risiko**
+
+Jika contoh lama bias atau tidak lengkap, output AI bisa ikut bias walaupun terlihat rapi.
+
+##### 1.4 AI di Sekitar Kita
+
+AI paling mudah dipahami lewat pengalaman harian. Ia sering bekerja diam-diam sebagai mesin prediksi yang mempersempit banyak kemungkinan menjadi beberapa pilihan yang muncul di layar.
+
+**
+
+###### Rekomendasi Musik
+
+Memprediksi lagu yang mungkin cocok dari riwayat dengar.
+
+**
+
+###### Navigasi Peta
+
+Memprediksi rute cepat dari lokasi, laporan, dan pola macet.
+
+**
+
+###### Filter Spam
+
+Mendeteksi pola pesan mencurigakan dari arsip email lama.
+
+**
+
+###### Penerjemah Teks
+
+Memprediksi susunan kalimat terjemahan yang paling alami.
+
+**
+
+###### Screening CV
+
+Menyaring kandidat berdasarkan pola data rekrutmen lama.
+
+**
+
+###### Chatbot Layanan
+
+Menyusun balasan dari pola pertanyaan pelanggan terdahulu.
+
+###### ** Membaca contoh dengan cara baru
+
+Saat aplikasi musik merekomendasikan lagu, sistem tidak memahami suasana hatimu seperti manusia. Ia membaca pola: lagu apa yang sering diputar, lagu apa yang dilewati, kapan kamu mendengarkan, dan pengguna lain dengan pola mirip mendengarkan apa.
+
+Saat peta menyarankan rute kecil, sistem tidak memikirkan kenyamanan warga sekitar secara otomatis. Ia mengoptimalkan tujuan tertentu, biasanya waktu tempuh. Karena itu, manusia perlu bertanya apakah tujuan sistem sudah mempertimbangkan dampak sosial yang lebih luas.
+
+Saat chatbot menjawab dengan kalimat rapi, sistem belum tentu benar. Ia bisa menyusun teks yang terdengar meyakinkan dari pola bahasa, tetapi tetap perlu diverifikasi jika menyangkut fakta, hukum, kesehatan, keuangan, atau keselamatan.
+
+Scenario Explorer
+
+###### Latih cara membaca AI dari kasus harian.
+
+Musik
+
+Peta
+
+Screening CV
+
+Chatbot
+
+###### Rekomendasi Musik
+
+Input  
+Riwayat lagu, skip, like, durasi dengar, dan pola pengguna mirip.
+
+Output  
+Daftar lagu yang diprediksi cocok untukmu.
+
+Human check  
+Apakah rekomendasi membuatmu menemukan hal baru atau hanya mengurungmu di selera lama?
+
+##### 1.5 Kebiasaan Berpikir Kritis
+
+Output AI bisa terdengar meyakinkan, tetapi tetap perlu diperiksa. Sejak awal modul ini, biasakan bertanya: apa tujuan sistemnya, data apa yang digunakan, pola apa yang mungkin ia pelajari, siapa yang diuntungkan, dan bagaimana manusia bisa mengoreksi kesalahan?
+
+1.  **Tujuan:** sistem ini dibuat untuk membantu siapa dan mengoptimalkan apa?
+2.  **Input:** data apa yang mungkin diserap, termasuk data yang tidak terlihat oleh pengguna?
+3.  **Pola:** kebiasaan atau korelasi apa yang sedang dicari?
+4.  **Output:** apakah hasilnya berupa rekomendasi, label, skor, jawaban, atau keputusan?
+5.  **Pemeriksaan manusia:** bagaimana pengguna bisa mengoreksi ketika sistem salah?
+
+Checklist
+
+###### Gunakan audit cepat sebelum percaya output AI.
+
+Centang pertanyaan yang sudah kamu jawab. Progress ini tersimpan di perangkatmu.
+
+Saya tahu tujuan sistemnya. Saya tahu data apa yang mungkin dipakai. Saya bisa membedakan output faktual dan prediktif. Saya tahu kapan harus melakukan verifikasi manusia.
+
+****0 dari 4 selesai
+
+Referensi Lanjutan
+
+##### Bacaan pendukung untuk memperdalam fondasi AI.
+
+Daftar ini menggabungkan referensi akademik, panduan tata kelola, dan sumber belajar praktis agar kamu melihat AI dari sisi teknis sekaligus sosial.
+
+**OECD AI Principles**
+
+Kerangka prinsip AI yang berpusat pada manusia, transparansi, robustness, dan akuntabilitas.
+
+**NIST AI Risk Management Framework**
+
+Panduan mengidentifikasi, mengukur, dan mengelola risiko sistem AI dalam organisasi.
+
+**UNESCO Recommendation on the Ethics of AI**
+
+Rujukan etika global tentang hak asasi, inklusi, lingkungan, dan dampak sosial AI.
+
+**Stanford AI Index Report**
+
+Laporan tahunan tentang tren riset, industri, pendidikan, kebijakan, dan dampak AI.
+
+**Russell & Norvig, Artificial Intelligence: A Modern Approach**
+
+Buku dasar AI klasik untuk memahami pencarian, reasoning, probabilitas, pembelajaran, dan agen cerdas.
+
+**Mitchell, Machine Learning**
+
+Fondasi konseptual machine learning tentang generalisasi, pembelajaran dari data, dan evaluasi model.
+
+**Goodfellow, Bengio & Courville, Deep Learning**
+
+Referensi utama untuk neural network, representasi data, optimisasi, dan deep learning modern.
+
+**DeepLearning.AI - AI for Everyone**
+
+Pengantar non-teknis untuk memahami peluang, batasan, dan strategi penerapan AI.
+
+**Google Machine Learning Crash Course**
+
+Sumber belajar praktis tentang dataset, model, evaluasi, bias, dan machine learning dasar.
+
+Arah belajar: modul ini berfokus pada literasi konseptual dan sosio-teknis. Kode, metrik evaluasi, matematika, dan arsitektur model akan dibahas pada modul berikutnya.
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<section class="fellow-dashboard fellow-modules-page lesson-detail-page" data-fellow-page="modules">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+        <div class="invite-card course-help-mini">
+            <div>
+                <strong>Butuh bantuan?</strong>
+                <p>Tanya HerAI Assistant tentang modul dan pembelajaran.</p>
+            </div>
+            <button type="button">Chat Sekarang</button>
+        </div>
+    </aside>
+
+    <main class="fellow-main">
+        <header class="lesson-topbar">
+            <nav class="lesson-breadcrumb" aria-label="Breadcrumb materi">
+                <a href="#/participant-ai-fundamentals"><i class="fas fa-arrow-left"></i><span>AI Fundamentals</span></a>
+                <span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+                <span>Pengantar AI</span>
+            </nav>
+            <div class="fellow-actions">
+                <label class="fellow-search">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="search" placeholder="Cari modul, topik, atau materi...">
+                </label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
+                    <i class="far fa-bell"></i>
+                    <span>5</span>
+                </button>
+                <a href="#/participant-profile" class="fellow-user-button">
+                    <span class="avatar-img"></span>
+                    <span><strong>Aisyah Putri</strong><small>Peserta</small></span>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+            </div>
+        </header>
+
+        <div class="lesson-layout">
+            <div class="lesson-main-content">
+                <section class="lesson-hero">
+                    <div class="lesson-hero-copy">
+                        <h1>Pengantar AI</h1>
+                        <p>Membangun model mental tentang AI sebagai sistem prediktif yang perlu dipahami secara kritis dan bertanggung jawab.</p>
+                        <div class="lesson-meta-row">
+                            <span><i class="far fa-clock"></i> 90-120 menit</span>
+                            <span><i class="fas fa-book-open"></i> Modul 1 dari 6</span>
+                            <b>Dasar</b>
+                        </div>
+                    </div>
+                    <img src="/assets/messaging/herai-chat-persona.png" alt="HerAI fellow belajar AI">
+                </section>
+
+                <section class="lesson-material-panel">
+                    <div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
+                        <a href="#/participant-ai-intro" class="active"><i class="fas fa-book-open"></i> Materi</a>
+                        <a href="#/participant-ai-intro-practice"><i class="fas fa-pen-to-square"></i> Latihan</a>
+                        <a href="#/participant-ai-intro-quiz"><i class="far fa-clipboard"></i> Kuis</a>
+                        <a href="#/participant-ai-intro-discussion"><i class="far fa-message"></i> Diskusi</a>
+                    </div>
+
+                    <article class="lesson-article" id="materi-ai">
+                        <div style="background: linear-gradient(90deg, rgba(246,51,146,.1) 0%, rgba(246,51,146,.02) 100%); border: 1px solid rgba(246,51,146,.15); padding: 24px; margin-bottom: 32px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px;">
+                            <h3 style="margin:0; color: #f63392; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-sparkles"></i> Topik 1: Kecerdasan Buatan di Sekitar Kita
+                            </h3>
+                            <p style="margin: 0; font-size: 1.05rem; color: var(--fellow-text); font-weight: 500;">
+                                Goal: Memahami AI secara akurat tanpa terjebak gambaran robot fiksi ilmiah.
+                            </p>
+                        </div>
+
+                        <section class="ai-intro-learning-map" aria-label="Peta belajar Pengantar AI">
+                            <div class="ai-intro-map-copy">
+                                <span>Alur Belajar</span>
+                                <h3>Baca AI sebagai sistem, bukan sebagai tokoh fiksi.</h3>
+                                <p>Gunakan urutan ini setiap kali kamu melihat fitur otomatis. Kita mulai dari hal yang dioptimalkan, lalu menelusuri data, pola, output, dan titik pemeriksaan manusia.</p>
+                                <div class="ai-intro-map-note">
+                                    <i class="fas fa-compass"></i>
+                                    <small>Framework 5 langkah ini akan dipakai lagi di latihan, kuis, dan diskusi.</small>
+                                </div>
+                            </div>
+                            <ol class="ai-intro-map-steps">
+                                <li><i class="fas fa-bullseye"></i><b>Tujuan</b><small>Apa yang dioptimalkan?</small></li>
+                                <li><i class="fas fa-database"></i><b>Data</b><small>Contoh apa yang dipelajari?</small></li>
+                                <li><i class="fas fa-wave-square"></i><b>Pola</b><small>Korelasi apa yang ditemukan?</small></li>
+                                <li><i class="fas fa-arrow-up-right-dots"></i><b>Output</b><small>Prediksi, label, atau rekomendasi?</small></li>
+                                <li><i class="fas fa-user-check"></i><b>Human check</b><small>Kapan perlu diverifikasi?</small></li>
+                            </ol>
+                        </section>
+
+                        <div style="background: #fff0f7; border: 1px solid rgba(246,51,146,0.3); border-radius: 20px; padding: 24px; display: flex; gap: 20px; align-items: flex-start; margin: 24px 0; box-shadow: 0 4px 12px rgba(246,51,146,0.05);">
+                            <img src="/assets/messaging/herai-chat-persona.png" alt="HerAI Buddy" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div>
+                                <h4 style="color: var(--fellow-pink); margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 700;">Mulai dari hal yang dekat</h4>
+                                <p style="margin: 0; font-size: 0.95rem; line-height: 1.6; color: var(--fellow-text);">AI sering terasa jauh dan rumit karena film menggambarkannya sebagai robot sadar diri. Dalam kehidupan nyata, AI lebih sering hadir sebagai sistem prediktif: merekomendasikan lagu, menyaring spam, menerjemahkan kalimat, atau menyarankan rute agar perjalanan lebih cepat.</p>
+                            </div>
+                        </div>
+
+                        <h3>1.1 Mendefinisikan Ulang AI</h3>
+                        <p><strong>Kecerdasan Buatan (Artificial Intelligence)</strong> adalah sistem berbasis mesin yang menggunakan input untuk menyimpulkan cara menghasilkan output seperti prediksi, rekomendasi, konten, atau keputusan. Definisi ini lebih aman daripada mengatakan AI adalah mesin yang berpikir seperti manusia, karena sistem hari ini tidak memiliki kesadaran atau pemahaman manusiawi.</p>
+                        <p>Dalam bahasa sederhana, AI adalah kumpulan teknik yang membantu komputer menjalankan tugas yang biasanya membutuhkan kecerdasan manusia: mengenali pola, memprediksi kemungkinan, memahami bahasa, melihat gambar, atau membantu menyaring pilihan yang kompleks.</p>
+                        <p>Modul ini sengaja tidak memulai dari kode, rumus, transformer, atau metrik evaluasi. Fokus awalnya adalah membangun cara berpikir: ketika sebuah sistem otomatis memberi saran, label, prediksi, atau jawaban, kita perlu tahu apa yang mungkin menjadi tujuan sistem, data apa yang masuk, pola apa yang dipelajari, dan kapan manusia harus memeriksa ulang.</p>
+
+                        <section class="ai-intro-lens" aria-label="Lensa membaca sistem AI">
+                            <div class="ai-intro-lens-copy">
+                                <span>Interactive Lens</span>
+                                <h4>Bongkar definisi AI menjadi 4 pertanyaan.</h4>
+                                <p>Klik setiap lensa untuk melihat bagaimana cara membacanya dalam kasus nyata.</p>
+                            </div>
+                            <div class="ai-intro-lens-controls" role="list">
+                                <button class="is-active" type="button" data-ai-lens="goal"><i class="fas fa-bullseye"></i> Tujuan</button>
+                                <button type="button" data-ai-lens="data"><i class="fas fa-database"></i> Data</button>
+                                <button type="button" data-ai-lens="pattern"><i class="fas fa-wave-square"></i> Pola</button>
+                                <button type="button" data-ai-lens="risk"><i class="fas fa-triangle-exclamation"></i> Risiko</button>
+                            </div>
+                            <article class="ai-intro-lens-output" data-ai-lens-output>
+                                <strong>Tujuan sistem</strong>
+                                <p>AI tidak netral dari tujuan. Sistem rekomendasi bisa mengoptimalkan waktu tonton, pembelian, akurasi, efisiensi, atau keselamatan. Tujuan yang berbeda akan menghasilkan perilaku yang berbeda.</p>
+                            </article>
+                        </section>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0;">
+                            <div style="padding: 20px; border-radius: 16px; border: 1px solid var(--fellow-line); background: #fff;">
+                                <h4 style="color: var(--fellow-text); margin-top: 0;"><i class="fas fa-bullseye" style="color: var(--fellow-pink);"></i> Fokus AI modern</h4>
+                                <p style="font-size: 0.9rem; color: var(--fellow-muted); margin-bottom: 0;">Bukan menyalin seluruh otak manusia, melainkan membantu sistem mencapai tujuan tertentu melalui pola data.</p>
+                            </div>
+                            <div style="padding: 20px; border-radius: 16px; border: 1px solid var(--fellow-line); background: #fff;">
+                                <h4 style="color: var(--fellow-text); margin-top: 0;"><i class="fas fa-chart-simple" style="color: var(--fellow-pink);"></i> Kekuatan utama</h4>
+                                <p style="font-size: 0.9rem; color: var(--fellow-muted); margin-bottom: 0;">AI unggul dalam menemukan keteraturan statistik dari data yang terlalu besar untuk dibaca manual.</p>
+                            </div>
+                        </div>
+
+                        <div style="background: #fff; border: 1px solid var(--fellow-line); border-radius: 16px; padding: 22px; margin: 28px 0;">
+                            <h4 style="margin: 0 0 14px 0; color: var(--fellow-text);"><i class="fas fa-list-check" style="color: var(--fellow-pink);"></i> Setelah topik ini, kamu diharapkan mampu</h4>
+                            <ul style="line-height: 1.8; margin: 0; color: var(--fellow-text);">
+                                <li>Menjelaskan AI sebagai sistem berbasis input dan output, bukan makhluk yang punya pikiran manusia.</li>
+                                <li>Membedakan software biasa yang mengikuti aturan kaku dari sistem AI yang belajar dari pola data.</li>
+                                <li>Mengenali contoh AI di sekitar kita, termasuk rekomendasi konten, filter spam, peta, penerjemah, dan chatbot.</li>
+                                <li>Membiasakan pemeriksaan manusia ketika output AI terdengar meyakinkan tetapi berpotensi salah.</li>
+                            </ul>
+                        </div>
+
+                        <h3>1.2 Software Biasa vs Sistem AI</h3>
+                        <p>Tidak semua aplikasi digital adalah AI. Kalkulator, validasi formulir yang hanya mengecek simbol @, atau tombol yang menjalankan instruksi tetap adalah software biasa. Program seperti itu mengikuti aturan eksplisit yang sudah ditulis pemrogram.</p>
+                        <p>Sistem AI berbeda karena menggunakan data historis untuk menemukan korelasi. Penyaring spam, misalnya, tidak hanya menjalankan aturan kaku. Ia melihat banyak contoh email lama, menemukan pola, lalu memprediksi status email baru.</p>
+
+                        <div style="background: rgba(246,51,146,0.08); border: 1px solid rgba(246,51,146,0.18); padding: 18px 20px; border-radius: 16px; margin: 32px 0;">
+                            <h4 style="margin: 0 0 8px 0; color: var(--fellow-pink); display: flex; align-items: center; gap: 8px;"><i class="fas fa-code-branch"></i> Software Biasa vs AI</h4>
+                            <p style="margin: 0; font-size: 0.95rem;">Software biasa seperti buku resep: semua langkah harus ditulis jelas dari awal. AI lebih seperti pekerja magang: ia diperlihatkan banyak contoh pekerjaan terdahulu, lalu belajar mengenali pola untuk membantu tugas baru.</p>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0;">
+                            <article style="background: #fff; border: 1px solid var(--fellow-line); border-radius: 16px; padding: 20px;">
+                                <h4 style="margin: 0 0 10px 0; color: var(--fellow-text);"><i class="fas fa-calculator" style="color: var(--fellow-pink);"></i> Software biasa</h4>
+                                <p style="margin: 0 0 10px 0; color: var(--fellow-muted); font-size: .92rem;">Berjalan dengan aturan eksplisit: jika A terjadi, lakukan B. Ia tidak otomatis membaik hanya karena melihat banyak contoh baru.</p>
+                                <ul style="margin: 0; padding-left: 18px; color: var(--fellow-text); font-size: .9rem; line-height: 1.7;">
+                                    <li>Kalkulator menghitung rumus yang pasti.</li>
+                                    <li>Form email mengecek simbol @.</li>
+                                    <li>Tombol submit menjalankan instruksi yang sudah ditulis.</li>
+                                </ul>
+                            </article>
+                            <article style="background: #fff; border: 1px solid var(--fellow-line); border-radius: 16px; padding: 20px;">
+                                <h4 style="margin: 0 0 10px 0; color: var(--fellow-text);"><i class="fas fa-chart-line" style="color: var(--fellow-pink);"></i> Sistem AI</h4>
+                                <p style="margin: 0 0 10px 0; color: var(--fellow-muted); font-size: .92rem;">Mencari pola dari banyak contoh, lalu memakai pola itu untuk memprediksi kasus baru yang belum pernah dilihat.</p>
+                                <ul style="margin: 0; padding-left: 18px; color: var(--fellow-text); font-size: .9rem; line-height: 1.7;">
+                                    <li>Filter spam membaca pola email penipuan.</li>
+                                    <li>Rekomendasi musik membaca riwayat dengar.</li>
+                                    <li>Peta digital membaca pola lalu lintas dan laporan pengguna.</li>
+                                </ul>
+                            </article>
+                        </div>
+
+                        <section class="ai-intro-classifier" aria-label="Mini klasifikasi software biasa dan sistem AI">
+                            <div>
+                                <span>Mini Check</span>
+                                <h4>Menurutmu ini software biasa atau AI?</h4>
+                                <p>Pilih satu contoh. Perhatikan apakah sistem hanya menjalankan aturan tetap atau memakai pola dari data.</p>
+                            </div>
+                            <div class="ai-intro-example-grid">
+                                <button type="button" data-ai-example="calculator"><i class="fas fa-calculator"></i><span>Kalkulator rumus</span></button>
+                                <button type="button" data-ai-example="spam"><i class="fas fa-envelope-circle-check"></i><span>Filter spam</span></button>
+                                <button type="button" data-ai-example="playlist"><i class="fas fa-music"></i><span>Playlist personal</span></button>
+                                <button type="button" data-ai-example="form"><i class="fas fa-at"></i><span>Validasi email @</span></button>
+                            </div>
+                            <article data-ai-example-output>
+                                <strong>Klik salah satu contoh</strong>
+                                <p>Jawabannya akan muncul di sini bersama alasan singkatnya.</p>
+                            </article>
+                        </section>
+
+                        <h3>1.3 Analogi: Buku Resep dan Pekerja Magang</h3>
+                        <p>Bayangkan kamu ingin membuat kue. Jika kamu memakai buku resep, semua langkah harus ditulis sangat jelas: berapa gram tepung, berapa lama dipanggang, suhu oven berapa, dan kapan adonan harus diaduk. Ini mirip software biasa. Pemrogram harus menuliskan aturan satu per satu.</p>
+                        <p>AI lebih mirip pekerja magang yang diberi ribuan contoh dokumen pekerjaan. Ia membaca dokumen lama, melihat mana yang dianggap baik, mana yang dianggap salah, lalu mulai mengenali pola. Ketika ada dokumen baru, ia mencoba menebak keputusan yang paling mungkin berdasarkan pengalaman dari contoh-contoh itu.</p>
+                        <p>Analogi ini penting karena menunjukkan kekuatan sekaligus risiko AI. Jika contoh lama berkualitas, sistem bisa membantu. Tetapi jika contoh lama bias, tidak lengkap, atau keliru, sistem juga bisa mewarisi masalah tersebut.</p>
+
+                        <section class="ai-intro-flip-grid" aria-label="Kartu analogi AI">
+                            <article tabindex="0">
+                                <div>
+                                    <span><i class="fas fa-book-open"></i></span>
+                                    <h4>Buku Resep</h4>
+                                    <p>Software biasa mengikuti instruksi eksplisit.</p>
+                                </div>
+                                <div>
+                                    <strong>Contoh</strong>
+                                    <p>Jika tombol diklik, buka halaman. Jika input tidak punya @, tampilkan pesan error.</p>
+                                </div>
+                            </article>
+                            <article tabindex="0">
+                                <div>
+                                    <span><i class="fas fa-user-graduate"></i></span>
+                                    <h4>Pekerja Magang</h4>
+                                    <p>AI belajar dari banyak contoh dan pola.</p>
+                                </div>
+                                <div>
+                                    <strong>Contoh</strong>
+                                    <p>Setelah melihat ribuan email, sistem menebak email baru termasuk spam atau bukan.</p>
+                                </div>
+                            </article>
+                            <article tabindex="0">
+                                <div>
+                                    <span><i class="fas fa-scale-balanced"></i></span>
+                                    <h4>Kualitas Contoh</h4>
+                                    <p>Data latihan memengaruhi perilaku sistem.</p>
+                                </div>
+                                <div>
+                                    <strong>Risiko</strong>
+                                    <p>Jika contoh lama bias atau tidak lengkap, output AI bisa ikut bias walaupun terlihat rapi.</p>
+                                </div>
+                            </article>
+                        </section>
+
+                        <h3>1.4 AI di Sekitar Kita</h3>
+                        <p>AI paling mudah dipahami lewat pengalaman harian. Ia sering bekerja diam-diam sebagai mesin prediksi yang mempersempit banyak kemungkinan menjadi beberapa pilihan yang muncul di layar.</p>
+
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0;">
+                            <div style="padding: 20px; border-radius: 16px; background: #fff; border: 1px solid var(--fellow-line); text-align: center;">
+                                <i class="fas fa-music" style="font-size: 1.8rem; color: var(--fellow-pink); margin-bottom: 12px; display: block;"></i>
+                                <h4 style="margin: 0 0 8px 0; font-size: 0.95rem;">Rekomendasi Musik</h4>
+                                <p style="font-size: 0.82rem; color: var(--fellow-muted); margin: 0;">Memprediksi lagu yang mungkin cocok dari riwayat dengar.</p>
+                            </div>
+                            <div style="padding: 20px; border-radius: 16px; background: #fff; border: 1px solid var(--fellow-line); text-align: center;">
+                                <i class="fas fa-map-location-dot" style="font-size: 1.8rem; color: var(--fellow-pink); margin-bottom: 12px; display: block;"></i>
+                                <h4 style="margin: 0 0 8px 0; font-size: 0.95rem;">Navigasi Peta</h4>
+                                <p style="font-size: 0.82rem; color: var(--fellow-muted); margin: 0;">Memprediksi rute cepat dari lokasi, laporan, dan pola macet.</p>
+                            </div>
+                            <div style="padding: 20px; border-radius: 16px; background: #fff; border: 1px solid var(--fellow-line); text-align: center;">
+                                <i class="fas fa-envelope-circle-check" style="font-size: 1.8rem; color: var(--fellow-pink); margin-bottom: 12px; display: block;"></i>
+                                <h4 style="margin: 0 0 8px 0; font-size: 0.95rem;">Filter Spam</h4>
+                                <p style="font-size: 0.82rem; color: var(--fellow-muted); margin: 0;">Mendeteksi pola pesan mencurigakan dari arsip email lama.</p>
+                            </div>
+                            <div style="padding: 20px; border-radius: 16px; background: #fff; border: 1px solid var(--fellow-line); text-align: center;">
+                                <i class="fas fa-language" style="font-size: 1.8rem; color: var(--fellow-pink); margin-bottom: 12px; display: block;"></i>
+                                <h4 style="margin: 0 0 8px 0; font-size: 0.95rem;">Penerjemah Teks</h4>
+                                <p style="font-size: 0.82rem; color: var(--fellow-muted); margin: 0;">Memprediksi susunan kalimat terjemahan yang paling alami.</p>
+                            </div>
+                            <div style="padding: 20px; border-radius: 16px; background: #fff; border: 1px solid var(--fellow-line); text-align: center;">
+                                <i class="fas fa-user-tie" style="font-size: 1.8rem; color: var(--fellow-pink); margin-bottom: 12px; display: block;"></i>
+                                <h4 style="margin: 0 0 8px 0; font-size: 0.95rem;">Screening CV</h4>
+                                <p style="font-size: 0.82rem; color: var(--fellow-muted); margin: 0;">Menyaring kandidat berdasarkan pola data rekrutmen lama.</p>
+                            </div>
+                            <div style="padding: 20px; border-radius: 16px; background: #fff; border: 1px solid var(--fellow-line); text-align: center;">
+                                <i class="fas fa-comments" style="font-size: 1.8rem; color: var(--fellow-pink); margin-bottom: 12px; display: block;"></i>
+                                <h4 style="margin: 0 0 8px 0; font-size: 0.95rem;">Chatbot Layanan</h4>
+                                <p style="font-size: 0.82rem; color: var(--fellow-muted); margin: 0;">Menyusun balasan dari pola pertanyaan pelanggan terdahulu.</p>
+                            </div>
+                        </div>
+
+                        <div style="background: #fff; border: 1px solid var(--fellow-line); border-radius: 16px; padding: 22px; margin: 30px 0;">
+                            <h4 style="margin: 0 0 12px 0; color: var(--fellow-text);"><i class="fas fa-magnifying-glass-chart" style="color: var(--fellow-pink);"></i> Membaca contoh dengan cara baru</h4>
+                            <p style="margin: 0 0 12px 0; color: var(--fellow-text);">Saat aplikasi musik merekomendasikan lagu, sistem tidak memahami suasana hatimu seperti manusia. Ia membaca pola: lagu apa yang sering diputar, lagu apa yang dilewati, kapan kamu mendengarkan, dan pengguna lain dengan pola mirip mendengarkan apa.</p>
+                            <p style="margin: 0 0 12px 0; color: var(--fellow-text);">Saat peta menyarankan rute kecil, sistem tidak memikirkan kenyamanan warga sekitar secara otomatis. Ia mengoptimalkan tujuan tertentu, biasanya waktu tempuh. Karena itu, manusia perlu bertanya apakah tujuan sistem sudah mempertimbangkan dampak sosial yang lebih luas.</p>
+                            <p style="margin: 0; color: var(--fellow-text);">Saat chatbot menjawab dengan kalimat rapi, sistem belum tentu benar. Ia bisa menyusun teks yang terdengar meyakinkan dari pola bahasa, tetapi tetap perlu diverifikasi jika menyangkut fakta, hukum, kesehatan, keuangan, atau keselamatan.</p>
+                        </div>
+
+                        <section class="ai-intro-scenario" aria-label="Simulasi membaca AI di sekitar kita">
+                            <div class="ai-intro-scenario-head">
+                                <span>Scenario Explorer</span>
+                                <h4>Latih cara membaca AI dari kasus harian.</h4>
+                            </div>
+                            <div class="ai-intro-scenario-tabs">
+                                <button class="is-active" type="button" data-ai-scenario="music">Musik</button>
+                                <button type="button" data-ai-scenario="map">Peta</button>
+                                <button type="button" data-ai-scenario="cv">Screening CV</button>
+                                <button type="button" data-ai-scenario="chatbot">Chatbot</button>
+                            </div>
+                            <article data-ai-scenario-output>
+                                <h4>Rekomendasi Musik</h4>
+                                <dl>
+                                    <div><dt>Input</dt><dd>Riwayat lagu, skip, like, durasi dengar, dan pola pengguna mirip.</dd></div>
+                                    <div><dt>Output</dt><dd>Daftar lagu yang diprediksi cocok untukmu.</dd></div>
+                                    <div><dt>Human check</dt><dd>Apakah rekomendasi membuatmu menemukan hal baru atau hanya mengurungmu di selera lama?</dd></div>
+                                </dl>
+                            </article>
+                        </section>
+
+                        <h3 style="margin-top: 40px;">1.5 Kebiasaan Berpikir Kritis</h3>
+                        <p>Output AI bisa terdengar meyakinkan, tetapi tetap perlu diperiksa. Sejak awal modul ini, biasakan bertanya: apa tujuan sistemnya, data apa yang digunakan, pola apa yang mungkin ia pelajari, siapa yang diuntungkan, dan bagaimana manusia bisa mengoreksi kesalahan?</p>
+
+                        <ol style="line-height: 1.8; color: var(--fellow-text);">
+                            <li><strong>Tujuan:</strong> sistem ini dibuat untuk membantu siapa dan mengoptimalkan apa?</li>
+                            <li><strong>Input:</strong> data apa yang mungkin diserap, termasuk data yang tidak terlihat oleh pengguna?</li>
+                            <li><strong>Pola:</strong> kebiasaan atau korelasi apa yang sedang dicari?</li>
+                            <li><strong>Output:</strong> apakah hasilnya berupa rekomendasi, label, skor, jawaban, atau keputusan?</li>
+                            <li><strong>Pemeriksaan manusia:</strong> bagaimana pengguna bisa mengoreksi ketika sistem salah?</li>
+                        </ol>
+
+                        <section class="ai-intro-audit" aria-label="Checklist berpikir kritis AI">
+                            <div>
+                                <span>Checklist</span>
+                                <h4>Gunakan audit cepat sebelum percaya output AI.</h4>
+                                <p>Centang pertanyaan yang sudah kamu jawab. Progress ini tersimpan di perangkatmu.</p>
+                            </div>
+                            <div class="ai-intro-audit-list">
+                                <label><input type="checkbox" data-ai-audit> Saya tahu tujuan sistemnya.</label>
+                                <label><input type="checkbox" data-ai-audit> Saya tahu data apa yang mungkin dipakai.</label>
+                                <label><input type="checkbox" data-ai-audit> Saya bisa membedakan output faktual dan prediktif.</label>
+                                <label><input type="checkbox" data-ai-audit> Saya tahu kapan harus melakukan verifikasi manusia.</label>
+                            </div>
+                            <div class="ai-intro-audit-meter" aria-live="polite"><b data-ai-audit-bar></b><span data-ai-audit-text>0 dari 4 selesai</span></div>
+                        </section>
+
+                        <section class="ai-intro-references" aria-label="Referensi Pengantar AI">
+                            <div class="ai-intro-reference-head">
+                                <span>Referensi Lanjutan</span>
+                                <h3>Bacaan pendukung untuk memperdalam fondasi AI.</h3>
+                                <p>Daftar ini menggabungkan referensi akademik, panduan tata kelola, dan sumber belajar praktis agar kamu melihat AI dari sisi teknis sekaligus sosial.</p>
+                            </div>
+                            <div class="ai-intro-reference-grid">
+                                <article><strong>OECD AI Principles</strong><p>Kerangka prinsip AI yang berpusat pada manusia, transparansi, robustness, dan akuntabilitas.</p></article>
+                                <article><strong>NIST AI Risk Management Framework</strong><p>Panduan mengidentifikasi, mengukur, dan mengelola risiko sistem AI dalam organisasi.</p></article>
+                                <article><strong>UNESCO Recommendation on the Ethics of AI</strong><p>Rujukan etika global tentang hak asasi, inklusi, lingkungan, dan dampak sosial AI.</p></article>
+                                <article><strong>Stanford AI Index Report</strong><p>Laporan tahunan tentang tren riset, industri, pendidikan, kebijakan, dan dampak AI.</p></article>
+                                <article><strong>Russell & Norvig, Artificial Intelligence: A Modern Approach</strong><p>Buku dasar AI klasik untuk memahami pencarian, reasoning, probabilitas, pembelajaran, dan agen cerdas.</p></article>
+                                <article><strong>Mitchell, Machine Learning</strong><p>Fondasi konseptual machine learning tentang generalisasi, pembelajaran dari data, dan evaluasi model.</p></article>
+                                <article><strong>Goodfellow, Bengio & Courville, Deep Learning</strong><p>Referensi utama untuk neural network, representasi data, optimisasi, dan deep learning modern.</p></article>
+                                <article><strong>DeepLearning.AI - AI for Everyone</strong><p>Pengantar non-teknis untuk memahami peluang, batasan, dan strategi penerapan AI.</p></article>
+                                <article><strong>Google Machine Learning Crash Course</strong><p>Sumber belajar praktis tentang dataset, model, evaluasi, bias, dan machine learning dasar.</p></article>
+                            </div>
+                        </section>
+
+                        <aside class="lesson-reference" style="margin-top: 32px; border-radius: 14px;">Arah belajar: modul ini berfokus pada literasi konseptual dan sosio-teknis. Kode, metrik evaluasi, matematika, dan arsitektur model akan dibahas pada modul berikutnya.</aside>
+
+                    </article>
+
+                    <footer class="lesson-nav-footer">
+                        <a href="#/participant-ai-fundamentals"><i class="fas fa-chevron-left"></i> Modul Sebelumnya</a>
+                        <a href="#/participant-ai-history">Chapter Selanjutnya <i class="fas fa-arrow-right"></i></a>
+                    </footer>
+                </section>
+            </div>
+
+            <aside class="lesson-right-panel">
+                <section class="module-side-card lesson-progress-card">
+                    <h2>Progres Modul</h2>
+                    <div class="lesson-progress-mini"><b style="--value:20%"></b><strong>20%</strong></div>
+                    <p>1 dari 5 chapter selesai</p>
+                    <a href="#/participant-ai-intro">Mulai Belajar</a>
+                </section>
+
+                <section class="module-side-card lesson-list-card">
+                    <h2>Daftar Materi</h2>
+                    <ol>
+                        <li><span>1</span><a href="#/participant-ai-intro">AI di Sekitar Kita dan Fondasi Awal</a><i class="far fa-circle"></i></li>
+                        <li><span>2</span><a href="#/participant-ai-history">Definisi, Software Biasa, dan Sistem AI</a><i class="far fa-circle"></i></li>
+                        <li><span>3</span><a href="#/participant-ai-types">Cara Kerja AI: Data, Model, dan Human Check</a><i class="far fa-circle"></i></li>
+                        <li><span>4</span><a href="#/participant-ai-ml-dl">Peta Istilah dan Penerapan AI</a><i class="far fa-circle"></i></li>
+                        <li><span>5</span><a href="#/participant-ai-summary">Risiko, Etika, dan Audit Sosio-Teknis</a><i class="far fa-circle"></i></li>
+                    </ol>
+                </section>
+
+                <section class="module-side-card lesson-note-card lesson-compact-note">
+                    <div class="module-side-head">
+                        <h2>Catatan</h2>
+                        <button type="button">+ Tambah</button>
+                    </div>
+                    <p>Catat poin penting materi ini agar mudah diingat.</p>
+                </section>
+
+                <section class="module-side-card lesson-reference-mini">
+                    <h2>Referensi Utama</h2>
+                    <a href="#materi-ai"><i class="fas fa-book"></i> OECD AI Principles</a>
+                    <a href="#materi-ai"><i class="fas fa-shield-halved"></i> NIST AI RMF</a>
+                    <a href="#materi-ai"><i class="fas fa-scale-balanced"></i> UNESCO AI Ethics</a>
+                    <a href="#materi-ai"><i class="fas fa-chart-line"></i> Stanford AI Index</a>
+                </section>
+            </aside>
+        </div>
+    </main>
+</section>
+
+````

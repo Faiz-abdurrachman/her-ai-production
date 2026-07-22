@@ -1,0 +1,209 @@
+# Chapter 12 — Ekosistem Python untuk AI
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/12-full.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+### Chapter 12 — Ekosistem Python untuk AI
+
+#### Learning Objectives
+
+-   Mengenali library utama dalam workflow AI.
+-   Memilih library berdasarkan masalah.
+-   Memahami package sebagai kemampuan tambahan, bukan tujuan belajar.
+
+#### Kenapa Materi Ini Penting?
+
+Pemula sering kewalahan oleh banyak nama library. Chapter ini memberi peta, bukan pembahasan mendalam.
+
+#### Hubungan dengan AI
+
+Ekosistem library membuat Python berguna dari data hingga aplikasi AI.
+
+#### Analogi
+
+Python adalah smartphone; library adalah aplikasi. Kita memasang aplikasi karena punya kebutuhan, bukan agar layar terlihat penuh.
+
+#### Penjelasan Konsep
+
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Library
+Peran ringkas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">NumPy
+Array dan komputasi numerik</td>
+<td align="left">Pandas
+Data tabular dan cleaning</td>
+</tr>
+</tbody>
+</table>
+
+#### Visual Thinking
+
+    Data tabular ─ Pandas ─ NumPy ─ visualisasi
+                                  ├─ Scikit-learn (nanti)
+                                  ├─ PyTorch/TensorFlow (nanti)
+    Teks/gambar ─ Transformers/OpenCV (nanti)
+
+#### Contoh Nyata
+
+Pandas membaca file nilai, NumPy menghitung statistik, Matplotlib membuat grafik.
+
+#### Contoh AI
+
+Pada project lanjutan, Scikit-learn atau framework lain menerima data yang sudah disiapkan. Kualitas tahap persiapan tetap penting.
+
+#### Kode Python
+
+    import numpy as np
+    import pandas as pd
+
+    print(np.__name__)
+    print(pd.__name__)
+
+#### Penjelasan Kode Baris per Baris
+
+1.  NumPy diimpor dengan alias konvensional `np`.
+2.  Pandas diimpor dengan alias `pd`.
+3.  Nama module ditampilkan sebagai pemeriksaan sederhana.
+
+#### Common Mistakes
+
+-   Memasang semua library sekaligus.
+-   Mengimpor package yang tidak dipakai.
+-   Mengira library menggantikan pemahaman data.
+
+#### Best Practices
+
+-   Mulai dari kebutuhan workflow.
+-   Gunakan dokumentasi resmi.
+-   Catat dependency project.
+
+#### Mini Challenge
+
+Pilih library yang paling relevan untuk: tabel CSV, array angka, grafik, gambar, dan Deep Learning. Jelaskan alasannya satu kalimat.
+
+#### Ringkasan
+
+Ekosistem Python menyediakan alat khusus untuk tiap tahap. Modul ini hanya mendalami NumPy dan Pandas sebagai gerbang data.
+
+#### Persiapan Chapter Berikutnya
+
+Kita mulai dari NumPy untuk memahami operasi pada sekumpulan angka.
+
+* * * * *
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<h1>Chapter 12 — Ekosistem Python untuk AI</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Mengenali library utama dalam workflow AI.</li>
+<li>Memilih library berdasarkan masalah.</li>
+<li>Memahami package sebagai kemampuan tambahan, bukan tujuan belajar.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Pemula sering kewalahan oleh banyak nama library. Chapter ini memberi peta, bukan pembahasan mendalam.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Ekosistem library membuat Python berguna dari data hingga aplikasi AI.</p>
+<h2>Analogi</h2>
+<p>Python adalah smartphone; library adalah aplikasi. Kita memasang aplikasi karena punya kebutuhan, bukan agar layar terlihat penuh.</p>
+<h2>Penjelasan Konsep</h2>
+<table>
+<thead>
+<tr>
+<th>Library</th>
+<th>Peran ringkas</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NumPy</td>
+<td>Array dan komputasi numerik</td>
+</tr>
+<tr>
+<td>Pandas</td>
+<td>Data tabular dan cleaning</td>
+</tr>
+<tr>
+<td>Matplotlib</td>
+<td>Visualisasi dasar</td>
+</tr>
+<tr>
+<td>Seaborn</td>
+<td>Visualisasi statistik tingkat tinggi</td>
+</tr>
+<tr>
+<td>Scikit-learn</td>
+<td>Workflow Machine Learning klasik, modul berikutnya</td>
+</tr>
+<tr>
+<td>PyTorch</td>
+<td>Deep Learning, modul lanjutan</td>
+</tr>
+<tr>
+<td>TensorFlow</td>
+<td>Deep Learning, modul lanjutan</td>
+</tr>
+<tr>
+<td>Hugging Face Transformers</td>
+<td>Model bahasa/vision siap pakai, modul lanjutan</td>
+</tr>
+<tr>
+<td>OpenCV</td>
+<td>Pemrosesan gambar dan video, modul Computer Vision</td>
+</tr>
+</tbody></table>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">Data tabular ─ Pandas ─ NumPy ─ visualisasi
+                              ├─ Scikit-learn (nanti)
+                              ├─ PyTorch/TensorFlow (nanti)
+Teks/gambar ─ Transformers/OpenCV (nanti)
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Pandas membaca file nilai, NumPy menghitung statistik, Matplotlib membuat grafik.</p>
+<h2>Contoh AI</h2>
+<p>Pada project lanjutan, Scikit-learn atau framework lain menerima data yang sudah disiapkan. Kualitas tahap persiapan tetap penting.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+
+print(np.__name__)
+print(pd.__name__)
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li>NumPy diimpor dengan alias konvensional <code>np</code>.</li>
+<li>Pandas diimpor dengan alias <code>pd</code>.</li>
+<li>Nama module ditampilkan sebagai pemeriksaan sederhana.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li>Memasang semua library sekaligus.</li>
+<li>Mengimpor package yang tidak dipakai.</li>
+<li>Mengira library menggantikan pemahaman data.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li>Mulai dari kebutuhan workflow.</li>
+<li>Gunakan dokumentasi resmi.</li>
+<li>Catat dependency project.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Pilih library yang paling relevan untuk: tabel CSV, array angka, grafik, gambar, dan Deep Learning. Jelaskan alasannya satu kalimat.</p>
+<h2>Ringkasan</h2>
+<p>Ekosistem Python menyediakan alat khusus untuk tiap tahap. Modul ini hanya mendalami NumPy dan Pandas sebagai gerbang data.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Kita mulai dari NumPy untuk memahami operasi pada sekumpulan angka.</p>
+<hr>
+
+````

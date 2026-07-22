@@ -1,0 +1,512 @@
+# Reasoning AI: Cara AI Menalar, Merencanakan, dan Menggunakan Tools
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/04-reasoning/chapters/01-full.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+### Reasoning AI: Cara AI Menalar, Merencanakan, dan Menggunakan Tools
+
+#### Deskripsi Modul
+
+Ketika pengguna memberikan sebuah masalah, sistem AI tidak selalu cukup hanya mengambil satu fakta atau menghasilkan satu kalimat. Tugas yang lebih kompleks dapat mengharuskan AI memahami tujuan, memilah informasi, menyusun urutan langkah, menggunakan alat eksternal, membaca hasil alat, memperbarui rencana, dan memeriksa jawaban sebelum menyampaikannya kepada pengguna.
+
+Modul ini membahas empat kemampuan yang saling berkaitan:
+
+1.  **Reasoning** — bagaimana AI mengolah konteks dan menghubungkan informasi untuk menyelesaikan tugas.
+2.  **Planning** — bagaimana AI mengubah tujuan besar menjadi subtugas dan urutan tindakan.
+3.  **Chain-of-Thought** — bagaimana langkah perantara dapat membantu penyelesaian masalah yang bertahap.
+4.  **Tool Use** — bagaimana AI menggunakan alat eksternal ketika informasi atau kemampuan di dalam model tidak mencukupi.
+
+Keempat kemampuan tersebut akan dihubungkan melalui alur:
+
+    REASON → PLAN → ACT → OBSERVE → UPDATE → ANSWER
+
+> **Catatan penting:** Istilah “AI menalar” digunakan untuk menggambarkan perilaku sistem ketika mengolah masalah. Istilah ini tidak berarti bahwa AI memiliki pikiran, kesadaran, atau cara memahami dunia yang sama dengan manusia.
+
+* * * * *
+
+#### Tujuan Pembelajaran
+
+Setelah menyelesaikan modul ini, peserta diharapkan mampu:
+
+-   menjelaskan reasoning dalam konteks sistem AI;
+-   menjelaskan hubungan konteks, instruksi, langkah perantara, dan jawaban AI;
+-   membedakan reasoning, planning, action, observation, update, dan answer;
+-   memisahkan fakta, asumsi, batasan, dan kesimpulan;
+-   memecah tugas besar menjadi subtugas yang dapat dikerjakan;
+-   menyusun rencana statis dan dinamis;
+-   menjelaskan fungsi serta keterbatasan Chain-of-Thought;
+-   menentukan kapan sebuah tool perlu digunakan;
+-   memilih tool sesuai kebutuhan tugas;
+-   memeriksa parameter dan output tool;
+-   mengidentifikasi kegagalan reasoning, planning, dan tool use;
+-   mengevaluasi apakah jawaban AI cukup layak dipercaya.
+
+* * * * *
+
+#### Peta Pembelajaran
+
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Submateri
+Fokus Utama
+Hasil yang Diharapkan</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1. Bagaimana AI Melakukan Penalaran
+Tujuan, fakta, asumsi, hubungan, kesimpulan
+Peserta dapat membedah proses penyelesaian AI</td>
+<td align="left">2. Planning dan Problem Decomposition
+Goal, constraints, subtasks, dependencies, replanning
+Peserta dapat menyusun dan mengevaluasi rencana</td>
+<td align="left">3. Chain-of-Thought
+Langkah perantara, prompt terstruktur, verifikasi, faithfulness
+Peserta memahami manfaat dan batas CoT</td>
+</tr>
+</tbody>
+</table>
+
+* * * * *
+
+### Submateri 1 — Bagaimana AI Melakukan Penalaran?
+
+#### 1.1 Pembuka: Menjawab Tidak Selalu Sama dengan Menyelesaikan
+
+Bayangkan seorang peserta meminta AI:
+
+> “Hitung apakah anggaran konsumsi acara cukup untuk seluruh peserta.”
+
+Untuk menjawab dengan benar, AI perlu memahami beberapa hal:
+
+-   berapa jumlah peserta;
+-   berapa biaya konsumsi per peserta;
+-   apakah ada biaya tambahan;
+-   berapa anggaran yang tersedia;
+-   operasi apa yang harus dilakukan;
+-   bagaimana menentukan bahwa anggaran cukup atau tidak.
+
+Pertanyaan tersebut berbeda dari pertanyaan sederhana seperti:
+
+> “Apa arti kata algoritma?”
+
+Pada pertanyaan kedua, AI dapat menghasilkan definisi berdasarkan konteks dan pola yang telah dipelajari. Pada pertanyaan anggaran, AI perlu menghubungkan beberapa data dan menjalankan urutan penyelesaian.
+
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Recall atau pengambilan informasi
+Reasoning atau penalaran</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Menghasilkan informasi yang sudah dikenali
+Menghubungkan beberapa informasi untuk memperoleh hasil baru</td>
+<td align="left">Biasanya dapat dijawab dalam satu langkah
+Sering membutuhkan beberapa langkah</td>
+</tr>
+</tbody>
+</table>
+
+#### 1.2 Apa yang Dimaksud dengan Reasoning dalam AI?
+
+Dalam konteks LLM, **reasoning** adalah istilah praktis untuk menggambarkan kemampuan model menggunakan instruksi, konteks, pola yang dipelajari, langkah perantara, dan hasil sebelumnya untuk menghasilkan respons yang sesuai dengan tugas.
+
+LLM pada dasarnya bekerja dengan memprediksi token berikutnya berdasarkan token yang sudah ada. Proses ini diulang hingga respons selesai. Meskipun mekanisme dasarnya adalah prediksi token, pola yang dipelajari dalam skala besar dapat menghasilkan perilaku seperti:
+
+-   mengikuti aturan;
+-   membandingkan alternatif;
+-   menghubungkan beberapa fakta;
+-   melakukan perhitungan bertahap;
+-   menyusun rencana;
+-   memperbaiki jawaban setelah menerima informasi baru.
+
+<!-- -->
+
+    Prompt dan konteks
+            ↓
+    Representasi hubungan informasi
+            ↓
+    Prediksi token berikutnya
+            ↓
+    Token menjadi konteks baru
+            ↓
+    Prediksi berikutnya
+            ↓
+    Respons lengkap
+
+Model bahasa dapat diperluas dengan kemampuan reasoning, retrieval, dan penggunaan alat eksternal. Pendekatan semacam ini sering dibahas sebagai **augmented language models** [6].
+
+#### 1.3 Tahapan Penalaran Sederhana
+
+Model mental berikut dapat digunakan untuk membaca bagaimana AI menyelesaikan sebuah tugas:
+
+    1. Memahami permintaan
+            ↓
+    2. Mengidentifikasi tujuan
+            ↓
+    3. Mengambil informasi relevan
+            ↓
+    4. Mengenali informasi yang hilang
+            ↓
+    5. Menentukan hubungan antar informasi
+            ↓
+    6. Menyusun langkah penyelesaian
+            ↓
+    7. Menghasilkan hasil
+            ↓
+    8. Memeriksa hasil
+
+##### Tahap 1 — Memahami Permintaan
+
+AI harus mengenali tugas utama yang diberikan. Permintaan pengguna dapat berupa:
+
+-   menjelaskan konsep;
+-   menghitung;
+-   membandingkan;
+-   membuat rencana;
+-   menganalisis data;
+-   memberikan rekomendasi;
+-   melakukan tindakan melalui tool.
+
+Perhatikan prompt berikut:
+
+> “Buat jadwal belajar machine learning selama satu minggu, maksimal dua jam per hari, untuk peserta pemula.”
+
+Informasi penting yang harus dipahami:
+
+-   output: jadwal belajar;
+-   durasi: satu minggu;
+-   batas waktu harian: maksimal dua jam;
+-   topik: machine learning;
+-   tingkat peserta: pemula.
+
+Jawaban yang berisi materi tingkat lanjut selama empat jam per hari mungkin terlihat lengkap, tetapi tetap gagal karena tidak mengikuti tujuan dan batasan.
+
+##### Tahap 2 — Mengidentifikasi Informasi yang Tersedia
+
+AI perlu memisahkan informasi yang sudah tersedia dan informasi yang belum tersedia.
+
+    Informasi tersedia:
+    - durasi satu minggu;
+    - maksimal dua jam per hari;
+    - fokus machine learning;
+    - peserta pemula.
+
+    Informasi belum tersedia:
+    - apakah peserta sudah memahami Python;
+    - waktu belajar yang disukai;
+    - perangkat yang tersedia;
+    - bentuk evaluasi yang diinginkan.
+
+Ketika ada informasi yang hilang, AI dapat:
+
+1.  meminta klarifikasi;
+2.  membuat asumsi yang dinyatakan secara terbuka;
+3.  memberikan beberapa opsi;
+4.  memberi solusi sementara beserta keterbatasannya.
+
+Contoh asumsi transparan:
+
+> “Saya mengasumsikan peserta sudah memahami dasar Python. Jika belum, sesi hari pertama perlu dialihkan untuk pengenalan Python.”
+
+##### Tahap 3 — Menentukan Informasi yang Relevan
+
+Tidak semua informasi dalam prompt harus digunakan.
+
+Contoh:
+
+> “Acara diselenggarakan di aula berwarna biru. Pesertanya 60 orang, biaya konsumsi Rp35.000 per orang, dan anggarannya Rp3.000.000.”
+
+Warna aula tidak relevan untuk perhitungan konsumsi. Jumlah peserta, biaya per peserta, dan anggaran adalah informasi relevan.
+
+Kemampuan memilih informasi relevan membantu AI menghindari jawaban yang terlalu panjang atau salah fokus.
+
+##### Tahap 4 — Menentukan Hubungan Antar Informasi
+
+AI perlu mengetahui bagaimana data saling berhubungan.
+
+    jumlah peserta × biaya per peserta = total konsumsi
+
+    anggaran − total kebutuhan = sisa anggaran
+
+Urutan hubungan ini penting. AI tidak dapat menghitung sisa anggaran sebelum mengetahui total kebutuhan.
+
+##### Tahap 5 — Menyusun Langkah Penyelesaian
+
+Tugas yang kompleks sebaiknya dipecah menjadi langkah yang jelas.
+
+    1. Hitung total konsumsi.
+    2. Tambahkan biaya lain.
+    3. Bandingkan total dengan anggaran.
+    4. Hitung sisa atau kekurangan.
+    5. Tuliskan kesimpulan.
+
+##### Tahap 6 — Memeriksa Hasil
+
+AI atau pengguna perlu memeriksa:
+
+-   apakah semua data relevan sudah dipakai;
+-   apakah satuan konsisten;
+-   apakah operasi benar;
+-   apakah ada batasan yang dilanggar;
+-   apakah kesimpulan mengikuti hasil;
+-   apakah tingkat keyakinan sesuai dengan bukti.
+
+* * * * *
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<h1>Reasoning AI: Cara AI Menalar, Merencanakan, dan Menggunakan Tools</h1>
+<h2>Deskripsi Modul</h2>
+<p>Ketika pengguna memberikan sebuah masalah, sistem AI tidak selalu cukup hanya mengambil satu fakta atau menghasilkan satu kalimat. Tugas yang lebih kompleks dapat mengharuskan AI memahami tujuan, memilah informasi, menyusun urutan langkah, menggunakan alat eksternal, membaca hasil alat, memperbarui rencana, dan memeriksa jawaban sebelum menyampaikannya kepada pengguna.</p>
+<p>Modul ini membahas empat kemampuan yang saling berkaitan:</p>
+<ol>
+<li><strong>Reasoning</strong> — bagaimana AI mengolah konteks dan menghubungkan informasi untuk menyelesaikan tugas.</li>
+<li><strong>Planning</strong> — bagaimana AI mengubah tujuan besar menjadi subtugas dan urutan tindakan.</li>
+<li><strong>Chain-of-Thought</strong> — bagaimana langkah perantara dapat membantu penyelesaian masalah yang bertahap.</li>
+<li><strong>Tool Use</strong> — bagaimana AI menggunakan alat eksternal ketika informasi atau kemampuan di dalam model tidak mencukupi.</li>
+</ol>
+<p>Keempat kemampuan tersebut akan dihubungkan melalui alur:</p>
+<pre><code class="language-text">REASON → PLAN → ACT → OBSERVE → UPDATE → ANSWER
+</code></pre>
+<blockquote>
+<p><strong>Catatan penting:</strong> Istilah “AI menalar” digunakan untuk menggambarkan perilaku sistem ketika mengolah masalah. Istilah ini tidak berarti bahwa AI memiliki pikiran, kesadaran, atau cara memahami dunia yang sama dengan manusia.</p>
+</blockquote>
+<hr />
+<h2>Tujuan Pembelajaran</h2>
+<p>Setelah menyelesaikan modul ini, peserta diharapkan mampu:</p>
+<ul>
+<li>menjelaskan reasoning dalam konteks sistem AI;</li>
+<li>menjelaskan hubungan konteks, instruksi, langkah perantara, dan jawaban AI;</li>
+<li>membedakan reasoning, planning, action, observation, update, dan answer;</li>
+<li>memisahkan fakta, asumsi, batasan, dan kesimpulan;</li>
+<li>memecah tugas besar menjadi subtugas yang dapat dikerjakan;</li>
+<li>menyusun rencana statis dan dinamis;</li>
+<li>menjelaskan fungsi serta keterbatasan Chain-of-Thought;</li>
+<li>menentukan kapan sebuah tool perlu digunakan;</li>
+<li>memilih tool sesuai kebutuhan tugas;</li>
+<li>memeriksa parameter dan output tool;</li>
+<li>mengidentifikasi kegagalan reasoning, planning, dan tool use;</li>
+<li>mengevaluasi apakah jawaban AI cukup layak dipercaya.</li>
+</ul>
+<hr />
+<h2>Peta Pembelajaran</h2>
+<table>
+<thead>
+<tr>
+<th>Submateri</th>
+<th>Fokus Utama</th>
+<th>Hasil yang Diharapkan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Bagaimana AI Melakukan Penalaran</td>
+<td>Tujuan, fakta, asumsi, hubungan, kesimpulan</td>
+<td>Peserta dapat membedah proses penyelesaian AI</td>
+</tr>
+<tr>
+<td>2. Planning dan Problem Decomposition</td>
+<td>Goal, constraints, subtasks, dependencies, replanning</td>
+<td>Peserta dapat menyusun dan mengevaluasi rencana</td>
+</tr>
+<tr>
+<td>3. Chain-of-Thought</td>
+<td>Langkah perantara, prompt terstruktur, verifikasi, faithfulness</td>
+<td>Peserta memahami manfaat dan batas CoT</td>
+</tr>
+<tr>
+<td>4. Tool Use</td>
+<td>Pemilihan tool, parameter, observation, permission, error</td>
+<td>Peserta dapat menilai penggunaan tool oleh AI</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1>Submateri 1 — Bagaimana AI Melakukan Penalaran?</h1>
+<h2>1.1 Pembuka: Menjawab Tidak Selalu Sama dengan Menyelesaikan</h2>
+<p>Bayangkan seorang peserta meminta AI:</p>
+<blockquote>
+<p>“Hitung apakah anggaran konsumsi acara cukup untuk seluruh peserta.”</p>
+</blockquote>
+<p>Untuk menjawab dengan benar, AI perlu memahami beberapa hal:</p>
+<ul>
+<li>berapa jumlah peserta;</li>
+<li>berapa biaya konsumsi per peserta;</li>
+<li>apakah ada biaya tambahan;</li>
+<li>berapa anggaran yang tersedia;</li>
+<li>operasi apa yang harus dilakukan;</li>
+<li>bagaimana menentukan bahwa anggaran cukup atau tidak.</li>
+</ul>
+<p>Pertanyaan tersebut berbeda dari pertanyaan sederhana seperti:</p>
+<blockquote>
+<p>“Apa arti kata algoritma?”</p>
+</blockquote>
+<p>Pada pertanyaan kedua, AI dapat menghasilkan definisi berdasarkan konteks dan pola yang telah dipelajari. Pada pertanyaan anggaran, AI perlu menghubungkan beberapa data dan menjalankan urutan penyelesaian.</p>
+<table>
+<thead>
+<tr>
+<th>Recall atau pengambilan informasi</th>
+<th>Reasoning atau penalaran</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Menghasilkan informasi yang sudah dikenali</td>
+<td>Menghubungkan beberapa informasi untuk memperoleh hasil baru</td>
+</tr>
+<tr>
+<td>Biasanya dapat dijawab dalam satu langkah</td>
+<td>Sering membutuhkan beberapa langkah</td>
+</tr>
+<tr>
+<td>Contoh: definisi algoritma</td>
+<td>Contoh: menghitung dan membandingkan anggaran</td>
+</tr>
+<tr>
+<td>Fokus pada “apa”</td>
+<td>Fokus pada “bagaimana” dan “mengapa”</td>
+</tr>
+</tbody>
+</table>
+<h2>1.2 Apa yang Dimaksud dengan Reasoning dalam AI?</h2>
+<p>Dalam konteks LLM, <strong>reasoning</strong> adalah istilah praktis untuk menggambarkan kemampuan model menggunakan instruksi, konteks, pola yang dipelajari, langkah perantara, dan hasil sebelumnya untuk menghasilkan respons yang sesuai dengan tugas.</p>
+<p>LLM pada dasarnya bekerja dengan memprediksi token berikutnya berdasarkan token yang sudah ada. Proses ini diulang hingga respons selesai. Meskipun mekanisme dasarnya adalah prediksi token, pola yang dipelajari dalam skala besar dapat menghasilkan perilaku seperti:</p>
+<ul>
+<li>mengikuti aturan;</li>
+<li>membandingkan alternatif;</li>
+<li>menghubungkan beberapa fakta;</li>
+<li>melakukan perhitungan bertahap;</li>
+<li>menyusun rencana;</li>
+<li>memperbaiki jawaban setelah menerima informasi baru.</li>
+</ul>
+<pre><code class="language-text">Prompt dan konteks
+        ↓
+Representasi hubungan informasi
+        ↓
+Prediksi token berikutnya
+        ↓
+Token menjadi konteks baru
+        ↓
+Prediksi berikutnya
+        ↓
+Respons lengkap
+</code></pre>
+<p>Model bahasa dapat diperluas dengan kemampuan reasoning, retrieval, dan penggunaan alat eksternal. Pendekatan semacam ini sering dibahas sebagai <strong>augmented language models</strong> [6].</p>
+<h2>1.3 Tahapan Penalaran Sederhana</h2>
+<p>Model mental berikut dapat digunakan untuk membaca bagaimana AI menyelesaikan sebuah tugas:</p>
+<pre><code class="language-text">1. Memahami permintaan
+        ↓
+2. Mengidentifikasi tujuan
+        ↓
+3. Mengambil informasi relevan
+        ↓
+4. Mengenali informasi yang hilang
+        ↓
+5. Menentukan hubungan antar informasi
+        ↓
+6. Menyusun langkah penyelesaian
+        ↓
+7. Menghasilkan hasil
+        ↓
+8. Memeriksa hasil
+</code></pre>
+<h3>Tahap 1 — Memahami Permintaan</h3>
+<p>AI harus mengenali tugas utama yang diberikan. Permintaan pengguna dapat berupa:</p>
+<ul>
+<li>menjelaskan konsep;</li>
+<li>menghitung;</li>
+<li>membandingkan;</li>
+<li>membuat rencana;</li>
+<li>menganalisis data;</li>
+<li>memberikan rekomendasi;</li>
+<li>melakukan tindakan melalui tool.</li>
+</ul>
+<p>Perhatikan prompt berikut:</p>
+<blockquote>
+<p>“Buat jadwal belajar machine learning selama satu minggu, maksimal dua jam per hari, untuk peserta pemula.”</p>
+</blockquote>
+<p>Informasi penting yang harus dipahami:</p>
+<ul>
+<li>output: jadwal belajar;</li>
+<li>durasi: satu minggu;</li>
+<li>batas waktu harian: maksimal dua jam;</li>
+<li>topik: machine learning;</li>
+<li>tingkat peserta: pemula.</li>
+</ul>
+<p>Jawaban yang berisi materi tingkat lanjut selama empat jam per hari mungkin terlihat lengkap, tetapi tetap gagal karena tidak mengikuti tujuan dan batasan.</p>
+<h3>Tahap 2 — Mengidentifikasi Informasi yang Tersedia</h3>
+<p>AI perlu memisahkan informasi yang sudah tersedia dan informasi yang belum tersedia.</p>
+<pre><code class="language-text">Informasi tersedia:
+- durasi satu minggu;
+- maksimal dua jam per hari;
+- fokus machine learning;
+- peserta pemula.
+
+Informasi belum tersedia:
+- apakah peserta sudah memahami Python;
+- waktu belajar yang disukai;
+- perangkat yang tersedia;
+- bentuk evaluasi yang diinginkan.
+</code></pre>
+<p>Ketika ada informasi yang hilang, AI dapat:</p>
+<ol>
+<li>meminta klarifikasi;</li>
+<li>membuat asumsi yang dinyatakan secara terbuka;</li>
+<li>memberikan beberapa opsi;</li>
+<li>memberi solusi sementara beserta keterbatasannya.</li>
+</ol>
+<p>Contoh asumsi transparan:</p>
+<blockquote>
+<p>“Saya mengasumsikan peserta sudah memahami dasar Python. Jika belum, sesi hari pertama perlu dialihkan untuk pengenalan Python.”</p>
+</blockquote>
+<h3>Tahap 3 — Menentukan Informasi yang Relevan</h3>
+<p>Tidak semua informasi dalam prompt harus digunakan.</p>
+<p>Contoh:</p>
+<blockquote>
+<p>“Acara diselenggarakan di aula berwarna biru. Pesertanya 60 orang, biaya konsumsi Rp35.000 per orang, dan anggarannya Rp3.000.000.”</p>
+</blockquote>
+<p>Warna aula tidak relevan untuk perhitungan konsumsi. Jumlah peserta, biaya per peserta, dan anggaran adalah informasi relevan.</p>
+<p>Kemampuan memilih informasi relevan membantu AI menghindari jawaban yang terlalu panjang atau salah fokus.</p>
+<h3>Tahap 4 — Menentukan Hubungan Antar Informasi</h3>
+<p>AI perlu mengetahui bagaimana data saling berhubungan.</p>
+<pre><code class="language-text">jumlah peserta × biaya per peserta = total konsumsi
+
+anggaran − total kebutuhan = sisa anggaran
+</code></pre>
+<p>Urutan hubungan ini penting. AI tidak dapat menghitung sisa anggaran sebelum mengetahui total kebutuhan.</p>
+<h3>Tahap 5 — Menyusun Langkah Penyelesaian</h3>
+<p>Tugas yang kompleks sebaiknya dipecah menjadi langkah yang jelas.</p>
+<pre><code class="language-text">1. Hitung total konsumsi.
+2. Tambahkan biaya lain.
+3. Bandingkan total dengan anggaran.
+4. Hitung sisa atau kekurangan.
+5. Tuliskan kesimpulan.
+</code></pre>
+<h3>Tahap 6 — Memeriksa Hasil</h3>
+<p>AI atau pengguna perlu memeriksa:</p>
+<ul>
+<li>apakah semua data relevan sudah dipakai;</li>
+<li>apakah satuan konsisten;</li>
+<li>apakah operasi benar;</li>
+<li>apakah ada batasan yang dilanggar;</li>
+<li>apakah kesimpulan mengikuti hasil;</li>
+<li>apakah tingkat keyakinan sesuai dengan bukti.</li>
+</ul>
+<hr />
+
+````

@@ -1,0 +1,115 @@
+# Proyek Mini: Audit Sistem Sosio-Teknis Harian
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/01-pengantar-ai/latihan.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+#### Proyek Mini: Audit Sistem Sosio-Teknis Harian
+
+Pilih satu layanan otomatis yang kamu gunakan dalam 24 jam terakhir, misalnya rekomendasi video, peta navigasi, filter wajah, koreksi teks, chatbot, atau aplikasi transportasi daring. Jawaban ini melatih cara membaca AI sebagai sistem sosial dan teknis sekaligus.
+
+1. Sistem yang Dipilih
+
+2. Tujuan, Input, Pola, Output
+
+3. Pemeriksaan Manusia
+
+4. Risiko Privasi dan Bias
+
+Simpan Jawaban
+
+Edit
+
+Hapus
+
+Jawaban latihan hanya tersimpan untuk akun/perangkatmu.
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<section class="fellow-dashboard fellow-modules-page lesson-detail-page" data-fellow-page="modules">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+    </aside>
+    <main class="fellow-main">
+        <header class="lesson-topbar">
+            <nav class="lesson-breadcrumb" aria-label="Breadcrumb materi"><a href="#/participant-ai-fundamentals"><i class="fas fa-arrow-left"></i><span>AI Fundamentals</span></a><span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span><span>Latihan Pengantar AI</span></nav>
+            <div class="fellow-actions">
+                <label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul, topik, atau materi..."></label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+                <a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+            </div>
+        </header>
+        <div class="lesson-layout">
+            <div class="lesson-main-content">
+                <section class="lesson-hero compact">
+                    <div class="lesson-hero-copy">
+                        <h1>Latihan Pengantar AI</h1>
+                        <p>Audit satu sistem otomatis yang kamu gunakan sehari-hari dengan model tujuan, input, pola, output, dan pemeriksaan manusia.</p>
+                        <div class="lesson-meta-row"><span><i class="far fa-clock"></i> 30 menit</span><span><i class="fas fa-pen-to-square"></i> Latihan</span><b>Reflektif</b></div>
+                    </div>
+                    <img src="/assets/messaging/herai-chat-persona.png" alt="HerAI fellow latihan AI">
+                </section>
+                <section class="lesson-material-panel">
+                    <div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
+                        <a href="#/participant-ai-intro"><i class="fas fa-book-open"></i> Materi</a>
+                        <a href="#/participant-ai-intro-practice" class="active"><i class="fas fa-pen-to-square"></i> Latihan</a>
+                        <a href="#/participant-ai-intro-quiz"><i class="far fa-clipboard"></i> Kuis</a>
+                        <a href="#/participant-ai-intro-discussion"><i class="far fa-message"></i> Diskusi</a>
+                    </div>
+                    <article class="lesson-article">
+                        <h2>Proyek Mini: Audit Sistem Sosio-Teknis Harian</h2>
+                        <p>Pilih satu layanan otomatis yang kamu gunakan dalam 24 jam terakhir, misalnya rekomendasi video, peta navigasi, filter wajah, koreksi teks, chatbot, atau aplikasi transportasi daring. Jawaban ini melatih cara membaca AI sebagai sistem sosial dan teknis sekaligus.</p>
+                        <form class="practice-response-form" id="aiIntroPracticeForm">
+                            <label><span>1. Sistem yang Dipilih</span><textarea name="system" rows="4" placeholder="Sebutkan layanan atau fitur otomatis yang kamu pilih dan kapan terakhir kamu menggunakannya."></textarea></label>
+                            <label><span>2. Tujuan, Input, Pola, Output</span><textarea name="flow" rows="7" placeholder="Bedah sistem tersebut: apa tujuannya, data apa yang mungkin diserap, pola apa yang dicari, dan output apa yang muncul di layar kamu?"></textarea></label>
+                            <label><span>3. Pemeriksaan Manusia</span><textarea name="humanCheck" rows="5" placeholder="Bagaimana pengguna bisa mengecek, mengoreksi, menolak, atau memberi feedback ketika sistem salah menebak?"></textarea></label>
+                            <label><span>4. Risiko Privasi dan Bias</span><textarea name="risk" rows="7" placeholder="Identifikasi minimal satu risiko privasi dan satu skenario ketidakadilan terhadap kelompok yang kurang terwakili dalam data."></textarea></label>
+                            <div class="practice-action-row">
+                                <button type="button" data-practice-save>Simpan Jawaban</button>
+                                <button type="button" data-practice-edit>Edit</button>
+                                <button type="button" data-practice-delete>Hapus</button>
+                            </div>
+                            <p class="practice-status" id="aiIntroPracticeStatus">Jawaban latihan hanya tersimpan untuk akun/perangkatmu.</p>
+                        </form>
+                    </article>
+                    <footer class="lesson-nav-footer">
+                        <a href="#/participant-ai-summary"><i class="fas fa-chevron-left"></i> Topik Sebelumnya</a>
+                        <a href="#/participant-ai-intro-quiz">Lanjut ke Kuis <i class="fas fa-arrow-right"></i></a>
+                    </footer>
+                </section>
+            </div>
+            <aside class="lesson-right-panel">
+                <section class="module-side-card lesson-progress-card"><h2>Progres Modul</h2><div class="lesson-progress-mini"><b style="--value:33%"></b><strong>33%</strong></div><p>Latihan membantu mengunci pemahaman sebelum kuis.</p><a href="#/participant-ai-intro-quiz">Ke Kuis</a></section>
+                <section class="module-side-card lesson-list-card"><h2>Daftar Materi</h2>
+                    <ol>
+                        <li><span>1</span><a href="#/participant-ai-intro">AI di Sekitar Kita dan Fondasi Awal</a><i class="far fa-circle"></i></li>
+                        <li><span>2</span><a href="#/participant-ai-history">Definisi, Software Biasa, dan Sistem AI</a><i class="far fa-circle"></i></li>
+                        <li><span>3</span><a href="#/participant-ai-types">Cara Kerja AI: Data, Model, dan Human Check</a><i class="far fa-circle"></i></li>
+                        <li><span>4</span><a href="#/participant-ai-ml-dl">Peta Istilah dan Penerapan AI</a><i class="far fa-circle"></i></li>
+                        <li><span>5</span><a href="#/participant-ai-summary">Risiko, Etika, dan Audit Sosio-Teknis</a><i class="far fa-circle"></i></li>
+                    </ol></section>
+            </aside>
+        </div>
+    </main>
+</section>
+
+````

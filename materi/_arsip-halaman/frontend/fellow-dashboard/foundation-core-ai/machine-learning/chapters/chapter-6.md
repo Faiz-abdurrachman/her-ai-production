@@ -1,0 +1,293 @@
+# Support Vector Machine
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning/chapters/chapter-6.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+Chapter 6
+
+#### Support Vector Machine
+
+Support Vector Machine mencari batas keputusan dengan margin selebar mungkin. Titik data yang paling dekat dengan batas disebut support vectors, dan titik-titik inilah yang sangat menentukan posisi batas.
+
+Learning objectives
+
+##### Setelah materi ini, kamu mampu
+
+-   **Menjelaskan margin, support vector, hard margin, soft margin, dan parameter C.
+-   **Memahami intuisi kernel trick untuk batas non-linear.
+-   **Membaca kapan SVM cocok dipakai dan kapan perlu hati-hati.
+
+Why it matters
+
+##### Kenapa SVM penting?
+
+SVM memberi cara elegan untuk mencari batas yang tidak hanya memisahkan data, tetapi juga punya ruang aman dari titik terdekat. Ide margin ini membantu generalisasi, terutama pada data dengan fitur cukup tinggi dan jumlah data tidak terlalu besar.
+
+****
+
+###### Margin sebagai zona aman
+
+Jika dua batas sama-sama memisahkan kelas, SVM memilih batas yang memberi jarak terbesar dari titik terdekat. Jarak itu disebut margin.
+
+Formula
+
+##### Margin dan soft margin
+
+`w^T x + b = 0`
+
+**Hyperplane.** Batas keputusan linear. Tanda dari skor menentukan kelas prediksi.
+
+`margin = 2 / ||w||`
+
+**Margin.** Semakin kecil norm bobot w, semakin lebar margin. SVM mencari pemisah dengan margin besar.
+
+`loss + C sum slack`
+
+**Soft margin.** Slack mengizinkan beberapa pelanggaran margin. C mengatur seberapa keras model menghukum pelanggaran.
+
+Analogy
+
+##### Analogi jalan pembatas
+
+Bayangkan kamu membuat jalan di antara dua kelompok rumah. Jalan yang baik bukan hanya lewat di tengah, tetapi juga memberi jarak aman dari rumah terdekat di kedua sisi. Support vectors adalah rumah yang paling dekat dengan jalan; posisinya menentukan lebar jalan.
+
+**
+
+###### Hard margin
+
+Tidak mengizinkan salah klasifikasi. Cocok hanya jika data benar-benar terpisah rapi.
+
+**
+
+###### Soft margin
+
+Mengizinkan beberapa titik melanggar margin agar model lebih tahan noise.
+
+**
+
+###### Parameter C
+
+C besar lebih keras menghukum error; C kecil lebih toleran dan bisa memberi margin lebih lebar.
+
+Kernel trick
+
+##### Memisahkan pola non-linear
+
+Jika data tidak bisa dipisahkan dengan garis di ruang asli, kernel membantu SVM menghitung kemiripan seolah data dipetakan ke ruang fitur lebih tinggi, tanpa benar-benar membangun semua dimensi itu secara eksplisit.
+
+`K(x, x') = phi(x)^T phi(x')`
+
+**Kernel.** Fungsi kemiripan yang menggantikan dot product di ruang fitur baru.
+
+`polynomial kernel`
+
+**Polynomial.** Cocok untuk interaksi fitur dengan derajat tertentu.
+
+`RBF kernel`
+
+**RBF.** Cocok untuk batas melengkung yang lebih fleksibel, tetapi perlu tuning gamma dan C.
+
+Real examples
+
+##### Kapan SVM sering dipakai?
+
+**Text classification**
+
+SVM linear bisa kuat pada data sparse berdimensi tinggi seperti bag-of-words atau TF-IDF.
+
+**Bioinformatics**
+
+SVM sering dipakai pada data dengan jumlah fitur besar dan sampel terbatas.
+
+**Baseline klasifikasi**
+
+SVM menjadi pembanding kuat sebelum memakai model yang lebih kompleks.
+
+Mini checkpoint
+
+##### Jawab sebentar
+
+Jika data punya outlier, mengapa soft margin biasanya lebih realistis daripada hard margin?
+
+Common mistakes
+
+##### Kesalahan yang sering terjadi
+
+-   **Memakai hard margin pada data noisy.
+-   **Menggunakan RBF tanpa scaling fitur.
+-   **Tidak melakukan tuning C dan gamma sehingga model underfit atau overfit.
+
+Summary
+
+##### Ringkasan
+
+SVM mencari batas dengan margin besar. Support vectors menentukan batas, soft margin membuat model tahan noise, dan kernel trick membantu menangani pola non-linear.
+
+[Lanjut ke Neural Networks **](#/participant-ai-lab-ml-neural-networks)
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<article class="ml-chapter ai-ml-chapter">
+    <header class="ml-chapter-header">
+        <span>Chapter 6</span>
+        <h2>Support Vector Machine</h2>
+        <p>Support Vector Machine mencari batas keputusan dengan margin selebar mungkin. Titik data yang paling dekat dengan batas disebut support vectors, dan titik-titik inilah yang sangat menentukan posisi batas.</p>
+    </header>
+
+    <section class="ai-ml-learning-card">
+        <div class="ml-section-head">
+            <span>Learning objectives</span>
+            <h3>Setelah materi ini, kamu mampu</h3>
+        </div>
+        <ul class="ai-ml-objectives">
+            <li><i class="fas fa-circle-check"></i><span>Menjelaskan margin, support vector, hard margin, soft margin, dan parameter C.</span></li>
+            <li><i class="fas fa-circle-check"></i><span>Memahami intuisi kernel trick untuk batas non-linear.</span></li>
+            <li><i class="fas fa-circle-check"></i><span>Membaca kapan SVM cocok dipakai dan kapan perlu hati-hati.</span></li>
+        </ul>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Why it matters</span>
+            <h3>Kenapa SVM penting?</h3>
+            <p>SVM memberi cara elegan untuk mencari batas yang tidak hanya memisahkan data, tetapi juga punya ruang aman dari titik terdekat. Ide margin ini membantu generalisasi, terutama pada data dengan fitur cukup tinggi dan jumlah data tidak terlalu besar.</p>
+        </div>
+        <div class="ml-boundary-demo">
+            <div class="ml-axis">
+                <b></b>
+                <span class="dot"></span>
+                <span class="dot d2"></span>
+                <span class="dot d3"></span>
+                <span class="dot green"></span>
+                <span class="dot green d2"></span>
+                <span class="dot green d3"></span>
+            </div>
+            <div class="ml-network-copy">
+                <h4>Margin sebagai zona aman</h4>
+                <p>Jika dua batas sama-sama memisahkan kelas, SVM memilih batas yang memberi jarak terbesar dari titik terdekat. Jarak itu disebut margin.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Formula</span>
+            <h3>Margin dan soft margin</h3>
+        </div>
+        <div class="ai-ml-formula-list">
+            <article>
+                <code>w^T x + b = 0</code>
+                <p><b>Hyperplane.</b> Batas keputusan linear. Tanda dari skor menentukan kelas prediksi.</p>
+            </article>
+            <article>
+                <code>margin = 2 / ||w||</code>
+                <p><b>Margin.</b> Semakin kecil norm bobot w, semakin lebar margin. SVM mencari pemisah dengan margin besar.</p>
+            </article>
+            <article>
+                <code>loss + C sum slack</code>
+                <p><b>Soft margin.</b> Slack mengizinkan beberapa pelanggaran margin. C mengatur seberapa keras model menghukum pelanggaran.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Analogy</span>
+            <h3>Analogi jalan pembatas</h3>
+            <p>Bayangkan kamu membuat jalan di antara dua kelompok rumah. Jalan yang baik bukan hanya lewat di tengah, tetapi juga memberi jarak aman dari rumah terdekat di kedua sisi. Support vectors adalah rumah yang paling dekat dengan jalan; posisinya menentukan lebar jalan.</p>
+        </div>
+        <div class="ml-card-grid three">
+            <article class="ml-info-card">
+                <i class="fas fa-grip-lines"></i>
+                <h4>Hard margin</h4>
+                <p>Tidak mengizinkan salah klasifikasi. Cocok hanya jika data benar-benar terpisah rapi.</p>
+            </article>
+            <article class="ml-info-card">
+                <i class="fas fa-arrows-left-right"></i>
+                <h4>Soft margin</h4>
+                <p>Mengizinkan beberapa titik melanggar margin agar model lebih tahan noise.</p>
+            </article>
+            <article class="ml-info-card">
+                <i class="fas fa-sliders"></i>
+                <h4>Parameter C</h4>
+                <p>C besar lebih keras menghukum error; C kecil lebih toleran dan bisa memberi margin lebih lebar.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Kernel trick</span>
+            <h3>Memisahkan pola non-linear</h3>
+            <p>Jika data tidak bisa dipisahkan dengan garis di ruang asli, kernel membantu SVM menghitung kemiripan seolah data dipetakan ke ruang fitur lebih tinggi, tanpa benar-benar membangun semua dimensi itu secara eksplisit.</p>
+        </div>
+        <div class="ai-ml-formula-list">
+            <article>
+                <code>K(x, x') = phi(x)^T phi(x')</code>
+                <p><b>Kernel.</b> Fungsi kemiripan yang menggantikan dot product di ruang fitur baru.</p>
+            </article>
+            <article>
+                <code>polynomial kernel</code>
+                <p><b>Polynomial.</b> Cocok untuk interaksi fitur dengan derajat tertentu.</p>
+            </article>
+            <article>
+                <code>RBF kernel</code>
+                <p><b>RBF.</b> Cocok untuk batas melengkung yang lebih fleksibel, tetapi perlu tuning gamma dan C.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Real examples</span>
+            <h3>Kapan SVM sering dipakai?</h3>
+        </div>
+        <div class="ml-case-grid">
+            <article>
+                <b>Text classification</b>
+                <p>SVM linear bisa kuat pada data sparse berdimensi tinggi seperti bag-of-words atau TF-IDF.</p>
+            </article>
+            <article>
+                <b>Bioinformatics</b>
+                <p>SVM sering dipakai pada data dengan jumlah fitur besar dan sampel terbatas.</p>
+            </article>
+            <article>
+                <b>Baseline klasifikasi</b>
+                <p>SVM menjadi pembanding kuat sebelum memakai model yang lebih kompleks.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="ai-ml-checkpoint">
+        <div>
+            <span>Mini checkpoint</span>
+            <h3>Jawab sebentar</h3>
+            <p>Jika data punya outlier, mengapa soft margin biasanya lebih realistis daripada hard margin?</p>
+        </div>
+    </section>
+
+    <section class="ai-ml-mistakes">
+        <div class="ml-section-head">
+            <span>Common mistakes</span>
+            <h3>Kesalahan yang sering terjadi</h3>
+        </div>
+        <ul class="ml-check-list">
+            <li><i class="fas fa-triangle-exclamation"></i><span>Memakai hard margin pada data noisy.</span></li>
+            <li><i class="fas fa-triangle-exclamation"></i><span>Menggunakan RBF tanpa scaling fitur.</span></li>
+            <li><i class="fas fa-triangle-exclamation"></i><span>Tidak melakukan tuning C dan gamma sehingga model underfit atau overfit.</span></li>
+        </ul>
+    </section>
+
+    <section class="ai-ml-summary">
+        <div>
+            <span>Summary</span>
+            <h3>Ringkasan</h3>
+            <p>SVM mencari batas dengan margin besar. Support vectors menentukan batas, soft margin membuat model tahan noise, dan kernel trick membantu menangani pola non-linear.</p>
+        </div>
+        <a href="#/participant-ai-lab-ml-neural-networks" class="ml-inline-next" data-ml-next="7">Lanjut ke Neural Networks <i class="fas fa-arrow-right"></i></a>
+    </section>
+</article>
+
+````

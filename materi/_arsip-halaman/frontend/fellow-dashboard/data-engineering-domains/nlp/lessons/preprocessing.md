@@ -1,0 +1,1778 @@
+# Pipeline Preprocessing
+
+> Sumber: `pages/frontend/fellow-dashboard/data-engineering-domains/nlp/lessons/preprocessing.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+01
+
+#### Pipeline Preprocessing
+
+Urutan transformasi teks sebelum masuk ke model — dan kenapa urutan itu penting
+
+Preprocessing bukan sekadar "membersihkan" teks — ini adalah serangkaian transformasi yang **mengubah teks mentah menjadi representasi yang bisa dipelajari model**. Urutan langkah sangat penting: stemming sebelum stopword removal menghasilkan hasil berbeda dibanding sebaliknya.
+
+**
+
+Raw Text
+
+"Saya sdh MAKAN, tapi tdk kenyang!!"
+
+→
+
+**
+
+Lowercase
+
+"saya sdh makan, tapi tdk kenyang!!"
+
+→
+
+**
+
+Noise Removal
+
+"saya sdh makan tapi tdk kenyang"
+
+→
+
+**
+
+Normalisasi
+
+"saya sudah makan tapi tidak kenyang"
+
+→
+
+**
+
+Stopword
+
+"makan kenyang"
+
+→
+
+**
+
+Stemming
+
+"makan kenyang"
+
+→
+
+**
+
+Final Tokens
+
+["makan", "kenyang"]
+
+**
+
+**Urutan penting!** Jika kamu hapus stopword sebelum normalisasi, kata "tdk" tidak akan cocok dengan stopword list yang berisi "tidak". Selalu normalisasi dulu, baru hapus stopword.
+
+** Panduan Penggunaan
+
+Kapan pakai teknik apa?
+
+<table>
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Teknik
+Sentiment Analysis
+Information Retrieval
+Machine Translation
+Topic Modeling</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Lowercasing
+<em></em>
+<em></em>
+<em></em> hati-hati
+<em></em></td>
+<td align="left">Noise Removal
+<em></em>
+<em></em>
+<em></em>
+<em></em></td>
+<td align="left">Stopword Removal
+<em></em> bisa hilang nuansa
+<em></em>
+<em></em>
+<em></em></td>
+<td align="left">Stemming
+<em></em>
+<em></em>
+<em></em>
+<em></em></td>
+<td align="left">Lemmatization
+<em></em>
+<em></em>
+<em></em>
+<em></em></td>
+</tr>
+</tbody>
+</table>
+
+02
+
+#### Lowercasing
+
+Langkah paling sederhana — tapi penuh edge cases tersembunyi
+
+Mengubah semua huruf ke lowercase memastikan "Makan", "MAKAN", dan "makan" diperlakukan sebagai token yang sama. Tanpa ini, vocabulary model membengkak tidak perlu.
+
+** Efek pada Vocabulary Size
+
+Kenapa lowercasing penting secara kuantitatif?
+
+1
+
+Tanpa lowercasing — "makan" muncul sebagai 4 token berbeda
+
+"Makan" + "MAKAN" + "makan" + "Makan." = 4 entri vocabulary
+
+2
+
+Dengan lowercasing — semua jadi satu
+
+"makan" = 1 entri vocabulary
+
+// vocabulary size berkurang, embedding lebih efisien
+
+** Edge Cases — Jangan Asal Lowercase!
+
+Kasus di mana lowercasing merusak makna
+
+US → us
+
+Negara (United States) berubah jadi kata ganti "kita"
+
+Apple → apple
+
+Nama perusahaan vs buah apel — berbeda makna
+
+Dr. Siti → dr. siti
+
+Named Entity (NER) menjadi tidak bisa dikenali
+
+COVID-19 → covid-19
+
+Akronim — aman di-lowercase untuk domain umum
+
+**
+
+Untuk task NER atau sentiment yang sensitif terhadap proper noun, gunakan **truecasing** bukan lowercasing — normalisasi kapitalisasi berdasarkan konteks linguistik.
+
+** Coba Sendiri — Lowercasing
+
+Saya SUKA makan Nasi Goreng di JAKARTA setiap Pagi!
+
+Apply Lowercase
+
+Reset
+
+Output:
+
+03
+
+#### Noise Removal
+
+Regex patterns untuk membersihkan teks dari karakter tidak relevan
+
+"Noise" adalah karakter atau pola yang tidak membawa informasi semantik untuk task kita — punctuation, HTML tags, URL, emoji, angka, whitespace berlebih. Kuncinya: **apa yang noise tergantung pada task-mu**.
+
+** Regex Patterns — Step by Step
+
+Transformasi per pattern pada satu kalimat
+
+Input: "Harga \<b\>Rp 50.000\</b\> ** cek di https://toko.id/item?id=123 \#promo"
+
+1 `re.sub(r'<[^>]+>', '', text)` Hapus HTML tags
+
+"Harga Rp 50.000 ** cek di https://toko.id/item?id=123 \#promo"
+
+2 `re.sub(r'https?://\S+', '', text)` Hapus URL
+
+"Harga Rp 50.000 ** cek di \#promo"
+
+3 `re.sub(r'[^\x00-\x7F]+', '', text)` Hapus non-ASCII (emoji)
+
+"Harga Rp 50.000 cek di \#promo"
+
+4 `re.sub(r'[^\w\s]', '', text)` Hapus punctuation & special chars
+
+"Harga Rp 50000 cek di promo"
+
+5 `re.sub(r'\d+', '', text)` Hapus angka
+
+"Harga Rp cek di promo"
+
+6 `re.sub(r'\s+', ' ', text).strip()` Normalize whitespace
+
+"Harga Rp cek di promo"
+
+** Kapan JANGAN Hapus
+
+Noise yang membawa makna — task dependent
+
+** ** **
+
+Sentiment Analysis
+
+Emoji membawa sentimen kuat — jangan hapus, encode saja
+
+Rp 50.000
+
+E-commerce NLP
+
+Angka harga adalah fitur penting
+
+\#promo @brand
+
+Social Media Analysis
+
+Hashtag dan mention adalah signal topik
+
+Dr. Prof. Ir.
+
+Named Entity Recognition
+
+Title prefix membantu identifikasi entitas
+
+** Regex Noise Remover
+
+Cek promo di https://tokopedia.com/item?id=123 ** harga \<b\>Rp 99.000\</b\> aja!! \#murah \#promo2024
+
+HTML tags URLs Emoji Punctuation Angka Hashtag
+
+Clean Text
+
+Reset
+
+Output:
+
+04
+
+#### Stopword Removal
+
+Menghapus kata yang terlalu umum dan tidak memberi informasi — tapi tidak selalu benar
+
+Stopword adalah kata-kata dengan **frekuensi tinggi tapi nilai informasi rendah** untuk task tertentu: "yang", "di", "dan", "adalah", "the", "a", "is". Menghapusnya mengurangi noise dan mempercepat training.
+
+** Hubungan dengan TF-IDF
+
+Mengapa stopword punya IDF rendah?
+
+1
+
+IDF (Inverse Document Frequency)
+
+IDF(t) = log ( N / df(t) )
+
+// N = total dokumen, df(t) = dokumen yang mengandung kata t
+
+2
+
+Kata "yang" muncul di hampir semua dokumen
+
+IDF("yang") = log( 10,000 / 9,980 ) ≈ 0.001 (sangat rendah)
+
+3
+
+Kata "inflasi" muncul di sedikit dokumen
+
+IDF("inflasi") = log( 10,000 / 120 ) ≈ 4.42 (tinggi, informatif)
+
+** Stopword Bahasa Indonesia
+
+756 kata dalam daftar resmi (NLTK + Sastrawi)
+
+Konjungsi
+
+danatau tapinamun sertakarena sehinggamaka
+
+Preposisi
+
+dike daripada dalamuntuk denganoleh
+
+Kata Ganti
+
+sayaaku kamudia merekakita kamiini
+
+Partikel
+
+punlah kahtah yangadalah itutersebut
+
+** Stopword Highlighter Stopword di-highlight merah — klik untuk hapus manual, atau hapus semua sekaligus
+
+Saya sedang belajar tentang pemrosesan teks bahasa Indonesia karena hal ini sangat penting untuk pengembangan model kecerdasan buatan yang dapat memahami bahasa kita dengan baik.
+
+Highlight Stopwords
+
+Hapus Semua
+
+Reset
+
+Hasil highlight (klik kata merah untuk hapus satu per satu):
+
+05
+
+#### Stemming
+
+Memangkas imbuhan untuk mendapatkan akar kata — rule-based dan cepat
+
+Stemming adalah proses menghapus imbuhan (prefix, suffix, infix, confix) secara mekanis menggunakan aturan morfologi. Hasilnya tidak selalu kata yang valid secara kamus — yang penting konsisten. Untuk Bahasa Indonesia, **Algoritma Nazief-Adriani** (diimplementasikan di PySastrawi) adalah standar de facto.
+
+** Morfologi Bahasa Indonesia — Semua Tipe Imbuhan
+
+Imbuhan yang perlu di-strip saat stemming
+
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Tipe
+Imbuhan
+Contoh
+Hasil Stem</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Prefix
+<code>me-, di-, ke-, ber-, ter-, pe-, se-</code>
+memakan, dimakan, berkumpul
+makan, makan, kumpul</td>
+<td align="left">Suffix
+<code>-kan, -an, -i, -nya, -lah, -kah</code>
+makanan, memakannya, makanlah
+makan, makan, makan</td>
+<td align="left">Confix
+<code>ke-an, pe-an, ber-an, per-an</code>
+kecantikan, pembelajaran, perjalanan
+cantik, ajar, jalan</td>
+<td align="left">Infix
+<code>-el-, -em-, -er-</code>
+telapak, gemetar, gerigi
+tapak, getar, gigi</td>
+</tr>
+</tbody>
+</table>
+
+** Algoritma Nazief-Adriani — Step by Step
+
+Stemming kata "mempelajari"
+
+1
+
+Input kata
+
+mempelajari
+
+Cek apakah ada di kamus → TIDAK → lanjut stripping
+
+2
+
+Strip suffix `-i`
+
+mempelaiar i
+
+→ "mempelaiar" — cek kamus → TIDAK → lanjut
+
+3
+
+Strip prefix `me-` (dengan nasal `m→p`)
+
+mem pelajar
+
+→ "pelajar" — cek kamus → ADA **
+
+4
+
+Strip prefix `pe-`
+
+pe lajar
+
+→ "lajar" — cek kamus → TIDAK → backtrack ke "pelajar"
+
+**
+
+Hasil akhir
+
+pelajar
+
+Stem dari "mempelajari" = **pelajar**
+
+** Stemmer Interaktif — Bahasa Indonesia
+
+Stem
+
+Atau stem paragraf:
+
+Pembelajaran mesin membutuhkan pemahaman mendalam tentang matematika dan pemrograman komputer.
+
+Stem Semua Kata
+
+Reset
+
+06
+
+#### Lemmatization
+
+Berbeda dari stemming — hasilnya selalu kata valid dalam kamus
+
+Lemmatization menggunakan **analisis morfologi dan kamus** untuk menemukan *lemma* (bentuk dasar kata). Hasilnya selalu kata yang valid, berbeda dengan stemming yang bisa menghasilkan kata "putus" dari kata yang tidak berhubungan.
+
+** Stemming vs Lemmatization — Perbandingan Eksak
+
+Kasus di mana hasilnya berbeda signifikan
+
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Kata Asal
+Stemming (Sastrawi)
+Lemmatization
+Mana yang Benar?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">berlari
+lari
+lari
+Sama <em></em></td>
+<td align="left">mempermasalahkan
+masalah
+masalah
+Sama <em></em></td>
+<td align="left">universitas
+univers
+universitas
+Beda <em></em></td>
+<td align="left">kecantikan
+cantik
+cantik
+Sama <em></em></td>
+</tr>
+</tbody>
+</table>
+
+**
+
+**Stemming lebih cepat** (rule-based, O(n)) tapi less accurate. **Lemmatization lebih akurat** (dictionary lookup, O(n log n)) tapi lambat. Untuk Bahasa Indonesia dengan morfologi kompleks, lemmatization lebih direkomendasikan.
+
+07
+
+#### Normalisasi Teks
+
+Menangani slang, singkatan, dan typo khas Indonesia — tantangan unik NLP lokal
+
+Teks media sosial Indonesia penuh dengan singkatan informal, slang, dan variasi penulisan yang tidak ada di kamus standar. Normalisasi mengubah bentuk tidak standar ini ke bentuk baku sebelum proses lainnya.
+
+** Kamus Normalisasi Bahasa Indonesia
+
+Contoh mapping — 300+ entri dalam dataset publik
+
+Singkatan SMS/Chat
+
+tdk→tidak
+
+sdh→sudah
+
+dgn→dengan
+
+utk→untuk
+
+yg→yang
+
+krn→karena
+
+Slang / Gaul
+
+gw→saya
+
+lu→kamu
+
+gabisa→tidak bisa
+
+gimana→bagaimana
+
+emang→memang
+
+banget→sangat
+
+Variasi Ejaan
+
+sy→saya
+
+aja→saja
+
+kalo→kalau
+
+udah→sudah
+
+nggak→tidak
+
+gitu→begitu
+
+** Normalizer Bahasa Indonesia
+
+Gw udah coba tapi gabisa, emang susah banget. Gimana caranya biar bisa? Krn gw nggak ngerti sm sekali.
+
+Normalize
+
+Reset
+
+Output:
+
+08
+
+#### ** Pipeline Lab
+
+Gabungkan semua teknik — toggle tiap step dan lihat teks berubah realtime
+
+Sekarang saatnya mencoba semua teknik dalam satu pipeline. Toggle setiap step, lihat bagaimana teks berubah di setiap tahap, dan pahami dampak urutan preprocessing.
+
+Input Teks
+
+Gw udah belajar Machine Learning selama 3 bulan, tapi masih bingung dgn matematikanya!! ** Ada yg bisa bantu? Cek di https://github.com/example
+
+Lowercase
+
+Semua huruf → kecil
+
+—
+
+Noise Removal
+
+Hapus URL, HTML, emoji, punctuation
+
+—
+
+Normalisasi
+
+Slang → formal, singkatan → kata penuh
+
+—
+
+Stopword Removal
+
+Hapus kata frekuensi tinggi tidak bermakna
+
+—
+
+Stemming
+
+Potong imbuhan ke kata dasar
+
+—
+
+Final Output
+
+—
+
+Lesson berikutnya
+
+##### POS Tagging & NER →
+
+Setelah preprocessing, pelajari cara mengidentifikasi jenis kata dan entitas dalam teks.
+
+[Lanjut ke POS & NER](#/participant-ai-lab-pos-ner)
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<section class="fellow-dashboard fellow-modules-page lesson-detail-page" data-fellow-page="modules">
+<style>
+.ai-lab-content .pipeline-visual { display: flex; align-items: center; gap: 0; margin: 24px 0; overflow-x: auto; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }
+.ai-lab-content .pv-step { background: var(--ai-card); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r); padding: 14px 12px; text-align: center; min-width: 105px; flex-shrink: 0; transition: transform .2s; }
+.ai-lab-content .pv-step:hover { transform: translateY(-2px); }
+.ai-lab-content .pv-step.active { border-color: var(--ai-accent); box-shadow: 0 0 0 1px rgba(246,51,146,.2); }
+.ai-lab-content .pvs-icon { font-size: 20px; margin-bottom: 6px; }
+.ai-lab-content .pvs-label { font-family: var(--ai-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--ai-text3); margin-bottom: 4px; }
+.ai-lab-content .pvs-example { font-size: 11px; color: var(--ai-text2); line-height: 1.4; }
+.ai-lab-content .pv-arrow { font-size: 18px; color: var(--ai-text3); flex-shrink: 0; padding: 0 4px; }
+.ai-lab-content .edge-cases { display: flex; flex-direction: column; gap: 10px; }
+.ai-lab-content .ec-item { background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); padding: 12px 14px; }
+.ai-lab-content .ec-original { font-family: var(--ai-mono); font-size: 13px; color: var(--ai-text); margin-bottom: 4px; }
+.ai-lab-content .ec-arrow { color: var(--ai-text3); margin: 0 6px; }
+.ai-lab-content .ec-result { font-weight: 700; }
+.ai-lab-content .ec-result.wrong { color: #ef4444; }
+.ai-lab-content .ec-result.ok { color: #34c759; }
+.ai-lab-content .ec-note { font-size: 11px; color: var(--ai-text3); }
+.ai-lab-content .use-table-wrap { overflow-x: auto; margin-top: 12px; }
+.ai-lab-content .use-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ai-lab-content .use-table th { background: var(--ai-bg); border-bottom: 1px solid var(--ai-border-s); padding: 8px 10px; text-align: left; font-family: var(--ai-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--ai-text3); }
+.ai-lab-content .use-table td { padding: 8px 10px; border-bottom: 1px solid var(--ai-border-s); color: var(--ai-text2); }
+.ai-lab-content .use-table .yes { color: #34c759; }
+.ai-lab-content .use-table .no { color: #ef4444; }
+.ai-lab-content .use-table .maybe { color: #f59e0b; }
+.ai-lab-content .lower-demo, .ai-lab-content .noise-demo, .ai-lab-content .stopword-demo, .ai-lab-content .stemming-demo, .ai-lab-content .norm-demo { background: var(--ai-card); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r); padding: 16px; margin: 16px 0; }
+.ai-lab-content .demo-btns { display: flex; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
+.ai-lab-content .demo-btn { font-size: 11px; font-family: var(--ai-mono); color: var(--ai-accent); background: none; border: 1px solid var(--ai-border-s); border-radius: 6px; padding: 6px 14px; cursor: pointer; }
+.ai-lab-content .demo-btn:hover { background: var(--ai-bg2); }
+.ai-lab-content .demo-output { background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); padding: 12px 14px; font-family: var(--ai-mono); font-size: 12px; color: var(--ai-text2); min-height: 50px; }
+.ai-lab-content .demo-input { width: 100%; min-height: 44px; background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); color: var(--ai-text); font-family: var(--ai-font); font-size: 13px; padding: 10px 14px; resize: vertical; outline: none; }
+.ai-lab-content .demo-input:focus { border-color: var(--ai-accent); }
+.ai-lab-content .demo-result { display: none; margin-top: 12px; }
+.ai-lab-content .demo-label { font-family: var(--ai-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--ai-text3); margin-bottom: 4px; }
+.ai-lab-content .demo-text { font-family: var(--ai-mono); font-size: 12px; color: var(--ai-text); background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); padding: 10px 14px; word-break: break-all; }
+.ai-lab-content .stopword-hint { font-size: 11px; color: var(--ai-text3); margin-bottom: 8px; }
+.ai-lab-content .stopword-word { display: inline-block; padding: 3px 8px; border-radius: 4px; font-family: var(--ai-mono); font-size: 11px; margin: 2px; cursor: pointer; border: 1px solid var(--ai-border-s); color: var(--ai-text2); }
+.ai-lab-content .stopword-word.hidden { opacity: .25; text-decoration: line-through; }
+.ai-lab-content .sw-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+.ai-lab-content .sw-col-title { font-family: var(--ai-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--ai-text3); margin-bottom: 6px; }
+.ai-lab-content .sw-col-words { font-size: 11px; color: var(--ai-text2); display: flex; flex-wrap: wrap; gap: 2px 6px; }
+.ai-lab-content .morph-table-wrap { overflow-x: auto; margin: 14px 0; }
+.ai-lab-content .morph-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ai-lab-content .morph-table th { background: var(--ai-bg); border-bottom: 1px solid var(--ai-border-s); padding: 8px 10px; text-align: left; font-family: var(--ai-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--ai-text3); }
+.ai-lab-content .morph-table td { padding: 8px 10px; border-bottom: 1px solid var(--ai-border-s); color: var(--ai-text2); font-family: var(--ai-mono); }
+.ai-lab-content .regpat-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--ai-border-s); }
+.ai-lab-content .regpat-num { width: 26px; height: 26px; border-radius: 50%; background: var(--ai-accent); color: #fff; font-family: var(--ai-mono); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.ai-lab-content .regpat-body { flex: 1; }
+.ai-lab-content .regpat-pattern { font-family: var(--ai-mono); font-size: 11px; color: var(--ai-accent); margin-bottom: 4px; }
+.ai-lab-content .regpat-desc { font-size: 11px; color: var(--ai-text3); margin-bottom: 4px; }
+.ai-lab-content .regpat-result { font-family: var(--ai-mono); font-size: 12px; color: var(--ai-text); padding: 6px 10px; background: var(--ai-bg); border-radius: 4px; }
+.ai-lab-content .nlp-step-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
+.ai-lab-content .nlp-step-toggle { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+.ai-lab-content .nlp-step-toggle input { opacity: 0; width: 0; height: 0; }
+.ai-lab-content .nlp-step-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: 11px; transition: .3s; }
+.ai-lab-content .nlp-step-slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background: var(--ai-accent); border-radius: 50%; transition: .3s; }
+.ai-lab-content .nlp-step-toggle input:checked + .nlp-step-slider:before { transform: translateX(16px); }
+.ai-lab-content .nlp-step-label { font-size: 12px; color: var(--ai-text); cursor: pointer; flex: 1; }
+.ai-lab-content .nlp-pipeline-tag { font-family: var(--ai-mono); font-size: 9px; text-transform: uppercase; letter-spacing: .06em; color: var(--ai-accent); background: rgba(246,51,146,.08); padding: 2px 8px; border-radius: 10px; }
+.ai-lab-content .noise-demo .toggle-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.ai-lab-content .noise-demo .toggle-btn { font-size: 11px; font-family: var(--ai-mono); padding: 4px 10px; border-radius: 6px; cursor: pointer; background: var(--ai-bg); border: 1px solid var(--ai-border-s); color: var(--ai-text2); }
+.ai-lab-content .noise-demo .toggle-btn.active { background: var(--ai-accent); color: #fff; border-color: var(--ai-accent); }
+@media (max-width: 700px) { .ai-lab-content .sw-grid { grid-template-columns: 1fr 1fr; } }
+.ai-lab-content .regex-pipeline { background: var(--ai-card); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r); overflow: hidden; }
+.ai-lab-content .rp-input { background: var(--ai-bg); border-bottom: 1px solid var(--ai-border-s); padding: 10px 14px; font-size: 12px; }
+.ai-lab-content .rp-label { font-family: var(--ai-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--ai-text3); margin-right: 8px; }
+.ai-lab-content .rp-text { color: var(--ai-text); font-family: var(--ai-mono); font-size: 11px; word-break: break-all; }
+.ai-lab-content .rp-steps { display: flex; flex-direction: column; }
+.ai-lab-content .rp-step { border-bottom: 1px solid var(--ai-border-s); padding: 12px 14px; }
+.ai-lab-content .rp-step:last-child .rps-result.rps-final { background: rgba(34,197,94,.08); border-color: rgba(34,197,94,.3); color: #22c55e; font-weight: 700; }
+.ai-lab-content .rps-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.ai-lab-content .rps-num { width: 22px; height: 22px; border-radius: 50%; background: var(--ai-accent); color: #fff; font-family: var(--ai-mono); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ai-lab-content .rps-pattern { font-family: var(--ai-mono); font-size: 11px; color: var(--ai-accent); background: rgba(246,51,146,.08); padding: 2px 6px; border-radius: 4px; }
+.ai-lab-content .rps-desc { font-size: 11px; color: var(--ai-text3); }
+.ai-lab-content .rps-result { font-size: 11px; color: var(--ai-text2); font-family: var(--ai-mono); padding: 6px 10px; background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); }
+.ai-lab-content .no-remove-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.ai-lab-content .nr-item { background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); padding: 14px; }
+.ai-lab-content .nr-char { font-size: 16px; color: var(--ai-text); margin-bottom: 6px; font-family: var(--ai-mono); }
+.ai-lab-content .nr-task { font-family: var(--ai-mono); font-size: 9px; text-transform: uppercase; letter-spacing: .08em; color: var(--ai-accent); margin-bottom: 4px; }
+.ai-lab-content .nr-reason { font-size: 11px; color: var(--ai-text3); line-height: 1.5; }
+.ai-lab-content .interactive-box { background: var(--ai-card); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r); overflow: hidden; margin: 16px 0; }
+.ai-lab-content .ib-header { background: var(--ai-bg); border-bottom: 1px solid var(--ai-border-s); padding: 12px 16px; }
+.ai-lab-content .ib-title { font-family: var(--ai-mono); font-size: 11px; font-weight: 700; color: var(--ai-text); text-transform: uppercase; letter-spacing: .06em; }
+.ai-lab-content .ib-body { padding: 16px; }
+.ai-lab-content .ib-input { width: 100%; min-height: 60px; background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); color: var(--ai-text); font-family: var(--ai-font); font-size: 13px; padding: 10px 14px; resize: vertical; outline: none; }
+.ai-lab-content .ib-input:focus { border-color: var(--ai-accent); }
+.ai-lab-content .noise-toggles { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.ai-lab-content .noise-toggle { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--ai-text2); cursor: pointer; font-family: var(--ai-mono); padding: 4px 10px; border: 1px solid var(--ai-border-s); border-radius: 20px; background: var(--ai-bg); }
+.ai-lab-content .noise-toggle input { margin: 0; accent-color: var(--ai-accent); }
+.ai-lab-content .ib-actions { display: flex; gap: 8px; margin-top: 12px; }
+.ai-lab-content .ib-btn { font-size: 12px; font-family: var(--ai-mono); padding: 8px 16px; border-radius: var(--ai-r-sm); cursor: pointer; border: 1px solid var(--ai-border-s); background: var(--ai-bg); color: var(--ai-text2); }
+.ai-lab-content .ib-btn.primary { background: var(--ai-accent); color: #fff; border-color: var(--ai-accent); }
+.ai-lab-content .ib-btn:hover { opacity: .85; }
+.ai-lab-content .ib-result { margin-top: 12px; background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); padding: 14px; }
+.ai-lab-content .ibr-label { font-family: var(--ai-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--ai-text3); margin-bottom: 6px; }
+.ai-lab-content .ibr-text { font-family: var(--ai-mono); font-size: 13px; color: var(--ai-text); word-break: break-all; margin-bottom: 8px; }
+.ai-lab-content .ibr-stats { font-size: 11px; color: var(--ai-text3); font-family: var(--ai-mono); }
+@media (max-width: 700px) { .ai-lab-content .no-remove-grid { grid-template-columns: 1fr; } }
+.ai-lab-content .sw-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+.ai-lab-content .sw-col { background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); padding: 10px; }
+.ai-lab-content .sw-col-title { font-family: var(--ai-mono); font-size: 9px; text-transform: uppercase; letter-spacing: .08em; color: var(--ai-accent); margin-bottom: 6px; }
+.ai-lab-content .sw-col .stopword-word { display: inline-block; padding: 2px 6px; margin: 1px; border-radius: 3px; font-family: var(--ai-mono); font-size: 10px; color: var(--ai-text2); background: rgba(142,145,160,.08); border: 1px solid rgba(142,145,160,.15); }
+.ai-lab-content .stopword-demo { background: var(--ai-card); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r); padding: 16px; margin: 16px 0; }
+.ai-lab-content .stopword-input { width: 100%; min-height: 60px; background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); color: var(--ai-text); font-family: var(--ai-font); font-size: 13px; padding: 10px 14px; resize: vertical; outline: none; margin-bottom: 10px; }
+.ai-lab-content .stopword-input:focus { border-color: var(--ai-accent); }
+.ai-lab-content .stopword-btns { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.ai-lab-content .stopword-btn { font-size: 11px; font-family: var(--ai-mono); padding: 6px 14px; border-radius: var(--ai-r-sm); cursor: pointer; border: 1px solid var(--ai-border-s); background: var(--ai-bg); color: var(--ai-text2); }
+.ai-lab-content .stopword-btn.primary { background: var(--ai-accent); color: #fff; border-color: var(--ai-accent); }
+.ai-lab-content .stopword-btn:hover { opacity: .85; }
+.ai-lab-content .stopword-output { background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); padding: 14px; min-height: 50px; font-size: 13px; color: var(--ai-text2); line-height: 1.8; }
+.ai-lab-content .stopword-output .sw-highlight { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.3); color: #ef4444; padding: 1px 4px; border-radius: 3px; margin: 1px; cursor: pointer; text-decoration: line-through; }
+.ai-lab-content .stopword-output .sw-normal { color: var(--ai-text); }
+.ai-lab-content .nlp-step-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--ai-border-s); }
+.ai-lab-content .nlp-step-row:last-child { border-bottom: none; }
+.ai-lab-content .nlp-step-num { font-family: var(--ai-mono); font-size: 12px; font-weight: 700; color: var(--ai-accent); width: 20px; flex-shrink: 0; }
+.ai-lab-content .nlp-step-name { font-size: 13px; font-weight: 500; color: var(--ai-text); flex: 1; }
+.ai-lab-content .nlp-step-toggle { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+.ai-lab-content .nlp-step-toggle input { opacity: 0; width: 0; height: 0; }
+.ai-lab-content .nlp-step-slider { position: absolute; cursor: pointer; inset: 0; background: var(--ai-border-s); border-radius: 11px; transition: .3s; }
+.ai-lab-content .nlp-step-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: .3s; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+.ai-lab-content .nlp-step-toggle input:checked + .nlp-step-slider { background: var(--ai-accent); }
+.ai-lab-content .nlp-step-toggle input:checked + .nlp-step-slider:before { transform: translateX(18px); }
+.ai-lab-content .pipeline-result { font-size: 12px; font-family: var(--ai-mono); color: var(--ai-text); background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); padding: 10px 14px; min-height: 50px; margin-top: 12px; }
+.ai-lab-content .morph-table-wrap { overflow-x: auto; margin-top: 12px; }
+.ai-lab-content .morph-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ai-lab-content .morph-table th { background: var(--ai-bg); border-bottom: 1px solid var(--ai-border-s); padding: 8px 10px; text-align: left; font-family: var(--ai-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--ai-text3); }
+.ai-lab-content .morph-table td { padding: 8px 10px; border-bottom: 1px solid var(--ai-border-s); color: var(--ai-text2); font-family: var(--ai-mono); font-size: 11px; }
+.ai-lab-content .normalize-demo { background: var(--ai-card); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r); padding: 16px; margin: 16px 0; }
+.ai-lab-content .norm-input { width: 100%; min-height: 50px; background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); color: var(--ai-text); font-family: var(--ai-font); font-size: 13px; padding: 10px 14px; resize: vertical; outline: none; margin-bottom: 10px; }
+.ai-lab-content .norm-input:focus { border-color: var(--ai-accent); }
+.ai-lab-content .norm-output { background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); padding: 14px; min-height: 50px; font-size: 13px; color: var(--ai-text2); font-family: var(--ai-mono); }
+.ai-lab-content .norm-output .norm-changed { color: var(--ai-accent); font-weight: 700; }
+.ai-lab-content .lab-pipeline-box { background: var(--ai-card); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r); padding: 16px; margin: 16px 0; }
+.ai-lab-content .stopword-categories { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+.ai-lab-content .swc-group { background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); padding: 12px; }
+.ai-lab-content .swc-title { font-family: var(--ai-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--ai-accent); margin-bottom: 8px; }
+.ai-lab-content .swc-words { display: flex; flex-wrap: wrap; gap: 4px; }
+.ai-lab-content .sw-chip { padding: 2px 8px; border-radius: 4px; font-family: var(--ai-mono); font-size: 10px; color: var(--ai-text2); background: rgba(142,145,160,.08); border: 1px solid rgba(142,145,160,.15); }
+.ai-lab-content .ib-hint { font-size: 11px; color: var(--ai-text3); margin-left: auto; }
+.ai-lab-content .ib-btn.danger { background: #ef4444; color: #fff; border-color: #ef4444; }
+.ai-lab-content .mt-type { display: inline-block; padding: 2px 8px; border-radius: 4px; font-family: var(--ai-mono); font-size: 10px; font-weight: 700; }
+.ai-lab-content .mt-type.prefix { background: rgba(41,151,255,.12); color: #2997ff; }
+.ai-lab-content .mt-type.suffix { background: rgba(255,159,10,.12); color: #ff9f0a; }
+.ai-lab-content .mt-type.confix { background: rgba(168,85,247,.12); color: #a855f7; }
+.ai-lab-content .mt-type.infix { background: rgba(34,197,94,.12); color: #22c55e; }
+.ai-lab-content .stem-steps { display: flex; flex-direction: column; border: 1px solid var(--ai-border-s); border-radius: var(--ai-r); overflow: hidden; }
+.ai-lab-content .ss-step { display: flex; gap: 14px; padding: 16px; border-bottom: 1px solid var(--ai-border-s); align-items: flex-start; }
+.ai-lab-content .ss-step:last-child, .ai-lab-content .ss-step.result { border-bottom: none; }
+.ai-lab-content .ss-step.result { background: rgba(34,197,94,.06); }
+.ai-lab-content .ss-num { width: 24px; height: 24px; border-radius: 50%; background: var(--ai-accent); color: #fff; font-family: var(--ai-mono); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ai-lab-content .ss-step.result .ss-num { background: #34c759; }
+.ai-lab-content .ss-content { flex: 1; }
+.ai-lab-content .ss-label { font-size: 12px; font-weight: 500; color: var(--ai-text); margin-bottom: 6px; }
+.ai-lab-content .ss-word { font-family: var(--ai-mono); font-size: 16px; margin-bottom: 4px; display: flex; align-items: center; gap: 0; }
+.ai-lab-content .sw-full { color: var(--ai-text); font-weight: 700; }
+.ai-lab-content .sw-removed { color: #ef4444; text-decoration: line-through; opacity: .7; font-size: 13px; }
+.ai-lab-content .sw-result { color: #22c55e; font-weight: 700; font-size: 18px; }
+.ai-lab-content .ss-action { font-size: 11px; color: var(--ai-text3); font-family: var(--ai-mono); }
+.ai-lab-content .stem-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.ai-lab-content .stem-single-input { flex: 1; background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); color: var(--ai-text); font-family: var(--ai-font); font-size: 14px; padding: 8px 14px; outline: none; }
+.ai-lab-content .stem-single-input:focus { border-color: var(--ai-accent); }
+.ai-lab-content .stem-result-visual { font-family: var(--ai-mono); font-size: 14px; padding: 10px; }
+.ai-lab-content .stem-batch-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--ai-border-s); }
+@media (max-width: 700px) { .ai-lab-content .stopword-categories { grid-template-columns: 1fr; } .ai-lab-content .stem-input-row { flex-direction: column; } }
+.ai-lab-content .stem-out { font-family: var(--ai-mono); color: var(--ai-text2); }
+.ai-lab-content .stem-out.wrong { color: #ef4444; text-decoration: line-through; opacity: .7; }
+.ai-lab-content .lemma-out { font-family: var(--ai-mono); color: #22c55e; font-weight: 700; }
+.ai-lab-content .same { color: #22c55e; font-size: 12px; }
+.ai-lab-content .diff { color: #f59e0b; font-size: 12px; }
+.ai-lab-content .norm-categories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+.ai-lab-content .nc-group { background: var(--ai-bg); border: 1px solid var(--ai-border-s); border-radius: var(--ai-r-sm); padding: 12px; }
+.ai-lab-content .nc-title { font-family: var(--ai-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--ai-accent); margin-bottom: 10px; }
+.ai-lab-content .nc-pairs { display: flex; flex-direction: column; gap: 6px; }
+.ai-lab-content .nc-pair { display: flex; align-items: center; gap: 6px; font-family: var(--ai-mono); font-size: 11px; }
+.ai-lab-content .nc-from { color: #ef4444; background: rgba(239,68,68,.08); padding: 2px 6px; border-radius: 4px; }
+.ai-lab-content .nc-arr { color: var(--ai-text3); }
+.ai-lab-content .nc-to { color: #22c55e; background: rgba(34,197,94,.08); padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+.ai-lab-content .norm-diff { font-family: var(--ai-mono); font-size: 12px; margin-top: 8px; }
+.ai-lab-content .norm-diff .nd-changed { color: var(--ai-accent); font-weight: 700; }
+.ai-lab-content .next-lesson-cta { background: var(--ai-bg2); border: 1px solid var(--fellow-line); border-radius: var(--ai-r); padding: 32px; text-align: center; margin-top: 48px; }
+.ai-lab-content .nlc-label { font-family: var(--ai-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--ai-accent); margin-bottom: 8px; display: block; }
+.ai-lab-content .nlc-title { font-family: "Plus Jakarta Sans", sans-serif; font-size: 22px; font-weight: 700; color: var(--ai-text); letter-spacing: -.01em; margin-bottom: 8px; }
+.ai-lab-content .nlc-desc { font-size: 14px; color: var(--ai-text2); margin-bottom: 20px; }
+.ai-lab-content .nlc-btn { display: inline-block; padding: 12px 28px; border-radius: 8px; background: var(--ai-accent); color: #fff; font-weight: 600; font-size: 14px; text-decoration: none; transition: all .2s; }
+.ai-lab-content .nlc-btn:hover { opacity: .9; transform: translateY(-2px); }
+@media (max-width: 700px) { .ai-lab-content .norm-categories { grid-template-columns: 1fr; } }
+</style>
+<button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+<div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+<aside class="fellow-sidebar" aria-label="Navigasi peserta">
+<a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
+<nav class="fellow-menu">
+<a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+<a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+<a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+<a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+<a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+<a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+<a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+<a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+</nav>
+<nav class="fellow-menu secondary">
+<a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+<a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+<a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+<a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+</nav>
+<div class="invite-card course-help-mini">
+<div><strong>Butuh bantuan?</strong><p>Tanya HerAI Assistant tentang modul dan pembelajaran.</p></div>
+<button type="button">Chat Sekarang</button>
+</div>
+</aside>
+<main class="fellow-main">
+<header class="lesson-topbar">
+<nav class="lesson-breadcrumb" aria-label="Breadcrumb materi">
+<a href="#/participant-ai-lab-nlp"><i class="fas fa-arrow-left"></i><span>NLP</span></a>
+<span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+<span>Basic Preprocessing</span>
+</nav>
+<div class="fellow-actions">
+<label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul, topik, atau materi..."></label>
+<button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+<a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+</div>
+</header>
+<div class="lesson-layout">
+<div class="lesson-main-content">
+<section class="lesson-hero">
+<div class="lesson-hero-copy">
+<h1>Basic Preprocessing</h1>
+<p>Membersihkan dan menyiapkan teks mentah agar siap diproses model NLP — dari lowercasing hingga normalisasi slang.</p>
+<div class="lesson-meta-row">
+<span><i class="far fa-clock"></i> 45 menit</span>
+<span><i class="fas fa-layer-group"></i> NLP · Text Fundamentals</span>
+<b><i class="fas fa-flask"></i> Interaktif</b>
+</div>
+</div>
+<img src="/assets/messaging/herai-chat-persona.png" alt="HerAI preprocessing">
+</section>
+<section class="lesson-material-panel">
+                    <div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
+                        <a href="#/participant-ai-lab-preprocessing" class="active"><i class="fas fa-book-open"></i> Materi</a>
+                    </div>
+<article class="lesson-article ai-lab-content" id="preprocessing-content">
+
+      <!-- ══════════ SEC 1: PIPELINE ══════════ -->
+      <section class="lesson-sec" id="sec-pipeline">
+        <div class="sec-header">
+          <span class="sec-num">01</span>
+          <div>
+            <h2 class="sec-title">Pipeline Preprocessing</h2>
+            <p class="sec-sub">Urutan transformasi teks sebelum masuk ke model — dan kenapa urutan itu penting</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          Preprocessing bukan sekadar "membersihkan" teks — ini adalah serangkaian transformasi
+          yang <strong>mengubah teks mentah menjadi representasi yang bisa dipelajari model</strong>.
+          Urutan langkah sangat penting: stemming sebelum stopword removal menghasilkan hasil berbeda
+          dibanding sebaliknya.
+        </div>
+
+        <!-- Pipeline visual -->
+        <div class="pipeline-visual">
+          <div class="pv-step" data-step="raw">
+            <div class="pvs-icon"><i class="fas fa-file-lines"></i></div>
+            <div class="pvs-label">Raw Text</div>
+            <div class="pvs-example">"Saya sdh MAKAN, tapi tdk kenyang!!"</div>
+          </div>
+          <div class="pv-arrow">→</div>
+          <div class="pv-step" data-step="lower">
+            <div class="pvs-icon"><i class="fas fa-font"></i></div>
+            <div class="pvs-label">Lowercase</div>
+            <div class="pvs-example">"saya sdh makan, tapi tdk kenyang!!"</div>
+          </div>
+          <div class="pv-arrow">→</div>
+          <div class="pv-step" data-step="noise">
+            <div class="pvs-icon"><i class="fas fa-broom"></i></div>
+            <div class="pvs-label">Noise Removal</div>
+            <div class="pvs-example">"saya sdh makan tapi tdk kenyang"</div>
+          </div>
+          <div class="pv-arrow">→</div>
+          <div class="pv-step" data-step="norm">
+            <div class="pvs-icon"><i class="fas fa-pen-to-square"></i></div>
+            <div class="pvs-label">Normalisasi</div>
+            <div class="pvs-example">"saya sudah makan tapi tidak kenyang"</div>
+          </div>
+          <div class="pv-arrow">→</div>
+          <div class="pv-step" data-step="stop">
+            <div class="pvs-icon"><i class="fas fa-ban"></i></div>
+            <div class="pvs-label">Stopword</div>
+            <div class="pvs-example">"makan kenyang"</div>
+          </div>
+          <div class="pv-arrow">→</div>
+          <div class="pv-step" data-step="stem">
+            <div class="pvs-icon"><i class="fas fa-scissors"></i></div>
+            <div class="pvs-label">Stemming</div>
+            <div class="pvs-example">"makan kenyang"</div>
+          </div>
+          <div class="pv-arrow">→</div>
+          <div class="pv-step active" data-step="final">
+            <div class="pvs-icon"><i class="fas fa-circle-check"></i></div>
+            <div class="pvs-label">Final Tokens</div>
+            <div class="pvs-example">["makan", "kenyang"]</div>
+          </div>
+        </div>
+
+        <div class="insight-callout">
+          <div class="ic-icon"><i class="fas fa-triangle-exclamation"></i></div>
+          <div class="ic-body">
+            <strong>Urutan penting!</strong> Jika kamu hapus stopword sebelum normalisasi,
+            kata "tdk" tidak akan cocok dengan stopword list yang berisi "tidak".
+            Selalu normalisasi dulu, baru hapus stopword.
+          </div>
+        </div>
+
+        <!-- Which steps to use table -->
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-chart-simple"></i> Panduan Penggunaan</div>
+          <div class="wb-title">Kapan pakai teknik apa?</div>
+          <div class="use-table-wrap">
+            <table class="use-table">
+              <thead>
+                <tr>
+                  <th>Teknik</th>
+                  <th>Sentiment Analysis</th>
+                  <th>Information Retrieval</th>
+                  <th>Machine Translation</th>
+                  <th>Topic Modeling</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Lowercasing</td><td class="yes"><i class="fas fa-circle-check"></i></td><td class="yes"><i class="fas fa-circle-check"></i></td><td class="no"><i class="fas fa-triangle-exclamation"></i> hati-hati</td><td class="yes"><i class="fas fa-circle-check"></i></td></tr>
+                <tr><td>Noise Removal</td><td class="yes"><i class="fas fa-circle-check"></i></td><td class="yes"><i class="fas fa-circle-check"></i></td><td class="yes"><i class="fas fa-circle-check"></i></td><td class="yes"><i class="fas fa-circle-check"></i></td></tr>
+                <tr><td>Stopword Removal</td><td class="no"><i class="fas fa-circle-xmark"></i> bisa hilang nuansa</td><td class="yes"><i class="fas fa-circle-check"></i></td><td class="no"><i class="fas fa-circle-xmark"></i></td><td class="yes"><i class="fas fa-circle-check"></i></td></tr>
+                <tr><td>Stemming</td><td class="maybe"><i class="fas fa-triangle-exclamation"></i></td><td class="yes"><i class="fas fa-circle-check"></i></td><td class="no"><i class="fas fa-circle-xmark"></i></td><td class="yes"><i class="fas fa-circle-check"></i></td></tr>
+                <tr><td>Lemmatization</td><td class="yes"><i class="fas fa-circle-check"></i></td><td class="yes"><i class="fas fa-circle-check"></i></td><td class="no"><i class="fas fa-circle-xmark"></i></td><td class="yes"><i class="fas fa-circle-check"></i></td></tr>
+                <tr><td>Normalisasi</td><td class="yes"><i class="fas fa-circle-check"></i></td><td class="yes"><i class="fas fa-circle-check"></i></td><td class="yes"><i class="fas fa-circle-check"></i></td><td class="yes"><i class="fas fa-circle-check"></i></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ SEC 2: LOWERCASING ══════════ -->
+      <section class="lesson-sec" id="sec-lower">
+        <div class="sec-header">
+          <span class="sec-num">02</span>
+          <div>
+            <h2 class="sec-title">Lowercasing</h2>
+            <p class="sec-sub">Langkah paling sederhana — tapi penuh edge cases tersembunyi</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          Mengubah semua huruf ke lowercase memastikan "Makan", "MAKAN", dan "makan" diperlakukan
+          sebagai token yang sama. Tanpa ini, vocabulary model membengkak tidak perlu.
+        </div>
+
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-ruler-combined"></i> Efek pada Vocabulary Size</div>
+          <div class="wb-title">Kenapa lowercasing penting secara kuantitatif?</div>
+          <div class="calc-chain">
+            <div class="calc-step">
+              <div class="cs-num-circle">1</div>
+              <div class="cs-content">
+                <div class="cs-label">Tanpa lowercasing — "makan" muncul sebagai 4 token berbeda</div>
+                <div class="math-line">
+                  <span class="math-term purple">"Makan"</span>
+                  <span class="math-op">+</span>
+                  <span class="math-term purple">"MAKAN"</span>
+                  <span class="math-op">+</span>
+                  <span class="math-term purple">"makan"</span>
+                  <span class="math-op">+</span>
+                  <span class="math-term purple">"Makan."</span>
+                  <span class="math-op">=</span>
+                  <span class="math-result red">4 entri vocabulary</span>
+                </div>
+              </div>
+            </div>
+            <div class="calc-step">
+              <div class="cs-num-circle">2</div>
+              <div class="cs-content">
+                <div class="cs-label">Dengan lowercasing — semua jadi satu</div>
+                <div class="math-line">
+                  <span class="math-term blue">"makan"</span>
+                  <span class="math-op">=</span>
+                  <span class="math-result green">1 entri vocabulary</span>
+                </div>
+                <div class="math-line">
+                  <span class="math-comment">// vocabulary size berkurang, embedding lebih efisien</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edge cases -->
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-triangle-exclamation"></i> Edge Cases — Jangan Asal Lowercase!</div>
+          <div class="wb-title">Kasus di mana lowercasing merusak makna</div>
+          <div class="edge-cases">
+            <div class="ec-item">
+              <div class="ec-original">US <span class="ec-arrow">→</span> <span class="ec-result wrong">us</span></div>
+              <div class="ec-note">Negara (United States) berubah jadi kata ganti "kita"</div>
+            </div>
+            <div class="ec-item">
+              <div class="ec-original">Apple <span class="ec-arrow">→</span> <span class="ec-result wrong">apple</span></div>
+              <div class="ec-note">Nama perusahaan vs buah apel — berbeda makna</div>
+            </div>
+            <div class="ec-item">
+              <div class="ec-original">Dr. Siti <span class="ec-arrow">→</span> <span class="ec-result wrong">dr. siti</span></div>
+              <div class="ec-note">Named Entity (NER) menjadi tidak bisa dikenali</div>
+            </div>
+            <div class="ec-item">
+              <div class="ec-original">COVID-19 <span class="ec-arrow">→</span> <span class="ec-result ok">covid-19</span></div>
+              <div class="ec-note">Akronim — aman di-lowercase untuk domain umum</div>
+            </div>
+          </div>
+          <div class="insight-callout" style="margin-top:14px;">
+            <div class="ic-icon"><i class="fas fa-lightbulb"></i></div>
+            <div class="ic-body">Untuk task NER atau sentiment yang sensitif terhadap proper noun, gunakan <strong>truecasing</strong> bukan lowercasing — normalisasi kapitalisasi berdasarkan konteks linguistik.</div>
+          </div>
+        </div>
+
+        <!-- Interactive -->
+        <div class="interactive-box" id="lower-demo">
+          <div class="ib-header">
+            <span class="ib-title"><i class="fas fa-pencil"></i> Coba Sendiri — Lowercasing</span>
+          </div>
+          <div class="ib-body">
+            <textarea class="ib-input" id="lowerInput" rows="3" placeholder="Ketik teks dengan berbagai kapitalisasi...">Saya SUKA makan Nasi Goreng di JAKARTA setiap Pagi!</textarea>
+            <div class="ib-actions">
+              <button class="ib-btn primary" onclick="applyLower()">Apply Lowercase</button>
+              <button class="ib-btn" onclick="resetLower()">Reset</button>
+            </div>
+            <div class="ib-result" id="lowerResult" style="display:none">
+              <div class="ibr-label">Output:</div>
+              <div class="ibr-text" id="lowerOutput"></div>
+              <div class="ibr-stats" id="lowerStats"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ SEC 3: NOISE REMOVAL ══════════ -->
+      <section class="lesson-sec" id="sec-noise">
+        <div class="sec-header">
+          <span class="sec-num">03</span>
+          <div>
+            <h2 class="sec-title">Noise Removal</h2>
+            <p class="sec-sub">Regex patterns untuk membersihkan teks dari karakter tidak relevan</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          "Noise" adalah karakter atau pola yang tidak membawa informasi semantik untuk task kita —
+          punctuation, HTML tags, URL, emoji, angka, whitespace berlebih. Kuncinya:
+          <strong>apa yang noise tergantung pada task-mu</strong>.
+        </div>
+
+        <!-- Regex patterns worked example -->
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-ruler-combined"></i> Regex Patterns — Step by Step</div>
+          <div class="wb-title">Transformasi per pattern pada satu kalimat</div>
+
+          <div class="regex-pipeline" id="regexPipeline">
+            <div class="rp-input">
+              <span class="rp-label">Input:</span>
+              <span class="rp-text">"Harga &lt;b&gt;Rp 50.000&lt;/b&gt; <i class="fas fa-face-smile"></i> cek di https://toko.id/item?id=123 #promo"</span>
+            </div>
+
+            <div class="rp-steps">
+              <div class="rp-step" data-pattern="html">
+                <div class="rps-header">
+                  <span class="rps-num">1</span>
+                  <code class="rps-pattern">re.sub(r'&lt;[^&gt;]+&gt;', '', text)</code>
+                  <span class="rps-desc">Hapus HTML tags</span>
+                </div>
+                <div class="rps-result">"Harga Rp 50.000 <i class="fas fa-face-smile"></i> cek di https://toko.id/item?id=123 #promo"</div>
+              </div>
+
+              <div class="rp-step" data-pattern="url">
+                <div class="rps-header">
+                  <span class="rps-num">2</span>
+                  <code class="rps-pattern">re.sub(r'https?://\S+', '', text)</code>
+                  <span class="rps-desc">Hapus URL</span>
+                </div>
+                <div class="rps-result">"Harga Rp 50.000 <i class="fas fa-face-smile"></i> cek di  #promo"</div>
+              </div>
+
+              <div class="rp-step" data-pattern="emoji">
+                <div class="rps-header">
+                  <span class="rps-num">3</span>
+                  <code class="rps-pattern">re.sub(r'[^\x00-\x7F]+', '', text)</code>
+                  <span class="rps-desc">Hapus non-ASCII (emoji)</span>
+                </div>
+                <div class="rps-result">"Harga Rp 50.000  cek di  #promo"</div>
+              </div>
+
+              <div class="rp-step" data-pattern="punct">
+                <div class="rps-header">
+                  <span class="rps-num">4</span>
+                  <code class="rps-pattern">re.sub(r'[^\w\s]', '', text)</code>
+                  <span class="rps-desc">Hapus punctuation & special chars</span>
+                </div>
+                <div class="rps-result">"Harga Rp 50000  cek di  promo"</div>
+              </div>
+
+              <div class="rp-step" data-pattern="num">
+                <div class="rps-header">
+                  <span class="rps-num">5</span>
+                  <code class="rps-pattern">re.sub(r'\d+', '', text)</code>
+                  <span class="rps-desc">Hapus angka</span>
+                </div>
+                <div class="rps-result">"Harga Rp   cek di  promo"</div>
+              </div>
+
+              <div class="rp-step" data-pattern="space">
+                <div class="rps-header">
+                  <span class="rps-num">6</span>
+                  <code class="rps-pattern">re.sub(r'\s+', ' ', text).strip()</code>
+                  <span class="rps-desc">Normalize whitespace</span>
+                </div>
+                <div class="rps-result rps-final">"Harga Rp cek di promo"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- When NOT to remove -->
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-triangle-exclamation"></i> Kapan JANGAN Hapus</div>
+          <div class="wb-title">Noise yang membawa makna — task dependent</div>
+          <div class="no-remove-grid">
+            <div class="nr-item">
+              <div class="nr-char"><i class="fas fa-face-smile"></i> <i class="fas fa-face-sad-tear"></i> <i class="fas fa-face-angry"></i></div>
+              <div class="nr-task">Sentiment Analysis</div>
+              <div class="nr-reason">Emoji membawa sentimen kuat — jangan hapus, encode saja</div>
+            </div>
+            <div class="nr-item">
+              <div class="nr-char">Rp 50.000</div>
+              <div class="nr-task">E-commerce NLP</div>
+              <div class="nr-reason">Angka harga adalah fitur penting</div>
+            </div>
+            <div class="nr-item">
+              <div class="nr-char">#promo @brand</div>
+              <div class="nr-task">Social Media Analysis</div>
+              <div class="nr-reason">Hashtag dan mention adalah signal topik</div>
+            </div>
+            <div class="nr-item">
+              <div class="nr-char">Dr. Prof. Ir.</div>
+              <div class="nr-task">Named Entity Recognition</div>
+              <div class="nr-reason">Title prefix membantu identifikasi entitas</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive regex tester -->
+        <div class="interactive-box" id="noise-demo">
+          <div class="ib-header">
+            <span class="ib-title"><i class="fas fa-broom"></i> Regex Noise Remover</span>
+          </div>
+          <div class="ib-body">
+            <textarea class="ib-input" id="noiseInput" rows="3" placeholder="Paste teks dengan noise...">Cek promo di https://tokopedia.com/item?id=123 <i class="fas fa-face-smile-hearts"></i><i class="fas fa-face-smile-hearts"></i> harga &lt;b&gt;Rp 99.000&lt;/b&gt; aja!! #murah #promo2024</textarea>
+            <div class="noise-toggles">
+              <label class="noise-toggle"><input type="checkbox" id="nt-html" checked> HTML tags</label>
+              <label class="noise-toggle"><input type="checkbox" id="nt-url" checked> URLs</label>
+              <label class="noise-toggle"><input type="checkbox" id="nt-emoji" checked> Emoji</label>
+              <label class="noise-toggle"><input type="checkbox" id="nt-punct" checked> Punctuation</label>
+              <label class="noise-toggle"><input type="checkbox" id="nt-num"> Angka</label>
+              <label class="noise-toggle"><input type="checkbox" id="nt-hashtag"> Hashtag</label>
+            </div>
+            <div class="ib-actions">
+              <button class="ib-btn primary" onclick="applyNoise()">Clean Text</button>
+              <button class="ib-btn" onclick="resetNoise()">Reset</button>
+            </div>
+            <div class="ib-result" id="noiseResult" style="display:none">
+              <div class="ibr-label">Output:</div>
+              <div class="ibr-text" id="noiseOutput"></div>
+              <div class="ibr-stats" id="noiseStats"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ SEC 4: STOPWORD ══════════ -->
+      <section class="lesson-sec" id="sec-stopword">
+        <div class="sec-header">
+          <span class="sec-num">04</span>
+          <div>
+            <h2 class="sec-title">Stopword Removal</h2>
+            <p class="sec-sub">Menghapus kata yang terlalu umum dan tidak memberi informasi — tapi tidak selalu benar</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          Stopword adalah kata-kata dengan <strong>frekuensi tinggi tapi nilai informasi rendah</strong>
+          untuk task tertentu: "yang", "di", "dan", "adalah", "the", "a", "is". Menghapusnya
+          mengurangi noise dan mempercepat training.
+        </div>
+
+        <!-- TF-IDF connection -->
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-ruler-combined"></i> Hubungan dengan TF-IDF</div>
+          <div class="wb-title">Mengapa stopword punya IDF rendah?</div>
+          <div class="calc-chain">
+            <div class="calc-step">
+              <div class="cs-num-circle">1</div>
+              <div class="cs-content">
+                <div class="cs-label">IDF (Inverse Document Frequency)</div>
+                <div class="math-line">
+                  <span class="math-term">IDF(t)</span>
+                  <span class="math-op">=</span>
+                  <span class="math-term">log</span>
+                  <span class="math-op">(</span>
+                  <span class="math-term blue">N</span>
+                  <span class="math-op">/</span>
+                  <span class="math-term purple">df(t)</span>
+                  <span class="math-op">)</span>
+                </div>
+                <div class="math-line">
+                  <span class="math-comment">// N = total dokumen, df(t) = dokumen yang mengandung kata t</span>
+                </div>
+              </div>
+            </div>
+            <div class="calc-step">
+              <div class="cs-num-circle">2</div>
+              <div class="cs-content">
+                <div class="cs-label">Kata "yang" muncul di hampir semua dokumen</div>
+                <div class="math-line">
+                  <span class="math-term">IDF("yang")</span>
+                  <span class="math-op">=</span>
+                  <span class="math-term">log(</span>
+                  <span class="math-term blue">10,000</span>
+                  <span class="math-op">/</span>
+                  <span class="math-term purple">9,980</span>
+                  <span class="math-op">)</span>
+                  <span class="math-op">≈</span>
+                  <span class="math-result red">0.001</span>
+                  <span class="math-comment"> (sangat rendah)</span>
+                </div>
+              </div>
+            </div>
+            <div class="calc-step">
+              <div class="cs-num-circle">3</div>
+              <div class="cs-content">
+                <div class="cs-label">Kata "inflasi" muncul di sedikit dokumen</div>
+                <div class="math-line">
+                  <span class="math-term">IDF("inflasi")</span>
+                  <span class="math-op">=</span>
+                  <span class="math-term">log(</span>
+                  <span class="math-term blue">10,000</span>
+                  <span class="math-op">/</span>
+                  <span class="math-term purple">120</span>
+                  <span class="math-op">)</span>
+                  <span class="math-op">≈</span>
+                  <span class="math-result green">4.42</span>
+                  <span class="math-comment"> (tinggi, informatif)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Indonesian stopwords -->
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-flag"></i> Stopword Bahasa Indonesia</div>
+          <div class="wb-title">756 kata dalam daftar resmi (NLTK + Sastrawi)</div>
+          <div class="stopword-categories">
+            <div class="swc-group">
+              <div class="swc-title">Konjungsi</div>
+              <div class="swc-words">
+                <span class="sw-chip">dan</span><span class="sw-chip">atau</span>
+                <span class="sw-chip">tapi</span><span class="sw-chip">namun</span>
+                <span class="sw-chip">serta</span><span class="sw-chip">karena</span>
+                <span class="sw-chip">sehingga</span><span class="sw-chip">maka</span>
+              </div>
+            </div>
+            <div class="swc-group">
+              <div class="swc-title">Preposisi</div>
+              <div class="swc-words">
+                <span class="sw-chip">di</span><span class="sw-chip">ke</span>
+                <span class="sw-chip">dari</span><span class="sw-chip">pada</span>
+                <span class="sw-chip">dalam</span><span class="sw-chip">untuk</span>
+                <span class="sw-chip">dengan</span><span class="sw-chip">oleh</span>
+              </div>
+            </div>
+            <div class="swc-group">
+              <div class="swc-title">Kata Ganti</div>
+              <div class="swc-words">
+                <span class="sw-chip">saya</span><span class="sw-chip">aku</span>
+                <span class="sw-chip">kamu</span><span class="sw-chip">dia</span>
+                <span class="sw-chip">mereka</span><span class="sw-chip">kita</span>
+                <span class="sw-chip">kami</span><span class="sw-chip">ini</span>
+              </div>
+            </div>
+            <div class="swc-group">
+              <div class="swc-title">Partikel</div>
+              <div class="swc-words">
+                <span class="sw-chip">pun</span><span class="sw-chip">lah</span>
+                <span class="sw-chip">kah</span><span class="sw-chip">tah</span>
+                <span class="sw-chip">yang</span><span class="sw-chip">adalah</span>
+                <span class="sw-chip">itu</span><span class="sw-chip">tersebut</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive stopword highlighter -->
+        <div class="interactive-box" id="stopword-demo">
+          <div class="ib-header">
+            <span class="ib-title"><i class="fas fa-ban"></i> Stopword Highlighter</span>
+            <span class="ib-hint">Stopword di-highlight merah — klik untuk hapus manual, atau hapus semua sekaligus</span>
+          </div>
+          <div class="ib-body">
+            <textarea class="ib-input" id="stopInput" rows="4" placeholder="Paste paragraf Bahasa Indonesia...">Saya sedang belajar tentang pemrosesan teks bahasa Indonesia karena hal ini sangat penting untuk pengembangan model kecerdasan buatan yang dapat memahami bahasa kita dengan baik.</textarea>
+            <div class="ib-actions">
+              <button class="ib-btn primary" onclick="highlightStopwords()">Highlight Stopwords</button>
+              <button class="ib-btn danger" onclick="removeStopwords()">Hapus Semua</button>
+              <button class="ib-btn" onclick="resetStop()">Reset</button>
+            </div>
+            <div class="ib-result" id="stopResult" style="display:none">
+              <div class="ibr-label">Hasil highlight (klik kata merah untuk hapus satu per satu):</div>
+              <div class="ibr-text highlighted" id="stopOutput"></div>
+              <div class="ibr-stats" id="stopStats"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ SEC 5: STEMMING ══════════ -->
+      <section class="lesson-sec" id="sec-stem">
+        <div class="sec-header">
+          <span class="sec-num">05</span>
+          <div>
+            <h2 class="sec-title">Stemming</h2>
+            <p class="sec-sub">Memangkas imbuhan untuk mendapatkan akar kata — rule-based dan cepat</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          Stemming adalah proses menghapus imbuhan (prefix, suffix, infix, confix) secara
+          mekanis menggunakan aturan morfologi. Hasilnya tidak selalu kata yang valid secara kamus —
+          yang penting konsisten. Untuk Bahasa Indonesia, <strong>Algoritma Nazief-Adriani</strong>
+          (diimplementasikan di PySastrawi) adalah standar de facto.
+        </div>
+
+        <!-- Morphology types -->
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-ruler-combined"></i> Morfologi Bahasa Indonesia — Semua Tipe Imbuhan</div>
+          <div class="wb-title">Imbuhan yang perlu di-strip saat stemming</div>
+          <div class="morpho-table-wrap">
+            <table class="morpho-table">
+              <thead>
+                <tr><th>Tipe</th><th>Imbuhan</th><th>Contoh</th><th>Hasil Stem</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="mt-type prefix">Prefix</span></td>
+                  <td><code>me-, di-, ke-, ber-, ter-, pe-, se-</code></td>
+                  <td>memakan, dimakan, berkumpul</td>
+                  <td>makan, makan, kumpul</td>
+                </tr>
+                <tr>
+                  <td><span class="mt-type suffix">Suffix</span></td>
+                  <td><code>-kan, -an, -i, -nya, -lah, -kah</code></td>
+                  <td>makanan, memakannya, makanlah</td>
+                  <td>makan, makan, makan</td>
+                </tr>
+                <tr>
+                  <td><span class="mt-type confix">Confix</span></td>
+                  <td><code>ke-an, pe-an, ber-an, per-an</code></td>
+                  <td>kecantikan, pembelajaran, perjalanan</td>
+                  <td>cantik, ajar, jalan</td>
+                </tr>
+                <tr>
+                  <td><span class="mt-type infix">Infix</span></td>
+                  <td><code>-el-, -em-, -er-</code></td>
+                  <td>telapak, gemetar, gerigi</td>
+                  <td>tapak, getar, gigi</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Step by step stemming -->
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-scissors"></i> Algoritma Nazief-Adriani — Step by Step</div>
+          <div class="wb-title">Stemming kata "mempelajari"</div>
+          <div class="stem-steps" id="stemSteps">
+            <div class="ss-step active">
+              <div class="ss-num">1</div>
+              <div class="ss-content">
+                <div class="ss-label">Input kata</div>
+                <div class="ss-word"><span class="sw-full">mempelajari</span></div>
+                <div class="ss-action">Cek apakah ada di kamus → TIDAK → lanjut stripping</div>
+              </div>
+            </div>
+            <div class="ss-step">
+              <div class="ss-num">2</div>
+              <div class="ss-content">
+                <div class="ss-label">Strip suffix <code>-i</code></div>
+                <div class="ss-word">
+                  <span class="sw-full">mempelaiar</span>
+                  <span class="sw-removed">i</span>
+                </div>
+                <div class="ss-action">→ "mempelaiar" — cek kamus → TIDAK → lanjut</div>
+              </div>
+            </div>
+            <div class="ss-step">
+              <div class="ss-num">3</div>
+              <div class="ss-content">
+                <div class="ss-label">Strip prefix <code>me-</code> (dengan nasal <code>m→p</code>)</div>
+                <div class="ss-word">
+                  <span class="sw-removed">mem</span>
+                  <span class="sw-full">pelajar</span>
+                </div>
+                <div class="ss-action">→ "pelajar" — cek kamus → ADA <i class="fas fa-check"></i></div>
+              </div>
+            </div>
+            <div class="ss-step">
+              <div class="ss-num">4</div>
+              <div class="ss-content">
+                <div class="ss-label">Strip prefix <code>pe-</code></div>
+                <div class="ss-word">
+                  <span class="sw-removed">pe</span>
+                  <span class="sw-full">lajar</span>
+                </div>
+                <div class="ss-action">→ "lajar" — cek kamus → TIDAK → backtrack ke "pelajar"</div>
+              </div>
+            </div>
+            <div class="ss-step result">
+              <div class="ss-num"><i class="fas fa-check"></i></div>
+              <div class="ss-content">
+                <div class="ss-label">Hasil akhir</div>
+                <div class="ss-word">
+                  <span class="sw-result">pelajar</span>
+                </div>
+                <div class="ss-action">Stem dari "mempelajari" = <strong>pelajar</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive stemmer -->
+        <div class="interactive-box" id="stem-demo">
+          <div class="ib-header">
+            <span class="ib-title"><i class="fas fa-scissors"></i> Stemmer Interaktif — Bahasa Indonesia</span>
+          </div>
+          <div class="ib-body">
+            <div class="stem-input-row">
+              <input type="text" class="stem-single-input" id="stemInput" placeholder="Ketik kata Bahasa Indonesia..." value="pembelajaran">
+              <button class="ib-btn primary" onclick="stemWord()">Stem</button>
+            </div>
+            <div class="ib-result" id="stemResult" style="display:none">
+              <div class="stem-result-visual" id="stemVisual"></div>
+            </div>
+            <div class="stem-batch-section">
+              <div class="ibr-label" style="margin-bottom:8px;">Atau stem paragraf:</div>
+              <textarea class="ib-input" id="stemBatchInput" rows="3" placeholder="Ketik atau paste teks...">Pembelajaran mesin membutuhkan pemahaman mendalam tentang matematika dan pemrograman komputer.</textarea>
+              <div class="ib-actions">
+                <button class="ib-btn primary" onclick="stemBatch()">Stem Semua Kata</button>
+                <button class="ib-btn" onclick="resetStem()">Reset</button>
+              </div>
+              <div class="ib-result" id="stemBatchResult" style="display:none">
+                <div class="ibr-text" id="stemBatchOutput"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ SEC 6: LEMMATIZATION ══════════ -->
+      <section class="lesson-sec" id="sec-lemma">
+        <div class="sec-header">
+          <span class="sec-num">06</span>
+          <div>
+            <h2 class="sec-title">Lemmatization</h2>
+            <p class="sec-sub">Berbeda dari stemming — hasilnya selalu kata valid dalam kamus</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          Lemmatization menggunakan <strong>analisis morfologi dan kamus</strong> untuk menemukan
+          <em>lemma</em> (bentuk dasar kata). Hasilnya selalu kata yang valid, berbeda dengan
+          stemming yang bisa menghasilkan kata "putus" dari kata yang tidak berhubungan.
+        </div>
+
+        <!-- Stemming vs Lemma comparison -->
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-bolt"></i> Stemming vs Lemmatization — Perbandingan Eksak</div>
+          <div class="wb-title">Kasus di mana hasilnya berbeda signifikan</div>
+          <div class="comparison-table-wrap">
+            <table class="comparison-table">
+              <thead>
+                <tr><th>Kata Asal</th><th>Stemming (Sastrawi)</th><th>Lemmatization</th><th>Mana yang Benar?</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>berlari</td>
+                  <td><span class="stem-out">lari</span></td>
+                  <td><span class="lemma-out">lari</span></td>
+                  <td class="same">Sama <i class="fas fa-check"></i></td>
+                </tr>
+                <tr>
+                  <td>mempermasalahkan</td>
+                  <td><span class="stem-out">masalah</span></td>
+                  <td><span class="lemma-out">masalah</span></td>
+                  <td class="same">Sama <i class="fas fa-check"></i></td>
+                </tr>
+                <tr>
+                  <td>universitas</td>
+                  <td><span class="stem-out wrong">univers</span></td>
+                  <td><span class="lemma-out">universitas</span></td>
+                  <td class="diff">Beda <i class="fas fa-triangle-exclamation"></i></td>
+                </tr>
+                <tr>
+                  <td>kecantikan</td>
+                  <td><span class="stem-out">cantik</span></td>
+                  <td><span class="lemma-out">cantik</span></td>
+                  <td class="same">Sama <i class="fas fa-check"></i></td>
+                </tr>
+                <tr>
+                  <td>went (Inggris)</td>
+                  <td><span class="stem-out wrong">went</span></td>
+                  <td><span class="lemma-out">go</span></td>
+                  <td class="diff">Beda <i class="fas fa-triangle-exclamation"></i></td>
+                </tr>
+                <tr>
+                  <td>better (Inggris)</td>
+                  <td><span class="stem-out wrong">better</span></td>
+                  <td><span class="lemma-out">good</span></td>
+                  <td class="diff">Beda <i class="fas fa-triangle-exclamation"></i></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="insight-callout" style="margin-top:14px;">
+            <div class="ic-icon"><i class="fas fa-bolt"></i></div>
+            <div class="ic-body">
+              <strong>Stemming lebih cepat</strong> (rule-based, O(n)) tapi less accurate.
+              <strong>Lemmatization lebih akurat</strong> (dictionary lookup, O(n log n)) tapi lambat.
+              Untuk Bahasa Indonesia dengan morfologi kompleks, lemmatization lebih direkomendasikan.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ SEC 7: NORMALISASI ══════════ -->
+      <section class="lesson-sec" id="sec-norm">
+        <div class="sec-header">
+          <span class="sec-num">07</span>
+          <div>
+            <h2 class="sec-title">Normalisasi Teks</h2>
+            <p class="sec-sub">Menangani slang, singkatan, dan typo khas Indonesia — tantangan unik NLP lokal</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          Teks media sosial Indonesia penuh dengan singkatan informal, slang, dan variasi penulisan
+          yang tidak ada di kamus standar. Normalisasi mengubah bentuk tidak standar ini ke bentuk
+          baku sebelum proses lainnya.
+        </div>
+
+        <!-- Normalization dictionary -->
+        <div class="worked-box">
+          <div class="wb-badge"><i class="fas fa-book"></i> Kamus Normalisasi Bahasa Indonesia</div>
+          <div class="wb-title">Contoh mapping — 300+ entri dalam dataset publik</div>
+          <div class="norm-categories">
+            <div class="nc-group">
+              <div class="nc-title">Singkatan SMS/Chat</div>
+              <div class="nc-pairs">
+                <div class="nc-pair"><span class="nc-from">tdk</span><span class="nc-arr">→</span><span class="nc-to">tidak</span></div>
+                <div class="nc-pair"><span class="nc-from">sdh</span><span class="nc-arr">→</span><span class="nc-to">sudah</span></div>
+                <div class="nc-pair"><span class="nc-from">dgn</span><span class="nc-arr">→</span><span class="nc-to">dengan</span></div>
+                <div class="nc-pair"><span class="nc-from">utk</span><span class="nc-arr">→</span><span class="nc-to">untuk</span></div>
+                <div class="nc-pair"><span class="nc-from">yg</span><span class="nc-arr">→</span><span class="nc-to">yang</span></div>
+                <div class="nc-pair"><span class="nc-from">krn</span><span class="nc-arr">→</span><span class="nc-to">karena</span></div>
+              </div>
+            </div>
+            <div class="nc-group">
+              <div class="nc-title">Slang / Gaul</div>
+              <div class="nc-pairs">
+                <div class="nc-pair"><span class="nc-from">gw</span><span class="nc-arr">→</span><span class="nc-to">saya</span></div>
+                <div class="nc-pair"><span class="nc-from">lu</span><span class="nc-arr">→</span><span class="nc-to">kamu</span></div>
+                <div class="nc-pair"><span class="nc-from">gabisa</span><span class="nc-arr">→</span><span class="nc-to">tidak bisa</span></div>
+                <div class="nc-pair"><span class="nc-from">gimana</span><span class="nc-arr">→</span><span class="nc-to">bagaimana</span></div>
+                <div class="nc-pair"><span class="nc-from">emang</span><span class="nc-arr">→</span><span class="nc-to">memang</span></div>
+                <div class="nc-pair"><span class="nc-from">banget</span><span class="nc-arr">→</span><span class="nc-to">sangat</span></div>
+              </div>
+            </div>
+            <div class="nc-group">
+              <div class="nc-title">Variasi Ejaan</div>
+              <div class="nc-pairs">
+                <div class="nc-pair"><span class="nc-from">sy</span><span class="nc-arr">→</span><span class="nc-to">saya</span></div>
+                <div class="nc-pair"><span class="nc-from">aja</span><span class="nc-arr">→</span><span class="nc-to">saja</span></div>
+                <div class="nc-pair"><span class="nc-from">kalo</span><span class="nc-arr">→</span><span class="nc-to">kalau</span></div>
+                <div class="nc-pair"><span class="nc-from">udah</span><span class="nc-arr">→</span><span class="nc-to">sudah</span></div>
+                <div class="nc-pair"><span class="nc-from">nggak</span><span class="nc-arr">→</span><span class="nc-to">tidak</span></div>
+                <div class="nc-pair"><span class="nc-from">gitu</span><span class="nc-arr">→</span><span class="nc-to">begitu</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive normalizer -->
+        <div class="interactive-box" id="norm-demo">
+          <div class="ib-header">
+            <span class="ib-title"><i class="fas fa-pen-to-square"></i> Normalizer Bahasa Indonesia</span>
+          </div>
+          <div class="ib-body">
+            <textarea class="ib-input" id="normInput" rows="3" placeholder="Ketik teks informal Indonesia...">Gw udah coba tapi gabisa, emang susah banget. Gimana caranya biar bisa? Krn gw nggak ngerti sm sekali.</textarea>
+            <div class="ib-actions">
+              <button class="ib-btn primary" onclick="applyNorm()">Normalize</button>
+              <button class="ib-btn" onclick="resetNorm()">Reset</button>
+            </div>
+            <div class="ib-result" id="normResult" style="display:none">
+              <div class="ibr-label">Output:</div>
+              <div class="ibr-text" id="normOutput"></div>
+              <div class="ibr-stats" id="normStats"></div>
+              <div class="norm-diff" id="normDiff"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ SEC 8: PIPELINE LAB ══════════ -->
+      <section class="lesson-sec" id="sec-lab">
+        <div class="sec-header">
+          <span class="sec-num">08</span>
+          <div>
+            <h2 class="sec-title"><i class="fas fa-flask"></i> Pipeline Lab</h2>
+            <p class="sec-sub">Gabungkan semua teknik — toggle tiap step dan lihat teks berubah realtime</p>
+          </div>
+        </div>
+
+        <div class="prose">
+          Sekarang saatnya mencoba semua teknik dalam satu pipeline. Toggle setiap step,
+          lihat bagaimana teks berubah di setiap tahap, dan pahami dampak urutan preprocessing.
+        </div>
+
+        <div class="pipeline-lab">
+          <!-- Input -->
+          <div class="pl-section">
+            <div class="pl-label">Input Teks</div>
+            <textarea class="pl-input" id="labInput" rows="4">Gw udah belajar Machine Learning selama 3 bulan, tapi masih bingung dgn matematikanya!! <i class="fas fa-face-grin-sweat"></i> Ada yg bisa bantu? Cek di https://github.com/example</textarea>
+          </div>
+
+          <!-- Step toggles -->
+          <div class="pl-steps">
+            <div class="pl-step-toggle" data-step="lower">
+              <div class="pst-left">
+                <label class="pst-toggle">
+                  <input type="checkbox" id="lab-lower" checked>
+                  <span class="pst-slider"></span>
+                </label>
+                <div class="pst-info">
+                  <div class="pst-name">Lowercase</div>
+                  <div class="pst-desc">Semua huruf → kecil</div>
+                </div>
+              </div>
+              <div class="pst-preview" id="prev-lower">—</div>
+            </div>
+
+            <div class="pl-step-toggle" data-step="noise">
+              <div class="pst-left">
+                <label class="pst-toggle">
+                  <input type="checkbox" id="lab-noise" checked>
+                  <span class="pst-slider"></span>
+                </label>
+                <div class="pst-info">
+                  <div class="pst-name">Noise Removal</div>
+                  <div class="pst-desc">Hapus URL, HTML, emoji, punctuation</div>
+                </div>
+              </div>
+              <div class="pst-preview" id="prev-noise">—</div>
+            </div>
+
+            <div class="pl-step-toggle" data-step="norm">
+              <div class="pst-left">
+                <label class="pst-toggle">
+                  <input type="checkbox" id="lab-norm" checked>
+                  <span class="pst-slider"></span>
+                </label>
+                <div class="pst-info">
+                  <div class="pst-name">Normalisasi</div>
+                  <div class="pst-desc">Slang → formal, singkatan → kata penuh</div>
+                </div>
+              </div>
+              <div class="pst-preview" id="prev-norm">—</div>
+            </div>
+
+            <div class="pl-step-toggle" data-step="stop">
+              <div class="pst-left">
+                <label class="pst-toggle">
+                  <input type="checkbox" id="lab-stop" checked>
+                  <span class="pst-slider"></span>
+                </label>
+                <div class="pst-info">
+                  <div class="pst-name">Stopword Removal</div>
+                  <div class="pst-desc">Hapus kata frekuensi tinggi tidak bermakna</div>
+                </div>
+              </div>
+              <div class="pst-preview" id="prev-stop">—</div>
+            </div>
+
+            <div class="pl-step-toggle" data-step="stem">
+              <div class="pst-left">
+                <label class="pst-toggle">
+                  <input type="checkbox" id="lab-stem">
+                  <span class="pst-slider"></span>
+                </label>
+                <div class="pst-info">
+                  <div class="pst-name">Stemming</div>
+                  <div class="pst-desc">Potong imbuhan ke kata dasar</div>
+                </div>
+              </div>
+              <div class="pst-preview" id="prev-stem">—</div>
+            </div>
+          </div>
+
+          <!-- Final output -->
+          <div class="pl-output">
+            <div class="pl-label">Final Output</div>
+            <div class="pl-result" id="labResult">—</div>
+            <div class="pl-stats" id="labStats"></div>
+          </div>
+        </div>
+
+        <!-- Next lesson -->
+        <div class="next-lesson-cta" style="margin-top:48px;">
+          <span class="nlc-label">Lesson berikutnya</span>
+          <h3 class="nlc-title">POS Tagging &amp; NER →</h3>
+          <p class="nlc-desc">Setelah preprocessing, pelajari cara mengidentifikasi jenis kata dan entitas dalam teks.</p>
+          <a href="#/participant-ai-lab-pos-ner" class="nlc-btn">Lanjut ke POS &amp; NER</a>
+        </div>
+      </section>
+
+</article>
+<footer class="lesson-nav-footer">
+<a href="#/participant-ai-lab-tokenization" class="lnf-prev">
+<span class="lnf-label">Lesson sebelumnya</span>
+<span class="lnf-title">Tokenisasi <i class="fas fa-arrow-left"></i></span>
+</a>
+<a href="#/participant-ai-lab-pos-ner" class="lnf-next">
+<span class="lnf-label">Lesson berikutnya</span>
+<span class="lnf-title">POS &amp; NER <i class="fas fa-arrow-right"></i></span>
+</a>
+</footer>
+</section>
+</div>
+<aside class="lesson-right-panel">
+<div class="lesson-progress-card">
+<div class="lpc-header"><i class="fas fa-chart-simple"></i> Progress NLP</div>
+<div class="lpc-ring-wrap"><svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="30" stroke="var(--border)" stroke-width="5" fill="none"/><circle cx="36" cy="36" r="30" stroke="var(--fellow-pink)" stroke-width="5" fill="none" stroke-dasharray="188.5" stroke-dashoffset="113" stroke-linecap="round"/></svg><div class="lpc-ring-text"><strong>40%</strong></div></div>
+<div class="lpc-meta"><span><i class="far fa-circle-check"></i> 2/5 selesai</span></div>
+</div>
+<div class="lesson-list-card">
+<h4>NLP Course</h4>
+<div class="lesson-list-item done"><span class="lli-dot"></span> 1. Tokenisasi</div>
+<div class="lesson-list-item active"><span class="lli-dot"></span> 2. Basic Preprocessing</div>
+<div class="lesson-list-item locked"><span class="lli-dot"></span> 3. POS &amp; NER</div>
+<div class="lesson-list-item locked"><span class="lli-dot"></span> 4. Bag of Words</div>
+<div class="lesson-list-item locked"><span class="lli-dot"></span> 5. TF-IDF</div>
+</div>
+</aside>
+</div>
+</main>
+</section>
+
+````

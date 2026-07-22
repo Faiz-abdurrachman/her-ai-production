@@ -1,0 +1,352 @@
+# Chapter 7 — Function: Membangun Pipeline Kecil
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/04-topic.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+### Chapter 7 — Function: Membangun Pipeline Kecil
+
+#### Learning Objectives
+
+-   Membuat function dengan parameter dan return value.
+-   Membedakan input function, proses, dan output.
+-   Menyusun beberapa function sebagai pipeline sederhana.
+
+#### Kenapa Materi Ini Penting?
+
+Copy-paste adalah salah satu praktik paling berbahaya dalam pemrograman data. Ketika aturan yang sama ditulis ulang di beberapa tempat, setiap perubahan harus dilakukan di semua lokasi tersebut—dan hampir pasti ada yang terlewat. Akibatnya, beberapa bagian program menggunakan aturan lama sementara bagian lain sudah diperbarui, menghasilkan output yang tidak konsisten dan sulit dilacak.
+
+Function adalah solusi untuk masalah ini. Sebuah function membungkus satu tanggung jawab—misalnya "validasi apakah sebuah score valid"—ke dalam blok yang memiliki nama, input yang jelas, dan output yang dapat diprediksi. Setelah ditulis, function dapat dipanggil dari mana saja tanpa menulis ulang logikanya. Jika aturan berubah, cukup perbarui satu tempat.
+
+Lebih dari sekadar menghindari duplikasi, function mengubah cara kamu berpikir tentang program. Dariba sebuah skrip panjang yang melakukan semuanya sekaligus, kamu mulai melihat program sebagai kumpulan langkah kecil yang masing-masing dapat diuji, diperbaiki, dan diganti secara independen. Inilah inti dari pipeline: serangkaian function yang masing-masing menerima input, melakukan satu transformasi, dan memberikan output ke function berikutnya.
+
+#### Hubungan dengan AI
+
+Pipeline data dalam project AI hampir selalu merupakan rangkaian function. Sebuah pipeline preprocessing tipikal memiliki `load_data()` yang membaca file, `validate_schema()` yang memeriksa kolom, `clean_data()` yang menangani missing value dan duplikat, `transform_features()` yang mengubah data mentah menjadi fitur, dan `save_clean_data()` yang menyimpan hasil. Setiap function memiliki satu tanggung jawab dan dapat diuji secara terpisah.
+
+Pendekatan ini bukan hanya masalah organisasi kode. Dalam project AI, kamu sering perlu mengganti satu langkah preprocessing tanpa mengubah langkah lainnya—misalnya mencoba metode imputasi yang berbeda untuk missing value. Jika setiap langkah adalah function terpisah, kamu cukup menulis function baru dan menggantinya di pipeline tanpa menyentuh kode lain.
+
+#### Analogi
+
+Bayangkan sebuah resep masakan. Resep adalah function: ia menerima bahan (parameter), menentukan langkah-langkah (isi function), dan menghasilkan hidangan (return value). Selama kamu mengikuti resep yang sama, hasilnya akan konsisten. Jika ingin variasi, kamu cukup mengubah satu bagian resep tanpa menulis ulang seluruh buku masak.
+
+Dalam data pipeline, setiap function adalah satu resep kecil. `load_data` adalah resep untuk membaca file. `clean_data` adalah resep untuk membersihkan data. Masing-masing berdiri sendiri, bisa diuji dengan bahannya masing-masing, dan bisa digabung dalam urutan berbeda untuk menghasilkan pipeline yang berbeda pula.
+
+#### Penjelasan Konsep
+
+**def** mendefinisikan function. Parameter adalah variabel input yang diterima function saat dipanggil. **return** mengirim nilai hasil kepada pemanggil. Jika function tidak memiliki return, ia mengembalikan None secara implisit. Perbedaan mendasar antara `return` dan `print`: return mengirim nilai untuk digunakan oleh bagian program lain, sedangkan print hanya menampilkan informasi ke layar dan hasilnya tidak dapat ditangkap oleh variabel.
+
+Setiap function sebaiknya memiliki satu tanggung jawab yang jelas. Tanda sebuah function memiliki terlalu banyak tanggung jawab: namanya mengandung kata "dan" (misalnya `load_and_clean_and_save`), parameter terlalu banyak, atau sulit diuji karena bergantung pada banyak kondisi eksternal. Function yang baik dapat dijelaskan dalam satu kalimat tanpa menggunakan kata "dan".
+
+Docstring—string di baris pertama function—berfungsi sebagai dokumentasi inline. Docstring menjelaskan apa yang dilakukan function, parameter apa yang diterima, dan apa yang dikembalikan. Ini bukan komentar biasa; banyak editor dan tool dokumentasi yang membaca docstring secara otomatis.
+
+#### Visual Thinking
+
+    raw score → validate_score() → clean score
+
+#### Contoh Nyata
+
+Aturan kelulusan dipakai pada ratusan peserta. Jika aturan tersebut ditulis ulang di setiap bagian program—misalnya di skrip laporan, di skrip notifikasi, dan di dashboard—maka ketika threshold berubah dari 75 menjadi 80, kamu harus mencari dan memperbarui ketiga tempat tersebut. Jika satu terlewat, laporan akan menggunakan aturan yang berbeda dari dashboard, menyebabkan kebingungan dan ketidakpercayaan.
+
+Dengan function `classify_score(score, threshold=75)`, aturan ditulis sekali. Ketika threshold berubah, cukup ubah satu baris di definisi function. Semua pemanggil akan menggunakan aturan baru secara otomatis.
+
+#### Contoh AI
+
+Function preprocessing yang sama dapat digunakan pada data training dan data baru agar transformasinya konsisten. Ini adalah konsep yang akan diperdalam pada modul Machine Learning, tetapi fondasinya sudah kamu bangun di sini: menulis function yang menerima input, melakukan transformasi, dan mengembalikan output tanpa efek samping yang tersembunyi.
+
+#### Kode Python
+
+    def classify_score(score, threshold=75):
+        """Mengembalikan status nilai peserta."""
+        if score is None:
+            return "missing"
+        if score >= threshold:
+            return "pass"
+        return "review"
+
+    status = classify_score(88)
+    print(status)
+
+#### Penjelasan Kode Baris per Baris
+
+1.  Function menerima `score` dan threshold default 75.
+2.  Docstring menjelaskan tanggung jawab function.
+3.  Data kosong ditangani lebih dulu sebagai guard condition.
+4.  Nilai valid dibandingkan dengan threshold.
+5.  `return` mengirim satu status sebagai string.
+6.  Function dipanggil dengan nilai 88; hasilnya disimpan di variabel.
+
+#### Common Mistakes
+
+-   **Menggunakan `print()` ketika caller membutuhkan `return`.** Print menampilkan teks ke layar, tetapi nilai tersebut tidak dapat ditangkap oleh variabel atau digunakan oleh function lain dalam pipeline. Jika kamu menulis `classify_score(88)` dan di dalamnya hanya ada `print("pass")`, maka `status = classify_score(88)` akan menyimpan None, bukan "pass".
+-   **Function mengerjakan terlalu banyak hal.** Function yang mencampur validasi, transformasi, penyimpanan file, dan pengiriman notifikasi sulit diuji dan sulit digunakan ulang. Jika sebuah function memiliki lebih dari satu alasan untuk berubah, pisahkan.
+-   **Mengubah data global secara tersembunyi.** Function yang memodifikasi variabel global tanpa memberi tahu pemanggil dapat menyebabkan bug yang sangat sulit dilacak. Gunakan parameter dan return value untuk komunikasi antar-function.
+
+#### Best Practices
+
+-   **Gunakan nama berupa tindakan.** Nama function seperti `validate_score()`, `load_data()`, atau `build_report()` langsung menjelaskan apa yang dilakukan. Hindari nama generik seperti `process()` atau `handle()`.
+-   **Buat input dan output jelas.** Setiap function harus memiliki parameter yang mendokumentasikan data yang dibutuhkan dan return value yang menjelaskan hasilnya. Hindari function yang mengembalikan tipe berbeda tergantung kondisi.
+-   **Uji function dengan normal, boundary, dan missing input.** Sebelum function dipakai dalam pipeline, uji dengan nilai normal (misalnya 88), nilai batas (74.9, 75, 100), dan input tidak valid (None, teks, -1). Ketiga kategori ini mencakup sebagian besar skenario error yang akan muncul di produksi.
+
+#### Mini Challenge
+
+Buat `calculate_average(scores)` yang mengabaikan `None` dan mengembalikan rata-rata atau `None` jika tidak ada nilai valid.
+
+#### Ringkasan
+
+Function adalah unit dasar organisasi kode dalam Python. Dengan membungkus satu tanggung jawab ke dalam function yang memiliki nama, parameter, dan return value yang jelas, kamu menghindari duplikasi, memudahkan pengujian, dan membangun fondasi untuk pipeline yang dapat dipercaya. Setiap function harus dapat dijelaskan dalam satu kalimat, diuji secara terpisah, dan digabungkan dengan function lain tanpa efek samping tersembunyi.
+
+#### Persiapan Chapter Berikutnya
+
+Kita akan mengenal dua alat modularitas tambahan: lambda untuk operasi singkat dan generator untuk aliran data bertahap.
+
+* * * * *
+
+### Chapter 8 — Modularitas: Lambda dan Generator
+
+#### Learning Objectives
+
+-   Memahami penggunaan lambda yang tepat.
+-   Membuat generator sederhana dengan `yield`.
+-   Memilih keterbacaan daripada kode yang terlalu ringkas.
+
+#### Kenapa Materi Ini Penting?
+
+Tidak semua operasi membutuhkan function penuh dengan nama dan docstring. Kadang kamu hanya perlu ekspresi kecil untuk memberi tahu `sorted()` bagaimana mengurutkan data, atau `map()` bagaimana mentransformasi nilai. Lambda adalah jawaban untuk kasus-kasus singkat seperti ini. Namun, kemudahan lambda sering kali menggoda programmer pemula untuk menulis logika rumit dalam satu baris—dan hasilnya justru lebih sulit dibaca daripada function biasa.
+
+Di sisi lain, data dalam project AI bisa sangat besar. Sebuah dataset dengan jutaan baris tidak dapat dimuat seluruhnya ke dalam memori tanpa risiko crash. Generator memungkinkan kamu memproses data satu per satu tanpa menyimpan semuanya sekaligus. Ini bukan optimasi prematur—ini adalah kebiasaan yang diperlukan ketika bekerja dengan data dalam skala nyata.
+
+#### Hubungan dengan AI
+
+Lambda sering muncul dalam operasi sorting, filtering, dan transformasi data. Sebagai contoh, mengurutkan record peserta berdasarkan score membutuhkan key function yang mengambil score dari setiap record—dan lambda adalah cara paling ringkas untuk menulisnya. Generator, di sisi lain, sangat berguna ketika dataset besar perlu dialirkan ke pipeline preprocessing tanpa memuat semuanya ke RAM.
+
+Pada tahap ini kamu belum bekerja dengan dataset besar. Tapi memahami konsep yield dan evaluasi lazy akan memberimu kerangka berpikir yang tepat ketika nanti berhadapan dengan data streaming atau batch processing.
+
+#### Analogi
+
+List seperti membawa seluruh galon air minum sekaligus—berat dan memakan tempat. Generator seperti keran air: air mengalir saat kamu butuh, dan kamu tidak perlu menyimpan seluruh sungai di rumah. Perbedaan ini menjadi sangat penting ketika "air" adalah dataset dengan jutaan baris.
+
+Lambda seperti pisau lipat kecil—praktis untuk membuka kotak atau memotong lakban, tetapi tidak cocok untuk memotong kayu atau memasak. Gunakan lambda untuk tugas kecil yang selesai dalam satu ekspresi. Untuk logika yang membutuhkan beberapa langkah atau kondisi, gunakan def. Keterbacaan selalu lebih penting daripada keringkasan.
+
+#### Penjelasan Konsep
+
+Lambda adalah function anonim satu baris yang ditulis tanpa nama. Sintaksnya: `lambda parameter: ekspresi`. Lambda tidak memiliki pernyataan (statement), hanya ekspresi—artinya tidak bisa mengandung return, if/elif/else blok, atau loop. Cocok untuk operasi sederhana seperti mengambil field dari dictionary. Jika lambda mulai terlihat rumit, saatnya menggantinya dengan def.
+
+Generator adalah function yang menggunakan **yield** sebagai pengganti return. Ketika function mencapai yield, eksekusi dijeda, nilai dikirim ke pemanggil, dan function melanjutkan dari titik yang sama ketika nilai berikutnya diminta. Perilaku ini disebut lazy evaluation: nilai dihasilkan hanya saat dibutuhkan, bukan sebelumnya.
+
+Generator hanya dapat diiterasi satu kali. Setelah habis, kamu perlu membuat generator baru untuk mengulang proses. Ini berbeda dengan list yang dapat diiterasi berkali-kali. Pilihlah generator ketika kamu hanya perlu memproses data satu kali secara berurutan, dan pilihlah list jika data perlu diakses berulang atau secara acak.
+
+#### Visual Thinking
+
+    File besar → record 1 → record 2 → record 3 → ...
+                  generator mengirim satu per satu
+
+#### Contoh Nyata
+
+Urutkan peserta berdasarkan score menggunakan key function.
+
+#### Contoh AI
+
+Dataset besar sering dibaca per batch atau per record agar penggunaan memori terkendali.
+
+#### Kode Python
+
+    participants = [
+        {"name": "Ayu", "score": 88},
+        {"name": "Nisa", "score": 91},
+    ]
+
+    ranked = sorted(participants, key=lambda item: item["score"], reverse=True)
+
+
+    def stream_names(items):
+        for item in items:
+            yield item["name"]
+
+
+    for name in stream_names(ranked):
+        print(name)
+
+#### Penjelasan Kode Baris per Baris
+
+1.  List menyimpan dua record dengan schema yang sama.
+2.  Lambda mengambil field score dari setiap item sebagai kunci pengurutan.
+3.  `reverse=True` mengurutkan dari score tertinggi ke terendah.
+4.  Generator menerima collection dan menghasilkan satu nama setiap kali yield dipanggil.
+5.  `yield` mengirim satu nama pada satu waktu tanpa menyimpan seluruh hasil di memori.
+6.  Loop meminta dan menampilkan setiap nama; generator aktif hanya selama loop berjalan.
+
+#### Common Mistakes
+
+-   **Lambda terlalu panjang dan sulit dibaca.** Jika ekspresi lambda melebihi satu baris atau mengandung logika bercabang, gunakan def. Kode yang ringkas tidak otomatis lebih baik.
+-   **Mengira generator dapat diulang setelah habis.** Generator adalah iterator satu kali. Setelah semua nilai dihasilkan, loop for berikutnya tidak akan menghasilkan apa-apa. Buat generator baru jika perlu mengulang.
+-   **Mengubah semua function menjadi generator tanpa kebutuhan.** Generator memiliki overhead dan keterbatasan (hanya satu kali iterasi). Gunakan hanya ketika aliran data bertahap atau penghematan memori memang relevan.
+
+#### Best Practices
+
+-   **Batasi lambda pada satu ekspresi jelas.** Lambda terbaik adalah yang bisa dibaca dalam sekejap. Jika pembaca perlu berpikir untuk memahami apa yang dilakukan lambda, saatnya beralih ke def.
+-   **Pakai `def` untuk logika bernama atau kompleks.** Function dengan nama mendokumentasikan diri mereka sendiri. Nama seperti `get_score` lebih jelas daripada `lambda x: x["score"]` dalam konteks yang rumit.
+-   **Gunakan generator ketika aliran data atau memori memang relevan.** Membaca file besar baris per baris, memproses streaming data, atau menghasilkan urutan tak terbatas adalah kasus penggunaan alami untuk generator.
+
+#### Mini Challenge
+
+Buat generator yang hanya menghasilkan score valid dari list yang mengandung `None`.
+
+#### Ringkasan
+
+Lambda dan generator adalah alat modularitas yang melengkapi function biasa. Lambda membantu operasi kecil tetap ringkas tanpa harus mendefinisikan function bernama. Generator memungkinkan aliran data bertahap tanpa memuat semuanya ke memori. Keduanya berguna jika tidak mengorbankan keterbacaan—dan keterbacaan hampir selalu lebih penting daripada keringkasan. Jika ragu, gunakan def.
+
+#### Persiapan Chapter Berikutnya
+
+Selanjutnya kita melihat bagaimana data dan perilaku dapat dibungkus dalam object sederhana melalui OOP.
+
+* * * * *
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<h1>Chapter 7 — Function: Membangun Pipeline Kecil</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Membuat function dengan parameter dan return value.</li>
+<li>Membedakan input function, proses, dan output.</li>
+<li>Menyusun beberapa function sebagai pipeline sederhana.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Copy-paste adalah salah satu praktik paling berbahaya dalam pemrograman data. Ketika aturan yang sama ditulis ulang di beberapa tempat, setiap perubahan harus dilakukan di semua lokasi tersebut—dan hampir pasti ada yang terlewat. Akibatnya, beberapa bagian program menggunakan aturan lama sementara bagian lain sudah diperbarui, menghasilkan output yang tidak konsisten dan sulit dilacak.</p>
+<p>Function adalah solusi untuk masalah ini. Sebuah function membungkus satu tanggung jawab—misalnya "validasi apakah sebuah score valid"—ke dalam blok yang memiliki nama, input yang jelas, dan output yang dapat diprediksi. Setelah ditulis, function dapat dipanggil dari mana saja tanpa menulis ulang logikanya. Jika aturan berubah, cukup perbarui satu tempat.</p>
+<p>Lebih dari sekadar menghindari duplikasi, function mengubah cara kamu berpikir tentang program. Dariba sebuah skrip panjang yang melakukan semuanya sekaligus, kamu mulai melihat program sebagai kumpulan langkah kecil yang masing-masing dapat diuji, diperbaiki, dan diganti secara independen. Inilah inti dari pipeline: serangkaian function yang masing-masing menerima input, melakukan satu transformasi, dan memberikan output ke function berikutnya.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Pipeline data dalam project AI hampir selalu merupakan rangkaian function. Sebuah pipeline preprocessing tipikal memiliki <code>load_data()</code> yang membaca file, <code>validate_schema()</code> yang memeriksa kolom, <code>clean_data()</code> yang menangani missing value dan duplikat, <code>transform_features()</code> yang mengubah data mentah menjadi fitur, dan <code>save_clean_data()</code> yang menyimpan hasil. Setiap function memiliki satu tanggung jawab dan dapat diuji secara terpisah.</p>
+<p>Pendekatan ini bukan hanya masalah organisasi kode. Dalam project AI, kamu sering perlu mengganti satu langkah preprocessing tanpa mengubah langkah lainnya—misalnya mencoba metode imputasi yang berbeda untuk missing value. Jika setiap langkah adalah function terpisah, kamu cukup menulis function baru dan menggantinya di pipeline tanpa menyentuh kode lain.</p>
+<h2>Analogi</h2>
+<p>Bayangkan sebuah resep masakan. Resep adalah function: ia menerima bahan (parameter), menentukan langkah-langkah (isi function), dan menghasilkan hidangan (return value). Selama kamu mengikuti resep yang sama, hasilnya akan konsisten. Jika ingin variasi, kamu cukup mengubah satu bagian resep tanpa menulis ulang seluruh buku masak.</p>
+<p>Dalam data pipeline, setiap function adalah satu resep kecil. <code>load_data</code> adalah resep untuk membaca file. <code>clean_data</code> adalah resep untuk membersihkan data. Masing-masing berdiri sendiri, bisa diuji dengan bahannya masing-masing, dan bisa digabung dalam urutan berbeda untuk menghasilkan pipeline yang berbeda pula.</p>
+<h2>Penjelasan Konsep</h2>
+<p><strong>def</strong> mendefinisikan function. Parameter adalah variabel input yang diterima function saat dipanggil. <strong>return</strong> mengirim nilai hasil kepada pemanggil. Jika function tidak memiliki return, ia mengembalikan None secara implisit. Perbedaan mendasar antara <code>return</code> dan <code>print</code>: return mengirim nilai untuk digunakan oleh bagian program lain, sedangkan print hanya menampilkan informasi ke layar dan hasilnya tidak dapat ditangkap oleh variabel.</p>
+<p>Setiap function sebaiknya memiliki satu tanggung jawab yang jelas. Tanda sebuah function memiliki terlalu banyak tanggung jawab: namanya mengandung kata "dan" (misalnya <code>load_and_clean_and_save</code>), parameter terlalu banyak, atau sulit diuji karena bergantung pada banyak kondisi eksternal. Function yang baik dapat dijelaskan dalam satu kalimat tanpa menggunakan kata "dan".</p>
+<p>Docstring—string di baris pertama function—berfungsi sebagai dokumentasi inline. Docstring menjelaskan apa yang dilakukan function, parameter apa yang diterima, dan apa yang dikembalikan. Ini bukan komentar biasa; banyak editor dan tool dokumentasi yang membaca docstring secara otomatis.</p>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">raw score → validate_score() → clean score
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Aturan kelulusan dipakai pada ratusan peserta. Jika aturan tersebut ditulis ulang di setiap bagian program—misalnya di skrip laporan, di skrip notifikasi, dan di dashboard—maka ketika threshold berubah dari 75 menjadi 80, kamu harus mencari dan memperbarui ketiga tempat tersebut. Jika satu terlewat, laporan akan menggunakan aturan yang berbeda dari dashboard, menyebabkan kebingungan dan ketidakpercayaan.</p>
+<p>Dengan function <code>classify_score(score, threshold=75)</code>, aturan ditulis sekali. Ketika threshold berubah, cukup ubah satu baris di definisi function. Semua pemanggil akan menggunakan aturan baru secara otomatis.</p>
+<h2>Contoh AI</h2>
+<p>Function preprocessing yang sama dapat digunakan pada data training dan data baru agar transformasinya konsisten. Ini adalah konsep yang akan diperdalam pada modul Machine Learning, tetapi fondasinya sudah kamu bangun di sini: menulis function yang menerima input, melakukan transformasi, dan mengembalikan output tanpa efek samping yang tersembunyi.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">def classify_score(score, threshold=75):
+    """Mengembalikan status nilai peserta."""
+    if score is None:
+        return "missing"
+    if score >= threshold:
+        return "pass"
+    return "review"
+
+status = classify_score(88)
+print(status)
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li>Function menerima <code>score</code> dan threshold default 75.</li>
+<li>Docstring menjelaskan tanggung jawab function.</li>
+<li>Data kosong ditangani lebih dulu sebagai guard condition.</li>
+<li>Nilai valid dibandingkan dengan threshold.</li>
+<li><code>return</code> mengirim satu status sebagai string.</li>
+<li>Function dipanggil dengan nilai 88; hasilnya disimpan di variabel.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Menggunakan <code>print()</code> ketika caller membutuhkan <code>return</code>.</strong> Print menampilkan teks ke layar, tetapi nilai tersebut tidak dapat ditangkap oleh variabel atau digunakan oleh function lain dalam pipeline. Jika kamu menulis <code>classify_score(88)</code> dan di dalamnya hanya ada <code>print("pass")</code>, maka <code>status = classify_score(88)</code> akan menyimpan None, bukan "pass".</li>
+<li><strong>Function mengerjakan terlalu banyak hal.</strong> Function yang mencampur validasi, transformasi, penyimpanan file, dan pengiriman notifikasi sulit diuji dan sulit digunakan ulang. Jika sebuah function memiliki lebih dari satu alasan untuk berubah, pisahkan.</li>
+<li><strong>Mengubah data global secara tersembunyi.</strong> Function yang memodifikasi variabel global tanpa memberi tahu pemanggil dapat menyebabkan bug yang sangat sulit dilacak. Gunakan parameter dan return value untuk komunikasi antar-function.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li><strong>Gunakan nama berupa tindakan.</strong> Nama function seperti <code>validate_score()</code>, <code>load_data()</code>, atau <code>build_report()</code> langsung menjelaskan apa yang dilakukan. Hindari nama generik seperti <code>process()</code> atau <code>handle()</code>.</li>
+<li><strong>Buat input dan output jelas.</strong> Setiap function harus memiliki parameter yang mendokumentasikan data yang dibutuhkan dan return value yang menjelaskan hasilnya. Hindari function yang mengembalikan tipe berbeda tergantung kondisi.</li>
+<li><strong>Uji function dengan normal, boundary, dan missing input.</strong> Sebelum function dipakai dalam pipeline, uji dengan nilai normal (misalnya 88), nilai batas (74.9, 75, 100), dan input tidak valid (None, teks, -1). Ketiga kategori ini mencakup sebagian besar skenario error yang akan muncul di produksi.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Buat <code>calculate_average(scores)</code> yang mengabaikan <code>None</code> dan mengembalikan rata-rata atau <code>None</code> jika tidak ada nilai valid.</p>
+<h2>Ringkasan</h2>
+<p>Function adalah unit dasar organisasi kode dalam Python. Dengan membungkus satu tanggung jawab ke dalam function yang memiliki nama, parameter, dan return value yang jelas, kamu menghindari duplikasi, memudahkan pengujian, dan membangun fondasi untuk pipeline yang dapat dipercaya. Setiap function harus dapat dijelaskan dalam satu kalimat, diuji secara terpisah, dan digabungkan dengan function lain tanpa efek samping tersembunyi.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Kita akan mengenal dua alat modularitas tambahan: lambda untuk operasi singkat dan generator untuk aliran data bertahap.</p>
+<hr>
+
+<h1>Chapter 8 — Modularitas: Lambda dan Generator</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Memahami penggunaan lambda yang tepat.</li>
+<li>Membuat generator sederhana dengan <code>yield</code>.</li>
+<li>Memilih keterbacaan daripada kode yang terlalu ringkas.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Tidak semua operasi membutuhkan function penuh dengan nama dan docstring. Kadang kamu hanya perlu ekspresi kecil untuk memberi tahu <code>sorted()</code> bagaimana mengurutkan data, atau <code>map()</code> bagaimana mentransformasi nilai. Lambda adalah jawaban untuk kasus-kasus singkat seperti ini. Namun, kemudahan lambda sering kali menggoda programmer pemula untuk menulis logika rumit dalam satu baris—dan hasilnya justru lebih sulit dibaca daripada function biasa.</p>
+<p>Di sisi lain, data dalam project AI bisa sangat besar. Sebuah dataset dengan jutaan baris tidak dapat dimuat seluruhnya ke dalam memori tanpa risiko crash. Generator memungkinkan kamu memproses data satu per satu tanpa menyimpan semuanya sekaligus. Ini bukan optimasi prematur—ini adalah kebiasaan yang diperlukan ketika bekerja dengan data dalam skala nyata.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Lambda sering muncul dalam operasi sorting, filtering, dan transformasi data. Sebagai contoh, mengurutkan record peserta berdasarkan score membutuhkan key function yang mengambil score dari setiap record—dan lambda adalah cara paling ringkas untuk menulisnya. Generator, di sisi lain, sangat berguna ketika dataset besar perlu dialirkan ke pipeline preprocessing tanpa memuat semuanya ke RAM.</p>
+<p>Pada tahap ini kamu belum bekerja dengan dataset besar. Tapi memahami konsep yield dan evaluasi lazy akan memberimu kerangka berpikir yang tepat ketika nanti berhadapan dengan data streaming atau batch processing.</p>
+<h2>Analogi</h2>
+<p>List seperti membawa seluruh galon air minum sekaligus—berat dan memakan tempat. Generator seperti keran air: air mengalir saat kamu butuh, dan kamu tidak perlu menyimpan seluruh sungai di rumah. Perbedaan ini menjadi sangat penting ketika "air" adalah dataset dengan jutaan baris.</p>
+<p>Lambda seperti pisau lipat kecil—praktis untuk membuka kotak atau memotong lakban, tetapi tidak cocok untuk memotong kayu atau memasak. Gunakan lambda untuk tugas kecil yang selesai dalam satu ekspresi. Untuk logika yang membutuhkan beberapa langkah atau kondisi, gunakan def. Keterbacaan selalu lebih penting daripada keringkasan.</p>
+<h2>Penjelasan Konsep</h2>
+<p>Lambda adalah function anonim satu baris yang ditulis tanpa nama. Sintaksnya: <code>lambda parameter: ekspresi</code>. Lambda tidak memiliki pernyataan (statement), hanya ekspresi—artinya tidak bisa mengandung return, if/elif/else blok, atau loop. Cocok untuk operasi sederhana seperti mengambil field dari dictionary. Jika lambda mulai terlihat rumit, saatnya menggantinya dengan def.</p>
+<p>Generator adalah function yang menggunakan <strong>yield</strong> sebagai pengganti return. Ketika function mencapai yield, eksekusi dijeda, nilai dikirim ke pemanggil, dan function melanjutkan dari titik yang sama ketika nilai berikutnya diminta. Perilaku ini disebut lazy evaluation: nilai dihasilkan hanya saat dibutuhkan, bukan sebelumnya.</p>
+<p>Generator hanya dapat diiterasi satu kali. Setelah habis, kamu perlu membuat generator baru untuk mengulang proses. Ini berbeda dengan list yang dapat diiterasi berkali-kali. Pilihlah generator ketika kamu hanya perlu memproses data satu kali secara berurutan, dan pilihlah list jika data perlu diakses berulang atau secara acak.</p>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">File besar → record 1 → record 2 → record 3 → ...
+              generator mengirim satu per satu
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Urutkan peserta berdasarkan score menggunakan key function.</p>
+<h2>Contoh AI</h2>
+<p>Dataset besar sering dibaca per batch atau per record agar penggunaan memori terkendali.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">participants = [
+    {"name": "Ayu", "score": 88},
+    {"name": "Nisa", "score": 91},
+]
+
+ranked = sorted(participants, key=lambda item: item["score"], reverse=True)
+
+
+def stream_names(items):
+    for item in items:
+        yield item["name"]
+
+
+for name in stream_names(ranked):
+    print(name)
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li>List menyimpan dua record dengan schema yang sama.</li>
+<li>Lambda mengambil field score dari setiap item sebagai kunci pengurutan.</li>
+<li><code>reverse=True</code> mengurutkan dari score tertinggi ke terendah.</li>
+<li>Generator menerima collection dan menghasilkan satu nama setiap kali yield dipanggil.</li>
+<li><code>yield</code> mengirim satu nama pada satu waktu tanpa menyimpan seluruh hasil di memori.</li>
+<li>Loop meminta dan menampilkan setiap nama; generator aktif hanya selama loop berjalan.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li><strong>Lambda terlalu panjang dan sulit dibaca.</strong> Jika ekspresi lambda melebihi satu baris atau mengandung logika bercabang, gunakan def. Kode yang ringkas tidak otomatis lebih baik.</li>
+<li><strong>Mengira generator dapat diulang setelah habis.</strong> Generator adalah iterator satu kali. Setelah semua nilai dihasilkan, loop for berikutnya tidak akan menghasilkan apa-apa. Buat generator baru jika perlu mengulang.</li>
+<li><strong>Mengubah semua function menjadi generator tanpa kebutuhan.</strong> Generator memiliki overhead dan keterbatasan (hanya satu kali iterasi). Gunakan hanya ketika aliran data bertahap atau penghematan memori memang relevan.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li><strong>Batasi lambda pada satu ekspresi jelas.</strong> Lambda terbaik adalah yang bisa dibaca dalam sekejap. Jika pembaca perlu berpikir untuk memahami apa yang dilakukan lambda, saatnya beralih ke def.</li>
+<li><strong>Pakai <code>def</code> untuk logika bernama atau kompleks.</strong> Function dengan nama mendokumentasikan diri mereka sendiri. Nama seperti <code>get_score</code> lebih jelas daripada <code>lambda x: x["score"]</code> dalam konteks yang rumit.</li>
+<li><strong>Gunakan generator ketika aliran data atau memori memang relevan.</strong> Membaca file besar baris per baris, memproses streaming data, atau menghasilkan urutan tak terbatas adalah kasus penggunaan alami untuk generator.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Buat generator yang hanya menghasilkan score valid dari list yang mengandung <code>None</code>.</p>
+<h2>Ringkasan</h2>
+<p>Lambda dan generator adalah alat modularitas yang melengkapi function biasa. Lambda membantu operasi kecil tetap ringkas tanpa harus mendefinisikan function bernama. Generator memungkinkan aliran data bertahap tanpa memuat semuanya ke memori. Keduanya berguna jika tidak mengorbankan keterbacaan—dan keterbacaan hampir selalu lebih penting daripada keringkasan. Jika ragu, gunakan def.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Selanjutnya kita melihat bagaimana data dan perilaku dapat dibungkus dalam object sederhana melalui OOP.</p>
+<hr>
+
+````

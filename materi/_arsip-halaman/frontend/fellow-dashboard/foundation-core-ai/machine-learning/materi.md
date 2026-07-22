@@ -1,0 +1,214 @@
+# materi
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning/materi.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+Topik aktif **Pengantar Machine Learning**
+
+**
+
+Memuat materi Machine Learning...
+
+** Topik Sebelumnya
+
+Topik Selanjutnya **
+
+[Buka Latihan **](#/participant-ai-lab-ml-practice)
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<section class="fellow-dashboard fellow-modules-page lesson-detail-page ml-course-page ml-materi-page" data-fellow-page="modules">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+        <div class="invite-card course-help-mini">
+            <div>
+                <strong>Butuh bantuan?</strong>
+                <p>Tanya HerAI Assistant tentang modul dan pembelajaran.</p>
+            </div>
+            <button type="button">Chat Sekarang</button>
+        </div>
+    </aside>
+
+    <main class="fellow-main">
+        <header class="lesson-topbar">
+            <nav class="lesson-breadcrumb" aria-label="Breadcrumb materi">
+                <a href="#/participant-modules"><i class="fas fa-arrow-left"></i><span>Course Catalog</span></a>
+                <span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+                <span>Machine Learning</span>
+            </nav>
+            <div class="fellow-actions">
+                <label class="fellow-search">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="search" placeholder="Cari modul, topik, atau materi...">
+                </label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
+                    <i class="far fa-bell"></i>
+                    <span>5</span>
+                </button>
+                <a href="#/participant-profile" class="fellow-user-button">
+                    <span class="avatar-img"></span>
+                    <span><strong>Aisyah Putri</strong><small>Peserta</small></span>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+            </div>
+        </header>
+
+        <div class="lesson-layout">
+            <div class="lesson-main-content">
+                <section class="lesson-hero ml-lesson-hero">
+                    <div class="lesson-hero-copy">
+                        <span class="ml-eyebrow"><i class="fas fa-diagram-project"></i> Course Machine Learning</span>
+                        <h1>Machine Learning untuk AI</h1>
+                        <p>Pelajari cara model belajar dari data, memilih algoritma, mengevaluasi performa, dan membaca risiko overfitting secara praktis.</p>
+                        <div class="lesson-meta-row">
+                            <span><i class="far fa-clock"></i> 120 menit</span>
+                            <span><i class="fas fa-layer-group"></i> 8 materi inti</span>
+                            <b>Core Foundation</b>
+                        </div>
+                    </div>
+                    <div class="ml-hero-visual" aria-hidden="true">
+                        <div class="ml-data-card is-source">
+                            <span>Dataset</span>
+                            <strong>x, y</strong>
+                        </div>
+                        <div class="ml-hero-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="ml-data-card is-model">
+                            <span>Model</span>
+                            <strong>h(x)</strong>
+                        </div>
+                        <div class="ml-hero-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="ml-data-card is-output">
+                            <span>Prediksi</span>
+                            <strong>y hat</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="lesson-material-panel">
+                    <div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
+                        <a href="#/participant-ai-lab-ml" class="active"><i class="fas fa-book-open"></i> Materi</a>
+                        <a href="#/participant-ai-lab-ml-practice"><i class="fas fa-pen-to-square"></i> Latihan</a>
+                        <a href="#/participant-ai-lab-ml-quiz"><i class="far fa-clipboard"></i> Kuis</a>
+                        <a href="#/participant-ai-lab-ml-discussion"><i class="far fa-message"></i> Diskusi</a>
+                    </div>
+
+                    <article class="lesson-article ai-lab-content" id="materi-ml">
+                        <div class="ml-current-topic">
+                            <span>Topik aktif</span>
+                            <strong data-ml-current-title>Pengantar Machine Learning</strong>
+                        </div>
+
+                        <div id="ml-chapter-container">
+                            <div class="ml-loading-state">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Memuat materi Machine Learning...</p>
+                            </div>
+                        </div>
+
+                        <div id="chapter-pagination" class="ml-chapter-pagination">
+                            <button id="btn-prev-chapter" type="button" class="ml-nav-btn is-outline" hidden>
+                                <i class="fas fa-arrow-left"></i> Topik Sebelumnya
+                            </button>
+                            <span></span>
+                            <button id="btn-next-chapter" type="button" class="ml-nav-btn">
+                                Topik Selanjutnya <i class="fas fa-arrow-right"></i>
+                            </button>
+                            <a href="#/participant-ai-lab-ml-practice" id="btn-finish-materi" class="ml-nav-btn" hidden>
+                                Buka Latihan <i class="fas fa-play"></i>
+                            </a>
+                        </div>
+                    </article>
+                </section>
+            </div>
+
+            <aside class="lesson-right-panel">
+                <section class="module-side-card lesson-progress-card">
+                    <h2>Progres Materi</h2>
+                    <div class="lesson-progress-mini"><b data-ml-progress-fill style="--value:13%"></b><strong data-ml-progress-value>13%</strong></div>
+                    <p data-ml-progress-text>1 dari 8 materi selesai</p>
+                    <a href="#/participant-ai-lab-ml-practice">Lanjut Latihan</a>
+                </section>
+
+                <section class="module-side-card lesson-list-card">
+                    <h2>Daftar Materi</h2>
+                    <ol id="ml-sidebar-list">
+                        <li class="active" data-chapter="1">
+                            <span>1</span>
+                            <a href="#/participant-ai-lab-ml-intro" data-ml-chapter="1">Pengantar ML</a>
+                            <i class="far fa-circle-play"></i>
+                        </li>
+                        <li data-chapter="2">
+                            <span>2</span>
+                            <a href="#/participant-ai-lab-ml-supervised" data-ml-chapter="2">Supervised Learning</a>
+                            <i class="far fa-circle"></i>
+                        </li>
+                        <li data-chapter="3">
+                            <span>3</span>
+                            <a href="#/participant-ai-lab-ml-regression-classification" data-ml-chapter="3">Regresi &amp; Klasifikasi</a>
+                            <i class="far fa-circle"></i>
+                        </li>
+                        <li data-chapter="4">
+                            <span>4</span>
+                            <a href="#/participant-ai-lab-ml-probabilistic" data-ml-chapter="4">Probabilistic Models</a>
+                            <i class="far fa-circle"></i>
+                        </li>
+                        <li data-chapter="5">
+                            <span>5</span>
+                            <a href="#/participant-ai-lab-ml-linear-discriminative" data-ml-chapter="5">Linear Discriminative</a>
+                            <i class="far fa-circle"></i>
+                        </li>
+                        <li data-chapter="6">
+                            <span>6</span>
+                            <a href="#/participant-ai-lab-ml-svm" data-ml-chapter="6">Support Vector Machine</a>
+                            <i class="far fa-circle"></i>
+                        </li>
+                        <li data-chapter="7">
+                            <span>7</span>
+                            <a href="#/participant-ai-lab-ml-neural-networks" data-ml-chapter="7">Neural Networks</a>
+                            <i class="far fa-circle"></i>
+                        </li>
+                        <li data-chapter="8">
+                            <span>8</span>
+                            <a href="#/participant-ai-lab-ml-unsupervised" data-ml-chapter="8">Unsupervised Learning</a>
+                            <i class="far fa-circle"></i>
+                        </li>
+                    </ol>
+                </section>
+
+                <section class="module-side-card lesson-note-card lesson-compact-note">
+                    <div class="module-side-head">
+                        <h2>Catatan</h2>
+                        <button type="button">+ Tambah</button>
+                    </div>
+                    <p>Catat istilah seperti fitur, label, loss, margin, kernel, dan clustering agar mudah dihubungkan saat latihan.</p>
+                </section>
+            </aside>
+        </div>
+    </main>
+</section>
+
+````

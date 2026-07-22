@@ -1,0 +1,939 @@
+# Machine Learning
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning/legacy-overview.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+****
+
+### Machine Learning
+
+Dari regresi linear hingga neural network — kurikulum lengkap untuk membangun fondasi ML yang kuat.
+
+** 8 Modul ** 50+ Topik **** AI Lab · Marchel Andrian Shevchenko**
+
+![HerAI ML learning](/assets/messaging/herai-chat-persona.png)
+
+01
+
+Foundation
+
+#### Pengantar Machine Learning
+
+Sebelum menyentuh algoritma apapun, pahami dulu apa yang sebenarnya dilakukan ML — dan mengapa cara berpikirnya berbeda dari pemrograman biasa.
+
+**
+
+##### [Apa itu Machine Learning?](#/participant-ai-lab-ml-intro)
+
+Perbedaan fundamental antara pemrograman klasik dan ML — dari aturan eksplisit ke induksi dari data. Tiga paradigma utama: supervised, unsupervised, dan reinforcement learning. Kapan ML adalah solusi yang tepat, dan kapan tidak.
+
+SupervisedUnsupervisedReinforcementInductive Learning
+
+**
+
+##### [Hipotesis, Model & Ruang Fitur](#/participant-ai-lab-ml-hypothesis)
+
+Mendefinisikan contoh latih sebagai vektor fitur x ∈ ℝⁿ. Hipotesis h: X → Y sebagai fungsi yang diinduksi dari data. Perbedaan antara model (ruang hipotesis H) dan hipotesis konkret (satu fungsi dengan parameter θ tetap).
+
+Feature VectorHypothesisTraining SetInstance Space
+
+**
+
+##### [VC Dimension & Kapasitas Model](#/participant-ai-lab-ml-vc-dim)
+
+Vapnik-Chervonenkis dimension sebagai ukuran kapasitas model — berapa banyak titik yang bisa di-shatter oleh H. Mengapa model linear di ℝⁿ memiliki VC-dim = n+1. Hubungan antara VC-dim dengan kemampuan generalisasi dan upper bound error.
+
+VC-DimensionShatterModel CapacityStatistical Learning
+
+**
+
+##### [Bias-Variance Tradeoff](#/participant-ai-lab-ml-bias-variance)
+
+Overfitting terjadi saat model terlalu kompleks — menghafal noise, generalisasi buruk. Underfitting saat model terlalu sederhana. Induktif bias sebagai asumsi yang memungkinkan generalisasi. The No Free Lunch Theorem: tidak ada algoritma terbaik untuk semua masalah.
+
+OverfittingUnderfittingBiasVarianceNo Free Lunch
+
+02
+
+Core Concept
+
+#### Supervised Learning
+
+Kerangka kerja paling umum dalam ML — belajar dari data berlabel untuk memprediksi label baru.
+
+**
+
+##### Komponen Algoritma ML
+
+Tiga komponen yang mendefinisikan setiap algoritma supervised learning: (1) Model H — ruang hipotesis yang dibatasi, (2) Fungsi Loss L — mengukur kesalahan prediksi, (3) Prosedur Optimisasi — mencari parameter θ optimal. Pilihan ketiganya menentukan induktif bias.
+
+ModelLoss FunctionOptimizationEmpirical Risk
+
+**
+
+##### Model Selection & Cross-Validation
+
+Memisahkan data ke training set dan validation set. k-Fold cross-validation untuk estimasi error generalisasi yang lebih robust. Prinsip Structural Risk Minimization (SRM), Akaike Information Criterion (AIC), dan Bayesian Information Criterion (BIC).
+
+k-Fold CVTrain/Val/TestSRMAICBIC
+
+    from sklearn.model_selection import cross_val_score
+    scores = cross_val_score(model, X, y, cv=5)
+    # Rata-rata akurasi 5-fold
+    print(scores.mean(), scores.std())
+
+**
+
+##### Generatif vs Diskriminatif
+
+Model generatif memodelkan distribusi gabungan P(x, Cⱼ) — bisa generate data baru, interpretable. Model diskriminatif langsung memodelkan P(Cⱼ|x) — akurasi lebih tinggi. Model parametrik vs non-parametrik, dan model linear vs non-linear.
+
+GeneratifDiskriminatifParametrikNon-parametrik
+
+03
+
+Algorithm
+
+#### Regresi & Klasifikasi Dasar
+
+Algoritma paling fundamental — yang masih relevan dan dipakai di production hingga hari ini.
+
+**
+
+##### Linear & Polynomial Regression
+
+Memodelkan hubungan antara fitur dan nilai kontinu. Metode Least Squares — meminimalkan jumlah kuadrat residual. Solusi analitik via Moore-Penrose pseudoinverse: w = (XᵀX)⁻¹Xᵀy. Regresi polinomial sebagai perluasan dengan fitur x², x³.
+
+Least SquaresPseudoinversePolynomialResiduals
+
+    import numpy as np
+    # Solusi analitik least squares
+    w = np.linalg.lstsq(X, y, rcond=None)[0]
+    y_pred = X @ w  # prediksi
+
+**
+
+##### Decision Trees & Ensembles
+
+Pohon keputusan mempartisi ruang fitur secara rekursif menggunakan kriteria Information Gain / Gini Impurity. Random Forest menggabungkan banyak pohon dengan bagging. Gradient Boosting (XGBoost, LightGBM) membangun pohon secara sekuensial — state-of-the-art untuk data tabular.
+
+Information GainGiniRandom ForestXGBoostBagging
+
+    from sklearn.ensemble import RandomForestClassifier
+    rf = RandomForestClassifier(n_estimators=100, max_depth=5)
+    rf.fit(X_train, y_train)
+    importance = rf.feature_importances_
+
+**
+
+##### k-Nearest Neighbors (k-NN)
+
+Algoritma non-parametrik — tidak ada fase training, semua kerja dilakukan saat prediksi. Klasifikasi berdasarkan mayoritas k tetangga terdekat menggunakan jarak Euclidean / Manhattan. Curse of dimensionality dan kompleksitas O(N·n) per prediksi.
+
+k-NNEuclidean DistanceLazy LearningCurse of Dim.
+
+04
+
+Probabilistic
+
+#### Probabilistic Models
+
+Menggunakan teori probabilitas untuk membangun model yang bisa mengekspresikan ketidakpastian prediksi.
+
+**
+
+##### Teori Probabilitas untuk ML
+
+Ekspektasi, variansi, dan independensi variabel. Distribusi Bernoulli, Multinomial, dan Gaussian sebagai building blocks. Maximum Likelihood Estimation (MLE) untuk mengoptimalkan parameter — "pilih parameter yang paling memungkinkan data yang kita amati terjadi".
+
+MLEGaussianBernoulliEkspektasiVariansi
+
+**
+
+##### Naive Bayes Classifier
+
+Menggunakan Teorema Bayes: P(Cⱼ|x) ∝ P(x|Cⱼ)·P(Cⱼ). Asumsi "naif" — semua fitur independen secara kondisional diberikan kelas. Gaussian NB untuk variabel kontinu. Laplace smoothing untuk mengatasi zero probability. Sangat efektif untuk text classification.
+
+Bayes TheoremCond. IndependenceGaussian NBLaplace Smoothing
+
+    from sklearn.naive_bayes import GaussianNB
+    clf = GaussianNB()
+    clf.fit(X_train, y_train)
+    proba = clf.predict_proba(X_test)
+
+**
+
+##### Bayesian Networks
+
+Semi-Naive Bayes yang memodelkan dependensi antar fitur menggunakan Directed Acyclic Graph (DAG). Algoritma FSSJ dan TAN (Tree-Augmented Naive Bayes) untuk membangun struktur jaringan secara otomatis dari data menggunakan Mutual Information.
+
+DAGTANFSSJMarkov BlanketMutual Information
+
+05
+
+**Industry Core
+
+#### Linear Discriminative Models
+
+Model yang langsung memodelkan batas keputusan — lebih sederhana, sering lebih akurat dari model generatif.
+
+**
+
+##### Generalized Linear Model
+
+Perluasan regresi linear untuk klasifikasi via fungsi aktivasi f: h(x) = f(wᵀx + w₀). Geometri hyperplane pemisah di ruang n-dimensi — w sebagai normal hyperplane. Klasifikasi multi-kelas dengan strategi one-vs-rest dan one-vs-one.
+
+HyperplaneDecision BoundaryOne-vs-RestMulti-class
+
+**
+
+##### Logistic Regression
+
+Model diskriminatif probabilistik — output adalah P(C₁|x) = σ(wᵀx + w₀). Fungsi sigmoid mengubah output linear ke [0,1]. Cross-entropy loss sebagai fungsi objektif yang konveks. Gradient descent dan SGD untuk optimisasi. Regularisasi L1 (Lasso) dan L2 (Ridge).
+
+SigmoidCross-EntropyGradient DescentL1/L2 RegSGD
+
+    from sklearn.linear_model import LogisticRegression
+    clf = LogisticRegression(C=1.0, penalty='l2')
+    clf.fit(X_train, y_train)
+    y_prob = clf.predict_proba(X_test)[:,1]
+
+**
+
+##### Evaluasi Model Klasifikasi
+
+Confusion matrix sebagai fondasi: TP, TN, FP, FN. Precision dan Recall — trade-off bergantung pada domain. F1-score sebagai harmonic mean. ROC curve dan AUC untuk evaluasi threshold-independent. Strategi untuk imbalanced dataset: oversampling (SMOTE), undersampling, class weights.
+
+Confusion MatrixPrecisionRecallF1ROC-AUC
+
+06
+
+Advanced
+
+#### Support Vector Machine
+
+Algoritma klasifikasi yang elegan secara matematis — memaksimalkan margin untuk generalisasi terbaik.
+
+Hard Margin SVM
+
+Data harus linearly separable sempurna. Tidak ada toleransi misklasifikasi.
+
+-   Margin maksimum: 2/||w||
+-   Kendala ketat per sampel
+-   Sensitif terhadap outlier
+
+Teoretis
+
+VS
+
+Soft Margin SVM
+
+Toleransi misklasifikasi terkontrol via parameter C.
+
+-   Slack variables ξᵢ ≥ 0
+-   C besar = margin kecil, fit ketat
+-   Robust terhadap noise
+
+Production
+
+**
+
+##### Maximum Margin Hyperplane
+
+Formulasi sebagai masalah optimisasi kuadratik — meminimalkan (1/2)||w||² subject to constraint klasifikasi. Metode Lagrange Multipliers mengubahnya ke dual problem. Support vectors sebagai titik kritis — menghapus titik lain tidak mengubah solusi.
+
+Quadratic ProgrammingLagrangeSupport VectorsDual Problem
+
+**
+
+##### Kernel Trick
+
+Untuk data non-linearly separable: peta ke ruang berdimensi tinggi via fungsi kernel K(x,x') = φ(x)ᵀφ(x') tanpa eksplisit menghitung φ(x). Mercer's theorem sebagai kondisi kernel valid. Polynomial K(x,x') = (xᵀx'+c)ᵈ, Gaussian RBF exp(-||x-x'||²/2σ²).
+
+Kernel TrickRBF KernelPolynomial KernelMercer Theorem
+
+    from sklearn.svm import SVC
+    svm = SVC(kernel='rbf', C=1.0, gamma='scale')
+    svm.fit(X_train, y_train)
+    score = svm.decision_function(X_test)
+
+07
+
+**Must Know
+
+#### Neural Networks
+
+Dari perceptron satu neuron hingga deep network berlapis — fondasi semua arsitektur AI modern.
+
+1958
+
+Perceptron
+
+Frank Rosenblatt
+
+→
+
+1986
+
+Backprop
+
+Rumelhart et al.
+
+→
+
+1989
+
+MLP
+
+Universal Approx.
+
+→
+
+2012
+
+Deep Learning
+
+AlexNet, GPU era
+
+→
+
+2017+
+
+Transformers
+
+Attention is all
+
+**
+
+##### Single Layer Perceptron
+
+Unit komputasi terinspirasi neuron biologis: net input z = wᵀx + w₀, lalu fungsi aktivasi f(z). Perceptron Learning Rule — update bobot berdasarkan error: w ← w + η·(y - ŷ)·x. Dijamin konvergen jika data linearly separable (Perceptron Convergence Theorem). Keterbatasan: tidak bisa memecahkan XOR.
+
+Perceptron RuleStep FunctionConvergence TheoremLinear Separability
+
+    # Perceptron learning rule
+    for x, y in training_data:
+        y_hat = step(w @ x + w0)
+        error = y - y_hat
+        w  += lr * error * x
+        w0 += lr * error
+
+**
+
+##### Multi-Layer Perceptron (MLP)
+
+Menyusun layer perceptron: input → hidden layers → output. Forward pass: z⁽ˡ⁾ = W⁽ˡ⁾a⁽ˡ⁻¹⁾ + b⁽ˡ⁾, a⁽ˡ⁾ = f(z⁽ˡ⁾). Fungsi aktivasi non-linear (ReLU, Sigmoid, Tanh, Softmax) — krusial agar network bukan sekadar regresi linear. Universal Approximation Theorem.
+
+Forward PassReLUSoftmaxHidden LayerUniversal Approx.
+
+**
+
+##### Backpropagation
+
+Algoritma efisien untuk menghitung gradien ∂L/∂W⁽ˡ⁾ menggunakan chain rule mundur dari output ke input. Error term: δ⁽ˡ⁾ = (W⁽ˡ⁺¹⁾)ᵀδ⁽ˡ⁺¹⁾ ⊙ f'(z⁽ˡ⁾). Masalah vanishing/exploding gradient — diatasi dengan ReLU, BatchNorm, dan gradient clipping.
+
+Chain RuleGradientVanishing GradientBatchNorm
+
+**
+
+##### Optimisasi & Regularisasi
+
+SGD dengan momentum, RMSprop, dan Adam sebagai optimizer modern. Mini-batch training untuk keseimbangan kecepatan dan stabilitas. Dropout — mematikan neuron secara acak saat training. Batch Normalization, weight decay, dan early stopping.
+
+AdamSGD + MomentumDropoutWeight DecayEarly Stopping
+
+    import torch.nn as nn, torch.optim as optim
+    model = nn.Sequential(
+        nn.Linear(128, 64), nn.ReLU(), nn.Dropout(0.3),
+        nn.Linear(64, 10)
+    )
+    optimizer = optim.Adam(model.parameters(), lr=1e-3)
+
+08
+
+Unsupervised
+
+#### Unsupervised Learning
+
+Menemukan struktur tersembunyi dalam data tanpa label — clustering, dimensionality reduction, dan density estimation.
+
+**
+
+##### K-Means Clustering
+
+Mempartisi data ke K cluster dengan meminimalkan intra-cluster variance. Algoritma iteratif: (1) assign tiap titik ke centroid terdekat, (2) update centroid sebagai rata-rata cluster. K-Medoids sebagai varian robust terhadap outlier. Pemilihan K via Elbow method dan Silhouette score.
+
+K-MeansK-MedoidsElbow MethodSilhouetteInertia
+
+    from sklearn.cluster import KMeans
+    km = KMeans(n_clusters=3, random_state=42)
+    labels = km.fit_predict(X)
+    centers = km.cluster_centers_
+
+**
+
+##### Hierarchical & Density Clustering
+
+Agglomerative clustering membangun dendrogram — tidak perlu menentukan K di awal. Linkage criteria: single, complete, average, Ward. DBSCAN menemukan cluster dengan bentuk arbitrer berdasarkan density — robust terhadap noise, tidak butuh K.
+
+DendrogramAgglomerativeDBSCANWard Linkage
+
+**
+
+##### Gaussian Mixture Models & EM
+
+Memodelkan data sebagai campuran K distribusi Gaussian. Algoritma Expectation-Maximization (EM): E-step menghitung probabilitas keanggotaan (soft assignment), M-step mengupdate parameter μ, Σ, π. PCA dan t-SNE untuk visualisasi dan dimensionality reduction.
+
+GMMEM AlgorithmSoft ClusteringPCAt-SNE
+
+Isi Materi
+
+-   [01Pengantar ML](#m1)
+-   [02Supervised Learning](#m2)
+-   [03Regresi & Klasifikasi](#m3)
+-   [04Probabilistic Models](#m4)
+-   [05Linear Discriminative](#m5)
+-   [06Support Vector Machine](#m6)
+-   [07Neural Networks](#m7)
+-   [08Unsupervised Learning](#m8)
+
+Progress0% ******
+
+Selanjutnya di AI Lab
+
+##### Computer Vision →
+
+Ajarkan mesin untuk melihat dan memahami dunia visual — dari piksel mentah hingga deteksi real-time.
+
+[Lanjutkan →](#/participant-ai-lab-cv)
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<section class="fellow-dashboard fellow-modules-page ai-lab-overview ml-overview" data-fellow-page="modules">
+<button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+<div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+<aside class="fellow-sidebar" aria-label="Navigasi peserta">
+<a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
+<nav class="fellow-menu">
+<a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+<a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+<a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+<a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+<a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+<a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+<a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+<a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+</nav>
+<nav class="fellow-menu secondary">
+<a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+<a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+<a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ &amp; Bantuan</span></a>
+<a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+</nav>
+</aside>
+
+<main class="fellow-main">
+<header class="lesson-topbar">
+<nav class="lesson-breadcrumb" aria-label="Breadcrumb">
+<a href="#/participant-modules"><i class="fas fa-arrow-left"></i><span>Modul</span></a>
+<span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+<span>Machine Learning</span>
+</nav>
+<div class="fellow-actions">
+<label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul..."></label>
+<button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+<a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+</div>
+</header>
+
+<div class="ai-overview-progress" id="mlProgressBar"><b id="mlProgressFill"></b></div>
+
+<section class="lesson-hero">
+<div class="lesson-hero-copy">
+<h1>Machine Learning</h1>
+<p>Dari regresi linear hingga neural network — kurikulum lengkap untuk membangun fondasi ML yang kuat.</p>
+<div class="lesson-meta-row">
+<span><i class="far fa-clock"></i> 8 Modul</span>
+<span><i class="fas fa-layer-group"></i> 50+ Topik</span>
+<b><i class="fas fa-flask"></i> AI Lab · Marchel Andrian Shevchenko</b>
+</div>
+</div>
+<img src="/assets/messaging/herai-chat-persona.png" alt="HerAI ML learning">
+</section>
+
+<div class="ai-overview-layout">
+<div class="ai-overview-content" id="mlContent">
+
+<!-- ── MODULE 1 ── -->
+<section class="ai-module" id="m1" data-color="#f63392">
+<div class="ai-module-head">
+<span class="ai-module-num">01</span>
+<div><span class="ai-module-tag">Foundation</span><h2>Pengantar Machine Learning</h2><p>Sebelum menyentuh algoritma apapun, pahami dulu apa yang sebenarnya dilakukan ML — dan mengapa cara berpikirnya berbeda dari pemrograman biasa.</p></div>
+</div>
+<div class="ai-topic-list">
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-brain"></i></div>
+<div class="ai-topic-body">
+<h3><a href="#/participant-ai-lab-ml-intro">Apa itu Machine Learning?</a></h3>
+<p>Perbedaan fundamental antara pemrograman klasik dan ML — dari aturan eksplisit ke induksi dari data. Tiga paradigma utama: supervised, unsupervised, dan reinforcement learning. Kapan ML adalah solusi yang tepat, dan kapan tidak.</p>
+<div class="ai-topic-tags"><span>Supervised</span><span>Unsupervised</span><span>Reinforcement</span><span>Inductive Learning</span></div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-ruler-combined"></i></div>
+<div class="ai-topic-body">
+<h3><a href="#/participant-ai-lab-ml-hypothesis">Hipotesis, Model &amp; Ruang Fitur</a></h3>
+<p>Mendefinisikan contoh latih sebagai vektor fitur x ∈ ℝⁿ. Hipotesis h: X → Y sebagai fungsi yang diinduksi dari data. Perbedaan antara model (ruang hipotesis H) dan hipotesis konkret (satu fungsi dengan parameter θ tetap).</p>
+<div class="ai-topic-tags"><span>Feature Vector</span><span>Hypothesis</span><span>Training Set</span><span>Instance Space</span></div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-ruler"></i></div>
+<div class="ai-topic-body">
+<h3><a href="#/participant-ai-lab-ml-vc-dim">VC Dimension &amp; Kapasitas Model</a></h3>
+<p>Vapnik-Chervonenkis dimension sebagai ukuran kapasitas model — berapa banyak titik yang bisa di-shatter oleh H. Mengapa model linear di ℝⁿ memiliki VC-dim = n+1. Hubungan antara VC-dim dengan kemampuan generalisasi dan upper bound error.</p>
+<div class="ai-topic-tags"><span>VC-Dimension</span><span>Shatter</span><span>Model Capacity</span><span>Statistical Learning</span></div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-scale-balanced"></i></div>
+<div class="ai-topic-body">
+<h3><a href="#/participant-ai-lab-ml-bias-variance">Bias-Variance Tradeoff</a></h3>
+<p>Overfitting terjadi saat model terlalu kompleks — menghafal noise, generalisasi buruk. Underfitting saat model terlalu sederhana. Induktif bias sebagai asumsi yang memungkinkan generalisasi. The No Free Lunch Theorem: tidak ada algoritma terbaik untuk semua masalah.</p>
+<div class="ai-topic-tags"><span>Overfitting</span><span>Underfitting</span><span>Bias</span><span>Variance</span><span>No Free Lunch</span></div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- ── MODULE 2 ── -->
+<section class="ai-module" id="m2" data-color="#22c55e">
+<div class="ai-module-head">
+<span class="ai-module-num">02</span>
+<div><span class="ai-module-tag">Core Concept</span><h2>Supervised Learning</h2><p>Kerangka kerja paling umum dalam ML — belajar dari data berlabel untuk memprediksi label baru.</p></div>
+</div>
+<div class="ai-topic-list">
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-arrows-rotate"></i></div>
+<div class="ai-topic-body">
+<h3>Komponen Algoritma ML</h3>
+<p>Tiga komponen yang mendefinisikan setiap algoritma supervised learning: (1) Model H — ruang hipotesis yang dibatasi, (2) Fungsi Loss L — mengukur kesalahan prediksi, (3) Prosedur Optimisasi — mencari parameter θ optimal. Pilihan ketiganya menentukan induktif bias.</p>
+<div class="ai-topic-tags"><span>Model</span><span>Loss Function</span><span>Optimization</span><span>Empirical Risk</span></div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-microscope"></i></div>
+<div class="ai-topic-body">
+<h3>Model Selection &amp; Cross-Validation</h3>
+<p>Memisahkan data ke training set dan validation set. k-Fold cross-validation untuk estimasi error generalisasi yang lebih robust. Prinsip Structural Risk Minimization (SRM), Akaike Information Criterion (AIC), dan Bayesian Information Criterion (BIC).</p>
+<div class="ai-topic-tags"><span>k-Fold CV</span><span>Train/Val/Test</span><span>SRM</span><span>AIC</span><span>BIC</span></div>
+<div class="topic-code">
+<pre><code><span class="c-kw">from</span> sklearn.model_selection <span class="c-kw">import</span> cross_val_score
+scores = <span class="c-fn">cross_val_score</span>(model, X, y, cv=<span class="c-num">5</span>)
+<span class="c-cmt"># Rata-rata akurasi 5-fold</span>
+<span class="c-fn">print</span>(scores.<span class="c-fn">mean</span>(), scores.<span class="c-fn">std</span>())</code></pre>
+</div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-folder-tree"></i></div>
+<div class="ai-topic-body">
+<h3>Generatif vs Diskriminatif</h3>
+<p>Model generatif memodelkan distribusi gabungan P(x, Cⱼ) — bisa generate data baru, interpretable. Model diskriminatif langsung memodelkan P(Cⱼ|x) — akurasi lebih tinggi. Model parametrik vs non-parametrik, dan model linear vs non-linear.</p>
+<div class="ai-topic-tags"><span>Generatif</span><span>Diskriminatif</span><span>Parametrik</span><span>Non-parametrik</span></div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- ── MODULE 3 ── -->
+<section class="ai-module" id="m3" data-color="#f59e0b">
+<div class="ai-module-head">
+<span class="ai-module-num">03</span>
+<div><span class="ai-module-tag">Algorithm</span><h2>Regresi &amp; Klasifikasi Dasar</h2><p>Algoritma paling fundamental — yang masih relevan dan dipakai di production hingga hari ini.</p></div>
+</div>
+<div class="ai-topic-list">
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-chart-line"></i></div>
+<div class="ai-topic-body">
+<h3>Linear &amp; Polynomial Regression</h3>
+<p>Memodelkan hubungan antara fitur dan nilai kontinu. Metode Least Squares — meminimalkan jumlah kuadrat residual. Solusi analitik via Moore-Penrose pseudoinverse: w = (XᵀX)⁻¹Xᵀy. Regresi polinomial sebagai perluasan dengan fitur x², x³.</p>
+<div class="ai-topic-tags"><span>Least Squares</span><span>Pseudoinverse</span><span>Polynomial</span><span>Residuals</span></div>
+<div class="topic-code">
+<pre><code><span class="c-kw">import</span> numpy <span class="c-kw">as</span> np
+<span class="c-cmt"># Solusi analitik least squares</span>
+w = np.linalg.<span class="c-fn">lstsq</span>(X, y, rcond=<span class="c-kw">None</span>)[<span class="c-num">0</span>]
+y_pred = X @ w  <span class="c-cmt"># prediksi</span></code></pre>
+</div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-tree"></i></div>
+<div class="ai-topic-body">
+<h3>Decision Trees &amp; Ensembles</h3>
+<p>Pohon keputusan mempartisi ruang fitur secara rekursif menggunakan kriteria Information Gain / Gini Impurity. Random Forest menggabungkan banyak pohon dengan bagging. Gradient Boosting (XGBoost, LightGBM) membangun pohon secara sekuensial — state-of-the-art untuk data tabular.</p>
+<div class="ai-topic-tags"><span>Information Gain</span><span>Gini</span><span>Random Forest</span><span>XGBoost</span><span>Bagging</span></div>
+<div class="topic-code">
+<pre><code><span class="c-kw">from</span> sklearn.ensemble <span class="c-kw">import</span> RandomForestClassifier
+rf = <span class="c-fn">RandomForestClassifier</span>(n_estimators=<span class="c-num">100</span>, max_depth=<span class="c-num">5</span>)
+rf.<span class="c-fn">fit</span>(X_train, y_train)
+importance = rf.feature_importances_</code></pre>
+</div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-location-dot"></i></div>
+<div class="ai-topic-body">
+<h3>k-Nearest Neighbors (k-NN)</h3>
+<p>Algoritma non-parametrik — tidak ada fase training, semua kerja dilakukan saat prediksi. Klasifikasi berdasarkan mayoritas k tetangga terdekat menggunakan jarak Euclidean / Manhattan. Curse of dimensionality dan kompleksitas O(N·n) per prediksi.</p>
+<div class="ai-topic-tags"><span>k-NN</span><span>Euclidean Distance</span><span>Lazy Learning</span><span>Curse of Dim.</span></div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- ── MODULE 4 ── -->
+<section class="ai-module" id="m4" data-color="#a855f7">
+<div class="ai-module-head">
+<span class="ai-module-num">04</span>
+<div><span class="ai-module-tag">Probabilistic</span><h2>Probabilistic Models</h2><p>Menggunakan teori probabilitas untuk membangun model yang bisa mengekspresikan ketidakpastian prediksi.</p></div>
+</div>
+<div class="ai-topic-list">
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-chart-simple"></i></div>
+<div class="ai-topic-body">
+<h3>Teori Probabilitas untuk ML</h3>
+<p>Ekspektasi, variansi, dan independensi variabel. Distribusi Bernoulli, Multinomial, dan Gaussian sebagai building blocks. Maximum Likelihood Estimation (MLE) untuk mengoptimalkan parameter — "pilih parameter yang paling memungkinkan data yang kita amati terjadi".</p>
+<div class="ai-topic-tags"><span>MLE</span><span>Gaussian</span><span>Bernoulli</span><span>Ekspektasi</span><span>Variansi</span></div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-diagram-project"></i></div>
+<div class="ai-topic-body">
+<h3>Naive Bayes Classifier</h3>
+<p>Menggunakan Teorema Bayes: P(Cⱼ|x) ∝ P(x|Cⱼ)·P(Cⱼ). Asumsi "naif" — semua fitur independen secara kondisional diberikan kelas. Gaussian NB untuk variabel kontinu. Laplace smoothing untuk mengatasi zero probability. Sangat efektif untuk text classification.</p>
+<div class="ai-topic-tags"><span>Bayes Theorem</span><span>Cond. Independence</span><span>Gaussian NB</span><span>Laplace Smoothing</span></div>
+<div class="topic-code">
+<pre><code><span class="c-kw">from</span> sklearn.naive_bayes <span class="c-kw">import</span> GaussianNB
+clf = <span class="c-fn">GaussianNB</span>()
+clf.<span class="c-fn">fit</span>(X_train, y_train)
+proba = clf.<span class="c-fn">predict_proba</span>(X_test)</code></pre>
+</div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-circle-nodes"></i></div>
+<div class="ai-topic-body">
+<h3>Bayesian Networks</h3>
+<p>Semi-Naive Bayes yang memodelkan dependensi antar fitur menggunakan Directed Acyclic Graph (DAG). Algoritma FSSJ dan TAN (Tree-Augmented Naive Bayes) untuk membangun struktur jaringan secara otomatis dari data menggunakan Mutual Information.</p>
+<div class="ai-topic-tags"><span>DAG</span><span>TAN</span><span>FSSJ</span><span>Markov Blanket</span><span>Mutual Information</span></div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- ── MODULE 5 ── -->
+<section class="ai-module" id="m5" data-color="#22c55e">
+<div class="ai-module-head">
+<span class="ai-module-num">05</span>
+<div>
+<span class="ai-module-tag"><i class="fas fa-fire" style="color:#f59e0b;margin-right:4px;"></i>Industry Core</span>
+<h2>Linear Discriminative Models</h2>
+<p>Model yang langsung memodelkan batas keputusan — lebih sederhana, sering lebih akurat dari model generatif.</p>
+</div>
+</div>
+<div class="ai-topic-list">
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-pen-to-square"></i></div>
+<div class="ai-topic-body">
+<h3>Generalized Linear Model</h3>
+<p>Perluasan regresi linear untuk klasifikasi via fungsi aktivasi f: h(x) = f(wᵀx + w₀). Geometri hyperplane pemisah di ruang n-dimensi — w sebagai normal hyperplane. Klasifikasi multi-kelas dengan strategi one-vs-rest dan one-vs-one.</p>
+<div class="ai-topic-tags"><span>Hyperplane</span><span>Decision Boundary</span><span>One-vs-Rest</span><span>Multi-class</span></div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-chart-line"></i></div>
+<div class="ai-topic-body">
+<h3>Logistic Regression</h3>
+<p>Model diskriminatif probabilistik — output adalah P(C₁|x) = σ(wᵀx + w₀). Fungsi sigmoid mengubah output linear ke [0,1]. Cross-entropy loss sebagai fungsi objektif yang konveks. Gradient descent dan SGD untuk optimisasi. Regularisasi L1 (Lasso) dan L2 (Ridge).</p>
+<div class="ai-topic-tags"><span>Sigmoid</span><span>Cross-Entropy</span><span>Gradient Descent</span><span>L1/L2 Reg</span><span>SGD</span></div>
+<div class="topic-code">
+<pre><code><span class="c-kw">from</span> sklearn.linear_model <span class="c-kw">import</span> LogisticRegression
+clf = <span class="c-fn">LogisticRegression</span>(C=<span class="c-num">1.0</span>, penalty=<span class="c-str">'l2'</span>)
+clf.<span class="c-fn">fit</span>(X_train, y_train)
+y_prob = clf.<span class="c-fn">predict_proba</span>(X_test)[:,<span class="c-num">1</span>]</code></pre>
+</div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-table-cells"></i></div>
+<div class="ai-topic-body">
+<h3>Evaluasi Model Klasifikasi</h3>
+<p>Confusion matrix sebagai fondasi: TP, TN, FP, FN. Precision dan Recall — trade-off bergantung pada domain. F1-score sebagai harmonic mean. ROC curve dan AUC untuk evaluasi threshold-independent. Strategi untuk imbalanced dataset: oversampling (SMOTE), undersampling, class weights.</p>
+<div class="ai-topic-tags"><span>Confusion Matrix</span><span>Precision</span><span>Recall</span><span>F1</span><span>ROC-AUC</span></div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- ── MODULE 6 — SVM with Compare Grid── -->
+<section class="ai-module" id="m6" data-color="#f63392">
+<div class="ai-module-head">
+<span class="ai-module-num">06</span>
+<div><span class="ai-module-tag">Advanced</span><h2>Support Vector Machine</h2><p>Algoritma klasifikasi yang elegan secara matematis — memaksimalkan margin untuk generalisasi terbaik.</p></div>
+</div>
+
+<div class="compare-grid">
+  <div class="compare-card">
+    <div class="ccard-title">Hard Margin SVM</div>
+    <div class="ccard-desc">Data harus linearly separable sempurna. Tidak ada toleransi misklasifikasi.</div>
+    <ul class="ccard-list">
+      <li>Margin maksimum: 2/||w||</li>
+      <li>Kendala ketat per sampel</li>
+      <li>Sensitif terhadap outlier</li>
+    </ul>
+    <span class="ccard-badge">Teoretis</span>
+  </div>
+  <div class="compare-vs">VS</div>
+  <div class="compare-card">
+    <div class="ccard-title">Soft Margin SVM</div>
+    <div class="ccard-desc">Toleransi misklasifikasi terkontrol via parameter C.</div>
+    <ul class="ccard-list">
+      <li>Slack variables ξᵢ ≥ 0</li>
+      <li>C besar = margin kecil, fit ketat</li>
+      <li>Robust terhadap noise</li>
+    </ul>
+    <span class="ccard-badge real">Production</span>
+  </div>
+</div>
+
+<div class="ai-topic-list">
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-ruler-combined"></i></div>
+<div class="ai-topic-body">
+<h3>Maximum Margin Hyperplane</h3>
+<p>Formulasi sebagai masalah optimisasi kuadratik — meminimalkan (1/2)||w||² subject to constraint klasifikasi. Metode Lagrange Multipliers mengubahnya ke dual problem. Support vectors sebagai titik kritis — menghapus titik lain tidak mengubah solusi.</p>
+<div class="ai-topic-tags"><span>Quadratic Programming</span><span>Lagrange</span><span>Support Vectors</span><span>Dual Problem</span></div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+<div class="ai-topic-body">
+<h3>Kernel Trick</h3>
+<p>Untuk data non-linearly separable: peta ke ruang berdimensi tinggi via fungsi kernel K(x,x') = φ(x)ᵀφ(x') tanpa eksplisit menghitung φ(x). Mercer's theorem sebagai kondisi kernel valid. Polynomial K(x,x') = (xᵀx'+c)ᵈ, Gaussian RBF exp(-||x-x'||²/2σ²).</p>
+<div class="ai-topic-tags"><span>Kernel Trick</span><span>RBF Kernel</span><span>Polynomial Kernel</span><span>Mercer Theorem</span></div>
+<div class="topic-code">
+<pre><code><span class="c-kw">from</span> sklearn.svm <span class="c-kw">import</span> SVC
+svm = <span class="c-fn">SVC</span>(kernel=<span class="c-str">'rbf'</span>, C=<span class="c-num">1.0</span>, gamma=<span class="c-str">'scale'</span>)
+svm.<span class="c-fn">fit</span>(X_train, y_train)
+score = svm.<span class="c-fn">decision_function</span>(X_test)</code></pre>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- ── MODULE 7 — Neural Networks with Timeline ── -->
+<section class="ai-module" id="m7" data-color="#38bdf8">
+<div class="ai-module-head">
+<span class="ai-module-num">07</span>
+<div>
+<span class="ai-module-tag"><i class="fas fa-fire" style="color:#f59e0b;margin-right:4px;"></i>Must Know</span>
+<h2>Neural Networks</h2>
+<p>Dari perceptron satu neuron hingga deep network berlapis — fondasi semua arsitektur AI modern.</p>
+</div>
+</div>
+
+<div class="arch-timeline">
+  <div class="arch-node">
+    <div class="arch-year">1958</div>
+    <div class="arch-name">Perceptron</div>
+    <div class="arch-note">Frank Rosenblatt</div>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-node">
+    <div class="arch-year">1986</div>
+    <div class="arch-name">Backprop</div>
+    <div class="arch-note">Rumelhart et al.</div>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-node">
+    <div class="arch-year">1989</div>
+    <div class="arch-name">MLP</div>
+    <div class="arch-note">Universal Approx.</div>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-node">
+    <div class="arch-year">2012</div>
+    <div class="arch-name">Deep Learning</div>
+    <div class="arch-note">AlexNet, GPU era</div>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-node">
+    <div class="arch-year">2017+</div>
+    <div class="arch-name">Transformers</div>
+    <div class="arch-note">Attention is all</div>
+  </div>
+</div>
+
+<div class="ai-topic-list">
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-bolt"></i></div>
+<div class="ai-topic-body">
+<h3>Single Layer Perceptron</h3>
+<p>Unit komputasi terinspirasi neuron biologis: net input z = wᵀx + w₀, lalu fungsi aktivasi f(z). Perceptron Learning Rule — update bobot berdasarkan error: w ← w + η·(y - ŷ)·x. Dijamin konvergen jika data linearly separable (Perceptron Convergence Theorem). Keterbatasan: tidak bisa memecahkan XOR.</p>
+<div class="ai-topic-tags"><span>Perceptron Rule</span><span>Step Function</span><span>Convergence Theorem</span><span>Linear Separability</span></div>
+<div class="topic-code">
+<pre><code><span class="c-cmt"># Perceptron learning rule</span>
+<span class="c-kw">for</span> x, y <span class="c-kw">in</span> training_data:
+    y_hat = <span class="c-fn">step</span>(w @ x + w0)
+    error = y - y_hat
+    w  += lr * error * x
+    w0 += lr * error</code></pre>
+</div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-building-columns"></i></div>
+<div class="ai-topic-body">
+<h3>Multi-Layer Perceptron (MLP)</h3>
+<p>Menyusun layer perceptron: input → hidden layers → output. Forward pass: z⁽ˡ⁾ = W⁽ˡ⁾a⁽ˡ⁻¹⁾ + b⁽ˡ⁾, a⁽ˡ⁾ = f(z⁽ˡ⁾). Fungsi aktivasi non-linear (ReLU, Sigmoid, Tanh, Softmax) — krusial agar network bukan sekadar regresi linear. Universal Approximation Theorem.</p>
+<div class="ai-topic-tags"><span>Forward Pass</span><span>ReLU</span><span>Softmax</span><span>Hidden Layer</span><span>Universal Approx.</span></div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-rotate"></i></div>
+<div class="ai-topic-body">
+<h3>Backpropagation</h3>
+<p>Algoritma efisien untuk menghitung gradien ∂L/∂W⁽ˡ⁾ menggunakan chain rule mundur dari output ke input. Error term: δ⁽ˡ⁾ = (W⁽ˡ⁺¹⁾)ᵀδ⁽ˡ⁺¹⁾ ⊙ f'(z⁽ˡ⁾). Masalah vanishing/exploding gradient — diatasi dengan ReLU, BatchNorm, dan gradient clipping.</p>
+<div class="ai-topic-tags"><span>Chain Rule</span><span>Gradient</span><span>Vanishing Gradient</span><span>BatchNorm</span></div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-rocket"></i></div>
+<div class="ai-topic-body">
+<h3>Optimisasi &amp; Regularisasi</h3>
+<p>SGD dengan momentum, RMSprop, dan Adam sebagai optimizer modern. Mini-batch training untuk keseimbangan kecepatan dan stabilitas. Dropout — mematikan neuron secara acak saat training. Batch Normalization, weight decay, dan early stopping.</p>
+<div class="ai-topic-tags"><span>Adam</span><span>SGD + Momentum</span><span>Dropout</span><span>Weight Decay</span><span>Early Stopping</span></div>
+<div class="topic-code">
+<pre><code><span class="c-kw">import</span> torch.nn <span class="c-kw">as</span> nn, torch.optim <span class="c-kw">as</span> optim
+model = nn.<span class="c-fn">Sequential</span>(
+    nn.<span class="c-fn">Linear</span>(<span class="c-num">128</span>, <span class="c-num">64</span>), nn.<span class="c-fn">ReLU</span>(), nn.<span class="c-fn">Dropout</span>(<span class="c-num">0.3</span>),
+    nn.<span class="c-fn">Linear</span>(<span class="c-num">64</span>, <span class="c-num">10</span>)
+)
+optimizer = optim.<span class="c-fn">Adam</span>(model.<span class="c-fn">parameters</span>(), lr=<span class="c-num">1e-3</span>)</code></pre>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- ── MODULE 8 ── -->
+<section class="ai-module" id="m8" data-color="#06b6d4">
+<div class="ai-module-head">
+<span class="ai-module-num">08</span>
+<div><span class="ai-module-tag">Unsupervised</span><h2>Unsupervised Learning</h2><p>Menemukan struktur tersembunyi dalam data tanpa label — clustering, dimensionality reduction, dan density estimation.</p></div>
+</div>
+<div class="ai-topic-list">
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-bullseye"></i></div>
+<div class="ai-topic-body">
+<h3>K-Means Clustering</h3>
+<p>Mempartisi data ke K cluster dengan meminimalkan intra-cluster variance. Algoritma iteratif: (1) assign tiap titik ke centroid terdekat, (2) update centroid sebagai rata-rata cluster. K-Medoids sebagai varian robust terhadap outlier. Pemilihan K via Elbow method dan Silhouette score.</p>
+<div class="ai-topic-tags"><span>K-Means</span><span>K-Medoids</span><span>Elbow Method</span><span>Silhouette</span><span>Inertia</span></div>
+<div class="topic-code">
+<pre><code><span class="c-kw">from</span> sklearn.cluster <span class="c-kw">import</span> KMeans
+km = <span class="c-fn">KMeans</span>(n_clusters=<span class="c-num">3</span>, random_state=<span class="c-num">42</span>)
+labels = km.<span class="c-fn">fit_predict</span>(X)
+centers = km.cluster_centers_</code></pre>
+</div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-sitemap"></i></div>
+<div class="ai-topic-body">
+<h3>Hierarchical &amp; Density Clustering</h3>
+<p>Agglomerative clustering membangun dendrogram — tidak perlu menentukan K di awal. Linkage criteria: single, complete, average, Ward. DBSCAN menemukan cluster dengan bentuk arbitrer berdasarkan density — robust terhadap noise, tidak butuh K.</p>
+<div class="ai-topic-tags"><span>Dendrogram</span><span>Agglomerative</span><span>DBSCAN</span><span>Ward Linkage</span></div>
+</div>
+</div>
+
+<div class="ai-topic-item">
+<div class="ai-topic-icon"><i class="fas fa-shuffle"></i></div>
+<div class="ai-topic-body">
+<h3>Gaussian Mixture Models &amp; EM</h3>
+<p>Memodelkan data sebagai campuran K distribusi Gaussian. Algoritma Expectation-Maximization (EM): E-step menghitung probabilitas keanggotaan (soft assignment), M-step mengupdate parameter μ, Σ, π. PCA dan t-SNE untuk visualisasi dan dimensionality reduction.</p>
+<div class="ai-topic-tags"><span>GMM</span><span>EM Algorithm</span><span>Soft Clustering</span><span>PCA</span><span>t-SNE</span></div>
+</div>
+</div>
+
+</div>
+</section>
+
+</div><!-- /ai-overview-content -->
+
+<aside class="ai-overview-toc" id="mlToc">
+<p class="ai-toc-label">Isi Materi</p>
+<ul class="ai-toc-list">
+<li><a href="#m1" class="ai-toc-link active" data-module="m1"><span class="ai-toc-num">01</span>Pengantar ML</a></li>
+<li><a href="#m2" class="ai-toc-link" data-module="m2"><span class="ai-toc-num">02</span>Supervised Learning</a></li>
+<li><a href="#m3" class="ai-toc-link" data-module="m3"><span class="ai-toc-num">03</span>Regresi &amp; Klasifikasi</a></li>
+<li><a href="#m4" class="ai-toc-link" data-module="m4"><span class="ai-toc-num">04</span>Probabilistic Models</a></li>
+<li><a href="#m5" class="ai-toc-link" data-module="m5"><span class="ai-toc-num">05</span>Linear Discriminative</a></li>
+<li><a href="#m6" class="ai-toc-link" data-module="m6"><span class="ai-toc-num">06</span>Support Vector Machine</a></li>
+<li><a href="#m7" class="ai-toc-link" data-module="m7"><span class="ai-toc-num">07</span>Neural Networks</a></li>
+<li><a href="#m8" class="ai-toc-link" data-module="m8"><span class="ai-toc-num">08</span>Unsupervised Learning</a></li>
+</ul>
+<div class="ai-toc-progress">
+<span>Progress</span><span id="mlTocProgressPct">0%</span>
+<b><i id="mlTocProgressFill"></i></b>
+</div>
+</aside>
+</div><!-- /ai-overview-layout -->
+
+<div class="next-module-cta">
+<div class="nmc-inner">
+<span class="nmc-label">Selanjutnya di AI Lab</span>
+<h3 class="nmc-title">Computer Vision →</h3>
+<p class="nmc-desc">Ajarkan mesin untuk melihat dan memahami dunia visual — dari piksel mentah hingga deteksi real-time.</p>
+<a href="#/participant-ai-lab-cv" class="nmc-btn">Lanjutkan →</a>
+</div>
+</div>
+
+</main>
+</section>
+
+````

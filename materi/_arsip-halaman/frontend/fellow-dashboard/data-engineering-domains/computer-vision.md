@@ -1,0 +1,803 @@
+# Computer Vision
+
+> Sumber: `pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+****
+
+### Computer Vision
+
+Mengajari mesin untuk melihat — dari piksel mentah ke deteksi objek real-time.
+
+** 6 Modul** 50+ Topik**** AI Lab · Marchel Andrian Shevchenko**
+
+![HerAI CV](/assets/messaging/herai-chat-persona.png)
+
+01
+
+Foundation
+
+#### Digital Image Fundamentals
+
+Before touching any model, understand what an image truly is — a matrix of numbers.
+
+##### [Pixel Anatomy](#/participant-ai-lab-cv-pixel)
+
+Coordinates, intensity values, and color spaces — RGB, HSV, LAB, and Grayscale. Understanding how the same scene looks different across color models.
+
+RGBHSVGrayscaleColor Theory
+
+️
+
+##### [Image Processing with OpenCV](#/participant-ai-lab-cv-opencv)
+
+Loading, resizing, cropping, flipping, and bitwise operations. The bread-and-butter toolkit for any CV pipeline.
+
+OpenCVimreadresizebitwise ops
+
+    import cv2
+    img = cv2.imread("image.jpg")
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    resized = cv2.resize(img, (640, 480))
+
+##### [Filtering & Kernels](#/participant-ai-lab-cv-filtering-kernels)
+
+Spatial convolution in practice. Gaussian blur for noise removal, median filter for salt-and-pepper noise, unsharp masking for sharpening, and Otsu's adaptive binarization.
+
+Gaussian BlurMedian FilterOtsu'sKernels
+
+##### [Morphological Transformations](#/participant-ai-lab-cv-morph)
+
+Erosion and dilation as fundamental building blocks. Opening (erode → dilate) removes small noise; closing (dilate → erode) fills holes. Essential for clean binary masks in defect detection.
+
+ErosionDilationOpeningClosing
+
+02
+
+Classic CV
+
+#### Classic Computer Vision & Features
+
+Understand the logic built before deep learning — algorithms still used in production today.
+
+##### Edge & Shape Detection
+
+Canny Edge Detection's multi-stage pipeline (noise reduction → gradient → non-maximum suppression → hysteresis). Sobel operator for directional gradients. Hough Transform for detecting lines and circles in structured environments.
+
+CannySobelHough TransformGradients
+
+##### Contour Analysis
+
+Finding and analyzing contours to compute area, perimeter, bounding boxes, and convex hulls. Directly applicable to defect detection in manufacturing and quality inspection pipelines.
+
+findContoursBoundingBoxMomentsConvex Hull
+
+️
+
+##### Feature Extraction
+
+SIFT (Scale-Invariant Feature Transform) for scale & rotation-invariant keypoints. ORB as the fast, patent-free alternative. Used in image stitching, AR markers, and visual SLAM.
+
+SIFTSURFORBDescriptor Matching
+
+03
+
+Deep Learning
+
+#### Deep Learning for Vision
+
+The core paradigm shift — letting the network learn its own features from data.
+
+1998 LeNet-5 MNIST digits
+
+→
+
+2012 AlexNet ImageNet revolution
+
+→
+
+2014 VGG-16 Depth matters
+
+→
+
+2015 ResNet Skip connections
+
+→
+
+2021 ViT Transformers arrive
+
+##### [Introduction to CNNs](#/participant-ai-lab-cv-cnn-why)
+
+How convolutional layers slide a filter across feature maps. The roles of stride, padding, and pooling (max vs average). Building intuition for what each layer actually learns.
+
+ConvolutionPoolingPaddingStrideFeature Maps
+
+️
+
+##### [Popular Architectures](#/participant-ai-lab-cv-cnn-arch)
+
+Deep dive into ResNet's residual connections — why they solve the vanishing gradient problem. EfficientNet's compound scaling. Understanding which backbone to choose for different constraints.
+
+ResNetEfficientNetMobileNetSkip Connections
+
+##### Transfer Learning
+
+Fine-tuning ImageNet pre-trained weights on your custom dataset. Feature extraction vs full fine-tuning. Layer freezing strategies and why they work so well with limited data.
+
+ImageNetFine-tuningFrozen LayersCustom Head
+
+    from torchvision.models import resnet50
+    model = resnet50(pretrained=True)
+    for param in model.parameters():
+        param.requires_grad = False   # freeze backbone
+    model.fc = nn.Linear(2048, num_classes)
+
+##### Loss Functions & Optimizers
+
+Cross-entropy loss and its variants (label smoothing, focal loss). SGD with momentum vs Adam. Learning rate schedulers, weight decay, dropout, and batch normalization for regularization.
+
+Cross-EntropyFocal LossAdamDropoutBatchNorm
+
+04
+
+Industry Core
+
+#### Object Detection
+
+The most deployed CV task in industry — locate and classify multiple objects in a single pass.
+
+###### Two-Stage Detectors
+
+High accuracy, slower inference. Propose regions first, then classify.
+
+-   R-CNN (2013)
+-   Fast R-CNN (2015)
+-   Faster R-CNN (2015)
+
+High Accuracy
+
+VS
+
+###### One-Stage Detectors
+
+Real-time capable. Predict boxes and classes in a single forward pass.
+
+-   YOLO v8 / v10 / v11
+-   SSD
+-   RetinaNet
+
+Real-Time
+
+##### Region-based Models
+
+The evolution from R-CNN's selective search bottleneck to Faster R-CNN's learnable Region Proposal Network (RPN). Understanding anchor boxes, ROI pooling, and multi-scale features with FPN.
+
+R-CNNRPNROI PoolFPNAnchors
+
+##### One-Stage Detectors (YOLO)
+
+YOLO's grid-cell prediction paradigm. YOLOv8 improvements: decoupled head, anchor-free design, and C2f blocks. Training custom datasets with Ultralytics and evaluating inference speed vs accuracy trade-offs.
+
+YOLOv8YOLOv11Anchor-freeSSDUltralytics
+
+    from ultralytics import YOLO
+    model = YOLO("yolov8n.pt")
+    model.train(data="dataset.yaml",
+                epochs=100, imgsz=640)
+    results = model.val()  # get mAP
+
+##### Performance Metrics
+
+IoU (Intersection over Union) as the geometric overlap criterion. Precision-Recall curves and how mAP@0.5 and mAP@0.5:0.95 are computed. Confusion matrices for multi-class detection evaluation.
+
+mAPIoUPrecisionRecallF1
+
+05
+
+Advanced
+
+#### Advanced Vision Tasks
+
+Go beyond bounding boxes — pixel-perfect understanding and temporal reasoning.
+
+️
+
+##### Image Segmentation
+
+Semantic segmentation assigns a class label to every pixel. Instance segmentation goes further — distinguishing individual object instances. U-Net's encoder-decoder for medical imaging. Mask R-CNN for instance masks. SAM (Segment Anything Model) as the new zero-shot foundation model.
+
+U-NetMask R-CNNSAMSemanticPanoptic
+
+##### Vision Transformers (ViT)
+
+Splitting an image into fixed-size patches and treating them as token sequences for a standard Transformer encoder. Why ViT outperforms CNNs at scale but needs more data. DINOv2 as a powerful self-supervised backbone.
+
+ViTPatchesSelf-AttentionDINOv2CLIP
+
+##### Optical Flow & Tracking
+
+Lucas-Kanade and Farneback for dense/sparse optical flow. DeepSORT combining Kalman filters with deep appearance features. ByteTrack's "every detection counts" philosophy for crowded scenes.
+
+Optical FlowDeepSORTByteTrackKalmanReID
+
+06
+
+Pro Level
+
+#### Deployment & Edge AI
+
+Models that only work in notebooks don't ship. Learn to take vision AI into production.
+
+Train (.pt)
+
+→
+
+** Optimize
+
+→
+
+Export (ONNX)
+
+→
+
+Deploy
+
+→
+
+Monitor
+
+##### Model Optimization
+
+Post-training quantization (INT8, FP16) to cut model size and latency. Structured pruning to remove redundant channels. Exporting to ONNX for framework-agnostic deployment, then TensorRT for NVIDIA GPU inference at maximum throughput.
+
+QuantizationPruningONNXTensorRTINT8
+
+##### Edge Deployment
+
+Running YOLO on Raspberry Pi 5 with NCNN. Jetson Nano / Orin for TensorRT-accelerated inference. Building REST APIs with FastAPI for network-accessible inference servers. Dockerizing the full pipeline for reproducible deployment.
+
+JetsonRaspberry PiNCNNFastAPIDocker
+
+    from fastapi import FastAPI, UploadFile
+    app = FastAPI()
+    model = YOLO("best.onnx")
+
+    @app.post("/detect")
+    async def detect(file: UploadFile):
+        img = read_image(await file.read())
+        return model.predict(img)[0].tojson()
+
+⏱️
+
+##### Real-time Inference
+
+Frame-skipping strategies for video streams. Multi-threading the capture/inference/render pipeline. Profiling with NVTX and optimizing memory layout. Achieving sub-30ms end-to-end latency for live camera feeds.
+
+VideoStreamThreadingProfilingLatencyFPS
+
+Isi Materi
+
+-   [01Digital Image Fundamentals](#m1)
+-   [02Classic CV Features](#m2)
+-   [03Deep Learning for Vision](#m3)
+-   [04Object Detection](#m4)
+-   [05Segmentation](#m5)
+-   [06Deployment at the Edge](#m6)
+
+Progress0%******
+
+Up next in AI Lab
+
+##### Natural Language Processing →
+
+Transformers, tokenization, RAG, and the full pipeline from text to meaning.
+
+[Continue Learning](#/participant-ai-lab-nlp)
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<section class="fellow-dashboard fellow-modules-page ai-lab-overview" data-fellow-page="modules">
+<button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+<div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+<aside class="fellow-sidebar" aria-label="Navigasi peserta">
+<a href="#/participant-dashboard" class="fellow-logo"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI"></a>
+<nav class="fellow-menu">
+<a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+<a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+<a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+<a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+<a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+<a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+<a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+<a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+</nav>
+<nav class="fellow-menu secondary">
+<a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+<a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+<a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ</span></a>
+<a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+</nav>
+</aside>
+<main class="fellow-main">
+<header class="lesson-topbar">
+<nav class="lesson-breadcrumb"><a href="#/participant-modules"><i class="fas fa-arrow-left"></i><span>Modul</span></a><span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span><span>Computer Vision</span></nav>
+<div class="fellow-actions">
+<label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul..."></label>
+<button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+<a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+</div>
+</header>
+<div class="ai-overview-progress" id="cvProgressBar"><b id="cvProgressFill"></b></div>
+<section class="ai-overview-hero">
+<div class="ai-hero-copy">
+<h1>Computer <span>Vision</span></h1>
+<p>Mengajari mesin untuk melihat — dari piksel mentah ke deteksi objek real-time.</p>
+<div class="ai-hero-meta"><span><i class="far fa-clock"></i> 6 Modul</span><span><i class="fas fa-layer-group"></i> 50+ Topik</span><b><i class="fas fa-flask"></i> AI Lab · Marchel Andrian Shevchenko</b></div>
+</div><div class="ai-hero-visual"><img src="/assets/messaging/herai-chat-persona.png" alt="HerAI CV"></div>
+</section>
+<div class="ai-overview-layout"><div class="ai-overview-content" id="cvContent">
+
+    <!-- ── MODULE 1 ── -->
+    <section class="module reveal" id="m1" data-color="#2997ff">
+      <div class="module-header">
+        <div class="module-num-badge" style="--mc:#2997ff">01</div>
+        <div class="module-meta">
+          <span class="module-tag" style="--mc:#2997ff">Foundation</span>
+          <h2 class="module-title">Digital Image Fundamentals</h2>
+          <p class="module-sub">Before touching any model, understand what an image truly is — a matrix of numbers.</p>
+        </div>
+      </div>
+
+      <div class="topic-list">
+
+        <div class="topic-item reveal-up">
+          <div class="topic-icon" style="--tc:#2997ff"></div>
+          <div class="topic-body">
+            <h3 class="topic-name"><a href="#/participant-ai-lab-cv-pixel" style="color:inherit;text-decoration:none;"> Pixel Anatomy </a></h3>
+            <p class="topic-desc">Coordinates, intensity values, and color spaces — RGB, HSV, LAB, and Grayscale. Understanding how the same scene looks different across color models.</p>
+            <div class="topic-tags">
+              <span class="ttag">RGB</span><span class="ttag">HSV</span><span class="ttag">Grayscale</span><span class="ttag">Color Theory</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-1">
+          <div class="topic-icon" style="--tc:#2997ff">️</div>
+          <div class="topic-body">
+            <h3 class="topic-name"><a href="#/participant-ai-lab-cv-opencv" style="color:inherit;text-decoration:none;"> Image Processing with OpenCV </a></h3>
+            <p class="topic-desc">Loading, resizing, cropping, flipping, and bitwise operations. The bread-and-butter toolkit for any CV pipeline.</p>
+            <div class="topic-tags">
+              <span class="ttag">OpenCV</span><span class="ttag">imread</span><span class="ttag">resize</span><span class="ttag">bitwise ops</span>
+            </div>
+          </div>
+          <div class="topic-code">
+<pre><code><span class="c-kw">import</span> cv2
+img <span class="c-op">=</span> cv2.<span class="c-fn">imread</span>(<span class="c-str">"image.jpg"</span>)
+gray <span class="c-op">=</span> cv2.<span class="c-fn">cvtColor</span>(img, cv2.COLOR_BGR2GRAY)
+resized <span class="c-op">=</span> cv2.<span class="c-fn">resize</span>(img, (<span class="c-num">640</span>, <span class="c-num">480</span>))</code></pre>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-2">
+          <div class="topic-icon" style="--tc:#2997ff"></div>
+          <div class="topic-body">
+            <h3 class="topic-name"><a href="#/participant-ai-lab-cv-filtering-kernels" style="color:inherit;text-decoration:none;">Filtering &amp; Kernels</a></h3>
+            <p class="topic-desc">Spatial convolution in practice. Gaussian blur for noise removal, median filter for salt-and-pepper noise, unsharp masking for sharpening, and Otsu's adaptive binarization.</p>
+            <div class="topic-tags">
+              <span class="ttag">Gaussian Blur</span><span class="ttag">Median Filter</span><span class="ttag">Otsu's</span><span class="ttag">Kernels</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-3">
+          <div class="topic-icon" style="--tc:#2997ff"></div>
+          <div class="topic-body">
+            <h3 class="topic-name"><a href="#/participant-ai-lab-cv-morph" style="color:inherit;text-decoration:none"> Morphological Transformations </a></h3>
+            <p class="topic-desc">Erosion and dilation as fundamental building blocks. Opening (erode → dilate) removes small noise; closing (dilate → erode) fills holes. Essential for clean binary masks in defect detection.</p>
+            <div class="topic-tags">
+              <span class="ttag">Erosion</span><span class="ttag">Dilation</span><span class="ttag">Opening</span><span class="ttag">Closing</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── MODULE 2 ── -->
+    <section class="module reveal" id="m2" data-color="#00c7be">
+      <div class="module-header">
+        <div class="module-num-badge" style="--mc:#00c7be">02</div>
+        <div class="module-meta">
+          <span class="module-tag" style="--mc:#00c7be">Classic CV</span>
+          <h2 class="module-title">Classic Computer Vision &amp; Features</h2>
+          <p class="module-sub">Understand the logic built before deep learning — algorithms still used in production today.</p>
+        </div>
+      </div>
+
+      <div class="topic-list">
+
+        <div class="topic-item reveal-up">
+          <div class="topic-icon" style="--tc:#00c7be"></div>
+          <div class="topic-body">
+            <h3 class="topic-name">Edge &amp; Shape Detection</h3>
+            <p class="topic-desc">Canny Edge Detection's multi-stage pipeline (noise reduction → gradient → non-maximum suppression → hysteresis). Sobel operator for directional gradients. Hough Transform for detecting lines and circles in structured environments.</p>
+            <div class="topic-tags">
+              <span class="ttag">Canny</span><span class="ttag">Sobel</span><span class="ttag">Hough Transform</span><span class="ttag">Gradients</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-1">
+          <div class="topic-icon" style="--tc:#00c7be"></div>
+          <div class="topic-body">
+            <h3 class="topic-name">Contour Analysis</h3>
+            <p class="topic-desc">Finding and analyzing contours to compute area, perimeter, bounding boxes, and convex hulls. Directly applicable to defect detection in manufacturing and quality inspection pipelines.</p>
+            <div class="topic-tags">
+              <span class="ttag">findContours</span><span class="ttag">BoundingBox</span><span class="ttag">Moments</span><span class="ttag">Convex Hull</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-2">
+          <div class="topic-icon" style="--tc:#00c7be">️</div>
+          <div class="topic-body">
+            <h3 class="topic-name">Feature Extraction</h3>
+            <p class="topic-desc">SIFT (Scale-Invariant Feature Transform) for scale &amp; rotation-invariant keypoints. ORB as the fast, patent-free alternative. Used in image stitching, AR markers, and visual SLAM.</p>
+            <div class="topic-tags">
+              <span class="ttag">SIFT</span><span class="ttag">SURF</span><span class="ttag">ORB</span><span class="ttag">Descriptor Matching</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── MODULE 3 ── -->
+    <section class="module reveal" id="m3" data-color="#a855f7">
+      <div class="module-header">
+        <div class="module-num-badge" style="--mc:#a855f7">03</div>
+        <div class="module-meta">
+          <span class="module-tag" style="--mc:#a855f7">Deep Learning</span>
+          <h2 class="module-title">Deep Learning for Vision</h2>
+          <p class="module-sub">The core paradigm shift — letting the network learn its own features from data.</p>
+        </div>
+      </div>
+
+      <!-- Architecture Evolution Timeline -->
+      <div class="arch-timeline">
+        <div class="arch-node reveal-up" style="--mc:#a855f7">
+          <span class="arch-year">1998</span>
+          <span class="arch-name">LeNet-5</span>
+          <span class="arch-note">MNIST digits</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node reveal-up delay-1" style="--mc:#a855f7">
+          <span class="arch-year">2012</span>
+          <span class="arch-name">AlexNet</span>
+          <span class="arch-note">ImageNet revolution</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node reveal-up delay-2" style="--mc:#a855f7">
+          <span class="arch-year">2014</span>
+          <span class="arch-name">VGG-16</span>
+          <span class="arch-note">Depth matters</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node reveal-up delay-3" style="--mc:#a855f7">
+          <span class="arch-year">2015</span>
+          <span class="arch-name">ResNet</span>
+          <span class="arch-note">Skip connections</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node reveal-up delay-4" style="--mc:#a855f7">
+          <span class="arch-year">2021</span>
+          <span class="arch-name">ViT</span>
+          <span class="arch-note">Transformers arrive</span>
+        </div>
+      </div>
+
+      <div class="topic-list">
+
+        <div class="topic-item reveal-up">
+          <div class="topic-icon" style="--tc:#a855f7"></div>
+          <div class="topic-body">
+            <h3 class="topic-name"><a href="#/participant-ai-lab-cv-cnn-why" style="color:inherit;text-decoration:none;"> Introduction to CNNs </a></h3>
+            <p class="topic-desc">How convolutional layers slide a filter across feature maps. The roles of stride, padding, and pooling (max vs average). Building intuition for what each layer actually learns.</p>
+            <div class="topic-tags">
+              <span class="ttag">Convolution</span><span class="ttag">Pooling</span><span class="ttag">Padding</span><span class="ttag">Stride</span><span class="ttag">Feature Maps</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-1">
+          <div class="topic-icon" style="--tc:#a855f7">️</div>
+          <div class="topic-body">
+            <h3 class="topic-name"><a href="#/participant-ai-lab-cv-cnn-arch" style="color:inherit;text-decoration:none;"> Popular Architectures </a></h3>
+            <p class="topic-desc">Deep dive into ResNet's residual connections — why they solve the vanishing gradient problem. EfficientNet's compound scaling. Understanding which backbone to choose for different constraints.</p>
+            <div class="topic-tags">
+              <span class="ttag">ResNet</span><span class="ttag">EfficientNet</span><span class="ttag">MobileNet</span><span class="ttag">Skip Connections</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-2">
+          <div class="topic-icon" style="--tc:#a855f7> <i class="fas fa-bolt"></i></div>
+          <div class="topic-body">
+            <h3 class="topic-name">Transfer Learning</h3>
+            <p class="topic-desc">Fine-tuning ImageNet pre-trained weights on your custom dataset. Feature extraction vs full fine-tuning. Layer freezing strategies and why they work so well with limited data.</p>
+            <div class="topic-tags">
+              <span class="ttag">ImageNet</span><span class="ttag">Fine-tuning</span><span class="ttag">Frozen Layers</span><span class="ttag">Custom Head</span>
+            </div>
+          </div>
+          <div class="topic-code">
+<pre><code><span class="c-kw">from</span> torchvision.models <span class="c-kw">import</span> resnet50
+model <span class="c-op">=</span> <span class="c-fn">resnet50</span>(pretrained<span class="c-op">=</span><span class="c-kw">True</span>)
+<span class="c-kw">for</span> param <span class="c-kw">in</span> model.parameters():
+    param.requires_grad <span class="c-op">=</span> <span class="c-kw">False</span>   <span class="c-cmt"># freeze backbone</span>
+model.fc <span class="c-op">=</span> nn.<span class="c-fn">Linear</span>(<span class="c-num">2048</span>, num_classes)</code></pre>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-3">
+          <div class="topic-icon" style="--tc:#a855f7"></div>
+          <div class="topic-body">
+            <h3 class="topic-name">Loss Functions &amp; Optimizers</h3>
+            <p class="topic-desc">Cross-entropy loss and its variants (label smoothing, focal loss). SGD with momentum vs Adam. Learning rate schedulers, weight decay, dropout, and batch normalization for regularization.</p>
+            <div class="topic-tags">
+              <span class="ttag">Cross-Entropy</span><span class="ttag">Focal Loss</span><span class="ttag">Adam</span><span class="ttag">Dropout</span><span class="ttag">BatchNorm</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── MODULE 4 ── -->
+    <section class="module reveal" id="m4" data-color="#ff9f0a">
+      <div class="module-header">
+        <div class="module-num-badge" style="--mc:#ff9f0a">04</div>
+        <div class="module-meta">
+          <span class="module-tag hot" style="--mc:#ff9f0a"> Industry Core</span>
+          <h2 class="module-title">Object Detection</h2>
+          <p class="module-sub">The most deployed CV task in industry — locate and classify multiple objects in a single pass.</p>
+        </div>
+      </div>
+
+      <!-- Comparison cards -->
+      <div class="compare-grid">
+        <div class="compare-card reveal-up" style="--mc:#ff9f0a">
+          <h4 class="ccard-title">Two-Stage Detectors</h4>
+          <p class="ccard-desc">High accuracy, slower inference. Propose regions first, then classify.</p>
+          <ul class="ccard-list">
+            <li>R-CNN (2013)</li>
+            <li>Fast R-CNN (2015)</li>
+            <li>Faster R-CNN (2015)</li>
+          </ul>
+          <div class="ccard-badge">High Accuracy</div>
+        </div>
+        <div class="compare-vs">VS</div>
+        <div class="compare-card reveal-up delay-2" style="--mc:#ff9f0a">
+          <h4 class="ccard-title">One-Stage Detectors</h4>
+          <p class="ccard-desc">Real-time capable. Predict boxes and classes in a single forward pass.</p>
+          <ul class="ccard-list">
+            <li>YOLO v8 / v10 / v11</li>
+            <li>SSD</li>
+            <li>RetinaNet</li>
+          </ul>
+          <div class="ccard-badge real">Real-Time</div>
+        </div>
+      </div>
+
+      <div class="topic-list">
+
+        <div class="topic-item reveal-up">
+          <div class="topic-icon" style="--tc:#ff9f0a"></div>
+          <div class="topic-body">
+            <h3 class="topic-name">Region-based Models</h3>
+            <p class="topic-desc">The evolution from R-CNN's selective search bottleneck to Faster R-CNN's learnable Region Proposal Network (RPN). Understanding anchor boxes, ROI pooling, and multi-scale features with FPN.</p>
+            <div class="topic-tags">
+              <span class="ttag">R-CNN</span><span class="ttag">RPN</span><span class="ttag">ROI Pool</span><span class="ttag">FPN</span><span class="ttag">Anchors</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-1">
+          <div class="topic-icon" style="--tc:#ff9f0a> <i class="fas fa-bolt"></i></div>
+          <div class="topic-body">
+            <h3 class="topic-name">One-Stage Detectors (YOLO)</h3>
+            <p class="topic-desc">YOLO's grid-cell prediction paradigm. YOLOv8 improvements: decoupled head, anchor-free design, and C2f blocks. Training custom datasets with Ultralytics and evaluating inference speed vs accuracy trade-offs.</p>
+            <div class="topic-tags">
+              <span class="ttag">YOLOv8</span><span class="ttag">YOLOv11</span><span class="ttag">Anchor-free</span><span class="ttag">SSD</span><span class="ttag">Ultralytics</span>
+            </div>
+          </div>
+          <div class="topic-code">
+<pre><code><span class="c-kw">from</span> ultralytics <span class="c-kw">import</span> YOLO
+model <span class="c-op">=</span> <span class="c-fn">YOLO</span>(<span class="c-str">"yolov8n.pt"</span>)
+model.<span class="c-fn">train</span>(data<span class="c-op">=</span><span class="c-str">"dataset.yaml"</span>,
+            epochs<span class="c-op">=</span><span class="c-num">100</span>, imgsz<span class="c-op">=</span><span class="c-num">640</span>)
+results <span class="c-op">=</span> model.<span class="c-fn">val</span>()  <span class="c-cmt"># get mAP</span></code></pre>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-2">
+          <div class="topic-icon" style="--tc:#ff9f0a"></div>
+          <div class="topic-body">
+            <h3 class="topic-name">Performance Metrics</h3>
+            <p class="topic-desc">IoU (Intersection over Union) as the geometric overlap criterion. Precision-Recall curves and how mAP@0.5 and mAP@0.5:0.95 are computed. Confusion matrices for multi-class detection evaluation.</p>
+            <div class="topic-tags">
+              <span class="ttag">mAP</span><span class="ttag">IoU</span><span class="ttag">Precision</span><span class="ttag">Recall</span><span class="ttag">F1</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── MODULE 5 ── -->
+    <section class="module reveal" id="m5" data-color="#34c759">
+      <div class="module-header">
+        <div class="module-num-badge" style="--mc:#34c759">05</div>
+        <div class="module-meta">
+          <span class="module-tag" style="--mc:#34c759">Advanced</span>
+          <h2 class="module-title">Advanced Vision Tasks</h2>
+          <p class="module-sub">Go beyond bounding boxes — pixel-perfect understanding and temporal reasoning.</p>
+        </div>
+      </div>
+
+      <div class="topic-list">
+
+        <div class="topic-item reveal-up">
+          <div class="topic-icon" style="--tc:#34c759">️</div>
+          <div class="topic-body">
+            <h3 class="topic-name">Image Segmentation</h3>
+            <p class="topic-desc">Semantic segmentation assigns a class label to every pixel. Instance segmentation goes further — distinguishing individual object instances. U-Net's encoder-decoder for medical imaging. Mask R-CNN for instance masks. SAM (Segment Anything Model) as the new zero-shot foundation model.</p>
+            <div class="topic-tags">
+              <span class="ttag">U-Net</span><span class="ttag">Mask R-CNN</span><span class="ttag">SAM</span><span class="ttag">Semantic</span><span class="ttag">Panoptic</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-1">
+          <div class="topic-icon" style="--tc:#34c759"></div>
+          <div class="topic-body">
+            <h3 class="topic-name">Vision Transformers (ViT)</h3>
+            <p class="topic-desc">Splitting an image into fixed-size patches and treating them as token sequences for a standard Transformer encoder. Why ViT outperforms CNNs at scale but needs more data. DINOv2 as a powerful self-supervised backbone.</p>
+            <div class="topic-tags">
+              <span class="ttag">ViT</span><span class="ttag">Patches</span><span class="ttag">Self-Attention</span><span class="ttag">DINOv2</span><span class="ttag">CLIP</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-2">
+          <div class="topic-icon" style="--tc:#34c759"></div>
+          <div class="topic-body">
+            <h3 class="topic-name">Optical Flow &amp; Tracking</h3>
+            <p class="topic-desc">Lucas-Kanade and Farneback for dense/sparse optical flow. DeepSORT combining Kalman filters with deep appearance features. ByteTrack's "every detection counts" philosophy for crowded scenes.</p>
+            <div class="topic-tags">
+              <span class="ttag">Optical Flow</span><span class="ttag">DeepSORT</span><span class="ttag">ByteTrack</span><span class="ttag">Kalman</span><span class="ttag">ReID</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── MODULE 6 ── -->
+    <section class="module reveal" id="m6" data-color="#ff375f">
+      <div class="module-header">
+        <div class="module-num-badge" style="--mc:#ff375f">06</div>
+        <div class="module-meta">
+          <span class="module-tag" style="--mc:#ff375f">Pro Level</span>
+          <h2 class="module-title">Deployment &amp; Edge AI</h2>
+          <p class="module-sub">Models that only work in notebooks don't ship. Learn to take vision AI into production.</p>
+        </div>
+      </div>
+
+      <!-- Deployment pipeline visual -->
+      <div class="deploy-pipeline reveal-up">
+        <div class="dp-step" style="--mc:#ff375f">
+          <span class="dp-icon"></span>
+          <span class="dp-label">Train (.pt)</span>
+        </div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-step" style="--mc:#ff375f">
+          <span class="dp-icon"><i class="fas fa-scissors"></i></span>
+          <span class="dp-label">Optimize</span>
+        </div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-step" style="--mc:#ff375f">
+          <span class="dp-icon"></span>
+          <span class="dp-label">Export (ONNX)</span>
+        </div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-step" style="--mc:#ff375f">
+          <span class="dp-icon"></span>
+          <span class="dp-label">Deploy</span>
+        </div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-step" style="--mc:#ff375f">
+          <span class="dp-icon"></span>
+          <span class="dp-label">Monitor</span>
+        </div>
+      </div>
+
+      <div class="topic-list">
+
+        <div class="topic-item reveal-up">
+          <div class="topic-icon" style="--tc:#ff375f"></div>
+          <div class="topic-body">
+            <h3 class="topic-name">Model Optimization</h3>
+            <p class="topic-desc">Post-training quantization (INT8, FP16) to cut model size and latency. Structured pruning to remove redundant channels. Exporting to ONNX for framework-agnostic deployment, then TensorRT for NVIDIA GPU inference at maximum throughput.</p>
+            <div class="topic-tags">
+              <span class="ttag">Quantization</span><span class="ttag">Pruning</span><span class="ttag">ONNX</span><span class="ttag">TensorRT</span><span class="ttag">INT8</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-1">
+          <div class="topic-icon" style="--tc:#ff375f"></div>
+          <div class="topic-body">
+            <h3 class="topic-name">Edge Deployment</h3>
+            <p class="topic-desc">Running YOLO on Raspberry Pi 5 with NCNN. Jetson Nano / Orin for TensorRT-accelerated inference. Building REST APIs with FastAPI for network-accessible inference servers. Dockerizing the full pipeline for reproducible deployment.</p>
+            <div class="topic-tags">
+              <span class="ttag">Jetson</span><span class="ttag">Raspberry Pi</span><span class="ttag">NCNN</span><span class="ttag">FastAPI</span><span class="ttag">Docker</span>
+            </div>
+          </div>
+          <div class="topic-code">
+<pre><code><span class="c-kw">from</span> fastapi <span class="c-kw">import</span> FastAPI, UploadFile
+app <span class="c-op">=</span> <span class="c-fn">FastAPI</span>()
+model <span class="c-op">=</span> <span class="c-fn">YOLO</span>(<span class="c-str">"best.onnx"</span>)
+
+<span class="c-dec">@app.post</span>(<span class="c-str">"/detect"</span>)
+<span class="c-kw">async def</span> <span class="c-fn">detect</span>(file: UploadFile):
+    img <span class="c-op">=</span> <span class="c-fn">read_image</span>(<span class="c-kw">await</span> file.<span class="c-fn">read</span>())
+    <span class="c-kw">return</span> model.<span class="c-fn">predict</span>(img)[<span class="c-num">0</span>].<span class="c-fn">tojson</span>()</code></pre>
+          </div>
+        </div>
+
+        <div class="topic-item reveal-up delay-2">
+          <div class="topic-icon" style="--tc:#ff375f">⏱️</div>
+          <div class="topic-body">
+            <h3 class="topic-name">Real-time Inference</h3>
+            <p class="topic-desc">Frame-skipping strategies for video streams. Multi-threading the capture/inference/render pipeline. Profiling with NVTX and optimizing memory layout. Achieving sub-30ms end-to-end latency for live camera feeds.</p>
+            <div class="topic-tags">
+              <span class="ttag">VideoStream</span><span class="ttag">Threading</span><span class="ttag">Profiling</span><span class="ttag">Latency</span><span class="ttag">FPS</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div><!-- /cv-content -->
+
+  <aside class="ai-overview-toc" id="cvToc">
+    <p class="ai-toc-label">Isi Materi</p>
+    <ul class="ai-toc-list">
+      <li><a href="#m1" class="ai-toc-link active" data-module="m1"><span class="ai-toc-num">01</span>Digital Image Fundamentals</a></li>
+      <li><a href="#m2" class="ai-toc-link" data-module="m2"><span class="ai-toc-num">02</span>Classic CV Features</a></li>
+      <li><a href="#m3" class="ai-toc-link" data-module="m3"><span class="ai-toc-num">03</span>Deep Learning for Vision</a></li>
+      <li><a href="#m4" class="ai-toc-link" data-module="m4"><span class="ai-toc-num">04</span>Object Detection</a></li>
+      <li><a href="#m5" class="ai-toc-link" data-module="m5"><span class="ai-toc-num">05</span>Segmentation</a></li>
+      <li><a href="#m6" class="ai-toc-link" data-module="m6"><span class="ai-toc-num">06</span>Deployment at the Edge</a></li>
+    </ul>
+    <div class="ai-toc-progress"><span>Progress</span><span id="cvTocProgressPct">0%</span><b><i id="cvTocProgressFill"></i></b></div>
+  </aside>
+</div><!-- /ai-overview-layout -->
+
+<!-- ═══════════════════════════════════════════ NEXT MODULE CTA ═══ -->
+<div class="next-module-cta">
+  <div class="nmc-inner">
+    <span class="nmc-label">Up next in AI Lab</span>
+    <h3 class="nmc-title">Natural Language Processing →</h3>
+    <p class="nmc-desc">Transformers, tokenization, RAG, and the full pipeline from text to meaning.</p>
+    <a href="#/participant-ai-lab-nlp" class="nmc-btn">Continue Learning</a>
+  </div>
+</div>
+
+</main>
+</section>
+
+````

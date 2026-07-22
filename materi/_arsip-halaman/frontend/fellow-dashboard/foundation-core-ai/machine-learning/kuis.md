@@ -1,0 +1,482 @@
+# Kuis Konsep Machine Learning
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning/kuis.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+Knowledge Check
+
+#### Kuis Konsep Machine Learning
+
+Pilih satu jawaban paling tepat. Kuis ini disimpan dengan key `heraiAiMlQuizDone`, `heraiAiMlQuizScore`, dan `heraiAiMlQuizAnswers`.
+
+1
+
+##### Kapan ML paling masuk akal digunakan?
+
+Saat aturan bisnis sederhana dan stabil. Saat pola kompleks berubah dan tersedia data contoh. Saat tidak ada data sama sekali. Saat output tidak perlu dievaluasi.
+
+2
+
+##### Apa makna x in R\^n pada konteks ML?
+
+Satu label kategori untuk semua data. Satu data sebagai vektor fitur dengan n dimensi. Jumlah epoch training. Nilai loss final.
+
+3
+
+##### Contoh tugas unsupervised learning adalah...
+
+Memprediksi spam berdasarkan label lama. Mengelompokkan pelanggan tanpa kategori awal. Menghitung pajak dengan rumus tetap. Mengunci akun dengan aturan manual tunggal.
+
+4
+
+##### Data seperti apa yang dibutuhkan supervised learning?
+
+Input dan label benar untuk contoh training. Input tanpa label dan tanpa tujuan. Hanya desain UI tanpa data. Hanya daftar warna dashboard.
+
+5
+
+##### Hubungan loss dan optimisasi yang benar adalah...
+
+Loss adalah jumlah fitur, optimisasi menghapus data. Loss mengukur error, optimisasi mencari parameter dengan loss lebih rendah. Loss hanya dipakai untuk clustering. Optimisasi berarti selalu menambah layer.
+
+6
+
+##### Fungsi validation set adalah...
+
+Menggantikan semua data train. Membantu memilih model sebelum evaluasi test final. Menyembunyikan label dari semua data. Menjadi data produksi utama.
+
+7
+
+##### Prediksi harga rumah termasuk...
+
+Regresi. Klasifikasi biner. Reinforcement learning. Tokenization.
+
+8
+
+##### Intuisi decision tree adalah...
+
+Menghitung satu centroid untuk semua data. Membuat pertanyaan fitur bertingkat untuk mencapai prediksi. Selalu memakai sigmoid sebagai output. Menghapus data validasi.
+
+9
+
+##### Hal penting sebelum memakai k-NN adalah...
+
+Menambah label palsu ke data test. Memastikan semua fitur diukur dengan skala berbeda ekstrem. Melakukan scaling fitur agar jarak adil. Menghindari semua metrik evaluasi.
+
+10
+
+##### Apa fungsi utama Bayes theorem?
+
+Memperbarui peluang setelah melihat bukti. Menentukan jumlah hidden layer. Mengubah semua fitur menjadi gambar. Menghapus prior dari model.
+
+11
+
+##### Mengapa Naive Bayes disebut "naive"?
+
+Karena tidak memakai probabilitas. Karena mengasumsikan fitur independen dalam kelas. Karena hanya bisa untuk gambar. Karena selalu tanpa label.
+
+12
+
+##### Laplace smoothing dipakai untuk...
+
+Membuat kernel RBF. Menghapus semua kata langka. Mencegah peluang nol pada Naive Bayes. Mengganti validation set.
+
+13
+
+##### Peran sigmoid dalam logistic regression adalah...
+
+Mengubah skor linear menjadi probabilitas 0 sampai 1. Menghitung centroid cluster. Menentukan jumlah fold validasi. Menghapus fitur kategorikal.
+
+14
+
+##### Untuk deteksi penyakit, metrik yang sering sangat penting karena FN mahal adalah...
+
+Jumlah parameter. Recall. Ukuran file model. Banyaknya warna chart.
+
+15
+
+##### Pernyataan yang benar tentang regularization adalah...
+
+Regularization selalu menambah data baru. L2 selalu membuat semua bobot nol. L1 bisa membantu feature selection dengan bobot nol. Regularization hanya untuk unsupervised learning.
+
+16
+
+##### Intuisi Support Vector Machine adalah...
+
+Menghafal semua titik tanpa batas keputusan. Mencari pemisah dengan margin yang baik. Menghapus semua support vector. Mengubah supervised menjadi reinforcement.
+
+17
+
+##### Kapan soft margin lebih masuk akal daripada hard margin?
+
+Saat data noisy atau tidak terpisah sempurna. Saat semua data identik. Saat tidak ada fitur. Saat model tidak perlu generalisasi.
+
+18
+
+##### Kernel trick pada SVM membantu untuk...
+
+Mengunci semua bobot menjadi nol. Menghapus kebutuhan scaling selamanya. Membuat batas non-linear melalui fungsi kemiripan. Mengubah label menjadi teks.
+
+19
+
+##### Peran activation function pada neural network adalah...
+
+Memberi non-linearitas pada output neuron. Menentukan jumlah data test. Menghapus gradient. Mengubah semua masalah menjadi clustering.
+
+20
+
+##### Backpropagation digunakan untuk...
+
+Membuat dendrogram cluster. Menghitung gradient agar bobot bisa diperbarui. Mengganti semua loss function. Menentukan label manual.
+
+21
+
+##### Train loss turun, tetapi validation loss naik. Ini biasanya tanda...
+
+Model makin sempurna di data baru. Overfitting. Data tidak punya fitur sama sekali. K-Means berhasil.
+
+22
+
+##### Intuisi utama K-Means adalah...
+
+Menetapkan titik ke centroid terdekat dan memperbarui centroid. Melatih classifier dari label benar. Menghitung sigmoid untuk tiap kelas. Menghapus semua cluster kecil.
+
+23
+
+##### Keunggulan DBSCAN dibanding K-Means adalah...
+
+Selalu membutuhkan label lengkap. Bisa menemukan cluster bentuk bebas dan noise. Selalu lebih cepat pada semua dataset. Tidak memiliki parameter sama sekali.
+
+24
+
+##### PCA umumnya digunakan untuk...
+
+Menambah label manual ke dataset. Menghitung confusion matrix. Mereduksi dimensi data. Menentukan reward reinforcement learning.
+
+** Submit Kuis
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<section class="fellow-dashboard fellow-modules-page lesson-detail-page ml-course-page ml-quiz-page" data-fellow-page="modules">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+    </aside>
+
+    <main class="fellow-main">
+        <header class="lesson-topbar">
+            <nav class="lesson-breadcrumb" aria-label="Breadcrumb materi">
+                <a href="#/participant-ai-lab-ml-practice"><i class="fas fa-arrow-left"></i><span>Latihan ML</span></a>
+                <span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+                <span>Kuis</span>
+            </nav>
+            <div class="fellow-actions">
+                <label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul, topik, atau materi..."></label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+                <a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+            </div>
+        </header>
+
+        <div class="lesson-layout">
+            <div class="lesson-main-content">
+                <section class="lesson-hero compact ml-lesson-hero">
+                    <div class="lesson-hero-copy">
+                        <span class="ml-eyebrow"><i class="far fa-clipboard"></i> Single Attempt</span>
+                        <h1>Kuis Machine Learning</h1>
+                        <p>Kerjakan 24 soal lintas delapan materi. Setelah submit, skor, highlight jawaban, dan pembahasan akan terbuka.</p>
+                        <div class="lesson-meta-row"><span><i class="far fa-clock"></i> 24 menit</span><span><i class="far fa-clipboard"></i> 24 soal</span><b>Terkunci Setelah Submit</b></div>
+                    </div>
+                    <div class="ml-hero-visual is-compact" aria-hidden="true">
+                        <div class="ml-score-orbit">
+                            <span>Loss</span>
+                            <strong>Eval</strong>
+                            <span>Score</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="lesson-material-panel">
+                    <div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
+                        <a href="#/participant-ai-lab-ml"><i class="fas fa-book-open"></i> Materi</a>
+                        <a href="#/participant-ai-lab-ml-practice"><i class="fas fa-pen-to-square"></i> Latihan</a>
+                        <a href="#/participant-ai-lab-ml-quiz" class="active"><i class="far fa-clipboard"></i> Kuis</a>
+                        <a href="#/participant-ai-lab-ml-discussion"><i class="far fa-message"></i> Diskusi</a>
+                    </div>
+                    <article class="lesson-article">
+                        <form id="aiMlQuizForm" class="lesson-quiz-section" data-quiz-key="heraiAiMlQuizDone">
+                            <div class="ml-section-head">
+                                <span>Knowledge Check</span>
+                                <h2>Kuis Konsep Machine Learning</h2>
+                                <p>Pilih satu jawaban paling tepat. Kuis ini disimpan dengan key <code>heraiAiMlQuizDone</code>, <code>heraiAiMlQuizScore</code>, dan <code>heraiAiMlQuizAnswers</code>.</p>
+                            </div>
+
+                            <div class="quiz-list">
+                                <article data-explanation="Machine Learning cocok saat pola sulit ditulis manual, berubah, dan ada data contoh untuk dipelajari.">
+                                    <span>1</span>
+                                    <h3>Kapan ML paling masuk akal digunakan?</h3>
+                                    <label><input type="radio" name="q1" value="0a"> Saat aturan bisnis sederhana dan stabil.</label>
+                                    <label><input type="radio" name="q1" value="1"> Saat pola kompleks berubah dan tersedia data contoh.</label>
+                                    <label><input type="radio" name="q1" value="0b"> Saat tidak ada data sama sekali.</label>
+                                    <label><input type="radio" name="q1" value="0c"> Saat output tidak perlu dievaluasi.</label>
+                                </article>
+
+                                <article data-explanation="Feature vector adalah representasi numerik dari satu contoh data.">
+                                    <span>2</span>
+                                    <h3>Apa makna x in R^n pada konteks ML?</h3>
+                                    <label><input type="radio" name="q2" value="0a"> Satu label kategori untuk semua data.</label>
+                                    <label><input type="radio" name="q2" value="1"> Satu data sebagai vektor fitur dengan n dimensi.</label>
+                                    <label><input type="radio" name="q2" value="0b"> Jumlah epoch training.</label>
+                                    <label><input type="radio" name="q2" value="0c"> Nilai loss final.</label>
+                                </article>
+
+                                <article data-explanation="Unsupervised learning mencari struktur dari data tanpa label, misalnya clustering pelanggan.">
+                                    <span>3</span>
+                                    <h3>Contoh tugas unsupervised learning adalah...</h3>
+                                    <label><input type="radio" name="q3" value="0a"> Memprediksi spam berdasarkan label lama.</label>
+                                    <label><input type="radio" name="q3" value="1"> Mengelompokkan pelanggan tanpa kategori awal.</label>
+                                    <label><input type="radio" name="q3" value="0b"> Menghitung pajak dengan rumus tetap.</label>
+                                    <label><input type="radio" name="q3" value="0c"> Mengunci akun dengan aturan manual tunggal.</label>
+                                </article>
+
+                                <article data-explanation="Supervised learning membutuhkan pasangan input dan label agar model bisa belajar hubungan x ke y.">
+                                    <span>4</span>
+                                    <h3>Data seperti apa yang dibutuhkan supervised learning?</h3>
+                                    <label><input type="radio" name="q4" value="1"> Input dan label benar untuk contoh training.</label>
+                                    <label><input type="radio" name="q4" value="0a"> Input tanpa label dan tanpa tujuan.</label>
+                                    <label><input type="radio" name="q4" value="0b"> Hanya desain UI tanpa data.</label>
+                                    <label><input type="radio" name="q4" value="0c"> Hanya daftar warna dashboard.</label>
+                                </article>
+
+                                <article data-explanation="Loss mengukur error prediksi, sedangkan optimisasi mencari parameter yang menurunkan loss.">
+                                    <span>5</span>
+                                    <h3>Hubungan loss dan optimisasi yang benar adalah...</h3>
+                                    <label><input type="radio" name="q5" value="0a"> Loss adalah jumlah fitur, optimisasi menghapus data.</label>
+                                    <label><input type="radio" name="q5" value="1"> Loss mengukur error, optimisasi mencari parameter dengan loss lebih rendah.</label>
+                                    <label><input type="radio" name="q5" value="0b"> Loss hanya dipakai untuk clustering.</label>
+                                    <label><input type="radio" name="q5" value="0c"> Optimisasi berarti selalu menambah layer.</label>
+                                </article>
+
+                                <article data-explanation="Validation set membantu memilih model atau hyperparameter sebelum test final.">
+                                    <span>6</span>
+                                    <h3>Fungsi validation set adalah...</h3>
+                                    <label><input type="radio" name="q6" value="0a"> Menggantikan semua data train.</label>
+                                    <label><input type="radio" name="q6" value="1"> Membantu memilih model sebelum evaluasi test final.</label>
+                                    <label><input type="radio" name="q6" value="0b"> Menyembunyikan label dari semua data.</label>
+                                    <label><input type="radio" name="q6" value="0c"> Menjadi data produksi utama.</label>
+                                </article>
+
+                                <article data-explanation="Regresi memprediksi nilai kontinu seperti harga, suhu, atau durasi.">
+                                    <span>7</span>
+                                    <h3>Prediksi harga rumah termasuk...</h3>
+                                    <label><input type="radio" name="q7" value="1"> Regresi.</label>
+                                    <label><input type="radio" name="q7" value="0a"> Klasifikasi biner.</label>
+                                    <label><input type="radio" name="q7" value="0b"> Reinforcement learning.</label>
+                                    <label><input type="radio" name="q7" value="0c"> Tokenization.</label>
+                                </article>
+
+                                <article data-explanation="Decision tree memilih split dengan ukuran seperti Information Gain atau Gini untuk memisahkan data.">
+                                    <span>8</span>
+                                    <h3>Intuisi decision tree adalah...</h3>
+                                    <label><input type="radio" name="q8" value="0a"> Menghitung satu centroid untuk semua data.</label>
+                                    <label><input type="radio" name="q8" value="1"> Membuat pertanyaan fitur bertingkat untuk mencapai prediksi.</label>
+                                    <label><input type="radio" name="q8" value="0b"> Selalu memakai sigmoid sebagai output.</label>
+                                    <label><input type="radio" name="q8" value="0c"> Menghapus data validasi.</label>
+                                </article>
+
+                                <article data-explanation="k-NN memprediksi dari tetangga terdekat, sehingga skala fitur sangat memengaruhi jarak.">
+                                    <span>9</span>
+                                    <h3>Hal penting sebelum memakai k-NN adalah...</h3>
+                                    <label><input type="radio" name="q9" value="0a"> Menambah label palsu ke data test.</label>
+                                    <label><input type="radio" name="q9" value="0b"> Memastikan semua fitur diukur dengan skala berbeda ekstrem.</label>
+                                    <label><input type="radio" name="q9" value="1"> Melakukan scaling fitur agar jarak adil.</label>
+                                    <label><input type="radio" name="q9" value="0c"> Menghindari semua metrik evaluasi.</label>
+                                </article>
+
+                                <article data-explanation="Bayes theorem memperbarui peluang hipotesis setelah melihat bukti.">
+                                    <span>10</span>
+                                    <h3>Apa fungsi utama Bayes theorem?</h3>
+                                    <label><input type="radio" name="q10" value="1"> Memperbarui peluang setelah melihat bukti.</label>
+                                    <label><input type="radio" name="q10" value="0a"> Menentukan jumlah hidden layer.</label>
+                                    <label><input type="radio" name="q10" value="0b"> Mengubah semua fitur menjadi gambar.</label>
+                                    <label><input type="radio" name="q10" value="0c"> Menghapus prior dari model.</label>
+                                </article>
+
+                                <article data-explanation="Naive Bayes disebut naive karena mengasumsikan fitur saling independen dalam kelas.">
+                                    <span>11</span>
+                                    <h3>Mengapa Naive Bayes disebut "naive"?</h3>
+                                    <label><input type="radio" name="q11" value="0a"> Karena tidak memakai probabilitas.</label>
+                                    <label><input type="radio" name="q11" value="1"> Karena mengasumsikan fitur independen dalam kelas.</label>
+                                    <label><input type="radio" name="q11" value="0b"> Karena hanya bisa untuk gambar.</label>
+                                    <label><input type="radio" name="q11" value="0c"> Karena selalu tanpa label.</label>
+                                </article>
+
+                                <article data-explanation="Laplace smoothing mencegah peluang menjadi nol saat fitur belum pernah muncul pada kelas tertentu.">
+                                    <span>12</span>
+                                    <h3>Laplace smoothing dipakai untuk...</h3>
+                                    <label><input type="radio" name="q12" value="0a"> Membuat kernel RBF.</label>
+                                    <label><input type="radio" name="q12" value="0b"> Menghapus semua kata langka.</label>
+                                    <label><input type="radio" name="q12" value="1"> Mencegah peluang nol pada Naive Bayes.</label>
+                                    <label><input type="radio" name="q12" value="0c"> Mengganti validation set.</label>
+                                </article>
+
+                                <article data-explanation="Logistic regression memakai sigmoid untuk mengubah skor linear menjadi probabilitas kelas positif.">
+                                    <span>13</span>
+                                    <h3>Peran sigmoid dalam logistic regression adalah...</h3>
+                                    <label><input type="radio" name="q13" value="1"> Mengubah skor linear menjadi probabilitas 0 sampai 1.</label>
+                                    <label><input type="radio" name="q13" value="0a"> Menghitung centroid cluster.</label>
+                                    <label><input type="radio" name="q13" value="0b"> Menentukan jumlah fold validasi.</label>
+                                    <label><input type="radio" name="q13" value="0c"> Menghapus fitur kategorikal.</label>
+                                </article>
+
+                                <article data-explanation="Recall penting ketika false negative mahal, misalnya kasus medis atau fraud yang lolos.">
+                                    <span>14</span>
+                                    <h3>Untuk deteksi penyakit, metrik yang sering sangat penting karena FN mahal adalah...</h3>
+                                    <label><input type="radio" name="q14" value="0a"> Jumlah parameter.</label>
+                                    <label><input type="radio" name="q14" value="1"> Recall.</label>
+                                    <label><input type="radio" name="q14" value="0b"> Ukuran file model.</label>
+                                    <label><input type="radio" name="q14" value="0c"> Banyaknya warna chart.</label>
+                                </article>
+
+                                <article data-explanation="L1 dapat mendorong beberapa bobot menjadi nol, sedangkan L2 mendorong bobot kecil dan stabil.">
+                                    <span>15</span>
+                                    <h3>Pernyataan yang benar tentang regularization adalah...</h3>
+                                    <label><input type="radio" name="q15" value="0a"> Regularization selalu menambah data baru.</label>
+                                    <label><input type="radio" name="q15" value="0b"> L2 selalu membuat semua bobot nol.</label>
+                                    <label><input type="radio" name="q15" value="1"> L1 bisa membantu feature selection dengan bobot nol.</label>
+                                    <label><input type="radio" name="q15" value="0c"> Regularization hanya untuk unsupervised learning.</label>
+                                </article>
+
+                                <article data-explanation="SVM memilih batas dengan margin besar agar pemisah lebih robust terhadap data baru.">
+                                    <span>16</span>
+                                    <h3>Intuisi Support Vector Machine adalah...</h3>
+                                    <label><input type="radio" name="q16" value="0a"> Menghafal semua titik tanpa batas keputusan.</label>
+                                    <label><input type="radio" name="q16" value="1"> Mencari pemisah dengan margin yang baik.</label>
+                                    <label><input type="radio" name="q16" value="0b"> Menghapus semua support vector.</label>
+                                    <label><input type="radio" name="q16" value="0c"> Mengubah supervised menjadi reinforcement.</label>
+                                </article>
+
+                                <article data-explanation="Soft margin mengizinkan beberapa pelanggaran agar SVM tetap realistis pada data noisy.">
+                                    <span>17</span>
+                                    <h3>Kapan soft margin lebih masuk akal daripada hard margin?</h3>
+                                    <label><input type="radio" name="q17" value="1"> Saat data noisy atau tidak terpisah sempurna.</label>
+                                    <label><input type="radio" name="q17" value="0a"> Saat semua data identik.</label>
+                                    <label><input type="radio" name="q17" value="0b"> Saat tidak ada fitur.</label>
+                                    <label><input type="radio" name="q17" value="0c"> Saat model tidak perlu generalisasi.</label>
+                                </article>
+
+                                <article data-explanation="Kernel trick menghitung kemiripan seolah data dipetakan ke ruang fitur lebih tinggi.">
+                                    <span>18</span>
+                                    <h3>Kernel trick pada SVM membantu untuk...</h3>
+                                    <label><input type="radio" name="q18" value="0a"> Mengunci semua bobot menjadi nol.</label>
+                                    <label><input type="radio" name="q18" value="0b"> Menghapus kebutuhan scaling selamanya.</label>
+                                    <label><input type="radio" name="q18" value="1"> Membuat batas non-linear melalui fungsi kemiripan.</label>
+                                    <label><input type="radio" name="q18" value="0c"> Mengubah label menjadi teks.</label>
+                                </article>
+
+                                <article data-explanation="Activation memberi non-linearitas sehingga network bisa menangkap pola lebih kompleks dari model linear.">
+                                    <span>19</span>
+                                    <h3>Peran activation function pada neural network adalah...</h3>
+                                    <label><input type="radio" name="q19" value="1"> Memberi non-linearitas pada output neuron.</label>
+                                    <label><input type="radio" name="q19" value="0a"> Menentukan jumlah data test.</label>
+                                    <label><input type="radio" name="q19" value="0b"> Menghapus gradient.</label>
+                                    <label><input type="radio" name="q19" value="0c"> Mengubah semua masalah menjadi clustering.</label>
+                                </article>
+
+                                <article data-explanation="Backpropagation memakai chain rule untuk menyebarkan gradient dari output kembali ke layer sebelumnya.">
+                                    <span>20</span>
+                                    <h3>Backpropagation digunakan untuk...</h3>
+                                    <label><input type="radio" name="q20" value="0a"> Membuat dendrogram cluster.</label>
+                                    <label><input type="radio" name="q20" value="1"> Menghitung gradient agar bobot bisa diperbarui.</label>
+                                    <label><input type="radio" name="q20" value="0b"> Mengganti semua loss function.</label>
+                                    <label><input type="radio" name="q20" value="0c"> Menentukan label manual.</label>
+                                </article>
+
+                                <article data-explanation="Validation loss naik saat train loss turun adalah sinyal overfitting.">
+                                    <span>21</span>
+                                    <h3>Train loss turun, tetapi validation loss naik. Ini biasanya tanda...</h3>
+                                    <label><input type="radio" name="q21" value="0a"> Model makin sempurna di data baru.</label>
+                                    <label><input type="radio" name="q21" value="1"> Overfitting.</label>
+                                    <label><input type="radio" name="q21" value="0b"> Data tidak punya fitur sama sekali.</label>
+                                    <label><input type="radio" name="q21" value="0c"> K-Means berhasil.</label>
+                                </article>
+
+                                <article data-explanation="K-Means mengelompokkan data ke centroid terdekat lalu memperbarui centroid dari rata-rata cluster.">
+                                    <span>22</span>
+                                    <h3>Intuisi utama K-Means adalah...</h3>
+                                    <label><input type="radio" name="q22" value="1"> Menetapkan titik ke centroid terdekat dan memperbarui centroid.</label>
+                                    <label><input type="radio" name="q22" value="0a"> Melatih classifier dari label benar.</label>
+                                    <label><input type="radio" name="q22" value="0b"> Menghitung sigmoid untuk tiap kelas.</label>
+                                    <label><input type="radio" name="q22" value="0c"> Menghapus semua cluster kecil.</label>
+                                </article>
+
+                                <article data-explanation="DBSCAN kuat untuk cluster bentuk bebas dan dapat menandai noise/outlier.">
+                                    <span>23</span>
+                                    <h3>Keunggulan DBSCAN dibanding K-Means adalah...</h3>
+                                    <label><input type="radio" name="q23" value="0a"> Selalu membutuhkan label lengkap.</label>
+                                    <label><input type="radio" name="q23" value="1"> Bisa menemukan cluster bentuk bebas dan noise.</label>
+                                    <label><input type="radio" name="q23" value="0b"> Selalu lebih cepat pada semua dataset.</label>
+                                    <label><input type="radio" name="q23" value="0c"> Tidak memiliki parameter sama sekali.</label>
+                                </article>
+
+                                <article data-explanation="PCA mereduksi dimensi dengan mencari komponen yang mempertahankan variasi data sebanyak mungkin.">
+                                    <span>24</span>
+                                    <h3>PCA umumnya digunakan untuk...</h3>
+                                    <label><input type="radio" name="q24" value="0a"> Menambah label manual ke dataset.</label>
+                                    <label><input type="radio" name="q24" value="0b"> Menghitung confusion matrix.</label>
+                                    <label><input type="radio" name="q24" value="1"> Mereduksi dimensi data.</label>
+                                    <label><input type="radio" name="q24" value="0c"> Menentukan reward reinforcement learning.</label>
+                                </article>
+                            </div>
+
+                            <div class="quiz-result-card" id="aiMlQuizResult" hidden></div>
+                            <button type="submit" class="quiz-submit-btn"><i class="fas fa-paper-plane"></i> Submit Kuis</button>
+                        </form>
+                    </article>
+                    <footer class="lesson-nav-footer">
+                        <a href="#/participant-ai-lab-ml-practice"><i class="fas fa-chevron-left"></i> Sebelumnya</a>
+                        <a href="#/participant-ai-lab-ml-discussion" id="aiMlQuizNext" class="is-disabled">Selanjutnya <i class="fas fa-arrow-right"></i></a>
+                    </footer>
+                </section>
+            </div>
+            <aside class="lesson-right-panel">
+                <section class="module-side-card lesson-progress-card">
+                    <h2>Progres Modul</h2>
+                    <div class="lesson-progress-mini"><b style="--value:75%"></b><strong>75%</strong></div>
+                    <p>Kirim kuis untuk membuka diskusi.</p>
+                    <a href="#/participant-ai-lab-ml-quiz">Kuis Aktif</a>
+                </section>
+                <section class="module-side-card lesson-list-card">
+                    <h2>Flow Belajar</h2>
+                    <ol>
+                        <li class="completed"><span>1</span><a href="#/participant-ai-lab-ml">Materi</a><i class="fas fa-circle-check"></i></li>
+                        <li class="completed"><span>2</span><a href="#/participant-ai-lab-ml-practice">Latihan</a><i class="fas fa-circle-check"></i></li>
+                        <li class="active"><span>3</span><a href="#/participant-ai-lab-ml-quiz">Kuis</a><i class="far fa-circle-play"></i></li>
+                        <li data-locked-after-quiz><span>4</span><a href="#/participant-ai-lab-ml-discussion">Diskusi</a><i class="far fa-circle"></i></li>
+                    </ol>
+                    <p class="lesson-lock-hint">Diskusi terbuka setelah kuis dikirim.</p>
+                </section>
+            </aside>
+        </div>
+    </main>
+</section>
+
+````

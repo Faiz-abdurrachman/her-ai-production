@@ -1,0 +1,151 @@
+# Chapter 1 — Kenapa Python untuk AI?
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/01-full.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+### Chapter 1 — Kenapa Python untuk AI?
+
+#### Learning Objectives
+
+-   Menjelaskan alasan Python populer dalam pekerjaan AI.
+-   Memetakan peran Python dari dataset sampai deployment.
+-   Membedakan bahasa Python dan library yang berjalan di atasnya.
+
+#### Kenapa Materi Ini Penting?
+
+Belajar sintaks tanpa melihat gambaran besar terasa seperti mengumpulkan alat tanpa tahu apa yang akan dibangun. Chapter ini memberi peta agar setiap konsep berikutnya memiliki tujuan.
+
+#### Hubungan dengan AI
+
+Workflow AI modern sering terlihat seperti ini:
+
+    Dataset → Python → Cleaning → Exploration → Model → Evaluation → Deployment
+
+Python menjadi penghubung antar-tahap. Ia membaca data, memanggil library, mengatur eksperimen, dan mengubah hasil menjadi sesuatu yang dapat digunakan. Pada modul ini kita fokus sampai tahap cleaning dan exploration.
+
+#### Analogi
+
+Bayangkan dapur profesional. Python adalah area dapurnya; NumPy, Pandas, dan library lain adalah peralatannya; data adalah bahan; model AI adalah salah satu resep lanjutan. Dapur yang baik tidak otomatis menghasilkan makanan, tetapi membuat seluruh proses dapat dilakukan dengan teratur.
+
+#### Penjelasan Konsep
+
+Python disukai karena sintaksnya relatif mudah dibaca, komunitasnya besar, dan ekosistem datanya matang. Python juga dapat dipakai secara interaktif di notebook serta sebagai file program `.py`.
+
+Python bukan AI itu sendiri. Menulis Python tidak otomatis membuat sistem cerdas. Python adalah alat untuk mengekspresikan proses dan menghubungkan komponen.
+
+#### Visual Thinking
+
+    Pertanyaan → Data → Kode Python → Informasi → Keputusan
+
+#### Contoh Nyata
+
+Panitia ingin mengetahui rata-rata nilai 500 peserta. Menghitung manual lambat dan rawan salah. Python dapat membaca file, membersihkan nilai kosong, menghitung rata-rata, dan menyimpan laporan.
+
+#### Contoh AI
+
+Sebelum data dipakai oleh model AI, Python sering digunakan untuk memeriksa apakah format, label, dan nilai kosongnya sudah benar.
+
+#### Kode Python
+
+    module_name = "Python untuk AI"
+    participant_count = 500
+
+    print(module_name)
+    print(participant_count)
+
+#### Penjelasan Kode Baris per Baris
+
+1.  `module_name` menyimpan teks nama modul.
+2.  `participant_count` menyimpan jumlah peserta sebagai angka.
+3.  `print()` menampilkan informasi agar dapat dilihat pengguna.
+
+#### Common Mistakes
+
+-   Mengira Python dan AI adalah hal yang sama.
+-   Menghafal sintaks tanpa memahami masalah.
+-   Memasang banyak library sebelum tahu kegunaannya.
+
+#### Best Practices
+
+-   Mulai dari pertanyaan, bukan library.
+-   Gunakan nama variabel yang menjelaskan isi.
+-   Bangun workflow kecil yang dapat diperiksa.
+
+#### Mini Challenge
+
+Buat dua variabel untuk nama dataset dan jumlah baris, lalu tampilkan keduanya.
+
+#### Ringkasan
+
+Python adalah bahasa orkestrasi utama dalam banyak workflow AI karena mudah dibaca dan memiliki ekosistem data yang kuat.
+
+#### Persiapan Chapter Berikutnya
+
+Berikutnya kita menyiapkan ruang kerja agar kode dapat dijalankan secara konsisten.
+
+* * * * *
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<h1>Chapter 1 — Kenapa Python untuk AI?</h1>
+<h2>Learning Objectives</h2>
+<ul>
+<li>Menjelaskan alasan Python populer dalam pekerjaan AI.</li>
+<li>Memetakan peran Python dari dataset sampai deployment.</li>
+<li>Membedakan bahasa Python dan library yang berjalan di atasnya.</li>
+</ul>
+<h2>Kenapa Materi Ini Penting?</h2>
+<p>Belajar sintaks tanpa melihat gambaran besar terasa seperti mengumpulkan alat tanpa tahu apa yang akan dibangun. Chapter ini memberi peta agar setiap konsep berikutnya memiliki tujuan.</p>
+<h2>Hubungan dengan AI</h2>
+<p>Workflow AI modern sering terlihat seperti ini:</p>
+<pre><code class="language-text">Dataset → Python → Cleaning → Exploration → Model → Evaluation → Deployment
+</code></pre>
+<p>Python menjadi penghubung antar-tahap. Ia membaca data, memanggil library, mengatur eksperimen, dan mengubah hasil menjadi sesuatu yang dapat digunakan. Pada modul ini kita fokus sampai tahap cleaning dan exploration.</p>
+<h2>Analogi</h2>
+<p>Bayangkan dapur profesional. Python adalah area dapurnya; NumPy, Pandas, dan library lain adalah peralatannya; data adalah bahan; model AI adalah salah satu resep lanjutan. Dapur yang baik tidak otomatis menghasilkan makanan, tetapi membuat seluruh proses dapat dilakukan dengan teratur.</p>
+<h2>Penjelasan Konsep</h2>
+<p>Python disukai karena sintaksnya relatif mudah dibaca, komunitasnya besar, dan ekosistem datanya matang. Python juga dapat dipakai secara interaktif di notebook serta sebagai file program <code>.py</code>.</p>
+<p>Python bukan AI itu sendiri. Menulis Python tidak otomatis membuat sistem cerdas. Python adalah alat untuk mengekspresikan proses dan menghubungkan komponen.</p>
+<h2>Visual Thinking</h2>
+<pre><code class="language-text">Pertanyaan → Data → Kode Python → Informasi → Keputusan
+</code></pre>
+<h2>Contoh Nyata</h2>
+<p>Panitia ingin mengetahui rata-rata nilai 500 peserta. Menghitung manual lambat dan rawan salah. Python dapat membaca file, membersihkan nilai kosong, menghitung rata-rata, dan menyimpan laporan.</p>
+<h2>Contoh AI</h2>
+<p>Sebelum data dipakai oleh model AI, Python sering digunakan untuk memeriksa apakah format, label, dan nilai kosongnya sudah benar.</p>
+<h2>Kode Python</h2>
+<pre><code class="language-python">module_name = &quot;Python untuk AI&quot;
+participant_count = 500
+
+print(module_name)
+print(participant_count)
+</code></pre>
+<h2>Penjelasan Kode Baris per Baris</h2>
+<ol>
+<li><code>module_name</code> menyimpan teks nama modul.</li>
+<li><code>participant_count</code> menyimpan jumlah peserta sebagai angka.</li>
+<li><code>print()</code> menampilkan informasi agar dapat dilihat pengguna.</li>
+</ol>
+<h2>Common Mistakes</h2>
+<ul>
+<li>Mengira Python dan AI adalah hal yang sama.</li>
+<li>Menghafal sintaks tanpa memahami masalah.</li>
+<li>Memasang banyak library sebelum tahu kegunaannya.</li>
+</ul>
+<h2>Best Practices</h2>
+<ul>
+<li>Mulai dari pertanyaan, bukan library.</li>
+<li>Gunakan nama variabel yang menjelaskan isi.</li>
+<li>Bangun workflow kecil yang dapat diperiksa.</li>
+</ul>
+<h2>Mini Challenge</h2>
+<p>Buat dua variabel untuk nama dataset dan jumlah baris, lalu tampilkan keduanya.</p>
+<h2>Ringkasan</h2>
+<p>Python adalah bahasa orkestrasi utama dalam banyak workflow AI karena mudah dibaca dan memiliki ekosistem data yang kuat.</p>
+<h2>Persiapan Chapter Berikutnya</h2>
+<p>Berikutnya kita menyiapkan ruang kerja agar kode dapat dijalankan secara konsisten.</p>
+<hr>
+
+````

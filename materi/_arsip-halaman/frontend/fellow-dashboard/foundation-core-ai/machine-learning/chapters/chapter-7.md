@@ -1,0 +1,336 @@
+# Neural Networks
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning/chapters/chapter-7.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+Chapter 7
+
+#### Neural Networks
+
+Neural network membangun prediksi dari lapisan-lapisan komputasi sederhana. Dengan cukup data, arsitektur, dan training yang tepat, network bisa menangkap pola non-linear yang sulit ditulis manual.
+
+Learning objectives
+
+##### Setelah materi ini, kamu mampu
+
+-   **Menjelaskan perceptron, MLP, activation, forward pass, dan backpropagation.
+-   **Membaca masalah vanishing gradient, exploding gradient, dan overfitting.
+-   **Membedakan peran optimizer, regularization, dan mini-batch training.
+
+Why it matters
+
+##### Kenapa neural network jadi pusat AI modern?
+
+Deep learning di computer vision, speech, NLP, dan generative AI berangkat dari ide neural network. Chapter ini memberi peta konsep agar kamu tidak hanya memakai model, tetapi juga paham mengapa training bisa berhasil atau gagal.
+
+x1x2x3
+
+**
+
+h1h2h3h4
+
+**
+
+y
+
+###### Layered representation
+
+Setiap layer mengubah representasi. Layer awal membaca sinyal sederhana, layer berikutnya menggabungkan sinyal menjadi pola yang lebih kompleks.
+
+Formula
+
+##### Dari perceptron ke MLP
+
+`z = w^T x + w0`
+
+**Net input.** Neuron menghitung kombinasi linear dari input dan bobot.
+
+`a = activation(z)`
+
+**Activation.** Fungsi seperti ReLU, sigmoid, tanh, atau softmax memberi non-linearitas dan bentuk output yang sesuai.
+
+`w <- w - learning_rate * gradient`
+
+**Gradient update.** Training memperbarui bobot berlawanan arah gradient agar loss menurun.
+
+Analogy
+
+##### Analogi tim penyaring informasi
+
+Bayangkan satu tim menilai aplikasi fellowship. Orang pertama membaca kelengkapan data, orang kedua membaca pola progres, orang ketiga membaca kualitas jawaban. Keputusan akhir muncul dari gabungan penilaian bertingkat. Neural network melakukan komposisi sinyal seperti itu, tetapi dengan angka dan bobot.
+
+**
+
+###### Forward pass
+
+Input mengalir dari layer awal ke output untuk menghasilkan prediksi.
+
+**
+
+###### Backpropagation
+
+Error dihitung di output, lalu gradient disebarkan mundur dengan chain rule.
+
+**
+
+###### Mini-batch
+
+Training memakai sebagian data per update agar lebih stabil dan efisien.
+
+Training toolkit
+
+##### Optimizer dan regularization
+
+**
+
+###### SGD
+
+Update sederhana berdasarkan mini-batch gradient.
+
+**
+
+###### Momentum
+
+Menyimpan arah update agar training tidak terlalu zig-zag.
+
+**
+
+###### RMSprop/Adam
+
+Menyesuaikan learning rate per parameter agar training lebih adaptif.
+
+**
+
+###### Dropout & weight decay
+
+Mengurangi overfitting dengan membatasi ketergantungan dan bobot besar.
+
+Failure modes
+
+##### Kenapa network bisa gagal belajar?
+
+**
+
+##### Vanishing gradient
+
+Gradient sangat kecil saat melewati banyak layer, sehingga layer awal belajar sangat lambat.
+
+**
+
+##### Exploding gradient
+
+Gradient terlalu besar dan membuat update bobot tidak stabil. Gradient clipping bisa membantu.
+
+**
+
+##### Overfitting
+
+Model terlalu kuat dibanding data. Gunakan regularization, data augmentation, early stopping, atau arsitektur lebih sederhana.
+
+**
+
+##### Training instability
+
+Learning rate terlalu besar, batch terlalu kecil, atau data tidak ternormalisasi dapat membuat loss sulit turun.
+
+Mini checkpoint
+
+##### Jawab sebentar
+
+Jika train loss turun tajam tetapi validation loss naik, apa diagnosisnya? Sebutkan dua tindakan perbaikan.
+
+Common mistakes
+
+##### Kesalahan yang sering terjadi
+
+-   **Memakai network besar untuk data kecil tanpa regularization.
+-   **Tidak menormalisasi fitur numerik sebelum training.
+-   **Mengubah banyak hyperparameter sekaligus sehingga sulit tahu penyebab perbaikan.
+
+Summary
+
+##### Ringkasan
+
+Neural network menggabungkan layer, activation, forward pass, dan backpropagation untuk belajar pola non-linear. Training yang baik membutuhkan optimizer, regularization, dan monitoring validation.
+
+[Lanjut ke Unsupervised Learning **](#/participant-ai-lab-ml-unsupervised)
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<article class="ml-chapter ai-ml-chapter">
+    <header class="ml-chapter-header">
+        <span>Chapter 7</span>
+        <h2>Neural Networks</h2>
+        <p>Neural network membangun prediksi dari lapisan-lapisan komputasi sederhana. Dengan cukup data, arsitektur, dan training yang tepat, network bisa menangkap pola non-linear yang sulit ditulis manual.</p>
+    </header>
+
+    <section class="ai-ml-learning-card">
+        <div class="ml-section-head">
+            <span>Learning objectives</span>
+            <h3>Setelah materi ini, kamu mampu</h3>
+        </div>
+        <ul class="ai-ml-objectives">
+            <li><i class="fas fa-circle-check"></i><span>Menjelaskan perceptron, MLP, activation, forward pass, dan backpropagation.</span></li>
+            <li><i class="fas fa-circle-check"></i><span>Membaca masalah vanishing gradient, exploding gradient, dan overfitting.</span></li>
+            <li><i class="fas fa-circle-check"></i><span>Membedakan peran optimizer, regularization, dan mini-batch training.</span></li>
+        </ul>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Why it matters</span>
+            <h3>Kenapa neural network jadi pusat AI modern?</h3>
+            <p>Deep learning di computer vision, speech, NLP, dan generative AI berangkat dari ide neural network. Chapter ini memberi peta konsep agar kamu tidak hanya memakai model, tetapi juga paham mengapa training bisa berhasil atau gagal.</p>
+        </div>
+        <div class="ml-network-demo">
+            <div class="ai-ml-network" aria-label="Ilustrasi neural network">
+                <div class="ml-neuron-column input-layer"><span>x1</span><span>x2</span><span>x3</span></div>
+                <i class="fas fa-arrow-right"></i>
+                <div class="ml-neuron-column hidden-layer"><span>h1</span><span>h2</span><span>h3</span><span>h4</span></div>
+                <i class="fas fa-arrow-right"></i>
+                <div class="ml-neuron-column output-layer"><span>y</span></div>
+            </div>
+            <div class="ml-network-copy">
+                <h4>Layered representation</h4>
+                <p>Setiap layer mengubah representasi. Layer awal membaca sinyal sederhana, layer berikutnya menggabungkan sinyal menjadi pola yang lebih kompleks.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Formula</span>
+            <h3>Dari perceptron ke MLP</h3>
+        </div>
+        <div class="ai-ml-formula-list">
+            <article>
+                <code>z = w^T x + w0</code>
+                <p><b>Net input.</b> Neuron menghitung kombinasi linear dari input dan bobot.</p>
+            </article>
+            <article>
+                <code>a = activation(z)</code>
+                <p><b>Activation.</b> Fungsi seperti ReLU, sigmoid, tanh, atau softmax memberi non-linearitas dan bentuk output yang sesuai.</p>
+            </article>
+            <article>
+                <code>w <- w - learning_rate * gradient</code>
+                <p><b>Gradient update.</b> Training memperbarui bobot berlawanan arah gradient agar loss menurun.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Analogy</span>
+            <h3>Analogi tim penyaring informasi</h3>
+            <p>Bayangkan satu tim menilai aplikasi fellowship. Orang pertama membaca kelengkapan data, orang kedua membaca pola progres, orang ketiga membaca kualitas jawaban. Keputusan akhir muncul dari gabungan penilaian bertingkat. Neural network melakukan komposisi sinyal seperti itu, tetapi dengan angka dan bobot.</p>
+        </div>
+        <div class="ml-card-grid three">
+            <article class="ml-info-card">
+                <i class="fas fa-arrow-right"></i>
+                <h4>Forward pass</h4>
+                <p>Input mengalir dari layer awal ke output untuk menghasilkan prediksi.</p>
+            </article>
+            <article class="ml-info-card">
+                <i class="fas fa-arrow-rotate-left"></i>
+                <h4>Backpropagation</h4>
+                <p>Error dihitung di output, lalu gradient disebarkan mundur dengan chain rule.</p>
+            </article>
+            <article class="ml-info-card">
+                <i class="fas fa-boxes-stacked"></i>
+                <h4>Mini-batch</h4>
+                <p>Training memakai sebagian data per update agar lebih stabil dan efisien.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Training toolkit</span>
+            <h3>Optimizer dan regularization</h3>
+        </div>
+        <div class="ml-algorithm-strip">
+            <article>
+                <i class="fas fa-person-running"></i>
+                <h4>SGD</h4>
+                <p>Update sederhana berdasarkan mini-batch gradient.</p>
+            </article>
+            <article>
+                <i class="fas fa-gauge-high"></i>
+                <h4>Momentum</h4>
+                <p>Menyimpan arah update agar training tidak terlalu zig-zag.</p>
+            </article>
+            <article>
+                <i class="fas fa-chart-area"></i>
+                <h4>RMSprop/Adam</h4>
+                <p>Menyesuaikan learning rate per parameter agar training lebih adaptif.</p>
+            </article>
+            <article>
+                <i class="fas fa-shield-halved"></i>
+                <h4>Dropout &amp; weight decay</h4>
+                <p>Mengurangi overfitting dengan membatasi ketergantungan dan bobot besar.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Failure modes</span>
+            <h3>Kenapa network bisa gagal belajar?</h3>
+        </div>
+        <div class="ml-card-grid two">
+            <article class="ml-concept-card">
+                <i class="fas fa-arrow-down"></i>
+                <h3>Vanishing gradient</h3>
+                <p>Gradient sangat kecil saat melewati banyak layer, sehingga layer awal belajar sangat lambat.</p>
+            </article>
+            <article class="ml-concept-card">
+                <i class="fas fa-burst"></i>
+                <h3>Exploding gradient</h3>
+                <p>Gradient terlalu besar dan membuat update bobot tidak stabil. Gradient clipping bisa membantu.</p>
+            </article>
+            <article class="ml-concept-card">
+                <i class="fas fa-layer-group"></i>
+                <h3>Overfitting</h3>
+                <p>Model terlalu kuat dibanding data. Gunakan regularization, data augmentation, early stopping, atau arsitektur lebih sederhana.</p>
+            </article>
+            <article class="ml-concept-card">
+                <i class="fas fa-clock"></i>
+                <h3>Training instability</h3>
+                <p>Learning rate terlalu besar, batch terlalu kecil, atau data tidak ternormalisasi dapat membuat loss sulit turun.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="ai-ml-checkpoint">
+        <div>
+            <span>Mini checkpoint</span>
+            <h3>Jawab sebentar</h3>
+            <p>Jika train loss turun tajam tetapi validation loss naik, apa diagnosisnya? Sebutkan dua tindakan perbaikan.</p>
+        </div>
+    </section>
+
+    <section class="ai-ml-mistakes">
+        <div class="ml-section-head">
+            <span>Common mistakes</span>
+            <h3>Kesalahan yang sering terjadi</h3>
+        </div>
+        <ul class="ml-check-list">
+            <li><i class="fas fa-triangle-exclamation"></i><span>Memakai network besar untuk data kecil tanpa regularization.</span></li>
+            <li><i class="fas fa-triangle-exclamation"></i><span>Tidak menormalisasi fitur numerik sebelum training.</span></li>
+            <li><i class="fas fa-triangle-exclamation"></i><span>Mengubah banyak hyperparameter sekaligus sehingga sulit tahu penyebab perbaikan.</span></li>
+        </ul>
+    </section>
+
+    <section class="ai-ml-summary">
+        <div>
+            <span>Summary</span>
+            <h3>Ringkasan</h3>
+            <p>Neural network menggabungkan layer, activation, forward pass, dan backpropagation untuk belajar pola non-linear. Training yang baik membutuhkan optimizer, regularization, dan monitoring validation.</p>
+        </div>
+        <a href="#/participant-ai-lab-ml-unsupervised" class="ml-inline-next" data-ml-next="8">Lanjut ke Unsupervised Learning <i class="fas fa-arrow-right"></i></a>
+    </section>
+</article>
+
+````

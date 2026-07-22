@@ -1,0 +1,383 @@
+# Unsupervised Learning
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning/chapters/chapter-8.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+Chapter 8
+
+#### Unsupervised Learning
+
+Unsupervised learning mencari struktur dari data tanpa label. Fokusnya bukan memprediksi jawaban benar, tetapi menemukan cluster, representasi ringkas, anomali, atau pola tersembunyi.
+
+Learning objectives
+
+##### Setelah materi ini, kamu mampu
+
+-   **Menjelaskan clustering, dimensionality reduction, dan density estimation.
+-   **Membedakan K-Means, hierarchical clustering, DBSCAN, dan Gaussian Mixture Model.
+-   **Memahami PCA dan t-SNE sebagai cara merangkum atau memvisualisasi data berdimensi tinggi.
+
+Why it matters
+
+##### Kenapa belajar tanpa label penting?
+
+Di banyak situasi, label mahal atau belum tersedia. Kita tetap bisa menemukan segmen pelanggan, pola perilaku peserta, struktur topik, representasi fitur, atau kandidat anomali dari data mentah.
+
+**
+
+##### Clustering
+
+Mengelompokkan data yang mirip tanpa kategori awal.
+
+**
+
+##### Dimensionality reduction
+
+Meringkas banyak fitur menjadi representasi lebih kecil.
+
+**
+
+##### Density estimation
+
+Membaca area data yang padat dan area yang jarang atau anomali.
+
+Formula
+
+##### K-Means dan tujuan clustering
+
+`assign x_i to nearest centroid`
+
+**Assignment step.** Setiap titik ditempatkan ke cluster dengan centroid terdekat.
+
+`centroid = mean(points in cluster)`
+
+**Update step.** Centroid digeser ke rata-rata titik dalam cluster.
+
+`min sum ||x_i - mu_cluster||^2`
+
+**Objective.** K-Means mencoba mengecilkan jarak titik ke centroid cluster masing-masing.
+
+Analogy
+
+##### Analogi mengatur peserta ke kelompok belajar
+
+Jika kamu tidak punya label "beginner", "intermediate", atau "advanced", kamu masih bisa mengelompokkan peserta dari pola progres, skor latihan, dan topik minat. Setelah cluster muncul, manusia memberi interpretasi pada tiap kelompok.
+
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Metode
+Intuisi
+Kuat saat
+Perhatian</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">K-Means
+Cluster berbasis centroid.
+Cluster relatif bulat dan jumlah cluster kira-kira diketahui.
+Sensitif scaling dan outlier.</td>
+<td align="left">Hierarchical
+Menggabungkan titik/cluster bertahap menjadi dendrogram.
+Ingin melihat struktur bertingkat.
+Linkage choice memengaruhi hasil.</td>
+<td align="left">DBSCAN
+Cluster sebagai area padat dan noise sebagai area jarang.
+Cluster bentuk bebas dan ada outlier.
+Parameter eps dan min_samples perlu tuning.</td>
+<td align="left">GMM
+Soft clustering dari campuran distribusi Gaussian.
+Satu titik bisa punya probabilitas ke beberapa cluster.
+Butuh asumsi distribusi dan estimasi EM.</td>
+</tr>
+</tbody>
+</table>
+
+Cluster quality
+
+##### Memilih jumlah cluster
+
+**
+
+###### Elbow method
+
+Lihat titik ketika penurunan inertia mulai melambat. Titik "siku" memberi kandidat jumlah cluster.
+
+**
+
+###### Silhouette score
+
+Mengukur apakah titik lebih dekat ke cluster sendiri dibanding cluster lain. Nilai lebih tinggi biasanya lebih baik.
+
+Dimensionality reduction
+
+##### PCA dan t-SNE
+
+**
+
+##### PCA
+
+Mencari arah komponen utama yang mempertahankan variasi data sebanyak mungkin. Cocok untuk kompresi fitur dan eksplorasi awal.
+
+`new axes = maximum variance`
+
+**
+
+##### t-SNE
+
+Membantu visualisasi data berdimensi tinggi ke 2D atau 3D. Bagus untuk eksplorasi, tetapi jarak global tidak selalu bisa ditafsirkan langsung.
+
+`high-D -> 2D map`
+
+Real examples
+
+##### Contoh penggunaan nyata
+
+**Segmentasi peserta**
+
+Mengelompokkan peserta berdasarkan progres, skor, dan aktivitas diskusi.
+
+**Eksplorasi embedding**
+
+Memvisualisasi embedding teks untuk melihat topik yang berdekatan.
+
+**Anomaly discovery**
+
+Menemukan pola transaksi, login, atau aktivitas yang jauh dari populasi normal.
+
+Mini checkpoint
+
+##### Jawab sebentar
+
+Jika kamu punya data peserta tanpa label kemampuan, metode apa yang kamu pilih untuk membuat kelompok belajar awal? Fitur apa saja yang akan kamu pakai?
+
+Common mistakes
+
+##### Kesalahan yang sering terjadi
+
+-   **Menganggap cluster otomatis berarti kategori bisnis yang benar tanpa validasi domain.
+-   **Memakai K-Means tanpa scaling fitur.
+-   **Menafsirkan visualisasi t-SNE terlalu literal untuk jarak global.
+
+Summary
+
+##### Ringkasan
+
+Unsupervised learning membantu menemukan struktur tanpa label. K-Means, hierarchical clustering, DBSCAN, GMM, PCA, dan t-SNE adalah alat eksplorasi penting, tetapi hasilnya tetap perlu interpretasi domain dan validasi.
+
+[Buka Latihan Machine Learning **](#/participant-ai-lab-ml-practice)
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<article class="ml-chapter ai-ml-chapter">
+    <header class="ml-chapter-header">
+        <span>Chapter 8</span>
+        <h2>Unsupervised Learning</h2>
+        <p>Unsupervised learning mencari struktur dari data tanpa label. Fokusnya bukan memprediksi jawaban benar, tetapi menemukan cluster, representasi ringkas, anomali, atau pola tersembunyi.</p>
+    </header>
+
+    <section class="ai-ml-learning-card">
+        <div class="ml-section-head">
+            <span>Learning objectives</span>
+            <h3>Setelah materi ini, kamu mampu</h3>
+        </div>
+        <ul class="ai-ml-objectives">
+            <li><i class="fas fa-circle-check"></i><span>Menjelaskan clustering, dimensionality reduction, dan density estimation.</span></li>
+            <li><i class="fas fa-circle-check"></i><span>Membedakan K-Means, hierarchical clustering, DBSCAN, dan Gaussian Mixture Model.</span></li>
+            <li><i class="fas fa-circle-check"></i><span>Memahami PCA dan t-SNE sebagai cara merangkum atau memvisualisasi data berdimensi tinggi.</span></li>
+        </ul>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Why it matters</span>
+            <h3>Kenapa belajar tanpa label penting?</h3>
+            <p>Di banyak situasi, label mahal atau belum tersedia. Kita tetap bisa menemukan segmen pelanggan, pola perilaku peserta, struktur topik, representasi fitur, atau kandidat anomali dari data mentah.</p>
+        </div>
+        <div class="ml-card-grid three">
+            <article class="ml-concept-card">
+                <i class="fas fa-object-group"></i>
+                <h3>Clustering</h3>
+                <p>Mengelompokkan data yang mirip tanpa kategori awal.</p>
+            </article>
+            <article class="ml-concept-card">
+                <i class="fas fa-compress"></i>
+                <h3>Dimensionality reduction</h3>
+                <p>Meringkas banyak fitur menjadi representasi lebih kecil.</p>
+            </article>
+            <article class="ml-concept-card">
+                <i class="fas fa-chart-area"></i>
+                <h3>Density estimation</h3>
+                <p>Membaca area data yang padat dan area yang jarang atau anomali.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Formula</span>
+            <h3>K-Means dan tujuan clustering</h3>
+        </div>
+        <div class="ai-ml-formula-list">
+            <article>
+                <code>assign x_i to nearest centroid</code>
+                <p><b>Assignment step.</b> Setiap titik ditempatkan ke cluster dengan centroid terdekat.</p>
+            </article>
+            <article>
+                <code>centroid = mean(points in cluster)</code>
+                <p><b>Update step.</b> Centroid digeser ke rata-rata titik dalam cluster.</p>
+            </article>
+            <article>
+                <code>min sum ||x_i - mu_cluster||^2</code>
+                <p><b>Objective.</b> K-Means mencoba mengecilkan jarak titik ke centroid cluster masing-masing.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Analogy</span>
+            <h3>Analogi mengatur peserta ke kelompok belajar</h3>
+            <p>Jika kamu tidak punya label "beginner", "intermediate", atau "advanced", kamu masih bisa mengelompokkan peserta dari pola progres, skor latihan, dan topik minat. Setelah cluster muncul, manusia memberi interpretasi pada tiap kelompok.</p>
+        </div>
+        <div class="ml-table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metode</th>
+                        <th>Intuisi</th>
+                        <th>Kuat saat</th>
+                        <th>Perhatian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>K-Means</td>
+                        <td>Cluster berbasis centroid.</td>
+                        <td>Cluster relatif bulat dan jumlah cluster kira-kira diketahui.</td>
+                        <td>Sensitif scaling dan outlier.</td>
+                    </tr>
+                    <tr>
+                        <td>Hierarchical</td>
+                        <td>Menggabungkan titik/cluster bertahap menjadi dendrogram.</td>
+                        <td>Ingin melihat struktur bertingkat.</td>
+                        <td>Linkage choice memengaruhi hasil.</td>
+                    </tr>
+                    <tr>
+                        <td>DBSCAN</td>
+                        <td>Cluster sebagai area padat dan noise sebagai area jarang.</td>
+                        <td>Cluster bentuk bebas dan ada outlier.</td>
+                        <td>Parameter eps dan min_samples perlu tuning.</td>
+                    </tr>
+                    <tr>
+                        <td>GMM</td>
+                        <td>Soft clustering dari campuran distribusi Gaussian.</td>
+                        <td>Satu titik bisa punya probabilitas ke beberapa cluster.</td>
+                        <td>Butuh asumsi distribusi dan estimasi EM.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Cluster quality</span>
+            <h3>Memilih jumlah cluster</h3>
+        </div>
+        <div class="ml-card-grid two">
+            <article class="ml-info-card">
+                <i class="fas fa-chart-line"></i>
+                <h4>Elbow method</h4>
+                <p>Lihat titik ketika penurunan inertia mulai melambat. Titik "siku" memberi kandidat jumlah cluster.</p>
+            </article>
+            <article class="ml-info-card">
+                <i class="fas fa-circle-nodes"></i>
+                <h4>Silhouette score</h4>
+                <p>Mengukur apakah titik lebih dekat ke cluster sendiri dibanding cluster lain. Nilai lebih tinggi biasanya lebih baik.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Dimensionality reduction</span>
+            <h3>PCA dan t-SNE</h3>
+        </div>
+        <div class="ml-card-grid two">
+            <article class="ml-concept-card">
+                <i class="fas fa-up-right-and-down-left-from-center"></i>
+                <h3>PCA</h3>
+                <p>Mencari arah komponen utama yang mempertahankan variasi data sebanyak mungkin. Cocok untuk kompresi fitur dan eksplorasi awal.</p>
+                <code>new axes = maximum variance</code>
+            </article>
+            <article class="ml-concept-card">
+                <i class="fas fa-map"></i>
+                <h3>t-SNE</h3>
+                <p>Membantu visualisasi data berdimensi tinggi ke 2D atau 3D. Bagus untuk eksplorasi, tetapi jarak global tidak selalu bisa ditafsirkan langsung.</p>
+                <code>high-D -> 2D map</code>
+            </article>
+        </div>
+    </section>
+
+    <section class="ml-topic-block">
+        <div class="ml-section-head">
+            <span>Real examples</span>
+            <h3>Contoh penggunaan nyata</h3>
+        </div>
+        <div class="ml-case-grid">
+            <article>
+                <b>Segmentasi peserta</b>
+                <p>Mengelompokkan peserta berdasarkan progres, skor, dan aktivitas diskusi.</p>
+            </article>
+            <article>
+                <b>Eksplorasi embedding</b>
+                <p>Memvisualisasi embedding teks untuk melihat topik yang berdekatan.</p>
+            </article>
+            <article>
+                <b>Anomaly discovery</b>
+                <p>Menemukan pola transaksi, login, atau aktivitas yang jauh dari populasi normal.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="ai-ml-checkpoint">
+        <div>
+            <span>Mini checkpoint</span>
+            <h3>Jawab sebentar</h3>
+            <p>Jika kamu punya data peserta tanpa label kemampuan, metode apa yang kamu pilih untuk membuat kelompok belajar awal? Fitur apa saja yang akan kamu pakai?</p>
+        </div>
+    </section>
+
+    <section class="ai-ml-mistakes">
+        <div class="ml-section-head">
+            <span>Common mistakes</span>
+            <h3>Kesalahan yang sering terjadi</h3>
+        </div>
+        <ul class="ml-check-list">
+            <li><i class="fas fa-triangle-exclamation"></i><span>Menganggap cluster otomatis berarti kategori bisnis yang benar tanpa validasi domain.</span></li>
+            <li><i class="fas fa-triangle-exclamation"></i><span>Memakai K-Means tanpa scaling fitur.</span></li>
+            <li><i class="fas fa-triangle-exclamation"></i><span>Menafsirkan visualisasi t-SNE terlalu literal untuk jarak global.</span></li>
+        </ul>
+    </section>
+
+    <section class="ai-ml-summary">
+        <div>
+            <span>Summary</span>
+            <h3>Ringkasan</h3>
+            <p>Unsupervised learning membantu menemukan struktur tanpa label. K-Means, hierarchical clustering, DBSCAN, GMM, PCA, dan t-SNE adalah alat eksplorasi penting, tetapi hasilnya tetap perlu interpretasi domain dan validasi.</p>
+        </div>
+        <a href="#/participant-ai-lab-ml-practice" class="ml-inline-next">Buka Latihan Machine Learning <i class="fas fa-play"></i></a>
+    </section>
+</article>
+
+````

@@ -1,0 +1,195 @@
+# Forum Pertanyaan
+
+> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning/diskusi.html`
+> Jenis: konversi halaman sumber + lampiran HTML asli lengkap.
+> Bagian pertama nyaman dibaca; lampiran mempertahankan setiap byte sumber tekstual tanpa potongan.
+
+Discussion Board
+
+#### Forum Pertanyaan
+
+Pilih salah satu prompt atau tulis pertanyaanmu sendiri. Thread dan balasan tersimpan di browser dengan key `heraiAiMlDiscussion`.
+
+** Pengantar ML
+
+** Supervised
+
+** Algoritma dasar
+
+** Probabilistic
+
+** Metrik & interpretasi
+
+** SVM
+
+** Neural network
+
+** Unsupervised
+
+Prompt diskusi Ceritakan satu kasus di sekitarmu yang cocok diselesaikan dengan ML, bukan rule-based biasa. Bagaimana kamu menentukan fitur, label, loss, dan metrik untuk masalah supervised learning? Kapan kamu memilih regresi, klasifikasi, decision tree, random forest, atau k-NN? Apa risiko asumsi independen pada Naive Bayes, dan kapan asumsi itu masih berguna? Mana yang lebih penting untuk kasus sensitif: akurasi tinggi, recall tinggi, atau model yang mudah dijelaskan? Bagaimana margin, support vector, dan kernel membantu SVM memisahkan data non-linear? Apa tantangan utama melatih neural network agar tidak overfit atau gagal belajar? Kapan clustering atau reduksi dimensi lebih tepat dibanding supervised learning? Tulis posting diskusi
+
+Posting akan tersimpan di browser ini.
+
+** Posting Diskusi
+
+## Lampiran Sumber HTML Lengkap
+
+````html
+<section class="fellow-dashboard fellow-modules-page lesson-detail-page ml-course-page ml-discussion-page" data-fellow-page="modules">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
+        </nav>
+    </aside>
+
+    <main class="fellow-main">
+        <header class="lesson-topbar">
+            <nav class="lesson-breadcrumb" aria-label="Breadcrumb materi">
+                <a href="#/participant-ai-lab-ml-quiz"><i class="fas fa-arrow-left"></i><span>Kuis ML</span></a>
+                <span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+                <span>Diskusi</span>
+            </nav>
+            <div class="fellow-actions">
+                <label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul, topik, atau materi..."></label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+                <a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+            </div>
+        </header>
+
+        <div class="lesson-layout">
+            <div class="lesson-main-content">
+                <section class="lesson-hero compact ml-lesson-hero">
+                    <div class="lesson-hero-copy">
+                        <span class="ml-eyebrow"><i class="far fa-message"></i> Forum Modul</span>
+                        <h1>Diskusi Machine Learning</h1>
+                        <p>Gunakan ruang ini untuk menghubungkan konsep ML dengan kasus nyata, pilihan algoritma, interpretabilitas, dan risiko bias model.</p>
+                        <div class="lesson-meta-row"><span><i class="far fa-message"></i> 8 prompt</span><span><i class="far fa-clock"></i> Tersimpan lokal</span><b>Kolaboratif</b></div>
+                    </div>
+                    <div class="ml-hero-visual is-compact" aria-hidden="true">
+                        <div class="ml-discussion-mark">
+                            <i class="far fa-comments"></i>
+                            <span>Bias</span>
+                            <span>Accuracy</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="lesson-material-panel">
+                    <div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
+                        <a href="#/participant-ai-lab-ml"><i class="fas fa-book-open"></i> Materi</a>
+                        <a href="#/participant-ai-lab-ml-practice"><i class="fas fa-pen-to-square"></i> Latihan</a>
+                        <a href="#/participant-ai-lab-ml-quiz"><i class="far fa-clipboard"></i> Kuis</a>
+                        <a href="#/participant-ai-lab-ml-discussion" class="active"><i class="far fa-message"></i> Diskusi</a>
+                    </div>
+                    <article class="lesson-article">
+                        <div class="ml-section-head">
+                            <span>Discussion Board</span>
+                            <h2>Forum Pertanyaan</h2>
+                            <p>Pilih salah satu prompt atau tulis pertanyaanmu sendiri. Thread dan balasan tersimpan di browser dengan key <code>heraiAiMlDiscussion</code>.</p>
+                        </div>
+
+                        <div class="ml-discussion-prompts" aria-label="Prompt diskusi Machine Learning">
+                            <button type="button" data-discussion-prompt="Ceritakan satu kasus di sekitarmu yang cocok diselesaikan dengan ML, bukan rule-based biasa.">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Pengantar ML</span>
+                            </button>
+                            <button type="button" data-discussion-prompt="Bagaimana kamu menentukan fitur, label, loss, dan metrik untuk masalah supervised learning?">
+                                <i class="fas fa-tags"></i>
+                                <span>Supervised</span>
+                            </button>
+                            <button type="button" data-discussion-prompt="Kapan kamu memilih regresi, klasifikasi, decision tree, random forest, atau k-NN?">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Algoritma dasar</span>
+                            </button>
+                            <button type="button" data-discussion-prompt="Apa risiko asumsi independen pada Naive Bayes, dan kapan asumsi itu masih berguna?">
+                                <i class="fas fa-percent"></i>
+                                <span>Probabilistic</span>
+                            </button>
+                            <button type="button" data-discussion-prompt="Mana yang lebih penting untuk kasus sensitif: akurasi tinggi, recall tinggi, atau model yang mudah dijelaskan?">
+                                <i class="fas fa-scale-balanced"></i>
+                                <span>Metrik &amp; interpretasi</span>
+                            </button>
+                            <button type="button" data-discussion-prompt="Bagaimana margin, support vector, dan kernel membantu SVM memisahkan data non-linear?">
+                                <i class="fas fa-vector-square"></i>
+                                <span>SVM</span>
+                            </button>
+                            <button type="button" data-discussion-prompt="Apa tantangan utama melatih neural network agar tidak overfit atau gagal belajar?">
+                                <i class="fas fa-network-wired"></i>
+                                <span>Neural network</span>
+                            </button>
+                            <button type="button" data-discussion-prompt="Kapan clustering atau reduksi dimensi lebih tepat dibanding supervised learning?">
+                                <i class="fas fa-object-group"></i>
+                                <span>Unsupervised</span>
+                            </button>
+                        </div>
+
+                        <form class="practice-response-form discussion-compose ml-discussion-form" id="aiMlDiscussionForm">
+                            <label>
+                                <span>Prompt diskusi</span>
+                                <select name="discussionPrompt">
+                                    <option>Ceritakan satu kasus di sekitarmu yang cocok diselesaikan dengan ML, bukan rule-based biasa.</option>
+                                    <option>Bagaimana kamu menentukan fitur, label, loss, dan metrik untuk masalah supervised learning?</option>
+                                    <option>Kapan kamu memilih regresi, klasifikasi, decision tree, random forest, atau k-NN?</option>
+                                    <option>Apa risiko asumsi independen pada Naive Bayes, dan kapan asumsi itu masih berguna?</option>
+                                    <option>Mana yang lebih penting untuk kasus sensitif: akurasi tinggi, recall tinggi, atau model yang mudah dijelaskan?</option>
+                                    <option>Bagaimana margin, support vector, dan kernel membantu SVM memisahkan data non-linear?</option>
+                                    <option>Apa tantangan utama melatih neural network agar tidak overfit atau gagal belajar?</option>
+                                    <option>Kapan clustering atau reduksi dimensi lebih tepat dibanding supervised learning?</option>
+                                </select>
+                            </label>
+                            <label>
+                                <span>Tulis posting diskusi</span>
+                                <textarea rows="6" placeholder="Contoh: Untuk kasus rekomendasi mentor, supervised learning cocok jika ada label kecocokan historis. Kalau belum ada label, clustering bisa dipakai untuk eksplorasi awal..."></textarea>
+                            </label>
+                            <div class="ml-save-panel">
+                                <p id="aiMlDiscussionStatus" class="practice-status">Posting akan tersimpan di browser ini.</p>
+                                <button type="submit"><i class="fas fa-paper-plane"></i> Posting Diskusi</button>
+                            </div>
+                        </form>
+
+                        <div class="discussion-thread" id="aiMlDiscussionList"></div>
+                    </article>
+                    <footer class="lesson-nav-footer">
+                        <a href="#/participant-ai-lab-ml-quiz"><i class="fas fa-chevron-left"></i> Kembali ke Kuis</a>
+                        <a href="#/participant-modules">Kembali ke Course Catalog <i class="fas fa-arrow-right"></i></a>
+                    </footer>
+                </section>
+            </div>
+            <aside class="lesson-right-panel">
+                <section class="module-side-card lesson-progress-card">
+                    <h2>Progres Modul</h2>
+                    <div class="lesson-progress-mini"><b style="--value:100%"></b><strong>100%</strong></div>
+                    <p>Diskusi membantu menguji pemahaman konsep di konteks nyata.</p>
+                    <a href="#/participant-ai-lab-ml">Buka Materi</a>
+                </section>
+                <section class="module-side-card lesson-list-card">
+                    <h2>Flow Belajar</h2>
+                    <ol>
+                        <li class="completed"><span>1</span><a href="#/participant-ai-lab-ml">Materi</a><i class="fas fa-circle-check"></i></li>
+                        <li class="completed"><span>2</span><a href="#/participant-ai-lab-ml-practice">Latihan</a><i class="fas fa-circle-check"></i></li>
+                        <li class="completed"><span>3</span><a href="#/participant-ai-lab-ml-quiz">Kuis</a><i class="fas fa-circle-check"></i></li>
+                        <li class="active"><span>4</span><a href="#/participant-ai-lab-ml-discussion">Diskusi</a><i class="far fa-circle-play"></i></li>
+                    </ol>
+                </section>
+            </aside>
+        </div>
+    </main>
+</section>
+
+````
