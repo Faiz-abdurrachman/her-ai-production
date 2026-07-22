@@ -568,9 +568,9 @@ const router = {
                 return;
             }
 
-            const globalSettings = typeof window.getGlobalSettingsAsync === "function"
-                ? await window.getGlobalSettingsAsync()
-                : (typeof window.getGlobalSettings === "function" ? window.getGlobalSettings() : {});
+            const globalSettings = typeof window.getGlobalSettings === "function"
+                ? window.getGlobalSettings()
+                : {};
             if (typeof window.applyPublicVisibilitySettings === "function") {
                 window.applyPublicVisibilitySettings(globalSettings);
             }
@@ -965,4 +965,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.addEventListener("hashchange", () => {
         router.handleRouting();
     });
+
+    // 5. Fetch settings in the background on initial load
+    if (typeof window.getGlobalSettingsAsync === "function") {
+        window.getGlobalSettingsAsync();
+    }
 });
