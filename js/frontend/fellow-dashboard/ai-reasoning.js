@@ -36,7 +36,7 @@
                 "text": "Biaya dasar adalah 50 \u00d7 Rp35.000 = Rp1.750.000. Anggaran Rp2.000.000 menyisakan Rp250.000. Namun ongkir, pajak, dan konsumsi panitia belum diketahui. Kesimpulan: biaya dasar cukup, tetapi total final perlu dikonfirmasi.",
                 "icon": "fas fa-list-check"
             },
-            "message": "Belum ada penilaian. Simpan pilihanmu berdasarkan intuisi. Setelah mempelajari chapter ini, kamu akan memeriksa kembali alasan pilihan tersebut."
+            "message": "Belum ada penilaian. Simpan pilihanmu berdasarkan intuisi. Setelah mempelajari topik ini, kamu akan memeriksa kembali alasan pilihan tersebut."
         },
         "opening": [
             "Bayangkan seorang peserta meminta AI: \"Hitung apakah anggaran konsumsi acara cukup untuk seluruh peserta.\"",
@@ -146,7 +146,7 @@
             "question": "AI memberikan jawaban panjang dan terstruktur tentang perhitungan anggaran. Apakah jawaban tersebut pasti benar?",
             "answerA": {"label": "Pasti benar", "text": "Karena AI menjelaskan langkahnya dengan detail.", "icon": "fas fa-circle-check"},
             "answerB": {"label": "Belum tentu benar", "text": "Karena langkah yang rapi bisa saja mengandung kesalahan perhitungan atau data.", "icon": "fas fa-magnifying-glass"},
-            "message": "Simpan pilihanmu dulu. Di chapter ini kamu akan belajar bahwa penjelasan yang rapi dan meyakinkan tidak selalu berarti benar."
+            "message": "Simpan pilihanmu dulu. Di topik ini kamu akan belajar bahwa penjelasan yang rapi dan meyakinkan tidak selalu berarti benar."
         },
         "opening": [
             "Bayangkan AI memberikan jawaban panjang dengan langkah-langkah yang terlihat rapi. Sebagai pengguna, apakah kamu langsung percaya?",
@@ -222,7 +222,7 @@
             "question": "Kamu diminta menyelenggarakan workshop AI dalam 2 minggu. Apa yang kamu lakukan pertama kali?",
             "answerA": {"label": "Langsung buat materi", "text": "Mulai menulis slide dan menyiapkan contoh kode.", "icon": "fas fa-pen-to-square"},
             "answerB": {"label": "Tentukan tujuan dulu", "text": "Tentukan siapa pesertanya, apa tujuan belajarnya, berapa durasinya, dan fasilitas apa yang tersedia.", "icon": "fas fa-bullseye"},
-            "message": "Simpan pilihanmu. Di chapter ini kamu akan belajar bahwa planning yang baik dimulai dari goal dan constraints — bukan langsung eksekusi."
+            "message": "Simpan pilihanmu. Di topik ini kamu akan belajar bahwa planning yang baik dimulai dari goal dan constraints — bukan langsung eksekusi."
         },
         "opening": ["Permintaan seperti \"Buat workshop pengenalan AI\" terlihat sederhana. Namun sebenarnya terdiri atas banyak keputusan: siapa pesertanya, apa tujuan belajarnya, berapa durasinya, materi apa, bagaimana latihannya, fasilitas apa yang tersedia.", "Sistem AI yang langsung menghasilkan jadwal tanpa memahami bagian-bagian tersebut berisiko membuat rencana yang tidak realistis. Di sinilah <strong>planning</strong> dan <strong>problem decomposition</strong> berperan."],
         "concepts": [
@@ -293,7 +293,7 @@
             "question": "Mana yang lebih bisa kamu percaya?",
             "answerA": {"label": "\"Anggaran cukup\"", "text": "Jawaban singkat tanpa penjelasan.", "icon": "fas fa-bolt"},
             "answerB": {"label": "\"Total Rp2.350.000, sisa Rp650.000, jadi cukup\"", "text": "Jawaban dengan langkah perhitungan yang bisa diperiksa.", "icon": "fas fa-list-check"},
-            "message": "Simpan pilihanmu. Di chapter ini kamu akan belajar bahwa langkah perantara membuat jawaban lebih mudah diaudit — tapi tetap perlu diverifikasi."
+            "message": "Simpan pilihanmu. Di topik ini kamu akan belajar bahwa langkah perantara membuat jawaban lebih mudah diaudit — tapi tetap perlu diverifikasi."
         },
         "opening": ["Bandingkan dua jawaban: \"Anggaran cukup\" vs \"Total konsumsi Rp2.100.000 + biaya administrasi Rp250.000 = Rp2.350.000. Dari anggaran Rp3.000.000, tersisa Rp650.000. Jadi, anggaran cukup.\"", "Jawaban kedua lebih mudah diperiksa karena pengguna bisa melihat: data yang dipakai, operasi yang dilakukan, hasil antara, dan dasar kesimpulan. Inilah esensi <strong>Chain-of-Thought</strong> (CoT)."],
         "concepts": [
@@ -366,7 +366,7 @@
             "question": "AI diminta menghitung 287 \u00d7 9.451. Apa yang sebaiknya dilakukan?",
             "answerA": {"label": "Hitung sendiri", "text": "AI menghitung dalam 'kepalanya' menggunakan prediksi token.", "icon": "fas fa-brain"},
             "answerB": {"label": "Gunakan kalkulator", "text": "AI memanggil tool kalkulator untuk memastikan akurasi.", "icon": "fas fa-calculator"},
-            "message": "Simpan pilihanmu. Di chapter ini kamu akan belajar kapan AI harus menggunakan tool eksternal dan bagaimana memvalidasi hasilnya."
+            "message": "Simpan pilihanmu. Di topik ini kamu akan belajar kapan AI harus menggunakan tool eksternal dan bagaimana memvalidasi hasilnya."
         },
         "opening": ["LLM tidak selalu bisa melakukan semua hal sendiri. Perkalian angka besar, data real-time, akses database — ini adalah contoh tugas yang lebih baik diserahkan ke tool eksternal.", "<strong>Tool use</strong> adalah kemampuan AI untuk menggunakan alat eksternal (kalkulator, API, search engine, spreadsheet) ketika informasi atau kemampuan di dalam model tidak mencukupi."],
         "concepts": [
@@ -1431,15 +1431,12 @@
         
         var analogyHtml = module.analogy ? '<div class="reasoning-scaffold-callout reasoning-analogy-callout" style="margin-top: 15px;"><i class="fas fa-lightbulb" aria-hidden="true"></i><p><strong>Analogi:</strong> ' + escapeHtml(module.analogy) + '</p></div>' : '';
 
-        var heroHtml = '<header class="ai-modern-chapter-hero" data-reasoning-injected data-section="orientation">' +
-            '<span>Topik ' + chapterNum + ' · ' + escapeHtml(module.duration) + '</span>' +
-            '<h2>' + escapeHtml(module.title) + '</h2>' +
-            '<p>' + escapeHtml(module.summary) + '</p>' +
-            '<div class="ai-modern-objectives">' +
-                '<strong>Tujuan pembelajaran</strong>' +
-                '<ul>' + objectivesHtml + '</ul>' +
-            '</div>' + analogyHtml +
-        '</header>';
+        var heroHtml = '<header class="lesson-topic-banner">' +
+            '<h3><i class="' + escapeHtml(module.icon || 'fas fa-book-open') + '"></i> Topik ' + chapterNum + ': ' + escapeHtml(module.title) + '</h3>' +
+            '<p>' + (module.summary ? 'Goal: ' + escapeHtml(module.summary) : '') + '</p>' +
+        '</header>' + 
+        (module.objectives && module.objectives.length ? '<div class="ai-modern-objectives" style="margin-bottom: 24px;"><strong>Tujuan pembelajaran</strong><ul>' + objectivesHtml + '</ul></div>' : '') +
+        (typeof analogyHtml !== 'undefined' ? analogyHtml : '');
 
         var navHtml = '<nav class="reasoning-source-jumps reasoning-visual-nav ai-modern-learning-nav" data-reasoning-injected id="reasoning-visual-nav" aria-label="Tahapan Topik ' + chapterNum + ' dari ' + total + '">' +
             '<span><i class="' + escapeHtml(module.icon) + '"></i> Jelajahi:</span>' +
@@ -1557,7 +1554,7 @@
 
     function finalRenderSummarySection(outcomes, transition, chapterNumber, total) {
         var transHtml = transition ? '<div class="reasoning-transition"><i class="fas fa-arrow-right" aria-hidden="true"></i><p><strong>Selanjutnya:</strong> ' + escapeHtml(transition) + '</p></div>' : '';
-        return '<section class="reasoning-summary-section" data-section="ringkasan">\n                <div class="reasoning-summary-head"><i class="fas fa-bookmark" aria-hidden="true"></i><div><span>Ringkasan</span><h3>Setelah chapter ini, kamu dapat:</h3></div></div>\n                <ul class="reasoning-outcomes-list">' + outcomes.map(function (o) { return '<li><i class="fas fa-circle-check" aria-hidden="true"></i> ' + escapeHtml(o) + '</li>'; }).join("") + '</ul>\n                ' + transHtml + '\n            </section>';
+        return '<section class="reasoning-summary-section" data-section="ringkasan">\n                <div class="reasoning-summary-head"><i class="fas fa-bookmark" aria-hidden="true"></i><div><span>Ringkasan</span><h3>Setelah topik ini, kamu dapat:</h3></div></div>\n                <ul class="reasoning-outcomes-list">' + outcomes.map(function (o) { return '<li><i class="fas fa-circle-check" aria-hidden="true"></i> ' + escapeHtml(o) + '</li>'; }).join("") + '</ul>\n                ' + transHtml + '\n            </section>';
     }
 
     function finalRenderPromptSection(lines) {
@@ -1844,7 +1841,7 @@
         if (transition && chapterNumber < total) {
             transitionHtml = '<div class="reasoning-transition"><i class="fas fa-arrow-right" aria-hidden="true"></i><p>' + escapeHtml(transition) + '</p></div>';
         }
-        return '<section class="reasoning-summary-section" data-section="ringkasan">\n            <div class="reasoning-summary-head"><i class="fas fa-bookmark" aria-hidden="true"></i><div><span>Ringkasan</span><h3>Setelah chapter ini, kamu dapat:</h3></div></div>\n            <ul class="reasoning-outcome-list">' + outcomeItems + '</ul>\n            ' + transitionHtml + '\n        </section>';
+        return '<section class="reasoning-summary-section" data-section="ringkasan">\n            <div class="reasoning-summary-head"><i class="fas fa-bookmark" aria-hidden="true"></i><div><span>Ringkasan</span><h3>Setelah topik ini, kamu dapat:</h3></div></div>\n            <ul class="reasoning-outcome-list">' + outcomeItems + '</ul>\n            ' + transitionHtml + '\n        </section>';
     }
 
     function initQuickChecks(scope) {
@@ -1879,7 +1876,7 @@
         if (progressText) progressText.textContent = completed + " dari " + total + " materi selesai";
     }
 
-    window.loadReasoningChapter = function (chapterNumber) {
+    window.loadReasoningTopik = function (chapterNumber) {
         var total = CHAPTERS.length;
         var chapter = Math.min(Math.max(Number(chapterNumber) || 1, 1), total);
         var module = CHAPTERS[chapter - 1];
@@ -1992,13 +1989,13 @@
         if (btnFinish) btnFinish.style.display = chapter === total ? "inline-block" : "none";
 
         document.querySelectorAll("#reasoning-sidebar-list li").forEach(function (li) {
-            var itemChapter = Number(li.dataset.chapter || "0");
+            var itemTopik = Number(li.dataset.chapter || "0");
             var icon = li.querySelector("i");
-            li.classList.toggle("active", itemChapter === chapter);
-            li.classList.toggle("completed", itemChapter < chapter);
+            li.classList.toggle("active", itemTopik === chapter);
+            li.classList.toggle("completed", itemTopik < chapter);
             if (!icon) return;
-            if (itemChapter === chapter) icon.className = "far fa-circle-play";
-            else if (itemChapter < chapter) icon.className = "fas fa-circle-check";
+            if (itemTopik === chapter) icon.className = "far fa-circle-play";
+            else if (itemTopik < chapter) icon.className = "fas fa-circle-check";
             else icon.className = "far fa-circle";
         });
 

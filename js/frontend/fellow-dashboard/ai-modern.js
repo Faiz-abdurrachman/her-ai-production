@@ -628,7 +628,7 @@
         });
     }
 
-    window.loadModernChapter = function (chapterNumber) {
+    window.loadModernTopik = function (chapterNumber) {
         var number = Math.min(Math.max(Number(chapterNumber) || 1, 1), CHAPTERS.length);
         var chapter = CHAPTERS[number - 1];
         var container = document.getElementById("modern-chapter-container");

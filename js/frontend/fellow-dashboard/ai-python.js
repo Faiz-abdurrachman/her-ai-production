@@ -736,15 +736,12 @@ var SOURCE_VISUALS = {
             return '<li><span class="ai-modern-objective-copy">' + escapeHtml(obj) + '</span></li>';
         }).join("");
         
-        var heroHtml = '<header class="ai-modern-chapter-hero" data-python-injected data-section="orientation">' +
-            '<span>Topik ' + chapterNum + ' · ' + escapeHtml(module.duration) + '</span>' +
-            '<h2>' + escapeHtml(module.title) + '</h2>' +
-            '<p>' + escapeHtml(module.summary) + '</p>' +
-            '<div class="ai-modern-objectives">' +
-                '<strong>Tujuan pembelajaran</strong>' +
-                '<ul>' + objectivesHtml + '</ul>' +
-            '</div>' +
-        '</header>';
+        var heroHtml = '<header class="lesson-topic-banner">' +
+            '<h3><i class="' + escapeHtml(module.icon || 'fas fa-book-open') + '"></i> Topik ' + chapterNum + ': ' + escapeHtml(module.title) + '</h3>' +
+            '<p>' + (module.summary ? 'Goal: ' + escapeHtml(module.summary) : '') + '</p>' +
+        '</header>' + 
+        (module.objectives && module.objectives.length ? '<div class="ai-modern-objectives" style="margin-bottom: 24px;"><strong>Tujuan pembelajaran</strong><ul>' + objectivesHtml + '</ul></div>' : '') +
+        (typeof analogyHtml !== 'undefined' ? analogyHtml : '');
 
         var navHtml = '<nav class="reasoning-source-jumps reasoning-visual-nav ai-modern-learning-nav" data-python-injected id="reasoning-visual-nav" aria-label="Tahapan Topik ' + chapterNum + ' dari ' + total + '">' +
             '<span><i class="' + escapeHtml(module.icon) + '"></i> Jelajahi:</span>' +
@@ -883,7 +880,7 @@ var SOURCE_VISUALS = {
 
     function finalRenderSummarySection(outcomes, transition, chapterNumber, total) {
         var transHtml = transition ? '<div class="reasoning-transition"><i class="fas fa-arrow-right" aria-hidden="true"></i><p><strong>Selanjutnya:</strong> ' + escapeHtml(transition) + '</p></div>' : '';
-        return '<section class="reasoning-summary-section" data-section="ringkasan">\n                <div class="reasoning-summary-head"><i class="fas fa-bookmark" aria-hidden="true"></i><div><span>Ringkasan</span><h3>Setelah chapter ini, kamu dapat:</h3></div></div>\n                <ul class="reasoning-outcomes-list">' + outcomes.map(function (o) { return '<li><i class="fas fa-circle-check" aria-hidden="true"></i> ' + escapeHtml(o) + '</li>'; }).join("") + '</ul>\n                ' + transHtml + '\n            </section>';
+        return '<section class="reasoning-summary-section" data-section="ringkasan">\n                <div class="reasoning-summary-head"><i class="fas fa-bookmark" aria-hidden="true"></i><div><span>Ringkasan</span><h3>Setelah topik ini, kamu dapat:</h3></div></div>\n                <ul class="reasoning-outcomes-list">' + outcomes.map(function (o) { return '<li><i class="fas fa-circle-check" aria-hidden="true"></i> ' + escapeHtml(o) + '</li>'; }).join("") + '</ul>\n                ' + transHtml + '\n            </section>';
     }
 
     function finalRenderPromptSection(lines) {
@@ -1170,7 +1167,7 @@ var SOURCE_VISUALS = {
         if (transition && chapterNumber < total) {
             transitionHtml = '<div class="reasoning-transition"><i class="fas fa-arrow-right" aria-hidden="true"></i><p>' + escapeHtml(transition) + '</p></div>';
         }
-        return '<section class="reasoning-summary-section" data-section="ringkasan">\n            <div class="reasoning-summary-head"><i class="fas fa-bookmark" aria-hidden="true"></i><div><span>Ringkasan</span><h3>Setelah chapter ini, kamu dapat:</h3></div></div>\n            <ul class="reasoning-outcome-list">' + outcomeItems + '</ul>\n            ' + transitionHtml + '\n        </section>';
+        return '<section class="reasoning-summary-section" data-section="ringkasan">\n            <div class="reasoning-summary-head"><i class="fas fa-bookmark" aria-hidden="true"></i><div><span>Ringkasan</span><h3>Setelah topik ini, kamu dapat:</h3></div></div>\n            <ul class="reasoning-outcome-list">' + outcomeItems + '</ul>\n            ' + transitionHtml + '\n        </section>';
     }
 
     function initQuickChecks(scope) {
@@ -1237,7 +1234,7 @@ var SOURCE_VISUALS = {
         });
     }
 
-    window.loadPythonChapter = function (chapterNumber) {
+    window.loadPythonTopik = function (chapterNumber) {
         var total = CHAPTERS.length;
         var chapter = Math.min(Math.max(Number(chapterNumber) || 1, 1), total);
         var module = CHAPTERS[chapter - 1];
@@ -1362,13 +1359,13 @@ var SOURCE_VISUALS = {
         if (btnFinish) btnFinish.style.display = chapter === total ? "inline-block" : "none";
 
         document.querySelectorAll("#reasoning-sidebar-list li").forEach(function (li) {
-            var itemChapter = Number(li.dataset.chapter || "0");
+            var itemTopik = Number(li.dataset.chapter || "0");
             var icon = li.querySelector("i");
-            li.classList.toggle("active", itemChapter === chapter);
-            li.classList.toggle("completed", itemChapter < chapter);
+            li.classList.toggle("active", itemTopik === chapter);
+            li.classList.toggle("completed", itemTopik < chapter);
             if (!icon) return;
-            if (itemChapter === chapter) icon.className = "far fa-circle-play";
-            else if (itemChapter < chapter) icon.className = "fas fa-circle-check";
+            if (itemTopik === chapter) icon.className = "far fa-circle-play";
+            else if (itemTopik < chapter) icon.className = "fas fa-circle-check";
             else icon.className = "far fa-circle";
         });
 

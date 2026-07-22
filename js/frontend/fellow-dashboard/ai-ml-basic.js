@@ -68,7 +68,7 @@
         return queryIndex >= 0 ? raw.slice(0, queryIndex) : raw;
     };
 
-    const getSavedChapter = () => {
+    const getSavedTopik = () => {
         const saved = Number(localStorage.getItem(STORAGE.chapter));
         return Number.isInteger(saved) && saved >= 1 && saved <= CHAPTERS.length ? saved : 1;
     };
@@ -111,7 +111,7 @@
 
     function updateChapterUi(chapterNumber) {
         const percentage = Math.round((chapterNumber / CHAPTERS.length) * 100);
-        const currentChapter = CHAPTERS[chapterNumber - 1];
+        const currentTopik = CHAPTERS[chapterNumber - 1];
 
         document.querySelectorAll("#ml-sidebar-list li").forEach(item => {
             const isActive = Number(item.dataset.chapter) === chapterNumber;
@@ -148,12 +148,12 @@
 
         if (prevButton) {
             prevButton.hidden = chapterNumber === 1;
-            prevButton.dataset.targetChapter = String(chapterNumber - 1);
+            prevButton.dataset.targetTopik = String(chapterNumber - 1);
         }
 
         if (nextButton) {
             nextButton.hidden = chapterNumber === CHAPTERS.length;
-            nextButton.dataset.targetChapter = String(chapterNumber + 1);
+            nextButton.dataset.targetTopik = String(chapterNumber + 1);
         }
 
         if (finishButton) {
@@ -196,7 +196,7 @@
 
         try {
             const response = await fetch(`${ML_BASE}/chapters/chapter-${target}.html`);
-            if (!response.ok) throw new Error("Chapter tidak ditemukan");
+            if (!response.ok) throw new Error("Topik tidak ditemukan");
             container.innerHTML = await response.text();
             updateChapterUi(target);
             container.querySelectorAll("[data-ml-next]").forEach(link => {
@@ -218,14 +218,14 @@
         }
     }
 
-    window.loadMlChapter = function (chapterNumber) {
+    window.loadMlTopik = function (chapterNumber) {
         navigateToChapter(Number(chapterNumber));
     };
 
     window.initAiMlMateri = function () {
         const path = getPath();
-        const routeChapter = findChapterByRoute(path);
-        const initialChapter = routeChapter || getSavedChapter();
+        const routeTopik = findChapterByRoute(path);
+        const initialTopik = routeTopik || getSavedChapter();
 
         document.querySelectorAll("[data-ml-chapter]").forEach(link => {
             link.addEventListener("click", event => {

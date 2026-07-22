@@ -274,14 +274,12 @@
             duration: '55 menit',
             tag: 'Fondasi',
             content: `
-                <div style="background: linear-gradient(90deg, rgba(246,51,146,.1) 0%, rgba(246,51,146,.02) 100%); border: 1px solid rgba(246,51,146,.15); padding: 24px; margin-bottom: 32px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px;">
-                    <h3 style="margin:0; color: #f63392; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-compass"></i> Chapter 2: Definisi, Software Biasa, dan Sistem AI
+                <header class="lesson-topic-banner">
+                    <h3><i class="fas fa-compass"></i> Topik 2: Definisi, Software Biasa, dan Sistem AI
                     </h3>
-                    <p style="margin: 0; font-size: 1.05rem; color: var(--fellow-text); font-weight: 500;">
-                        Goal: Memahami AI sebagai sistem prediktif, bukan robot fiksi ilmiah, sekaligus membedakan software biasa dari sistem berbasis data.
+                    <p>Goal: Memahami AI sebagai sistem prediktif, bukan robot fiksi ilmiah, sekaligus membedakan software biasa dari sistem berbasis data.
                     </p>
-                </div>
+                </header>
 
                 <h3>2.1 Kenapa Definisi AI Perlu Diluruskan</h3>
                 <p>Banyak orang pertama kali mengenal AI dari film, novel, atau berita sensasional. Akibatnya, AI sering dibayangkan sebagai robot fisik yang punya emosi, kesadaran diri, atau niat tersembunyi. Gambaran itu menarik, tetapi kurang membantu untuk belajar AI yang dipakai hari ini.</p>
@@ -355,7 +353,7 @@
                 <p>Ketika aplikasi belanja menampilkan produk yang terasa kebetulan cocok, itu bukan tebakan gaib. Sistem membaca kata kunci, kategori barang, harga yang sering dilihat, produk yang dimasukkan keranjang, durasi berhenti di halaman tertentu, dan pola belanja pengguna lain yang mirip. Dengan cara ini peserta mulai melihat AI sebagai mesin pengurutan dan prediksi, bukan sebagai entitas yang memahami keinginan manusia secara utuh.</p>
 
                 <div style="background: rgba(246,51,146,.08); border: 1px solid rgba(246,51,146,.18); border-radius: 16px; padding: 20px; margin: 28px 0;">
-                    <h4 style="margin: 0 0 10px 0; color: var(--fellow-text);"><i class="fas fa-magnifying-glass-chart" style="color: var(--fellow-pink);"></i> Ringkasan cara berpikir chapter ini</h4>
+                    <h4 style="margin: 0 0 10px 0; color: var(--fellow-text);"><i class="fas fa-magnifying-glass-chart" style="color: var(--fellow-pink);"></i> Ringkasan cara berpikir topik ini</h4>
                     <p style="margin: 0; color: var(--fellow-text);">Jangan bertanya "apakah mesin ini pintar seperti manusia?" sebagai pertanyaan utama. Pertanyaan yang lebih berguna adalah: data apa yang dipakai, pola apa yang dipelajari, output apa yang diberikan, siapa yang diuntungkan, siapa yang bisa dirugikan, dan bagaimana manusia dapat mengoreksi output yang keliru.</p>
                 </div>
             `
@@ -425,14 +423,12 @@
             duration: '70 menit',
             tag: 'Model Mental',
             content: `
-                <div style="background: linear-gradient(90deg, rgba(246,51,146,.1) 0%, rgba(246,51,146,.02) 100%); border: 1px solid rgba(246,51,146,.15); padding: 24px; margin-bottom: 32px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px;">
-                    <h3 style="margin:0; color: #f63392; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-route"></i> Chapter 3: Cara Kerja AI: Data, Model, dan Human Check
+                <header class="lesson-topic-banner">
+                    <h3><i class="fas fa-route"></i> Topik 3: Cara Kerja AI: Data, Model, dan Human Check
                     </h3>
-                    <p style="margin: 0; font-size: 1.05rem; color: var(--fellow-text); font-weight: 500;">
-                        Goal: Memahami alur kerja AI secara utuh tanpa masuk ke kode, rumus, atau arsitektur teknis.
+                    <p>Goal: Memahami alur kerja AI secara utuh tanpa masuk ke kode, rumus, atau arsitektur teknis.
                     </p>
-                </div>
+                </header>
 
                 <h3>3.1 Model Mental Enam Langkah</h3>
                 <p>Setiap sistem AI bisa dibaca melalui alur sederhana: <strong>Tujuan, Input, Pola, Model, Output, dan Pemeriksaan Manusia</strong>. Alur ini membantu kita membedah AI tanpa perlu melihat kode di balik layar.</p>
@@ -575,7 +571,7 @@
                 </div>
 
                 <h3>3.8 Cara Membaca Setiap Sistem dengan Satu Kerangka</h3>
-                <p>Setelah chapter ini, peserta seharusnya bisa mengambil aplikasi apa pun dan membedahnya. Untuk chatbot: tujuannya menjawab pertanyaan; input-nya prompt dan riwayat percakapan; pola yang dipakai adalah pola bahasa; model menghasilkan jawaban; output perlu diverifikasi. Untuk sistem pinjaman: tujuannya menilai risiko; input-nya riwayat finansial; pola yang dipakai adalah korelasi pembayaran masa lalu; output-nya persetujuan, penolakan, atau skor; manusia harus memastikan tidak ada diskriminasi tersembunyi.</p>
+                <p>Setelah topik ini, peserta seharusnya bisa mengambil aplikasi apa pun dan membedahnya. Untuk chatbot: tujuannya menjawab pertanyaan; input-nya prompt dan riwayat percakapan; pola yang dipakai adalah pola bahasa; model menghasilkan jawaban; output perlu diverifikasi. Untuk sistem pinjaman: tujuannya menilai risiko; input-nya riwayat finansial; pola yang dipakai adalah korelasi pembayaran masa lalu; output-nya persetujuan, penolakan, atau skor; manusia harus memastikan tidak ada diskriminasi tersembunyi.</p>
                 <p>Kerangka yang sama berlaku untuk rekomendasi video, filter wajah, prediksi cuaca, transkripsi suara, dan screening CV. Semakin sering peserta berlatih membaca sistem seperti ini, semakin kecil kemungkinan mereka menjadi pengguna pasif yang langsung percaya pada layar.</p>
 
                 <h3 style="margin-top: 32px;">3.9 Bedah Kasus: Chatbot Pendidikan</h3>
@@ -673,14 +669,12 @@
             duration: '65 menit',
             tag: 'Literasi AI',
             content: `
-                <div style="background: linear-gradient(90deg, rgba(246,51,146,.1) 0%, rgba(246,51,146,.02) 100%); border: 1px solid rgba(246,51,146,.15); padding: 24px; margin-bottom: 32px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px;">
-                    <h3 style="margin:0; color: #f63392; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-layer-group"></i> Chapter 4: Peta Istilah dan Penerapan AI
+                <header class="lesson-topic-banner">
+                    <h3><i class="fas fa-layer-group"></i> Topik 4: Peta Istilah dan Penerapan AI
                     </h3>
-                    <p style="margin: 0; font-size: 1.05rem; color: var(--fellow-text); font-weight: 500;">
-                        Goal: Memahami istilah dasar AI sekaligus membaca penerapannya di kehidupan, pendidikan, dan ruang kerja.
+                    <p>Goal: Memahami istilah dasar AI sekaligus membaca penerapannya di kehidupan, pendidikan, dan ruang kerja.
                     </p>
-                </div>
+                </header>
 
                 <h3>4.1 Hubungan AI, Machine Learning, dan Deep Learning</h3>
                 <p>AI adalah payung besar. Di dalamnya ada Machine Learning, yaitu pendekatan yang membuat komputer belajar dari data. Di dalam Machine Learning ada Deep Learning, pendekatan berlapis yang kuat untuk gambar, suara, teks, dan data tak terstruktur berskala besar.</p>
@@ -782,7 +776,7 @@
 
                 <h3 style="margin-top: 32px;">4.7 Jembatan ke Modul Lanjutan</h3>
                 <p>Chapter ini menjadi jembatan untuk modul berikutnya. Ketika nanti belajar Python untuk AI, peserta akan mulai melihat bagaimana data direpresentasikan dan diproses. Ketika belajar Matematika untuk AI, peserta akan memahami probabilitas, vektor, optimisasi, dan statistik yang menopang model. Ketika masuk Machine Learning, peserta akan melihat bagaimana pola dipelajari secara lebih formal. Ketika masuk NLP dan Computer Vision, peserta akan melihat bagaimana teks dan gambar diproses sebagai data.</p>
-                <p>Jadi, tujuan chapter ini bukan membuat peserta menghafal istilah, tetapi membangun peta. Dengan peta ini, peserta tidak tersesat saat bertemu istilah baru. Mereka tahu bahwa AI adalah payung besar, ML adalah pendekatan belajar dari data, DL adalah cabang berlapis untuk pola kompleks, dan ANI adalah bentuk AI praktis yang hari ini benar-benar dipakai.</p>
+                <p>Jadi, tujuan topik ini bukan membuat peserta menghafal istilah, tetapi membangun peta. Dengan peta ini, peserta tidak tersesat saat bertemu istilah baru. Mereka tahu bahwa AI adalah payung besar, ML adalah pendekatan belajar dari data, DL adalah cabang berlapis untuk pola kompleks, dan ANI adalah bentuk AI praktis yang hari ini benar-benar dipakai.</p>
 
                 <h3 style="margin-top: 32px;">4.8 Penerapan di Pendidikan</h3>
                 <p>Dalam pendidikan, AI dapat membantu peserta membuat ringkasan, menyusun pertanyaan latihan, memberi umpan balik awal pada tulisan, menerjemahkan materi, atau menjelaskan konsep dengan bahasa yang lebih sederhana. Manfaatnya besar untuk peserta yang butuh pendamping belajar fleksibel. Namun pendidikan juga menuntut pemahaman, bukan sekadar jawaban cepat.</p>
@@ -970,14 +964,12 @@
             duration: '75 menit',
             tag: 'Audit AI',
             content: `
-                <div style="background: linear-gradient(90deg, rgba(246,51,146,.1) 0%, rgba(246,51,146,.02) 100%); border: 1px solid rgba(246,51,146,.15); padding: 24px; margin-bottom: 32px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px;">
-                    <h3 style="margin:0; color: #f63392; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-magnifying-glass-chart"></i> Chapter 5: Risiko, Etika, dan Audit Sosio-Teknis
+                <header class="lesson-topic-banner">
+                    <h3><i class="fas fa-magnifying-glass-chart"></i> Topik 5: Risiko, Etika, dan Audit Sosio-Teknis
                     </h3>
-                    <p style="margin: 0; font-size: 1.05rem; color: var(--fellow-text); font-weight: 500;">
-                        Goal: Mengubah peserta dari pengguna pasif menjadi auditor kritis yang mampu membaca dampak sistem AI.
+                    <p>Goal: Mengubah peserta dari pengguna pasif menjadi auditor kritis yang mampu membaca dampak sistem AI.
                     </p>
-                </div>
+                </header>
 
                 <p>Literasi AI tidak selesai ketika kita bisa menjelaskan cara kerja model. Peserta juga perlu bertanya: apakah sistem ini aman, adil, transparan, menjaga privasi, dan masih memungkinkan manusia melakukan koreksi?</p>
                 <p>Bagian ini adalah inti dari literasi sosio-teknis. AI tidak boleh dinilai hanya dari seberapa cepat atau canggih output-nya. Sistem yang cepat tetapi bias, tidak transparan, melanggar privasi, atau tidak bisa dikoreksi tetap berbahaya.</p>
@@ -1149,7 +1141,7 @@
         page.querySelector('[data-lesson-list]').innerHTML = renderLessonList(path);
         page.querySelector('[data-lesson-progress-bar]').style.setProperty('--value', `${progress}%`);
         page.querySelector('[data-lesson-progress-text]').textContent = `${progress}%`;
-        page.querySelector('[data-lesson-progress-caption]').textContent = `${index + 1} dari ${introLessonRoutes.length} chapter selesai`;
+        page.querySelector('[data-lesson-progress-caption]').textContent = `${index + 1} dari ${introLessonRoutes.length} topik selesai`;
         const prevLink = page.querySelector('[data-lesson-prev]');
         const nextLink = page.querySelector('[data-lesson-next]');
         prevLink.href = `#${prev.path}`;

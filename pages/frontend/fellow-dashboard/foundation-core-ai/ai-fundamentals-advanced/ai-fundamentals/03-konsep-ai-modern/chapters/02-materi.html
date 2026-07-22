@@ -1,18 +1,4 @@
 <div class="chapter-content fade-in ai-modern-chapter">
-    <header class="ai-modern-chapter-hero">
-        <span>Topik 2 · 30 menit</span>
-        <h2>Transformer: Mesin di Balik Model Modern</h2>
-        <p>Transformer membuat model modern dapat membaca relasi antar token secara paralel, menjaga konteks, dan menghasilkan output token demi token.</p>
-        <div class="ai-modern-objectives">
-            <strong>Tujuan pembelajaran</strong>
-            <ul>
-                <li>Menjelaskan token, embedding, positional information, attention, dan feed-forward network.</li>
-                <li>Membedakan encoder, decoder, dan encoder-decoder.</li>
-                <li>Memahami context window, generation controls, KV cache, dan batas attention.</li>
-            </ul>
-        </div>
-    </header>
-
     <section class="ai-modern-section">
         <div class="ai-modern-question"><i class="fas fa-circle-question"></i><p><strong>Pertanyaan pemantik:</strong> Mengapa model modern bisa menghubungkan kata yang berjauhan dalam prompt panjang, tetapi tetap bisa kehilangan fakta penting di tengah konteks?</p></div>
         <p>Pada pendekatan sekuensial lama, urutan kata dibaca langkah demi langkah. Ini membuat konteks jauh sulit dipertahankan dan training sulit diparalelkan. Transformer mengubah fokusnya: setiap token dapat menimbang hubungan dengan token lain melalui attention.</p>

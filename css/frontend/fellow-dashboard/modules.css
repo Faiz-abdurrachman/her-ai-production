@@ -12695,3 +12695,35 @@
         transition-duration: .01ms !important;
     }
 }
+
+/* Standard Topic Banner from Pengantar AI */
+.lesson-topic-banner {
+    background: linear-gradient(90deg, rgba(246,51,146,.1) 0%, rgba(246,51,146,.02) 100%);
+    border: 1px solid rgba(246,51,146,.15);
+    padding: 24px;
+    margin-bottom: 32px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lesson-topic-banner h2,
+.lesson-topic-banner h3 {
+    margin: 0;
+    color: #f63392;
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lesson-topic-banner p {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--fellow-text);
+    font-weight: 500;
+}

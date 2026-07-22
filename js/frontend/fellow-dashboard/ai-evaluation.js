@@ -283,15 +283,12 @@
             return '<li><span class="ai-modern-objective-copy">' + escapeHtml(obj) + '</span></li>';
         }).join("");
         
-        var heroHtml = '<header class="ai-modern-chapter-hero" data-evaluation-injected data-section="orientation">' +
-            '<span>Topik ' + chapterNum + ' · ' + escapeHtml(module.duration) + '</span>' +
-            '<h2>' + escapeHtml(module.title) + '</h2>' +
-            '<p>' + escapeHtml(module.summary) + '</p>' +
-            '<div class="ai-modern-objectives">' +
-                '<strong>Tujuan pembelajaran</strong>' +
-                '<ul>' + objectivesHtml + '</ul>' +
-            '</div>' +
-        '</header>';
+        var heroHtml = '<header class="lesson-topic-banner">' +
+            '<h3><i class="' + escapeHtml(module.icon || 'fas fa-book-open') + '"></i> Topik ' + chapterNum + ': ' + escapeHtml(module.title) + '</h3>' +
+            '<p>' + (module.summary ? 'Goal: ' + escapeHtml(module.summary) : '') + '</p>' +
+        '</header>' + 
+        (module.objectives && module.objectives.length ? '<div class="ai-modern-objectives" style="margin-bottom: 24px;"><strong>Tujuan pembelajaran</strong><ul>' + objectivesHtml + '</ul></div>' : '') +
+        (typeof analogyHtml !== 'undefined' ? analogyHtml : '');
 
         var navHtml = '<nav class="reasoning-source-jumps reasoning-visual-nav ai-modern-learning-nav" data-evaluation-injected id="reasoning-visual-nav" aria-label="Tahapan Topik ' + chapterNum + ' dari ' + total + '">' +
             '<span><i class="' + escapeHtml(module.icon) + '"></i> Jelajahi:</span>' +
@@ -338,7 +335,7 @@
     function renderSummarySection(outcomes, transition, chapterNum, total) {
         var transHtml = transition ? '<div class="reasoning-transition"><i class="fas fa-arrow-right" aria-hidden="true"></i><p><strong>Selanjutnya:</strong> ' + escapeHtml(transition) + '</p></div>' : '';
         return '<section class="reasoning-summary-section" data-section="ringkasan">\n' +
-               '    <div class="reasoning-summary-head"><i class="fas fa-bookmark" aria-hidden="true"></i><div><span>Ringkasan</span><h3>Setelah chapter ini, kamu dapat:</h3></div></div>\n' +
+               '    <div class="reasoning-summary-head"><i class="fas fa-bookmark" aria-hidden="true"></i><div><span>Ringkasan</span><h3>Setelah topik ini, kamu dapat:</h3></div></div>\n' +
                '    <ul class="reasoning-outcomes-list">' + outcomes.map(function (o) { return '<li><i class="fas fa-circle-check" aria-hidden="true"></i> ' + escapeHtml(o) + '</li>'; }).join("") + '</ul>\n' +
                '    ' + transHtml + '\n' +
                '</section>';
@@ -426,7 +423,7 @@
         container.innerHTML = '<div class="ai-evaluation-loading"><i class="fas fa-spinner fa-spin"></i><p>Memuat materi...</p></div>';
         fetch(BASE + "/chapters/" + module.chapter)
             .then(function (response) {
-                if (!response.ok) throw new Error("Chapter not found");
+                if (!response.ok) throw new Error("Topik not found");
                 return response.text();
             })
             .then(function (html) {
