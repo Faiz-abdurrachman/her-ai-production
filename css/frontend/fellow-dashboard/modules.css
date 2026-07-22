@@ -4926,6 +4926,7 @@
 }
 
 .reasoning-example-step {
+    align-items: start;
     display: grid;
     gap: 4px;
     grid-template-columns: 100px minmax(0, 1fr);
