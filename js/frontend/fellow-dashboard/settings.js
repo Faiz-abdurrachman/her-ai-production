@@ -364,14 +364,12 @@
             duration: '40 menit',
             tag: 'Konsep Inti',
             content: `
-                <div style="background: linear-gradient(90deg, rgba(246,51,146,.1) 0%, rgba(246,51,146,.02) 100%); border: 1px solid rgba(246,51,146,.15); padding: 24px; margin-bottom: 32px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px;">
-                    <h3 style="margin:0; color: #f63392; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-code-branch"></i> Topik 3: Software Biasa vs Sistem AI
+                <header class="lesson-topic-banner">
+                    <h3><i class="fas fa-code-branch"></i> Topik 3: Software Biasa vs Sistem AI
                     </h3>
-                    <p style="margin: 0; font-size: 1.05rem; color: var(--fellow-text); font-weight: 500;">
-                        Goal: Mengetahui kapan sebuah aplikasi hanya software biasa dan kapan ia layak disebut sistem AI.
+                    <p>Goal: Mengetahui kapan sebuah aplikasi hanya software biasa dan kapan ia layak disebut sistem AI.
                     </p>
-                </div>
+                </header>
 
                 <h3>3.1 Software Biasa: Aturan Ditulis Manual</h3>
                 <p>Software biasa bekerja dengan aturan yang jelas, eksplisit, dan sudah ditulis oleh pemrogram. Jika kondisi A terjadi, sistem melakukan B. Jika kondisi tidak terpenuhi, sistem melakukan C. Polanya deterministik: input yang sama akan menghasilkan output yang sama selama aturan tidak diubah.</p>
@@ -609,14 +607,12 @@
             duration: '45 menit',
             tag: 'Alur Kerja',
             content: `
-                <div style="background: linear-gradient(90deg, rgba(246,51,146,.1) 0%, rgba(246,51,146,.02) 100%); border: 1px solid rgba(246,51,146,.15); padding: 24px; margin-bottom: 32px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px;">
-                    <h3 style="margin:0; color: #f63392; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-arrows-spin"></i> Topik 5: Training, Inferensi, dan Human Check
+                <header class="lesson-topic-banner">
+                    <h3><i class="fas fa-arrows-spin"></i> Topik 5: Training, Inferensi, dan Human Check
                     </h3>
-                    <p style="margin: 0; font-size: 1.05rem; color: var(--fellow-text); font-weight: 500;">
-                        Goal: Memahami bahwa AI tidak hanya soal model, tetapi juga proses belajar, penggunaan, dan koreksi.
+                    <p>Goal: Memahami bahwa AI tidak hanya soal model, tetapi juga proses belajar, penggunaan, dan koreksi.
                     </p>
-                </div>
+                </header>
 
                 <h3>5.1 Dua Fase Utama AI</h3>
                 <p>AI modern biasanya memiliki dua fase besar: <strong>training</strong> dan <strong>inferensi</strong>. Training adalah masa belajar. Inferensi adalah masa pemakaian. Perbedaan ini penting karena banyak orang hanya melihat output AI di layar, padahal kualitas output sangat ditentukan oleh proses belajar sebelumnya.</p>
@@ -821,14 +817,12 @@
             duration: '45 menit',
             tag: 'Penerapan',
             content: `
-                <div style="background: linear-gradient(90deg, rgba(246,51,146,.1) 0%, rgba(246,51,146,.02) 100%); border: 1px solid rgba(246,51,146,.15); padding: 24px; margin-bottom: 32px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px;">
-                    <h3 style="margin:0; color: #f63392; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-globe"></i> Topik 7: Penerapan AI dalam Kehidupan
+                <header class="lesson-topic-banner">
+                    <h3><i class="fas fa-globe"></i> Topik 7: Penerapan AI dalam Kehidupan
                     </h3>
-                    <p style="margin: 0; font-size: 1.05rem; color: var(--fellow-text); font-weight: 500;">
-                        Goal: Membaca AI di kehidupan sehari-hari sebagai sistem yang punya tujuan, input, dan dampak.
+                    <p>Goal: Membaca AI di kehidupan sehari-hari sebagai sistem yang punya tujuan, input, dan dampak.
                     </p>
-                </div>
+                </header>
 
                 <h3>7.1 Kenapa Penerapan Harian Penting</h3>
                 <p>Literasi AI tidak dimulai dari laboratorium. Ia dimulai dari kebiasaan membaca aplikasi yang dipakai setiap hari. Rekomendasi video, peta digital, filter email, chatbot layanan pelanggan, penerjemah teks, dan sistem harga transportasi daring semuanya bisa dibaca dengan model yang sama.</p>
@@ -871,14 +865,12 @@
             duration: '40 menit',
             tag: 'Evaluasi',
             content: `
-                <div style="background: linear-gradient(90deg, rgba(246,51,146,.1) 0%, rgba(246,51,146,.02) 100%); border: 1px solid rgba(246,51,146,.15); padding: 24px; margin-bottom: 32px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px;">
-                    <h3 style="margin:0; color: #f63392; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-scale-balanced"></i> Topik 8: Manfaat dan Keterbatasan AI
+                <header class="lesson-topic-banner">
+                    <h3><i class="fas fa-scale-balanced"></i> Topik 8: Manfaat dan Keterbatasan AI
                     </h3>
-                    <p style="margin: 0; font-size: 1.05rem; color: var(--fellow-text); font-weight: 500;">
-                        Goal: Mengapresiasi manfaat AI tanpa kehilangan sikap kritis terhadap batas dan risikonya.
+                    <p>Goal: Mengapresiasi manfaat AI tanpa kehilangan sikap kritis terhadap batas dan risikonya.
                     </p>
-                </div>
+                </header>
 
                 <h3>8.1 Manfaat Praktis AI</h3>
                 <p>AI bermanfaat ketika dipakai untuk mempercepat analisis, menyaring informasi, menemukan pola, dan membantu manusia melihat pilihan yang terlalu banyak untuk diproses manual. Dalam konteks belajar dan kerja, AI dapat menjadi alat bantu yang kuat selama pengguna tetap memahami batasnya.</p>
@@ -921,14 +913,12 @@
             duration: '50 menit',
             tag: 'Etika AI',
             content: `
-                <div style="background: linear-gradient(90deg, rgba(246,51,146,.1) 0%, rgba(246,51,146,.02) 100%); border: 1px solid rgba(246,51,146,.15); padding: 24px; margin-bottom: 32px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px;">
-                    <h3 style="margin:0; color: #f63392; font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-shield-halved"></i> Topik 9: Bias, Halusinasi, Privasi, dan Black Box
+                <header class="lesson-topic-banner">
+                    <h3><i class="fas fa-shield-halved"></i> Topik 9: Bias, Halusinasi, Privasi, dan Black Box
                     </h3>
-                    <p style="margin: 0; font-size: 1.05rem; color: var(--fellow-text); font-weight: 500;">
-                        Goal: Mengenali risiko AI yang paling sering muncul dalam kehidupan nyata.
+                    <p>Goal: Mengenali risiko AI yang paling sering muncul dalam kehidupan nyata.
                     </p>
-                </div>
+                </header>
 
                 <h3>9.1 Bias: Ketika Masa Lalu Diulang Mesin</h3>
                 <p>Miskonsepsi besar tentang AI adalah anggapan bahwa keputusan komputer pasti objektif. Padahal AI belajar dari data historis yang dibuat oleh manusia dan institusi. Jika sejarah memuat diskriminasi, ketimpangan, atau pengecualian kelompok tertentu, model dapat mengulangnya dengan tampilan yang seolah netral.</p>
