@@ -1,0 +1,554 @@
+*HASIL CEK MATERI DAN FITUR HERAI*
+
+Tanggal pengecekan: 19 Juli 2026
+
+Keterangan:
+✅ = Materi tersedia dan bisa dibuka
+🟡 = Sebagian tersedia, belum lengkap, atau belum aktif
+❌ = Belum ada materi final, baru tersedia judul dan outline
+
+
+*1. MATERI YANG SUDAH TERSEDIA DAN AKTIF ✅*
+
+Semua materi berikut berada di course AI Fundamentals & Advanced:
+
+*1. Pengantar AI*
+
+Materi yang tersedia:
+- Sejarah dan perkembangan AI
+- Jenis-jenis AI
+- Komponen sistem AI
+- Penerapan AI
+- Pipeline AI
+- Perbedaan Machine Learning dan Deep Learning
+- Kelebihan dan kekurangan AI
+- Etika AI
+- Masa depan AI
+- Rangkuman
+- Latihan
+- Kuis
+- Diskusi
+
+*2. Python untuk AI*
+
+Materi yang tersedia:
+- Setup environment
+- Computational thinking
+- Sintaks dan tipe data
+- Collection
+- Control flow
+- Function
+- Lambda, generator, dan modularitas
+- Object-Oriented Programming
+- Error handling
+- File I/O
+- Ekosistem Python untuk AI
+- NumPy
+- Pandas
+- Mini AI workflow
+- Latihan
+- Mini project
+- Kuis 20 soal
+- Diskusi
+
+*3. Konsep AI Modern*
+
+Materi yang tersedia:
+- Foundation model
+- Transformer
+- AI Agent
+- Model, data, tools, dan infrastructure
+- Human oversight
+- Latihan
+- Kuis
+- Diskusi
+
+*4. Reasoning AI*
+
+Materi yang tersedia:
+- Fakta, asumsi, dan kesimpulan
+- Planning dan problem decomposition
+- Langkah penyelesaian terstruktur
+- Tool use
+- Integrated reasoning workflow
+- Latihan
+- Evaluasi
+- Kuis
+- Diskusi
+
+*5. Evaluation AI (Perlu pengembangan)* 
+
+Materi yang tersedia:
+- Evaluasi output AI
+- Benchmark dan dataset
+- Reliability dan robustness
+- Bias dan fairness
+- Evaluation plan
+- Latihan
+- Kuis
+- Diskusi
+
+*6. Evolution of AI* (Perlu pengembangan)
+
+Materi yang tersedia:
+- Symbolic AI dan expert system
+- Machine Learning
+- Reinforcement Learning
+- Autoencoder, VAE, dan GAN
+- Diffusion model
+- Transformer dan LLM
+- Hybrid AI
+- Latihan
+- Kuis
+- Diskusi
+
+
+*2. MATERI SUDAH ADA, TETAPI BELUM LENGKAP ATAU BELUM AKTIF 🟡*
+
+*1. Math for AI* (perlu pengembangan)
+
+Yang sudah ada:
+- Linear algebra
+- Statistik
+- Probabilitas
+- Kalkulus
+- Optimisasi
+- Studi kasus
+- Latihan
+- Kuis
+- Diskusi
+
+Yang belum:
+- Route portal masih menuju halaman Under Development
+- Progres belajar belum tersimpan di backend
+- Grading belum terpusat
+- Belum diuji end-to-end sebagai course aktif
+
+*2. Machine Learning*
+
+Yang sudah ada:
+- Pengenalan Machine Learning
+- Supervised Learning
+- Regression dan Classification
+- Probabilistic Model
+- Linear Discriminative Model
+- Support Vector Machine
+- Neural Network
+- Unsupervised Learning
+- Feature vector
+- Hypothesis
+- Bias-variance
+- VC dimension
+- Latihan
+- Kuis
+- Diskusi
+
+Yang belum:
+- Route portal masih menuju halaman Under Development
+- Belum ada notebook atau dataset pembelajaran yang terintegrasi
+- Belum ada capstone Machine Learning
+- Progres dan grading belum tersimpan di backend
+- Model tuning belum menjadi lesson final yang berdiri sendiri
+
+*3. Natural Language Processing*
+
+Yang sudah ada:
+- Tokenization
+- Text preprocessing
+- POS tagging
+- Named Entity Recognition
+- Bag-of-Words
+- TF-IDF
+
+Yang belum:
+- Word embedding dan semantic similarity
+- Word2Vec atau embedding modern
+- Text classification
+- Sentiment analysis
+- Transformer dan BERT
+- RAG dan retrieval
+- LLM dan fine-tuning
+- Project akhir NLP
+- Latihan terintegrasi
+- Kuis terintegrasi
+- Diskusi terintegrasi
+- Assessment
+- Seluruh route NLP masih menuju halaman Under Development
+
+*4. Computer Vision*
+
+Yang sudah ada:
+- Anatomi pixel
+- Filtering dan kernel
+- Morphological transformation
+- Image processing dengan OpenCV
+- Pengenalan CNN
+- Alasan MLP tidak cocok untuk gambar
+- ReLU
+- Fully Connected Layer
+- Praktik CIFAR-10
+- Arsitektur CNN
+- CNN Architecture Builder
+
+Yang belum:
+- Object detection
+- YOLO atau model detection sejenis
+- Image segmentation
+- Object tracking
+- Data augmentation
+- Transfer learning
+- Vision Transformer
+- Deployment model vision
+- Portfolio atau final project
+- Kuis dan assessment course yang terstruktur
+- Seluruh route Computer Vision masih menuju halaman Under Development
+
+*5. Generative AI*
+
+Yang sudah ada dalam bentuk draft atau scaffold:
+- Generative AI Overview
+- Prompting Workflow
+- Generation Pipeline
+- Output Evaluation
+- Creative Workflow
+
+Yang belum:
+- Materi final per lesson
+- Dasar model generatif secara mendalam
+- Autoregressive model
+- VAE, GAN, dan Diffusion secara praktik
+- Praktik generasi teks
+- Praktik generasi gambar dan audio
+- Safety, copyright, consent, dan bias secara lengkap
+- Latihan interaktif
+- Kuis final
+- Diskusi terintegrasi
+- Project Generative AI
+- Assessment
+- Penyimpanan progress di backend
+- Route masih menuju halaman Under Development
+
+*6. AI for Industries*
+
+Yang sudah ada:
+- Halaman publik AI untuk budaya dan bahasa
+- Infrastructure
+- Smart agriculture
+- Healthcare
+- Manufacturing
+
+Yang belum:
+- Belum berbentuk course LMS
+- Belum ada lesson per industri
+- Belum ada latihan
+- Belum ada kuis
+- Belum ada diskusi
+- Belum ada project
+- Belum ada rubric penilaian
+
+
+*3. MATERI FINAL YANG BELUM TERSEDIA ❌*
+
+Daftar berikut baru memiliki judul dan outline. Materi detail, latihan, kuis, diskusi, project, dan assessment belum dibuat.
+
+*A. FOUNDATION & CORE AI*
+
+*1. Deep Learning*
+
+Rencana materi:
+- Neural Network Basics
+- Training dan Backpropagation
+- CNN dan RNN
+- Transformer Basics
+- Regularization
+
+*2. Reinforcement Learning*
+
+Rencana materi:
+- Agent dan Environment
+- Reward dan Policy
+- Value Function
+- Exploration vs Exploitation
+- Reinforcement Learning Case Study
+
+
+*B. GENERATIVE & MULTIMODAL AI*
+
+*3. LLM*
+
+Rencana materi:
+- Transformer Recap
+- Prompting dan Instruction
+- RAG Basics
+- Fine-tuning
+- Deployment LLM
+
+*4. Vision Language Model*
+
+Rencana materi:
+- Image-Text Alignment
+- Image Captioning
+- Visual Question Answering
+- VLM Evaluation
+- VLM Use Cases
+
+*5. Multimodal LLM*
+
+Rencana materi:
+- Multimodal Inputs
+- Cross-modal Learning
+- Fusion Strategies
+- Multimodal Evaluation
+- Multimodal Product Patterns
+
+*6. Agentic AI*
+
+Rencana materi:
+- Agent Loop
+- Tool Use
+- Planning
+- Memory
+- Agent Evaluation
+
+
+*C. DATA & ENGINEERING*
+
+*7. Bioinformatics*
+
+Rencana materi:
+- Biological Data
+- Genomics
+- Protein Analysis
+- Medical AI Risks
+- Bioinformatics Case Study
+
+*8. Data Engineering*
+
+Rencana materi:
+- Data Pipeline
+- ETL dan ELT
+- Warehouse dan Lakehouse
+- Orchestration
+- Data Quality
+
+*9. Data Science*
+
+Rencana materi:
+- Exploratory Data Analysis
+- Experimentation dan A/B Testing
+- Data Visualization
+- Modeling
+- Insight Storytelling
+
+*10. Infrastructure*
+
+Rencana materi:
+- Compute Basics
+- GPU Environment
+- Model Serving Stack
+- Observability
+- Scaling
+
+*11. Deployment*
+
+Rencana materi:
+- Packaging
+- API Serving
+- Release Strategy
+- Monitoring
+- Rollback
+
+*12. Front-end*
+
+Rencana materi:
+- AI Interface Patterns
+- Dashboard
+- Visualization
+- Accessibility
+- Frontend Integration
+
+*13. Back-end*
+
+Rencana materi:
+- API Design
+- Database dan Authentication
+- Queue dan Background Job
+- Integrations
+- Service Scaling
+
+
+*D. BUSINESS & INDUSTRY*
+
+*14. Business Insight*
+
+Rencana materi:
+- Business Question
+- Metric Design
+- Insight Pipeline
+- Decision Support
+- Executive Storytelling
+
+*15. People & Business Management*
+
+Rencana materi:
+- AI Adoption
+- Team Workflow
+- Change Management
+- Governance
+- Operational Strategy
+
+*16. AI for Culture*
+
+Rencana materi:
+- Cultural Data
+- Language Preservation
+- Creative Workflow
+- Cultural Ethics
+- Culture Case Study
+
+*17. AI for Healthcare*
+
+Rencana materi:
+- Healthcare Data
+- Clinical Decision Support
+- Medical Imaging
+- Patient Analytics
+- Safety dan Ethics
+
+*18. UI/UX Design Thinking*
+
+Rencana materi:
+- User Research
+- AI Journey Mapping
+- Prototyping
+- Usability Testing
+- Design Evaluation
+
+*19. AI for Manufacturing*
+
+Rencana materi:
+- Manufacturing Data
+- Predictive Maintenance
+- Quality Inspection
+- Robotics
+- Process Optimization
+
+*20. AI for Geospatial*
+
+Rencana materi:
+- Geospatial Data
+- Remote Sensing
+- GIS Intelligence
+- Spatial Modeling
+- Location Analytics
+
+
+*E. SPECIALIZATION TRACK YANG BELUM MEMILIKI MATERI FINAL*
+
+*1. Computer Vision Track*
+
+Rencana materi:
+- Computer Vision Course Review
+- OpenCV Practice
+- Object Detection dan Segmentation
+- Vision Transformer
+- Computer Vision Portfolio Project
+
+*2. Speech Recognition Track*
+
+Rencana materi:
+- Audio Basics
+- Feature Extraction dan MFCC
+- Automatic Speech Recognition
+- Text-to-Speech
+- Speech Product Case
+
+*3. NLP & LLM Track*
+
+Rencana materi:
+- NLP Foundation
+- LLM Workflow
+- RAG System
+- NLP Evaluation
+- NLP Capstone
+
+*4. MLOps & Deployment Track*
+
+Rencana materi:
+- MLOps Lifecycle
+- Model Serving
+- CI/CD
+- Monitoring
+- Production Incident Drill
+
+*5. Multimodal LLM Track*
+
+Rencana materi:
+- Multimodal Foundation
+- VLM Use Cases
+- Cross-modal Evaluation
+- Multimodal Product UX
+- Multimodal Capstone
+
+*6. Medical & Biology AI Track*
+
+Rencana materi:
+- Biological and Medical Data
+- Clinical AI
+- Protein dan Genomics
+- Safety Review
+- Medical/Biology Capstone
+
+
+*4. STATUS FITUR PENGATURAN DAN GANTI PASSWORD*
+
+*1. Pengaturan Peserta 🟡*
+
+Halaman Pengaturan peserta sudah tersedia secara visual, tetapi belum berfungsi penuh.
+
+Bagian yang terlihat:
+- Profil Publik
+- Keamanan Akun
+- Preferensi Notifikasi
+- Tampilan dan Aksesibilitas
+- Upload dan hapus foto
+- Tombol Simpan Perubahan
+
+Kekurangan:
+- Data masih berupa contoh hard-coded atas nama Aisyah Putri
+- Menu Keamanan, Notifikasi, dan Aksesibilitas belum aktif
+- Tombol Simpan belum tersambung ke backend
+- Upload dan hapus foto belum tersambung ke backend
+- Halaman Pengaturan masih berupa prototype visual
+
+Catatan:
+- Edit profil dasar sudah tersedia di halaman profil terpisah
+- Data yang dapat diubah meliputi nama, email, WhatsApp, alamat, dan link CV
+- Admin Global Settings sudah tersedia, tetapi berbeda dari Pengaturan peserta
+
+*2. Ganti Password Peserta ❌*
+
+Fitur ganti password mandiri untuk peserta belum tersedia.
+
+Kondisi saat ini:
+- Peserta hanya dapat login menggunakan password yang dibuat atau diprovision oleh panitia
+- Belum ada form password lama, password baru, dan konfirmasi password
+- Fungsi setParticipantPassword di GAS hanya dirancang untuk pembuatan password pertama, bukan mengganti password yang sudah ada
+- Fungsi setParticipantPassword belum dibuka sebagai action GAS
+- Pembuatan password mandiri dinonaktifkan di frontend
+- Jika password peserta perlu diganti, saat ini harus dilakukan melalui reset atau provisioning ulang oleh admin/panitia
+
+
+*CATATAN JUMLAH MATERI*
+
+Jumlah 200 file Markdown tidak berarti terdapat 200 course.
+
+Angka tersebut mencakup:
+- Arsip halaman HTML
+- Source JavaScript
+- Outline course
+- Versi legacy
+- README
+- Manifest
+
+Course final yang benar-benar aktif saat pengecekan dilakukan baru enam modul utama dalam AI Fundamentals & Advanced.

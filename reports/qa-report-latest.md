@@ -1,12 +1,12 @@
 # HerAI QA Smoke Report
 
-Generated: 2026-06-14T17:37:02.314Z
+Generated: 2026-07-17T18:06:54.183Z
 
 ## Summary
 
-- PASS: 44
+- PASS: 78
 - WARN: 6
-- FAIL: 1
+- FAIL: 2
 - Frontend URL: http://127.0.0.1:3000
 - Messaging URL: http://127.0.0.1:8091
 - Signaling URL: http://127.0.0.1:8080
@@ -20,12 +20,12 @@ Masih ada FAIL yang harus diperbaiki sebelum dianggap aman untuk deploy.
 
 ## Failed Checks
 
-- Go Services / signaling: go test ./...: # github.com/pion/webrtc/v4
-compile: writing output: write $WORK/b190/_pkg_.a: no space left on device
+- Go Services / messaging: go test ./...: failed to initialize build cache at /private/tmp/herai-go-build-cache: mkdir /private: permission denied
+- Go Services / signaling: go test ./...: failed to initialize build cache at /private/tmp/herai-go-build-cache: mkdir /private: permission denied
 
 ## Warnings
 
-- Runtime Endpoint / Frontend http://127.0.0.1:3000: Not reachable or not OK: 0 fetch failed
+- Runtime Endpoint / Frontend http://127.0.0.1:3000: HTTP 200, expected text not found
 - Runtime Endpoint / Messaging http://127.0.0.1:8091/healthz: Not reachable or not OK: 0 fetch failed
 - Runtime Endpoint / Messaging http://127.0.0.1:8091/api/config: Not reachable or not OK: 0 fetch failed
 - Runtime Endpoint / Signaling http://127.0.0.1:8080/healthz: Not reachable or not OK: 0 fetch failed
@@ -49,7 +49,7 @@ compile: writing output: write $WORK/b190/_pkg_.a: no space left on device
 | Required Files | docs/DEVELOPER_HANDOVER_AND_ROADMAP.md | PASS | Found |
 | Required Files | docs/DEVELOPER_HANDOVER_AND_ROADMAP.pdf | PASS | Found |
 | Required Files | docs/HerAI_Developer_Prompt_Templates.pdf | PASS | Found |
-| SPA Routes | Route count | PASS | 41 routes detected |
+| SPA Routes | Route count | PASS | 157 routes detected |
 | SPA Routes | Every route points to existing HTML | PASS | All route files exist |
 | JavaScript Syntax | js/dashboard/admin-modules.js | PASS | Syntax OK |
 | JavaScript Syntax | js/dashboard/ai-prescreening.js | PASS | Syntax OK |
@@ -62,7 +62,42 @@ compile: writing output: write $WORK/b190/_pkg_.a: no space left on device
 | JavaScript Syntax | js/frontend/announcement.js | PASS | Syntax OK |
 | JavaScript Syntax | js/frontend/competency-test.js | PASS | Syntax OK |
 | JavaScript Syntax | js/frontend/data-penduduk.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-evaluation.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-evolution.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/bow.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-arch-builder.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-arch.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-fc.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-hands.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-intro.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-relu.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-why.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cv-overview.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/filtering-kernels.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/gen-overview.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/image-processing-opencv.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/machine-learning-overview.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/ml-bias-variance.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/ml-hypothesis.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/ml-intro.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/ml-overview.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/ml-vc-dim.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/morphological-transforms.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/nlp-overview.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/pixel-anatomy.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/pos-ner.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/preprocessing.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/tfidf.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/tokenization.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-math-for-ai.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-ml-basic.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-modern.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-python-basic.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-python.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/ai-reasoning.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard/course-placeholder.js | PASS | Syntax OK |
 | JavaScript Syntax | js/frontend/fellow-dashboard/settings.js | PASS | Syntax OK |
+| JavaScript Syntax | js/frontend/fellow-dashboard.js | PASS | Syntax OK |
 | JavaScript Syntax | js/frontend/meeting.js | PASS | Syntax OK |
 | JavaScript Syntax | js/frontend/messaging.js | PASS | Syntax OK |
 | JavaScript Syntax | js/frontend/profile.js | PASS | Syntax OK |
@@ -72,16 +107,16 @@ compile: writing output: write $WORK/b190/_pkg_.a: no space left on device
 | JavaScript Syntax | js/main.js | PASS | Syntax OK |
 | JavaScript Syntax | js/router.js | PASS | Syntax OK |
 | JavaScript Syntax | server.js | PASS | Syntax OK |
-| Go Services | messaging: go test ./... | PASS | ?   	herai-messaging	[no test files] |
-| Go Services | signaling: go test ./... | FAIL | # github.com/pion/webrtc/v4<br>compile: writing output: write $WORK/b190/_pkg_.a: no space left on device |
-| GAS | Sheet registry count | PASS | 58 sheets detected |
-| GAS | Action route count | PASS | 44 actions detected |
+| Go Services | messaging: go test ./... | FAIL | failed to initialize build cache at /private/tmp/herai-go-build-cache: mkdir /private: permission denied |
+| Go Services | signaling: go test ./... | FAIL | failed to initialize build cache at /private/tmp/herai-go-build-cache: mkdir /private: permission denied |
+| GAS | Sheet registry count | PASS | 72 sheets detected |
+| GAS | Action route count | PASS | 48 actions detected |
 | GAS | Duplicate actions | PASS | None |
 | GAS | Critical actions available | PASS | All critical actions found |
 | Documentation | docs/DEVELOPER_HANDOVER_AND_ROADMAP.md | PASS | 21 KB |
 | Documentation | docs/DEVELOPER_HANDOVER_AND_ROADMAP.pdf | PASS | 36 KB |
 | Documentation | docs/HerAI_Developer_Prompt_Templates.pdf | PASS | 15 KB |
-| Runtime Endpoint | Frontend http://127.0.0.1:3000 | WARN | Not reachable or not OK: 0 fetch failed |
+| Runtime Endpoint | Frontend http://127.0.0.1:3000 | WARN | HTTP 200, expected text not found |
 | Runtime Endpoint | Messaging http://127.0.0.1:8091/healthz | WARN | Not reachable or not OK: 0 fetch failed |
 | Runtime Endpoint | Messaging http://127.0.0.1:8091/api/config | WARN | Not reachable or not OK: 0 fetch failed |
 | Runtime Endpoint | Signaling http://127.0.0.1:8080/healthz | WARN | Not reachable or not OK: 0 fetch failed |

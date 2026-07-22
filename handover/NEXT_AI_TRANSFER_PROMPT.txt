@@ -1,0 +1,73 @@
+Baca seluruh checkpoint utama berikut sebelum mengubah kode:
+
+/home/faiz/her6/Her-AI/handover/AI_HANDOFF_CURRENT_STATE.md
+
+Repository:
+/home/faiz/her6/Her-AI
+
+Aturan penting:
+
+1. Kode GAS canonical adalah gas/Code.gs.
+2. Spreadsheet canonical adalah 1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w.
+3. Deployment canonical adalah AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE.
+4. ParticipantAccounts adalah sumber kredensial login.
+5. peserta_tahap_1 adalah sumber profil peserta.
+6. Jangan provision/reset 187 akun existing dan jangan memakai forceReset:true.
+7. Jangan mengubah login, password, atau workflow admin tanpa scope baru.
+8. Status deploy GAS latest belum dikonfirmasi; Save saja tidak cukup, deployment
+   existing harus diedit ke New version lalu Deploy.
+9. Jangan mencetak, menyimpan, atau membagikan NIK/password peserta.
+10. Worktree dirty dan perubahan bercampur; jangan reset, checkout, atau cleanup
+    massal.
+
+Checkpoint login:
+
+- Regression test login peserta lulus lokal.
+- Login admin tetap memakai alur baseline.
+- Login peserta memakai NIK dan generated_password dari baris ParticipantAccounts
+  yang sama.
+- Profil dihubungkan melalui participant_rowId, dengan fallback NIK.
+- Token peserta berlaku 12 jam dan password tidak disimpan di sessionStorage.
+- Deployment production terbaru masih perlu dikonfirmasi dan diuji satu akun nyata.
+
+Checkpoint materi:
+
+- Folder materi berisi 200 Markdown dan 111.574 baris.
+- Enam modul AI Fundamentals & Advanced aktif.
+- Math, Machine Learning, NLP, dan Computer Vision mempunyai materi substantif,
+  tetapi route masih menuju Under Development.
+- Generative AI baru parsial.
+- Dua puluh course masih placeholder.
+- Enam specialization track masih scaffold.
+- Terdapat 72 route AI Lab/track menuju Under Development.
+- Route checker 114/114 hanya membuktikan file target ada, bukan course aktif.
+
+Laporan utama:
+
+- reports/MATERIAL_AND_FEATURE_GAP_AUDIT_2026-07-19.md
+- reports/MATERIAL_FEATURE_STATUS_WHATSAPP_2026-07-19.md
+- reports/MATERIAL_FEATURE_STATUS_WHATSAPP_2026-07-19.txt
+
+Checkpoint fitur akun peserta:
+
+- Halaman Pengaturan peserta ada, tetapi masih prototype dengan data contoh.
+- Tombol Simpan/Unggah/Hapus dan tab Keamanan/Notifikasi/Aksesibilitas belum aktif.
+- Edit profil dasar tersedia melalui updateParticipantProfile di halaman profil.
+- Ganti password mandiri peserta belum tersedia.
+- setParticipantPassword adalah function legacy first-set, tidak diekspos sebagai
+  action, dan bukan implementasi ganti password.
+
+Prioritas terdekat:
+
+1. Konfirmasi senior deploy gas/Code.gs sebagai New version di deployment existing.
+2. Jalankan E2E satu akun nyata tanpa mencatat kredensial.
+3. Setelah login terverifikasi, perbaiki semantic route checker.
+4. Aktifkan Math, ML, NLP, dan CV hanya setelah smoke test.
+5. Bangun progress/gradebook server-side.
+6. Jadwalkan hardening action admin GAS dan sanitasi getParticipantAccounts bersama
+   senior.
+7. Kerjakan Pengaturan/ganti password hanya jika user memberi scope baru.
+
+Mulai dengan audit read-only atas status terbaru. Jangan melakukan mutasi data
+Google Sheets, deployment, provisioning, reset password, pengiriman email, atau
+perubahan admin tanpa instruksi eksplisit dari user.

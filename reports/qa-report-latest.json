@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-14T17:37:02.314Z",
+  "generated_at": "2026-07-17T18:06:54.183Z",
   "summary": {
-    "PASS": 44,
+    "PASS": 78,
     "WARN": 6,
-    "FAIL": 1
+    "FAIL": 2
   },
   "config": {
     "frontendUrl": "http://127.0.0.1:3000",
@@ -95,7 +95,7 @@
       "area": "SPA Routes",
       "check": "Route count",
       "status": "PASS",
-      "detail": "41 routes detected"
+      "detail": "157 routes detected"
     },
     {
       "area": "SPA Routes",
@@ -171,7 +171,217 @@
     },
     {
       "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-evaluation.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-evolution.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/bow.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/cnn-arch-builder.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/cnn-arch.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/cnn-fc.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/cnn-hands.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/cnn-intro.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/cnn-relu.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/cnn-why.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/cv-overview.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/filtering-kernels.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/gen-overview.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/image-processing-opencv.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/machine-learning-overview.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/ml-bias-variance.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/ml-hypothesis.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/ml-intro.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/ml-overview.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/ml-vc-dim.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/morphological-transforms.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/nlp-overview.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/pixel-anatomy.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/pos-ner.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/preprocessing.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/tfidf.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-lab/tokenization.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-math-for-ai.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-ml-basic.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-modern.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-python-basic.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-python.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/ai-reasoning.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard/course-placeholder.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
       "check": "js/frontend/fellow-dashboard/settings.js",
+      "status": "PASS",
+      "detail": "Syntax OK"
+    },
+    {
+      "area": "JavaScript Syntax",
+      "check": "js/frontend/fellow-dashboard.js",
       "status": "PASS",
       "detail": "Syntax OK"
     },
@@ -232,26 +442,26 @@
     {
       "area": "Go Services",
       "check": "messaging: go test ./...",
-      "status": "PASS",
-      "detail": "?   \therai-messaging\t[no test files]"
+      "status": "FAIL",
+      "detail": "failed to initialize build cache at /private/tmp/herai-go-build-cache: mkdir /private: permission denied"
     },
     {
       "area": "Go Services",
       "check": "signaling: go test ./...",
       "status": "FAIL",
-      "detail": "# github.com/pion/webrtc/v4\ncompile: writing output: write $WORK/b190/_pkg_.a: no space left on device"
+      "detail": "failed to initialize build cache at /private/tmp/herai-go-build-cache: mkdir /private: permission denied"
     },
     {
       "area": "GAS",
       "check": "Sheet registry count",
       "status": "PASS",
-      "detail": "58 sheets detected"
+      "detail": "72 sheets detected"
     },
     {
       "area": "GAS",
       "check": "Action route count",
       "status": "PASS",
-      "detail": "44 actions detected"
+      "detail": "48 actions detected"
     },
     {
       "area": "GAS",
@@ -287,7 +497,7 @@
       "area": "Runtime Endpoint",
       "check": "Frontend http://127.0.0.1:3000",
       "status": "WARN",
-      "detail": "Not reachable or not OK: 0 fetch failed"
+      "detail": "HTTP 200, expected text not found"
     },
     {
       "area": "Runtime Endpoint",
