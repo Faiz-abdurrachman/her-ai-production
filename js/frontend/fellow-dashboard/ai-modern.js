@@ -659,11 +659,11 @@
         var prev = document.getElementById("btn-prev-chapter");
         var next = document.getElementById("btn-next-chapter");
         if (list) list.innerHTML = CHAPTERS.map(function (chapter, index) { var number = index + 1; return '<li data-chapter="' + number + '"><span>' + number + '</span><button type="button" data-load-modern="' + number + '">' + escapeHtml(chapter.shortTitle) + '</button><i class="far fa-circle"></i></li>'; }).join("");
-        if (list) list.querySelectorAll("[data-load-modern]").forEach(function (button) { button.addEventListener("click", function () { window.loadModernChapter(Number(button.dataset.loadModern)); }); });
-        if (prev) prev.addEventListener("click", function () { window.loadModernChapter(Number(localStorage.getItem(STORAGE_KEY_CHAPTER)) - 1); });
-        if (next) next.addEventListener("click", function () { window.loadModernChapter(Number(localStorage.getItem(STORAGE_KEY_CHAPTER)) + 1); });
+        if (list) list.querySelectorAll("[data-load-modern]").forEach(function (button) { button.addEventListener("click", function () { window.loadModernTopik(Number(button.dataset.loadModern)); }); });
+        if (prev) prev.addEventListener("click", function () { window.loadModernTopik(Number(localStorage.getItem(STORAGE_KEY_CHAPTER)) - 1); });
+        if (next) next.addEventListener("click", function () { window.loadModernTopik(Number(localStorage.getItem(STORAGE_KEY_CHAPTER)) + 1); });
         var initial = Number(localStorage.getItem(STORAGE_KEY_CHAPTER)) || 1;
-        window.loadModernChapter(initial);
+        window.loadModernTopik(initial);
     };
 })();
 

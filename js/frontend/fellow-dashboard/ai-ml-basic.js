@@ -171,10 +171,10 @@
             return;
         }
 
-        loadMlChapter(chapterNumber, { syncHash: false });
+        loadMlTopik(chapterNumber, { syncHash: false });
     }
 
-    async function loadMlChapter(chapterNumber, options = {}) {
+    async function loadMlTopik(chapterNumber, options = {}) {
         const container = document.getElementById("ml-chapter-container");
         if (!container) return;
 
@@ -251,7 +251,7 @@
             });
         }
 
-        loadMlChapter(initialChapter, { syncHash: false });
+        loadMlTopik(initialChapter, { syncHash: false });
     };
 
     function getPracticePayload(form) {

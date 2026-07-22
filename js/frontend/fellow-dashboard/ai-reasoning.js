@@ -2013,25 +2013,25 @@
         if (list) {
             list.innerHTML = CHAPTERS.map(function (chapter, index) {
                 const chapterNumber = index + 1;
-                return `<li data-chapter="${chapterNumber}"><span>${chapterNumber}</span><a href="javascript:void(0)" onclick="window.loadReasoningChapter(${chapterNumber})">${escapeHtml(chapter.shortTitle)}</a><i class="far fa-circle"></i></li>`;
+                return `<li data-chapter="${chapterNumber}"><span>${chapterNumber}</span><a href="javascript:void(0)" onclick="window.loadReasoningTopik(${chapterNumber})">${escapeHtml(chapter.shortTitle)}</a><i class="far fa-circle"></i></li>`;
             }).join("");
         }
 
         if (btnPrev) {
             btnPrev.addEventListener("click", function () {
                 const current = Number(localStorage.getItem(STORAGE.chapter)) || initial;
-                window.loadReasoningChapter(Math.max(1, current - 1));
+                window.loadReasoningTopik(Math.max(1, current - 1));
             });
         }
 
         if (btnNext) {
             btnNext.addEventListener("click", function () {
                 const current = Number(localStorage.getItem(STORAGE.chapter)) || initial;
-                window.loadReasoningChapter(Math.min(total, current + 1));
+                window.loadReasoningTopik(Math.min(total, current + 1));
             });
         }
 
-        window.loadReasoningChapter(initial);
+        window.loadReasoningTopik(initial);
     };
 
     function getSavedPractice() {

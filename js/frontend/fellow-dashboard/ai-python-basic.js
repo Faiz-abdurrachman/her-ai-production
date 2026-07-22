@@ -501,7 +501,7 @@
             });
         }
 
-        window.loadPythonChapter = function(chapterNum) {
+        window.loadPythonTopik = function(chapterNum) {
             if (chapterNum >= 1 && chapterNum <= totalChapters) {
                 currentChapter = chapterNum;
                 localStorage.setItem(STORAGE_KEY_CHAPTER, currentChapter.toString());
