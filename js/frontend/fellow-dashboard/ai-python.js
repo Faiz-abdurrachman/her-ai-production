@@ -383,17 +383,53 @@ var SOURCE_VISUALS = {
         </section>`;
     }
 
+    function setupBeginnerRoadmap(container) {
+        var roadmaps = container.querySelectorAll(".ai-modern-beginner-roadmap");
+        roadmaps.forEach(function(roadmap) {
+            var steps = Array.from(roadmap.querySelectorAll("[data-roadmap-step]"));
+            var progress = roadmap.querySelector("[data-roadmap-progress]");
+            var bar = roadmap.querySelector("[data-roadmap-bar]");
+            steps.forEach(function (detail) {
+                detail.addEventListener("toggle", function () {
+                    if (!detail.open) return;
+                    steps.forEach(function (other) { if (other !== detail) other.open = false; });
+                    var index = Number(detail.dataset.roadmapStep);
+                    if (progress) progress.textContent = "Langkah " + (index + 1) + " dari " + steps.length;
+                    if (bar) bar.style.width = Math.round(((index + 1) / steps.length) * 100) + "%";
+                });
+            });
+            if (bar && steps.length) bar.style.width = Math.round(100 / steps.length) + "%";
+        });
+    }
+
     function renderPythonDeepDive(module) {
-        if (!module || !module.deepDive) return "";
-        var example = module.workedExample || [];
-        return `<section class="python-deep-dive" data-python-injected data-section="konsep">
-            <div class="python-deep-dive-head"><i class="fas fa-book-open-reader" aria-hidden="true"></i><div><span>Deep Dive Pemula</span><h2>Memahami konsep, bukan menghafal sintaks</h2><p>Gunakan penjelasan berikut untuk menghubungkan kode, data, failure case, dan keputusan dalam workflow AI.</p></div></div>
-            <div class="python-deep-dive-grid">${module.deepDive.map(function (section, index) {
-                return `<article><span>${String(index + 1).padStart(2, "0")}</span><h3>${escapeHtml(section[0])}</h3><p>${escapeHtml(section[1])}</p><p>${escapeHtml(section[2])}</p></article>`;
-            }).join("")}</div>
-            ${example.length ? `<section class="python-worked-example"><div><i class="fas fa-flask" aria-hidden="true"></i><span>Worked Example</span><h3>${escapeHtml(example[0])}</h3></div><ol>${example.slice(1).map(function (step) { return `<li><strong>${escapeHtml(step[0])}</strong><p>${escapeHtml(step[1])}</p></li>`; }).join("")}</ol></section>` : ""}
-            <section class="python-beginner-glossary"><div><i class="fas fa-language" aria-hidden="true"></i><span>Glossary Pemula</span><h3>Istilah yang perlu kamu kuasai</h3></div><dl>${(module.glossary || []).map(function (item) { return `<div><dt>${escapeHtml(item[0])}</dt><dd>${escapeHtml(item[1])}</dd></div>`; }).join("")}</dl></section>
-        </section>`;
+        if (!module) return "";
+        var parts = [];
+
+        if (module.deepDive && module.deepDive.length) {
+            var roadmapHtml = '<section class="ai-modern-beginner-roadmap" data-python-injected data-section="konsep">' +
+                '<div class="ai-modern-roadmap-head"><i class="fas fa-compass" aria-hidden="true"></i><div><span>Jalur Pemula</span><h3>Memahami konsep, bukan menghafal sintaks</h3><p>Gunakan penjelasan berikut untuk menghubungkan kode, data, failure case, dan keputusan dalam workflow AI.</p></div></div>' +
+                '<div class="ai-modern-roadmap-strip" aria-hidden="true">' + module.deepDive.map(function (step, index) { return '<div><span>' + (index + 1) + '</span><i class="fas fa-book-open-reader"></i><strong>' + escapeHtml(step[0]) + '</strong></div>'; }).join("") + '</div>' +
+                '<div class="ai-modern-roadmap-progress"><span data-roadmap-progress>Langkah 1 dari ' + module.deepDive.length + '</span><b><i data-roadmap-bar></i></b></div>' +
+                '<div class="ai-modern-roadmap-steps">' + module.deepDive.map(function (step, index) {
+                    return '<details data-roadmap-step="' + index + '"' + (index === 0 ? " open" : "") + '><summary><span>' + String(index + 1).padStart(2, "0") + '</span><i class="fas fa-book-open-reader" aria-hidden="true"></i><div><strong>' + escapeHtml(step[0]) + '</strong></div><i class="fas fa-chevron-down" aria-hidden="true"></i></summary><div class="ai-modern-roadmap-body"><p>' + escapeHtml(step[1]) + '</p>' + (step[2] ? '<p>' + escapeHtml(step[2]) + '</p>' : '') + '</div></details>';
+                }).join("") + '</div></section>';
+            parts.push(roadmapHtml);
+        }
+
+        if (module.workedExample && module.workedExample.length) {
+            var title = module.workedExample[0];
+            var steps = module.workedExample.slice(1);
+            var exampleHtml = '<section class="ai-modern-worked-example" data-python-injected data-section="contoh"><div class="ai-modern-worked-head"><i class="fas fa-magnifying-glass-chart" aria-hidden="true"></i><div><span>Contoh Terurai</span><h3>' + escapeHtml(title) + '</h3></div></div><div class="ai-modern-worked-steps">' + steps.map(function (step, index) { return '<article><span>' + (index + 1) + '</span><div><strong>' + escapeHtml(step[0]) + '</strong><p>' + escapeHtml(step[1]) + '</p></div></article>'; }).join("") + '</div></section>';
+            parts.push(exampleHtml);
+        }
+
+        if (module.glossary && module.glossary.length) {
+            var glossaryHtml = '<section class="ai-modern-beginner-glossary" data-python-injected data-section="ringkasan"><div class="ai-modern-glossary-head"><i class="fas fa-language" aria-hidden="true"></i><div><span>Glossary Pemula</span><h3>Istilah yang perlu kamu kuasai</h3><p>Buka setiap istilah untuk mengulang definisinya sebelum lanjut.</p></div></div><div class="ai-modern-glossary-grid">' + module.glossary.map(function (item, index) { return '<details' + (index === 0 ? " open" : "") + '><summary><span>' + String(index + 1).padStart(2, "0") + '</span><strong>' + escapeHtml(item[0]) + '</strong><i class="fas fa-chevron-down" aria-hidden="true"></i></summary><p>' + escapeHtml(item[1]) + '</p></details>'; }).join("") + '</div></section>';
+            parts.push(glossaryHtml);
+        }
+
+        return parts.join("\n");
     }
 
     function initSourceVisualLab(container, config) {
@@ -696,7 +732,30 @@ var SOURCE_VISUALS = {
     }
 
     function renderOrientationAndNav(module, chapterNum, total) {
-        return '<section class="reasoning-scaffold-module-meta reasoning-final-meta" data-python-injected data-section="orientation">\n            <div class="reasoning-scaffold-module-meta-head">\n                <i class="' + escapeHtml(module.icon) + '" aria-hidden="true"></i>\n                <div>\n                    <span>Topik ' + chapterNum + ' dari ' + total + '</span>\n                    <h2>' + escapeHtml(module.title) + '</h2>\n                    <p>' + escapeHtml(module.summary) + '</p>\n                </div>\n            </div>\n            <div class="reasoning-meta-row"><strong><i class="far fa-clock" aria-hidden="true"></i> Durasi</strong> <span>' + escapeHtml(module.duration) + '</span></div>\n            <div class="reasoning-meta-row"><strong><i class="fas fa-bullseye" aria-hidden="true"></i> Learning Objectives</strong>' + renderList(module.objectives) + '</div>\n        </section>\n\n        <nav class="reasoning-source-jumps reasoning-visual-nav" data-python-injected id="reasoning-visual-nav" aria-label="Tahapan belajar">\n            <span>Tahapan:</span>\n            <button type="button" data-jump="hook">Pembuka</button>\n            <button type="button" data-jump="konsep">Konsep</button>\n            <button type="button" data-jump="contoh">Contoh & Latihan</button>\n            <button type="button" data-jump="check">Uji Pemahaman</button>\n            <button type="button" data-jump="ringkasan">Ringkasan</button>\n        </nav>';
+        var objectivesHtml = (module.objectives || []).map(function(obj) {
+            return '<li><span class="ai-modern-objective-copy">' + escapeHtml(obj) + '</span></li>';
+        }).join("");
+        
+        var heroHtml = '<header class="ai-modern-chapter-hero" data-python-injected data-section="orientation">' +
+            '<span>Topik ' + chapterNum + ' · ' + escapeHtml(module.duration) + '</span>' +
+            '<h2>' + escapeHtml(module.title) + '</h2>' +
+            '<p>' + escapeHtml(module.summary) + '</p>' +
+            '<div class="ai-modern-objectives">' +
+                '<strong>Tujuan pembelajaran</strong>' +
+                '<ul>' + objectivesHtml + '</ul>' +
+            '</div>' +
+        '</header>';
+
+        var navHtml = '<nav class="reasoning-source-jumps reasoning-visual-nav ai-modern-learning-nav" data-python-injected id="reasoning-visual-nav" aria-label="Tahapan Topik ' + chapterNum + ' dari ' + total + '">' +
+            '<span><i class="' + escapeHtml(module.icon) + '"></i> Jelajahi:</span>' +
+            '<button type="button" data-jump="hook">Pembuka</button>' +
+            '<button type="button" data-jump="konsep">Konsep</button>' +
+            '<button type="button" data-jump="contoh">Contoh & Latihan</button>' +
+            '<button type="button" data-jump="check">Uji Pemahaman</button>' +
+            '<button type="button" data-jump="ringkasan">Ringkasan</button>' +
+        '</nav>';
+
+        return heroHtml + '\n' + navHtml;
     }
 
     function renderEndOfChapter(module, chapterNum, total, visualConfig) {
@@ -1280,6 +1339,7 @@ var SOURCE_VISUALS = {
                 setupChallengeInteraction(container);
                 setupVisualNav(container);
                 setupCopyButtons(container);
+                setupBeginnerRoadmap(container);
 
                 // 7. Phase layout — wrap source content, add fase badges
                 try {
