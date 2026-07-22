@@ -13,13 +13,55 @@
     };
 
     var MODULES = [
-        { slug: "reading-ai-evolution", title: "Membaca Evolusi AI", summary: "Membaca AI sebagai akumulasi paradigma: aturan, data, reward, generasi, dan sistem hybrid.", chapter: "chapter-1.html", duration: "30 menit" },
-        { slug: "symbolic-ai", title: "Symbolic AI dan Expert Systems", summary: "Fakta, aturan, inference engine, expert system, explanation trace, dan safety layer modern.", chapter: "chapter-2.html", duration: "35 menit" },
-        { slug: "learning-from-data", title: "Machine Learning: Belajar dari Data", summary: "Supervised, unsupervised, feature, label, loss, embedding, overfitting, dan generalization.", chapter: "chapter-3.html", duration: "40 menit" },
-        { slug: "reinforcement-learning", title: "Reinforcement Learning", summary: "Agent, environment, state, action, reward, policy, exploration, exploitation, Q-learning, dan DQN.", chapter: "chapter-4.html", duration: "35 menit" },
-        { slug: "vae-and-gan", title: "Autoencoder, VAE, dan GAN", summary: "Encoder, decoder, latent space, generator, discriminator, dan trade-off model generatif awal.", chapter: "chapter-5.html", duration: "35 menit" },
-        { slug: "diffusion-models", title: "Diffusion Models", summary: "Noise, denoising, inference steps, kualitas generasi, dan biaya compute.", chapter: "chapter-6.html", duration: "35 menit" },
-        { slug: "transformer-llm-hybrid-ai", title: "Transformer, LLM, dan Hybrid AI", summary: "Attention, LLM, RAG, tools, guardrail, dan sistem AI hybrid untuk produk nyata.", chapter: "chapter-7.html", duration: "45 menit" }
+        { slug: "reading-ai-evolution", title: "Membaca Evolusi AI", shortTitle: "Evolusi", summary: "Membaca AI sebagai akumulasi paradigma: aturan, data, reward, generasi, dan sistem hybrid.", chapter: "chapter-1.html", duration: "30 menit", icon: "fas fa-book-open-reader",
+          objectives: ["Mengidentifikasi perubahan paradigma AI dari waktu ke waktu.", "Memahami bahwa AI adalah akumulasi metode."],
+          hook: { question: "Menurutmu, apa pendorong utama revolusi AI belakangan ini?", answerA: { label: "Hardware & Data", text: "GPU kuat dan data berlimpah", icon: "fas fa-microchip" }, answerB: { label: "Algoritma Baru", text: "Ditemukannya metode baru", icon: "fas fa-brain" }, message: "Hardware dan data adalah katalis utama! Kebanyakan algoritma sudah ada sejak lama." },
+          glossary: [["Paradigma", "Cara pandang atau model penyelesaian masalah tertentu."], ["Milestone", "Pencapaian penting yang menandai era baru."]],
+          quickCheck: { question: "Paradigma AI baru biasanya langsung menghapus paradigma lama secara total. Benar atau salah?", options: ["Benar", "Salah"], answer: 1, explanationCorrect: "Benar! Paradigma lama seringkali bertahan untuk use-case spesifik.", explanationWrong: "Sebenarnya, paradigma lama sering bertahan untuk kontrol ketat." },
+          learningOutcomes: ["Mengetahui sejarah singkat perkembangan AI.", "Menyadari bahwa sistem AI modern seringkali bersifat hybrid."],
+          transition: "Setelah memahami gambaran besarnya, mari selami paradigma awal yang banyak bergantung pada logika: Symbolic AI." },
+        { slug: "symbolic-ai", title: "Symbolic AI dan Expert Systems", shortTitle: "Symbolic AI", summary: "Fakta, aturan, inference engine, expert system, explanation trace, dan safety layer modern.", chapter: "chapter-2.html", duration: "35 menit", icon: "fas fa-gavel",
+          objectives: ["Memahami konsep dasar Symbolic AI dan Expert Systems.", "Mengetahui kapan harus menggunakan aturan eksplisit."],
+          hook: { question: "Jika kamu membuat AI untuk mendiagnosis pasien berdasarkan standar rumah sakit, apa pendekatanmu?", answerA: { label: "Aturan Pasti", text: "Pohon keputusan (IF/THEN)", icon: "fas fa-code-branch" }, answerB: { label: "Tebakan AI", text: "Belajar sendiri dari data", icon: "fas fa-robot" }, message: "Untuk standar medis yang baku, pendekatan berbasis aturan (Symbolic AI) seringkali lebih aman dan dapat dijelaskan!" },
+          glossary: [["Inference Engine", "Komponen yang menerapkan aturan logika pada sekumpulan fakta."], ["Explanation Trace", "Jejak yang menunjukkan bagaimana sistem mengambil keputusan."]],
+          quickCheck: { question: "Kelemahan utama dari Expert System tradisional adalah...", options: ["Sulit dirawat ketika domain berubah (Knowledge acquisition bottleneck)", "Hanya bisa dijalankan di superkomputer"], answer: 0, explanationCorrect: "Tepat sekali! Menulis ribuan aturan secara manual sangat merepotkan.", explanationWrong: "Bukan. Expert systems justru sangat hemat komputasi." },
+          learningOutcomes: ["Mampu merancang aturan dasar IF/THEN.", "Mengerti pentingnya explanation trace untuk audit."],
+          transition: "Lalu bagaimana jika aturannya terlalu rumit untuk ditulis manual? Di sinilah kita butuh Machine Learning." },
+        { slug: "learning-from-data", title: "Machine Learning: Belajar dari Data", shortTitle: "Machine Learning", summary: "Supervised, unsupervised, feature, label, loss, embedding, overfitting, dan generalization.", chapter: "chapter-3.html", duration: "40 menit", icon: "fas fa-database",
+          objectives: ["Membedakan supervised dan unsupervised learning.", "Memahami konsep overfitting dan generalization."],
+          hook: { question: "Kamu punya ribuan foto kucing dan anjing tanpa label. Apa pendekatan awalmu?", answerA: { label: "Supervised Learning", text: "Menyiapkan label dulu", icon: "fas fa-tags" }, answerB: { label: "Unsupervised Learning", text: "Membiarkan AI mencari pola", icon: "fas fa-project-diagram" }, message: "Karena belum ada label, Unsupervised Learning (seperti clustering) adalah langkah awal yang cerdas!" },
+          glossary: [["Overfitting", "Kondisi model menghafal data training tapi gagal pada data baru."], ["Feature", "Sinyal input yang digunakan model untuk belajar."]],
+          quickCheck: { question: "Akurasi training 99%, tetapi akurasi pada data baru hanya 50%. Ini disebut...", options: ["Overfitting", "Underfitting"], answer: 0, explanationCorrect: "Benar. Modelmu 'menghafal' jawaban, bukan 'memahami' pola.", explanationWrong: "Ini disebut Overfitting." },
+          learningOutcomes: ["Dapat menentukan feature dan label.", "Memilih algoritma yang tepat berdasarkan label data."],
+          transition: "Bagaimana jika AI harus mengambil serangkaian keputusan beruntun? Jawabannya ada di Reinforcement Learning." },
+        { slug: "reinforcement-learning", title: "Reinforcement Learning", shortTitle: "RL", summary: "Agent, environment, state, action, reward, policy, exploration, exploitation, Q-learning, dan DQN.", chapter: "chapter-4.html", duration: "35 menit", icon: "fas fa-gamepad",
+          objectives: ["Memahami elemen RL: Agent, Environment, State, Action, Reward.", "Mengerti konsep exploration vs exploitation."],
+          hook: { question: "Bagaimana cara terbaik mengajari AI bermain catur?", answerA: { label: "Contoh", text: "Memberi jutaan data pertandingan", icon: "fas fa-book" }, answerB: { label: "Trial & Error", text: "Bermain sendiri dan diberi skor", icon: "fas fa-gamepad" }, message: "Pendekatan Trial & Error (RL) terbukti ampuh untuk game!" },
+          glossary: [["Reward Hacking", "AI menemukan celah untuk mendapat reward tanpa menyelesaikan tugas."], ["Policy", "Strategi agent memilih action di suatu state."]],
+          quickCheck: { question: "Jika agent RL selalu memilih aksi yang pernah memberinya reward tertinggi tanpa mau mencoba aksi lain, ia terjebak dalam...", options: ["Exploration", "Exploitation"], answer: 1, explanationCorrect: "Benar! Terlalu banyak exploitation membuat agent kurang inovatif.", explanationWrong: "Salah. Ini disebut Exploitation." },
+          learningOutcomes: ["Mampu merancang sistem reward yang aman.", "Mengetahui penyebab agent gagal belajar (seperti reward hacking)."],
+          transition: "Setelah menguasai pengenalan pola, mari kita lihat AI yang bisa menciptakan data baru (Generative Models)." },
+        { slug: "vae-and-gan", title: "Autoencoder, VAE, dan GAN", shortTitle: "Generative I", summary: "Encoder, decoder, latent space, generator, discriminator, dan trade-off model generatif awal.", chapter: "chapter-5.html", duration: "35 menit", icon: "fas fa-wand-magic-sparkles",
+          objectives: ["Memahami arsitektur Autoencoder, VAE, dan GAN.", "Mengetahui trade-off VAE dan GAN dalam kualitas generasi."],
+          hook: { question: "Saat membuat generator wajah, apa tantangan terbesarnya?", answerA: { label: "Ketajaman", text: "Membuat gambar tidak blur", icon: "fas fa-image" }, answerB: { label: "Variasi", text: "Memastikan wajah yang dihasilkan beragam", icon: "fas fa-users" }, message: "Keduanya! GAN biasanya tajam tapi variasi sedikit (mode collapse), sementara VAE beragam tapi cenderung blur." },
+          glossary: [["Latent Space", "Representasi matematis padat dari data."], ["Discriminator", "Komponen GAN pendeteksi gambar palsu."]],
+          quickCheck: { question: "Dalam GAN, apa tujuan utama dari Generator?", options: ["Mengelompokkan data", "Mengecoh Discriminator agar mengira datanya asli"], answer: 1, explanationCorrect: "Tepat! Generator dan Discriminator bermain untuk saling mengalahkan.", explanationWrong: "Itu Autoencoder. Generator menipu discriminator." },
+          learningOutcomes: ["Membandingkan cara kerja VAE dan GAN.", "Memahami mode collapse pada GAN."],
+          transition: "GAN punya masalah stabilitas. Itulah mengapa model berbasis Diffusion muncul." },
+        { slug: "diffusion-models", title: "Diffusion Models", shortTitle: "Diffusion", summary: "Noise, denoising, inference steps, kualitas generasi, dan biaya compute.", chapter: "chapter-6.html", duration: "35 menit", icon: "fas fa-cloud",
+          objectives: ["Mempelajari konsep penambahan noise (forward) dan denoising (reverse).", "Mengevaluasi trade-off antara kualitas dan inference steps."],
+          hook: { question: "Apa ide dasar dari Diffusion Models dalam membuat gambar?", answerA: { label: "Menyusun Pixel", text: "Mewarnai pixel dari nol", icon: "fas fa-paint-brush" }, answerB: { label: "Mengukir Noise", text: "Memulai dari noise dan membersihkannya bertahap", icon: "fas fa-eraser" }, message: "Diffusion bekerja bagaikan pemahat: memulai dari noise kasar lalu 'mengikisnya' (denoising)!" },
+          glossary: [["Inference Steps", "Jumlah iterasi denoising yang dilakukan untuk menghasilkan gambar."], ["Denoising", "Proses menghilangkan noise dari gambar."]],
+          quickCheck: { question: "Jika kamu mengurangi jumlah 'inference steps' drastis saat menggunakan diffusion model, apa dampaknya?", options: ["Gambar lebih cepat dibuat, tapi kualitas turun", "Gambar makin detail tapi lambat"], answer: 0, explanationCorrect: "Benar. Trade-off utamanya antara waktu komputasi (latency) dan kualitas generasi.", explanationWrong: "Kebalikannya." },
+          learningOutcomes: ["Memahami alur generasi gambar via diffusion.", "Mengambil keputusan produk terkait latency vs quality."],
+          transition: "Terakhir, mari pelajari bintang utama AI saat ini: Transformer dan LLM." },
+        { slug: "transformer-llm-hybrid-ai", title: "Transformer, LLM, dan Hybrid AI", shortTitle: "Transformer & Hybrid", summary: "Attention, LLM, RAG, tools, guardrail, dan sistem AI hybrid untuk produk nyata.", chapter: "chapter-7.html", duration: "45 menit", icon: "fas fa-robot",
+          objectives: ["Memahami arsitektur Transformer (Attention).", "Merancang sistem AI Hybrid (LLM + RAG + Rules)."],
+          hook: { question: "Jika kamu membuat chatbot dengan LLM, perlukah komponen lain?", answerA: { label: "Perlu", text: "Butuh RAG dan Guardrails", icon: "fas fa-shield-halved" }, answerB: { label: "Tidak", text: "Cukup LLM saja dengan prompt yang bagus", icon: "fas fa-robot" }, message: "Sangat Perlu! LLM murni bisa berhalusinasi. Sistem AI produksi hampir selalu berupa Hybrid AI." },
+          glossary: [["Attention", "Mekanisme model untuk fokus pada konteks teks tertentu."], ["RAG", "Teknik menyuapi LLM dengan dokumen relevan sebelum menjawab."]],
+          quickCheck: { question: "Apa solusi terbaik mengurangi risiko LLM berhalusinasi?", options: ["Memberi prompt khusus", "Menggunakan RAG"], answer: 1, explanationCorrect: "Tepat. RAG memaksa LLM mendasarkan jawaban pada dokumen sumber.", explanationWrong: "Prompt saja tidak cukup kuat mencegah halusinasi. Butuh RAG." },
+          learningOutcomes: ["Mengidentifikasi kapan harus menggunakan sistem Hybrid.", "Merancang komponen RAG dan guardrail sederhana."],
+          transition: "Selesai! Kamu sekarang memahami seluruh paradigma penting evolusi AI." }
     ];
 
     var EXERCISES = [
@@ -202,6 +244,153 @@
         return renderMaterial(module);
     }
 
+    function renderList(items) {
+        if (!items || !items.length) return "";
+        return '<ul class="reasoning-meta-list">' + items.map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("") + '</ul>';
+    }
+
+    function renderOrientationAndNav(module, chapterNum, total) {
+        var objectivesHtml = (module.objectives || []).map(function(obj) {
+            return '<li><span class="ai-modern-objective-copy">' + escapeHtml(obj) + '</span></li>';
+        }).join("");
+        
+        var heroHtml = '<header class="ai-modern-chapter-hero" data-evolution-injected data-section="orientation">' +
+            '<span>Topik ' + chapterNum + ' · ' + escapeHtml(module.duration) + '</span>' +
+            '<h2>' + escapeHtml(module.title) + '</h2>' +
+            '<p>' + escapeHtml(module.summary) + '</p>' +
+            '<div class="ai-modern-objectives">' +
+                '<strong>Tujuan pembelajaran</strong>' +
+                '<ul>' + objectivesHtml + '</ul>' +
+            '</div>' +
+        '</header>';
+
+        var navHtml = '<nav class="reasoning-source-jumps reasoning-visual-nav ai-modern-learning-nav" data-evolution-injected id="reasoning-visual-nav" aria-label="Tahapan Topik ' + chapterNum + ' dari ' + total + '">' +
+            '<span><i class="' + escapeHtml(module.icon) + '"></i> Jelajahi:</span>' +
+            '<button type="button" data-jump="hook">Pembuka</button>' +
+            '<button type="button" data-jump="konsep">Konsep</button>' +
+            '<button type="button" data-jump="check">Uji Pemahaman</button>' +
+            '<button type="button" data-jump="ringkasan">Ringkasan</button>' +
+        '</nav>';
+
+        return heroHtml + '\n' + navHtml;
+    }
+
+    function renderHookSection(hook) {
+        return '<section class="reasoning-hook-section" data-python-injected data-section="hook">\n' +
+               '    <div class="reasoning-hook-head"><i class="fas fa-hand-pointer" aria-hidden="true"></i><div><span>Pembuka</span><h3>' + escapeHtml(hook.question) + '</h3></div></div>\n' +
+               '    <div class="reasoning-hook-options">\n' +
+               '        <button type="button" class="reasoning-hook-card" data-hook-option="a">\n' +
+               '            <div class="reasoning-hook-card-icon"><i class="' + escapeHtml(hook.answerA.icon) + '" aria-hidden="true"></i></div>\n' +
+               '            <div><strong>' + escapeHtml(hook.answerA.label) + '</strong><p>' + escapeHtml(hook.answerA.text) + '</p></div>\n' +
+               '        </button>\n' +
+               '        <button type="button" class="reasoning-hook-card" data-hook-option="b">\n' +
+               '            <div class="reasoning-hook-card-icon"><i class="' + escapeHtml(hook.answerB.icon) + '" aria-hidden="true"></i></div>\n' +
+               '            <div><strong>' + escapeHtml(hook.answerB.label) + '</strong><p>' + escapeHtml(hook.answerB.text) + '</p></div>\n' +
+               '        </button>\n' +
+               '    </div>\n' +
+               '    <p class="reasoning-hook-message" hidden>' + escapeHtml(hook.message) + '</p>\n' +
+               '</section>';
+    }
+
+    function renderQuickCheckSection(qc) {
+        return '<section class="reasoning-quick-check reasoning-qc-enhanced" data-evolution-injected data-section="check" data-check-answer="' + qc.answer + '" data-check-correct="' + escapeHtml(qc.explanationCorrect || "") + '" data-check-wrong="' + escapeHtml(qc.explanationWrong || "") + '"><div class="reasoning-quick-head"><i class="fas fa-circle-question" aria-hidden="true"></i><div><span>Quick Check</span><h3>' + escapeHtml(qc.question) + '</h3></div></div><div class="reasoning-check-options">' + qc.options.map(function (option, index) { return '<button type="button" data-check-option="' + index + '"><b>' + String.fromCharCode(65 + index) + '</b><span>' + escapeHtml(option) + '</span></button>'; }).join("") + '</div><div class="reasoning-check-actions"><button type="button" class="reasoning-scaffold-check-button" data-check-submit><i class="fas fa-check"></i> Periksa Jawaban</button><button type="button" class="reasoning-scaffold-reveal-button reasoning-check-retry" data-check-retry hidden><i class="fas fa-rotate-left"></i> Coba Lagi</button></div><p class="reasoning-check-feedback" aria-live="polite" hidden></p></section>';
+    }
+
+    function renderGlossarySection(glossary) {
+        if (!glossary || glossary.length === 0) return "";
+        return '<section class="reasoning-concept-card reasoning-scaffold-callout" data-section="konsep">\n' +
+               '    <h3><i class="fas fa-book" aria-hidden="true"></i> Glosarium Cepat</h3>\n' +
+               '    <ul>' + glossary.map(function(item) {
+                    return '<li><strong>' + escapeHtml(item[0]) + ':</strong> ' + escapeHtml(item[1]) + '</li>';
+                }).join("") + '</ul>\n' +
+               '</section>';
+    }
+
+    function renderSummarySection(outcomes, transition, chapterNum, total) {
+        var transHtml = transition ? '<div class="reasoning-transition"><i class="fas fa-arrow-right" aria-hidden="true"></i><p><strong>Selanjutnya:</strong> ' + escapeHtml(transition) + '</p></div>' : '';
+        return '<section class="reasoning-summary-section" data-section="ringkasan">\n' +
+               '    <div class="reasoning-summary-head"><i class="fas fa-bookmark" aria-hidden="true"></i><div><span>Ringkasan</span><h3>Setelah chapter ini, kamu dapat:</h3></div></div>\n' +
+               '    <ul class="reasoning-outcomes-list">' + outcomes.map(function (o) { return '<li><i class="fas fa-circle-check" aria-hidden="true"></i> ' + escapeHtml(o) + '</li>'; }).join("") + '</ul>\n' +
+               '    ' + transHtml + '\n' +
+               '</section>';
+    }
+
+    function setupHookInteraction(container) {
+        container.querySelectorAll(".reasoning-hook-section").forEach(function (section) {
+            var message = section.querySelector(".reasoning-hook-message");
+            section.querySelectorAll("[data-hook-option]").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    section.querySelectorAll("[data-hook-option]").forEach(function (btn) {
+                        btn.classList.toggle("is-selected", btn === button);
+                    });
+                    if (message) message.hidden = false;
+                });
+            });
+        });
+    }
+
+    function setupQuickChecks(container) {
+        container.querySelectorAll(".reasoning-quick-check").forEach(function (card) {
+            var answer = Number(card.dataset.checkAnswer);
+            var feedback = card.querySelector(".reasoning-check-feedback");
+            var submitBtn = card.querySelector("[data-check-submit]");
+            var retryBtn = card.querySelector("[data-check-retry]");
+            var options = card.querySelectorAll("[data-check-option]");
+            var selectedIndex = -1;
+
+            options.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    selectedIndex = Number(button.dataset.checkOption);
+                    options.forEach(function (opt) {
+                        opt.classList.toggle("is-selected", Number(opt.dataset.checkOption) === selectedIndex);
+                        opt.classList.remove("is-correct", "is-wrong");
+                    });
+                    if (submitBtn) submitBtn.disabled = false;
+                });
+            });
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.addEventListener("click", function () {
+                    if (selectedIndex < 0) return;
+                    options.forEach(function (opt) {
+                        var idx = Number(opt.dataset.checkOption);
+                        opt.classList.toggle("is-correct", idx === answer);
+                        opt.classList.toggle("is-wrong", idx === selectedIndex && idx !== answer);
+                    });
+                    if (feedback) {
+                        feedback.hidden = false;
+                        feedback.textContent = selectedIndex === answer ? (card.dataset.answerCorrectText || "Benar!") : (card.dataset.answerWrongText || "Belum tepat.");
+                        feedback.dataset.tone = selectedIndex === answer ? "success" : "warning";
+                    }
+                    submitBtn.hidden = true;
+                    if (retryBtn) retryBtn.hidden = false;
+                });
+            }
+
+            if (retryBtn) {
+                retryBtn.addEventListener("click", function () {
+                    selectedIndex = -1;
+                    options.forEach(function (opt) {
+                        opt.classList.remove("is-selected", "is-correct", "is-wrong");
+                    });
+                    if (feedback) feedback.hidden = true;
+                    retryBtn.hidden = true;
+                    if (submitBtn) { submitBtn.hidden = false; submitBtn.disabled = true; }
+                });
+            }
+        });
+    }
+
+    function setupVisualNav(container) {
+        container.querySelectorAll("[data-jump]").forEach(function (button) {
+            button.addEventListener("click", function () {
+                var section = container.querySelector('[data-section="' + button.dataset.jump + '"]');
+                if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+        });
+    }
+
     function renderMaterial(module) {
         var container = document.getElementById("aiEvolutionActivity");
         if (!container) return;
@@ -212,9 +401,45 @@
                 return response.text();
             })
             .then(function (html) {
-                container.innerHTML = html + `<button type="button" class="ai-evolution-complete" data-complete-module="${escapeHtml(module.slug)}"><i class="fas fa-circle-check"></i> Tandai materi selesai</button>`;
+                var chapterNum = moduleNumber(module);
+                var total = MODULES.length;
+                
+                var wrapper = document.createElement("div");
+                wrapper.innerHTML = html;
+                
+                wrapper.querySelectorAll("table").forEach(function (t) {
+                    if (!t.parentElement.classList.contains("reasoning-scaffold-table-wrap")) {
+                        var w = document.createElement("div");
+                        w.className = "reasoning-scaffold-table-wrap";
+                        t.parentNode.insertBefore(w, t);
+                        w.appendChild(t);
+                    }
+                });
+                wrapper.querySelectorAll("blockquote").forEach(function (bq) {
+                    bq.classList.add("reasoning-scaffold-callout");
+                });
+                
+                var processedHtml = wrapper.innerHTML;
+                
+                if (module.hook) {
+                    var hookHtml = renderHookSection(module.hook);
+                    processedHtml = processedHtml.replace(/<\/header>/i, "</header>\\n" + hookHtml);
+                }
+                
+                var finalHtml = renderOrientationAndNav(module, chapterNum, total) + 
+                                processedHtml + 
+                                (module.quickCheck ? renderQuickCheckSection(module.quickCheck) : "") +
+                                (module.glossary ? renderGlossarySection(module.glossary) : "") +
+                                (module.learningOutcomes ? renderSummarySection(module.learningOutcomes, module.transition, chapterNum, total) : "") +
+                                `<button type="button" class="ai-evolution-complete" data-complete-module="${escapeHtml(module.slug)}"><i class="fas fa-circle-check"></i> Tandai materi selesai</button>`;
+                
+                container.innerHTML = finalHtml;
                 var button = container.querySelector("[data-complete-module]");
                 if (button) button.addEventListener("click", function () { markComplete(module.slug); });
+                
+                setupHookInteraction(container);
+                setupQuickChecks(container);
+                setupVisualNav(container);
             })
             .catch(function () {
                 container.innerHTML = '<div class="ai-evolution-error"><i class="fas fa-triangle-exclamation"></i><p>Materi gagal dimuat. Coba refresh halaman.</p></div>';

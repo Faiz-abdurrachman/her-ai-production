@@ -13,12 +13,84 @@
     };
 
     var MODULES = [
-        { slug: "why-evaluate-ai", title: "Mengapa AI Perlu Dievaluasi?", summary: "Hubungan tujuan, pengguna, risiko, metrik, release decision, dan monitoring.", chapter: "chapter-1.html", duration: "25 menit" },
-        { slug: "output-evaluation", title: "Mengevaluasi Output AI", summary: "Rubric output, human evaluation, metrik otomatis, LLM-as-a-judge, dan RAG evaluation.", chapter: "chapter-2.html", duration: "35 menit" },
-        { slug: "benchmark-and-dataset", title: "Benchmark dan Dataset Evaluasi", summary: "Benchmark, test set, leaderboard, contamination, dan konteks Indonesia.", chapter: "chapter-3.html", duration: "30 menit" },
-        { slug: "reliability-and-robustness", title: "Reliability dan Robustness", summary: "Consistency, robustness, calibration, hallucination, stress test, dan monitoring.", chapter: "chapter-4.html", duration: "35 menit" },
-        { slug: "bias-and-fairness", title: "Bias dan Fairness", summary: "Bias statistik, sosial, harmful bias, fairness metric, dan audit konteks Indonesia.", chapter: "chapter-5.html", duration: "35 menit" },
-        { slug: "system-quality-evaluation-plan", title: "Kualitas Sistem AI dan Evaluation Plan", summary: "System quality, lifecycle, release criteria, monitoring, incident response, dan evaluation plan.", chapter: "chapter-6.html", duration: "40 menit" }
+        { 
+            slug: "why-evaluate-ai", title: "Mengapa AI Perlu Dievaluasi?", shortTitle: "Mengapa Evaluasi", summary: "Hubungan tujuan, pengguna, risiko, metrik, release decision, dan monitoring.", chapter: "chapter-1.html", duration: "25 menit",
+            icon: "fas fa-shield-halved",
+            objectives: [
+                "Menyadari pentingnya evaluasi melampaui metrik populer",
+                "Mendefinisikan tujuan dan pengguna sistem",
+                "Mengetahui perlunya monitoring dan release decision"
+            ],
+            hook: { question: "Mengapa AI tidak cukup diuji seperti fitur software biasa?", answerA: { label: "Lebih mudah", text: "AI hampir selalu benar.", icon: "fas fa-check" }, answerB: { label: "Lebih kompleks", text: "AI probabilistik dan berdampak nyata.", icon: "fas fa-code-branch" }, message: "Evaluasi AI harus diselaraskan dengan tujuan produk, risiko, dan dampak pada pengguna." },
+            glossary: [["Release decision", "Keputusan kapan AI siap digunakan."], ["Monitoring", "Pengawasan terus-menerus pascadeploy."]],
+            quickCheck: { question: "Apa langkah awal dalam mengevaluasi AI?", options: ["Langsung menggunakan benchmark", "Mendefinisikan tujuan dan pengguna", "Memilih model paling besar"], answer: 1, explanationCorrect: "Tepat. Evaluasi harus berasal dari konteks keputusan pengguna.", explanationWrong: "Benchmark populer seringkali tidak mewakili pengguna sebenarnya." },
+            learningOutcomes: ["Menentukan tujuan evaluasi berdasar risiko", "Menyusun peta pengguna dan keputusan yang didukung AI"], transition: "Mari lanjut mengevaluasi output yang dihasilkan AI."
+        },
+        { 
+            slug: "output-evaluation", title: "Mengevaluasi Output AI", shortTitle: "Evaluasi Output", summary: "Rubric output, human evaluation, metrik otomatis, LLM-as-a-judge, dan RAG evaluation.", chapter: "chapter-2.html", duration: "35 menit",
+            icon: "fas fa-clipboard-check",
+            objectives: [
+                "Menggunakan rubrik dan human evaluation",
+                "Memilih metrik otomatis yang tepat",
+                "Menerapkan LLM-as-a-judge"
+            ],
+            hook: { question: "Apakah LLM bisa mengevaluasi LLM lain (LLM-as-a-judge)?", answerA: { label: "Bisa", text: "Dengan instruksi rubrik dan kalibrasi yang baik.", icon: "fas fa-scale-balanced" }, answerB: { label: "Tidak bisa", text: "AI tidak bisa menilai AI.", icon: "fas fa-ban" }, message: "LLM-as-a-judge memungkinkan evaluasi yang lebih skalabel asalkan dikalibrasi dengan penilaian manusia." },
+            glossary: [["LLM-as-a-judge", "Penggunaan LLM untuk mengevaluasi output model lain berdasarkan rubrik."], ["Faithfulness", "Kesesuaian jawaban dengan konteks sumber (pada RAG)."]],
+            quickCheck: { question: "Apa metrik evaluasi yang tepat untuk sistem RAG?", options: ["Hanya BLEU score", "Faithfulness dan Answer Relevance", "Kecepatan merespon"], answer: 1, explanationCorrect: "Benar. RAG harus setia pada sumber dokumen.", explanationWrong: "Metrik teks klasik seperti BLEU kurang efektif untuk penalaran kontekstual." },
+            learningOutcomes: ["Membuat rubrik evaluasi output", "Menerapkan LLM judge yang dikalibrasi"], transition: "Selanjutnya kita lihat kumpulan dataset untuk benchmark."
+        },
+        { 
+            slug: "benchmark-and-dataset", title: "Benchmark dan Dataset Evaluasi", shortTitle: "Benchmark & Dataset", summary: "Benchmark, test set, leaderboard, contamination, dan konteks Indonesia.", chapter: "chapter-3.html", duration: "30 menit",
+            icon: "fas fa-chart-bar",
+            objectives: [
+                "Memahami fungsi test set dan benchmark",
+                "Mengenali risiko data contamination",
+                "Menyadari pentingnya benchmark lokal/Indonesia"
+            ],
+            hook: { question: "Skor tinggi di leaderboard berarti model siap dideploy?", answerA: { label: "Ya", text: "Leaderboard adalah bukti terbaik.", icon: "fas fa-trophy" }, answerB: { label: "Belum tentu", text: "Benchmark belum tentu merepresentasikan pengguna.", icon: "fas fa-users" }, message: "Leaderboard hanya sinyal awal. Pengujian dengan test set internal yang mencerminkan pengguna nyata wajib dilakukan." },
+            glossary: [["Data contamination", "Model telah melihat test set selama fase training, membuat evaluasinya tidak valid."], ["Leaderboard", "Papan peringkat skor benchmark publik."]],
+            quickCheck: { question: "Mengapa benchmark global tidak cukup untuk konteks Indonesia?", options: ["Benchmark global terlalu susah", "Adanya mismatch bahasa, domain, dan budaya", "Biaya evaluasinya mahal"], answer: 1, explanationCorrect: "Tepat. Perbedaan konteks lokal bisa membuat model gagal di lapangan.", explanationWrong: "Pertimbangkan kerelevanan budaya dan bahasa penggunanya." },
+            learningOutcomes: ["Menilai kesesuaian benchmark eksternal", "Menghindari jebakan data contamination"], transition: "Selain skor yang tinggi, sistem harus reliabel."
+        },
+        { 
+            slug: "reliability-and-robustness", title: "Reliability dan Robustness", shortTitle: "Reliability", summary: "Consistency, robustness, calibration, hallucination, stress test, dan monitoring.", chapter: "chapter-4.html", duration: "35 menit",
+            icon: "fas fa-gears",
+            objectives: [
+                "Menganalisis robustness terhadap input tidak terduga",
+                "Mendeteksi dan mitigasi hallucination",
+                "Melakukan stress test"
+            ],
+            hook: { question: "Bila AI tidak tahu jawabannya, apa yang sebaiknya ia lakukan?", answerA: { label: "Mencoba menjawab", text: "Terlihat pintar lebih baik.", icon: "fas fa-comment-dots" }, answerB: { label: "Mengakui tidak tahu", text: "Menolak halus atau eskalasi.", icon: "fas fa-shield-halved" }, message: "Sistem yang reliabel memiliki failure mode yang aman, seperti menolak menjawab dibanding berhalusinasi." },
+            glossary: [["Hallucination", "AI menghasilkan fakta fiktif yang terdengar meyakinkan."], ["Stress test", "Menguji model dengan input ekstrem atau adversarial."]],
+            quickCheck: { question: "Apa salah satu cara mendeteksi hallucination secara otomatis?", options: ["SelfCheckGPT (konsistensi antarsampel)", "Menghitung jumlah kata", "Mengecek grammar"], answer: 0, explanationCorrect: "Tepat. Jika AI diminta beberapa kali dan jawabannya berbeda-beda untuk fakta yang sama, kemungkinan ia berhalusinasi.", explanationWrong: "Coba pikirkan bagaimana konsistensi jawaban bisa menjadi sinyal." },
+            learningOutcomes: ["Membuat stress test untuk edge cases", "Mengevaluasi tingkat confidence dan kalibrasi"], transition: "Bahkan jika reliabel, apakah sistem itu adil?"
+        },
+        { 
+            slug: "bias-and-fairness", title: "Bias dan Fairness", shortTitle: "Bias & Fairness", summary: "Bias statistik, sosial, harmful bias, fairness metric, dan audit konteks Indonesia.", chapter: "chapter-5.html", duration: "35 menit",
+            icon: "fas fa-scale-balanced",
+            objectives: [
+                "Mengidentifikasi bias sosial dan historis",
+                "Menerapkan metrik fairness",
+                "Mengaudit bias konteks lokal"
+            ],
+            hook: { question: "Menghapus variabel 'gender' akan menghilangkan bias gender pada AI?", answerA: { label: "Ya", text: "AI tidak bisa melihat gender lagi.", icon: "fas fa-eraser" }, answerB: { label: "Tidak", text: "Ada fitur proksi seperti sekolah atau hobi.", icon: "fas fa-magnifying-glass" }, message: "Fitur proksi sering kali membawa informasi sensitif kembali ke dalam model. Evaluasi dampak (bukan hanya input) lebih kritikal." },
+            glossary: [["Fairness metric", "Ukuran kesetaraan performa atau dampak pada kelompok berbeda."], ["Proxy feature", "Variabel yang berkorelasi kuat dengan atribut sensitif (misal: kode pos untuk ras/kelas sosial)."]],
+            quickCheck: { question: "Apa itu Equalized Odds dalam konteks fairness?", options: ["Setiap orang mendapat skor yang sama", "Kesetaraan tingkat error antar kelompok", "Model selalu memprediksi positif"], answer: 1, explanationCorrect: "Tepat. Memastikan tingkat false positive dan false negative merata.", explanationWrong: "Fokus pada keseimbangan peluang salah antar grup." },
+            learningOutcomes: ["Mendeteksi sumber bias dari data", "Memilih fairness metric sesuai konteks sistem"], transition: "Terakhir, mari kita gabungkan semuanya dalam satu rencana evaluasi."
+        },
+        { 
+            slug: "system-quality-evaluation-plan", title: "Kualitas Sistem AI dan Evaluation Plan", shortTitle: "Evaluation Plan", summary: "System quality, lifecycle, release criteria, monitoring, incident response, dan evaluation plan.", chapter: "chapter-6.html", duration: "40 menit",
+            icon: "fas fa-list-check",
+            objectives: [
+                "Menetapkan release criteria",
+                "Menyusun monitoring plan pascadeploy",
+                "Membuat komprehensif AI Evaluation Plan"
+            ],
+            hook: { question: "Evaluasi AI selesai ketika model sudah di-deploy ke pengguna?", answerA: { label: "Ya", text: "Proses development selesai.", icon: "fas fa-flag-checkered" }, answerB: { label: "Tidak", text: "Perilaku pengguna berubah-ubah.", icon: "fas fa-arrows-rotate" }, message: "Monitoring pascadeploy adalah jantung evaluasi sistem AI nyata karena input terus bergeser." },
+            glossary: [["Release criteria", "Syarat kualitas minimum sistem sebelum dapat dideploy."], ["Incident response", "Prosedur penanganan saat sistem AI gagal beroperasi dengan aman."]],
+            quickCheck: { question: "AI Evaluation Plan terbaik seharusnya memuat...", options: ["Hanya skor benchmark terbaik", "Risiko, metrik, release criteria, dan monitoring", "Daftar dataset saja"], answer: 1, explanationCorrect: "Benar. Evaluasi teknis harus diiringi governance.", explanationWrong: "Sebuah plan harus end-to-end hingga operasional." },
+            learningOutcomes: ["Merancang AI Evaluation Plan yang operasional", "Merespons kegagalan AI di ranah produksi"], transition: "Selesai! Kamu sekarang memiliki kerangka evaluasi komprehensif."
+        }
     ];
 
     var EXERCISES = [
@@ -201,6 +273,153 @@
         return renderMaterial(module);
     }
 
+    function renderList(items) {
+        if (!items || !items.length) return "";
+        return '<ul class="reasoning-meta-list">' + items.map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join("") + '</ul>';
+    }
+
+    function renderOrientationAndNav(module, chapterNum, total) {
+        var objectivesHtml = (module.objectives || []).map(function(obj) {
+            return '<li><span class="ai-modern-objective-copy">' + escapeHtml(obj) + '</span></li>';
+        }).join("");
+        
+        var heroHtml = '<header class="ai-modern-chapter-hero" data-evaluation-injected data-section="orientation">' +
+            '<span>Topik ' + chapterNum + ' · ' + escapeHtml(module.duration) + '</span>' +
+            '<h2>' + escapeHtml(module.title) + '</h2>' +
+            '<p>' + escapeHtml(module.summary) + '</p>' +
+            '<div class="ai-modern-objectives">' +
+                '<strong>Tujuan pembelajaran</strong>' +
+                '<ul>' + objectivesHtml + '</ul>' +
+            '</div>' +
+        '</header>';
+
+        var navHtml = '<nav class="reasoning-source-jumps reasoning-visual-nav ai-modern-learning-nav" data-evaluation-injected id="reasoning-visual-nav" aria-label="Tahapan Topik ' + chapterNum + ' dari ' + total + '">' +
+            '<span><i class="' + escapeHtml(module.icon) + '"></i> Jelajahi:</span>' +
+            '<button type="button" data-jump="hook">Pembuka</button>' +
+            '<button type="button" data-jump="konsep">Konsep</button>' +
+            '<button type="button" data-jump="check">Uji Pemahaman</button>' +
+            '<button type="button" data-jump="ringkasan">Ringkasan</button>' +
+        '</nav>';
+
+        return heroHtml + '\n' + navHtml;
+    }
+
+    function renderHookSection(hook) {
+        return '<section class="reasoning-hook-section" data-python-injected data-section="hook">\n' +
+               '    <div class="reasoning-hook-head"><i class="fas fa-hand-pointer" aria-hidden="true"></i><div><span>Pembuka</span><h3>' + escapeHtml(hook.question) + '</h3></div></div>\n' +
+               '    <div class="reasoning-hook-options">\n' +
+               '        <button type="button" class="reasoning-hook-card" data-hook-option="a">\n' +
+               '            <div class="reasoning-hook-card-icon"><i class="' + escapeHtml(hook.answerA.icon) + '" aria-hidden="true"></i></div>\n' +
+               '            <div><strong>' + escapeHtml(hook.answerA.label) + '</strong><p>' + escapeHtml(hook.answerA.text) + '</p></div>\n' +
+               '        </button>\n' +
+               '        <button type="button" class="reasoning-hook-card" data-hook-option="b">\n' +
+               '            <div class="reasoning-hook-card-icon"><i class="' + escapeHtml(hook.answerB.icon) + '" aria-hidden="true"></i></div>\n' +
+               '            <div><strong>' + escapeHtml(hook.answerB.label) + '</strong><p>' + escapeHtml(hook.answerB.text) + '</p></div>\n' +
+               '        </button>\n' +
+               '    </div>\n' +
+               '    <p class="reasoning-hook-message" hidden>' + escapeHtml(hook.message) + '</p>\n' +
+               '</section>';
+    }
+
+    function renderQuickCheckSection(qc) {
+        return '<section class="reasoning-quick-check reasoning-qc-enhanced" data-evaluation-injected data-section="check" data-check-answer="' + qc.answer + '" data-check-correct="' + escapeHtml(qc.explanationCorrect || "") + '" data-check-wrong="' + escapeHtml(qc.explanationWrong || "") + '"><div class="reasoning-quick-head"><i class="fas fa-circle-question" aria-hidden="true"></i><div><span>Quick Check</span><h3>' + escapeHtml(qc.question) + '</h3></div></div><div class="reasoning-check-options">' + qc.options.map(function (option, index) { return '<button type="button" data-check-option="' + index + '"><b>' + String.fromCharCode(65 + index) + '</b><span>' + escapeHtml(option) + '</span></button>'; }).join("") + '</div><div class="reasoning-check-actions"><button type="button" class="reasoning-scaffold-check-button" data-check-submit><i class="fas fa-check"></i> Periksa Jawaban</button><button type="button" class="reasoning-scaffold-reveal-button reasoning-check-retry" data-check-retry hidden><i class="fas fa-rotate-left"></i> Coba Lagi</button></div><p class="reasoning-check-feedback" aria-live="polite" hidden></p></section>';
+    }
+
+    function renderGlossarySection(glossary) {
+        if (!glossary || glossary.length === 0) return "";
+        return '<section class="reasoning-concept-card reasoning-scaffold-callout" data-section="konsep">\n' +
+               '    <h3><i class="fas fa-book" aria-hidden="true"></i> Glosarium Cepat</h3>\n' +
+               '    <ul>' + glossary.map(function(item) {
+                    return '<li><strong>' + escapeHtml(item[0]) + ':</strong> ' + escapeHtml(item[1]) + '</li>';
+                }).join("") + '</ul>\n' +
+               '</section>';
+    }
+
+    function renderSummarySection(outcomes, transition, chapterNum, total) {
+        var transHtml = transition ? '<div class="reasoning-transition"><i class="fas fa-arrow-right" aria-hidden="true"></i><p><strong>Selanjutnya:</strong> ' + escapeHtml(transition) + '</p></div>' : '';
+        return '<section class="reasoning-summary-section" data-section="ringkasan">\n' +
+               '    <div class="reasoning-summary-head"><i class="fas fa-bookmark" aria-hidden="true"></i><div><span>Ringkasan</span><h3>Setelah chapter ini, kamu dapat:</h3></div></div>\n' +
+               '    <ul class="reasoning-outcomes-list">' + outcomes.map(function (o) { return '<li><i class="fas fa-circle-check" aria-hidden="true"></i> ' + escapeHtml(o) + '</li>'; }).join("") + '</ul>\n' +
+               '    ' + transHtml + '\n' +
+               '</section>';
+    }
+
+    function setupHookInteraction(container) {
+        container.querySelectorAll(".reasoning-hook-section").forEach(function (section) {
+            var message = section.querySelector(".reasoning-hook-message");
+            section.querySelectorAll("[data-hook-option]").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    section.querySelectorAll("[data-hook-option]").forEach(function (btn) {
+                        btn.classList.toggle("is-selected", btn === button);
+                    });
+                    if (message) message.hidden = false;
+                });
+            });
+        });
+    }
+
+    function setupQuickChecks(container) {
+        container.querySelectorAll(".reasoning-quick-check").forEach(function (card) {
+            var answer = Number(card.dataset.checkAnswer);
+            var feedback = card.querySelector(".reasoning-check-feedback");
+            var submitBtn = card.querySelector("[data-check-submit]");
+            var retryBtn = card.querySelector("[data-check-retry]");
+            var options = card.querySelectorAll("[data-check-option]");
+            var selectedIndex = -1;
+
+            options.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    selectedIndex = Number(button.dataset.checkOption);
+                    options.forEach(function (opt) {
+                        opt.classList.toggle("is-selected", Number(opt.dataset.checkOption) === selectedIndex);
+                        opt.classList.remove("is-correct", "is-wrong");
+                    });
+                    if (submitBtn) submitBtn.disabled = false;
+                });
+            });
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.addEventListener("click", function () {
+                    if (selectedIndex < 0) return;
+                    options.forEach(function (opt) {
+                        var idx = Number(opt.dataset.checkOption);
+                        opt.classList.toggle("is-correct", idx === answer);
+                        opt.classList.toggle("is-wrong", idx === selectedIndex && idx !== answer);
+                    });
+                    if (feedback) {
+                        feedback.hidden = false;
+                        feedback.textContent = selectedIndex === answer ? (card.dataset.answerCorrectText || "Benar!") : (card.dataset.answerWrongText || "Belum tepat.");
+                        feedback.dataset.tone = selectedIndex === answer ? "success" : "warning";
+                    }
+                    submitBtn.hidden = true;
+                    if (retryBtn) retryBtn.hidden = false;
+                });
+            }
+
+            if (retryBtn) {
+                retryBtn.addEventListener("click", function () {
+                    selectedIndex = -1;
+                    options.forEach(function (opt) {
+                        opt.classList.remove("is-selected", "is-correct", "is-wrong");
+                    });
+                    if (feedback) feedback.hidden = true;
+                    retryBtn.hidden = true;
+                    if (submitBtn) { submitBtn.hidden = false; submitBtn.disabled = true; }
+                });
+            }
+        });
+    }
+
+    function setupVisualNav(container) {
+        container.querySelectorAll("[data-jump]").forEach(function (button) {
+            button.addEventListener("click", function () {
+                var section = container.querySelector('[data-section="' + button.dataset.jump + '"]');
+                if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+        });
+    }
+
     function renderMaterial(module) {
         var container = document.getElementById("aiEvaluationActivity");
         if (!container) return;
@@ -211,9 +430,45 @@
                 return response.text();
             })
             .then(function (html) {
-                container.innerHTML = html + `<button type="button" class="ai-evaluation-complete" data-complete-module="${escapeHtml(module.slug)}"><i class="fas fa-circle-check"></i> Tandai materi selesai</button>`;
+                var chapterNum = moduleNumber(module);
+                var total = MODULES.length;
+
+                var wrapper = document.createElement("div");
+                wrapper.innerHTML = html;
+
+                wrapper.querySelectorAll("table").forEach(function (t) {
+                    if (!t.parentElement.classList.contains("reasoning-scaffold-table-wrap")) {
+                        var w = document.createElement("div");
+                        w.className = "reasoning-scaffold-table-wrap";
+                        t.parentNode.insertBefore(w, t);
+                        w.appendChild(t);
+                    }
+                });
+                wrapper.querySelectorAll("blockquote").forEach(function (bq) {
+                    bq.classList.add("reasoning-scaffold-callout");
+                });
+
+                var processedHtml = wrapper.innerHTML;
+
+                if (module.hook) {
+                    var hookHtml = renderHookSection(module.hook);
+                    processedHtml = processedHtml.replace(/<\/header>/i, "</header>\n" + hookHtml);
+                }
+
+                var finalHtml = renderOrientationAndNav(module, chapterNum, total) +
+                                processedHtml +
+                                (module.quickCheck ? renderQuickCheckSection(module.quickCheck) : "") +
+                                (module.glossary ? renderGlossarySection(module.glossary) : "") +
+                                (module.learningOutcomes ? renderSummarySection(module.learningOutcomes, module.transition, chapterNum, total) : "") +
+                                `<button type="button" class="ai-evaluation-complete" data-complete-module="${escapeHtml(module.slug)}"><i class="fas fa-circle-check"></i> Tandai materi selesai</button>`;
+
+                container.innerHTML = finalHtml;
                 var button = container.querySelector("[data-complete-module]");
                 if (button) button.addEventListener("click", function () { markComplete(module.slug); });
+
+                setupHookInteraction(container);
+                setupQuickChecks(container);
+                setupVisualNav(container);
             })
             .catch(function () {
                 container.innerHTML = '<div class="ai-evaluation-error"><i class="fas fa-triangle-exclamation"></i><p>Materi gagal dimuat. Coba refresh halaman.</p></div>';
