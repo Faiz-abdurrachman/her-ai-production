@@ -1,6 +1,6 @@
 # AI Handoff — Current Checkpoint HerAI Fellowship SuperApp
 
-**Checkpoint:** 19 Juli 2026, Asia/Jakarta  
+**Checkpoint:** 25 Juli 2026, Asia/Jakarta  
 **Workspace:** `/home/faiz/her6/Her-AI`  
 **Branch:** `main`  
 **Tujuan:** Sumber kebenaran utama untuk AI/developer berikutnya.
@@ -28,6 +28,15 @@ Sesudah pekerjaan login, dilakukan audit materi/fitur dan dokumentasi:
 - Versi ringkas `.md` dan `.txt` untuk WhatsApp sudah dibuat.
 - Status Pengaturan peserta dan ganti password sudah diaudit.
 - Folder handover sudah disinkronkan dengan checkpoint ini.
+
+**Pembaruan Tambahan 24/25 Juli 2026:**
+- **Router & Navigasi**: Memperbaiki 404 pada modul *Evaluation AI* dan *Evolution of AI*. Menambahkan _subroutes_ `-practice`, `-quiz`, `-discussion` ke `router.js` beserta inisiasi layout *dashboard*. Memperbaiki *cache-busting* di `index.html`.
+- **Konten Materi**: Menghapus jargon internal ("Artifact bab" menjadi "Tugas Praktik") di `05-evaluation-ai.md` agar lebih profesional.
+- **Sistem Latihan Terpisah (Separation of Concerns)**: Memperbarui compiler `build_module.js` sehingga bagian `## Latihan` tidak lagi muncul di tab Materi, melainkan diekstrak eksklusif untuk tab Latihan.
+- **Kunci Jawaban/Pembahasan Interaktif**: Menulis **Pembahasan** lengkap untuk semua latihan di modul 05 dan 06. *Compiler* sekarang mendeteksi tag `**Pembahasan:**` dan menyuntikkannya ke UI interaktif "Lihat pembahasan".
+- **Bug Fix Compiler Modul**: Memperbaiki `build_module.js` karena elemen interaktif Python (Glossary, Deep Dive, Quiz, dll) menyebar/bocor ke seluruh 19 modul lain saat proses cloning. Perbaikan dilakukan dengan menyuntikkan kode JS pembersih di ujung file hasil kompilasi.
+- **Batch Rebuild**: Telah menjalankan `rebuild_all_modules.sh` untuk 19 modul lanjutan agar materi kembali bersih dari anomali data Python.
+- **Root Server**: Mengembalikan `server.js` dari `scripts/module-tools/` ke folder *root* agar *development server* dapat dijalankan normal dengan `node server.js`.
 
 ## 2. Identitas sistem canonical
 
