@@ -4297,10 +4297,6 @@
         padding: 5px 10px;
     }
 }
-    color: #ffffff;
-}
-    color: #c21868;
-}
 
 .reasoning-task-navigator button.is-complete:not(.is-active) {
     background: #fff7fb;
@@ -11261,6 +11257,7 @@
 .ai-python-practice-page .python-practice-form,
 .ai-python-quiz-page #aiPythonQuizForm ,
 .ai-python-quiz-page #aiDeepLearningQuizForm ,
+.ai-python-quiz-page #aiReinforcementLearningQuizForm ,
 .ai-python-quiz-page #aiReinforcementLearningQuizForm {
     border-top: 0;
     display: grid;
@@ -11376,8 +11373,10 @@
 .ai-python-practice-page #aiPythonPracticeList,
 .ai-python-practice-page #aiDeepLearningPracticeList,
 .ai-python-practice-page #aiReinforcementLearningPracticeList,
+.ai-python-practice-page #aiReinforcementLearningPracticeList,
 .ai-python-quiz-page #aiPythonQuizList ,
 .ai-python-quiz-page #aiDeepLearningQuizList ,
+.ai-python-quiz-page #aiReinforcementLearningQuizList ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList {
     min-width: 0;
 }
@@ -11385,6 +11384,7 @@
 .ai-python-practice-page .reasoning-practice-card,
 .ai-python-quiz-page #aiPythonQuizList > article ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article ,
+.ai-python-quiz-page #aiReinforcementLearningQuizList > article ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article {
     background: #ffffff;
     border: 1px solid var(--python-line);
@@ -11398,6 +11398,7 @@
 .ai-python-practice-page .reasoning-practice-card[hidden],
 .ai-python-quiz-page #aiPythonQuizList > article[hidden] ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article[hidden] ,
+.ai-python-quiz-page #aiReinforcementLearningQuizList > article[hidden] ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article[hidden] {
     display: none !important;
 }
@@ -11640,6 +11641,7 @@
 
 .ai-python-quiz-page #aiPythonQuizNavigator ,
 .ai-python-quiz-page #aiDeepLearningQuizNavigator ,
+.ai-python-quiz-page #aiReinforcementLearningQuizNavigator ,
 .ai-python-quiz-page #aiReinforcementLearningQuizNavigator {
     display: flex;
     flex-wrap: wrap;
@@ -11647,6 +11649,7 @@
 
 .ai-python-quiz-page #aiPythonQuizList > article > span ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article > span ,
+.ai-python-quiz-page #aiReinforcementLearningQuizList > article > span ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article > span {
     background: var(--python-pink);
     border: 0;
@@ -11658,6 +11661,7 @@
 
 .ai-python-quiz-page #aiPythonQuizList > article > small ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article > small ,
+.ai-python-quiz-page #aiReinforcementLearningQuizList > article > small ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article > small {
     color: var(--python-pink-deep);
     font-size: .75rem;
@@ -11668,6 +11672,7 @@
 
 .ai-python-quiz-page #aiPythonQuizList > article > h3 ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article > h3 ,
+.ai-python-quiz-page #aiReinforcementLearningQuizList > article > h3 ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article > h3 {
     color: var(--python-ink);
     line-height: 1.48;
@@ -11900,6 +11905,7 @@
 
 .ai-python-quiz-page #aiPythonQuizForm.is-locked .reasoning-scaffold-options label ,
 .ai-python-quiz-page #aiDeepLearningQuizForm.is-locked .reasoning-scaffold-options label ,
+.ai-python-quiz-page #aiReinforcementLearningQuizForm.is-locked .reasoning-scaffold-options label ,
 .ai-python-quiz-page #aiReinforcementLearningQuizForm.is-locked .reasoning-scaffold-options label {
     cursor: not-allowed;
 }
@@ -12513,6 +12519,8 @@
     border-radius: 14px;
 }
 
+}
+
 @media (max-width: 920px) {
     .ai-python-page .python-deep-dive-grid {
         grid-template-columns: minmax(0, 1fr);
@@ -12561,6 +12569,7 @@
     .ai-python-practice-page .reasoning-practice-card,
     .ai-python-quiz-page #aiPythonQuizList > article ,
     .ai-python-quiz-page #aiDeepLearningQuizList > article ,
+    .ai-python-quiz-page #aiReinforcementLearningQuizList > article ,
     .ai-python-quiz-page #aiReinforcementLearningQuizList > article {
         padding: 15px;
     }
@@ -12685,7 +12694,7 @@
     .ai-evaluation-page .ai-evaluation-detail-head,
     .ai-evolution-page .ai-evolution-detail-head {
         margin: -18px -18px 18px;
-}
+    }
 
     .ai-python-practice-page .python-save-panel > div {
         display: grid;
@@ -12752,6 +12761,7 @@
 
 /* FORCING QUIZ NAVIGATOR FIX FOR DEEP LEARNING */
 .ai-python-quiz-page #aiDeepLearningQuizNavigator ,
+.ai-python-quiz-page #aiReinforcementLearningQuizNavigator ,
 .ai-python-quiz-page #aiReinforcementLearningQuizNavigator {
     display: flex !important;
     flex-wrap: wrap !important;
@@ -12759,6 +12769,7 @@
     justify-content: flex-start !important;
 }
 .ai-python-quiz-page #aiDeepLearningQuizNavigator button ,
+.ai-python-quiz-page #aiReinforcementLearningQuizNavigator button ,
 .ai-python-quiz-page #aiReinforcementLearningQuizNavigator button {
     flex: 0 0 44px !important;
     height: 44px !important;
