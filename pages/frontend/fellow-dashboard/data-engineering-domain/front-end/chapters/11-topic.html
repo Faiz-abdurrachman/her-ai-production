@@ -1,0 +1,98 @@
+<h1>Mini Project: Dashboard Evaluasi Diri Berbasis Umpan Balik</h1>
+<h2>Tujuan Proyek</h2>
+<p>Membangun antarmuka formulir dan dashboard yang mengumpulkan penilaian orang lain, menampilkan pola umpan balik, serta menjaga anonimitas dan aksesibilitas.</p>
+<p>Proyek harus cukup kecil untuk selesai, tetapi cukup lengkap untuk memperlihatkan alur berpikir. Nilai utama bukan pada tampilan atau kompleksitas, melainkan kejelasan tujuan, kualitas keputusan, pengujian, dan dokumentasi.</p>
+<h2>Deliverable</h2>
+<ul>
+<li>problem statement dan intended use;</li>
+<li>diagram arsitektur atau alur kerja;</li>
+<li>data dictionary atau inventaris sumber;</li>
+<li>baseline yang dapat dijalankan;</li>
+<li>hasil pengujian normal, error, dan kasus batas;</li>
+<li>daftar risiko serta kontrol;</li>
+<li>ringkasan hasil untuk audiens nonteknis;</li>
+<li>README dan rencana pengembangan.</li>
+</ul>
+<h2>Tahapan Pengerjaan</h2>
+<ol>
+<li>Tulis masalah, pengguna, keputusan, dan batas penggunaan.</li>
+<li>Buat inventaris data, sumber daya, pemilik, izin, serta risiko.</li>
+<li>Rancang arsitektur atau alur kerja versi minimum.</li>
+<li>Bangun baseline yang dapat dijalankan ulang.</li>
+<li>Tambahkan validasi, logging, dan penanganan error.</li>
+<li>Susun golden set atau skenario uji, termasuk kasus batas.</li>
+<li>Ukur outcome, guardrail, performa, dan biaya.</li>
+<li>Dokumentasikan hasil, keterbatasan, runbook, serta rencana iterasi.</li>
+</ol>
+<h2>Contoh Kode Awal</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">const controller = new AbortController();
+
+async function requestInsight(payload) {
+  const response = await fetch(&quot;/api/insights&quot;, {
+    method: &quot;POST&quot;,
+    headers: {&quot;Content-Type&quot;: &quot;application/json&quot;},
+    body: JSON.stringify(payload),
+    signal: controller.signal
+  });
+  if (!response.ok) throw new Error(`Request gagal: ${response.status}`);
+  return response.json();
+}
+
+document.querySelector(&quot;#stop&quot;).onclick = () =&gt; controller.abort();
+</code></pre></div>
+<p>Kode tersebut hanya titik awal. Tambahkan pemeriksaan input, konfigurasi, test, logging, serta penanganan error sesuai konteks proyek.</p>
+<h2>Rubrik Penilaian</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aspek</th>
+<th align="right">Bobot</th>
+<th>Indikator</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Problem framing</td>
+<td align="right">15%</td>
+<td>Pengguna, keputusan, outcome, dan batas jelas</td>
+</tr>
+<tr>
+<td>Data atau input</td>
+<td align="right">15%</td>
+<td>Sumber, izin, kualitas, dan representasi dijelaskan</td>
+</tr>
+<tr>
+<td>Rancangan</td>
+<td align="right">15%</td>
+<td>Komponen, interface, serta trade-off masuk akal</td>
+</tr>
+<tr>
+<td>Implementasi</td>
+<td align="right">20%</td>
+<td>Baseline berjalan, modular, dan dapat diulang</td>
+</tr>
+<tr>
+<td>Evaluasi</td>
+<td align="right">15%</td>
+<td>Metrik, kasus batas, serta subgroup diperiksa</td>
+</tr>
+<tr>
+<td>Responsible practice</td>
+<td align="right">10%</td>
+<td>Privasi, keamanan, fairness, dan human review</td>
+</tr>
+<tr>
+<td>Komunikasi</td>
+<td align="right">10%</td>
+<td>Dokumentasi dan demo mudah dipahami</td>
+</tr>
+</tbody></table></div>
+<h2>Pertanyaan Review Proyek</h2>
+<ol>
+<li>Keputusan apa yang benar-benar dibantu proyek ini?</li>
+<li>Apa kegagalan yang paling mungkin dan paling berbahaya?</li>
+<li>Bukti apa yang menunjukkan solusi lebih baik daripada baseline?</li>
+<li>Siapa yang berwenang menyetujui, menghentikan, atau mengubah sistem?</li>
+<li>Informasi apa yang harus terlihat oleh pengguna agar tidak salah memahami hasil?</li>
+</ol>
+<hr>
+

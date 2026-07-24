@@ -1,0 +1,120 @@
+<h1>Accessibility dan Internationalization</h1>
+<h2>Tujuan Bab</h2>
+<p>Setelah mempelajari bab ini, peserta mampu:</p>
+<ul>
+<li>menjelaskan peran accessibility dan internationalization dalam Front-end Development for AI Products;</li>
+<li>membedakan istilah yang sering tercampur;</li>
+<li>menyusun alur kerja sederhana yang dapat diuji;</li>
+<li>mengenali risiko, trade-off, dan kebutuhan dokumentasi.</li>
+</ul>
+<h2>Gambaran Sederhana</h2>
+<p>Accessibility dan Internationalization tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimulai dari pertanyaan: <strong>keputusan apa yang ingin diperbaiki, bukti apa yang tersedia, dan siapa yang menanggung dampak ketika sistem salah?</strong></p>
+<blockquote>
+<p><strong>Analogi:</strong> Front-end adalah ruang percakapan antara pengguna dan sistem. Desain yang baik bukan hanya terlihat rapi, tetapi membuat kemampuan, batasan, dan status AI dapat dipahami.</p>
+</blockquote>
+<p>Pada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, keamanan, biaya, kemampuan dipelihara, dan kejelasan tindakan ketika terjadi kegagalan.</p>
+<h2>Konsep Inti</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Istilah</th>
+<th>Penjelasan mudah</th>
+<th>Cara memeriksa pemahaman</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>keyboard</strong></td>
+<td>konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana keyboard diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>screen reader</strong></td>
+<td>konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana screen reader diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>contrast</strong></td>
+<td>konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana contrast diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>focus</strong></td>
+<td>konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana focus diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>language</strong></td>
+<td>konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana language diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>locale</strong></td>
+<td>konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana locale diukur, diuji, atau dikendalikan?</td>
+</tr>
+</tbody></table></div>
+<h3>Hubungan antarkonsep</h3>
+<p>Bayangkan alur <strong>keyboard -&gt; screen reader -&gt; contrast -&gt; focus</strong>. Setiap panah menyatakan asumsi. Asumsi tersebut harus ditulis dan diuji. Ketika hasil akhir salah, tim dapat menelusuri pada tahap mana asumsi tidak lagi berlaku.</p>
+<p>Contohnya, perubahan pada <strong>keyboard</strong> dapat memengaruhi <strong>screen reader</strong>, lalu mengubah cara <strong>contrast</strong> dihitung. Tanpa pengamatan dan versioning, perubahan ini mudah dianggap sebagai perilaku pengguna atau performa model, padahal sumbernya berada di proses sebelumnya.</p>
+<h2>Langkah Kerja</h2>
+<ol>
+<li>Tentukan tujuan accessibility dan internationalization dan keputusan yang akan dipengaruhi.</li>
+<li>Petakan input, output, pemilik, pengguna, serta batas sistem.</li>
+<li>Tetapkan definisi dan kriteria penerimaan untuk keyboard serta screen reader.</li>
+<li>Bangun versi kecil menggunakan data atau skenario yang aman.</li>
+<li>Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem.</li>
+<li>Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut.</li>
+</ol>
+<h2>Contoh Kasus</h2>
+<p>Dalam mini project <strong>Dashboard Evaluasi Diri Berbasis Umpan Balik</strong>, tim perlu menerapkan accessibility dan internationalization secara bertahap. Mulailah dengan satu alur yang kecil dan dapat diamati. Catat input, transformasi atau keputusan, output, waktu proses, serta alasan ketika suatu item ditolak.</p>
+<p>Misalnya, tim menemukan bahwa <strong>keyboard</strong> tidak konsisten. Respons yang buruk adalah langsung menambah kompleksitas. Respons yang lebih baik adalah mengisolasi sumber masalah, membuat aturan validasi, mengukur frekuensi kejadian, dan menentukan siapa yang bertanggung jawab memperbaikinya.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Situasi</th>
+<th>Pilihan tindakan</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Data atau input belum lengkap</td>
+<td>Tolak, minta perbaikan, atau gunakan fallback</td>
+<td>Menjaga kualitas tetapi dapat menambah friksi</td>
+</tr>
+<tr>
+<td>Hasil belum pasti</td>
+<td>Tampilkan ketidakpastian dan minta review</td>
+<td>Lebih aman tetapi membutuhkan waktu manusia</td>
+</tr>
+<tr>
+<td>Beban meningkat</td>
+<td>Scale, antrekan, atau pembatasan</td>
+<td>Menjaga layanan tetapi menambah biaya atau waktu tunggu</td>
+</tr>
+<tr>
+<td>Perubahan berisiko</td>
+<td>Uji terbatas dan siapkan rollback</td>
+<td>Rilis lebih lambat tetapi dampak kegagalan lebih kecil</td>
+</tr>
+</tbody></table></div>
+<h2>Kesalahan Umum</h2>
+<ul>
+<li>Memulai dari alat sebelum memahami tujuan accessibility dan internationalization.</li>
+<li>Menganggap keyboard sudah memiliki definisi yang sama bagi semua pihak.</li>
+<li>Hanya menguji jalur normal dan mengabaikan kegagalan atau data yang tidak lengkap.</li>
+<li>Tidak menetapkan pemilik, indikator, dan prosedur ketika kualitas menurun.</li>
+</ul>
+<h2>Checkpoint</h2>
+<ol>
+<li>Jelaskan keyboard dengan kalimat sendiri dan berikan satu contoh.</li>
+<li>Apa hubungan antara screen reader dan contrast dalam bab ini?</li>
+<li>Sebutkan satu risiko ketika accessibility dan internationalization diterapkan tanpa pengujian.</li>
+</ol>
+<h2>Latihan</h2>
+<ol>
+<li>Buat diagram sederhana yang menghubungkan keyboard, screen reader, contrast, focus. Tandai asumsi dan titik kegagalan.</li>
+<li>Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.</li>
+<li>Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.</li>
+</ol>
+<hr>
+

@@ -131,12 +131,30 @@ const router = {
         "/participant-ai-lab-bioinformatics-practice": "/pages/frontend/fellow-dashboard/data-engineering-domain/bioinformatics/latihan.html",
         "/participant-ai-lab-bioinformatics-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domain/bioinformatics/kuis.html",
         "/participant-ai-lab-bioinformatics-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domain/bioinformatics/diskusi.html",
-        "/participant-ai-lab-data-engineering": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-data-science": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-infrastructure": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-deployment": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-front-end": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-back-end": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-data-engineering": "/pages/frontend/fellow-dashboard/data-engineering-domain/data-engineering/materi.html",
+        "/participant-ai-lab-data-engineering-practice": "/pages/frontend/fellow-dashboard/data-engineering-domain/data-engineering/latihan.html",
+        "/participant-ai-lab-data-engineering-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domain/data-engineering/kuis.html",
+        "/participant-ai-lab-data-engineering-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domain/data-engineering/diskusi.html",
+        "/participant-ai-lab-data-science": "/pages/frontend/fellow-dashboard/data-engineering-domain/data-science/materi.html",
+        "/participant-ai-lab-data-science-practice": "/pages/frontend/fellow-dashboard/data-engineering-domain/data-science/latihan.html",
+        "/participant-ai-lab-data-science-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domain/data-science/kuis.html",
+        "/participant-ai-lab-data-science-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domain/data-science/diskusi.html",
+        "/participant-ai-lab-infrastructure": "/pages/frontend/fellow-dashboard/data-engineering-domain/infrastructure/materi.html",
+        "/participant-ai-lab-infrastructure-practice": "/pages/frontend/fellow-dashboard/data-engineering-domain/infrastructure/latihan.html",
+        "/participant-ai-lab-infrastructure-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domain/infrastructure/kuis.html",
+        "/participant-ai-lab-infrastructure-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domain/infrastructure/diskusi.html",
+        "/participant-ai-lab-deployment": "/pages/frontend/fellow-dashboard/data-engineering-domain/deployment/materi.html",
+        "/participant-ai-lab-deployment-practice": "/pages/frontend/fellow-dashboard/data-engineering-domain/deployment/latihan.html",
+        "/participant-ai-lab-deployment-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domain/deployment/kuis.html",
+        "/participant-ai-lab-deployment-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domain/deployment/diskusi.html",
+        "/participant-ai-lab-front-end": "/pages/frontend/fellow-dashboard/data-engineering-domain/front-end/materi.html",
+        "/participant-ai-lab-front-end-practice": "/pages/frontend/fellow-dashboard/data-engineering-domain/front-end/latihan.html",
+        "/participant-ai-lab-front-end-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domain/front-end/kuis.html",
+        "/participant-ai-lab-front-end-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domain/front-end/diskusi.html",
+        "/participant-ai-lab-back-end": "/pages/frontend/fellow-dashboard/data-engineering-domain/back-end/materi.html",
+        "/participant-ai-lab-back-end-practice": "/pages/frontend/fellow-dashboard/data-engineering-domain/back-end/latihan.html",
+        "/participant-ai-lab-back-end-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domain/back-end/kuis.html",
+        "/participant-ai-lab-back-end-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domain/back-end/diskusi.html",
         "/participant-ai-lab-business-insight": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-people-business-mgt": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-ai-culture": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -783,6 +801,96 @@ const router = {
                     if (path === "/participant-ai-lab-deep-learning-discussion" && typeof window.initAiDeepLearningDiscussion === "function") {
                         window.initAiDeepLearningDiscussion();
                     }
+                } else if (path.startsWith("/participant-ai-lab-back-end") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-back-end" && typeof window.initAiBackEndMateri === "function") {
+                        window.initAiBackEndMateri();
+                    }
+                    if (path === "/participant-ai-lab-back-end-practice" && typeof window.initAiBackEndPractice === "function") {
+                        window.initAiBackEndPractice();
+                    }
+                    if (path === "/participant-ai-lab-back-end-quiz" && typeof window.initAiBackEndQuiz === "function") {
+                        window.initAiBackEndQuiz();
+                    }
+                    if (path === "/participant-ai-lab-back-end-discussion" && typeof window.initAiBackEndDiscussion === "function") {
+                        window.initAiBackEndDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-front-end") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-front-end" && typeof window.initAiFrontEndMateri === "function") {
+                        window.initAiFrontEndMateri();
+                    }
+                    if (path === "/participant-ai-lab-front-end-practice" && typeof window.initAiFrontEndPractice === "function") {
+                        window.initAiFrontEndPractice();
+                    }
+                    if (path === "/participant-ai-lab-front-end-quiz" && typeof window.initAiFrontEndQuiz === "function") {
+                        window.initAiFrontEndQuiz();
+                    }
+                    if (path === "/participant-ai-lab-front-end-discussion" && typeof window.initAiFrontEndDiscussion === "function") {
+                        window.initAiFrontEndDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-deployment") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-deployment" && typeof window.initAiDeploymentMateri === "function") {
+                        window.initAiDeploymentMateri();
+                    }
+                    if (path === "/participant-ai-lab-deployment-practice" && typeof window.initAiDeploymentPractice === "function") {
+                        window.initAiDeploymentPractice();
+                    }
+                    if (path === "/participant-ai-lab-deployment-quiz" && typeof window.initAiDeploymentQuiz === "function") {
+                        window.initAiDeploymentQuiz();
+                    }
+                    if (path === "/participant-ai-lab-deployment-discussion" && typeof window.initAiDeploymentDiscussion === "function") {
+                        window.initAiDeploymentDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-infrastructure") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-infrastructure" && typeof window.initAiInfrastructureMateri === "function") {
+                        window.initAiInfrastructureMateri();
+                    }
+                    if (path === "/participant-ai-lab-infrastructure-practice" && typeof window.initAiInfrastructurePractice === "function") {
+                        window.initAiInfrastructurePractice();
+                    }
+                    if (path === "/participant-ai-lab-infrastructure-quiz" && typeof window.initAiInfrastructureQuiz === "function") {
+                        window.initAiInfrastructureQuiz();
+                    }
+                    if (path === "/participant-ai-lab-infrastructure-discussion" && typeof window.initAiInfrastructureDiscussion === "function") {
+                        window.initAiInfrastructureDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-data-science") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-data-science" && typeof window.initAiDataScienceMateri === "function") {
+                        window.initAiDataScienceMateri();
+                    }
+                    if (path === "/participant-ai-lab-data-science-practice" && typeof window.initAiDataSciencePractice === "function") {
+                        window.initAiDataSciencePractice();
+                    }
+                    if (path === "/participant-ai-lab-data-science-quiz" && typeof window.initAiDataScienceQuiz === "function") {
+                        window.initAiDataScienceQuiz();
+                    }
+                    if (path === "/participant-ai-lab-data-science-discussion" && typeof window.initAiDataScienceDiscussion === "function") {
+                        window.initAiDataScienceDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-data-engineering") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-data-engineering" && typeof window.initAiDataEngineeringMateri === "function") {
+                        window.initAiDataEngineeringMateri();
+                    }
+                    if (path === "/participant-ai-lab-data-engineering-practice" && typeof window.initAiDataEngineeringPractice === "function") {
+                        window.initAiDataEngineeringPractice();
+                    }
+                    if (path === "/participant-ai-lab-data-engineering-quiz" && typeof window.initAiDataEngineeringQuiz === "function") {
+                        window.initAiDataEngineeringQuiz();
+                    }
+                    if (path === "/participant-ai-lab-data-engineering-discussion" && typeof window.initAiDataEngineeringDiscussion === "function") {
+                        window.initAiDataEngineeringDiscussion();
+                    }
+
                 } else if (path.startsWith("/participant-ai-lab-bioinformatics") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
                     if (path === "/participant-ai-lab-bioinformatics" && typeof window.initAiBioinformaticsMateri === "function") {

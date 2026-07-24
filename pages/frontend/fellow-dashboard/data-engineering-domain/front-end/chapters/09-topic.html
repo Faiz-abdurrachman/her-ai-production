@@ -1,0 +1,120 @@
+<h1>Testing dan Performa Front-end</h1>
+<h2>Tujuan Bab</h2>
+<p>Setelah mempelajari bab ini, peserta mampu:</p>
+<ul>
+<li>menjelaskan peran testing dan performa front-end dalam Front-end Development for AI Products;</li>
+<li>membedakan istilah yang sering tercampur;</li>
+<li>menyusun alur kerja sederhana yang dapat diuji;</li>
+<li>mengenali risiko, trade-off, dan kebutuhan dokumentasi.</li>
+</ul>
+<h2>Gambaran Sederhana</h2>
+<p>Testing dan Performa Front-end tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimulai dari pertanyaan: <strong>keputusan apa yang ingin diperbaiki, bukti apa yang tersedia, dan siapa yang menanggung dampak ketika sistem salah?</strong></p>
+<blockquote>
+<p><strong>Analogi:</strong> Front-end adalah ruang percakapan antara pengguna dan sistem. Desain yang baik bukan hanya terlihat rapi, tetapi membuat kemampuan, batasan, dan status AI dapat dipahami.</p>
+</blockquote>
+<p>Pada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, keamanan, biaya, kemampuan dipelihara, dan kejelasan tindakan ketika terjadi kegagalan.</p>
+<h2>Konsep Inti</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Istilah</th>
+<th>Penjelasan mudah</th>
+<th>Cara memeriksa pemahaman</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>unit</strong></td>
+<td>konsep penting dalam testing dan performa front-end yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana unit diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>integration</strong></td>
+<td>konsep penting dalam testing dan performa front-end yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana integration diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>end-to-end</strong></td>
+<td>konsep penting dalam testing dan performa front-end yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana end-to-end diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>bundle</strong></td>
+<td>konsep penting dalam testing dan performa front-end yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana bundle diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>lazy load</strong></td>
+<td>konsep penting dalam testing dan performa front-end yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana lazy load diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>Core Web Vitals</strong></td>
+<td>konsep penting dalam testing dan performa front-end yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana Core Web Vitals diukur, diuji, atau dikendalikan?</td>
+</tr>
+</tbody></table></div>
+<h3>Hubungan antarkonsep</h3>
+<p>Bayangkan alur <strong>unit -&gt; integration -&gt; end-to-end -&gt; bundle</strong>. Setiap panah menyatakan asumsi. Asumsi tersebut harus ditulis dan diuji. Ketika hasil akhir salah, tim dapat menelusuri pada tahap mana asumsi tidak lagi berlaku.</p>
+<p>Contohnya, perubahan pada <strong>unit</strong> dapat memengaruhi <strong>integration</strong>, lalu mengubah cara <strong>end-to-end</strong> dihitung. Tanpa pengamatan dan versioning, perubahan ini mudah dianggap sebagai perilaku pengguna atau performa model, padahal sumbernya berada di proses sebelumnya.</p>
+<h2>Langkah Kerja</h2>
+<ol>
+<li>Tentukan tujuan testing dan performa front-end dan keputusan yang akan dipengaruhi.</li>
+<li>Petakan input, output, pemilik, pengguna, serta batas sistem.</li>
+<li>Tetapkan definisi dan kriteria penerimaan untuk unit serta integration.</li>
+<li>Bangun versi kecil menggunakan data atau skenario yang aman.</li>
+<li>Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem.</li>
+<li>Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut.</li>
+</ol>
+<h2>Contoh Kasus</h2>
+<p>Dalam mini project <strong>Dashboard Evaluasi Diri Berbasis Umpan Balik</strong>, tim perlu menerapkan testing dan performa front-end secara bertahap. Mulailah dengan satu alur yang kecil dan dapat diamati. Catat input, transformasi atau keputusan, output, waktu proses, serta alasan ketika suatu item ditolak.</p>
+<p>Misalnya, tim menemukan bahwa <strong>unit</strong> tidak konsisten. Respons yang buruk adalah langsung menambah kompleksitas. Respons yang lebih baik adalah mengisolasi sumber masalah, membuat aturan validasi, mengukur frekuensi kejadian, dan menentukan siapa yang bertanggung jawab memperbaikinya.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Situasi</th>
+<th>Pilihan tindakan</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Data atau input belum lengkap</td>
+<td>Tolak, minta perbaikan, atau gunakan fallback</td>
+<td>Menjaga kualitas tetapi dapat menambah friksi</td>
+</tr>
+<tr>
+<td>Hasil belum pasti</td>
+<td>Tampilkan ketidakpastian dan minta review</td>
+<td>Lebih aman tetapi membutuhkan waktu manusia</td>
+</tr>
+<tr>
+<td>Beban meningkat</td>
+<td>Scale, antrekan, atau pembatasan</td>
+<td>Menjaga layanan tetapi menambah biaya atau waktu tunggu</td>
+</tr>
+<tr>
+<td>Perubahan berisiko</td>
+<td>Uji terbatas dan siapkan rollback</td>
+<td>Rilis lebih lambat tetapi dampak kegagalan lebih kecil</td>
+</tr>
+</tbody></table></div>
+<h2>Kesalahan Umum</h2>
+<ul>
+<li>Memulai dari alat sebelum memahami tujuan testing dan performa front-end.</li>
+<li>Menganggap unit sudah memiliki definisi yang sama bagi semua pihak.</li>
+<li>Hanya menguji jalur normal dan mengabaikan kegagalan atau data yang tidak lengkap.</li>
+<li>Tidak menetapkan pemilik, indikator, dan prosedur ketika kualitas menurun.</li>
+</ul>
+<h2>Checkpoint</h2>
+<ol>
+<li>Jelaskan unit dengan kalimat sendiri dan berikan satu contoh.</li>
+<li>Apa hubungan antara integration dan end-to-end dalam bab ini?</li>
+<li>Sebutkan satu risiko ketika testing dan performa front-end diterapkan tanpa pengujian.</li>
+</ol>
+<h2>Latihan</h2>
+<ol>
+<li>Buat diagram sederhana yang menghubungkan unit, integration, end-to-end, bundle. Tandai asumsi dan titik kegagalan.</li>
+<li>Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.</li>
+<li>Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.</li>
+</ol>
+<hr>
+

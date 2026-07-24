@@ -1,0 +1,182 @@
+<h1>Data Engineering</h1>
+<blockquote>
+<p><strong>HerAI Fellowship - Participant Module</strong><br>Membangun aliran data yang andal dari sumber hingga siap dipakai analitik dan AI.</p>
+</blockquote>
+<h2>Tentang Modul</h2>
+<p>Data Engineering membahas cara merancang, membangun, menguji, mengamankan, dan mengoperasikan pipeline data. Peserta belajar melihat data sebagai produk yang memiliki kontrak, pemilik, kualitas, lineage, dan target layanan.</p>
+<p>Modul disusun dengan bahasa bertahap. Setiap bab berisi tujuan, konsep inti, alur kerja, contoh kasus, kesalahan umum, checkpoint, dan latihan. Peserta tidak perlu menghafal seluruh istilah. Yang lebih penting adalah memahami hubungan antarkomponen dan mampu menjelaskan alasan di balik sebuah pilihan.</p>
+<h2>Capaian Pembelajaran</h2>
+<p>Setelah menyelesaikan modul, peserta mampu:</p>
+<ul>
+<li>menjelaskan fondasi dan istilah utama Data Engineering;</li>
+<li>menerjemahkan kebutuhan menjadi rancangan yang dapat diuji;</li>
+<li>membuat prototipe kecil dengan dokumentasi dan kontrol dasar;</li>
+<li>mengevaluasi kualitas, risiko, keterbatasan, serta biaya;</li>
+<li>menyampaikan hasil dan rekomendasi kepada pemangku kepentingan.</li>
+</ul>
+<h2>Prasyarat</h2>
+<ul>
+<li>Python dasar, SQL dasar, dan pemahaman data tabular.</li>
+<li>Mampu membaca diagram sederhana dan mengikuti contoh kode.</li>
+<li>Bersedia mencatat asumsi, kegagalan, dan keputusan selama latihan.</li>
+</ul>
+<h2>Cara Belajar yang Disarankan</h2>
+<ol>
+<li>Baca gambaran dan tujuan setiap bab.</li>
+<li>Buat catatan istilah dengan bahasa sendiri.</li>
+<li>Kerjakan checkpoint sebelum melihat kembali materi.</li>
+<li>Jalankan atau adaptasi contoh kode bila relevan.</li>
+<li>Gunakan mini project sebagai portofolio, bukan sekadar tugas akhir.</li>
+<li>Lakukan review keamanan, privasi, dan dampak sebelum demonstrasi.</li>
+</ol>
+<h2>Peta Materi</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Tahap</th>
+<th>Fokus</th>
+<th>Hasil</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fondasi</td>
+<td>Istilah, tujuan, konteks, dan arsitektur</td>
+<td>Peta masalah yang jelas</td>
+</tr>
+<tr>
+<td>Pembangunan</td>
+<td>Data, proses, komponen, dan integrasi</td>
+<td>Baseline yang dapat diuji</td>
+</tr>
+<tr>
+<td>Evaluasi</td>
+<td>Kualitas, risiko, subgroup, biaya</td>
+<td>Bukti dan daftar keterbatasan</td>
+</tr>
+<tr>
+<td>Operasi</td>
+<td>Monitoring, ownership, respons, iterasi</td>
+<td>Sistem yang dapat dipelihara</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h1>Peran dan Arsitektur Data Engineering</h1>
+<h2>Tujuan Bab</h2>
+<p>Setelah mempelajari bab ini, peserta mampu:</p>
+<ul>
+<li>menjelaskan peran peran dan arsitektur data engineering dalam Data Engineering;</li>
+<li>membedakan istilah yang sering tercampur;</li>
+<li>menyusun alur kerja sederhana yang dapat diuji;</li>
+<li>mengenali risiko, trade-off, dan kebutuhan dokumentasi.</li>
+</ul>
+<h2>Gambaran Sederhana</h2>
+<p>Peran dan Arsitektur Data Engineering tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimulai dari pertanyaan: <strong>keputusan apa yang ingin diperbaiki, bukti apa yang tersedia, dan siapa yang menanggung dampak ketika sistem salah?</strong></p>
+<blockquote>
+<p><strong>Analogi:</strong> Data engineer seperti perancang sistem air kota: bukan hanya memindahkan air, tetapi memastikan sumber, pipa, penyimpanan, tekanan, kebersihan, dan pemantauan bekerja bersama.</p>
+</blockquote>
+<p>Pada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, keamanan, biaya, kemampuan dipelihara, dan kejelasan tindakan ketika terjadi kegagalan.</p>
+<h2>Konsep Inti</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Istilah</th>
+<th>Penjelasan mudah</th>
+<th>Cara memeriksa pemahaman</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>sumber data</strong></td>
+<td>konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana sumber data diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>ingestion</strong></td>
+<td>konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana ingestion diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>storage</strong></td>
+<td>konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana storage diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>transformation</strong></td>
+<td>konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana transformation diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>serving</strong></td>
+<td>konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana serving diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>konsumen data</strong></td>
+<td>konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana konsumen data diukur, diuji, atau dikendalikan?</td>
+</tr>
+</tbody></table></div>
+<h3>Hubungan antarkonsep</h3>
+<p>Bayangkan alur <strong>sumber data -&gt; ingestion -&gt; storage -&gt; transformation</strong>. Setiap panah menyatakan asumsi. Asumsi tersebut harus ditulis dan diuji. Ketika hasil akhir salah, tim dapat menelusuri pada tahap mana asumsi tidak lagi berlaku.</p>
+<p>Contohnya, perubahan pada <strong>sumber data</strong> dapat memengaruhi <strong>ingestion</strong>, lalu mengubah cara <strong>storage</strong> dihitung. Tanpa pengamatan dan versioning, perubahan ini mudah dianggap sebagai perilaku pengguna atau performa model, padahal sumbernya berada di proses sebelumnya.</p>
+<h2>Langkah Kerja</h2>
+<ol>
+<li>Tentukan tujuan peran dan arsitektur data engineering dan keputusan yang akan dipengaruhi.</li>
+<li>Petakan input, output, pemilik, pengguna, serta batas sistem.</li>
+<li>Tetapkan definisi dan kriteria penerimaan untuk sumber data serta ingestion.</li>
+<li>Bangun versi kecil menggunakan data atau skenario yang aman.</li>
+<li>Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem.</li>
+<li>Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut.</li>
+</ol>
+<h2>Contoh Kasus</h2>
+<p>Dalam mini project <strong>Pipeline Analitik Penjualan</strong>, tim perlu menerapkan peran dan arsitektur data engineering secara bertahap. Mulailah dengan satu alur yang kecil dan dapat diamati. Catat input, transformasi atau keputusan, output, waktu proses, serta alasan ketika suatu item ditolak.</p>
+<p>Misalnya, tim menemukan bahwa <strong>sumber data</strong> tidak konsisten. Respons yang buruk adalah langsung menambah kompleksitas. Respons yang lebih baik adalah mengisolasi sumber masalah, membuat aturan validasi, mengukur frekuensi kejadian, dan menentukan siapa yang bertanggung jawab memperbaikinya.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Situasi</th>
+<th>Pilihan tindakan</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Data atau input belum lengkap</td>
+<td>Tolak, minta perbaikan, atau gunakan fallback</td>
+<td>Menjaga kualitas tetapi dapat menambah friksi</td>
+</tr>
+<tr>
+<td>Hasil belum pasti</td>
+<td>Tampilkan ketidakpastian dan minta review</td>
+<td>Lebih aman tetapi membutuhkan waktu manusia</td>
+</tr>
+<tr>
+<td>Beban meningkat</td>
+<td>Scale, antrekan, atau pembatasan</td>
+<td>Menjaga layanan tetapi menambah biaya atau waktu tunggu</td>
+</tr>
+<tr>
+<td>Perubahan berisiko</td>
+<td>Uji terbatas dan siapkan rollback</td>
+<td>Rilis lebih lambat tetapi dampak kegagalan lebih kecil</td>
+</tr>
+</tbody></table></div>
+<h2>Kesalahan Umum</h2>
+<ul>
+<li>Memulai dari alat sebelum memahami tujuan peran dan arsitektur data engineering.</li>
+<li>Menganggap sumber data sudah memiliki definisi yang sama bagi semua pihak.</li>
+<li>Hanya menguji jalur normal dan mengabaikan kegagalan atau data yang tidak lengkap.</li>
+<li>Tidak menetapkan pemilik, indikator, dan prosedur ketika kualitas menurun.</li>
+</ul>
+<h2>Checkpoint</h2>
+<ol>
+<li>Jelaskan sumber data dengan kalimat sendiri dan berikan satu contoh.</li>
+<li>Apa hubungan antara ingestion dan storage dalam bab ini?</li>
+<li>Sebutkan satu risiko ketika peran dan arsitektur data engineering diterapkan tanpa pengujian.</li>
+</ol>
+<h2>Latihan</h2>
+<ol>
+<li>Buat diagram sederhana yang menghubungkan sumber data, ingestion, storage, transformation. Tandai asumsi dan titik kegagalan.</li>
+<li>Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.</li>
+<li>Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.</li>
+</ol>
+<hr>
+
