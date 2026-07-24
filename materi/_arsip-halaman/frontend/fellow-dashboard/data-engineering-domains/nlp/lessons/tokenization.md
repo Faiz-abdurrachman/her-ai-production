@@ -557,7 +557,7 @@ Ketik teks untuk melihat analisis morfologi...
                 <section class="lesson-hero">
                     <div class="lesson-hero-copy">
                         <h1>Tokenisasi — NLP Fundamentals</h1>
-                        <p>Langkah pertama setiap pipeline NLP: memotong teks menjadi unit yang bisa diproses mesin. Materi dari AI Lab oleh Marchel Andrian Shevchenko.</p>
+                        <p>Langkah pertama setiap pipeline NLP: memotong teks menjadi unit yang bisa diproses mesin. Materi dari AI Lab oleh HerAI.</p>
                         <div class="lesson-meta-row">
                             <span><i class="far fa-clock"></i> 45 menit</span>
                             <span><i class="fas fa-language"></i> NLP · Text Fundamentals</span>

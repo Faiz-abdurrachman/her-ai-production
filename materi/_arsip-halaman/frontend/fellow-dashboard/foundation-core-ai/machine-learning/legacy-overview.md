@@ -10,7 +10,7 @@
 
 Dari regresi linear hingga neural network — kurikulum lengkap untuk membangun fondasi ML yang kuat.
 
-** 8 Modul ** 50+ Topik **** AI Lab · Marchel Andrian Shevchenko**
+** 8 Modul ** 50+ Topik **** AI Lab · HerAI**
 
 ![HerAI ML learning](/assets/messaging/herai-chat-persona.png)
 
@@ -457,7 +457,7 @@ Ajarkan mesin untuk melihat dan memahami dunia visual — dari piksel mentah hin
 <div class="lesson-meta-row">
 <span><i class="far fa-clock"></i> 8 Modul</span>
 <span><i class="fas fa-layer-group"></i> 50+ Topik</span>
-<b><i class="fas fa-flask"></i> AI Lab · Marchel Andrian Shevchenko</b>
+<b><i class="fas fa-flask"></i> AI Lab · HerAI</b>
 </div>
 </div>
 <img src="/assets/messaging/herai-chat-persona.png" alt="HerAI ML learning">

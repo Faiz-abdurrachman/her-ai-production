@@ -10,7 +10,7 @@
 
 Kurikulum lengkap untuk membangun kecerdasan bahasa — dari teks mentah ke makna.
 
-** 6 Modul ** 38+ Topik **** AI Lab · Marchel Andrian Shevchenko**
+** 6 Modul ** 38+ Topik **** AI Lab · HerAI**
 
 ![HerAI NLP learning](/assets/messaging/herai-chat-persona.png)
 
@@ -359,7 +359,7 @@ Progress0% ******
 <div class="lesson-meta-row">
 <span><i class="far fa-clock"></i> 6 Modul</span>
 <span><i class="fas fa-layer-group"></i> 38+ Topik</span>
-<b><i class="fas fa-flask"></i> AI Lab · Marchel Andrian Shevchenko</b>
+<b><i class="fas fa-flask"></i> AI Lab · HerAI</b>
 </div>
 </div>
 <img src="/assets/messaging/herai-chat-persona.png" alt="HerAI NLP learning">
