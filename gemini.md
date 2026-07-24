@@ -99,3 +99,12 @@ Beberapa dokumen Markdown (.md) menyertakan *YAML Front Matter* (misalnya `--- \
 - Menambahkan Regex `/title:\s*(.*)/` untuk mengekstrak metadata dari YAML front matter.
 - Jika front matter tidak ada, jatuh ke fallback pencarian header `#`.
 - Melakukan *rebuild* masal pada seluruh modul yang terdampak.
+
+## 9. Bug Mismatch URL (Katalog Modules vs Route Dinamis)
+**Deskripsi:**
+Pengguna mengklik tombol "Mulai" pada card LLM di halaman Katalog Modul, tetapi diarahkan ke halaman "Under Development" (404), padahal modul sudah berhasil di-*generate*.
+**Penyebab:**
+URL statis (href) pada HTML Katalog Modul untuk LLM tertulis `#/participant-ai-lab-llm`. Namun, saat generator `build_module.js` dieksekusi dengan *ID base* `ai-large-language-model`, ia mendaftarkan rute yang panjang: `#/participant-ai-lab-large-language-model`. Ketidaksinkronan rute ini menyebabkan error 404 saat pengguna melakukan klik dari UI.
+**Solusi:**
+- Memperbaiki HTML `modules.html` agar `href` pada card modul LLM sinkron menjadi `#/participant-ai-lab-large-language-model`.
+- Sebagai best practice, untuk modul-modul selanjutnya (seperti VLM, Multimodal LLM), ID yang di-pass saat proses *generate* dipastikan 100% konsisten dengan URL yang sudah terdefinisi di UI Katalog.
