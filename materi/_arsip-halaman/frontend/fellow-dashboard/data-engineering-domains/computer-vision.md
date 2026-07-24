@@ -10,7 +10,7 @@
 
 Mengajari mesin untuk melihat — dari piksel mentah ke deteksi objek real-time.
 
-** 6 Modul** 50+ Topik**** AI Lab · Marchel Andrian Shevchenko**
+** 6 Modul** 50+ Topik**** AI Lab · HerAI**
 
 ![HerAI CV](/assets/messaging/herai-chat-persona.png)
 
@@ -334,7 +334,7 @@ Transformers, tokenization, RAG, and the full pipeline from text to meaning.
 <div class="ai-hero-copy">
 <h1>Computer <span>Vision</span></h1>
 <p>Mengajari mesin untuk melihat — dari piksel mentah ke deteksi objek real-time.</p>
-<div class="ai-hero-meta"><span><i class="far fa-clock"></i> 6 Modul</span><span><i class="fas fa-layer-group"></i> 50+ Topik</span><b><i class="fas fa-flask"></i> AI Lab · Marchel Andrian Shevchenko</b></div>
+<div class="ai-hero-meta"><span><i class="far fa-clock"></i> 6 Modul</span><span><i class="fas fa-layer-group"></i> 50+ Topik</span><b><i class="fas fa-flask"></i> AI Lab · HerAI</b></div>
 </div><div class="ai-hero-visual"><img src="/assets/messaging/herai-chat-persona.png" alt="HerAI CV"></div>
 </section>
 <div class="ai-overview-layout"><div class="ai-overview-content" id="cvContent">

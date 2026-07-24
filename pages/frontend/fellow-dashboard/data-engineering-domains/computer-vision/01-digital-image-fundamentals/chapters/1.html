@@ -1,6 +1,5 @@
-<section class="fellow-dashboard fellow-modules-page lesson-detail-page pixel-anatomy-page" data-fellow-page="modules">
 <style>
-  .pixel-anatomy-page{
+  .cv-chapter-wrapper{
     --px-bg:#fff7fb;
     --px-bg-2:#fff0f7;
     --px-card:#ffffff;
@@ -30,113 +29,113 @@
   }
 
   /* ── Topbar ────────────────────────────────────── */
-  .pixel-anatomy-page .lesson-topbar{
+  .cv-chapter-wrapper .lesson-topbar{
     position:sticky; top:0; z-index:100;
     padding:0; background:transparent;
   }
-  .pixel-anatomy-page .lesson-topbar-inner{
+  .cv-chapter-wrapper .lesson-topbar-inner{
     max-width:1600px; width:100%; margin:0 auto;
     display:flex; align-items:center;
     height:68px;
   }
-  .pixel-anatomy-page .navbar-left{
+  .cv-chapter-wrapper .navbar-left{
     flex:0 0 30%; display:flex; align-items:center;
     padding-left:24px; min-width:0;
   }
-  .pixel-anatomy-page .navbar-center{
+  .cv-chapter-wrapper .navbar-center{
     flex:0 0 40%; display:flex; align-items:center; justify-content:center;
     text-align:center; min-width:0;
     font-family:var(--px-font-disp); font-size:15px; font-weight:700;
     color:var(--px-text);
   }
-  .pixel-anatomy-page .navbar-right{
+  .cv-chapter-wrapper .navbar-right{
     flex:0 0 30%; display:flex; align-items:center; justify-content:flex-end;
     padding-right:24px; min-width:0;
   }
-  .pixel-anatomy-page .lesson-breadcrumb{
+  .cv-chapter-wrapper .lesson-breadcrumb{
     display:flex; align-items:center; gap:8px; flex-shrink:0;
     color:var(--px-text-2);
   }
-  .pixel-anatomy-page .lesson-breadcrumb a{
+  .cv-chapter-wrapper .lesson-breadcrumb a{
     display:inline-flex; align-items:center; gap:6px;
     color:var(--px-text-2); text-decoration:none;
     transition:color .2s;
   }
-  .pixel-anatomy-page .lesson-breadcrumb a:hover{ color:var(--px-accent); }
-  .pixel-anatomy-page .lesson-breadcrumb-separator{ color:var(--px-text-3); font-size:10px; }
-  .pixel-anatomy-page .lesson-breadcrumb > span:last-child{
+  .cv-chapter-wrapper .lesson-breadcrumb a:hover{ color:var(--px-accent); }
+  .cv-chapter-wrapper .lesson-breadcrumb-separator{ color:var(--px-text-3); font-size:10px; }
+  .cv-chapter-wrapper .lesson-breadcrumb > span:last-child{
     font-weight:600; color:var(--px-text);
   }
-  .pixel-anatomy-page .fellow-actions{
+  .cv-chapter-wrapper .fellow-actions{
     display:flex; align-items:center; gap:10px; flex-shrink:0;
   }
-  .pixel-anatomy-page .fellow-search{
+  .cv-chapter-wrapper .fellow-search{
     display:flex; align-items:center; gap:8px;
     background:rgba(255,255,255,.95); height:40px;
     border:1px solid rgba(246,51,146,.12);
     border-radius:100px; padding:0 16px;
     transition:all .2s; min-width:200px;
   }
-  .pixel-anatomy-page .fellow-search:focus-within{
+  .cv-chapter-wrapper .fellow-search:focus-within{
     border-color:rgba(246,51,146,.3);
     box-shadow:0 0 0 3px rgba(246,51,146,.08);
   }
-  .pixel-anatomy-page .fellow-search i{ color:var(--px-text-3); font-size:14px; }
-  .pixel-anatomy-page .fellow-search input{
+  .cv-chapter-wrapper .fellow-search i{ color:var(--px-text-3); font-size:14px; }
+  .cv-chapter-wrapper .fellow-search input{
     border:none; outline:none; background:transparent;
     font-size:13px; color:var(--px-text); width:120px;
     font-family:var(--px-font-body);
   }
-  .pixel-anatomy-page .fellow-search input::placeholder{ color:var(--px-text-3); }
-  .pixel-anatomy-page .fellow-icon-button{
+  .cv-chapter-wrapper .fellow-search input::placeholder{ color:var(--px-text-3); }
+  .cv-chapter-wrapper .fellow-icon-button{
     display:flex; align-items:center; justify-content:center;
     width:40px; height:40px; padding:0;
     background:rgba(255,255,255,.95); border:1px solid rgba(246,51,146,.12);
     border-radius:100px; cursor:pointer; position:relative;
     transition:all .2s; color:var(--px-text-2);
   }
-  .pixel-anatomy-page .fellow-icon-button:hover{
+  .cv-chapter-wrapper .fellow-icon-button:hover{
     border-color:rgba(246,51,146,.25);
     background:#fff; color:var(--px-text);
   }
-  .pixel-anatomy-page .fellow-icon-button span{
+  .cv-chapter-wrapper .fellow-icon-button span{
     position:absolute; top:-4px; right:-4px;
     background:var(--px-accent); color:#fff; font-size:10px; font-weight:700;
     width:18px; height:18px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
   }
-  .pixel-anatomy-page .fellow-user-button{
+  .cv-chapter-wrapper .fellow-user-button{
     display:flex; align-items:center; gap:8px;
     background:rgba(255,255,255,.95); border:1px solid rgba(246,51,146,.12);
     border-radius:100px; padding:5px 12px 5px 6px;
     text-decoration:none; transition:all .2s; color:var(--px-text);
   }
-  .pixel-anatomy-page .fellow-user-button:hover{
+  .cv-chapter-wrapper .fellow-user-button:hover{
     border-color:rgba(246,51,146,.25);
     background:#fff; box-shadow:0 2px 8px rgba(246,51,146,.06);
   }
-  .pixel-anatomy-page .fellow-user-button .avatar-img{
+  .cv-chapter-wrapper .fellow-user-button .avatar-img{
     width:30px; height:30px; border-radius:50%;
     background:linear-gradient(135deg, var(--px-accent), #ff8ab7);
     display:flex; align-items:center; justify-content:center;
     color:#fff; font-size:12px; font-weight:700; flex-shrink:0;
   }
-  .pixel-anatomy-page .fellow-user-button strong{ font-size:13px; font-weight:700; display:block; }
-  .pixel-anatomy-page .fellow-user-button small{ font-size:10px; color:var(--px-text-3); display:block; }
-  .pixel-anatomy-page .fellow-user-button > i{ font-size:10px; color:var(--px-text-3); margin-left:2px; }
+  .cv-chapter-wrapper .fellow-user-button strong{ font-size:13px; font-weight:700; display:block; }
+  .cv-chapter-wrapper .fellow-user-button small{ font-size:10px; color:var(--px-text-3); display:block; }
+  .cv-chapter-wrapper .fellow-user-button > i{ font-size:10px; color:var(--px-text-3); margin-left:2px; }
 
   /* ── Layout grid ─────────────────────────────── */
-  .pixel-anatomy-page .lesson-layout{
+  .cv-chapter-wrapper .lesson-layout{
     display:grid;
     grid-template-columns:minmax(0,1fr) 320px;
     gap:24px; align-items:start;
     max-width:1600px; margin:0 auto;
     padding:24px 24px 56px;
   }
-  .pixel-anatomy-page .lesson-main-content{ min-width:0; }
+  .cv-chapter-wrapper .lesson-main-content{ min-width:0; }
 
   /* ── Hero ────────────────────────────────────── */
-  .pixel-anatomy-page .lesson-hero{
+  .cv-chapter-wrapper .lesson-hero{
     display:grid;
     grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr);
     gap:28px; align-items:center;
@@ -147,601 +146,601 @@
       linear-gradient(135deg, #ffffff 0%, #fff7fb 58%, #fff0f7 100%);
     box-shadow:var(--px-shadow-lg); overflow:hidden;
   }
-  .pixel-anatomy-page .lesson-hero h1{ font-family:var(--px-font-disp); color:var(--px-text); letter-spacing:-.04em; }
-  .pixel-anatomy-page .lesson-hero p,
-  .pixel-anatomy-page .lesson-meta-row{ color:var(--px-text-2); }
-  .pixel-anatomy-page .lesson-hero img{
+  .cv-chapter-wrapper .lesson-hero h1{ font-family:var(--px-font-disp); color:var(--px-text); letter-spacing:-.04em; }
+  .cv-chapter-wrapper .lesson-hero p,
+  .cv-chapter-wrapper .lesson-meta-row{ color:var(--px-text-2); }
+  .cv-chapter-wrapper .lesson-hero img{
     max-width:240px; width:100%; justify-self:end;
     filter:drop-shadow(0 18px 30px rgba(246,51,146,.10));
   }
 
   /* ── Content area — centered like reference ──── */
-  .pixel-anatomy-page .lesson-material-panel{ display:grid; gap:18px; }
-  .pixel-anatomy-page .lesson-article{ max-width:800px; }
+  .cv-chapter-wrapper .lesson-material-panel{ display:grid; gap:18px; }
+  .cv-chapter-wrapper .lesson-article{ max-width:800px; }
   /* ── Fix global .challenge-card grid clash ──────── */
-  .pixel-anatomy-page .challenge-card{
+  .cv-chapter-wrapper .challenge-card{
     display:block; padding:0; min-height:auto;
     align-items:normal; gap:0;
     grid-template-columns:none;
   }
-  .pixel-anatomy-page .challenge-card h2{ font-size:inherit; color:inherit; margin:0; line-height:inherit; }
-  .pixel-anatomy-page .challenge-card p{ font-size:inherit; color:inherit; margin:0; line-height:inherit; }
+  .cv-chapter-wrapper .challenge-card h2{ font-size:inherit; color:inherit; margin:0; line-height:inherit; }
+  .cv-chapter-wrapper .challenge-card p{ font-size:inherit; color:inherit; margin:0; line-height:inherit; }
 
-  .pixel-anatomy-page .lesson-tabs a{
+  .cv-chapter-wrapper .lesson-tabs a{
     background:rgba(255,255,255,.92);
     border:1px solid var(--px-line);
     box-shadow:var(--px-shadow);
     border-radius:var(--px-radius-sm);
     padding:8px 18px; align-self:center; margin:0;
   }
-  .pixel-anatomy-page .lesson-tabs a.active{
+  .cv-chapter-wrapper .lesson-tabs a.active{
     background:var(--px-accent-soft);
     color:var(--px-accent);
     border-color:var(--px-line-strong);
   }
-  .pixel-anatomy-page .lesson-nav-footer a,
-  .pixel-anatomy-page .lesson-list-card,
-  .pixel-anatomy-page .lesson-progress-card{
+  .cv-chapter-wrapper .lesson-nav-footer a,
+  .cv-chapter-wrapper .lesson-list-card,
+  .cv-chapter-wrapper .lesson-progress-card{
     background:rgba(255,255,255,.92);
     border:1px solid var(--px-line);
     box-shadow:var(--px-shadow);
   }
-  .pixel-anatomy-page .lesson-tabs a.active{
+  .cv-chapter-wrapper .lesson-tabs a.active{
     background:var(--px-accent-soft); color:var(--px-accent);
     border-color:var(--px-line-strong);
   }
 
   /* ── Right panel ─────────────────────────────── */
-  .pixel-anatomy-page .lesson-list-card h4,
-  .pixel-anatomy-page .lpc-header{ font-family:var(--px-font-disp); }
-  .pixel-anatomy-page .lesson-right-panel{
+  .cv-chapter-wrapper .lesson-list-card h4,
+  .cv-chapter-wrapper .lpc-header{ font-family:var(--px-font-disp); }
+  .cv-chapter-wrapper .lesson-right-panel{
     position:sticky; top:88px; align-self:start;
     display:flex; flex-direction:column; gap:16px;
   }
-  .pixel-anatomy-page .lesson-right-panel > *{ border-radius:20px; }
-  .pixel-anatomy-page .lesson-list-item{
+  .cv-chapter-wrapper .lesson-right-panel > *{ border-radius:20px; }
+  .cv-chapter-wrapper .lesson-list-item{
     padding:6px 10px; border-radius:8px; color:var(--px-text); font-size:13px;
     display:flex; align-items:center; gap:8px; cursor:default;
   }
-  .pixel-anatomy-page .lesson-list-item.active,
-  .pixel-anatomy-page .lesson-list-item:hover{
+  .cv-chapter-wrapper .lesson-list-item.active,
+  .cv-chapter-wrapper .lesson-list-item:hover{
     background:rgba(246,51,146,.08); color:var(--px-text);
   }
-  .pixel-anatomy-page .lesson-list-item.active .lli-dot{ background:var(--px-accent); }
-  .pixel-anatomy-page .lli-dot{
+  .cv-chapter-wrapper .lesson-list-item.active .lli-dot{ background:var(--px-accent); }
+  .cv-chapter-wrapper .lli-dot{
     width:8px; height:8px; border-radius:50%; background:rgba(246,51,146,.2); flex-shrink:0;
   }
-  .pixel-anatomy-page .lesson-list-item.done .lli-dot{ background:#16a34a; }
-  .pixel-anatomy-page .lpc-meta{
+  .cv-chapter-wrapper .lesson-list-item.done .lli-dot{ background:#16a34a; }
+  .cv-chapter-wrapper .lpc-meta{
     display:flex; gap:12px; font-size:12px; color:var(--px-text-2); margin-top:10px;
   }
-  .pixel-anatomy-page .lesson-nav-footer a:last-child{
+  .cv-chapter-wrapper .lesson-nav-footer a:last-child{
     background:var(--px-accent); color:#fff; border-color:var(--px-accent);
   }
 
   /* ── Sections ────────────────────────────────── */
-  .pixel-anatomy-page .lesson-sec{
+  .cv-chapter-wrapper .lesson-sec{
     padding-bottom:48px; margin-bottom:8px;
     border-bottom:1px solid var(--px-line);
     scroll-margin-top:120px;
   }
-  .pixel-anatomy-page .lesson-sec:last-child{ border-bottom:none; }
-  .pixel-anatomy-page .sec-header{
+  .cv-chapter-wrapper .lesson-sec:last-child{ border-bottom:none; }
+  .cv-chapter-wrapper .sec-header{
     display:flex; align-items:flex-start; gap:16px; margin-bottom:24px;
   }
-  .pixel-anatomy-page .sec-num{
+  .cv-chapter-wrapper .sec-num{
     font-family:var(--px-font-mono); font-size:12px; color:var(--px-accent);
     padding:4px 0; letter-spacing:.06em; flex-shrink:0; min-width:26px;
   }
-  .pixel-anatomy-page .sec-title{
+  .cv-chapter-wrapper .sec-title{
     font-family:var(--px-font-disp); font-size:clamp(22px,3vw,28px); font-weight:700;
     color:var(--px-text); letter-spacing:-.04em; margin-bottom:4px;
   }
-  .pixel-anatomy-page .sec-sub,
-  .pixel-anatomy-page .prose,
-  .pixel-anatomy-page .info-card p,
-  .pixel-anatomy-page .cs-desc,
-  .pixel-anatomy-page .challenge-desc,
-  .pixel-anatomy-page .coord-readout,
-  .pixel-anatomy-page .expected-box,
-  .pixel-anatomy-page .fs-msg{ color:var(--px-text-2); }
+  .cv-chapter-wrapper .sec-sub,
+  .cv-chapter-wrapper .prose,
+  .cv-chapter-wrapper .info-card p,
+  .cv-chapter-wrapper .cs-desc,
+  .cv-chapter-wrapper .challenge-desc,
+  .cv-chapter-wrapper .coord-readout,
+  .cv-chapter-wrapper .expected-box,
+  .cv-chapter-wrapper .fs-msg{ color:var(--px-text-2); }
 
   /* ── Prose & inline code ─────────────────────── */
-  .pixel-anatomy-page .prose{
+  .cv-chapter-wrapper .prose{
     font-size:15px; color:var(--px-text-2); line-height:1.75; margin-bottom:20px; max-width:640px;
   }
-  .pixel-anatomy-page .prose strong{ color:var(--px-text); font-weight:600; }
-  .pixel-anatomy-page .prose code,
-  .pixel-anatomy-page code{
+  .cv-chapter-wrapper .prose strong{ color:var(--px-text); font-weight:600; }
+  .cv-chapter-wrapper .prose code,
+  .cv-chapter-wrapper code{
     font-family:var(--px-font-mono); font-size:12.5px;
     background:rgba(246,51,146,.06); padding:2px 6px; border-radius:4px; color:var(--px-accent);
   }
-  .pixel-anatomy-page .callout strong{ color:var(--px-text); }
+  .cv-chapter-wrapper .callout strong{ color:var(--px-text); }
 
   /* ── Callouts ────────────────────────────────── */
-  .pixel-anatomy-page .callout{
+  .cv-chapter-wrapper .callout{
     display:flex; gap:12px; padding:14px 16px;
     border-radius:14px; margin-bottom:20px;
     font-size:13.5px; line-height:1.65; color:var(--px-text-2);
     background:#fff; border:1px solid var(--px-line); box-shadow:var(--px-shadow);
   }
-  .pixel-anatomy-page .callout-icon{ flex-shrink:0; font-size:16px; line-height:1.5; }
-  .pixel-anatomy-page .callout.info{
+  .cv-chapter-wrapper .callout-icon{ flex-shrink:0; font-size:16px; line-height:1.5; }
+  .cv-chapter-wrapper .callout.info{
     background:linear-gradient(135deg, rgba(246,51,146,.05), rgba(255,255,255,.98));
     border-color:rgba(246,51,146,.18);
   }
-  .pixel-anatomy-page .callout.warn{
+  .cv-chapter-wrapper .callout.warn{
     background:linear-gradient(135deg, rgba(255,193,7,.08), rgba(255,255,255,.98));
     border-color:rgba(255,193,7,.18);
   }
-  .pixel-anatomy-page .callout.danger{
+  .cv-chapter-wrapper .callout.danger{
     background:linear-gradient(135deg, rgba(225,29,72,.08), rgba(255,255,255,.98));
     border-color:rgba(225,29,72,.18);
   }
 
   /* ── Widget card ─────────────────────────────── */
-  .pixel-anatomy-page .widget-card,
-  .pixel-anatomy-page .info-card,
-  .pixel-anatomy-page .cs-card,
-  .pixel-anatomy-page .challenge-card,
-  .pixel-anatomy-page .playground-card,
-  .pixel-anatomy-page .final-score-card,
-  .pixel-anatomy-page .next-lesson-cta{
+  .cv-chapter-wrapper .widget-card,
+  .cv-chapter-wrapper .info-card,
+  .cv-chapter-wrapper .cs-card,
+  .cv-chapter-wrapper .challenge-card,
+  .cv-chapter-wrapper .playground-card,
+  .cv-chapter-wrapper .final-score-card,
+  .cv-chapter-wrapper .next-lesson-cta{
     background:rgba(255,255,255,.96);
     border:1px solid var(--px-line);
     border-radius:var(--px-radius);
     box-shadow:var(--px-shadow);
   }
-  .pixel-anatomy-page .widget-card{
+  .cv-chapter-wrapper .widget-card{
     padding:20px; margin-bottom:20px; overflow:hidden;
   }
-  .pixel-anatomy-page .widget-label{
+  .cv-chapter-wrapper .widget-label{
     font-family:var(--px-font-disp); font-size:11px;
     text-transform:uppercase; letter-spacing:.06em;
     color:var(--px-text-3); margin-bottom:16px;
   }
 
   /* ── Pixel inspector ─────────────────────────── */
-  .pixel-anatomy-page .pixel-inspector{
+  .cv-chapter-wrapper .pixel-inspector{
     display:grid;
     grid-template-columns:280px 1fr;
     gap:20px; align-items:start;
   }
-  .pixel-anatomy-page #pixelCanvas{
+  .cv-chapter-wrapper #pixelCanvas{
     border-radius:8px; border:1px solid var(--px-line-strong);
     cursor:crosshair; image-rendering:pixelated;
     width:280px; height:280px; display:block;
   }
-  .pixel-anatomy-page .px-info-panel{ display:flex; flex-direction:column; gap:12px; }
-  .pixel-anatomy-page .px-swatch{
+  .cv-chapter-wrapper .px-info-panel{ display:flex; flex-direction:column; gap:12px; }
+  .cv-chapter-wrapper .px-swatch{
     width:100%; height:56px; border-radius:8px;
     border:1px solid var(--px-line); background:#eee;
     transition:background .15s;
   }
-  .pixel-anatomy-page .px-stats{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
-  .pixel-anatomy-page .px-stat{
+  .cv-chapter-wrapper .px-stats{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .cv-chapter-wrapper .px-stat{
     background:var(--px-bg); border:1px solid var(--px-line);
     border-radius:8px; padding:8px;
     display:flex; flex-direction:column; gap:2px;
   }
-  .pixel-anatomy-page .px-stat-label{
+  .cv-chapter-wrapper .px-stat-label{
     font-family:var(--px-font-mono); font-size:9px;
     text-transform:uppercase; letter-spacing:.08em; color:var(--px-text-3);
   }
-  .pixel-anatomy-page .px-stat-val{ font-size:15px; font-weight:500; color:var(--px-text); }
-  .pixel-anatomy-page .px-stat-val.mono{ font-family:var(--px-font-mono); font-size:12px; }
-  .pixel-anatomy-page .px-stat-sub{ font-size:10px; color:var(--px-text-3); }
+  .cv-chapter-wrapper .px-stat-val{ font-size:15px; font-weight:500; color:var(--px-text); }
+  .cv-chapter-wrapper .px-stat-val.mono{ font-family:var(--px-font-mono); font-size:12px; }
+  .cv-chapter-wrapper .px-stat-sub{ font-size:10px; color:var(--px-text-3); }
 
   /* ── Channel bars ────────────────────────────── */
-  .pixel-anatomy-page .ch-bars{ display:flex; flex-direction:column; gap:8px; }
-  .pixel-anatomy-page .ch-row{ display:flex; align-items:center; gap:10px; }
-  .pixel-anatomy-page .ch-lbl{
+  .cv-chapter-wrapper .ch-bars{ display:flex; flex-direction:column; gap:8px; }
+  .cv-chapter-wrapper .ch-row{ display:flex; align-items:center; gap:10px; }
+  .cv-chapter-wrapper .ch-lbl{
     font-family:var(--px-font-mono); font-size:12px; font-weight:700; min-width:14px;
   }
-  .pixel-anatomy-page .ch-lbl.red{ color:var(--px-red); }
-  .pixel-anatomy-page .ch-lbl.green{ color:var(--px-green); }
-  .pixel-anatomy-page .ch-lbl.blue{ color:var(--px-blue); }
-  .pixel-anatomy-page .ch-track{
+  .cv-chapter-wrapper .ch-lbl.red{ color:var(--px-red); }
+  .cv-chapter-wrapper .ch-lbl.green{ color:var(--px-green); }
+  .cv-chapter-wrapper .ch-lbl.blue{ color:var(--px-blue); }
+  .cv-chapter-wrapper .ch-track{
     flex:1; height:8px; background:rgba(246,51,146,.08);
     border-radius:4px; overflow:hidden;
   }
-  .pixel-anatomy-page .ch-fill{
+  .cv-chapter-wrapper .ch-fill{
     height:100%; border-radius:4px;
     background:var(--c, var(--px-accent)); width:0%;
     transition:width .12s ease;
   }
-  .pixel-anatomy-page .ch-num{
+  .cv-chapter-wrapper .ch-num{
     font-family:var(--px-font-mono); font-size:12px;
     color:var(--px-text-2); min-width:28px; text-align:right;
   }
 
   /* ── Coord readout ───────────────────────────── */
-  .pixel-anatomy-page .coord-readout{
+  .cv-chapter-wrapper .coord-readout{
     margin-top:12px; font-size:13px; color:var(--px-text-2);
   }
 
   /* ── RGB channel labels ──────────────────────── */
-  .pixel-anatomy-page .rgb-labels{
+  .cv-chapter-wrapper .rgb-labels{
     display:grid; grid-template-columns:repeat(4,1fr);
     gap:8px; margin-top:8px; text-align:center;
   }
-  .pixel-anatomy-page .rgb-labels span{
+  .cv-chapter-wrapper .rgb-labels span{
     font-family:var(--px-font-mono); font-size:11px; color:var(--px-text-3); font-weight:700;
   }
 
   /* ── Code blocks ─────────────────────────────── */
-  .pixel-anatomy-page .code-block{
+  .cv-chapter-wrapper .code-block{
     background:#fff; border:1px solid var(--px-line);
     border-radius:14px; box-shadow:var(--px-shadow);
     overflow:hidden; margin-bottom:20px;
   }
-  .pixel-anatomy-page .cb-label{
+  .cv-chapter-wrapper .cb-label{
     background:#fff4f9; border-bottom:1px solid var(--px-line);
     padding:8px 16px; font-family:var(--px-font-disp);
     font-size:11px; text-transform:uppercase; letter-spacing:.06em;
     color:var(--px-text-2);
   }
-  .pixel-anatomy-page .code-block pre{ padding:18px 20px; overflow-x:auto; margin:0; }
-  .pixel-anatomy-page .code-block code,
-  .pixel-anatomy-page .hint-box,
-  .pixel-anatomy-page .expected-box code,
-  .pixel-anatomy-page .output-pre,
-  .pixel-anatomy-page .code-editor{
+  .cv-chapter-wrapper .code-block pre{ padding:18px 20px; overflow-x:auto; margin:0; }
+  .cv-chapter-wrapper .code-block code,
+  .cv-chapter-wrapper .hint-box,
+  .cv-chapter-wrapper .expected-box code,
+  .cv-chapter-wrapper .output-pre,
+  .cv-chapter-wrapper .code-editor{
     font-family:var(--px-font-mono);
   }
-  .pixel-anatomy-page .code-block code{
+  .cv-chapter-wrapper .code-block code{
     font-size:13px; line-height:1.75;
     background:#fff; padding:0; color:var(--px-text);
   }
-  .pixel-anatomy-page .kw{ color:#db2777; font-weight:600; }
-  .pixel-anatomy-page .fn{ color:#7c3aed; }
-  .pixel-anatomy-page .str{ color:#15803d; }
-  .pixel-anatomy-page .num{ color:#b45309; }
-  .pixel-anatomy-page .op{ color:#667085; }
-  .pixel-anatomy-page .cm{ color:#98a2b3; font-style:italic; }
+  .cv-chapter-wrapper .kw{ color:#db2777; font-weight:600; }
+  .cv-chapter-wrapper .fn{ color:#7c3aed; }
+  .cv-chapter-wrapper .str{ color:#15803d; }
+  .cv-chapter-wrapper .num{ color:#b45309; }
+  .cv-chapter-wrapper .op{ color:#667085; }
+  .cv-chapter-wrapper .cm{ color:#98a2b3; font-style:italic; }
 
   /* ── Two column layout ───────────────────────── */
-  .pixel-anatomy-page .two-col{
+  .cv-chapter-wrapper .two-col{
     display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;
   }
-  .pixel-anatomy-page .two-col .code-block{ margin-bottom:0; }
-  .pixel-anatomy-page .info-card{ padding:20px; }
-  .pixel-anatomy-page .ic-title{
+  .cv-chapter-wrapper .two-col .code-block{ margin-bottom:0; }
+  .cv-chapter-wrapper .info-card{ padding:20px; }
+  .cv-chapter-wrapper .ic-title{
     font-family:var(--px-font-disp); font-size:14px; font-weight:600;
     color:var(--px-text); margin-bottom:10px;
   }
-  .pixel-anatomy-page .info-card p{ font-size:13px; line-height:1.7; }
-  .pixel-anatomy-page .info-card p strong{ color:var(--px-text); font-weight:500; }
+  .cv-chapter-wrapper .info-card p{ font-size:13px; line-height:1.7; }
+  .cv-chapter-wrapper .info-card p strong{ color:var(--px-text); font-weight:500; }
 
   /* ── Color space cards ───────────────────────── */
-  .pixel-anatomy-page .cs-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
-  .pixel-anatomy-page .cs-card{
+  .cv-chapter-wrapper .cs-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+  .cv-chapter-wrapper .cs-card{
     padding:18px; border-top:2px solid var(--cs-accent, var(--px-accent));
     transition:border-color .2s;
   }
-  .pixel-anatomy-page .cs-card-top{
+  .cv-chapter-wrapper .cs-card-top{
     display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px;
   }
-  .pixel-anatomy-page .cs-name{
+  .cv-chapter-wrapper .cs-name{
     font-family:var(--px-font-disp); font-size:18px; font-weight:700; color:var(--px-text);
   }
-  .pixel-anatomy-page .cs-use{
+  .cv-chapter-wrapper .cs-use{
     font-family:var(--px-font-mono); font-size:10px; color:var(--px-text-3); letter-spacing:.04em;
   }
-  .pixel-anatomy-page .cs-channels{ display:flex; gap:8px; margin-bottom:12px; }
-  .pixel-anatomy-page .cs-ch{
+  .cv-chapter-wrapper .cs-channels{ display:flex; gap:8px; margin-bottom:12px; }
+  .cv-chapter-wrapper .cs-ch{
     display:flex; flex-direction:column; gap:2px;
     background:var(--px-bg); border:1px solid var(--px-line);
     border-radius:6px; padding:6px 10px; min-width:48px;
   }
-  .pixel-anatomy-page .cs-ch span:first-child{
+  .cv-chapter-wrapper .cs-ch span:first-child{
     font-family:var(--px-font-mono); font-size:12px; font-weight:700;
     color:var(--cs-accent, var(--px-accent));
   }
-  .pixel-anatomy-page .cs-ch span:last-child{
+  .cv-chapter-wrapper .cs-ch span:last-child{
     font-family:var(--px-font-mono); font-size:10px; color:var(--px-text-3);
   }
-  .pixel-anatomy-page .cs-desc{ font-size:12.5px; line-height:1.65; margin-bottom:12px; }
-  .pixel-anatomy-page .cs-code{
+  .cv-chapter-wrapper .cs-desc{ font-size:12.5px; line-height:1.65; margin-bottom:12px; }
+  .cv-chapter-wrapper .cs-code{
     font-family:var(--px-font-mono); font-size:11px; color:var(--px-text-3);
     background:var(--px-bg); padding:4px 8px; border-radius:4px; display:block;
   }
 
   /* ── Calc widget ─────────────────────────────── */
-  .pixel-anatomy-page .calc-preview{
+  .cv-chapter-wrapper .calc-preview{
     width:100%; height:60px; border-radius:8px;
     border:1px solid var(--px-line); margin-bottom:16px; transition:background .1s;
   }
-  .pixel-anatomy-page .calc-sliders{ display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
-  .pixel-anatomy-page .csl-row{ display:flex; align-items:center; gap:12px; }
-  .pixel-anatomy-page .csl-lbl{
+  .cv-chapter-wrapper .calc-sliders{ display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+  .cv-chapter-wrapper .csl-row{ display:flex; align-items:center; gap:12px; }
+  .cv-chapter-wrapper .csl-lbl{
     font-family:var(--px-font-mono); font-size:13px; font-weight:700; min-width:14px;
   }
-  .pixel-anatomy-page .csl-lbl.red{ color:var(--px-red); }
-  .pixel-anatomy-page .csl-lbl.green{ color:var(--px-green); }
-  .pixel-anatomy-page .csl-lbl.blue{ color:var(--px-blue); }
-  .pixel-anatomy-page .csl-row input[type="range"]{ flex:1; }
-  .pixel-anatomy-page .csl-val{
+  .cv-chapter-wrapper .csl-lbl.red{ color:var(--px-red); }
+  .cv-chapter-wrapper .csl-lbl.green{ color:var(--px-green); }
+  .cv-chapter-wrapper .csl-lbl.blue{ color:var(--px-blue); }
+  .cv-chapter-wrapper .csl-row input[type="range"]{ flex:1; }
+  .cv-chapter-wrapper .csl-val{
     font-family:var(--px-font-mono); font-size:12px;
     color:var(--px-text-2); min-width:28px; text-align:right;
   }
-  .pixel-anatomy-page .calc-results{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
-  .pixel-anatomy-page .cr-item{
+  .cv-chapter-wrapper .calc-results{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .cv-chapter-wrapper .cr-item{
     background:var(--px-bg); border:1px solid var(--px-line);
     border-radius:8px; padding:10px 12px;
   }
-  .pixel-anatomy-page .cr-label{
+  .cv-chapter-wrapper .cr-label{
     font-family:var(--px-font-mono); font-size:10px;
     text-transform:uppercase; letter-spacing:.06em; color:var(--px-text-3); margin-bottom:6px;
   }
-  .pixel-anatomy-page .cr-val{
+  .cv-chapter-wrapper .cr-val{
     font-family:var(--px-font-mono); font-size:13px; color:var(--px-text); font-weight:500;
   }
 
   /* ── Challenge cards ─────────────────────────── */
-  .pixel-anatomy-page .challenge-card{ padding:20px; margin-bottom:20px; }
-  .pixel-anatomy-page .challenge-header{ margin-bottom:14px; }
-  .pixel-anatomy-page .challenge-badge{
+  .cv-chapter-wrapper .challenge-card{ padding:20px; margin-bottom:20px; }
+  .cv-chapter-wrapper .challenge-header{ margin-bottom:14px; }
+  .cv-chapter-wrapper .challenge-badge{
     display:inline-flex; align-items:center; gap:6px;
     font-family:var(--px-font-disp); font-size:11px; font-weight:600;
     color:var(--px-accent); background:var(--px-accent-soft);
     padding:4px 12px; border-radius:20px; margin-bottom:8px;
   }
-  .pixel-anatomy-page .quiz-badge{ color:var(--px-accent); background:rgba(246,51,146,.1); border-color:rgba(246,51,146,.25); }
-  .pixel-anatomy-page .challenge-title{
+  .cv-chapter-wrapper .quiz-badge{ color:var(--px-accent); background:rgba(246,51,146,.1); border-color:rgba(246,51,146,.25); }
+  .cv-chapter-wrapper .challenge-title{
     font-family:var(--px-font-disp); font-size:16px; font-weight:700; color:var(--px-text);
   }
-  .pixel-anatomy-page .challenge-desc{
+  .cv-chapter-wrapper .challenge-desc{
     font-size:13.5px; line-height:1.65; margin-bottom:16px;
   }
-  .pixel-anatomy-page .challenge-editor{ margin-top:12px; }
-  .pixel-anatomy-page .editor-tabs{
+  .cv-chapter-wrapper .challenge-editor{ margin-top:12px; }
+  .cv-chapter-wrapper .editor-tabs{
     display:flex; gap:0; border-bottom:1px solid var(--px-line);
   }
-  .pixel-anatomy-page .editor-tab{
+  .cv-chapter-wrapper .editor-tab{
     padding:8px 16px; font-family:var(--px-font-mono); font-size:11px;
     color:var(--px-text-3); background:var(--px-bg);
     border:1px solid var(--px-line); border-bottom:none;
     border-radius:8px 8px 0 0; margin-bottom:-1px;
   }
-  .pixel-anatomy-page .editor-tab.active{
+  .cv-chapter-wrapper .editor-tab.active{
     background:var(--px-bg-2); color:var(--px-text); border-bottom-color:var(--px-bg-2);
   }
-  .pixel-anatomy-page .code-editor-wrap{ position:relative; }
-  .pixel-anatomy-page .code-editor{
+  .cv-chapter-wrapper .code-editor-wrap{ position:relative; }
+  .cv-chapter-wrapper .code-editor{
     width:100%; min-height:180px; padding:16px;
     background:var(--px-bg-2); border:1px solid var(--px-line);
     border-top:none; border-radius:0 0 12px 12px;
     font-size:13px; line-height:1.75; color:var(--px-text);
     resize:vertical; outline:none; tab-size:2;
   }
-  .pixel-anatomy-page .editor-actions{
+  .cv-chapter-wrapper .editor-actions{
     display:flex; gap:8px; margin-top:10px; align-items:center;
   }
-  .pixel-anatomy-page .run-btn{
+  .cv-chapter-wrapper .run-btn{
     padding:8px 18px; border-radius:8px; border:none;
     background:var(--px-accent); color:#fff;
     font-size:13px; font-weight:600; cursor:pointer;
     font-family:var(--px-font-body);
     transition:all .2s;
   }
-  .pixel-anatomy-page .run-btn:hover{ background:#d42a7d; }
-  .pixel-anatomy-page .run-btn.large{ padding:10px 28px; font-size:14px; }
-  .pixel-anatomy-page .hint-btn,
-  .pixel-anatomy-page .reset-btn{
+  .cv-chapter-wrapper .run-btn:hover{ background:#d42a7d; }
+  .cv-chapter-wrapper .run-btn.large{ padding:10px 28px; font-size:14px; }
+  .cv-chapter-wrapper .hint-btn,
+  .cv-chapter-wrapper .reset-btn{
     padding:7px 14px; border-radius:8px;
     border:1px solid var(--px-line); background:#fff;
     font-size:12px; cursor:pointer; font-family:var(--px-font-body);
     color:var(--px-text-2); transition:all .2s;
   }
-  .pixel-anatomy-page .hint-btn:hover,
-  .pixel-anatomy-page .reset-btn:hover{
+  .cv-chapter-wrapper .hint-btn:hover,
+  .cv-chapter-wrapper .reset-btn:hover{
     background:var(--px-bg); border-color:var(--px-line-strong); color:var(--px-text);
   }
-  .pixel-anatomy-page .hint-box{
+  .cv-chapter-wrapper .hint-box{
     margin-top:10px; padding:12px 16px; border-radius:10px;
     background:var(--px-bg); border:1px solid var(--px-line);
     font-size:12.5px; color:var(--px-text-2); line-height:1.65;
   }
-  .pixel-anatomy-page .output-wrap{
+  .cv-chapter-wrapper .output-wrap{
     margin-top:10px; border-radius:10px;
     background:#fff0f7; color:#171827; overflow:hidden;
     border:1px solid rgba(246,51,146,.18);
   }
-  .pixel-anatomy-page .output-pre{
+  .cv-chapter-wrapper .output-pre{
     padding:12px 16px; font-size:13px; line-height:1.7; margin:0;
     color:#171827; white-space:pre-wrap; background:transparent;
   }
-  .pixel-anatomy-page .output-label{
+  .cv-chapter-wrapper .output-label{
     padding:6px 14px; font-family:var(--px-font-mono); font-size:10px;
     text-transform:uppercase; letter-spacing:.06em;
     color:#171827; background:rgba(246,51,146,.08);
   }
-  .pixel-anatomy-page .output-wrap.is-error{
+  .cv-chapter-wrapper .output-wrap.is-error{
     background:#fce4f0;
     border-color:rgba(246,51,146,.3);
   }
-  .pixel-anatomy-page .output-wrap.is-error{
+  .cv-chapter-wrapper .output-wrap.is-error{
     background:#fce4f0;
     border-color:rgba(246,51,146,.3);
   }
-  .pixel-anatomy-page .check-result{
+  .cv-chapter-wrapper .check-result{
     margin-top:10px; padding:10px 14px; border-radius:10px; font-size:13px; font-weight:500;
   }
-  .pixel-anatomy-page .check-result.pass{ background:rgba(22,163,74,.08); color:#16a34a; border:1px solid rgba(22,163,74,.2); }
-  .pixel-anatomy-page .check-result.fail{ background:rgba(225,29,72,.08); color:#e11d48; border:1px solid rgba(225,29,72,.2); }
-  .pixel-anatomy-page .expected-box{
+  .cv-chapter-wrapper .check-result.pass{ background:rgba(22,163,74,.08); color:#16a34a; border:1px solid rgba(22,163,74,.2); }
+  .cv-chapter-wrapper .check-result.fail{ background:rgba(225,29,72,.08); color:#e11d48; border:1px solid rgba(225,29,72,.2); }
+  .cv-chapter-wrapper .expected-box{
     margin-top:10px; padding:12px 16px; border-radius:10px;
     background:var(--px-bg); border:1px solid var(--px-line);
     font-size:13px; color:var(--px-text-2);
   }
-  .pixel-anatomy-page .expected-label{
+  .cv-chapter-wrapper .expected-label{
     font-family:var(--px-font-disp); font-size:11px; font-weight:600;
     color:var(--px-text-3); display:block; margin-bottom:6px; text-transform:uppercase;
   }
-  .pixel-anatomy-page .expected-box code{
+  .cv-chapter-wrapper .expected-box code{
     font-size:13px; line-height:1.7; color:var(--px-text); background:transparent; padding:0;
   }
 
   /* ── Quiz ────────────────────────────────────── */
-  .pixel-anatomy-page .quiz-block-title{
+  .cv-chapter-wrapper .quiz-block-title{
     font-family:var(--px-font-disp); font-size:15px; font-weight:700;
     color:var(--px-text); margin-bottom:20px; padding-top:4px;
   }
-  .pixel-anatomy-page .quiz-item{ margin-bottom:28px; }
-  .pixel-anatomy-page .quiz-q-num{
+  .cv-chapter-wrapper .quiz-item{ margin-bottom:28px; }
+  .cv-chapter-wrapper .quiz-q-num{
     font-family:var(--px-font-mono); font-size:10px;
     text-transform:uppercase; letter-spacing:.08em; color:var(--px-text-3); margin-bottom:8px;
   }
-  .pixel-anatomy-page .quiz-q-text{
+  .cv-chapter-wrapper .quiz-q-text{
     font-size:15px; font-weight:500; color:var(--px-text); margin-bottom:14px; line-height:1.6;
   }
-  .pixel-anatomy-page .quiz-opts{ display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
-  .pixel-anatomy-page .quiz-opt{
+  .cv-chapter-wrapper .quiz-opts{ display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+  .cv-chapter-wrapper .quiz-opt{
     display:flex; align-items:flex-start; gap:12px;
     padding:12px 16px; border-radius:10px;
     border:1px solid var(--px-line); background:#fff;
     cursor:pointer; font-size:13.5px; color:var(--px-text-2);
     transition:all .15s; text-align:left; width:100%; font-family:var(--px-font-body);
   }
-  .pixel-anatomy-page .quiz-opt:hover:not(:disabled){
+  .cv-chapter-wrapper .quiz-opt:hover:not(:disabled){
     background:var(--px-bg); border-color:var(--px-line-strong); color:var(--px-text);
   }
-  .pixel-anatomy-page .quiz-opt.correct{
+  .cv-chapter-wrapper .quiz-opt.correct{
     background:rgba(22,163,74,.06); border-color:rgba(22,163,74,.25); color:#16a34a;
   }
-  .pixel-anatomy-page .quiz-opt.wrong{
+  .cv-chapter-wrapper .quiz-opt.wrong{
     background:rgba(225,29,72,.06); border-color:rgba(225,29,72,.25); color:#e11d48;
   }
-  .pixel-anatomy-page .quiz-opt.muted{ opacity:.4; }
-  .pixel-anatomy-page .quiz-opt-badge{
+  .cv-chapter-wrapper .quiz-opt.muted{ opacity:.4; }
+  .cv-chapter-wrapper .quiz-opt-badge{
     width:24px; height:24px; border-radius:50%;
     background:var(--px-bg); display:flex; align-items:center; justify-content:center;
     font-family:var(--px-font-mono); font-size:11px; color:var(--px-text-3); flex-shrink:0;
   }
-  .pixel-anatomy-page .quiz-feedback{
+  .cv-chapter-wrapper .quiz-feedback{
     padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; display:none; color:var(--px-text-2);
   }
-  .pixel-anatomy-page .quiz-feedback.show{ display:block; }
-  .pixel-anatomy-page .quiz-feedback.ok{
+  .cv-chapter-wrapper .quiz-feedback.show{ display:block; }
+  .cv-chapter-wrapper .quiz-feedback.ok{
     background:rgba(22,163,74,.06); border:1px solid rgba(22,163,74,.2); color:#16a34a;
   }
-  .pixel-anatomy-page .quiz-feedback.bad{
+  .cv-chapter-wrapper .quiz-feedback.bad{
     background:rgba(225,29,72,.06); border:1px solid rgba(225,29,72,.2); color:#e11d48;
   }
 
   /* ── Playground ──────────────────────────────── */
-  .pixel-anatomy-page .playground-card{ padding:0; overflow:hidden; margin-top:20px; }
-  .pixel-anatomy-page .playground-toolbar{
+  .cv-chapter-wrapper .playground-card{ padding:0; overflow:hidden; margin-top:20px; }
+  .cv-chapter-wrapper .playground-toolbar{
     display:flex; align-items:center; justify-content:space-between;
     flex-wrap:wrap; gap:10px; padding:12px 16px;
     background:var(--px-bg); border-bottom:1px solid var(--px-line);
     font-family:var(--px-font-body);
   }
-  .pixel-anatomy-page .pg-toolbar-left{ display:flex; align-items:center; gap:8px; }
-  .pixel-anatomy-page .pg-title{
+  .cv-chapter-wrapper .pg-toolbar-left{ display:flex; align-items:center; gap:8px; }
+  .cv-chapter-wrapper .pg-title{
     font-family:var(--px-font-disp); font-size:13px; font-weight:600; color:var(--px-text);
   }
-  .pixel-anatomy-page .py-ready-dot{
+  .cv-chapter-wrapper .py-ready-dot{
     width:8px; height:8px; border-radius:50%; background:#16a34a; flex-shrink:0;
   }
-  .pixel-anatomy-page .pg-toolbar-right{ display:flex; gap:6px; flex-wrap:wrap; }
-  .pixel-anatomy-page .pg-snippet-btn{
+  .cv-chapter-wrapper .pg-toolbar-right{ display:flex; gap:6px; flex-wrap:wrap; }
+  .cv-chapter-wrapper .pg-snippet-btn{
     padding:5px 12px; border-radius:6px; border:1px solid var(--px-line);
     background:#fff; font-size:11px; cursor:pointer;
     font-family:var(--px-font-mono); color:var(--px-text-2); transition:all .2s;
   }
-  .pixel-anatomy-page .pg-snippet-btn:hover{ border-color:var(--px-line-strong); color:var(--px-text); }
-  .pixel-anatomy-page .playground-editor{ min-height:160px; border:none; border-radius:0; }
-  .pixel-anatomy-page .playground-actions{
+  .cv-chapter-wrapper .pg-snippet-btn:hover{ border-color:var(--px-line-strong); color:var(--px-text); }
+  .cv-chapter-wrapper .playground-editor{ min-height:160px; border:none; border-radius:0; }
+  .cv-chapter-wrapper .playground-actions{
     display:flex; gap:8px; padding:12px 16px; align-items:center;
     border-top:1px solid var(--px-line);
   }
-  .pixel-anatomy-page .pg-note{
+  .cv-chapter-wrapper .pg-note{
     margin-left:auto; font-size:11px; color:var(--px-text-3);
     font-family:var(--px-font-mono);
   }
 
   /* ── Final score card ────────────────────────── */
-  .pixel-anatomy-page .final-score-card{ padding:28px; margin-top:24px; text-align:center; }
-  .pixel-anatomy-page .fs-title{
+  .cv-chapter-wrapper .final-score-card{ padding:28px; margin-top:24px; text-align:center; }
+  .cv-chapter-wrapper .fs-title{
     font-family:var(--px-font-disp); font-size:20px; font-weight:700; color:var(--px-text); margin-bottom:16px;
   }
-  .pixel-anatomy-page .fs-scores{
+  .cv-chapter-wrapper .fs-scores{
     display:flex; gap:24px; justify-content:center; margin-bottom:12px; flex-wrap:wrap;
   }
-  .pixel-anatomy-page .fs-msg{ font-size:13px; }
+  .cv-chapter-wrapper .fs-msg{ font-size:13px; }
 
   /* ── Next lesson CTA ─────────────────────────── */
-  .pixel-anatomy-page .next-lesson-cta{
+  .cv-chapter-wrapper .next-lesson-cta{
     margin-top:32px; padding:32px; text-align:center;
     background:linear-gradient(135deg, #fff, #fff7fb);
   }
-  .pixel-anatomy-page .nlc-inner{}
-  .pixel-anatomy-page .nlc-label{
+  .cv-chapter-wrapper .nlc-inner{}
+  .cv-chapter-wrapper .nlc-label{
     font-family:var(--px-font-mono); font-size:10px;
     text-transform:uppercase; letter-spacing:.1em; color:var(--px-text-3);
     margin-bottom:8px; display:block;
   }
-  .pixel-anatomy-page .nlc-title{
+  .cv-chapter-wrapper .nlc-title{
     font-family:var(--px-font-disp); font-size:22px; font-weight:700;
     color:var(--px-text); letter-spacing:-.01em; margin-bottom:8px;
   }
-  .pixel-anatomy-page .nlc-desc{ font-size:14px; margin-bottom:20px; color:var(--px-text-2); }
-  .pixel-anatomy-page .nlc-btn{
+  .cv-chapter-wrapper .nlc-desc{ font-size:14px; margin-bottom:20px; color:var(--px-text-2); }
+  .cv-chapter-wrapper .nlc-btn{
     display:inline-block; padding:12px 28px; border-radius:8px;
     background:var(--px-accent); color:#fff; font-weight:600; font-size:14px;
     text-decoration:none; transition:all .2s;
   }
-  .pixel-anatomy-page .nlc-btn:hover{ background:#d42a7d; transform:translateY(-1px); }
+  .cv-chapter-wrapper .nlc-btn:hover{ background:#d42a7d; transform:translateY(-1px); }
 
   /* ── Nav footer ──────────────────────────────── */
-  .pixel-anatomy-page .lesson-nav-footer a:hover{
+  .cv-chapter-wrapper .lesson-nav-footer a:hover{
     border-color:var(--px-line-strong); transform:translateY(-1px);
   }
 
   /* ── Range inputs ────────────────────────────── */
-  .pixel-anatomy-page input[type="range"]{
+  .cv-chapter-wrapper input[type="range"]{
     -webkit-appearance:none; height:4px; border-radius:2px;
     background:rgba(246,51,146,.12); outline:none; cursor:pointer;
   }
-  .pixel-anatomy-page input[type="range"]::-webkit-slider-thumb{
+  .cv-chapter-wrapper input[type="range"]::-webkit-slider-thumb{
     -webkit-appearance:none; width:16px; height:16px; border-radius:50%;
     background:var(--px-accent); cursor:pointer;
     border:2px solid #fff; box-shadow:0 2px 8px rgba(246,51,146,.25);
     transition:transform .15s;
   }
-  .pixel-anatomy-page input[type="range"]::-webkit-slider-thumb:hover{ transform:scale(1.2); }
+  .cv-chapter-wrapper input[type="range"]::-webkit-slider-thumb:hover{ transform:scale(1.2); }
 
   /* ── Responsive ──────────────────────────────── */
   @media (max-width: 1200px){
-    .pixel-anatomy-page .lesson-layout{ grid-template-columns:1fr; }
-    .pixel-anatomy-page .lesson-article{ max-width:none; }
-    .pixel-anatomy-page .lesson-right-panel{ position:static; flex-direction:row; flex-wrap:wrap; }
-    .pixel-anatomy-page .lesson-right-panel > *{ flex:1 1 280px; }
+    .cv-chapter-wrapper .lesson-layout{ grid-template-columns:1fr; }
+    .cv-chapter-wrapper .lesson-article{ max-width:none; }
+    .cv-chapter-wrapper .lesson-right-panel{ position:static; flex-direction:row; flex-wrap:wrap; }
+    .cv-chapter-wrapper .lesson-right-panel > *{ flex:1 1 280px; }
   }
   @media (max-width: 900px){
-    .pixel-anatomy-page .lesson-topbar-inner{ height:60px; }
-    .pixel-anatomy-page .navbar-left{ padding-left:16px; }
-    .pixel-anatomy-page .navbar-right{ padding-right:16px; }
-    .pixel-anatomy-page .fellow-search{ min-width:auto; flex:1; }
-    .pixel-anatomy-page .fellow-search input{ width:80px; }
-    .pixel-anatomy-page .fellow-user-button span:not(.avatar-img),
-    .pixel-anatomy-page .fellow-user-button > i{ display:none; }
-    .pixel-anatomy-page .lesson-hero{ grid-template-columns:1fr; padding:28px 24px 24px; }
-    .pixel-anatomy-page .lesson-hero img{ justify-self:center; max-width:210px; }
-    .pixel-anatomy-page .lesson-layout{ padding-inline:16px; }
-    .pixel-anatomy-page .pixel-inspector{ grid-template-columns:1fr; }
-    .pixel-anatomy-page #pixelCanvas{ width:100% !important; height:auto !important; }
-    .pixel-anatomy-page .two-col{ grid-template-columns:1fr; }
-    .pixel-anatomy-page .cs-grid{ grid-template-columns:1fr; }
-    .pixel-anatomy-page .calc-results{ grid-template-columns:1fr 1fr; }
+    .cv-chapter-wrapper .lesson-topbar-inner{ height:60px; }
+    .cv-chapter-wrapper .navbar-left{ padding-left:16px; }
+    .cv-chapter-wrapper .navbar-right{ padding-right:16px; }
+    .cv-chapter-wrapper .fellow-search{ min-width:auto; flex:1; }
+    .cv-chapter-wrapper .fellow-search input{ width:80px; }
+    .cv-chapter-wrapper .fellow-user-button span:not(.avatar-img),
+    .cv-chapter-wrapper .fellow-user-button > i{ display:none; }
+    .cv-chapter-wrapper .lesson-hero{ grid-template-columns:1fr; padding:28px 24px 24px; }
+    .cv-chapter-wrapper .lesson-hero img{ justify-self:center; max-width:210px; }
+    .cv-chapter-wrapper .lesson-layout{ padding-inline:16px; }
+    .cv-chapter-wrapper .pixel-inspector{ grid-template-columns:1fr; }
+    .cv-chapter-wrapper #pixelCanvas{ width:100% !important; height:auto !important; }
+    .cv-chapter-wrapper .two-col{ grid-template-columns:1fr; }
+    .cv-chapter-wrapper .cs-grid{ grid-template-columns:1fr; }
+    .cv-chapter-wrapper .calc-results{ grid-template-columns:1fr 1fr; }
   }
   @media (max-width: 600px){
-    .pixel-anatomy-page .calc-results{ grid-template-columns:1fr; }
-    .pixel-anatomy-page .px-stats{ grid-template-columns:1fr; }
-    .pixel-anatomy-page .rgb-labels{ grid-template-columns:repeat(2,1fr); }
-    .pixel-anatomy-page .playground-toolbar{ flex-direction:column; align-items:flex-start; }
+    .cv-chapter-wrapper .calc-results{ grid-template-columns:1fr; }
+    .cv-chapter-wrapper .px-stats{ grid-template-columns:1fr; }
+    .cv-chapter-wrapper .rgb-labels{ grid-template-columns:repeat(2,1fr); }
+    .cv-chapter-wrapper .playground-toolbar{ flex-direction:column; align-items:flex-start; }
   }
 
   /* --- UNIVERSAL UI FIXES FOR CV LESSONS --- */
@@ -770,90 +769,12 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
   }
 </style>
-<button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
-<div class="fellow-sidebar-scrim" aria-hidden="true"></div>
-<aside class="fellow-sidebar" aria-label="Navigasi peserta">
-<a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
-<nav class="fellow-menu">
-<a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
-<a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
-<a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
-<a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
-<a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
-<a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
-<a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
-<a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
-</nav>
-<nav class="fellow-menu secondary">
-<a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
-<a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
-<a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ &amp; Bantuan</span></a>
-<a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
-</nav>
-<div class="invite-card course-help-mini">
-<div><strong>Butuh bantuan?</strong><p>Tanya HerAI Assistant tentang modul dan pembelajaran.</p></div>
-<button type="button">Chat Sekarang</button>
-</div>
-</aside>
-<main class="fellow-main">
- <header class="lesson-topbar" style="display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:68px; border-bottom:1px solid rgba(0,0,0,0.05); background:#fff;">
-            <nav class="lesson-breadcrumb" aria-label="Breadcrumb materi" style="display:flex; align-items:center; gap:8px;">
-                <a href="#/participant-specialization-computer-vision" style="display:flex; align-items:center; gap:6px; color:#6f7282; text-decoration:none;"><i class="fas fa-arrow-left"></i><span>Computer Vision</span></a>
-                <span class="lesson-breadcrumb-separator" style="color:#a0a4b8; font-size:12px;"><i class="fas fa-arrow-right"></i></span>
-                <span style="font-weight:600; color:#171827;">Pixel Anatomy</span>
-            </nav>
-            <div class="fellow-actions" style="display:flex; align-items:center; gap:12px;">
-                <label class="fellow-search" style="display:flex; align-items:center; gap:8px; background:#f4f5f8; padding:8px 16px; border-radius:100px;"><i class="fas fa-magnifying-glass" style="color:#6f7282;"></i><input type="search" placeholder="Cari modul, topik, atau materi..." style="border:none; background:transparent; outline:none; font-size:13px; width:200px;"></label>
-                <button type="button" class="fellow-icon-button" aria-label="Notifikasi" style="background:#f4f5f8; border:none; width:36px; height:36px; border-radius:50%; position:relative;"><i class="far fa-bell"></i><span style="position:absolute; top:-2px; right:-2px; background:#f63392; color:#fff; font-size:10px; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">5</span></button>
-                <a href="#/participant-profile" class="fellow-user-button" style="display:flex; align-items:center; gap:8px; text-decoration:none; color:#171827;"><span class="avatar-img" style="width:36px; height:36px; background:#e2e8f0; border-radius:50%; display:inline-block;"></span><span style="display:flex; flex-direction:column; line-height:1.2;"><strong>Aisyah Putri</strong><small style="color:#6f7282; font-size:11px;">Peserta</small></span><i class="fas fa-chevron-down" style="color:#6f7282; font-size:12px; margin-left:4px;"></i></a>
-            </div>
-        </header>
-<div class="lesson-layout">
-<div class="lesson-main-content">
-<section class="lesson-hero">
-<div class="lesson-hero-copy">
-<h1>Pixel Anatomy</h1>
-<p>Anatomi piksel — apa itu piksel, sistem koordinat, RGB channels, color spaces, dan matematika di baliknya.</p>
-<div class="lesson-meta-row">
-<span><i class="far fa-clock"></i> 30 menit</span>
-<span><i class="fas fa-layer-group"></i> CV &middot; Image Processing</span>
-<b>Fondasi</b>
-</div>
-</div>
-<img src="/assets/messaging/herai-chat-persona.png" alt="HerAI CV learning">
-</section>
-<section class="lesson-material-panel">
-<div class="lesson-tabs cv-local-tabs" role="tablist" aria-label="Jenis materi">
-<a href="javascript:void(0)" class="active" onclick="switchCvLocalTab(this, 'teori')"><i class="fas fa-book-open"></i> Teori</a>
-<a href="javascript:void(0)" onclick="switchCvLocalTab(this, 'evaluasi')"><i class="fas fa-laptop-code"></i> Latihan & Kuis</a>
-<a href="#/participant-specialization-computer-vision"><i class="fas fa-layer-group"></i> Katalog CV</a>
-</div>
 <style>
   /* Sembunyikan kuis secara default saat memuat halaman */
   #sec-quiz { display: none; }
 </style>
-<script>
-  if (!window.switchCvLocalTab) {
-    window.switchCvLocalTab = function(el, mode) {
-      const tabs = document.querySelectorAll('.cv-local-tabs a');
-      tabs.forEach(t => t.classList.remove('active'));
-      el.classList.add('active');
 
-      const teoriSecs = document.querySelectorAll('.lesson-sec:not(#sec-quiz)');
-      const evalSec = document.getElementById('sec-quiz');
-
-      if (mode === 'teori') {
-        teoriSecs.forEach(s => s.style.display = 'block');
-        if (evalSec) evalSec.style.display = 'none';
-      } else {
-        teoriSecs.forEach(s => s.style.display = 'none');
-        if (evalSec) evalSec.style.display = 'block';
-        window.dispatchEvent(new Event('resize'));
-      }
-    };
-  }
-</script>
-<article class="lesson-article ai-lab-content" id="pixel-content">
+<article class="lesson-article ai-lab-content cv-chapter-wrapper" id="pixel-content">
 
       <!-- ─── SEC 1 ─── -->
       <section class="lesson-sec" id="sec-what">
@@ -1310,31 +1231,4 @@ print(gray)</textarea></div>
       </section>
 
 </article>
-<footer class="lesson-nav-footer">
-<a href="#/participant-ai-lab-cv-opencv" class="lnf-prev">
-<span class="lnf-label">Lesson sebelumnya</span>
-<span class="lnf-title">Image Processing with OpenCV <i class="fas fa-arrow-left"></i></span>
-</a>
-<a href="#/participant-ai-lab-cv" class="lnf-next">
-<span class="lnf-label">Kembali ke</span>
-<span class="lnf-title">Katalog Computer Vision <i class="fas fa-arrow-right"></i></span>
-</a>
-</footer>
-</section>
-</div>
-<aside class="lesson-right-panel">
-<div class="lesson-progress-card">
-<div class="lpc-header"><i class="fas fa-chart-simple"></i> Progress CV</div>
-<div class="lpc-ring-wrap"><svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="30" stroke="var(--border)" stroke-width="5" fill="none"/><circle cx="36" cy="36" r="30" stroke="var(--fellow-pink)" stroke-width="5" fill="none" stroke-dasharray="188.5" stroke-dashoffset="0" stroke-linecap="round"/></svg><div class="lpc-ring-text"><strong>100%</strong></div></div>
-<div class="lpc-meta"><span><i class="far fa-circle-check"></i> 10/10 selesai</span><span><i class="fas fa-fire"></i> 0 streak</span></div>
-</div>
-<div class="lesson-list-card">
-<h4>CV Course</h4>
-<div class="lesson-list-item done"><span class="lli-dot"></span> 1-8. Done</div>
-<div class="lesson-list-item done"><span class="lli-dot"></span> 9. Image Processing</div>
-<div class="lesson-list-item active"><span class="lli-dot"></span> 10. Pixel Anatomy</div>
-</div>
-</aside>
-</div>
-</main>
-</section>
+
