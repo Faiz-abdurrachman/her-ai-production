@@ -25,13 +25,21 @@ const practiceHtmlPath = `"/pages/frontend/fellow-dashboard/${categoryFolder}/${
 const quizHtmlPath = `"/pages/frontend/fellow-dashboard/${categoryFolder}/${moduleFolder}/kuis.html"`;
 const discussionHtmlPath = `"/pages/frontend/fellow-dashboard/${categoryFolder}/${moduleFolder}/diskusi.html"`;
 
-if (routerJs.includes('under-development.html') && routerJs.includes(actualRouteKey)) {
+if (routerJs.includes(actualRouteKey) && routerJs.includes('under-development.html')) {
     // Replace in staticRoutes
     routerJs = routerJs.replace(
         new RegExp(`"${actualRouteKey}":.*under-development\\.html",?`),
         `"${actualRouteKey}": ${materiHtmlPath},\n        "${actualRouteKey}-practice": ${practiceHtmlPath},\n        "${actualRouteKey}-quiz": ${quizHtmlPath},\n        "${actualRouteKey}-discussion": ${discussionHtmlPath},`
     );
+} else if (!routerJs.includes(actualRouteKey)) {
+    // Insert into staticRoutes
+    routerJs = routerJs.replace(/routes: \{/, `routes: {\n        "${actualRouteKey}": ${materiHtmlPath},\n        "${actualRouteKey}-practice": ${practiceHtmlPath},\n        "${actualRouteKey}-quiz": ${quizHtmlPath},\n        "${actualRouteKey}-discussion": ${discussionHtmlPath},`);
     
+    // Insert into publicRoutes
+    routerJs = routerJs.replace(/const publicRoutes = \[/, `const publicRoutes = [\n            "${actualRouteKey}",\n            "${actualRouteKey}-practice",\n            "${actualRouteKey}-quiz",\n            "${actualRouteKey}-discussion",`);
+}
+
+if (!routerJs.includes(`path.startsWith("${actualRouteKey}")`)) {
     // Also inject into initRouter
     const initInjection = `
                 } else if (path.startsWith("${actualRouteKey}") && typeof window.initFellowDashboardPage === "function") {
@@ -55,7 +63,7 @@ if (routerJs.includes('under-development.html') && routerJs.includes(actualRoute
     fs.writeFileSync(routerPath, routerJs);
     console.log("Updated router.js");
 } else {
-    console.log("Routes already exist in router.js or under-development not found");
+    console.log("Routes already exist in router.js");
 }
 
 // 2. Update index.html

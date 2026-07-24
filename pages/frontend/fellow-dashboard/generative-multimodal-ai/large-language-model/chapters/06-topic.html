@@ -1,0 +1,97 @@
+<h1>Inference dan Strategi Decoding</h1>
+<h2>6.1 Apa Itu Inference?</h2>
+<p>Inference adalah proses menjalankan model yang sudah dilatih untuk menghasilkan output. Pada model autoregresif, inference berlangsung token demi token.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">1. Model membaca prompt.
+2. Model menghitung logits token berikutnya.
+3. Decoding memilih token.
+4. Token ditambahkan ke konteks.
+5. Proses berulang sampai kondisi berhenti.
+</code></pre></div>
+<p>Dua fase komputasi sering dibedakan:</p>
+<ul>
+<li><strong>Prefill:</strong> memproses seluruh token prompt.</li>
+<li><strong>Decode:</strong> menghasilkan token baru satu per satu.</li>
+</ul>
+<p>Prompt panjang meningkatkan beban prefill. Output panjang meningkatkan jumlah langkah decode.</p>
+<h2>6.2 Greedy Decoding</h2>
+<p>Greedy decoding selalu memilih token dengan probabilitas tertinggi.</p>
+<p>Kelebihan:</p>
+<ul>
+<li>sederhana,</li>
+<li>lebih konsisten,</li>
+<li>cocok untuk beberapa tugas terstruktur.</li>
+</ul>
+<p>Keterbatasan:</p>
+<ul>
+<li>dapat menghasilkan teks repetitif,</li>
+<li>tidak selalu menemukan urutan terbaik secara global,</li>
+<li>kurang bervariasi untuk tugas kreatif.</li>
+</ul>
+<h2>6.3 Temperature</h2>
+<p>Temperature mengubah ketajaman distribusi probabilitas sebelum sampling.</p>
+<ul>
+<li>Temperature rendah membuat pilihan lebih terkonsentrasi pada token berprobabilitas tinggi.</li>
+<li>Temperature lebih tinggi meningkatkan variasi.</li>
+<li>Temperature tidak membuat model lebih mengetahui fakta.</li>
+</ul>
+<div class="reasoning-code-block"><pre><code class="language-text">Tugas ekstraksi JSON -&gt; biasanya butuh variasi rendah
+Brainstorm ide kreatif -&gt; dapat memakai variasi lebih tinggi
+</code></pre></div>
+<p>Nilai parameter bergantung pada model dan sistem. Selalu uji dengan dataset tugas nyata.</p>
+<h2>6.4 Top-k dan Top-p</h2>
+<p><strong>Top-k sampling</strong> membatasi pilihan pada k token dengan probabilitas tertinggi.</p>
+<p><strong>Top-p sampling</strong> memilih himpunan token terkecil yang jumlah probabilitasnya mencapai ambang p.</p>
+<p>Keduanya mengurangi kemungkinan memilih token dari ekor distribusi yang sangat kecil. Parameter dapat berinteraksi dengan temperature.</p>
+<h2>6.5 Stop Condition dan Maximum Output</h2>
+<p>Sistem perlu menentukan kapan generasi berhenti:</p>
+<ul>
+<li>token akhir dari model,</li>
+<li>stop sequence,</li>
+<li>batas token output,</li>
+<li>format selesai,</li>
+<li>pembatalan oleh pengguna atau sistem.</li>
+</ul>
+<p>Batas output yang terlalu pendek memotong jawaban. Batas terlalu panjang meningkatkan biaya dan risiko respons menyimpang.</p>
+<h2>6.6 Repetition dan Structured Output</h2>
+<p>Beberapa sistem menyediakan penalti repetisi atau constraint format. Namun format tetap perlu divalidasi oleh program.</p>
+<div class="reasoning-code-block"><pre><code class="language-python">import json
+
+raw_output = &#39;{&quot;category&quot;: &quot;billing&quot;, &quot;priority&quot;: 2}&#39;
+
+try:
+    result = json.loads(raw_output)
+    assert result[&quot;category&quot;] in {&quot;billing&quot;, &quot;technical&quot;, &quot;general&quot;}
+    assert result[&quot;priority&quot;] in {1, 2, 3}
+except (json.JSONDecodeError, KeyError, AssertionError):
+    result = {&quot;error&quot;: &quot;Output model tidak valid&quot;}
+</code></pre></div>
+<blockquote>
+<p><strong>Prinsip penting:</strong> prompt meminta format. Program memastikan format.</p>
+</blockquote>
+<h2>6.7 Reproducibility</h2>
+<p>Output sampling dapat berubah antar-run. Bahkan konfigurasi yang terlihat sama dapat berubah karena versi model, sistem inference, atau implementasi numerik. Untuk eksperimen:</p>
+<ul>
+<li>simpan model dan versi,</li>
+<li>simpan prompt lengkap,</li>
+<li>simpan parameter decoding,</li>
+<li>gunakan dataset evaluasi tetap,</li>
+<li>catat waktu dan lingkungan,</li>
+<li>jangan menilai kualitas dari satu contoh saja.</li>
+</ul>
+<h2>Checkpoint Bab 6</h2>
+<ol>
+<li>Apa perbedaan fase prefill dan decode?</li>
+<li>Mengapa temperature tinggi tidak berarti jawaban lebih benar?</li>
+<li>Mengapa output JSON tetap harus divalidasi program?</li>
+</ol>
+<h2>Latihan Bab 6 - Eksperimen Decoding</h2>
+<p>Gunakan satu tugas ringkasan dan satu tugas brainstorming. Buat rancangan eksperimen yang membandingkan tiga konfigurasi decoding. Tentukan:</p>
+<ul>
+<li>parameter yang diubah,</li>
+<li>output yang diamati,</li>
+<li>rubric kualitas,</li>
+<li>jumlah pengulangan,</li>
+<li>cara memilih konfigurasi akhir.</li>
+</ul>
+<hr>
+

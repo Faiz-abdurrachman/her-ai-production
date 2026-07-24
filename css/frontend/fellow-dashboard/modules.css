@@ -11257,6 +11257,8 @@
 .ai-python-practice-page .python-practice-form,
 .ai-python-quiz-page #aiPythonQuizForm ,
 .ai-python-quiz-page #aiDeepLearningQuizForm ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizForm ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizForm ,
 .ai-python-quiz-page #aiReinforcementLearningQuizForm ,
 .ai-python-quiz-page #aiReinforcementLearningQuizForm {
     border-top: 0;
@@ -11372,10 +11374,14 @@
 
 .ai-python-practice-page #aiPythonPracticeList,
 .ai-python-practice-page #aiDeepLearningPracticeList,
+.ai-python-practice-page #aiLargeLanguageModelPracticeList,
+.ai-python-practice-page #aiLargeLanguageModelPracticeList,
 .ai-python-practice-page #aiReinforcementLearningPracticeList,
 .ai-python-practice-page #aiReinforcementLearningPracticeList,
 .ai-python-quiz-page #aiPythonQuizList ,
 .ai-python-quiz-page #aiDeepLearningQuizList ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizList ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizList ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList {
     min-width: 0;
@@ -11384,6 +11390,8 @@
 .ai-python-practice-page .reasoning-practice-card,
 .ai-python-quiz-page #aiPythonQuizList > article ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizList > article ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizList > article ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article {
     background: #ffffff;
@@ -11398,6 +11406,8 @@
 .ai-python-practice-page .reasoning-practice-card[hidden],
 .ai-python-quiz-page #aiPythonQuizList > article[hidden] ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article[hidden] ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizList > article[hidden] ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizList > article[hidden] ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article[hidden] ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article[hidden] {
     display: none !important;
@@ -11641,6 +11651,8 @@
 
 .ai-python-quiz-page #aiPythonQuizNavigator ,
 .ai-python-quiz-page #aiDeepLearningQuizNavigator ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizNavigator ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizNavigator ,
 .ai-python-quiz-page #aiReinforcementLearningQuizNavigator ,
 .ai-python-quiz-page #aiReinforcementLearningQuizNavigator {
     display: flex;
@@ -11649,6 +11661,8 @@
 
 .ai-python-quiz-page #aiPythonQuizList > article > span ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article > span ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizList > article > span ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizList > article > span ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article > span ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article > span {
     background: var(--python-pink);
@@ -11661,6 +11675,8 @@
 
 .ai-python-quiz-page #aiPythonQuizList > article > small ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article > small ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizList > article > small ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizList > article > small ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article > small ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article > small {
     color: var(--python-pink-deep);
@@ -11672,6 +11688,8 @@
 
 .ai-python-quiz-page #aiPythonQuizList > article > h3 ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article > h3 ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizList > article > h3 ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizList > article > h3 ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article > h3 ,
 .ai-python-quiz-page #aiReinforcementLearningQuizList > article > h3 {
     color: var(--python-ink);
@@ -11905,6 +11923,8 @@
 
 .ai-python-quiz-page #aiPythonQuizForm.is-locked .reasoning-scaffold-options label ,
 .ai-python-quiz-page #aiDeepLearningQuizForm.is-locked .reasoning-scaffold-options label ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizForm.is-locked .reasoning-scaffold-options label ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizForm.is-locked .reasoning-scaffold-options label ,
 .ai-python-quiz-page #aiReinforcementLearningQuizForm.is-locked .reasoning-scaffold-options label ,
 .ai-python-quiz-page #aiReinforcementLearningQuizForm.is-locked .reasoning-scaffold-options label {
     cursor: not-allowed;
@@ -12569,6 +12589,8 @@
     .ai-python-practice-page .reasoning-practice-card,
     .ai-python-quiz-page #aiPythonQuizList > article ,
     .ai-python-quiz-page #aiDeepLearningQuizList > article ,
+    .ai-python-quiz-page #aiLargeLanguageModelQuizList > article ,
+    .ai-python-quiz-page #aiLargeLanguageModelQuizList > article ,
     .ai-python-quiz-page #aiReinforcementLearningQuizList > article ,
     .ai-python-quiz-page #aiReinforcementLearningQuizList > article {
         padding: 15px;
@@ -12761,6 +12783,8 @@
 
 /* FORCING QUIZ NAVIGATOR FIX FOR DEEP LEARNING */
 .ai-python-quiz-page #aiDeepLearningQuizNavigator ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizNavigator ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizNavigator ,
 .ai-python-quiz-page #aiReinforcementLearningQuizNavigator ,
 .ai-python-quiz-page #aiReinforcementLearningQuizNavigator {
     display: flex !important;
@@ -12769,6 +12793,8 @@
     justify-content: flex-start !important;
 }
 .ai-python-quiz-page #aiDeepLearningQuizNavigator button ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizNavigator button ,
+.ai-python-quiz-page #aiLargeLanguageModelQuizNavigator button ,
 .ai-python-quiz-page #aiReinforcementLearningQuizNavigator button ,
 .ai-python-quiz-page #aiReinforcementLearningQuizNavigator button {
     flex: 0 0 44px !important;

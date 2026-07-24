@@ -1,0 +1,182 @@
+<h1>Large Language Model</h1>
+<blockquote>
+<p>Modul belajar praktis dan mudah dipahami untuk peserta HerAI Fellowship. Materi dimulai dari cara teks diubah menjadi token, kemudian membahas embedding, Transformer, pretraining, prompting, Retrieval-Augmented Generation, fine-tuning, evaluasi, keselamatan, deployment, dan mini project asisten FAQ berbasis dokumen.</p>
+</blockquote>
+<h2>Informasi Course</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Komponen</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Level</td>
+<td>Intermediate</td>
+</tr>
+<tr>
+<td>Estimasi belajar</td>
+<td>20-24 jam</td>
+</tr>
+<tr>
+<td>Prasyarat</td>
+<td>Python dasar, machine learning, pengantar deep learning, dan konsep Transformer dasar</td>
+</tr>
+<tr>
+<td>Bentuk pembelajaran</td>
+<td>Materi, analogi, diagram teks, contoh, latihan, checkpoint, kuis, diskusi, dan mini project</td>
+</tr>
+<tr>
+<td>Hasil akhir</td>
+<td>Peserta mampu memahami alur kerja LLM dan merancang prototipe aplikasi LLM yang terukur, aman, dan dapat dievaluasi</td>
+</tr>
+</tbody></table></div>
+<h2>Tentang Modul Ini</h2>
+<p>Large Language Model atau LLM sering terlihat seperti sistem yang memahami bahasa sebagaimana manusia. Dalam praktiknya, LLM adalah model statistik berskala besar yang mempelajari pola token dari banyak data dan menghasilkan token berikutnya berdasarkan konteks yang tersedia.</p>
+<p>Modul ini tidak hanya menjelaskan cara meminta jawaban dari model. Peserta akan belajar membedakan kemampuan model, pengetahuan eksternal, instruksi, konteks, dan komponen sistem di sekeliling model. Pemahaman tersebut penting agar aplikasi tidak dibangun berdasarkan asumsi bahwa model selalu benar.</p>
+<blockquote>
+<p><strong>Prinsip belajar:</strong> pahami dulu aliran data dan sumber kegagalan. Baru setelah itu pilih teknik seperti prompting, RAG, atau fine-tuning. Teknik yang lebih kompleks tidak otomatis menjadi solusi yang lebih baik.</p>
+</blockquote>
+<h2>Capaian Pembelajaran</h2>
+<p>Setelah menyelesaikan modul ini, peserta diharapkan mampu:</p>
+<ol>
+<li>Menjelaskan LLM sebagai model prediksi token dan membedakannya dari mesin pencari atau basis data.</li>
+<li>Memahami tokenisasi, vocabulary, embedding, positional information, attention, dan Transformer decoder secara intuitif.</li>
+<li>Menjelaskan pretraining, instruction tuning, preference alignment, dan proses inference.</li>
+<li>Mengendalikan keluaran melalui instruksi, konteks, contoh, format, dan parameter decoding.</li>
+<li>Menentukan kapan menggunakan prompting, RAG, fine-tuning, atau kombinasi beberapa pendekatan.</li>
+<li>Mendesain pipeline RAG sederhana yang memiliki proses chunking, retrieval, generation, dan citation.</li>
+<li>Mengevaluasi kualitas output berdasarkan correctness, relevance, faithfulness, safety, latency, dan cost.</li>
+<li>Mengenali hallucination, prompt injection, kebocoran data, bias, serta risiko operasional lainnya.</li>
+<li>Membuat mini project asisten FAQ berbasis dokumen dan menyusun laporan eksperimen.</li>
+</ol>
+<h2>Prasyarat</h2>
+<p>Peserta sebaiknya sudah memahami variabel, fungsi, list, dictionary, dan pemrosesan string di Python. Pemahaman dasar tentang neural network, loss function, gradient descent, embedding, dan attention akan membantu, tetapi setiap konsep utama tetap dijelaskan secara bertahap.</p>
+<blockquote>
+<p><strong>Catatan matematika:</strong> modul memakai notasi sederhana untuk menunjukkan hubungan antarkomponen. Peserta tidak diwajibkan menurunkan seluruh persamaan Transformer.</p>
+</blockquote>
+<h2>Peta Materi</h2>
+<ol>
+<li>Pengantar Large Language Model</li>
+<li>Tokenisasi dan Representasi Teks</li>
+<li>Embedding dan Informasi Posisi</li>
+<li>Transformer untuk Model Bahasa</li>
+<li>Pretraining, Instruction Tuning, dan Alignment</li>
+<li>Inference dan Strategi Decoding</li>
+<li>Prompting yang Terstruktur</li>
+<li>Retrieval-Augmented Generation</li>
+<li>Fine-Tuning dan Adaptasi Model</li>
+<li>Evaluasi Sistem LLM</li>
+<li>Hallucination, Safety, Privacy, dan Security</li>
+<li>Deployment, Monitoring, Latency, dan Cost</li>
+<li>Mini Project Asisten FAQ Berbasis Dokumen</li>
+<li>Kuis Akhir dan Pembahasan</li>
+<li>Diskusi, Glosarium, Ringkasan, dan Referensi</li>
+</ol>
+<hr>
+<h1>Pengantar Large Language Model</h1>
+<h2>1.1 Apa Itu Large Language Model?</h2>
+<p>Large Language Model adalah model yang mempelajari pola bahasa dari kumpulan teks dalam skala besar. Kata <em>large</em> dapat merujuk pada jumlah parameter, jumlah data, kebutuhan komputasi, atau gabungan ketiganya. Kata <em>language model</em> berarti model memperkirakan kemungkinan urutan token.</p>
+<p>Untuk model autoregresif, gagasan dasarnya adalah:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">teks sebelumnya -&gt; model -&gt; probabilitas token berikutnya
+</code></pre></div>
+<p>Misalnya, setelah membaca kalimat <code>Ibu membeli beras di</code>, model mungkin memberi kemungkinan tinggi pada token <code>pasar</code>, <code>toko</code>, atau <code>warung</code>. Model memilih atau mengambil sampel satu token, menambahkannya ke konteks, lalu mengulangi proses tersebut sampai respons selesai.</p>
+<p>Secara ringkas:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Prompt: &quot;Air membeku pada suhu&quot;
+          ↓
+Model menghitung distribusi probabilitas token
+          ↓
+Token terpilih: &quot;0&quot;
+          ↓
+Konteks baru: &quot;Air membeku pada suhu 0&quot;
+          ↓
+Prediksi berikutnya: &quot;derajat&quot;, lalu &quot;Celsius&quot;
+</code></pre></div>
+<h2>1.2 LLM Bukan Mesin Pencari</h2>
+<p>LLM dan mesin pencari memiliki cara kerja berbeda.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aspek</th>
+<th>LLM</th>
+<th>Mesin Pencari</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fungsi utama</td>
+<td>Menghasilkan teks berdasarkan pola dan konteks</td>
+<td>Menemukan dokumen atau halaman yang relevan</td>
+</tr>
+<tr>
+<td>Sumber jawaban</td>
+<td>Parameter model dan konteks yang diberikan</td>
+<td>Indeks dokumen yang dapat ditelusuri</td>
+</tr>
+<tr>
+<td>Jaminan sumber</td>
+<td>Tidak otomatis memiliki sumber yang dapat diperiksa</td>
+<td>Biasanya menampilkan tautan atau dokumen</td>
+</tr>
+<tr>
+<td>Risiko utama</td>
+<td>Menghasilkan jawaban terdengar benar tetapi salah</td>
+<td>Menemukan sumber yang tidak relevan atau kurang tepercaya</td>
+</tr>
+<tr>
+<td>Kekuatan</td>
+<td>Merangkum, mengubah format, menulis, menjelaskan</td>
+<td>Menemukan informasi aktual dan sumber asli</td>
+</tr>
+</tbody></table></div>
+<p>Aplikasi yang membutuhkan fakta dari dokumen tertentu sebaiknya tidak hanya mengandalkan memori parameter model. Sistem dapat menambahkan retrieval sehingga model menerima potongan dokumen yang relevan sebelum menjawab.</p>
+<h2>1.3 Kemampuan yang Sering Muncul</h2>
+<p>LLM dapat menunjukkan kemampuan seperti:</p>
+<ul>
+<li>menjawab pertanyaan,</li>
+<li>merangkum teks,</li>
+<li>menerjemahkan,</li>
+<li>mengklasifikasikan teks,</li>
+<li>mengekstrak informasi,</li>
+<li>menghasilkan kode,</li>
+<li>mengubah gaya penulisan,</li>
+<li>mengikuti format keluaran,</li>
+<li>menggunakan dokumen atau tool yang diberikan sistem.</li>
+</ul>
+<p>Kemampuan tersebut tidak berarti model memiliki pemahaman, ingatan, atau tujuan yang sama dengan manusia. Output tetap dipengaruhi pola data, instruksi, konteks, dan proses sampling.</p>
+<h2>1.4 Kapan LLM Cocok Digunakan?</h2>
+<p>LLM cocok ketika tugas melibatkan bahasa yang bervariasi dan aturan manual sulit mencakup seluruh kemungkinan, misalnya:</p>
+<ul>
+<li>membuat ringkasan awal dari dokumen panjang,</li>
+<li>menyusun draf komunikasi yang kemudian ditinjau manusia,</li>
+<li>mengubah pertanyaan pengguna menjadi kategori atau parameter terstruktur,</li>
+<li>menjawab FAQ berdasarkan basis pengetahuan,</li>
+<li>membantu pencarian semantik,</li>
+<li>menghasilkan variasi materi belajar.</li>
+</ul>
+<p>LLM kurang tepat ketika:</p>
+<ul>
+<li>jawaban harus selalu deterministik dan dapat dihitung dengan aturan sederhana,</li>
+<li>kesalahan kecil dapat menimbulkan dampak keselamatan tinggi tanpa verifikasi,</li>
+<li>sumber data tidak boleh meninggalkan lingkungan yang dikendalikan,</li>
+<li>informasi harus selalu mutakhir tetapi sistem tidak memiliki retrieval,</li>
+<li>tugas cukup diselesaikan dengan template, regex, query database, atau model kecil.</li>
+</ul>
+<blockquote>
+<p><strong>Prinsip praktis:</strong> gunakan LLM untuk bagian yang membutuhkan fleksibilitas bahasa. Gunakan program biasa untuk aturan pasti, perhitungan, validasi, dan kontrol akses.</p>
+</blockquote>
+<h2>Checkpoint Bab 1</h2>
+<ol>
+<li>Mengapa LLM disebut model prediksi token?</li>
+<li>Apa perbedaan paling penting antara LLM dan mesin pencari?</li>
+<li>Sebutkan satu kasus ketika aturan biasa lebih tepat daripada LLM.</li>
+</ol>
+<h2>Latihan Bab 1 - Menentukan Peran LLM</h2>
+<p>Pilih salah satu skenario berikut: layanan pelanggan, tutor belajar, administrasi kampus, atau analisis dokumen. Buat tabel berisi:</p>
+<ul>
+<li>tugas yang cocok ditangani LLM,</li>
+<li>tugas yang harus ditangani program deterministik,</li>
+<li>bagian yang harus ditinjau manusia,</li>
+<li>risiko jika seluruh proses diserahkan kepada model.</li>
+</ul>
+<hr>
+

@@ -1,0 +1,312 @@
+{
+    "practices": [
+        {
+            "id": "PRACTICE-1",
+            "prompt": [
+                "Pilih satu skenario berikut: penghemat energi, robot gudang, rekomendasi materi belajar, atau penjadwalan mesin. Tuliskan:",
+                "- keputusan apa yang perlu dibuat,\n- feedback apa yang mungkin tersedia,\n- konsekuensi jangka panjangnya,\n- risiko jika agent melakukan eksplorasi tanpa batas.",
+                "---"
+            ]
+        },
+        {
+            "id": "PRACTICE-2",
+            "prompt": [
+                "Rancang MDP sederhana untuk sistem pengatur lampu lalu lintas. Tentukan:",
+                "- state,\n- observation yang tersedia,\n- action,\n- reward,\n- kondisi akhir atau horizon,\n- risiko jika state terlalu sederhana.",
+                "---"
+            ]
+        },
+        {
+            "id": "PRACTICE-3",
+            "prompt": [
+                "Buat reward awal untuk robot gudang yang harus mengantar barang. Setelah itu, cari minimal tiga kemungkinan perilaku tidak diinginkan dan revisi reward atau batasannya.",
+                "---"
+            ]
+        },
+        {
+            "id": "PRACTICE-4",
+            "prompt": [
+                "Buat tabel Q sederhana untuk tiga state dan dua action. Isi nilai perkiraan sendiri, lalu tulis policy greedy yang dihasilkan.",
+                "---"
+            ]
+        },
+        {
+            "id": "PRACTICE-5",
+            "prompt": [
+                "Jalankan simulasi bandit dengan `epsilon` 0, 0.01, 0.1, dan 0.3. Bandingkan:",
+                "- total reward,\n- frekuensi action terbaik dipilih,\n- kestabilan hasil antar-run.",
+                "---"
+            ]
+        },
+        {
+            "id": "PRACTICE-6",
+            "prompt": [
+                "Gunakan episode reward `[-1, -1, 5]` dengan `gamma = 0.9`.",
+                "1. Hitung return Monte Carlo dari setiap langkah.\n2. Misalkan `V(S_t)=1.0` dan `V(S_(t+1))=2.0`. Hitung TD target dan TD error untuk reward `-1`.",
+                "---"
+            ]
+        },
+        {
+            "id": "PRACTICE-7",
+            "prompt": [
+                "Buat satu contoh transisi:",
+                "```text\nQ(s,a)=2.0, reward=1, gamma=0.9, max Q(s',.)=4.0, alpha=0.1\n```",
+                "Hitung:",
+                "1. target Q-learning,\n2. TD error,\n3. Q-value baru.",
+                "---"
+            ]
+        },
+        {
+            "id": "PRACTICE-8",
+            "prompt": [
+                "Gambarkan arsitektur DQN untuk observation berukuran 8 fitur dan 4 action. Tentukan:",
+                "- ukuran input,\n- dua hidden layer,\n- ukuran output,\n- informasi yang disimpan di replay buffer.",
+                "---"
+            ]
+        },
+        {
+            "id": "PRACTICE-9",
+            "prompt": [
+                "Untuk tiga langkah dengan return `[4, 1, -2]` dan baseline `[2, 2, 0]`, hitung advantage sederhana. Jelaskan action mana yang seharusnya diperkuat atau dilemahkan.",
+                "---"
+            ]
+        },
+        {
+            "id": "PRACTICE-10",
+            "prompt": [
+                "Ambil reward dari latihan sebelumnya. Bertindaklah sebagai agent yang mencari celah. Tuliskan lima cara memperoleh reward tanpa memenuhi tujuan sebenarnya. Setelah itu, tambahkan batasan dan metrik untuk mengurangi risiko tersebut.",
+                "---"
+            ]
+        },
+        {
+            "id": "PRACTICE-11",
+            "prompt": [
+                "Rancang tabel eksperimen untuk membandingkan tiga nilai epsilon decay. Sertakan:",
+                "- variabel yang dikontrol,\n- jumlah seed,\n- metrik utama,\n- metrik keselamatan,\n- aturan memilih konfigurasi terbaik.",
+                "---"
+            ]
+        }
+    ],
+    "quiz": [
+        [
+            "Komponen yang memilih action dalam RL adalah ...",
+            [
+                "Reward",
+                "Agent",
+                "Dataset",
+                "Label"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Tujuan umum RL adalah ...",
+            [
+                "Memaksimalkan satu reward langsung saja",
+                "Meminimalkan ukuran state",
+                "Memaksimalkan expected return jangka panjang",
+                "Menghapus kebutuhan evaluasi"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "State yang baik seharusnya ...",
+            [
+                "Selalu berupa gambar",
+                "Merangkum informasi relevan untuk keputusan berikutnya",
+                "Tidak berubah sepanjang episode",
+                "Hanya berisi reward"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Discount factor mendekati nol membuat agent ...",
+            [
+                "Lebih fokus pada reward dekat",
+                "Selalu memilih action acak",
+                "Tidak dapat belajar",
+                "Mengabaikan reward langsung"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "V(s) memperkirakan ...",
+            [
+                "Probabilitas state tidak pernah muncul",
+                "Return dari state ketika mengikuti policy",
+                "Jumlah action yang tersedia",
+                "Learning rate optimal"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Q(s,a) memperkirakan ...",
+            [
+                "Return setelah mengambil action a pada state s",
+                "Ukuran replay buffer",
+                "Jumlah episode",
+                "Nilai reward terakhir saja"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Intuisi Bellman adalah ...",
+            [
+                "Nilai sekarang terdiri dari reward langsung dan nilai masa depan",
+                "Semua state harus memiliki nilai sama",
+                "Reward tidak diperlukan",
+                "Policy tidak boleh berubah"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Exploration diperlukan agar ...",
+            [
+                "Agent tidak pernah menggunakan pengetahuan lama",
+                "Agent dapat menemukan action yang belum cukup dicoba",
+                "Episode selalu lebih panjang",
+                "Reward menjadi nol"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Pada epsilon-greedy, epsilon menyatakan ...",
+            [
+                "Probabilitas eksplorasi",
+                "Discount factor",
+                "Learning rate",
+                "Ukuran state"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Monte Carlo memperbarui nilai ...",
+            [
+                "Sebelum menerima reward",
+                "Setelah memperoleh return episode",
+                "Tanpa pengalaman",
+                "Hanya pada supervised dataset"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Temporal-Difference disebut bootstrapping karena ...",
+            [
+                "Menggunakan estimasi nilai berikutnya untuk memperbarui nilai sekarang",
+                "Selalu memakai neural network",
+                "Tidak memiliki reward",
+                "Menghapus state terminal"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "SARSA adalah on-policy karena targetnya memakai ...",
+            [
+                "Action acak dari policy lain",
+                "Action berikutnya yang benar-benar dipilih policy saat ini",
+                "Hanya reward maksimum global",
+                "Dataset tetap"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Target Q-learning memakai ...",
+            [
+                "Nilai minimum action berikutnya",
+                "Rata-rata semua reward historis",
+                "Maksimum Q pada state berikutnya",
+                "Tidak ada nilai masa depan"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Replay buffer pada DQN berguna untuk ...",
+            [
+                "Menyimpan model final saja",
+                "Menggunakan ulang dan mengacak pengalaman training",
+                "Menghapus kebutuhan target network",
+                "Menjamin keselamatan"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Target network membantu ...",
+            [
+                "Membuat target belajar lebih stabil",
+                "Menambah jumlah action",
+                "Mengubah state menjadi reward",
+                "Menghapus exploration"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Policy gradient mengoptimalkan ...",
+            [
+                "Policy secara langsung",
+                "Ukuran replay buffer saja",
+                "Jumlah state",
+                "Label klasifikasi"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Critic pada actor-critic berfungsi untuk ...",
+            [
+                "Memilih warna visualisasi",
+                "Menilai state atau action dan memberi sinyal belajar",
+                "Menghapus reward",
+                "Menentukan hardware"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "PPO membatasi perubahan policy agar ...",
+            [
+                "Update tidak terlalu ekstrem",
+                "Semua action memiliki probabilitas nol",
+                "Policy tidak pernah belajar",
+                "Reward selalu positif"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Evaluasi RL sebaiknya ...",
+            [
+                "Hanya memakai satu seed terbaik",
+                "Memisahkan evaluasi dari training dan memakai beberapa seed",
+                "Hanya melihat loss network",
+                "Mengabaikan safety violation"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ],
+        [
+            "Reward hacking berarti ...",
+            [
+                "Agent mendapat reward tinggi melalui perilaku yang tidak sesuai tujuan sebenarnya",
+                "Programmer menghapus reward",
+                "Reward selalu negatif",
+                "Agent menggunakan epsilon-greedy"
+            ],
+            0,
+            "Penjelasan belum tersedia."
+        ]
+    ]
+}

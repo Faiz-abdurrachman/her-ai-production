@@ -1,0 +1,183 @@
+<h1>Deployment, Monitoring, Latency, dan Cost</h1>
+<h2>12.1 LLM Adalah Satu Komponen Sistem</h2>
+<p>Aplikasi produksi biasanya memiliki:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">User Interface
+      ↓
+API / Orchestrator
+      ↓
+Authentication dan Authorization
+      ↓
+Prompt Builder - Retriever - Tool Router
+      ↓
+Model Endpoint
+      ↓
+Validation dan Safety Filter
+      ↓
+Logging, Monitoring, Evaluation
+</code></pre></div>
+<p>Setiap lapisan memiliki kegagalan sendiri. Kualitas model saja tidak cukup.</p>
+<h2>12.2 Memilih Model</h2>
+<p>Pertimbangan pemilihan model:</p>
+<ul>
+<li>kualitas pada eval set,</li>
+<li>dukungan bahasa,</li>
+<li>context window,</li>
+<li>structured output,</li>
+<li>latency,</li>
+<li>throughput,</li>
+<li>biaya,</li>
+<li>lokasi pemrosesan data,</li>
+<li>kebijakan penggunaan,</li>
+<li>kemampuan deployment,</li>
+<li>stabilitas versi.</li>
+</ul>
+<p>Buat model card internal yang mencatat alasan pemilihan dan batas penggunaan.</p>
+<h2>12.3 Latency</h2>
+<p>Komponen latency:</p>
+<ul>
+<li>waktu jaringan,</li>
+<li>antrean,</li>
+<li>retrieval,</li>
+<li>reranking,</li>
+<li>prefill,</li>
+<li>decode,</li>
+<li>tool call,</li>
+<li>post-processing.</li>
+</ul>
+<p>Metrik yang berguna:</p>
+<ul>
+<li>time to first token,</li>
+<li>total response time,</li>
+<li>tokens per second,</li>
+<li>p50, p95, dan p99 latency,</li>
+<li>timeout rate.</li>
+</ul>
+<p>Streaming memperbaiki pengalaman pengguna, tetapi tidak mengurangi total komputasi dan dapat menampilkan bagian output sebelum validasi selesai.</p>
+<h2>12.4 Cost</h2>
+<p>Biaya dapat berasal dari:</p>
+<ul>
+<li>token input,</li>
+<li>token output,</li>
+<li>embedding,</li>
+<li>reranking,</li>
+<li>penyimpanan indeks,</li>
+<li>GPU atau endpoint,</li>
+<li>logging dan observability,</li>
+<li>evaluasi manusia.</li>
+</ul>
+<p>Optimisasi biaya:</p>
+<ul>
+<li>gunakan model paling kecil yang memenuhi target,</li>
+<li>ringkas konteks,</li>
+<li>batasi top-k,</li>
+<li>cache hasil aman,</li>
+<li>gunakan routing berdasarkan kesulitan,</li>
+<li>kurangi output yang tidak perlu,</li>
+<li>batch proses offline,</li>
+<li>ukur cost per successful task, bukan hanya cost per request.</li>
+</ul>
+<h2>12.5 Caching</h2>
+<p>Jenis cache:</p>
+<ul>
+<li>response cache untuk request identik,</li>
+<li>semantic cache untuk pertanyaan mirip,</li>
+<li>retrieval cache,</li>
+<li>embedding cache,</li>
+<li>prefix atau prompt cache.</li>
+</ul>
+<p>Risiko cache:</p>
+<ul>
+<li>data lama,</li>
+<li>kebocoran lintas pengguna,</li>
+<li>respons salah digunakan kembali,</li>
+<li>invalidation sulit,</li>
+<li>data sensitif tersimpan terlalu lama.</li>
+</ul>
+<p>Cache key harus memperhitungkan identitas, izin, versi dokumen, model, dan prompt.</p>
+<h2>12.6 Monitoring</h2>
+<p>Monitor minimal:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Area</th>
+<th>Contoh metrik</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reliability</td>
+<td>error rate, timeout, retry</td>
+</tr>
+<tr>
+<td>Quality</td>
+<td>pass rate eval, user correction, abstention</td>
+</tr>
+<tr>
+<td>Retrieval</td>
+<td>no-result rate, recall proxy, source distribution</td>
+</tr>
+<tr>
+<td>Safety</td>
+<td>blocked request, policy violation, injection detection</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>p50/p95 latency, throughput</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>token per request, cost per successful task</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>dokumen usang, indexing failure, permission mismatch</td>
+</tr>
+</tbody></table></div>
+<p>Jangan menyimpan seluruh prompt dan output secara otomatis tanpa mempertimbangkan privasi. Gunakan redaction dan sampling sesuai kebijakan.</p>
+<h2>12.7 Versioning dan Rollback</h2>
+<p>Versi sistem mencakup:</p>
+<ul>
+<li>model,</li>
+<li>tokenizer,</li>
+<li>system prompt,</li>
+<li>template chat,</li>
+<li>retrieval index,</li>
+<li>embedding model,</li>
+<li>reranker,</li>
+<li>parameter decoding,</li>
+<li>validator,</li>
+<li>kebijakan safety.</li>
+</ul>
+<p>Perubahan satu komponen dapat mengubah output. Rilis sebaiknya melalui canary atau A/B test dengan guardrail dan rollback.</p>
+<h2>12.8 Service Level Objective</h2>
+<p>Contoh SLO:</p>
+<ul>
+<li>95% request selesai kurang dari 8 detik,</li>
+<li>99.5% request tidak mengalami error sistem,</li>
+<li>seluruh kasus safety kritis lulus sebelum rilis,</li>
+<li>citation accuracy minimal 90% pada eval set,</li>
+<li>biaya median per tugas di bawah budget yang ditentukan.</li>
+</ul>
+<p>Target harus disesuaikan dengan kebutuhan dan risiko aplikasi.</p>
+<h2>Checkpoint Bab 12</h2>
+<ol>
+<li>Mengapa time to first token berbeda dari total response time?</li>
+<li>Apa risiko semantic cache pada data privat?</li>
+<li>Komponen apa saja yang harus memiliki versi selain model?</li>
+</ol>
+<h2>Latihan Bab 12 - Production Readiness Review</h2>
+<p>Buat checklist rilis untuk aplikasi LLM yang mencakup:</p>
+<ul>
+<li>kualitas,</li>
+<li>keamanan,</li>
+<li>privasi,</li>
+<li>observability,</li>
+<li>latency,</li>
+<li>cost,</li>
+<li>kapasitas,</li>
+<li>fallback,</li>
+<li>incident response,</li>
+<li>rollback.</li>
+</ul>
+<p>Beri status <code>lulus</code>, <code>perlu perbaikan</code>, atau <code>blocker</code> untuk setiap item.</p>
+<hr>
+

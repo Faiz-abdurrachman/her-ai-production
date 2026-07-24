@@ -1,0 +1,68 @@
+<h1>Embedding dan Informasi Posisi</h1>
+<h2>3.1 Dari Token ID ke Vektor</h2>
+<p>Token ID belum membawa informasi yang dapat diproses secara bermakna. Model memakai tabel embedding untuk mengubah ID menjadi vektor berisi angka.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Token ID 1842
+      ↓ lookup embedding
+[0.12, -0.43, 0.08, ..., 0.31]
+</code></pre></div>
+<p>Vektor embedding dipelajari selama training. Token yang sering muncul dalam konteks serupa dapat memiliki representasi yang membantu model mengolah hubungan semantik dan sintaksis.</p>
+<blockquote>
+<p><strong>Analogi:</strong> token ID seperti nomor anggota perpustakaan. Nomor tersebut tidak menjelaskan minat pembaca. Embedding seperti profil multidimensi yang merangkum pola keterkaitan.</p>
+</blockquote>
+<h2>3.2 Embedding Tidak Sama dengan Definisi Kamus</h2>
+<p>Embedding bukan daftar makna eksplisit. Setiap dimensi biasanya tidak memiliki label sederhana seperti <code>tingkat formalitas</code> atau <code>jenis objek</code>. Makna muncul dari pola gabungan banyak dimensi dan berubah ketika embedding diproses oleh layer Transformer.</p>
+<p>Pada awal model, setiap kemunculan token yang sama mengambil embedding awal yang sama. Setelah melewati self-attention dan feed-forward layer, representasinya menjadi <strong>contextual</strong>. Token <code>bisa</code> pada kalimat <code>ular itu berbisa</code> dan <code>saya bisa hadir</code> akhirnya memiliki representasi berbeda karena konteksnya berbeda.</p>
+<h2>3.3 Mengapa Posisi Dibutuhkan?</h2>
+<p>Self-attention membandingkan token satu sama lain. Tanpa informasi posisi, model sulit membedakan:</p>
+<ul>
+<li><code>kucing mengejar tikus</code>, dan</li>
+<li><code>tikus mengejar kucing</code>.</li>
+</ul>
+<p>Karena itu, model menambahkan atau menggabungkan informasi posisi dengan representasi token. Pendekatan dapat berupa positional encoding tetap, embedding posisi yang dipelajari, atau mekanisme posisi relatif.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">representasi input = token embedding + informasi posisi
+</code></pre></div>
+<h2>3.4 Similarity untuk Retrieval</h2>
+<p>Embedding juga digunakan di luar model generatif. Sebuah embedding model dapat mengubah kalimat atau dokumen menjadi vektor. Kedekatan dua vektor dapat dipakai untuk pencarian semantik.</p>
+<p>Cosine similarity secara intuitif membandingkan arah dua vektor:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">similarity(A, B) = dot(A, B) / (panjang(A) x panjang(B))
+</code></pre></div>
+<p>Nilai yang lebih tinggi biasanya menunjukkan representasi lebih mirip menurut model embedding. Similarity bukan bukti bahwa dua teks benar, setara, atau aman. Ia hanya sinyal kedekatan yang perlu dievaluasi.</p>
+<h2>3.5 Dense dan Sparse Retrieval</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Pendekatan</th>
+<th>Representasi</th>
+<th>Kekuatan</th>
+<th>Keterbatasan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sparse retrieval</td>
+<td>Kata dan bobot kemunculan</td>
+<td>Kuat untuk istilah exact, nama, kode</td>
+<td>Kurang fleksibel pada parafrasa</td>
+</tr>
+<tr>
+<td>Dense retrieval</td>
+<td>Vektor embedding</td>
+<td>Kuat untuk kemiripan semantik</td>
+<td>Dapat melewatkan istilah exact</td>
+</tr>
+<tr>
+<td>Hybrid retrieval</td>
+<td>Gabungan keduanya</td>
+<td>Menyeimbangkan exact dan semantik</td>
+<td>Pipeline lebih kompleks</td>
+</tr>
+</tbody></table></div>
+<h2>Checkpoint Bab 3</h2>
+<ol>
+<li>Apa fungsi embedding pada input LLM?</li>
+<li>Mengapa token yang sama dapat memiliki makna kontekstual berbeda?</li>
+<li>Kapan sparse retrieval dapat lebih berguna daripada dense retrieval?</li>
+</ol>
+<h2>Latihan Bab 3 - Membandingkan Makna</h2>
+<p>Buat enam pasangan kalimat. Tiga pasangan harus memiliki kata berbeda tetapi makna mirip. Tiga pasangan lainnya harus memiliki banyak kata sama tetapi makna berbeda. Jelaskan pendekatan retrieval mana yang mungkin berhasil atau gagal pada setiap pasangan.</p>
+<hr>
+

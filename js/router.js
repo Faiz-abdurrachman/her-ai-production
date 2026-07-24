@@ -10,6 +10,10 @@ const router = {
     // Wajib pakai '/' di depan path folder agar terbaca absolut dari root
     // ==========================================
     routes: {
+        "/participant-ai-lab-large-language-model": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/large-language-model/materi.html",
+        "/participant-ai-lab-large-language-model-practice": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/large-language-model/latihan.html",
+        "/participant-ai-lab-large-language-model-quiz": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/large-language-model/kuis.html",
+        "/participant-ai-lab-large-language-model-discussion": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/large-language-model/diskusi.html",
         "/": "/pages/frontend/home.html",
         "/home": "/pages/frontend/home.html",
         "/projects": "/pages/frontend/projects.html",
@@ -754,6 +758,21 @@ const router = {
                     if (path === "/participant-ai-lab-deep-learning-discussion" && typeof window.initAiDeepLearningDiscussion === "function") {
                         window.initAiDeepLearningDiscussion();
                     }
+                } else if (path.startsWith("/participant-ai-lab-large-language-model") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-large-language-model" && typeof window.initAiLargeLanguageModelMateri === "function") {
+                        window.initAiLargeLanguageModelMateri();
+                    }
+                    if (path === "/participant-ai-lab-large-language-model-practice" && typeof window.initAiLargeLanguageModelPractice === "function") {
+                        window.initAiLargeLanguageModelPractice();
+                    }
+                    if (path === "/participant-ai-lab-large-language-model-quiz" && typeof window.initAiLargeLanguageModelQuiz === "function") {
+                        window.initAiLargeLanguageModelQuiz();
+                    }
+                    if (path === "/participant-ai-lab-large-language-model-discussion" && typeof window.initAiLargeLanguageModelDiscussion === "function") {
+                        window.initAiLargeLanguageModelDiscussion();
+                    }
+
                 } else if (path.startsWith("/participant-ai-lab-reinforcement-learning") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
                     if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initAiReinforcementLearningMateri === "function") {

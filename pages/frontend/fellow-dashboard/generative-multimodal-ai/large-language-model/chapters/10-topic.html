@@ -1,0 +1,194 @@
+<h1>Evaluasi Sistem LLM</h1>
+<h2>10.1 Mengapa Demo Tidak Cukup?</h2>
+<p>Satu demo yang berhasil tidak mewakili kualitas sistem. LLM dapat memberi jawaban berbeda pada variasi kecil input. Evaluasi membutuhkan kumpulan kasus yang mencerminkan penggunaan nyata, edge case, dan skenario berisiko.</p>
+<p>Unit evaluasi dapat berupa:</p>
+<ul>
+<li>model saja,</li>
+<li>prompt,</li>
+<li>retriever,</li>
+<li>pipeline end-to-end,</li>
+<li>pengalaman pengguna,</li>
+<li>proses operasional.</li>
+</ul>
+<h2>10.2 Dimensi Kualitas</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Dimensi</th>
+<th>Pertanyaan evaluasi</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Correctness</td>
+<td>Apakah jawaban benar?</td>
+</tr>
+<tr>
+<td>Relevance</td>
+<td>Apakah jawaban menjawab kebutuhan pengguna?</td>
+</tr>
+<tr>
+<td>Faithfulness</td>
+<td>Apakah klaim didukung konteks atau sumber?</td>
+</tr>
+<tr>
+<td>Completeness</td>
+<td>Apakah informasi penting tercakup?</td>
+</tr>
+<tr>
+<td>Format validity</td>
+<td>Apakah output mengikuti schema?</td>
+</tr>
+<tr>
+<td>Safety</td>
+<td>Apakah respons menghindari tindakan berbahaya?</td>
+</tr>
+<tr>
+<td>Fairness</td>
+<td>Apakah kualitas konsisten untuk kelompok dan bahasa?</td>
+</tr>
+<tr>
+<td>Latency</td>
+<td>Apakah waktu respons sesuai target?</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>Apakah biaya per tugas dapat diterima?</td>
+</tr>
+</tbody></table></div>
+<h2>10.3 Evaluasi Deterministik</h2>
+<p>Tugas terstruktur dapat dinilai dengan program:</p>
+<ul>
+<li>exact match,</li>
+<li>validasi JSON,</li>
+<li>precision, recall, F1,</li>
+<li>akurasi label,</li>
+<li>unit test,</li>
+<li>citation ID match,</li>
+<li>regex atau schema validation.</li>
+</ul>
+<p>Metrik deterministik mudah direproduksi, tetapi tidak selalu menangkap kualitas bahasa.</p>
+<h2>10.4 Evaluasi dengan Rubric Manusia</h2>
+<p>Untuk ringkasan atau jawaban terbuka, gunakan rubric yang jelas.</p>
+<p>Contoh skala faithfulness:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Skor</th>
+<th>Definisi</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4</td>
+<td>Semua klaim penting didukung sumber</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Ada detail kecil yang tidak didukung, inti tetap benar</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Beberapa klaim penting tidak didukung</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Mayoritas klaim tidak didukung atau bertentangan</td>
+</tr>
+</tbody></table></div>
+<p>Evaluator perlu contoh anchor untuk setiap skor. Gunakan lebih dari satu evaluator pada subset untuk mengukur konsistensi.</p>
+<h2>10.5 LLM sebagai Evaluator</h2>
+<p>Model dapat membantu memberi skor atau membandingkan jawaban, tetapi hasilnya harus dikalibrasi. Risiko meliputi:</p>
+<ul>
+<li>bias terhadap jawaban panjang,</li>
+<li>bias terhadap posisi pilihan,</li>
+<li>menyukai gaya tertentu,</li>
+<li>gagal mendeteksi kesalahan domain,</li>
+<li>terpengaruh prompt injection pada output yang dinilai.</li>
+</ul>
+<p>Gunakan evaluator model sebagai sinyal, bukan satu-satunya kebenaran. Bandingkan dengan penilaian manusia.</p>
+<h2>10.6 Evaluasi Retrieval</h2>
+<p>Untuk RAG, ukur apakah sumber benar berhasil diambil.</p>
+<ul>
+<li><strong>Recall@k:</strong> apakah chunk relevan muncul di top-k?</li>
+<li><strong>Precision@k:</strong> berapa banyak top-k yang benar-benar relevan?</li>
+<li><strong>MRR:</strong> seberapa tinggi posisi hasil relevan pertama?</li>
+<li><strong>nDCG:</strong> mempertimbangkan relevansi bertingkat dan posisi.</li>
+</ul>
+<p>Dataset evaluasi retrieval memerlukan query dan dokumen relevan yang telah ditandai.</p>
+<h2>10.7 Test Set yang Baik</h2>
+<p>Test set sebaiknya mencakup:</p>
+<ul>
+<li>pertanyaan umum,</li>
+<li>pertanyaan sulit,</li>
+<li>typo dan bahasa informal,</li>
+<li>pertanyaan tanpa jawaban,</li>
+<li>sumber bertentangan,</li>
+<li>dokumen versi lama dan baru,</li>
+<li>prompt injection,</li>
+<li>data sensitif,</li>
+<li>permintaan format,</li>
+<li>bahasa dan kelompok pengguna berbeda.</li>
+</ul>
+<h2>10.8 Regression Testing</h2>
+<p>Setiap perubahan model, prompt, retrieval, chunking, atau parameter dapat memperbaiki satu metrik dan merusak yang lain. Regression test membandingkan versi baru dengan baseline.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Versi kandidat boleh dirilis jika:
+- correctness tidak turun lebih dari ambang,
+- safety tidak memburuk,
+- latency memenuhi SLO,
+- cost masih dalam budget,
+- kasus kritis seluruhnya lulus.
+</code></pre></div>
+<h2>10.9 Error Taxonomy</h2>
+<p>Kategorikan kegagalan agar tindakan perbaikan tepat.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Error</th>
+<th>Kemungkinan penyebab</th>
+<th>Perbaikan awal</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Jawaban tidak relevan</td>
+<td>Prompt atau retrieval buruk</td>
+<td>Perbaiki query, reranking, instruksi</td>
+</tr>
+<tr>
+<td>Fakta dibuat-buat</td>
+<td>Bukti tidak tersedia atau diabaikan</td>
+<td>Tambah abstention, RAG, evaluasi faithfulness</td>
+</tr>
+<tr>
+<td>JSON rusak</td>
+<td>Schema tidak jelas atau decoding terlalu bebas</td>
+<td>Constraint, contoh, parser, retry</td>
+</tr>
+<tr>
+<td>Sumber salah</td>
+<td>Metadata atau citation mapping buruk</td>
+<td>Kendalikan citation di program</td>
+</tr>
+<tr>
+<td>Data terlarang muncul</td>
+<td>Filter akses atau redaction gagal</td>
+<td>Perbaiki authorization dan logging</td>
+</tr>
+</tbody></table></div>
+<h2>Checkpoint Bab 10</h2>
+<ol>
+<li>Mengapa evaluasi end-to-end saja belum cukup untuk RAG?</li>
+<li>Kapan evaluasi deterministik lebih tepat daripada rubric manusia?</li>
+<li>Mengapa LLM-as-a-judge perlu dikalibrasi?</li>
+</ol>
+<h2>Latihan Bab 10 - Membuat Eval Set</h2>
+<p>Buat minimal 25 kasus evaluasi untuk asisten dokumen. Beri setiap kasus:</p>
+<ul>
+<li>pertanyaan,</li>
+<li>dokumen atau bukti yang benar,</li>
+<li>jawaban ideal atau rubric,</li>
+<li>kategori kesulitan,</li>
+<li>tingkat risiko,</li>
+<li>metrik yang digunakan,</li>
+<li>hasil baseline.</li>
+</ul>
+<hr>
+

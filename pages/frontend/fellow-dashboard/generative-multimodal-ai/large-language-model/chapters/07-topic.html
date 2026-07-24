@@ -1,0 +1,156 @@
+<h1>Prompting yang Terstruktur</h1>
+<h2>7.1 Prompt Adalah Spesifikasi Tugas</h2>
+<p>Prompt yang baik menjelaskan pekerjaan yang harus dilakukan, bukan sekadar topik. Struktur yang berguna:</p>
+<ol>
+<li>Peran atau konteks sistem.</li>
+<li>Tujuan tugas.</li>
+<li>Data atau konteks yang boleh digunakan.</li>
+<li>Batasan.</li>
+<li>Format keluaran.</li>
+<li>Contoh bila diperlukan.</li>
+<li>Kriteria keberhasilan.</li>
+</ol>
+<p>Contoh prompt lemah:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Jelaskan laporan ini.
+</code></pre></div>
+<p>Contoh lebih terstruktur:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Tugas: ringkas laporan untuk koordinator divisi.
+Gunakan hanya informasi dalam &lt;dokumen&gt;.
+Keluaran:
+1. tiga temuan utama,
+2. dua risiko,
+3. tindakan yang perlu diputuskan.
+Jika informasi tidak tersedia, tulis &quot;tidak ditemukan&quot;.
+Maksimum 250 kata.
+</code></pre></div>
+<h2>7.2 Memisahkan Instruksi dan Data</h2>
+<p>Gunakan delimiter agar model dapat membedakan instruksi dengan data pengguna.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">&lt;instruksi&gt;
+Ekstrak nama kegiatan, tanggal, dan penanggung jawab.
+&lt;/instruksi&gt;
+
+&lt;dokumen&gt;
+...
+&lt;/dokumen&gt;
+</code></pre></div>
+<p>Delimiter tidak menjadi sistem keamanan yang sempurna, tetapi meningkatkan kejelasan. Data eksternal tetap harus dianggap tidak tepercaya.</p>
+<h2>7.3 Zero-Shot, One-Shot, dan Few-Shot</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Teknik</th>
+<th>Isi prompt</th>
+<th>Kapan berguna</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Zero-shot</td>
+<td>Instruksi tanpa contoh</td>
+<td>Tugas sederhana atau model sudah mengenali pola</td>
+</tr>
+<tr>
+<td>One-shot</td>
+<td>Satu contoh</td>
+<td>Menunjukkan format dasar</td>
+</tr>
+<tr>
+<td>Few-shot</td>
+<td>Beberapa contoh</td>
+<td>Menstabilkan label, gaya, atau edge case</td>
+</tr>
+</tbody></table></div>
+<p>Contoh few-shot harus benar, konsisten, dan mewakili kasus sulit. Contoh yang buruk dapat menyesatkan model.</p>
+<h2>7.4 Decomposition</h2>
+<p>Tugas kompleks dapat dipecah menjadi beberapa tahap yang dapat diperiksa:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Dokumen
+  ↓
+Ekstraksi fakta
+  ↓
+Validasi field wajib
+  ↓
+Penyusunan ringkasan
+  ↓
+Pemeriksaan citation
+</code></pre></div>
+<p>Decomposition lebih mudah diuji dibanding satu prompt yang meminta terlalu banyak hal sekaligus.</p>
+<h2>7.5 Prompt untuk Keluaran Terstruktur</h2>
+<p>Definisikan schema dengan jelas:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Kembalikan JSON dengan field:
+- issue: string
+- severity: salah satu [low, medium, high]
+- evidence: kutipan pendek dari dokumen
+- action: string
+</code></pre></div>
+<p>Kemudian program harus:</p>
+<ul>
+<li>parse JSON,</li>
+<li>memeriksa field wajib,</li>
+<li>memeriksa enum,</li>
+<li>membatasi panjang,</li>
+<li>menangani output tidak valid,</li>
+<li>mengulang atau meminta perbaikan bila perlu.</li>
+</ul>
+<h2>7.6 Instruksi Ketidakpastian</h2>
+<p>Model perlu diberi kebijakan ketika data tidak cukup:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Jika jawaban tidak didukung konteks, jangan menebak.
+Nyatakan bahwa informasi tidak ditemukan dan sebutkan data yang dibutuhkan.
+</code></pre></div>
+<p>Instruksi ini membantu, tetapi tidak menjamin faithfulness. Evaluasi tetap diperlukan.</p>
+<h2>7.7 Prompt Versioning</h2>
+<p>Prompt adalah bagian dari kode aplikasi. Kelola seperti artefak versi:</p>
+<ul>
+<li>beri ID dan versi,</li>
+<li>simpan perubahan,</li>
+<li>catat alasan perubahan,</li>
+<li>uji regression,</li>
+<li>kaitkan dengan hasil evaluasi,</li>
+<li>siapkan rollback.</li>
+</ul>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Versi</th>
+<th>Perubahan</th>
+<th>Alasan</th>
+<th>Dampak evaluasi</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v1.0</td>
+<td>Prompt awal</td>
+<td>Baseline</td>
+<td>Faithfulness 0.72</td>
+</tr>
+<tr>
+<td>v1.1</td>
+<td>Tambah instruksi tidak menebak</td>
+<td>Kurangi hallucination</td>
+<td>Faithfulness 0.81</td>
+</tr>
+<tr>
+<td>v1.2</td>
+<td>Tambah schema citation</td>
+<td>Audit sumber</td>
+<td>Citation accuracy 0.88</td>
+</tr>
+</tbody></table></div>
+<h2>Checkpoint Bab 7</h2>
+<ol>
+<li>Mengapa prompt sebaiknya menyebut format keluaran?</li>
+<li>Apa manfaat memisahkan instruksi dan dokumen?</li>
+<li>Mengapa prompt perlu versioning dan regression test?</li>
+</ol>
+<h2>Latihan Bab 7 - Memperbaiki Prompt</h2>
+<p>Perbaiki prompt berikut:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Baca dokumen ini dan beri jawaban yang bagus.
+</code></pre></div>
+<p>Buat versi untuk:</p>
+<ol>
+<li>ekstraksi data terstruktur,</li>
+<li>ringkasan eksekutif,</li>
+<li>jawaban FAQ dengan citation,</li>
+<li>klasifikasi laporan insiden.</li>
+</ol>
+<p>Untuk setiap versi, tentukan kriteria keberhasilan dan cara memvalidasi output.</p>
+<hr>
+

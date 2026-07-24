@@ -1,0 +1,176 @@
+<h1>Retrieval-Augmented Generation</h1>
+<h2>8.1 Mengapa RAG Dibutuhkan?</h2>
+<p>Retrieval-Augmented Generation atau RAG menggabungkan pencarian informasi dengan generasi teks. Sebelum menjawab, sistem mengambil potongan dokumen yang relevan dan memasukkannya ke prompt.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Pertanyaan pengguna
+        ↓
+Retriever mencari potongan relevan
+        ↓
+Potongan + pertanyaan dimasukkan ke prompt
+        ↓
+LLM menyusun jawaban
+        ↓
+Jawaban + citation
+</code></pre></div>
+<p>RAG berguna ketika pengetahuan:</p>
+<ul>
+<li>berasal dari dokumen organisasi,</li>
+<li>sering berubah,</li>
+<li>perlu memiliki citation,</li>
+<li>terlalu besar untuk dimasukkan seluruhnya,</li>
+<li>harus dipisahkan berdasarkan hak akses.</li>
+</ul>
+<h2>8.2 Tahap Ingestion</h2>
+<p>Pipeline ingestion menyiapkan dokumen agar dapat dicari:</p>
+<ol>
+<li>Mengambil file atau data.</li>
+<li>Mengekstrak teks.</li>
+<li>Membersihkan struktur yang rusak.</li>
+<li>Memecah teks menjadi chunk.</li>
+<li>Menambahkan metadata.</li>
+<li>Membuat indeks sparse, dense, atau hybrid.</li>
+<li>Menyimpan hubungan ke dokumen sumber.</li>
+</ol>
+<p>Metadata yang berguna:</p>
+<ul>
+<li>document_id,</li>
+<li>judul,</li>
+<li>bagian atau halaman,</li>
+<li>tanggal berlaku,</li>
+<li>kategori,</li>
+<li>pemilik dokumen,</li>
+<li>tingkat akses,</li>
+<li>versi.</li>
+</ul>
+<h2>8.3 Chunking</h2>
+<p>Chunk terlalu kecil kehilangan konteks. Chunk terlalu besar membawa banyak informasi tidak relevan dan menghabiskan context window.</p>
+<p>Strategi chunking:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Strategi</th>
+<th>Cara</th>
+<th>Cocok untuk</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fixed size</td>
+<td>Potong setiap sejumlah token</td>
+<td>Baseline cepat</td>
+</tr>
+<tr>
+<td>Overlap</td>
+<td>Chunk saling tumpang tindih</td>
+<td>Mengurangi putus konteks</td>
+</tr>
+<tr>
+<td>Struktur dokumen</td>
+<td>Berdasarkan heading atau paragraf</td>
+<td>Dokumen terformat baik</td>
+</tr>
+<tr>
+<td>Semantic chunking</td>
+<td>Berdasarkan perubahan topik</td>
+<td>Dokumen panjang dan bervariasi</td>
+</tr>
+<tr>
+<td>Parent-child</td>
+<td>Retrieve bagian kecil, kirim konteks lebih besar</td>
+<td>Menjaga presisi dan konteks</td>
+</tr>
+</tbody></table></div>
+<p>Tidak ada ukuran chunk universal. Ukuran harus diuji terhadap jenis pertanyaan nyata.</p>
+<h2>8.4 Retrieval</h2>
+<p>Retriever mengubah pertanyaan menjadi query dan mengambil kandidat chunk. Tantangan penting:</p>
+<ul>
+<li>pertanyaan pengguna mungkin ambigu,</li>
+<li>istilah pengguna berbeda dari dokumen,</li>
+<li>dokumen lama masih berada di indeks,</li>
+<li>potongan relevan berada di beberapa bagian,</li>
+<li>hak akses membatasi dokumen yang boleh diambil.</li>
+</ul>
+<p>Sistem dapat memakai query rewriting, hybrid search, metadata filtering, dan reranking.</p>
+<h2>8.5 Reranking</h2>
+<p>Retriever awal biasanya cepat dan mengambil banyak kandidat. Reranker menilai kembali pasangan query-chunk secara lebih teliti, lalu memilih beberapa chunk terbaik.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">1. Retriever mengambil 30 kandidat.
+2. Reranker mengurutkan ulang.
+3. Sistem memilih 5 chunk untuk prompt.
+</code></pre></div>
+<p>Reranking dapat meningkatkan relevansi, tetapi menambah latency dan biaya.</p>
+<h2>8.6 Generation dan Citation</h2>
+<p>Prompt RAG harus meminta model:</p>
+<ul>
+<li>menggunakan hanya konteks yang diberikan,</li>
+<li>menyatakan jika bukti tidak cukup,</li>
+<li>menghubungkan klaim dengan sumber,</li>
+<li>tidak mengikuti instruksi yang tertanam di dokumen,</li>
+<li>menjaga format citation.</li>
+</ul>
+<p>Citation sebaiknya dibuat dari metadata yang dikendalikan program, bukan dipercayakan sepenuhnya pada teks bebas model.</p>
+<h2>8.7 RAG Tidak Menghapus Hallucination</h2>
+<p>RAG dapat gagal karena:</p>
+<ul>
+<li>dokumen yang benar tidak masuk indeks,</li>
+<li>chunking memotong informasi penting,</li>
+<li>retrieval memilih sumber salah,</li>
+<li>konteks berisi informasi bertentangan,</li>
+<li>model mengabaikan konteks,</li>
+<li>citation tidak sesuai dengan klaim,</li>
+<li>dokumen mengandung prompt injection.</li>
+</ul>
+<p>Karena itu, evaluasi harus memisahkan:</p>
+<ol>
+<li>kualitas retrieval,</li>
+<li>kualitas generasi,</li>
+<li>kualitas citation,</li>
+<li>end-to-end answer quality.</li>
+</ol>
+<h2>8.8 Contoh Retrieval Sederhana dengan Word Overlap</h2>
+<p>Contoh berikut bukan pengganti vector database, tetapi membantu memahami pipeline.</p>
+<div class="reasoning-code-block"><pre><code class="language-python">import re
+from collections import Counter
+
+DOCUMENTS = [
+    {&quot;id&quot;: &quot;A&quot;, &quot;text&quot;: &quot;Pendaftaran ditutup pada 10 Agustus.&quot;},
+    {&quot;id&quot;: &quot;B&quot;, &quot;text&quot;: &quot;Peserta wajib membawa kartu identitas.&quot;},
+    {&quot;id&quot;: &quot;C&quot;, &quot;text&quot;: &quot;Perubahan jadwal diumumkan melalui dashboard.&quot;},
+]
+
+def tokens(text):
+    return re.findall(r&quot;[a-z0-9]+&quot;, text.lower())
+
+def overlap_score(query, document):
+    q = Counter(tokens(query))
+    d = Counter(tokens(document))
+    return sum(min(q[word], d[word]) for word in q)
+
+def retrieve(query, top_k=2):
+    ranked = sorted(
+        DOCUMENTS,
+        key=lambda item: overlap_score(query, item[&quot;text&quot;]),
+        reverse=True,
+    )
+    return ranked[:top_k]
+
+print(retrieve(&quot;kapan pendaftaran ditutup&quot;))
+</code></pre></div>
+<p>Keterbatasan metode ini adalah parafrasa seperti <code>batas registrasi</code> mungkin tidak cocok dengan <code>pendaftaran ditutup</code>. Dense atau hybrid retrieval dapat membantu.</p>
+<h2>Checkpoint Bab 8</h2>
+<ol>
+<li>Apa perbedaan tahap ingestion dan retrieval?</li>
+<li>Mengapa ukuran chunk perlu diuji?</li>
+<li>Mengapa evaluasi RAG harus memisahkan retrieval dan generation?</li>
+</ol>
+<h2>Latihan Bab 8 - Mendesain RAG</h2>
+<p>Gunakan kumpulan dokumen pedoman organisasi. Buat rancangan berisi:</p>
+<ul>
+<li>jenis dokumen,</li>
+<li>aturan chunking,</li>
+<li>metadata wajib,</li>
+<li>filter hak akses,</li>
+<li>retrieval baseline,</li>
+<li>format citation,</li>
+<li>minimal 15 pertanyaan evaluasi,</li>
+<li>kebijakan ketika bukti tidak ditemukan.</li>
+</ul>
+<hr>
+

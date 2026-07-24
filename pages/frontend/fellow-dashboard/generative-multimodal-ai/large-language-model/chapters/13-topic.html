@@ -1,0 +1,243 @@
+<h1>Mini Project: Asisten FAQ Berbasis Dokumen</h1>
+<h2>13.1 Tujuan Project</h2>
+<p>Peserta membangun prototipe asisten yang menjawab pertanyaan berdasarkan kumpulan dokumen. Sistem harus menampilkan sumber, mengakui ketika bukti tidak cukup, dan memiliki evaluasi yang dapat diulang.</p>
+<p>Contoh domain:</p>
+<ul>
+<li>pedoman kegiatan,</li>
+<li>panduan akademik,</li>
+<li>SOP organisasi,</li>
+<li>dokumentasi produk,</li>
+<li>kebijakan layanan,</li>
+<li>materi pembelajaran.</li>
+</ul>
+<h2>13.2 Batasan Project</h2>
+<p>Project minimal memiliki:</p>
+<ol>
+<li>Lima dokumen atau bagian dokumen.</li>
+<li>Metadata sumber.</li>
+<li>Proses chunking yang terdokumentasi.</li>
+<li>Retrieval baseline.</li>
+<li>Prompt dengan aturan faithfulness.</li>
+<li>Citation ke sumber.</li>
+<li>Jawaban <code>informasi tidak ditemukan</code> ketika bukti tidak cukup.</li>
+<li>Eval set minimal 25 pertanyaan.</li>
+<li>Laporan error analysis.</li>
+<li>Catatan risiko privasi dan prompt injection.</li>
+</ol>
+<h2>13.3 Arsitektur</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">Dokumen
+  ↓
+Cleaning dan Chunking
+  ↓
+Index + Metadata
+  ↓
+Pertanyaan Pengguna
+  ↓
+Retrieval
+  ↓
+Prompt Builder
+  ↓
+LLM
+  ↓
+Validator + Citation Mapper
+  ↓
+Jawaban
+</code></pre></div>
+<h2>13.4 Struktur Data</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">knowledge_base = [
+    {
+        &quot;chunk_id&quot;: &quot;policy-01-section-2&quot;,
+        &quot;title&quot;: &quot;Pedoman Peserta&quot;,
+        &quot;section&quot;: &quot;Kehadiran&quot;,
+        &quot;version&quot;: &quot;2026-01&quot;,
+        &quot;access&quot;: &quot;participant&quot;,
+        &quot;text&quot;: &quot;Peserta wajib mengikuti minimal 90 persen sesi.&quot;,
+    },
+    {
+        &quot;chunk_id&quot;: &quot;policy-01-section-3&quot;,
+        &quot;title&quot;: &quot;Pedoman Peserta&quot;,
+        &quot;section&quot;: &quot;Tugas&quot;,
+        &quot;version&quot;: &quot;2026-01&quot;,
+        &quot;access&quot;: &quot;participant&quot;,
+        &quot;text&quot;: &quot;Tugas dikumpulkan melalui dashboard sesuai tenggat.&quot;,
+    },
+]
+</code></pre></div>
+<h2>13.5 Retrieval Baseline</h2>
+<p>Mulai dengan baseline sederhana agar mudah dibandingkan. Contoh word overlap dari Bab 8 dapat digunakan. Setelah baseline diukur, tambahkan salah satu peningkatan:</p>
+<ul>
+<li>normalisasi istilah,</li>
+<li>synonym mapping,</li>
+<li>sparse retrieval,</li>
+<li>dense retrieval,</li>
+<li>hybrid retrieval,</li>
+<li>reranking,</li>
+<li>query rewriting.</li>
+</ul>
+<p>Jangan mengganti banyak komponen sekaligus. Perubahan terpisah membantu mengetahui penyebab perbaikan.</p>
+<h2>13.6 Prompt Builder</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">def build_prompt(question, chunks):
+    context = &quot;\n\n&quot;.join(
+        f&quot;[SOURCE {item[&#39;chunk_id&#39;]}]\n{item[&#39;text&#39;]}&quot;
+        for item in chunks
+    )
+
+    return f&quot;&quot;&quot;
+Anda adalah asisten FAQ berbasis dokumen.
+Gunakan hanya sumber di bawah ini.
+Jangan menebak. Jika bukti tidak cukup, tulis:
+&quot;Informasi tidak ditemukan dalam sumber yang tersedia.&quot;
+Cantumkan source ID setelah setiap klaim utama.
+
+&lt;sources&gt;
+{context}
+&lt;/sources&gt;
+
+&lt;question&gt;
+{question}
+&lt;/question&gt;
+&quot;&quot;&quot;.strip()
+</code></pre></div>
+<p>Fungsi <code>call_model()</code> dapat dihubungkan ke model yang disetujui program. Simpan prompt final dan konfigurasi untuk evaluasi.</p>
+<h2>13.7 Validation</h2>
+<p>Periksa keluaran:</p>
+<ul>
+<li>jawaban tidak kosong,</li>
+<li>panjang wajar,</li>
+<li>citation hanya memakai source ID yang diberikan,</li>
+<li>tidak ada data sensitif,</li>
+<li>format sesuai,</li>
+<li>request berisiko diarahkan ke prosedur yang benar.</li>
+</ul>
+<p>Contoh validator citation sederhana:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">import re
+
+def validate_citations(answer, allowed_ids):
+    cited = set(re.findall(r&quot;SOURCE\s+([A-Za-z0-9_-]+)&quot;, answer))
+    unknown = cited - set(allowed_ids)
+    return {
+        &quot;valid&quot;: len(unknown) == 0,
+        &quot;cited&quot;: sorted(cited),
+        &quot;unknown&quot;: sorted(unknown),
+    }
+</code></pre></div>
+<h2>13.8 Eval Set</h2>
+<p>Bagi 25 pertanyaan menjadi:</p>
+<ul>
+<li>8 pertanyaan langsung,</li>
+<li>5 pertanyaan parafrasa,</li>
+<li>4 pertanyaan yang membutuhkan dua sumber,</li>
+<li>3 pertanyaan tanpa jawaban,</li>
+<li>2 pertanyaan dengan dokumen bertentangan,</li>
+<li>2 prompt injection,</li>
+<li>1 pertanyaan terkait akses terlarang.</li>
+</ul>
+<p>Metrik minimal:</p>
+<ul>
+<li>retrieval hit@k,</li>
+<li>answer correctness,</li>
+<li>faithfulness,</li>
+<li>citation accuracy,</li>
+<li>abstention accuracy,</li>
+<li>latency,</li>
+<li>rata-rata jumlah token atau estimasi biaya.</li>
+</ul>
+<h2>13.9 Eksperimen</h2>
+<p>Lakukan minimal tiga eksperimen:</p>
+<ol>
+<li><strong>Baseline:</strong> chunking awal + retrieval sederhana.</li>
+<li><strong>Eksperimen A:</strong> ubah chunking atau overlap.</li>
+<li><strong>Eksperimen B:</strong> tambah hybrid retrieval atau reranking.</li>
+</ol>
+<p>Gunakan eval set yang sama. Catat perubahan hanya pada satu atau sedikit variabel.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Eksperimen</th>
+<th align="right">Hit@5</th>
+<th align="right">Faithfulness</th>
+<th align="right">Citation Accuracy</th>
+<th align="right">P95 Latency</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Baseline</td>
+<td align="right">...</td>
+<td align="right">...</td>
+<td align="right">...</td>
+<td align="right">...</td>
+</tr>
+<tr>
+<td>A</td>
+<td align="right">...</td>
+<td align="right">...</td>
+<td align="right">...</td>
+<td align="right">...</td>
+</tr>
+<tr>
+<td>B</td>
+<td align="right">...</td>
+<td align="right">...</td>
+<td align="right">...</td>
+<td align="right">...</td>
+</tr>
+</tbody></table></div>
+<h2>13.10 Laporan Akhir</h2>
+<p>Laporan project berisi:</p>
+<ol>
+<li>Masalah dan pengguna sasaran.</li>
+<li>Batas data dan akses.</li>
+<li>Arsitektur.</li>
+<li>Strategi chunking dan retrieval.</li>
+<li>Prompt dan validator.</li>
+<li>Eval set dan rubric.</li>
+<li>Hasil eksperimen.</li>
+<li>Lima error utama.</li>
+<li>Risiko dan mitigasi.</li>
+<li>Rekomendasi langkah berikutnya.</li>
+</ol>
+<h2>Rubric Project</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Komponen</th>
+<th align="right">Bobot</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Pemahaman masalah dan batasan</td>
+<td align="right">10%</td>
+</tr>
+<tr>
+<td>Data, chunking, dan metadata</td>
+<td align="right">15%</td>
+</tr>
+<tr>
+<td>Retrieval</td>
+<td align="right">15%</td>
+</tr>
+<tr>
+<td>Prompt, generation, dan citation</td>
+<td align="right">15%</td>
+</tr>
+<tr>
+<td>Evaluasi dan eksperimen</td>
+<td align="right">20%</td>
+</tr>
+<tr>
+<td>Safety, privacy, dan security</td>
+<td align="right">15%</td>
+</tr>
+<tr>
+<td>Dokumentasi dan presentasi</td>
+<td align="right">10%</td>
+</tr>
+</tbody></table></div>
+<h2>Checkpoint Bab 13</h2>
+<ol>
+<li>Mengapa project harus memiliki pertanyaan tanpa jawaban?</li>
+<li>Mengapa satu variabel sebaiknya diubah pada satu eksperimen?</li>
+<li>Apa perbedaan retrieval hit dan faithfulness jawaban?</li>
+</ol>
+<hr>
+

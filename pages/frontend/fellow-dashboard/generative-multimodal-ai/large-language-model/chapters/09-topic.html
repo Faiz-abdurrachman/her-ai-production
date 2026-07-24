@@ -1,0 +1,158 @@
+<h1>Fine-Tuning dan Adaptasi Model</h1>
+<h2>9.1 Kapan Prompting Tidak Cukup?</h2>
+<p>Prompting cocok untuk mengubah instruksi, konteks, dan format tanpa mengubah parameter model. Fine-tuning mengubah sebagian atau seluruh parameter agar perilaku model lebih sesuai dengan data contoh.</p>
+<p>Fine-tuning dapat berguna untuk:</p>
+<ul>
+<li>format yang sangat konsisten,</li>
+<li>gaya respons domain tertentu,</li>
+<li>klasifikasi dengan label khusus,</li>
+<li>pola tugas yang berulang,</li>
+<li>model kecil yang perlu ditingkatkan pada tugas sempit.</li>
+</ul>
+<p>Fine-tuning bukan pilihan utama untuk memasukkan fakta yang sering berubah. RAG biasanya lebih sesuai untuk pengetahuan dinamis dan citation.</p>
+<h2>9.2 Memilih Prompting, RAG, atau Fine-Tuning</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Kebutuhan</th>
+<th>Teknik awal</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mengubah instruksi atau gaya sederhana</td>
+<td>Prompting</td>
+</tr>
+<tr>
+<td>Menjawab berdasarkan dokumen terbaru</td>
+<td>RAG</td>
+</tr>
+<tr>
+<td>Menstabilkan format dan perilaku berulang</td>
+<td>Fine-tuning</td>
+</tr>
+<tr>
+<td>Pengetahuan dinamis + format khusus</td>
+<td>RAG + fine-tuning</td>
+</tr>
+<tr>
+<td>Aturan pasti dan validasi</td>
+<td>Program deterministik</td>
+</tr>
+</tbody></table></div>
+<h2>9.3 Supervised Fine-Tuning</h2>
+<p>Supervised fine-tuning menggunakan pasangan input-output yang dianggap benar.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Input : laporan insiden dan instruksi klasifikasi
+Target: JSON kategori, tingkat dampak, dan tindakan awal
+</code></pre></div>
+<p>Dataset harus konsisten. Jika dua contoh serupa memiliki label berbeda tanpa alasan, model menerima sinyal yang bertentangan.</p>
+<h2>9.4 Parameter-Efficient Fine-Tuning</h2>
+<p>Parameter-efficient fine-tuning atau PEFT memperbarui sebagian kecil parameter tambahan, bukan seluruh model. Salah satu pendekatan populer adalah low-rank adaptation.</p>
+<p>Manfaat umum:</p>
+<ul>
+<li>kebutuhan memori lebih rendah,</li>
+<li>artefak adaptasi lebih kecil,</li>
+<li>lebih mudah membuat beberapa adapter,</li>
+<li>training lebih terjangkau dibanding full fine-tuning.</li>
+</ul>
+<p>Keterbatasan:</p>
+<ul>
+<li>tetap membutuhkan data berkualitas,</li>
+<li>dapat overfit,</li>
+<li>tidak otomatis memperbaiki factuality,</li>
+<li>kompatibilitas dan deployment perlu direncanakan.</li>
+</ul>
+<h2>9.5 Data Preparation</h2>
+<p>Checklist dataset fine-tuning:</p>
+<ul>
+<li>Definisikan tugas dan schema.</li>
+<li>Hapus data pribadi yang tidak diperlukan.</li>
+<li>Pisahkan train, validation, dan test berdasarkan unit yang benar.</li>
+<li>Deduplicate contoh.</li>
+<li>Periksa distribusi label.</li>
+<li>Tambahkan edge case.</li>
+<li>Catat sumber dan izin.</li>
+<li>Gunakan evaluator manusia untuk subset kritis.</li>
+<li>Hindari memasukkan jawaban test ke training.</li>
+</ul>
+<h2>9.6 Overfitting dan Catastrophic Forgetting</h2>
+<p>Fine-tuning terlalu agresif dapat membuat model menghafal contoh, kehilangan kemampuan umum, atau merespons semua input dengan pola domain yang sama.</p>
+<p>Gejala:</p>
+<ul>
+<li>train loss turun tetapi validation tidak membaik,</li>
+<li>respons sangat mirip dengan dataset,</li>
+<li>kemampuan umum menurun,</li>
+<li>model terlalu percaya diri pada input di luar domain.</li>
+</ul>
+<p>Mitigasi:</p>
+<ul>
+<li>kurangi learning rate atau epoch,</li>
+<li>tambah variasi data,</li>
+<li>gunakan early stopping,</li>
+<li>evaluasi kemampuan umum dan domain,</li>
+<li>pertahankan baseline tanpa fine-tuning.</li>
+</ul>
+<h2>9.7 Model Distillation dan Model Kecil</h2>
+<p>Tidak semua aplikasi membutuhkan model terbesar. Model kecil yang disesuaikan dapat memberikan:</p>
+<ul>
+<li>latency lebih rendah,</li>
+<li>biaya lebih rendah,</li>
+<li>deployment lokal,</li>
+<li>kontrol data lebih kuat,</li>
+<li>performa cukup baik untuk tugas sempit.</li>
+</ul>
+<p>Pemilihan model harus berdasarkan evaluasi, bukan ukuran parameter saja.</p>
+<h2>Checkpoint Bab 9</h2>
+<ol>
+<li>Mengapa fakta yang sering berubah lebih cocok ditangani RAG?</li>
+<li>Apa manfaat utama PEFT?</li>
+<li>Sebutkan dua gejala overfitting pada fine-tuning.</li>
+</ol>
+<h2>Latihan Bab 9 - Decision Memo</h2>
+<p>Pilih satu kebutuhan aplikasi. Tulis memo satu halaman yang menjawab:</p>
+<ul>
+<li>baseline tanpa fine-tuning,</li>
+<li>kegagalan baseline,</li>
+<li>alasan fine-tuning diperlukan atau tidak,</li>
+<li>jenis data yang dibutuhkan,</li>
+<li>risiko privasi dan bias,</li>
+<li>metrik keberhasilan,</li>
+<li>rencana rollback.</li>
+</ul>
+<h3>Template Decision Memo</h3>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Bagian</th>
+<th>Pertanyaan yang Harus Dijawab</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Masalah</td>
+<td>Perilaku baseline mana yang belum memenuhi kebutuhan?</td>
+</tr>
+<tr>
+<td>Alternatif</td>
+<td>Apakah prompting atau RAG sudah diuji lebih dahulu?</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>Apakah tersedia contoh yang benar, legal, aman, dan mewakili penggunaan nyata?</td>
+</tr>
+<tr>
+<td>Evaluasi</td>
+<td>Metrik domain dan kemampuan umum apa yang harus dipertahankan?</td>
+</tr>
+<tr>
+<td>Risiko</td>
+<td>Apa risiko overfitting, bias, privacy, dan perubahan perilaku?</td>
+</tr>
+<tr>
+<td>Operasional</td>
+<td>Bagaimana model disimpan, dirilis, dipantau, dan dikembalikan ke versi sebelumnya?</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>Kriteria keputusan:</strong> fine-tuning dilakukan hanya ketika manfaat yang terukur melebihi biaya data, komputasi, evaluasi, dan risiko operasional.</p>
+</blockquote>
+<hr>
+

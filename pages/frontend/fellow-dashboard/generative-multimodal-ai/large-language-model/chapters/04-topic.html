@@ -1,0 +1,88 @@
+<h1>Transformer untuk Model Bahasa</h1>
+<h2>4.1 Gambaran Besar</h2>
+<p>Transformer adalah arsitektur neural network yang mengolah hubungan antartoken menggunakan attention. Banyak LLM generatif memakai susunan <strong>decoder-only Transformer</strong>.</p>
+<p>Alur sederhananya:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Token IDs
+   ↓
+Token embedding + posisi
+   ↓
+Transformer block 1
+   ↓
+Transformer block 2
+   ↓
+...
+   ↓
+Transformer block N
+   ↓
+Logits untuk seluruh vocabulary
+   ↓
+Probabilitas token berikutnya
+</code></pre></div>
+<p>Setiap Transformer block umumnya memiliki:</p>
+<ul>
+<li>self-attention,</li>
+<li>feed-forward network,</li>
+<li>residual connection,</li>
+<li>normalization.</li>
+</ul>
+<h2>4.2 Query, Key, dan Value</h2>
+<p>Self-attention membentuk tiga representasi dari setiap token:</p>
+<ul>
+<li><strong>Query:</strong> informasi apa yang sedang dicari token ini?</li>
+<li><strong>Key:</strong> informasi apa yang ditawarkan token lain?</li>
+<li><strong>Value:</strong> informasi apa yang akan diteruskan jika dianggap relevan?</li>
+</ul>
+<blockquote>
+<p><strong>Analogi perpustakaan:</strong> query adalah pertanyaan pembaca, key adalah label katalog, dan value adalah isi buku yang dipinjam. Kecocokan query-key menentukan seberapa besar isi value digunakan.</p>
+</blockquote>
+<p>Secara konseptual:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">score = kecocokan(query, key)
+weight = softmax(score)
+output = jumlah(weight x value)
+</code></pre></div>
+<h2>4.3 Causal Mask</h2>
+<p>Pada model autoregresif, token pada posisi tertentu tidak boleh melihat token masa depan saat training. Causal mask memastikan prediksi token ke-5 hanya menggunakan token 1 sampai 4.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Posisi yang boleh diperhatikan
+
+Token 1: [1, 0, 0, 0]
+Token 2: [1, 1, 0, 0]
+Token 3: [1, 1, 1, 0]
+Token 4: [1, 1, 1, 1]
+</code></pre></div>
+<p>Tanpa mask, model dapat melihat jawaban yang seharusnya diprediksi dan objective training menjadi tidak valid.</p>
+<h2>4.4 Multi-Head Attention</h2>
+<p>Satu pola attention mungkin fokus pada hubungan subjek-predikat, sedangkan pola lain fokus pada referensi kata, format, atau hubungan jarak jauh. Multi-head attention memberi beberapa ruang representasi yang dipelajari secara paralel.</p>
+<p>Tidak ada jaminan setiap head memiliki fungsi manusiawi yang jelas. Namun secara kolektif, multi-head attention membantu model memproses berbagai hubungan.</p>
+<h2>4.5 Feed-Forward Network</h2>
+<p>Setelah informasi antartoken dicampur oleh attention, setiap posisi diproses oleh feed-forward network. Bagian ini memberi transformasi nonlinear dan kapasitas tambahan.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Attention: bertukar informasi antartoken
+Feed-forward: memproses informasi pada setiap posisi
+</code></pre></div>
+<h2>4.6 Residual dan Normalization</h2>
+<p>Residual connection membantu informasi dan gradient mengalir melewati banyak layer. Normalization menjaga skala aktivasi lebih stabil. Kedua komponen penting agar training model dalam dapat berjalan.</p>
+<h2>4.7 Dari Hidden State ke Logits</h2>
+<p>Representasi terakhir diproyeksikan menjadi satu skor untuk setiap token dalam vocabulary. Skor tersebut disebut <strong>logits</strong>. Softmax mengubah logits menjadi distribusi probabilitas.</p>
+<div class="reasoning-code-block"><pre><code class="language-python">import math
+
+logits = [2.0, 1.0, 0.1]
+exp_values = [math.exp(x) for x in logits]
+total = sum(exp_values)
+probabilities = [x / total for x in exp_values]
+print(probabilities)
+</code></pre></div>
+<p>Token dengan probabilitas terbesar tidak selalu harus dipilih. Strategi decoding menentukan bagaimana probabilitas digunakan.</p>
+<h2>Checkpoint Bab 4</h2>
+<ol>
+<li>Apa tujuan self-attention?</li>
+<li>Mengapa model autoregresif membutuhkan causal mask?</li>
+<li>Apa perbedaan peran attention dan feed-forward network?</li>
+</ol>
+<h2>Latihan Bab 4 - Menelusuri Alur Data</h2>
+<p>Gambar ulang alur dari kalimat input sampai distribusi token berikutnya. Untuk setiap tahap, tuliskan bentuk informasi yang dihasilkan dan pertanyaan berikut:</p>
+<ul>
+<li>Apa yang dipelajari pada tahap tersebut?</li>
+<li>Apa yang terjadi jika tahap itu dihilangkan?</li>
+<li>Apakah tahap itu bekerja per token atau lintas token?</li>
+</ul>
+<hr>
+

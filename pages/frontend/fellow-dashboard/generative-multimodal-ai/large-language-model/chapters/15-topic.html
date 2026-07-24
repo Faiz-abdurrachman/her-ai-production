@@ -1,0 +1,228 @@
+<h1>Diskusi, Glosarium, Ringkasan, dan Referensi</h1>
+<h2>Diskusi dan Refleksi</h2>
+<p>Gunakan pertanyaan berikut untuk diskusi kelompok:</p>
+<ol>
+<li>Apakah aplikasi yang sedang dirancang benar-benar membutuhkan LLM?</li>
+<li>Kapan jawaban <code>tidak tahu</code> lebih bernilai daripada jawaban lengkap?</li>
+<li>Siapa yang bertanggung jawab ketika output model merugikan pengguna?</li>
+<li>Bagaimana tim membedakan masalah model, prompt, retrieval, dan data?</li>
+<li>Data apa yang tidak boleh masuk ke prompt atau log?</li>
+<li>Apakah model kecil cukup untuk tugas yang dipilih?</li>
+<li>Bagaimana menjaga citation tetap terhubung ke dokumen yang benar?</li>
+<li>Kapan keputusan harus tetap berada pada manusia?</li>
+</ol>
+<h2>Glosarium</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Istilah</th>
+<th>Definisi sederhana</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Abstention</td>
+<td>Keputusan sistem untuk tidak menjawab ketika bukti atau keyakinan tidak cukup</td>
+</tr>
+<tr>
+<td>Alignment</td>
+<td>Proses menyesuaikan perilaku model dengan instruksi, preferensi, dan batas keselamatan</td>
+</tr>
+<tr>
+<td>Attention</td>
+<td>Mekanisme untuk menimbang hubungan antartoken</td>
+</tr>
+<tr>
+<td>Autoregressive</td>
+<td>Menghasilkan token berdasarkan token yang sudah ada</td>
+</tr>
+<tr>
+<td>Base model</td>
+<td>Model pretrained yang belum secara khusus disesuaikan untuk chat atau instruksi</td>
+</tr>
+<tr>
+<td>Causal mask</td>
+<td>Mask yang mencegah token melihat token masa depan</td>
+</tr>
+<tr>
+<td>Chunk</td>
+<td>Potongan dokumen yang disimpan dan diambil oleh retrieval</td>
+</tr>
+<tr>
+<td>Context window</td>
+<td>Jumlah token yang dapat diproses dalam satu konteks</td>
+</tr>
+<tr>
+<td>Cross-entropy</td>
+<td>Loss untuk membandingkan distribusi prediksi dengan token target</td>
+</tr>
+<tr>
+<td>Decoding</td>
+<td>Cara memilih token dari distribusi probabilitas</td>
+</tr>
+<tr>
+<td>Dense retrieval</td>
+<td>Pencarian berdasarkan embedding vektor</td>
+</tr>
+<tr>
+<td>Embedding</td>
+<td>Representasi vektor dari token, kalimat, atau dokumen</td>
+</tr>
+<tr>
+<td>Eval set</td>
+<td>Kumpulan kasus tetap untuk mengukur kualitas sistem</td>
+</tr>
+<tr>
+<td>Faithfulness</td>
+<td>Tingkat dukungan sumber terhadap klaim output</td>
+</tr>
+<tr>
+<td>Few-shot</td>
+<td>Prompt yang memuat beberapa contoh</td>
+</tr>
+<tr>
+<td>Fine-tuning</td>
+<td>Training lanjutan untuk menyesuaikan parameter model</td>
+</tr>
+<tr>
+<td>Hallucination</td>
+<td>Klaim yang tidak didukung fakta atau konteks</td>
+</tr>
+<tr>
+<td>Inference</td>
+<td>Proses menggunakan model terlatih untuk menghasilkan output</td>
+</tr>
+<tr>
+<td>Instruction tuning</td>
+<td>Training dengan pasangan instruksi dan respons</td>
+</tr>
+<tr>
+<td>Latency</td>
+<td>Waktu yang dibutuhkan sistem untuk merespons</td>
+</tr>
+<tr>
+<td>LLM</td>
+<td>Model bahasa berskala besar</td>
+</tr>
+<tr>
+<td>Logits</td>
+<td>Skor mentah model sebelum softmax</td>
+</tr>
+<tr>
+<td>Metadata</td>
+<td>Informasi tentang sumber, bagian, versi, atau akses dokumen</td>
+</tr>
+<tr>
+<td>Multi-head attention</td>
+<td>Beberapa attention head yang dipelajari secara paralel</td>
+</tr>
+<tr>
+<td>PEFT</td>
+<td>Adaptasi model dengan memperbarui sebagian kecil parameter</td>
+</tr>
+<tr>
+<td>Positional information</td>
+<td>Informasi urutan token dalam input</td>
+</tr>
+<tr>
+<td>Prefill</td>
+<td>Fase memproses token prompt sebelum decoding</td>
+</tr>
+<tr>
+<td>Prompt</td>
+<td>Instruksi dan konteks yang diberikan ke model</td>
+</tr>
+<tr>
+<td>Prompt injection</td>
+<td>Input yang mencoba mengambil alih instruksi sistem</td>
+</tr>
+<tr>
+<td>RAG</td>
+<td>Sistem yang mengambil informasi sebelum menghasilkan jawaban</td>
+</tr>
+<tr>
+<td>Reranking</td>
+<td>Mengurutkan ulang kandidat retrieval dengan penilaian lebih teliti</td>
+</tr>
+<tr>
+<td>Retrieval</td>
+<td>Proses mencari dokumen atau chunk relevan</td>
+</tr>
+<tr>
+<td>Softmax</td>
+<td>Fungsi yang mengubah logits menjadi probabilitas</td>
+</tr>
+<tr>
+<td>Sparse retrieval</td>
+<td>Pencarian berdasarkan kata atau fitur yang jarang</td>
+</tr>
+<tr>
+<td>Temperature</td>
+<td>Parameter yang mengubah variasi distribusi sampling</td>
+</tr>
+<tr>
+<td>Token</td>
+<td>Unit teks yang diproses model</td>
+</tr>
+<tr>
+<td>Tokenizer</td>
+<td>Komponen yang mengubah teks menjadi token ID dan sebaliknya</td>
+</tr>
+<tr>
+<td>Transformer</td>
+<td>Arsitektur neural network berbasis attention</td>
+</tr>
+<tr>
+<td>Vocabulary</td>
+<td>Daftar token yang dikenali tokenizer</td>
+</tr>
+</tbody></table></div>
+<h2>Ringkasan Cepat</h2>
+<ol>
+<li>LLM generatif memprediksi token berikutnya secara berulang.</li>
+<li>Tokenizer mengubah teks menjadi token ID; embedding mengubah ID menjadi vektor.</li>
+<li>Transformer memakai attention untuk mencampur informasi antartoken.</li>
+<li>Pretraining mempelajari pola bahasa, sedangkan instruction tuning membantu mengikuti tugas.</li>
+<li>Decoding mengontrol cara token dipilih, bukan menambah pengetahuan model.</li>
+<li>Prompt yang baik menjelaskan tujuan, konteks, batasan, format, dan kriteria keberhasilan.</li>
+<li>RAG mengambil dokumen relevan agar jawaban dapat memakai sumber yang diperbarui.</li>
+<li>Fine-tuning cocok untuk menstabilkan perilaku atau format, bukan sebagai database fakta dinamis.</li>
+<li>Evaluasi harus mengukur correctness, relevance, faithfulness, safety, latency, dan cost.</li>
+<li>Authorization, validation, dan tool permission harus ditegakkan di luar model.</li>
+<li>Output model adalah data tidak tepercaya yang perlu diperiksa.</li>
+<li>Sistem produksi membutuhkan monitoring, versioning, regression test, dan rollback.</li>
+</ol>
+<h2>Checklist Sebelum Membangun Aplikasi LLM</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Masalah benar-benar membutuhkan fleksibilitas bahasa.</li>
+<li><input disabled="" type="checkbox"> Ada baseline non-LLM atau prompt sederhana.</li>
+<li><input disabled="" type="checkbox"> Sumber pengetahuan dan kepemilikannya jelas.</li>
+<li><input disabled="" type="checkbox"> Data sensitif telah dipetakan.</li>
+<li><input disabled="" type="checkbox"> Prompt memiliki versi.</li>
+<li><input disabled="" type="checkbox"> Output memiliki schema atau validator.</li>
+<li><input disabled="" type="checkbox"> RAG memiliki metadata dan aturan akses.</li>
+<li><input disabled="" type="checkbox"> Eval set mencakup pertanyaan tanpa jawaban dan edge case.</li>
+<li><input disabled="" type="checkbox"> Prompt injection dan tool abuse telah diuji.</li>
+<li><input disabled="" type="checkbox"> Model, latency, dan cost memenuhi target.</li>
+<li><input disabled="" type="checkbox"> Logging mengikuti kebijakan privasi.</li>
+<li><input disabled="" type="checkbox"> Ada fallback, human review, incident response, dan rollback.</li>
+</ul>
+<h2>Referensi Belajar</h2>
+<ol>
+<li>Vaswani, A., et al. (2017). <em>Attention Is All You Need</em>.</li>
+<li>Devlin, J., et al. (2018). <em>BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</em>.</li>
+<li>Brown, T. B., et al. (2020). <em>Language Models are Few-Shot Learners</em>.</li>
+<li>Bommasani, R., et al. (2021). <em>On the Opportunities and Risks of Foundation Models</em>.</li>
+<li>Lewis, P., et al. (2020). <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</em>.</li>
+<li>Ouyang, L., et al. (2022). <em>Training Language Models to Follow Instructions with Human Feedback</em>.</li>
+<li>Hu, E. J., et al. (2021). <em>LoRA: Low-Rank Adaptation of Large Language Models</em>.</li>
+<li>Liang, P., et al. (2022). <em>Holistic Evaluation of Language Models</em>.</li>
+<li>Lin, S., Hilton, J., &amp; Evans, O. (2021). <em>TruthfulQA: Measuring How Models Mimic Human Falsehoods</em>.</li>
+<li>Mitchell, M., et al. (2019). <em>Model Cards for Model Reporting</em>.</li>
+<li>Gebru, T., et al. (2021). <em>Datasheets for Datasets</em>.</li>
+<li>Jurafsky, D., &amp; Martin, J. H. <em>Speech and Language Processing</em>.</li>
+<li>Goodfellow, I., Bengio, Y., &amp; Courville, A. (2016). <em>Deep Learning</em>.</li>
+</ol>
+<h2>Penutup</h2>
+<p>LLM menjadi berguna bukan hanya karena model dapat menghasilkan bahasa, tetapi karena sistem di sekelilingnya mengatur data, instruksi, retrieval, validasi, izin, evaluasi, dan monitoring. Peserta yang memahami seluruh pipeline dapat membuat aplikasi yang lebih dapat dipercaya daripada sekadar demo yang terlihat cerdas.</p>
+<p>Langkah berikutnya dalam jalur pembelajaran HerAI adalah memperluas pemahaman ke <strong>Vision Language Model</strong>, yaitu model yang menggabungkan teks dan informasi visual.</p>
+
