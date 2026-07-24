@@ -3,6 +3,23 @@
  * METODE FINAL: HASH ROUTING (ANTI BLANK & ANTI 404)
  * Otak Utama Sistem Single Page Application (SPA) HerAI Fellowship
  */
+window.switchCvLocalTab = function(el, mode) {
+    const tabs = document.querySelectorAll('.cv-local-tabs a');
+    tabs.forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+
+    const teoriSecs = document.querySelectorAll('.lesson-sec:not(#sec-quiz)');
+    const evalSec = document.getElementById('sec-quiz');
+
+    if (mode === 'teori') {
+        teoriSecs.forEach(s => s.style.display = 'block');
+        if (evalSec) evalSec.style.display = 'none';
+    } else {
+        teoriSecs.forEach(s => s.style.display = 'none');
+        if (evalSec) evalSec.style.display = 'block';
+        window.dispatchEvent(new Event('resize'));
+    }
+};
 
 const router = {
     // ==========================================
@@ -65,7 +82,15 @@ const router = {
         "/participant-ai-reasoning-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/04-reasoning/kuis.html",
         "/participant-ai-reasoning-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/04-reasoning/diskusi.html",
         "/participant-ai-evaluation": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/05-evaluation/materi.html",
+        "/participant-ai-evaluation-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/05-evaluation/latihan.html",
+        "/participant-ai-evaluation-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/05-evaluation/kuis.html",
+        "/participant-ai-evaluation-kuis": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/05-evaluation/kuis.html",
+        "/participant-ai-evaluation-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/05-evaluation/diskusi.html",
         "/participant-ai-evolution": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/materi.html",
+        "/participant-ai-evolution-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/latihan.html",
+        "/participant-ai-evolution-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/kuis.html",
+        "/participant-ai-evolution-kuis": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/kuis.html",
+        "/participant-ai-evolution-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/diskusi.html",
         "/participant-mentor": "/pages/frontend/fellow-dashboard/mentor.html",
         "/participant-tasks": "/pages/frontend/fellow-dashboard/tasks.html",
         "/participant-projects": "/pages/frontend/fellow-dashboard/projects.html",
@@ -108,7 +133,7 @@ const router = {
         "/participant-ai-lab-math-practice": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math-quiz": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math-discussion": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/materi.html",
         "/participant-ai-lab-deep-learning-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/latihan.html",
@@ -184,23 +209,40 @@ const router = {
         "/participant-ai-lab-geospatial-practice": "/pages/frontend/fellow-dashboard/business-industry-application/geospatial/latihan.html",
         "/participant-ai-lab-geospatial-quiz": "/pages/frontend/fellow-dashboard/business-industry-application/geospatial/kuis.html",
         "/participant-ai-lab-geospatial-discussion": "/pages/frontend/fellow-dashboard/business-industry-application/geospatial/diskusi.html",
-        "/participant-specialization-computer-vision": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-specialization-computer-vision": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision.html",
+
+        "/participant-cv-digital-image": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/materi.html",
+        "/participant-cv-digital-image-practice": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/latihan.html",
+        "/participant-cv-digital-image-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/kuis.html",
+        "/participant-cv-digital-image-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/diskusi.html",
+        "/participant-cv-cnn": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/materi.html",
+        "/participant-cv-cnn-practice": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/latihan.html",
+        "/participant-cv-cnn-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/kuis.html",
+        "/participant-cv-cnn-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/diskusi.html",
+        "/participant-cv-advanced-cnn": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/03-advanced-cnn-architectures/materi.html",
+        "/participant-cv-advanced-cnn-practice": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/03-advanced-cnn-architectures/latihan.html",
+        "/participant-cv-advanced-cnn-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/03-advanced-cnn-architectures/kuis.html",
+        "/participant-cv-advanced-cnn-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/03-advanced-cnn-architectures/diskusi.html",
+
+        "/participant-specialization-computer-vision-practice": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/latihan.html",
+        "/participant-specialization-computer-vision-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/kuis.html",
+        "/participant-specialization-computer-vision-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/diskusi.html",
         "/participant-specialization-speech-recognition": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-specialization-nlp-llm": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-specialization-mlops-deployment": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-specialization-multimodal-llm": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-specialization-medical-biology-ai": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-cv-cnn-intro": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-cv-cnn-why": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-cv-cnn-relu": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-cv-filtering-kernels": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-cv-cnn-fc": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-cv-cnn-hands": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-cv-cnn-arch": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-cv-morph": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-cv-opencv": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-cv-pixel": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-cv-cnn-arch-builder": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-cv-cnn-intro": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/cnn-intro.html",
+        "/participant-ai-lab-cv-cnn-why": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/cnn-why.html",
+        "/participant-ai-lab-cv-cnn-relu": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/cnn-relu.html",
+        "/participant-ai-lab-cv-filtering-kernels": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/filtering-kernels.html",
+        "/participant-ai-lab-cv-cnn-fc": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/cnn-fc.html",
+        "/participant-ai-lab-cv-cnn-hands": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/cnn-hands.html",
+        "/participant-ai-lab-cv-cnn-arch": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/cnn-arch.html",
+        "/participant-ai-lab-cv-morph": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/morphological-transforms.html",
+        "/participant-ai-lab-cv-opencv": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/image-processing-opencv.html",
+        "/participant-ai-lab-cv-pixel": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/pixel-anatomy.html",
+        "/participant-ai-lab-cv-cnn-arch-builder": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/cnn-arch-builder.html",
         "/meeting": "/pages/frontend/meeting.html",
         "/messaging": "/pages/frontend/fellow-dashboard/chatroom.html",
         "/messaging-alt": "/pages/frontend/messaging.html",
@@ -374,7 +416,7 @@ const router = {
 
     isParticipantRouteAllowed(path) {
         if (path === "/participant-dashboard" || path === "/participant-modules" || path === "/participant-settings") return true;
-        return path.startsWith("/participant-ai-") || path.startsWith("/participant-ai-lab-") || path.startsWith("/participant-specialization-");
+        return path.startsWith("/participant-ai-") || path.startsWith("/participant-ai-lab-") || path.startsWith("/participant-specialization-") || path.startsWith("/participant-cv-");
     },
 
     renderParticipantAccessNotice(appContent, navContainer, footerContainer, options = {}) {
@@ -492,7 +534,15 @@ const router = {
             "/participant-ai-reasoning-quiz",
             "/participant-ai-reasoning-discussion",
             "/participant-ai-evaluation",
+            "/participant-ai-evaluation-practice",
+            "/participant-ai-evaluation-quiz",
+            "/participant-ai-evaluation-kuis",
+            "/participant-ai-evaluation-discussion",
             "/participant-ai-evolution",
+            "/participant-ai-evolution-practice",
+            "/participant-ai-evolution-quiz",
+            "/participant-ai-evolution-kuis",
+            "/participant-ai-evolution-discussion",
             "/participant-profile",
             "/participant-mentor",
             "/participant-tasks",
@@ -548,6 +598,23 @@ const router = {
             "/participant-ai-lab-manufacturing",
             "/participant-ai-lab-geospatial",
             "/participant-specialization-computer-vision",
+
+            "/participant-cv-digital-image",
+            "/participant-cv-digital-image-practice",
+            "/participant-cv-digital-image-quiz",
+            "/participant-cv-digital-image-discussion",
+            "/participant-cv-cnn",
+            "/participant-cv-cnn-practice",
+            "/participant-cv-cnn-quiz",
+            "/participant-cv-cnn-discussion",
+            "/participant-cv-advanced-cnn",
+            "/participant-cv-advanced-cnn-practice",
+            "/participant-cv-advanced-cnn-quiz",
+            "/participant-cv-advanced-cnn-discussion",
+
+            "/participant-specialization-computer-vision-practice",
+            "/participant-specialization-computer-vision-quiz",
+            "/participant-specialization-computer-vision-discussion",
             "/participant-specialization-speech-recognition",
             "/participant-specialization-nlp-llm",
             "/participant-specialization-mlops-deployment",
@@ -946,6 +1013,17 @@ const router = {
                     }
                     if (path === "/participant-ai-modern-discussion" && typeof window.initAiModernDiscussion === "function") {
                         window.initAiModernDiscussion();
+                    }
+                } else if (path.startsWith("/participant-cv-")) {
+                    if (typeof window.initFellowDashboardPage === "function") {
+                        window.initFellowDashboardPage("modules");
+                    }
+                    if (path === "/participant-cv-digital-image" && typeof window.initCvDigitalImage === "function") {
+                        window.initCvDigitalImage();
+                    } else if (path === "/participant-cv-cnn" && typeof window.initCvCnn === "function") {
+                        window.initCvCnn();
+                    } else if (path === "/participant-cv-advanced-cnn" && typeof window.initCvAdvancedCnn === "function") {
+                        window.initCvAdvancedCnn();
                     }
                 } else if (path.startsWith("/participant-ai-reasoning") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
@@ -1353,21 +1431,42 @@ const router = {
                     }
 
 
-                } else if (path === "/participant-ai-evaluation" && typeof window.initFellowDashboardPage === "function") {
+                } else if (path.startsWith("/participant-ai-evaluation") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (typeof window.initAiEvaluation === "function") {
-                        window.initAiEvaluation();
+                    if (path === "/participant-ai-evaluation" && typeof window.initAiEvaluationMateri === "function") {
+                        window.initAiEvaluationMateri();
                     }
-                } else if (path === "/participant-ai-evolution" && typeof window.initFellowDashboardPage === "function") {
+                    if (path === "/participant-ai-evaluation-practice" && typeof window.initAiEvaluationPractice === "function") {
+                        window.initAiEvaluationPractice();
+                    }
+                    if ((path === "/participant-ai-evaluation-quiz" || path === "/participant-ai-evaluation-kuis") && typeof window.initAiEvaluationQuiz === "function") {
+                        window.initAiEvaluationQuiz();
+                    }
+                    if (path === "/participant-ai-evaluation-discussion" && typeof window.initAiEvaluationDiscussion === "function") {
+                        window.initAiEvaluationDiscussion();
+                    }
+                } else if (path.startsWith("/participant-ai-evolution") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (typeof window.initAiEvolution === "function") {
-                        window.initAiEvolution();
+                    if (path === "/participant-ai-evolution" && typeof window.initAiEvolutionMateri === "function") {
+                        window.initAiEvolutionMateri();
+                    }
+                    if (path === "/participant-ai-evolution-practice" && typeof window.initAiEvolutionPractice === "function") {
+                        window.initAiEvolutionPractice();
+                    }
+                    if ((path === "/participant-ai-evolution-quiz" || path === "/participant-ai-evolution-kuis") && typeof window.initAiEvolutionQuiz === "function") {
+                        window.initAiEvolutionQuiz();
+                    }
+                    if (path === "/participant-ai-evolution-discussion" && typeof window.initAiEvolutionDiscussion === "function") {
+                        window.initAiEvolutionDiscussion();
                     }
                 } else if (path.startsWith("/participant-ai-") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
                 } else if (path.startsWith("/participant-specialization-") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (typeof window.initCoursePlaceholder === "function") {
+                    
+                    if (path === "/participant-specialization-computer-vision" && typeof window.initCvOverview === "function") {
+                        window.initCvOverview();
+                    } else if (typeof window.initCoursePlaceholder === "function") {
                         window.initCoursePlaceholder();
                     }
                 } else if (path === "/participant-profile" && typeof window.initFellowDashboardPage === "function") {

@@ -191,3 +191,79 @@ Pada saat melakukan verifikasi *UI Mobile* di halaman Kuis, ditemukan bahwa labe
 - Membuat script `fix_js_quiz_label.js` untuk memindai direktori `js/frontend/fellow-dashboard/` dan mengedit seluruh file JavaScript modul, kecuali `ai-python.js` dan `ai-python-basic.js`.
 - Melakukan Regex replace dari `<small>Python untuk AI</small>` menjadi label netral `<small>Evaluasi Modul</small>`.
 - Merender ulang halaman di browser untuk memastikan label soal berubah dengan benar.
+
+## 18. Bug Navigasi: Halaman Sub-Modul Evaluation & Evolution Mengembalikan 404
+**Deskripsi:**
+Ketika mengklik tab Latihan, Kuis, atau Diskusi di modul 05 (Evaluation AI) dan 06 (Evolution of AI), halaman tidak merender (muncul halaman 404 atau tidak ada perubahan tampilan).
+**Penyebab:**
+- Route untuk sub-halaman (`-practice`, `-quiz`, `-discussion`) belum didaftarkan di dalam `router.js`.
+- Logika inisiasi *sidebar* (`window.initFellowDashboardPage`) tidak dipanggil saat halaman-halaman tersebut diakses.
+**Solusi:**
+- Menambahkan route lengkap modul 05 dan 06 beserta kondisi `if/else` inisiasinya ke dalam `router.js`.
+- Menambahkan mekanisme *cache-busting* parameter query pada file `index.html` untuk `<script src="/js/router.js?v=...">` agar *browser* selalu memuat *router* versi terbaru.
+
+## 19. Bug UI/UX: Latihan Modul Masih Bercampur di Materi dan Tidak Memiliki Kunci Jawaban
+**Deskripsi:**
+Pada modul Evaluation AI dan Evolution of AI, soal latihan masih muncul di bagian paling bawah pada tab "Materi". Selain itu, tab "Latihan" hanya berisi *form* isian biasa tanpa adanya panduan, referensi jawaban, atau pembahasan (tombol "Lihat pembahasan" jika diklik hanya memunculkan teks default "Tuliskan hasil analisis Anda.").
+**Penyebab:**
+- Script compiler `build_module.js` tidak menghapus segmen `## Latihan` saat merakit `html` materi.
+- Modul 05 dan 06 tidak menyediakan teks pembahasan/jawaban di naskah aslinya (`.md`), dan `build_module.js` memiliki teks *hardcoded* sebagai nilai balikan default jika pembahasan absen.
+**Solusi:**
+- Mengubah logika `build_module.js` dengan menyisipkan Regex yang membuang segmen `## Latihan` dari *markdown* utama sebelum dikonversi menjadi HTML untuk *tab* Materi.
+- Memperluas *parser* `build_module.js` untuk mendeteksi label `**Pembahasan:**`.
+- Menulis ulang seluruh 12 Latihan di modul 05 dan 06 (menambahkan rubrik, kriteria, dan penjelasan pada setiap `**Pembahasan:**`).
+- Merakit (re-build) ulang kedua modul sehingga tab Latihan kini murni terisolasi, interaktif, dan menyediakan panduan solusi tersembunyi yang bisa dimunculkan peserta dengan tombol klik.
+
+## 21. Perombakan Arsitektur Halaman Evaluasi Computer Vision (Hybrid Tabs)
+- **Problem**: Modul Computer Vision memiliki sistem kuis dan _coding challenge_ yang tertanam (*hardcoded*) di setiap halaman materi (misal: `pixel-anatomy.html`). Saat dicoba dipisah menjadi tab global seperti Python, terungkap bahwa interaksi OpenCV dan elemen Canvas-nya terikat kuat pada file materi masing-masing (banyak konflik ID dan referensi DOM yang bentrok jika digabung ke 1 file `latihan.html` global).
+- **Solution (Hybrid UI Architecture)**:
+  1. **Local Sub-Tabs**: Menambahkan tab lokal switcher (`Teori` | `Latihan & Kuis`) di dalam 4 file materi interaktif CV. Bagian kuis secara otomatis di-_hide_ saat membaca teori, dan dimunculkan saat tab Evaluasi di-klik, menjaga file JS tetap aman di habitatnya tanpa error DOM.
+  2. **Global Mission Board**: Tab global `kuis.html` dan `latihan.html` milik Computer Vision tidak dihapus, melainkan disulap menjadi sebuah **Mission Board**. Halaman tersebut menampilkan *grid* kartu misi evaluasi yang rapi. Apabila *card* di-klik, *user* akan dilempar langsung ke bab yang bersangkutan.
+- **Dampak**: Halaman teori CV menjadi bersih 100%, sistem evaluasi dan kanvas interaktif CV tidak rusak (*zero regression*), dan UI/UX tetap terasa premium dan terstruktur dari halaman luar.
+
+## 20. Bug Navigasi: Halaman Modul Computer Vision Tidak Merespon Klik
+**Deskripsi:**
+Pengguna melaporkan bahwa URL lama dan baru menuju Computer Vision "dobel", dan ketika membuka URL baru (`participant-specialization-computer-vision`), kartu topik materi (contoh: Pixel Anatomy) tidak merespon saat diklik.
+
+**Penyebab:**
+- Script aktivasi UI JS ditaruh di dalam blok IF `router.js` yang salah (blok khusus `participant-ai-lab-`), sehingga JS `initCvOverview()` tidak pernah tereksekusi ketika user masuk via URL baru (`participant-specialization-`).
+- Selain itu, blok route `participant-specialization-` memiliki pemanggilan fungsi `initCoursePlaceholder()` otomatis yang berpotensi membajak halaman menjadi status "Under Development" secara keliru.
+
+**Solusi:**
+- Memindahkan fungsi `initCvOverview()` ke dalam blok `else if` yang tepat di `router.js`.
+- Mencegah eksekusi `initCoursePlaceholder()` jika route yang dituju adalah Computer Vision.
+- Hasilnya, fitur kartu interaktif (clickable card) kembali aktif sempurna.
+
+## 22. Migrasi Arsitektur Modul Computer Vision ke Sistem Sub-Modul Terpusat (Sub-module Architecture)
+**Deskripsi:**
+Modul Computer Vision sebelumnya menggunakan struktur lama berupa 11 file HTML raksasa yang tidak terstruktur, membuat navigasinya sangat padat dan tidak sejalan dengan modul AI Fundamentals yang menggunakan hierarki Sub-Modul.
+**Penyebab:**
+- Katalog awal memiliki 11 kartu topik yang menumpuk.
+- File HTML legacy mengandung wrapper header, navigasi, dan footer yang hardcoded.
+**Solusi:**
+- Membuat script Node.js (`build_cv_submodules.js`, `extract_cv_chapters.js`) untuk memecah 11 file HTML legacy menjadi komponen `chapters` murni (hanya berisi `<article>`, `<style>`, dan `<script>`).
+- Mengatur ulang arsitekturnya ke dalam 3 Sub-Modul utama:
+  1. `01-digital-image-fundamentals`
+  2. `02-convolutional-neural-networks`
+  3. `03-advanced-cnn-architectures`
+- Mengganti halaman katalog Computer Vision menjadi layout 3-card yang lebih elegan, sejajar dengan standar UI AI Fundamentals.
+
+## 23. Bug Router & Security Guard Memblokir Akses Modul CV Baru
+**Deskripsi:**
+Setelah arsitektur URL baru diterapkan (contoh: `#/participant-cv-digital-image`), user dilempar ke halaman "Akses Peserta Dibatasi".
+**Penyebab:**
+Fungsi `isParticipantRouteAllowed` di `js/router.js` bertindak sebagai *whitelist security guard* yang hanya membolehkan prefix `/participant-ai-` atau `/participant-specialization-`. Prefix baru `/participant-cv-` tidak terdaftar.
+**Solusi:**
+- Menambahkan kondisi `|| path.startsWith("/participant-cv-")` ke dalam fungsi whitelist di `router.js`. Akses kini kembali terbuka.
+
+## 24. Bug Visual & Fungsional: Layout dan Interaksi Python CV Hancur Pasca Migrasi
+**Deskripsi:**
+Halaman materi CV berhasil dimuat, tetapi komponen interaktif (seperti inspeksi piksel) dan *syntax highlighting* kode Python hancur total. Tombol "Run Code" juga tidak bereaksi.
+**Penyebab:**
+- Browser mengabaikan eksekusi tag `<style>` yang diinjeksi secara mentah (raw innerHTML) dari file `chapters/*.html`.
+- Kelas CSS wrapper usang (seperti `.pixel-anatomy-page`) sudah tidak menempel pada *body*, membuat *scoped CSS* rusak.
+- Fungsi inisiasi legacy Pyodide dan Canvas (seperti `initAiLabPixel()`) yang aslinya dipanggil oleh `router.js` tidak pernah tereksekusi pada arsitektur baru.
+**Solusi:**
+- Menulis script `fix_css_scoping.js` untuk mengganti *wrapper class* lama menjadi `.cv-chapter-wrapper` secara dinamis pada semua 11 chapter.
+- Memodifikasi *logic injection* di `js/frontend/fellow-dashboard/ai-cv.js` untuk membedah DOM (*DOM parsing*) dan memasukkan node `<style>` secara manual ke dalam `<head>`.
+- Mendaftarkan *hash map* untuk menghubungkan ID chapter dengan *legacy init function* masing-masing, dan mengeksekusinya menggunakan `setTimeout` sesaat setelah konten HTML dirender. Semua interaktivitas dan styling kini aktif secara sempurna.

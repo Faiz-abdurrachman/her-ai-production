@@ -79,3 +79,19 @@ Pada sesi terbaru, fokus perbaikan beralih kepada standarisasi tampilan modul AI
 Jika ingin me-*rebuild* atau menambah modul masa depan berbasis Markdown menggunakan generator ini, jalankan:
 `node scripts/module-tools/build_module.js "<path-ke-md>" <id-modul> <kategori-folder> <modul-folder>`
 **Contoh:** `node scripts/module-tools/build_module.js "nazril/modul-materi-herai/foundation-core-ai/Modul_Deep_Learning_HerAI.md" ai-deep-learning foundation-core-ai deep-learning`
+
+### D. Perbaikan Render Topik di Konsep AI Modern (Custom UI)
+- **Masalah:** Pada tab Materi modul Konsep AI Modern, "Card Topik" beserta fitur interaktifnya (Navigasi Jelajahi, Roadmaps) sama sekali tidak muncul.
+- **Penyebab:** Modul ini memakai *custom* UI rendering yang bergantung pada elemen `.ai-modern-chapter-hero` dari file source HTML. Karena file source HTML tidak memiliki *header/hero section*, script JS gagal menemukan *anchor* injeksi, sehingga proses *rendering* komponen interaktif di bawahnya dibatalkan secara otomatis (ter-skip).
+- **Solusi:** Melakukan *patch* pada fungsi `loadSourceHtml` di dalam `ai-modern.js` untuk memproduksi Topic Card Header secara dinamis (`<div class="ai-modern-chapter-hero">...</div>`) sekaligus menginjeksi urutan angkanya (Misal: `TOPIK 1 — FOUNDATION MODELS`). Perbaikan ini otomatis mengaktifkan kembali (unhide) seluruh elemen interaktif yang sebelumnya lumpuh.
+
+### E. Audit & Komparasi Modul (Roadmap Selanjutnya)
+- Saat ini web (dalam folder `materi/` dan *router*) baru menampung pilar fundamental awal. Termasuk dua modul yang baru di-build secara mulus menggunakan `build_module.js` hari ini, yaitu:
+  - `05-evaluation-ai-terintegrasi.md` (Ter-build dan masuk *router*)
+  - `06-evolution-of-ai-terintegrasi.md` (Ter-build dan masuk *router*)
+- **Status Backlog Ekstrem:** Sebagian besar (90%) *file markdown* buatan Nazril masih **nganggur (raw)** di direktori `nazril/modul-materi-herai (1)/modul-materi-herai/` dan **belum dieksekusi ke web**. Modul raksasa yang masih menanti:
+  - **Core Lanjutan:** Deep Learning, Reinforcement Learning.
+  - **Generative AI:** LLM, VLM, Multimodal LLM, Agentic AI.
+  - **Data Engineering:** Data Science, Infrastructure, Backend, Frontend, Deployment, Bioinformatics.
+  - **Business & Applications:** UI/UX, Business Insight, Management, Healthcare, Manufacturing, Geospatial, Culture.
+- **Tindakan AI Berikutnya:** Gunakan skrip `build_module.js` secara ekstensif untuk memproses deretan modul ini secara bertahap, atau gunakan metode paralel (subagents) untuk mempercepat deployment. Selalu uji di browser sesudahnya.
