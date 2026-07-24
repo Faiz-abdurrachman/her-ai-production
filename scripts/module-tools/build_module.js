@@ -145,8 +145,18 @@ function buildModule(mdPath, baseId, categoryFolder, moduleFolder) {
     }).join('\n');
     
     // Determine the module title from the first line of the markdown
-    const firstLine = content.split('\n')[0];
-    const moduleTitleRaw = firstLine && firstLine.startsWith('#') ? firstLine.replace(/#/g, '').trim() : baseId;
+    // Extract Title: Check for 'title:' in front matter, else find first '#', else use baseId
+    let moduleTitleRaw = baseId;
+    const lines = content.split('\n');
+    const titleMatch = content.match(/title:\s*(.*)/);
+    if (titleMatch) {
+        moduleTitleRaw = titleMatch[1].trim();
+    } else {
+        const firstHeader = lines.find(line => line.trim().startsWith('# '));
+        if (firstHeader) {
+            moduleTitleRaw = firstHeader.replace(/#/g, '').trim();
+        }
+    }
     const moduleTitle = escapeHtml(moduleTitleRaw);
 
     ['materi', 'latihan', 'kuis', 'diskusi'].forEach(page => {
