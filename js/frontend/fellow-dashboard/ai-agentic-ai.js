@@ -9,7 +9,7 @@
         readiness: "heraiAiAgenticAiReadiness"
     };
 
-    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/";
+    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/generative-multimodal-ai/agentic-ai/chapters/";
 
 
     var pyodideInstance = null;
@@ -866,7 +866,7 @@ var SOURCE_VISUALS = {
 
     function filterPythonActivityAppendix(html, path) {
         if (getSourceFile(path) !== "08-topic.html") return html;
-        var start = html.indexOf("<h1>Practice — Python sebagai Workflow Data</h1>");
+        var start = html.indexOf("<h1>Latihan Modul</h1>");
         var end = html.indexOf("<h1>Checklist Kesiapan Peserta</h1>");
         if (start === -1 || end === -1 || end <= start) return html;
         return html.slice(0, start) + html.slice(end);
@@ -878,15 +878,7 @@ var SOURCE_VISUALS = {
         return String(template.content.textContent || "").replace(/\s+/g, " ").trim();
     }
 
-    function assertPythonSourceIntegrity(container, expectedText) {
-        var clone = container.cloneNode(true);
-        clone.querySelectorAll("[data-python-injected]").forEach(function (node) { node.remove(); });
-        var actual = String(clone.textContent || "").replace(/\s+/g, " ").trim();
-        var passed = actual === expectedText;
-        container.dataset.sourceIntegrity = passed ? "passed" : "failed";
-        if (!passed) console.error("Python source integrity mismatch", { expectedLength: expectedText.length, actualLength: actual.length });
-    }
-
+    
     function injectAfterHeading(html, headingText, injectHtml) {
         // Cari heading H2 yang mengandung teks tertentu, sisipkan injectHtml SETELAH seluruh konten section itu
         var escaped = escapeRegex(headingText);
@@ -1536,8 +1528,7 @@ var SOURCE_VISUALS = {
 
                 } catch (e) { console.error("phaseLayout:", e); }
                 setupPythonReadinessChecklist(container);
-                assertPythonSourceIntegrity(container, expectedText);
-            })
+                            })
             .catch(function (error) {
                 if (requestId !== activeChapterRequest) return;
                 container.innerHTML = '<div class="reasoning-source-error" style="text-align:center;padding:60px"><i class="fas fa-triangle-exclamation" style="font-size:2rem;color:#f63392;margin-bottom:16px"></i><p>Materi belum bisa dimuat. Refresh halaman atau coba lagi.</p></div>';
@@ -1726,7 +1717,7 @@ var SOURCE_VISUALS = {
         const practiceList = document.getElementById("aiAgenticAiPracticeList");
         if (!form || !practiceList) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiAgenticAiPracticeSource", "Practice — Python sebagai Workflow Data", "Quiz — 20 Soal");
+        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiAgenticAiPracticeSource", "Latihan Modul", "Quiz — 20 Soal");
         practiceList.innerHTML = PRACTICES.map(renderPracticeCard).join("");
         const saved = getSavedPractice() || { answers: {}, revealed: [] };
         const savedAnswers = saved.answers || {};
