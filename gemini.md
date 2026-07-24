@@ -81,13 +81,21 @@ Pengguna melaporkan bahwa saat membuka materi Reinforcement Learning, Topik 1 ya
 
 ## 7. Bug Visual: Teks "Prompt" Menampilkan Karakter Baris Baru Literal (`\n\n`)
 **Deskripsi:**
-Pengguna melaporkan adanya tulisan berantakan seperti `\n\n- state,` pada area Prompt di halaman Latihan/Tugas.
-
+Pengguna melaporkan bahwa tulisan di halaman latihan menampilkan baris baru secara literal sebagai teks `\n\n`, yang seharusnya dirender sebagai baris baru.
 **Penyebab:**
-- Script `scripts/module-tools/build_module.js` menggabungkan beberapa paragraf soal latihan menggunakan delimiter string literal `\\n\\n` (double backslash).
-- Ketika object data tersebut dikonversi dengan `JSON.stringify` untuk dimasukkan ke file JavaScript, backslash ganda tersebut di-escape lagi menjadi literal string `\n\n` di browser (bukannya newline karakter sebenarnya). Akibatnya, fungsi `text.split("\n")` di frontend gagal memecah string tersebut.
+Di dalam `scripts/module-tools/build_module.js`, pada saat menggabungkan latihan menjadi array JSON, script menggunakan `replace(/\n/g, '\\n\\n')`. Saat generator mem-parsing data JSON tersebut, string die-escape dua kali sehingga tanda backslash ikut tercetak di UI.
+**Solusi:**
+- Menghapus double backslash di `build_module.js`.
+- Mengubah `practiceLines.join('\\n\\n')` menjadi `practiceLines.join('\n\n')` (single escape).
+- Generator akan tetap mem-parsing-nya dengan benar sebagai karakter enter standar di dalam object `prompt`.
 
-**Cara Perbaikan:**
-- Mengubah delimiter di `build_module.js` menjadi karakter newline sesungguhnya (`\n\n` dengan single backslash).
-- Melakukan *rebuild* ulang pada modul Deep Learning dan Reinforcement Learning.
-- Hasilnya, newline di-escape secara proporsional dan berhasil di-render sebagai format blok rapi di halaman browser tanpa membocorkan kode *escape sequence*.
+## 8. Bug Ekstraksi Judul: Modul Menampilkan ID Mentah (ai-large-language-model)
+**Deskripsi:**
+Setelah modul dirender, tulisan raksasa di halaman materi menampilkan ID mentah seperti `ai-large-language-model` alih-alih teks natural "Large Language Model".
+**Penyebab:**
+Beberapa dokumen Markdown (.md) menyertakan *YAML Front Matter* (misalnya `--- \n title: ...`) di baris teratas. Script `build_module.js` sebelumnya hanya mencari header pertama (`#`) atau langsung menggunakan `baseId` (ID rahasia) jika tidak menemukannya, sehingga YAML front matter diabaikan dan `baseId` menjadi fallback.
+**Solusi:**
+- Memperbarui fungsi pencarian judul di `build_module.js`.
+- Menambahkan Regex `/title:\s*(.*)/` untuk mengekstrak metadata dari YAML front matter.
+- Jika front matter tidak ada, jatuh ke fallback pencarian header `#`.
+- Melakukan *rebuild* masal pada seluruh modul yang terdampak.
