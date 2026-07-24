@@ -1,1257 +1,1052 @@
+---
+course_id: evolution-of-ai
+title: Evolution of AI
+slug: evolution-of-ai
+category: Foundation and Core AI
+level: Intermediate
+language: id
+status: revised-integrated
+version: 2.0.0
+estimated_duration: 7-8 jam
+previous_module: evaluation-ai
+next_module: deep-learning
+study_case: Asisten Pembelajaran HerAI
+updated_at: 2026-07-23
+---
+
 # Evolution of AI
 
-> Ekspor lengkap dari sumber materi HerAI yang tersedia di repository.
-> Mencakup materi, latihan, kuis, diskusi, pembahasan, versi legacy, dan/atau data interaktif bila tersedia.
+## Tentang Modul Ini
 
-## Membaca Evolusi AI
+Modul ini tidak hanya menceritakan sejarah AI. Tujuannya adalah memahami **mengapa paradigma baru muncul**, masalah apa yang diselesaikannya, masalah apa yang tetap belum selesai, dan bagaimana cara mengevaluasinya.
 
-> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/chapters/chapter-1.html`
+Modul sebelumnya, **Evaluation AI**, menghasilkan AI Evaluation Plan. Di modul ini, kerangka tersebut dipakai kembali untuk membandingkan symbolic AI, machine learning, reinforcement learning, model generatif, diffusion, Transformer, LLM, dan hybrid AI.
 
-Chapter 1 - 30 menit
+### Studi kasus yang dilanjutkan
 
-#### Membaca Evolusi AI
+Kita tetap menggunakan **Asisten Pembelajaran HerAI**. Sistem ini akan dibangun sedikit demi sedikit:
 
-Pertanyaan pembuka: apakah paradigma AI baru selalu membuat pendekatan lama tidak berguna?
+1. aturan digunakan untuk kebijakan yang pasti;
+2. machine learning digunakan untuk mengenali pola;
+3. reinforcement learning dipertimbangkan untuk keputusan berurutan;
+4. model generatif digunakan untuk membuat representasi atau konten;
+5. LLM digunakan untuk interaksi bahasa;
+6. seluruh komponen digabung menjadi sistem hybrid.
 
-##### ** Tujuan Pembelajaran
+### Lima lensa evaluasi dari modul sebelumnya
 
--   Memahami paradigma AI sebagai cara berbeda merepresentasikan masalah.
--   Membaca evolusi AI sebagai akumulasi aturan, data, reward, dan generasi.
--   Menghubungkan milestone historis dengan kemampuan AI modern.
+Setiap paradigma akan dinilai dengan lima pertanyaan:
 
-**
+1. **Kualitas hasil:** apakah output menjawab tujuan?
+2. **Generalisasi:** apakah bekerja pada data atau situasi baru?
+3. **Reliability:** apakah perilakunya konsisten dan aman saat gagal?
+4. **Fairness dan safety:** siapa yang dapat dirugikan?
+5. **System readiness:** apakah dapat dipantau, ditinjau, dan dihentikan?
 
-**Konsep Utama.** Evolusi AI bukan antrean teknologi yang saling menghapus. Symbolic AI memberi aturan, machine learning memberi pola dari data, reinforcement learning memberi pembelajaran dari reward, generative AI memberi kemampuan menghasilkan konten, dan hybrid AI menggabungkan kontrol dengan fleksibilitas.
+### Hasil yang dibangun secara bertahap
 
-##### Inti Konsep
+| Bab | Komponen yang ditambahkan | Luaran evaluasi |
+|---|---|---|
+| 1 | Peta paradigma | Paradigm Comparison Canvas |
+| 2 | Rule engine | Rule Test Set dan explanation trace |
+| 3 | Model klasifikasi dan embedding | Generalization Report |
+| 4 | Kebijakan adaptif | Reward and Safety Specification |
+| 5 | Representasi dan generasi awal | Generative Quality Report |
+| 6 | Generasi diffusion | Quality-Cost-Safety Matrix |
+| 7 | LLM, RAG, tools, dan hybrid system | Integrated System Evaluation Plan |
 
-Paradigma adalah cara memandang masalah. Dalam AI, paradigma menentukan apa yang dianggap sebagai pengetahuan, bagaimana sistem belajar, dan bagaimana keputusan dibuat. Jika symbolic AI bertanya "aturan apa yang harus ditulis?", machine learning bertanya "pola apa yang dapat dipelajari?", dan generative AI bertanya "data baru apa yang bisa dihasilkan?".
+---
 
-Compute dan skala membuat beberapa pendekatan menjadi lebih kuat, tetapi skala tidak menggantikan desain sistem. Banyak produk AI modern tetap memakai aturan, retrieval, model statistik, LLM, dan human review secara bersamaan.
+# Bab 1 - Membaca Evolusi AI sebagai Perubahan Cara Memecahkan Masalah
 
-##### Paradigma dan Pertanyaan Utama
+## Pertanyaan pembuka
 
-<table>
-<colgroup>
-<col width="50%" />
-<col width="50%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Paradigma
-Pertanyaan utama</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Symbolic AI
-Bagaimana pengetahuan ditulis sebagai aturan?</td>
-<td align="left">Supervised Learning
-Bagaimana model belajar dari contoh berlabel?</td>
-</tr>
-</tbody>
-</table>
+Apakah teknologi AI baru selalu membuat teknologi lama tidak berguna?
 
-##### Timeline Evolusi AI
+## Tujuan pembelajaran
 
-1.  **Logic Theorist**Symbolic reasoning untuk pembuktian logika; penting karena menunjukkan komputer dapat memanipulasi simbol.
-2.  **Perceptron**Classifier linear yang belajar dari contoh; fondasi awal learning machine.
-3.  **Programs with Common Sense**Gagasan McCarthy tentang penalaran logis dan common-sense reasoning.
-4.  **DENDRAL dan MYCIN**Expert system yang menunjukkan nilai knowledge base dan explanation trace.
-5.  **Backpropagation**Memperkuat neural network multilapis melalui optimisasi error.
-6.  **Q-learning, DQN, AlphaGo**Agent belajar dari reward, pengalaman, dan self-play.
-7.  **VAE, GAN, Diffusion**Model generatif mulai menghasilkan representasi, sampel tajam, dan sintesis berkualitas tinggi.
-8.  **Transformer dan GPT-3**Attention dan skala membuka LLM yang fleksibel untuk bahasa, kode, reasoning, dan tool use.
+Peserta dapat:
 
-**
+1. memahami paradigma sebagai cara merepresentasikan masalah;
+2. membaca evolusi AI sebagai akumulasi aturan, data, reward, dan generasi;
+3. menghubungkan perubahan teknologi dengan perubahan cara evaluasi;
+4. membuat Paradigm Comparison Canvas.
 
-**Analogi.** Evolusi AI mirip alat navigasi. Peta kertas tidak hilang ketika GPS muncul; keduanya menjawab kebutuhan berbeda dan bisa dipakai bersama.
+## Hubungan dengan Evaluation AI
 
-###### Contoh Nyata: chatbot fellowship
+Pada modul sebelumnya, kita belajar bahwa teknologi harus dinilai dari tujuan dan risiko, bukan dari popularitas. Prinsip yang sama dipakai di sini. Kita tidak akan bertanya "mana teknologi paling modern?". Kita akan bertanya "pendekatan mana yang paling cocok, dan bukti apa yang dibutuhkan?".
 
-Chatbot dapat memakai aturan untuk deadline resmi, retrieval untuk dokumen program, dan LLM untuk merangkai jawaban yang ramah.
+## 1.1 Paradigma adalah cara melihat masalah
 
-###### Contoh Nyata: rekomendasi materi
+Paradigma menentukan:
 
-Rekomendasi dapat memakai supervised learning dari histori belajar, embedding untuk kemiripan topik, dan aturan prasyarat agar urutan belajar tetap aman.
+- bentuk pengetahuan;
+- cara sistem belajar;
+- jenis input dan output;
+- cara keputusan dibuat;
+- cara sistem diuji.
 
-##### Lebih Teknis
+Contohnya:
 
-Representasi pengetahuan berubah dari simbol eksplisit menjadi vektor, latent space, policy, dan distribusi probabilitas. Perubahan ini memengaruhi cara sistem diuji: aturan diuji dengan kasus deterministik, model data diuji dengan generalisasi, dan model generatif diuji dengan kualitas, keamanan, serta kontrol.
+| Paradigma | Pertanyaan utama |
+|---|---|
+| Symbolic AI | Aturan apa yang harus ditulis? |
+| Machine learning | Pola apa yang dapat dipelajari dari data? |
+| Reinforcement learning | Tindakan apa yang memberi hasil jangka panjang terbaik? |
+| Generative modeling | Bagaimana membuat data baru yang mirip distribusi pelatihan? |
+| LLM | Bagaimana memprediksi dan menghasilkan bahasa berdasarkan konteks? |
+| Hybrid AI | Bagaimana membagi tugas ke beberapa pendekatan? |
 
-##### Kesalahan Umum
+## 1.2 Evolusi bukan antrean pengganti
 
-1.  Menganggap paradigma baru selalu menggantikan yang lama.
-2.  Menyamakan semua AI modern dengan LLM.
-3.  Menganggap skala selalu lebih penting daripada desain sistem.
-4.  Membaca sejarah AI hanya sebagai hafalan tahun.
+Symbolic AI tidak hilang ketika machine learning muncul. Aturan tetap berguna untuk kebijakan yang deterministik. Machine learning tidak hilang ketika LLM muncul. Model klasifikasi kecil sering lebih murah dan stabil untuk tugas tertentu.
 
-##### Mini-check
+Evolusi AI lebih tepat dibaca sebagai penambahan alat.
 
-Pilih satu produk AI yang kamu kenal. Bagian mana yang cocok memakai aturan, data, reward, generasi, atau kombinasi hybrid?
+```text
+Aturan -> Pola dari data -> Keputusan berurutan -> Generasi -> Bahasa skala besar -> Sistem hybrid
+```
 
-##### Ringkasan
+## 1.3 Milestone dan perubahan kemampuan
 
--   AI berkembang lewat akumulasi paradigma.
--   Setiap paradigma menjawab masalah dengan representasi dan sinyal belajar berbeda.
--   Sistem modern sering hybrid karena kebutuhan produk jarang murni satu paradigma.
+1. **Logic Theorist:** komputer dapat memanipulasi simbol.
+2. **Perceptron:** mesin dapat belajar pemisah sederhana dari contoh.
+3. **DENDRAL dan MYCIN:** pengetahuan pakar dapat ditulis sebagai knowledge base.
+4. **Backpropagation:** neural network multilapis dapat dilatih lebih efektif.
+5. **Q-learning dan DQN:** agent dapat belajar dari reward.
+6. **VAE dan GAN:** model dapat mempelajari latent space dan menghasilkan sampel.
+7. **Diffusion:** generasi berkualitas tinggi dapat dilakukan melalui denoising bertahap.
+8. **Transformer dan LLM:** attention dan skala memungkinkan pemrosesan bahasa yang fleksibel.
 
-##### Glossary
+Fokusnya bukan menghafal tahun, tetapi melihat perubahan representasi dan sinyal belajar.
 
-Paradigma  
-Cara berpikir dominan untuk menyelesaikan masalah.
+## 1.4 Perubahan paradigma mengubah cara evaluasi
 
-Hybrid AI  
-Sistem yang menggabungkan beberapa pendekatan AI atau aturan.
+| Paradigma | Bukti utama |
+|---|---|
+| Symbolic | aturan benar, lengkap, tidak konflik, dan dapat dilacak |
+| Machine learning | generalisasi pada data baru dan performa per kelompok |
+| Reinforcement learning | reward jangka panjang, constraint, dan perilaku aman |
+| Generative model | kualitas, diversity, kontrol, dan bias |
+| LLM | factuality, faithfulness, robustness, dan tool safety |
 
-Representasi  
-Bentuk internal pengetahuan atau data yang dipakai sistem.
+## 1.5 Tugas Praktik: Paradigm Comparison Canvas
 
-##### Referensi
+```yaml
+product: Asisten Pembelajaran HerAI
+needs:
+  deterministic_policy: true
+  pattern_recognition: true
+  sequential_decision: optional
+  content_generation: true
+  natural_language_interface: true
+comparison_questions:
+  - masalah apa yang diselesaikan?
+  - data atau pengetahuan apa yang dibutuhkan?
+  - kegagalan apa yang mungkin terjadi?
+  - bagaimana cara mengevaluasinya?
+  - apakah pendekatan lain masih dibutuhkan?
+```
 
-1.  McCarthy, *Programs with Common Sense*, 1959.
-2.  Rosenblatt, *The Perceptron*, 1958.
-3.  Rumelhart, Hinton, and Williams, *Learning Representations by Back-Propagating Errors*, 1986.
-4.  Vaswani et al., *Attention Is All You Need*, 2017.
+## Latihan 1
 
-## Symbolic AI dan Expert Systems
+Pilih satu produk AI. Tentukan bagian yang lebih cocok memakai aturan, machine learning, generasi, atau gabungan beberapa pendekatan.
 
-> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/chapters/chapter-2.html`
+**Pembahasan:**
+Jika produk adalah "Sistem Penilaian Ujian Otomatis":
+- Aturan (Rules): Untuk memeriksa format pengumpulan dan batasan kata.
+- Machine Learning (Klasifikasi): Untuk memeriksa relevansi jawaban.
+- Generasi (LLM): Untuk memberikan feedback detail (contoh perbaikan) dengan syarat tidak digunakan untuk menentukan kelulusan langsung.
 
-Chapter 2 - 35 menit
+## Handoff ke Bab 2
 
-#### Symbolic AI dan Expert Systems
+Bab 1 menunjukkan bahwa pendekatan lama tetap penting. Bab 2 memulai dari symbolic AI, yaitu paradigma yang menulis pengetahuan secara eksplisit.
 
-Pertanyaan pembuka: kapan aturan eksplisit lebih tepat daripada model statistik?
+---
 
-##### ** Tujuan Pembelajaran
+# Bab 2 - Symbolic AI dan Expert Systems
 
--   Memahami simbol, fakta, predikat, aturan, dan inferensi.
--   Membedakan forward chaining dan backward chaining.
--   Mengenali kekuatan expert system dan batasnya.
+## Pertanyaan pembuka
 
-**
+Kapan aturan eksplisit lebih aman daripada model statistik?
 
-**Konsep Utama.** Symbolic AI menulis pengetahuan secara eksplisit. Sistem bekerja dengan fakta, aturan, knowledge base, inference engine, dan explanation trace.
+## Tujuan pembelajaran
 
-##### Inti Konsep
+Peserta dapat:
 
-Dalam symbolic AI, pengetahuan diperlakukan sebagai simbol yang dapat dimanipulasi. Aturan seperti `IF pembayaran gagal AND pengguna meminta refund THEN arahkan ke billing refund` membuat keputusan mudah diaudit.
+1. memahami fakta, aturan, knowledge base, dan inference engine;
+2. membedakan forward chaining dan backward chaining;
+3. mengenali kekuatan dan keterbatasan expert system;
+4. mengevaluasi rule coverage, conflict, dan explanation trace;
+5. menambahkan rule engine pada Asisten HerAI.
 
-Expert system seperti DENDRAL dan MYCIN menunjukkan bahwa AI bisa kuat pada domain sempit jika aturan dan pengetahuan pakar ditulis dengan teliti. Namun sistem ini mahal dirawat ketika domain ambigu atau berubah cepat.
+## Hubungan dengan Bab 1
 
-Fakta**Aturan**Mesin Inferensi**Kesimpulan**Penjelasan
+Bab 1 memperkenalkan symbolic AI sebagai pendekatan berbasis aturan. Sekarang kita melihat bagaimana pendekatan itu bekerja dan bagaimana kerangka Evaluation AI diterapkan padanya.
 
-**
+## 2.1 Pengetahuan ditulis secara eksplisit
 
-**Analogi.** Symbolic AI seperti petugas yang bekerja memakai SOP. Keputusannya mudah ditelusuri, tetapi kesulitan ketika situasi tidak tercakup di SOP.
+Contoh aturan:
 
-###### Contoh Nyata: compliance
+```text
+IF topik = deadline AND dokumen_resmi_tersedia
+THEN jawab_dari_dokumen
 
-Aturan eksplisit cocok untuk kebijakan yang harus dipatuhi secara deterministik, misalnya validasi kelengkapan dokumen.
+IF topik = dispensasi AND bukti_tidak_lengkap
+THEN eskalasi_ke_mentor
+```
 
-###### Contoh Nyata: safety layer
+Aturan seperti ini mudah diaudit karena tim dapat melihat kondisi dan hasilnya.
 
-LLM dapat menjawab fleksibel, tetapi rule-based guardrail memastikan kebijakan wajib tidak dilanggar.
+## 2.2 Komponen expert system
 
-##### Lebih Teknis
+- **Facts:** informasi yang diketahui.
+- **Rules:** hubungan IF/THEN.
+- **Knowledge base:** kumpulan facts dan rules.
+- **Inference engine:** komponen yang menjalankan aturan.
+- **Explanation trace:** jejak aturan yang aktif.
 
-    facts = {"payment_failed", "refund_requested"}
-    rules = [
-      ({"payment_failed", "refund_requested"}, "billing_refund"),
-      ({"login_issue"}, "account_access")
-    ]
-    for condition, route in rules:
-      if condition <= facts:
-        print(route)
+### Forward chaining
 
-Forward chaining bergerak dari fakta ke kesimpulan. Backward chaining bergerak dari hipotesis ke fakta yang perlu dibuktikan. Certainty factor dapat memberi bobot saat aturan tidak sepenuhnya pasti.
+Berangkat dari fakta menuju kesimpulan.
 
-##### Kesalahan Umum
+### Backward chaining
 
-1.  Menganggap symbolic AI sepenuhnya usang.
-2.  Mengira aturan selalu mudah dirawat.
-3.  Menyamakan explainable dengan selalu benar.
-4.  Memaksa domain ambigu menjadi aturan kaku.
+Berangkat dari hipotesis, lalu mencari fakta yang diperlukan untuk membuktikannya.
 
-##### Mini-check
+## 2.3 Kekuatan symbolic AI
 
-Buat dua aturan triase tiket fellowship dan jelaskan kapan aturan itu perlu ditinjau ulang.
+- cocok untuk kebijakan yang harus konsisten;
+- mudah dijelaskan;
+- mudah diuji dengan kasus deterministik;
+- dapat membatasi perilaku model generatif;
+- tidak selalu membutuhkan data besar.
 
-##### Ringkasan
+## 2.4 Keterbatasan symbolic AI
 
--   Symbolic AI unggul untuk domain eksplisit dan audit.
--   Expert system membutuhkan knowledge engineering yang disiplin.
--   Sistem modern masih memakai aturan untuk kontrol, compliance, dan safety.
+- aturan bertambah sangat banyak;
+- pengecualian sulit dikelola;
+- bahasa manusia sering ambigu;
+- domain berubah sehingga knowledge base cepat usang;
+- aturan lengkap membutuhkan waktu dari pakar.
 
-##### Glossary
+## 2.5 Menggunakan lensa Evaluation AI
 
-Knowledge base  
-Kumpulan fakta dan aturan.
+### Kualitas hasil
 
-Inference engine  
-Komponen yang menerapkan aturan untuk menarik kesimpulan.
+Apakah kesimpulan sesuai kebijakan?
 
-Explanation trace  
-Jejak aturan yang menjelaskan mengapa keputusan dibuat.
+### Generalisasi
 
-##### Referensi
+Symbolic AI tidak "belajar" generalisasi seperti ML. Yang diuji adalah apakah rule coverage mencakup variasi kasus penting.
 
-1.  Newell, Shaw, and Simon, *Logic Theorist*, 1956.
-2.  Feigenbaum, Buchanan, and Lederberg, DENDRAL project.
-3.  Shortliffe, *MYCIN*, 1970s.
-4.  Lenat, *CYC*, 1995.
+### Reliability
 
-## Machine Learning: Belajar dari Data
+Apakah aturan selalu menghasilkan keputusan yang sama untuk fakta yang sama?
 
-> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/chapters/chapter-3.html`
+### Fairness dan safety
 
-Chapter 3 - 40 menit
+Apakah aturan memperlakukan kelompok tertentu secara tidak adil? Apakah ada fitur proxy yang tidak seharusnya digunakan?
 
-#### Machine Learning: Belajar dari Data
+### System readiness
 
-Pertanyaan pembuka: apa yang berubah ketika aturan tidak lagi ditulis satu per satu?
+Apakah perubahan aturan memiliki approval, versioning, dan audit log?
 
-##### ** Tujuan Pembelajaran
+## 2.6 Rule Test Set
 
--   Memahami feature, label, loss, training, validation, dan test.
--   Membedakan supervised dan unsupervised learning.
--   Mengenali overfitting, generalization, representation learning, dan embedding.
+| Kasus | Fakta | Expected rule | Expected result |
+|---|---|---|---|
+| Deadline tersedia | topic=deadline, source=true | answer_from_source | jawaban bersumber |
+| Dispensasi ambigu | topic=dispensasi, evidence=false | escalate | dialihkan ke mentor |
+| Data pribadi | request=other_user_data | deny | permintaan ditolak |
+| Aturan konflik | source_v1 != source_v2 | conflict_handler | jelaskan konflik dan eskalasi |
 
-**
+## 2.7 Tugas Praktik: Rule Engine dan Explanation Trace
 
-**Konsep Utama.** Machine learning menggeser pekerjaan dari menulis aturan menjadi menyediakan data, label, tujuan optimisasi, dan evaluasi generalisasi.
+```python
+facts = {"topic:dispensasi", "evidence:missing"}
 
-##### Inti Konsep
+rules = [
+    ({"topic:dispensasi", "evidence:missing"}, "escalate_to_mentor"),
+    ({"request:other_user_data"}, "deny_private_data"),
+]
 
-Supervised learning belajar dari contoh berlabel. Model melihat input, membuat prediksi, menghitung error terhadap label, lalu memperbarui parameter agar error turun.
+for condition, decision in rules:
+    if condition.issubset(facts):
+        print({"matched_rule": list(condition), "decision": decision})
+```
 
-Unsupervised learning bekerja tanpa label eksplisit. Sistem mencari struktur seperti cluster, dimensi penting, embedding, atau pola kemiripan yang berguna untuk search, rekomendasi, dan eksplorasi data.
+## Latihan 2
 
-Data**Prediksi**Error**Update Parameter**Ulangi
+Buat tiga aturan untuk deadline, permintaan data pribadi, dan pertanyaan yang tidak memiliki sumber. Tambahkan expected result dan explanation trace.
 
-**
+**Pembahasan:**
+1. Aturan Deadline: Jika `topic:deadline` -> `result:tampilkan_tabel_waktu`, `trace:rule_deadline_matched`.
+2. Data Pribadi: Jika `intent:req_other_user_data` -> `result:block_and_deny`, `trace:rule_privacy_violation`.
+3. Tanpa Sumber: Jika `knowledge:empty` -> `result:fallback_to_human`, `trace:rule_out_of_domain`.
 
-**Analogi.** Supervised learning seperti latihan dengan kunci jawaban. Unsupervised learning seperti mengelompokkan kartu tanpa nama kategori, lalu menemukan pola sendiri.
+## Handoff ke Bab 3
 
-###### Contoh Nyata: klasifikasi email
+Rule engine bekerja baik untuk kebijakan yang jelas. Namun menulis aturan untuk semua variasi bahasa dan pola pengguna tidak praktis. Bab 3 memperkenalkan machine learning untuk mempelajari pola dari data.
 
-Label spam atau bukan spam membantu model belajar pola kata, pengirim, dan struktur pesan.
+---
 
-###### Contoh Nyata: semantic search
+# Bab 3 - Machine Learning: Belajar dari Data
 
-Embedding mengubah teks menjadi vektor sehingga dokumen serupa dapat ditemukan meski kata-katanya tidak sama.
+## Pertanyaan pembuka
 
-##### Lebih Teknis
+Apa yang berubah ketika aturan tidak lagi ditulis satu per satu?
 
-    for batch in data:
-      prediction = model(batch.x)
-      loss = compare(prediction, batch.y)
-      gradient = backward(loss)
-      update(model.parameters, gradient)
+## Tujuan pembelajaran
 
-Perceptron memberi fondasi classifier linear. Backpropagation memperkuat neural network multilapis. PCA dan k-means menunjukkan cara membaca struktur tanpa label. Embedding space menyimpan kemiripan makna dalam bentuk vektor.
+Peserta dapat:
 
-##### Kesalahan Umum
+1. memahami feature, label, loss, training, validation, dan test;
+2. membedakan supervised dan unsupervised learning;
+3. memahami generalization, overfitting, dan embedding;
+4. menghubungkan evaluasi ML dengan dataset dan fairness;
+5. menambahkan klasifikasi dan semantic search pada Asisten HerAI.
 
-1.  Menganggap data lebih banyak selalu lebih baik.
-2.  Menyamakan correlation dengan causation.
-3.  Mengira akurasi training adalah kualitas akhir.
-4.  Menganggap label selalu objektif.
-5.  Memakai ML untuk business rules yang sebenarnya deterministik.
+## Hubungan dengan Bab 2
 
-##### Mini-check
+Symbolic AI membutuhkan aturan untuk setiap kondisi. Machine learning menggeser sebagian pekerjaan: tim menyediakan contoh, label, tujuan optimisasi, dan data evaluasi. Rule engine tidak dibuang. Ia tetap dipakai untuk kebijakan yang tidak boleh berubah.
 
-Untuk sistem rekomendasi materi, tentukan contoh feature, label, risiko overfitting, dan cara validasi.
+## 3.1 Supervised learning
 
-##### Ringkasan
+Model belajar dari pasangan input dan label.
 
--   ML belajar pola dari data, bukan dari aturan manual saja.
--   Supervised, unsupervised, dan representation learning menjawab kebutuhan berbeda.
--   Generalization lebih penting daripada skor training.
+Contoh:
 
-##### Glossary
+- input: "aku lupa password";
+- label: `account_access`.
 
-Feature  
-Informasi input yang dipakai model.
+Alurnya:
 
-Label  
-Target jawaban pada supervised learning.
+```text
+Data berlabel -> Prediksi -> Hitung error -> Perbarui parameter -> Uji pada data baru
+```
 
-Overfitting  
-Model terlalu cocok dengan data training dan buruk pada data baru.
+## 3.2 Unsupervised learning dan embedding
 
-##### Referensi
+Ketika label belum tersedia, model dapat mencari struktur:
 
-1.  Rosenblatt, *The Perceptron*, 1958.
-2.  Rumelhart, Hinton, and Williams, 1986.
-3.  Pearson, *Principal Components Analysis*, 1901.
-4.  MacQueen, *Some Methods for Classification and Analysis of Multivariate Observations*, 1967.
-5.  Bengio, Courville, and Vincent, *Representation Learning*, 2013.
+- clustering untuk mengelompokkan tema;
+- dimensionality reduction untuk membaca pola;
+- embedding untuk mengubah teks menjadi vektor.
 
-## Reinforcement Learning
+Embedding memungkinkan semantic search. Pertanyaan "kapan tugas dikumpulkan?" dapat dianggap mirip dengan dokumen berjudul "batas waktu pengumpulan" meskipun kata-katanya tidak sama.
 
-> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/chapters/chapter-4.html`
+## 3.3 Overfitting dan generalization
 
-Chapter 4 - 35 menit
+- **Overfitting:** model terlalu cocok pada data training.
+- **Generalization:** model tetap baik pada data baru.
 
-#### Reinforcement Learning
+Akurasi training 99% tidak berarti model siap digunakan. Data validation dan test harus dipisahkan.
 
-Pertanyaan pembuka: apa risiko ketika reward tidak mewakili tujuan manusia?
+## 3.4 Menggunakan lensa Evaluation AI
 
-##### ** Tujuan Pembelajaran
+### Kualitas hasil
 
--   Memahami agent, environment, state, action, reward, policy, dan episode.
--   Membedakan reinforcement learning dari supervised learning.
--   Menjelaskan exploration, exploitation, Q-learning, DQN, dan self-play secara konseptual.
+Untuk klasifikasi, periksa precision, recall, F1, dan jenis error.
 
-**
+### Generalisasi
 
-**Konsep Utama.** Reinforcement learning melatih agent mengambil tindakan berurutan untuk memaksimalkan reward jangka panjang, bukan hanya menebak label satu kali.
+Gunakan hidden test set dan data dari periode atau kelompok berbeda.
 
-##### Inti Konsep
+### Reliability
 
-Agent mengamati state, memilih action, menerima reward, lalu memperbarui policy. Tantangannya adalah keputusan hari ini dapat memengaruhi hasil beberapa langkah ke depan.
+Periksa typo, bahasa informal, data di luar domain, dan calibration.
 
-Exploration berarti mencoba tindakan baru untuk belajar. Exploitation berarti memakai tindakan yang tampak terbaik berdasarkan pengalaman. Keduanya perlu seimbang.
+### Fairness dan safety
 
-Agent**Action**Environment**Reward + State**Policy Update
+Bandingkan error rate pada kelompok bahasa atau akses berbeda.
 
-**
+### System readiness
 
-**Analogi.** Belajar RL seperti belajar strategi permainan. Kamu tidak hanya diberi jawaban benar, tetapi mendapat konsekuensi dari tindakan dan belajar dari rangkaian keputusan.
+Pantau drift dan simpan versi data, model, serta threshold.
 
-###### Contoh Nyata: robot navigasi
+## 3.5 Melanjutkan studi kasus
 
-Robot mendapat reward saat mendekati target dan penalti saat menabrak penghalang.
+Asisten HerAI sekarang memiliki:
 
-###### Contoh Nyata: rekomendasi adaptif
+1. rule engine untuk kebijakan;
+2. classifier untuk menentukan jenis pertanyaan;
+3. embedding search untuk menemukan dokumen.
 
-Sistem dapat menyesuaikan rekomendasi berdasarkan respons peserta, tetapi reward harus hati-hati agar tidak mengejar klik saja.
+```text
+Pertanyaan -> Classifier -> Retrieval -> Rule check -> Jawaban atau eskalasi
+```
 
-##### Lebih Teknis
+## 3.6 Tugas Praktik: Generalization Report
 
-    observe state
-    choose action using policy
-    receive reward and next_state
-    estimate future value
-    update policy or q_value
+```yaml
+model_task: intent_classification
+train_accuracy: 0.96
+validation_accuracy: 0.88
+test_accuracy: 0.86
+critical_class_recall:
+  policy_question: 0.94
+  personal_data_request: 0.98
+subgroup_results:
+  formal_language_f1: 0.90
+  informal_language_f1: 0.81
+known_gap:
+  - singkatan dan campuran bahasa
+next_action:
+  - tambah data informal
+  - lakukan error review
+```
 
-Q-learning memperkirakan nilai tindakan pada state tertentu. DQN memakai neural network untuk memperkirakan Q-value. AlphaGo menunjukkan kekuatan self-play dan kombinasi supervised learning, reinforcement learning, serta search.
+## Latihan 3
 
-##### Kesalahan Umum
+Untuk klasifikasi pertanyaan peserta, tentukan feature, label, pembagian train-validation-test, risiko overfitting, dan satu fairness check.
 
-1.  Mengira reward sederhana selalu mewakili tujuan nyata.
-2.  Mengabaikan eksplorasi sehingga agent terlalu cepat puas.
-3.  Menganggap RL cocok untuk semua produk.
-4.  Tidak memeriksa dampak jangka panjang.
+**Pembahasan:**
+- **Feature**: Teks input, asal institusi, panjang teks.
+- **Label**: `Tanya_Materi`, `Tanya_Jadwal`, `Tanya_Tugas`.
+- **Split**: 70% Train, 15% Validation, 15% Test.
+- **Overfitting**: Model hanya menghafal pertanyaan dari cohort awal, tidak bisa jawab pola bahasa cohort baru.
+- **Fairness Check**: Pastikan akurasi tetap tinggi untuk peserta yang memakai dialek daerah atau bukan bahasa Indonesia baku.
 
-##### Mini-check
+## Handoff ke Bab 4
 
-Untuk asisten belajar, apa state, action, reward, dan risiko reward hacking yang mungkin muncul?
+Machine learning biasanya membuat satu prediksi untuk satu input. Beberapa masalah membutuhkan rangkaian keputusan yang saling memengaruhi. Bab 4 membahas reinforcement learning.
 
-##### Ringkasan
+---
 
--   RL cocok untuk keputusan berurutan.
--   Reward shaping sangat menentukan perilaku agent.
--   Exploration dan exploitation harus seimbang.
+# Bab 4 - Reinforcement Learning
 
-##### Glossary
+## Pertanyaan pembuka
 
-Policy  
-Strategi agent memilih tindakan.
+Apa risiko ketika reward tidak benar-benar mewakili tujuan manusia?
 
-Reward  
-Sinyal umpan balik untuk tindakan agent.
+## Tujuan pembelajaran
 
-Q-value  
-Perkiraan nilai tindakan pada state tertentu.
+Peserta dapat:
 
-##### Referensi
+1. memahami agent, environment, state, action, reward, policy, dan episode;
+2. membedakan RL dari supervised learning;
+3. memahami exploration dan exploitation;
+4. mengenali reward hacking dan risiko jangka panjang;
+5. menilai apakah RL memang diperlukan.
 
-1.  Watkins and Dayan, *Q-learning*, 1992.
-2.  Sutton and Barto, *Reinforcement Learning: An Introduction*.
-3.  Mnih et al., *Human-level Control through Deep Reinforcement Learning*, 2015.
-4.  Silver et al., *Mastering the Game of Go with Deep Neural Networks and Tree Search*, 2016.
+## Hubungan dengan Bab 3
 
-## Autoencoder, VAE, dan GAN
+Classifier pada Bab 3 membuat prediksi sekali. Reinforcement learning digunakan ketika tindakan hari ini memengaruhi keadaan dan hasil berikutnya. Namun RL tidak otomatis lebih baik. Banyak produk cukup memakai aturan atau supervised learning.
 
-> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/chapters/chapter-5.html`
+## 4.1 Komponen RL
 
-Chapter 5 - 35 menit
+- **Agent:** pengambil tindakan.
+- **Environment:** tempat agent bertindak.
+- **State:** kondisi saat ini.
+- **Action:** pilihan tindakan.
+- **Reward:** sinyal hasil.
+- **Policy:** strategi memilih tindakan.
+- **Episode:** satu rangkaian interaksi.
 
-#### Autoencoder, VAE, dan GAN
+## 4.2 Contoh pada rekomendasi belajar
 
-Pertanyaan pembuka: mengapa sampel yang tampak bagus belum tentu mudah dikontrol?
+- state: materi yang telah diselesaikan dan skor kuis;
+- action: memilih materi berikutnya;
+- reward: peningkatan pemahaman dan penyelesaian tugas;
+- risiko: agent mengejar klik atau waktu layar, bukan belajar nyata.
 
-##### ** Tujuan Pembelajaran
+## 4.3 Exploration dan exploitation
 
--   Memahami encoder, decoder, latent space, generator, dan discriminator.
--   Membedakan autoencoder, VAE, dan GAN secara konseptual.
--   Memilih keluarga model berdasarkan kebutuhan struktur, variasi, atau ketajaman sampel.
+- **Exploration:** mencoba opsi baru untuk belajar.
+- **Exploitation:** memilih opsi yang saat ini terlihat terbaik.
 
-**
+Jika agent hanya mengejar opsi populer, peserta mungkin tidak menemukan materi yang sebenarnya lebih sesuai.
 
-**Konsep Utama.** Model generatif belajar membuat data baru yang mirip data pelatihan. Autoencoder belajar memadatkan dan merekonstruksi, VAE membuat latent space lebih terstruktur, dan GAN melatih generator melawan discriminator.
+## 4.4 Q-learning, DQN, dan self-play
 
-##### Inti Konsep
+Q-learning memperkirakan nilai sebuah tindakan pada state tertentu. DQN menggunakan neural network untuk memperkirakan Q-value. Self-play memungkinkan agent belajar melalui interaksi melawan versi dirinya atau lingkungan simulasi.
 
-Autoencoder terdiri dari encoder yang memadatkan input dan decoder yang membangun kembali input. VAE menambahkan probabilitas agar latent space lebih mulus dan dapat disampling.
+Konsep ini penting secara historis, tetapi penggunaan nyata membutuhkan simulator, data interaksi, dan kontrol keselamatan.
 
-GAN memakai dua model. Generator mencoba membuat sampel meyakinkan, sementara discriminator mencoba membedakan sampel asli dan palsu. Persaingan ini dapat menghasilkan sampel tajam, tetapi training sering tidak stabil.
+## 4.5 Menggunakan lensa Evaluation AI
 
-Input**Encoder**Latent Space**Decoder**Rekonstruksi
+### Kualitas hasil
 
-**
+Jangan hanya melihat reward per langkah. Periksa outcome belajar jangka panjang.
 
-**Analogi.** VAE seperti membuat peta ringkas dari banyak gaya gambar, sedangkan GAN seperti kompetisi antara pemalsu dan pemeriksa.
+### Generalisasi
 
-###### Contoh Nyata: data augmentation
+Uji pada tipe peserta dan kondisi yang tidak ada di training.
 
-Model generatif dapat membuat variasi contoh untuk membantu eksplorasi, tetapi tetap perlu audit kualitas dan bias.
+### Reliability
 
-###### Contoh Nyata: anomaly detection
+Uji policy saat data hilang, state salah, atau reward terlambat.
 
-Autoencoder dapat mendeteksi input yang sulit direkonstruksi karena berbeda dari pola normal.
+### Fairness dan safety
 
-##### Lebih Teknis
+Pastikan eksplorasi tidak membebankan risiko pada kelompok tertentu.
 
-    z = encoder(input)
-    reconstruction = decoder(z)
-    loss = reconstruction_error + latent_regularization
-    update(encoder, decoder)
+### System readiness
 
-VAE menyeimbangkan rekonstruksi dan regularisasi latent distribution. GAN menyeimbangkan kemampuan generator dan discriminator. Ketidakseimbangan dapat menyebabkan mode collapse atau kualitas sampel tidak stabil.
+Gunakan constraint, approval, logging, dan kemampuan menghentikan policy.
 
-##### Kesalahan Umum
+## 4.6 Tugas Praktik: Reward and Safety Specification
 
-1.  Mengira sampel tajam selalu berarti model lebih baik.
-2.  Mengabaikan kualitas latent space.
-3.  Tidak memeriksa bias pada sampel generatif.
-4.  Menyamakan VAE, GAN, dan diffusion.
+```yaml
+agent_goal: memilih materi berikutnya
+state:
+  - completed_modules
+  - quiz_scores
+  - stated_interest
+actions:
+  - recommend_foundation
+  - recommend_practice
+  - recommend_review
+reward:
+  positive:
+    - quiz_improvement
+    - completion_with_understanding
+  forbidden_proxy:
+    - click_only
+    - screen_time_only
+constraints:
+  - prerequisite_order_must_hold
+  - user_can_override
+  - no_sensitive_attribute_targeting
+```
 
-##### Mini-check
+## Latihan 4
 
-Jika kamu butuh latent space yang mudah dieksplorasi, kapan VAE lebih masuk akal daripada GAN?
+Rancang state, action, reward, dan constraint untuk sistem rekomendasi materi. Jelaskan satu kemungkinan reward hacking.
 
-##### Ringkasan
+**Pembahasan:**
+- **State**: Materi yang sudah dibaca peserta, skor kuis, waktu aktif.
+- **Action**: Merekomendasikan materi lanjutan A, B, atau C.
+- **Reward**: +1 jika materi diselesaikan.
+- **Constraint**: Tidak boleh merekomendasikan materi advanced sebelum basic selesai.
+- **Reward Hacking**: Sistem merekomendasikan materi yang durasinya hanya 1 menit terus-menerus karena pasti diselesaikan, mengabaikan kurikulum sesungguhnya.
 
--   Autoencoder memadatkan dan merekonstruksi data.
--   VAE membuat latent space lebih terstruktur.
--   GAN kuat menghasilkan sampel tajam, tetapi perlu stabilitas training.
+## Handoff ke Bab 5
 
-##### Glossary
+RL berfokus pada tindakan berurutan. Bab 5 beralih ke keluarga model yang mempelajari representasi dan menghasilkan data baru.
 
-Latent space  
+---
+
+# Bab 5 - Autoencoder, VAE, dan GAN
+
+## Pertanyaan pembuka
+
+Mengapa sampel yang terlihat bagus belum tentu mudah dikontrol?
+
+## Tujuan pembelajaran
+
+Peserta dapat:
+
+1. memahami encoder, decoder, latent space, generator, dan discriminator;
+2. membedakan autoencoder, VAE, dan GAN;
+3. menghubungkan model generatif dengan representation learning;
+4. mengevaluasi rekonstruksi, diversity, dan mode collapse;
+5. menentukan kapan generasi benar-benar dibutuhkan.
+
+## Hubungan dengan Bab 4
+
+RL belajar memilih tindakan. Model pada bab ini belajar struktur data dan menghasilkan sampel. Sinyal belajarnya berbeda, sehingga cara evaluasinya juga berbeda.
+
+## 5.1 Autoencoder
+
+Autoencoder terdiri dari:
+
+```text
+Input -> Encoder -> Latent representation -> Decoder -> Rekonstruksi
+```
+
+Model belajar menyimpan informasi penting dalam representasi yang lebih ringkas. Autoencoder dapat digunakan untuk kompresi, representation learning, dan anomaly detection.
+
+## 5.2 Variational Autoencoder
+
+VAE menambahkan struktur probabilistik pada latent space. Hasilnya, titik-titik di latent space lebih mudah disampling dan diinterpolasi.
+
+VAE berguna ketika tim membutuhkan variasi yang terstruktur, tetapi hasilnya dapat lebih halus dibanding GAN.
+
+## 5.3 Generative Adversarial Network
+
+GAN memiliki dua model:
+
+- **Generator:** membuat sampel;
+- **Discriminator:** membedakan sampel asli dan buatan.
+
+Keduanya berkompetisi. Training dapat menghasilkan sampel tajam, tetapi bisa tidak stabil.
+
+## 5.4 Risiko mode collapse
+
+Mode collapse terjadi ketika generator hanya menghasilkan sedikit jenis sampel. Output mungkin terlihat bagus, tetapi diversity rendah.
+
+Ini menunjukkan mengapa evaluasi generatif tidak cukup memakai satu contoh terbaik.
+
+## 5.5 Menggunakan lensa Evaluation AI
+
+### Kualitas hasil
+
+Periksa rekonstruksi, kemiripan, dan kegunaan untuk tugas.
+
+### Generalisasi
+
+Periksa apakah model hanya meniru contoh training atau dapat membuat variasi yang masuk akal.
+
+### Reliability
+
+Uji stabilitas training dan sensitivitas terhadap seed.
+
+### Fairness dan safety
+
+Audit bias representasi dan kemungkinan menghasilkan konten sensitif.
+
+### System readiness
+
+Simpan data lineage, model version, dan review hasil sebelum digunakan.
+
+## 5.6 Melanjutkan studi kasus
+
+Pada Asisten HerAI, autoencoder dapat dipakai secara terbatas untuk mendeteksi pola pertanyaan yang sangat berbeda dari data normal. Model generatif tidak digunakan untuk membuat aturan. Aturan resmi tetap berasal dari dokumen dan rule engine.
+
+## 5.7 Tugas Praktik: Generative Quality Report
+
+```yaml
+model_family: vae
+purpose: eksplorasi representasi pola pertanyaan
+metrics:
+  - reconstruction_error
+  - latent_cluster_quality
+  - diversity
+qualitative_review:
+  - apakah variasi masuk akal?
+  - apakah ada pola sensitif yang muncul?
+known_risks:
+  - bias data
+  - output tidak memiliki makna faktual
+```
+
+## Latihan 5
+
+Bandingkan autoencoder, VAE, dan GAN untuk dua kebutuhan: anomaly detection dan variasi desain. Jelaskan model yang dipilih dan cara mengevaluasinya.
+
+**Pembahasan:**
+- **Anomaly Detection**: Autoencoder cocok karena menghitung reconstruction error yang akurat untuk data di luar distribusi. Evaluasi: AUC-ROC pada dataset anomali.
+- **Variasi Desain**: GAN lebih baik jika butuh gambar yang tajam dan realistis, atau VAE jika butuh variasi mulus. Evaluasi: FID (Frechet Inception Distance) atau survey manusia untuk realisme.
+
+## Handoff ke Bab 6
+
+VAE dan GAN membuka generasi data, tetapi masing-masing memiliki trade-off. Bab 6 membahas diffusion yang menggunakan proses denoising bertahap.
+
+---
+
+# Bab 6 - Diffusion Models
+
+## Pertanyaan pembuka
+
+Bagaimana menyeimbangkan kualitas generasi, kecepatan, biaya, dan keamanan?
+
+## Tujuan pembelajaran
+
+Peserta dapat:
+
+1. memahami noising dan denoising secara konseptual;
+2. menjelaskan mengapa diffusion kuat untuk sintesis;
+3. membaca trade-off inference steps dan latency;
+4. mengevaluasi prompt alignment, diversity, safety, dan biaya;
+5. membedakan kualitas visual dan kebenaran informasi.
+
+## Hubungan dengan Bab 5
+
+GAN melatih generator melawan discriminator. Diffusion memakai cara berbeda: model belajar membalik proses penambahan noise. Perbedaan training ini memengaruhi stabilitas, biaya inference, dan cara evaluasi.
+
+## 6.1 Proses sederhana diffusion
+
+Saat training:
+
+```text
+Data bersih -> Tambah noise -> Model belajar memprediksi noise
+```
+
+Saat generasi:
+
+```text
+Noise acak -> Denoise bertahap -> Sampel baru
+```
+
+## 6.2 Kekuatan dan trade-off
+
+Kelebihan:
+
+- kualitas tinggi;
+- training relatif stabil;
+- mudah dikondisikan dengan prompt atau input tambahan.
+
+Kekurangan:
+
+- membutuhkan beberapa langkah inference;
+- latency dan biaya dapat tinggi;
+- kualitas visual tidak menjamin fakta benar;
+- sumber data dan hak penggunaan perlu diperhatikan.
+
+## 6.3 Menggunakan lensa Evaluation AI
+
+### Kualitas hasil
+
+Periksa prompt alignment, kualitas visual, dan kegunaan.
+
+### Generalisasi
+
+Uji prompt, gaya, dan objek yang tidak dominan di data.
+
+### Reliability
+
+Bandingkan hasil dari beberapa seed dan sampler.
+
+### Fairness dan safety
+
+Periksa stereotip, konten tidak pantas, data pribadi, dan hak penggunaan.
+
+### System readiness
+
+Pantau latency, biaya, filter, logging, dan human review.
+
+## 6.4 Melanjutkan studi kasus
+
+Asisten HerAI dapat memakai diffusion untuk membuat ilustrasi belajar. Namun ilustrasi tidak boleh dianggap sebagai sumber fakta. Konten yang menjelaskan aturan tetap berasal dari dokumen resmi.
+
+Ini menunjukkan pembagian tugas dalam hybrid system:
+
+- diffusion membuat visual;
+- retrieval menyediakan fakta;
+- rule engine menjaga kebijakan;
+- manusia meninjau konten yang akan dipublikasikan.
+
+## 6.5 Tugas Praktik: Quality-Cost-Safety Matrix
+
+| Konfigurasi | Kualitas | Latency | Biaya | Risiko | Penggunaan |
+|---|---:|---:|---:|---|---|
+| Steps rendah | sedang | rendah | rendah | detail berkurang | preview |
+| Steps menengah | baik | sedang | sedang | perlu review | konten internal |
+| Steps tinggi | tinggi | tinggi | tinggi | tetap perlu audit | final terpilih |
+
+## Latihan 6
+
+Rancang evaluasi untuk fitur pembuat ilustrasi materi. Masukkan prompt alignment, diversity, latency, biaya, bias, dan human review.
+
+**Pembahasan:**
+- **Prompt Alignment**: CLIP score untuk mengukur kesesuaian gambar dengan instruksi.
+- **Diversity**: Variasi visual agar ilustrasi tidak monoton.
+- **Latency & Biaya**: <3 detik per gambar, <Rp500/generasi.
+- **Bias**: Pastikan gambar profesi (misal: "seorang dokter") tidak selalu didominasi gender atau ras tertentu.
+- **Human Review**: Kurator (admin) wajib menyetujui (approve) sebelum masuk ke slide materi publik.
+
+## Handoff ke Bab 7
+
+Bab 2 sampai 6 menunjukkan bahwa setiap paradigma menyelesaikan bagian berbeda. Bab 7 menggabungkan kemampuan bahasa, retrieval, aturan, tools, dan evaluasi menjadi hybrid AI.
+
+---
+
+# Bab 7 - Transformer, LLM, dan Hybrid AI
+
+## Pertanyaan pembuka
+
+Mengapa produk AI modern sering membutuhkan lebih dari satu model atau satu paradigma?
+
+## Tujuan pembelajaran
+
+Peserta dapat:
+
+1. memahami attention, Transformer, token, context window, dan LLM;
+2. mengenali kekuatan dan keterbatasan LLM;
+3. memahami RAG, tools, guardrail, dan human oversight;
+4. merancang arsitektur hybrid;
+5. menggabungkan AI Evaluation Plan dari modul sebelumnya.
+
+## Hubungan dengan bab sebelumnya
+
+Symbolic AI memberi kontrol. ML memberi pengenalan pola. RL memberi kerangka keputusan berurutan. Model generatif memberi kemampuan membuat data. Transformer dan LLM menggabungkan representation learning skala besar dengan antarmuka bahasa yang fleksibel.
+
+Namun LLM tidak menggantikan semua komponen tersebut.
+
+## 7.1 Attention dan Transformer
+
+Attention membantu model memberi bobot pada bagian konteks yang relevan. Transformer membuat mekanisme ini dapat diproses secara paralel dan diskalakan.
+
+LLM decoder-only biasanya menghasilkan token berikutnya berdasarkan token sebelumnya.
+
+```text
+Prompt + Context -> Transformer -> Probabilitas token berikutnya -> Output
+```
+
+## 7.2 Kekuatan LLM
+
+- memahami dan menghasilkan bahasa;
+- merangkum;
+- membantu coding;
+- mengikuti instruksi;
+- menggunakan tools;
+- berinteraksi dengan banyak jenis pengguna.
+
+## 7.3 Keterbatasan LLM
+
+- dapat mengarang fakta;
+- tidak otomatis memiliki data terbaru;
+- prompt tidak menjamin kepatuhan deterministik;
+- context window terbatas;
+- dapat terpengaruh prompt injection;
+- confidence bahasa tidak sama dengan confidence kebenaran.
+
+## 7.4 RAG dan grounding
+
+RAG mengambil dokumen yang relevan sebelum model membuat jawaban.
+
+```text
+Pertanyaan -> Retrieval -> Dokumen relevan -> LLM -> Jawaban bersumber
+```
+
+RAG membantu grounding, tetapi tidak menghilangkan hallucination sepenuhnya. Retrieval, prompt, generation, dan citation tetap harus dievaluasi.
+
+## 7.5 Tools dan agent workflow
+
+LLM dapat memilih tools seperti:
+
+- pencarian dokumen;
+- kalkulator;
+- database;
+- kalender;
+- API internal.
+
+Tool schema, izin, validation, timeout, logging, dan approval diperlukan agar tindakan tetap aman.
+
+## 7.6 Arsitektur hybrid Asisten HerAI
+
+```text
+User
+  -> Input validation
+  -> Intent classifier
+  -> Policy rule check
+  -> Document retrieval
+  -> LLM response generation
+  -> Faithfulness and safety validation
+  -> Human escalation when needed
+  -> Logging and monitoring
+```
+
+Pembagian tugas:
+
+| Komponen | Tanggung jawab |
+|---|---|
+| Rules | kebijakan wajib dan larangan |
+| Classifier | menentukan jenis pertanyaan |
+| Embedding retrieval | menemukan dokumen |
+| LLM | menjelaskan dengan bahasa alami |
+| Validator | memeriksa sumber dan format |
+| Human reviewer | menangani kasus sensitif atau konflik |
+| Monitoring | mendeteksi drift dan incident |
+
+## 7.7 Menggunakan seluruh lensa Evaluation AI
+
+### Kualitas hasil
+
+Gunakan relevansi, factuality, faithfulness, clarity, dan safety.
+
+### Generalisasi
+
+Uji bahasa informal, topik baru, dan dokumen baru.
+
+### Reliability
+
+Uji repeated sampling, missing source, ambiguity, dan prompt injection.
+
+### Fairness dan safety
+
+Bandingkan performa per kelompok dan audit penggunaan tools.
+
+### System readiness
+
+Periksa logging, release gate, human review, incident response, monitoring, dan rollback.
+
+## 7.8 Tugas Praktik: Integrated System Evaluation Plan
+
+```yaml
+system: Asisten Pembelajaran HerAI
+architecture:
+  - rules
+  - classifier
+  - retrieval
+  - llm
+  - validator
+  - human_review
+component_evaluation:
+  rules:
+    - coverage
+    - conflict
+    - trace
+  classifier:
+    - f1
+    - calibration
+    - subgroup_error
+  retrieval:
+    - context_recall
+    - source_quality
+  llm:
+    - factuality
+    - faithfulness
+    - clarity
+  tools:
+    - schema_validation
+    - permission_test
+system_evaluation:
+  - end_to_end_task_success
+  - critical_failure_rate
+  - escalation_quality
+  - latency
+  - cost
+  - monitoring_readiness
+```
+
+## Latihan 7 - Merancang sistem hybrid
+
+Rancang asisten untuk menjawab materi, jadwal, tugas, dan aturan. Tentukan bagian yang memakai rules, classifier, retrieval, LLM, tools, human review, dan monitoring. Tambahkan minimal satu pengujian untuk setiap komponen.
+
+**Pembahasan:**
+- **Rules**: Memblokir prompt kasar (Pengujian: Stress test kata kotor).
+- **Classifier**: Membedakan topik jadwal vs materi (Pengujian: Test set 500 pertanyaan beragam).
+- **Retrieval (RAG)**: Mencari dokumen PDF terkait (Pengujian: Retrieval precision@5).
+- **LLM**: Menyusun kalimat jawaban akhir yang ramah (Pengujian: Factuality dan Grounding review).
+- **Tools**: Menarik API kalender untuk jadwal (Pengujian: API latency dan error handling).
+- **Human Review**: Tombol "Laporkan Jawaban Salah" bagi pengguna.
+- **Monitoring**: Dashboard rata-rata rating (1-5) tiap hari.
+
+---
+
+# Proyek Akhir - Dari Paradigma ke Sistem Hybrid
+
+Buat proposal singkat untuk satu produk AI. Proposal harus memuat:
+
+1. masalah pengguna;
+2. paradigma yang dipertimbangkan;
+3. alasan memilih atau menolak setiap paradigma;
+4. pembagian tugas antarkomponen;
+5. data atau knowledge base yang dibutuhkan;
+6. failure paling berbahaya;
+7. cara mengevaluasi setiap komponen;
+8. release criteria;
+9. monitoring dan human review.
+
+## Template keputusan
+
+| Kebutuhan | Paradigma | Alasan | Risiko | Evaluasi |
+|---|---|---|---|---|
+| Kebijakan wajib | Symbolic AI | deterministik | aturan usang | coverage dan trace |
+| Klasifikasi pertanyaan | Supervised ML | belajar dari contoh | overfitting | F1 dan subgroup |
+| Rekomendasi berurutan | RL atau aturan adaptif | outcome jangka panjang | reward hacking | long-term outcome |
+| Ilustrasi | Diffusion | generasi visual | bias dan biaya | quality-cost-safety |
+| Jawaban bahasa | LLM + RAG | fleksibel dan bersumber | hallucination | faithfulness dan robustness |
+
+---
+
+# Kuis Akhir
+
+## Soal
+
+1. Mengapa evolusi AI sebaiknya dibaca sebagai akumulasi paradigma?
+2. Apa hubungan perubahan representasi dengan perubahan cara evaluasi?
+3. Kapan symbolic AI lebih tepat daripada machine learning?
+4. Apa fungsi explanation trace?
+5. Mengapa rule coverage penting?
+6. Apa perbedaan supervised dan unsupervised learning?
+7. Mengapa generalization lebih penting daripada skor training?
+8. Bagaimana embedding membantu semantic search?
+9. Apa perbedaan keputusan satu langkah dan keputusan berurutan?
+10. Mengapa reward yang salah dapat menghasilkan perilaku buruk?
+11. Apa fungsi latent space pada autoencoder dan VAE?
+12. Apa yang dimaksud mode collapse?
+13. Bagaimana diffusion menghasilkan sampel baru?
+14. Mengapa inference steps perlu dievaluasi bersama biaya?
+15. Apa fungsi attention pada Transformer?
+16. Mengapa RAG tidak menghilangkan hallucination sepenuhnya?
+17. Mengapa prompt saja tidak cukup untuk kontrol kebijakan?
+18. Apa manfaat arsitektur hybrid?
+19. Mengapa setiap komponen hybrid perlu dievaluasi secara terpisah?
+20. Bagaimana Evaluation AI membantu memahami Evolution of AI?
+
+## Kunci jawaban ringkas
+
+1. Paradigma lama tetap berguna untuk masalah dan kontrol tertentu.
+2. Setiap representasi menghasilkan jenis kegagalan dan bukti yang berbeda.
+3. Saat aturan harus deterministik, dapat diaudit, dan tidak boleh dinegosiasikan.
+4. Menunjukkan aturan yang menghasilkan keputusan.
+5. Agar kasus penting tidak jatuh ke area tanpa aturan.
+6. Supervised memakai label; unsupervised mencari struktur tanpa label eksplisit.
+7. Sistem harus bekerja pada data baru, bukan hanya data training.
+8. Embedding menyimpan kemiripan makna dalam bentuk vektor.
+9. Keputusan berurutan memengaruhi state dan hasil berikutnya.
+10. Agent dapat mengoptimalkan proxy yang tidak sama dengan tujuan manusia.
+11. Menyimpan representasi ringkas dari faktor penting data.
+12. Generator menghasilkan variasi yang sangat terbatas.
+13. Mulai dari noise dan melakukan denoising bertahap.
+14. Lebih banyak steps dapat meningkatkan kualitas tetapi menaikkan latency dan biaya.
+15. Memberi bobot pada bagian konteks yang relevan.
+16. Retrieval dapat gagal dan LLM masih dapat mengarang atau salah menafsirkan.
+17. Prompt bersifat probabilistik; kebijakan penting membutuhkan rules dan validation.
+18. Membagi tugas sesuai kekuatan setiap pendekatan.
+19. Kegagalan satu komponen dapat tersembunyi dalam skor end-to-end.
+20. Evaluation AI memberi lensa tujuan, generalisasi, reliability, fairness, dan system readiness.
+
+---
+
+# Ringkasan Modul
+
+- AI berkembang melalui perubahan representasi, sinyal belajar, dan kemampuan.
+- Paradigma baru tidak otomatis menghapus paradigma lama.
+- Symbolic AI unggul pada aturan eksplisit dan audit.
+- Machine learning unggul pada pola yang sulit ditulis sebagai aturan.
+- Reinforcement learning digunakan untuk keputusan berurutan, tetapi reward harus dirancang hati-hati.
+- Autoencoder, VAE, GAN, dan diffusion memiliki tujuan serta risiko generatif yang berbeda.
+- Transformer dan LLM memberikan fleksibilitas bahasa, tetapi membutuhkan grounding dan kontrol.
+- Hybrid AI membagi tugas kepada komponen yang paling sesuai.
+- Kerangka Evaluation AI harus diterapkan pada setiap paradigma dan pada sistem secara keseluruhan.
+
+# Glosarium
+
+**Attention**  
+Mekanisme yang membantu model memberi bobot pada bagian konteks yang relevan.
+
+**Embedding**  
+Representasi data dalam bentuk vektor yang menyimpan pola kemiripan.
+
+**Explanation trace**  
+Jejak aturan yang menjelaskan asal keputusan symbolic system.
+
+**Hybrid AI**  
+Sistem yang menggabungkan beberapa paradigma atau komponen.
+
+**Latent space**  
 Ruang representasi ringkas yang menyimpan faktor penting data.
 
-Generator  
-Model yang membuat sampel baru.
-
-Discriminator  
-Model yang membedakan sampel asli dan buatan.
-
-##### Referensi
-
-1.  Kingma and Welling, *Auto-Encoding Variational Bayes*, 2013.
-2.  Goodfellow et al., *Generative Adversarial Nets*, 2014.
-3.  Bengio, Courville, and Vincent, *Representation Learning*, 2013.
-
-## Diffusion Models
-
-> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/chapters/chapter-6.html`
-
-Chapter 6 - 35 menit
-
-#### Diffusion Models
-
-Pertanyaan pembuka: bagaimana menyeimbangkan kualitas generasi dan biaya compute?
-
-##### ** Tujuan Pembelajaran
-
--   Memahami proses noise dan denoising secara konseptual.
--   Menjelaskan mengapa diffusion model kuat untuk sintesis gambar.
--   Menganalisis trade-off inference steps, kualitas, dan biaya.
-
-**
-
-**Konsep Utama.** Diffusion model belajar membalik proses penambahan noise. Saat generasi, model mulai dari noise lalu menguranginya bertahap hingga muncul sampel yang koheren.
-
-##### Inti Konsep
-
-Training diffusion memperlihatkan data bersih yang diberi noise bertahap. Model belajar memprediksi noise atau versi lebih bersih dari data tersebut. Generasi melakukan proses terbalik dari noise menuju sampel.
-
-Kelebihannya adalah kualitas dan stabilitas yang baik. Kekurangannya, generasi sering membutuhkan beberapa langkah denoising sehingga latency dan biaya compute perlu diperhatikan.
-
-Data Bersih**Tambah Noise**Belajar Denoise**Noise**Sampel Baru
-
-**
-
-**Analogi.** Diffusion seperti belajar membersihkan gambar yang makin lama makin buram, lalu memakai kemampuan itu untuk membangun gambar dari kabut noise.
-
-###### Contoh Nyata: image generation
-
-Diffusion banyak dipakai untuk membuat visual dari prompt, inpainting, dan variasi gambar.
-
-###### Contoh Nyata: desain prototipe
-
-Tim produk dapat membuat alternatif visual cepat, tetapi tetap perlu kurasi manusia dan pemeriksaan hak penggunaan.
-
-##### Lebih Teknis
-
-    sample = random_noise()
-    for step in denoising_steps:
-      predicted_noise = model(sample, step)
-      sample = remove_noise(sample, predicted_noise)
-    return sample
-
-Lebih banyak denoising steps dapat meningkatkan kualitas, tetapi menambah waktu. Sampler modern mencoba mempercepat proses tanpa merusak kualitas terlalu banyak.
-
-##### Kesalahan Umum
-
-1.  Mengira diffusion hanya untuk gambar.
-2.  Mengabaikan biaya inference.
-3.  Menyamakan kualitas visual dengan kebenaran konten.
-4.  Tidak memeriksa bias dan hak data pelatihan.
-
-##### Mini-check
-
-Jika aplikasi butuh hasil sangat cepat, trade-off apa yang perlu dipikirkan saat memilih diffusion?
-
-##### Ringkasan
-
--   Diffusion belajar proses denoising bertahap.
--   Kualitas tinggi datang bersama biaya inference.
--   Manusia tetap perlu memeriksa akurasi, bias, dan hak penggunaan.
-
-##### Glossary
-
-Denoising  
-Proses mengurangi noise dari data.
-
-Inference steps  
-Jumlah langkah generasi saat model membuat sampel.
-
-Sampler  
-Metode untuk menjalankan proses generasi diffusion.
-
-##### Referensi
-
-1.  Sohl-Dickstein et al., *Deep Unsupervised Learning using Nonequilibrium Thermodynamics*, 2015.
-2.  Ho, Jain, and Abbeel, *Denoising Diffusion Probabilistic Models*, 2020.
-
-## Transformer, LLM, dan Hybrid AI
-
-> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/chapters/chapter-7.html`
-
-Chapter 7 - 45 menit
-
-#### Transformer, LLM, dan Hybrid AI
-
-Pertanyaan pembuka: mengapa sistem AI modern sering membutuhkan lebih dari satu model?
-
-##### ** Tujuan Pembelajaran
-
--   Memahami attention, Transformer, context window, dan LLM secara intuitif.
--   Mengenali kekuatan dan keterbatasan LLM.
--   Merancang arsitektur hybrid untuk kebutuhan produk nyata.
-
-**
-
-**Konsep Utama.** Transformer memakai attention untuk membaca hubungan antartoken. LLM memakai skala data dan parameter untuk menghasilkan bahasa, tetapi produk AI yang aman sering menggabungkan LLM dengan retrieval, rules, tools, dan human oversight.
-
-##### Inti Konsep
-
-Attention membantu model menentukan bagian konteks mana yang relevan saat memproses token. Transformer membuat proses ini dapat diskalakan dan menjadi fondasi banyak LLM modern.
-
-LLM fleksibel untuk bahasa, ringkasan, kode, dan interaksi. Namun LLM tidak otomatis tahu data terbaru, dapat berhalusinasi, dan tidak selalu mengikuti kebijakan secara deterministik. Karena itu arsitektur hybrid sering lebih aman.
-
-User**Policy Rules**Retrieval**LLM**Review + Logging
-
-**
-
-**Analogi.** LLM seperti komunikator cerdas yang butuh arsip, SOP, kalkulator, dan supervisor agar jawaban produk tetap tepat.
-
-###### Contoh Nyata: asisten fellowship
-
-RAG mengambil aturan program, LLM menjelaskan, rule engine menjaga batas kebijakan, dan human review menangani kasus sensitif.
-
-###### Contoh Nyata: agent workflow
-
-LLM dapat memilih tool, tetapi tool schema, izin, logging, dan validasi menjaga tindakan tetap aman.
-
-##### Lebih Teknis
-
-    query = user_input
-    policy = check_rules(query)
-    context = retrieve_documents(query)
-    draft = llm.generate(query, context)
-    answer = validate(draft, policy)
-
-Decoder-only model menghasilkan token berikutnya berdasarkan konteks. Context window membatasi jumlah informasi yang dapat dilihat langsung. RAG menambahkan dokumen relevan, tetapi tidak menghapus hallucination sepenuhnya. Guardrail dan orchestration menjaga alur sistem.
-
-##### Kesalahan Umum
-
-1.  Menganggap LLM memahami seperti manusia.
-2.  Menganggap parameter lebih banyak selalu lebih baik.
-3.  Mengira prompt cukup untuk semua kontrol.
-4.  Menganggap RAG menghilangkan hallucination sepenuhnya.
-5.  Menganggap hybrid system hanya menambah API.
-
-##### Mini-check
-
-Rancang arsitektur hybrid sederhana untuk asisten fellowship: komponen apa yang rule-based, retrieval, LLM, dan human review?
-
-##### Ringkasan
-
--   Transformer membuat attention skalabel untuk bahasa dan multimodal.
--   LLM kuat tetapi membutuhkan grounding dan kontrol.
--   Hybrid AI menggabungkan fleksibilitas dengan reliability dan auditability.
-
-##### Glossary
-
-Attention  
-Mekanisme untuk memberi bobot pada bagian konteks yang relevan.
-
-Context window  
-Batas konteks yang dapat diproses model dalam satu interaksi.
-
-RAG  
-Retrieval augmented generation, yaitu mengambil dokumen relevan sebelum generasi jawaban.
-
-##### Referensi
-
-1.  Vaswani et al., *Attention Is All You Need*, 2017.
-2.  Brown et al., *Language Models are Few-Shot Learners*, 2020.
-3.  McCarthy, *Programs with Common Sense*, 1959.
-
-## Diskusi Evolution of AI
-
-> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/diskusi.html`
-
-### Diskusi Evolution of AI
-
-Refleksi dirender oleh shell canonical Evolution of AI.
-
-[Buka diskusi](#/participant-ai-evolution?activity=diskusi)
-
-## Kuis Evolution of AI
-
-> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/kuis.html`
-
-### Kuis Evolution of AI
-
-Kuis dirender oleh shell canonical Evolution of AI.
-
-[Buka kuis](#/participant-ai-evolution?activity=kuis)
-
-## Latihan Evolution of AI
-
-> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/latihan.html`
-
-### Latihan Evolution of AI
-
-Latihan dirender oleh shell canonical Evolution of AI.
-
-[Buka latihan](#/participant-ai-evolution?activity=latihan)
-
-## materi
-
-> Sumber: `pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/materi.html`
-
-**
-
-Memuat materi Evolution of AI...
-
-## Konten Dinamis dan Interaktif
-
-> Data berikut diekstrak dari JavaScript runtime untuk `evolution`, termasuk teks yang baru muncul setelah interaksi.
-
-#### MODULES
-
-#### Membaca Evolusi AI
-
-- **slug:** reading-ai-evolution
-- **title:** Membaca Evolusi AI
-- **summary:** Membaca AI sebagai akumulasi paradigma: aturan, data, reward, generasi, dan sistem hybrid.
-- **chapter:** chapter-1.html
-- **duration:** 30 menit
-
-#### Symbolic AI dan Expert Systems
-
-- **slug:** symbolic-ai
-- **title:** Symbolic AI dan Expert Systems
-- **summary:** Fakta, aturan, inference engine, expert system, explanation trace, dan safety layer modern.
-- **chapter:** chapter-2.html
-- **duration:** 35 menit
-
-#### Machine Learning: Belajar dari Data
-
-- **slug:** learning-from-data
-- **title:** Machine Learning: Belajar dari Data
-- **summary:** Supervised, unsupervised, feature, label, loss, embedding, overfitting, dan generalization.
-- **chapter:** chapter-3.html
-- **duration:** 40 menit
-
-#### Reinforcement Learning
-
-- **slug:** reinforcement-learning
-- **title:** Reinforcement Learning
-- **summary:** Agent, environment, state, action, reward, policy, exploration, exploitation, Q-learning, dan DQN.
-- **chapter:** chapter-4.html
-- **duration:** 35 menit
-
-#### Autoencoder, VAE, dan GAN
-
-- **slug:** vae-and-gan
-- **title:** Autoencoder, VAE, dan GAN
-- **summary:** Encoder, decoder, latent space, generator, discriminator, dan trade-off model generatif awal.
-- **chapter:** chapter-5.html
-- **duration:** 35 menit
-
-#### Diffusion Models
-
-- **slug:** diffusion-models
-- **title:** Diffusion Models
-- **summary:** Noise, denoising, inference steps, kualitas generasi, dan biaya compute.
-- **chapter:** chapter-6.html
-- **duration:** 35 menit
-
-#### Transformer, LLM, dan Hybrid AI
-
-- **slug:** transformer-llm-hybrid-ai
-- **title:** Transformer, LLM, dan Hybrid AI
-- **summary:** Attention, LLM, RAG, tools, guardrail, dan sistem AI hybrid untuk produk nyata.
-- **chapter:** chapter-7.html
-- **duration:** 45 menit
-
-#### EXERCISES
-
-#### Memasangkan milestone dengan paradigma
-
-- **id:** evo-ex-1
-- **module:** reading-ai-evolution
-- **title:** Memasangkan milestone dengan paradigma
-- **scenario:** Tim onboarding melihat daftar Logic Theorist, Perceptron, Q-learning, GAN, DDPM, dan Transformer.
-- **instruction:** Kelompokkan milestone ke paradigma: symbolic, machine learning, reinforcement learning, generative modeling, atau LLM.
-- **modelAnswer:** Milestone harus dibaca dari perubahan cara representasi dan sinyal belajar, bukan hafalan tahun.
-- **type:** matching
-
-#### Paradigma baru tidak selalu menghapus yang lama
-
-- **id:** evo-ex-2
-- **module:** reading-ai-evolution
-- **title:** Paradigma baru tidak selalu menghapus yang lama
-- **scenario:** Sebuah chatbot memakai LLM tetapi tetap butuh SOP program.
-- **instruction:** Jelaskan dua alasan mengapa aturan eksplisit tetap berguna.
-- **modelAnswer:** Aturan membantu audit, kebijakan deterministik, dan batas keselamatan yang tidak boleh dinegosiasikan.
-- **type:** short
-
-#### Menelusuri rule engine
-
-- **id:** evo-ex-3
-- **module:** symbolic-ai
-- **title:** Menelusuri rule engine
-- **scenario:** Rule engine mengarah ke billing refund jika payment_failed dan refund_requested aktif.
-- **instruction:** Tuliskan fakta aktif, aturan yang cocok, kesimpulan, dan explanation trace.
-- **modelAnswer:** Trace penting agar keputusan bisa dijelaskan dan diaudit.
-- **type:** trace
-
-#### Menyusun aturan triase tiket
-
-- **id:** evo-ex-4
-- **module:** symbolic-ai
-- **title:** Menyusun aturan triase tiket
-- **scenario:** Peserta mengirim tiket login gagal, pembayaran gagal, atau meminta sertifikat.
-- **instruction:** Buat minimal tiga aturan IF/AND/THEN untuk triase.
-- **modelAnswer:** Aturan yang baik spesifik, mudah dirawat, dan punya fallback saat fakta tidak lengkap.
-- **type:** rule
-
-#### Menentukan feature dan label
-
-- **id:** evo-ex-5
-- **module:** learning-from-data
-- **title:** Menentukan feature dan label
-- **scenario:** Tim ingin memprediksi peserta berisiko terlambat mengumpulkan tugas.
-- **instruction:** Tentukan contoh feature, label, dan risiko label bias.
-- **modelAnswer:** Feature adalah sinyal input; label adalah target. Label historis bisa memuat bias proses lama.
-- **type:** classification
-
-#### Memilih supervised atau unsupervised
-
-- **id:** evo-ex-6
-- **module:** learning-from-data
-- **title:** Memilih supervised atau unsupervised
-- **scenario:** Ada data tiket tanpa label kategori, tetapi tim ingin menemukan tema umum.
-- **instruction:** Pilih supervised atau unsupervised dan jelaskan alasannya.
-- **modelAnswer:** Tanpa label, clustering atau embedding exploration lebih masuk akal sebagai langkah awal.
-- **type:** classification
-
-#### Menganalisis overfitting
-
-- **id:** evo-ex-7
-- **module:** learning-from-data
-- **title:** Menganalisis overfitting
-- **scenario:** Akurasi training 99%, validation 62%, dan hasil peserta baru buruk.
-- **instruction:** Jelaskan masalah yang paling mungkin dan dua mitigasi.
-- **modelAnswer:** Ini sinyal overfitting; mitigasi dapat berupa data validasi lebih baik, regularisasi, fitur lebih relevan, atau model lebih sederhana.
-- **type:** case
-
-#### Mengidentifikasi agent, state, action, reward
-
-- **id:** evo-ex-8
-- **module:** reinforcement-learning
-- **title:** Mengidentifikasi agent, state, action, reward
-- **scenario:** Sistem rekomendasi belajar adaptif memilih materi berikutnya untuk peserta.
-- **instruction:** Tentukan agent, state, action, reward, dan risiko reward hacking.
-- **modelAnswer:** Reward harus mewakili belajar nyata, bukan sekadar klik atau waktu layar.
-- **type:** builder
-
-#### Exploration vs exploitation
-
-- **id:** evo-ex-9
-- **module:** reinforcement-learning
-- **title:** Exploration vs exploitation
-- **scenario:** Agent selalu memilih materi yang historis paling sering diklik.
-- **instruction:** Jelaskan konsep yang tidak seimbang dan dampaknya.
-- **modelAnswer:** Agent terlalu exploitative; eksplorasi diperlukan agar sistem menemukan opsi baru yang mungkin lebih baik.
-- **type:** case
-
-#### Encoder, decoder, generator, discriminator
-
-- **id:** evo-ex-10
-- **module:** vae-and-gan
-- **title:** Encoder, decoder, generator, discriminator
-- **scenario:** Tim membandingkan autoencoder, VAE, dan GAN untuk demo generatif.
-- **instruction:** Identifikasi komponen yang muncul pada tiap model.
-- **modelAnswer:** Autoencoder/VAE memakai encoder-decoder; GAN memakai generator-discriminator.
-- **type:** matching
-
-#### Memilih VAE atau GAN
-
-- **id:** evo-ex-11
-- **module:** vae-and-gan
-- **title:** Memilih VAE atau GAN
-- **scenario:** Tim membutuhkan latent space terstruktur untuk eksplorasi variasi desain.
-- **instruction:** Pilih VAE atau GAN dan jelaskan trade-off.
-- **modelAnswer:** VAE lebih cocok untuk latent space terstruktur; GAN dapat menghasilkan sampel tajam tetapi training bisa lebih sulit.
-- **type:** decision
-
-#### Mengurutkan proses diffusion
-
-- **id:** evo-ex-12
-- **module:** diffusion-models
-- **title:** Mengurutkan proses diffusion
-- **scenario:** Peserta harus menjelaskan generasi gambar tanpa rumus.
-- **instruction:** Urutkan: tambah noise, belajar denoise, mulai dari noise, denoise bertahap, hasil sampel.
-- **modelAnswer:** Urutan inti diffusion adalah forward noising saat training dan reverse denoising saat generasi.
-- **type:** sequencing
-
-#### Trade-off inference steps
-
-- **id:** evo-ex-13
-- **module:** diffusion-models
-- **title:** Trade-off inference steps
-- **scenario:** Aplikasi perlu membuat preview visual cepat saat user mengetik prompt.
-- **instruction:** Analisis dampak mengurangi jumlah denoising steps.
-- **modelAnswer:** Steps lebih sedikit dapat menurunkan latency, tetapi kualitas atau detail bisa turun.
-- **type:** case
-
-#### Mengidentifikasi komponen LLM
-
-- **id:** evo-ex-14
-- **module:** transformer-llm-hybrid-ai
-- **title:** Mengidentifikasi komponen LLM
-- **scenario:** Asisten fellowship memakai dokumen program, LLM, rule policy, dan logging.
-- **instruction:** Tentukan mana retrieval, LLM, rule-based guardrail, dan observability.
-- **modelAnswer:** Hybrid AI membagi tugas: retrieval memberi sumber, LLM merangkai, rules menjaga kebijakan, logging mendukung audit.
-- **type:** architecture
-
-#### Menemukan keterbatasan LLM
-
-- **id:** evo-ex-15
-- **module:** transformer-llm-hybrid-ai
-- **title:** Menemukan keterbatasan LLM
-- **scenario:** LLM menjawab percaya diri untuk aturan program yang tidak ada di dokumen.
-- **instruction:** Sebutkan keterbatasan dan mitigasi produk.
-- **modelAnswer:** Masalahnya hallucination atau grounding lemah; mitigasi: RAG, abstain behavior, rule checks, dan human escalation.
-- **type:** case
-
-#### Merancang sistem hybrid
-
-- **id:** evo-ex-16
-- **module:** transformer-llm-hybrid-ai
-- **title:** Merancang sistem hybrid
-- **scenario:** HerAI ingin asisten yang menjawab fleksibel tetapi patuh kebijakan program.
-- **instruction:** Rancang arsitektur komponen dari user input sampai jawaban final.
-- **modelAnswer:** Arsitektur kuat menggabungkan policy engine, retrieval, LLM, validator, logging, dan human review untuk kasus sensitif.
-- **type:** architecture
-
-#### QUIZ
-
-#### Item 1
-
-- **id:** evo-q-1
-- **module:** reading-ai-evolution
-- **question:** Mengapa paradigma baru tidak selalu menghapus paradigma lama?
-##### options
-
-- Karena semua paradigma punya use case, kontrol, dan trade-off berbeda
-- Karena teknologi lama selalu lebih akurat
-- Karena LLM tidak bisa dipakai
-- Karena data tidak pernah penting
-
-- **answer:** 0
-- **explanation:** Paradigma lama tetap berguna ketika kebutuhan audit, kontrol, atau struktur eksplisit lebih penting.
-- **difficulty:** pemahaman
-- **tag:** reading-ai-evolution
-
-#### Item 2
-
-- **id:** evo-q-2
-- **module:** reading-ai-evolution
-- **question:** Sebuah sistem memakai aturan SOP, embedding search, dan LLM. Cara membaca evolusinya adalah...
-##### options
-
-- Hybrid AI yang menggabungkan paradigma
-- Pure symbolic AI
-- Hanya supervised learning
-- Hanya reinforcement learning
-
-- **answer:** 0
-- **explanation:** Sistem modern sering menggabungkan representasi dan kontrol berbeda.
-- **difficulty:** penerapan
-- **tag:** reading-ai-evolution
-
-#### Item 3
-
-- **id:** evo-q-3
-- **module:** reading-ai-evolution
-- **question:** Ketika membaca timeline AI, fokus terbaik adalah...
-##### options
-
-- Tahun yang harus dihafalkan
-- Perubahan masalah, pendekatan, dan pengaruhnya
-- Jumlah parameter setiap model
-- Nama vendor paling populer
-
-- **answer:** 1
-- **explanation:** Timeline berguna jika membantu membaca perubahan kemampuan.
-- **difficulty:** analisis
-- **tag:** reading-ai-evolution
-
-#### Item 4
-
-- **id:** evo-q-4
-- **module:** symbolic-ai
-- **question:** Organisasi harus mengikuti aturan hukum deterministik dan dapat diaudit. Lapisan apa yang paling tepat?
-##### options
-
-- Rule-based policy layer
-- GAN
-- Diffusion sampler
-- Embedding saja
-
-- **answer:** 0
-- **explanation:** Aturan eksplisit cocok untuk keputusan yang wajib dapat diaudit.
-- **difficulty:** penerapan
-- **tag:** symbolic-ai
-
-#### Item 5
-
-- **id:** evo-q-5
-- **module:** symbolic-ai
-- **question:** Forward chaining berarti...
-##### options
-
-- Berangkat dari fakta menuju kesimpulan
-- Berangkat dari gambar menuju noise
-- Berangkat dari label menuju embedding
-- Berangkat dari reward menuju prompt
-
-- **answer:** 0
-- **explanation:** Forward chaining menerapkan aturan pada fakta aktif.
-- **difficulty:** pemahaman
-- **tag:** symbolic-ai
-
-#### Item 6
-
-- **id:** evo-q-6
-- **module:** symbolic-ai
-- **question:** Keterbatasan expert system yang paling umum adalah...
-##### options
-
-- Butuh knowledge engineering dan sulit menangani pengecualian luas
-- Tidak bisa menjelaskan keputusan
-- Selalu membutuhkan GPU besar
-- Tidak bisa memakai aturan
-
-- **answer:** 0
-- **explanation:** Expert system kuat tapi perawatannya mahal saat domain berubah.
-- **difficulty:** analisis
-- **tag:** symbolic-ai
-
-#### Item 7
-
-- **id:** evo-q-7
-- **module:** learning-from-data
-- **question:** Model sangat bagus pada training tetapi buruk pada data baru. Masalah paling mungkin?
-##### options
-
-- Overfitting
-- Forward chaining
-- Diffusion
-- Context window
-
-- **answer:** 0
-- **explanation:** Overfitting terjadi saat model terlalu cocok pada data training.
-- **difficulty:** penerapan
-- **tag:** learning-from-data
-
-#### Item 8
-
-- **id:** evo-q-8
-- **module:** learning-from-data
-- **question:** Data tiket belum punya label, tetapi tim ingin menemukan kelompok tema. Pendekatan awal yang cocok?
-##### options
-
-- Unsupervised learning
-- Backward chaining
-- Single rule
-- Self-play
-
-- **answer:** 0
-- **explanation:** Clustering atau embedding exploration cocok saat label belum ada.
-- **difficulty:** penerapan
-- **tag:** learning-from-data
-
-#### Item 9
-
-- **id:** evo-q-9
-- **module:** learning-from-data
-- **question:** Label historis perlu diaudit karena...
-##### options
-
-- Label dapat memuat bias proses lama
-- Label selalu salah
-- Label tidak dipakai model
-- Label menghapus fitur
-
-- **answer:** 0
-- **explanation:** Label sering merefleksikan keputusan manusia atau institusi sebelumnya.
-- **difficulty:** analisis
-- **tag:** learning-from-data
-
-#### Item 10
-
-- **id:** evo-q-10
-- **module:** reinforcement-learning
-- **question:** Agent hanya memilih tindakan yang pernah memberi reward tertinggi dan tidak mencoba opsi baru. Konsep yang bermasalah?
-##### options
-
-- Exploration vs exploitation
-- Latent regularization
-- Backward chaining
-- Denoising
-
-- **answer:** 0
-- **explanation:** Agent terlalu exploitative dan kurang eksplorasi.
-- **difficulty:** penerapan
-- **tag:** reinforcement-learning
-
-#### Item 11
-
-- **id:** evo-q-11
-- **module:** reinforcement-learning
-- **question:** Dalam RL, reward sebaiknya...
-##### options
-
-- Mewakili tujuan jangka panjang yang benar
-- Selalu berupa klik
-- Tidak pernah berubah
-- Dihapus setelah training
-
-- **answer:** 0
-- **explanation:** Reward salah dapat membuat perilaku yang tampak optimal tetapi buruk bagi manusia.
-- **difficulty:** analisis
-- **tag:** reinforcement-learning
-
-#### Item 12
-
-- **id:** evo-q-12
-- **module:** reinforcement-learning
-- **question:** Q-value secara konseptual adalah...
-##### options
-
-- Perkiraan nilai action pada state
-- Jumlah token prompt
-- Kualitas gambar
-- Aturan IF/THEN
-
-- **answer:** 0
-- **explanation:** Q-value membantu agent memilih tindakan berdasarkan nilai yang diperkirakan.
-- **difficulty:** pemahaman
-- **tag:** reinforcement-learning
-
-#### Item 13
-
-- **id:** evo-q-13
-- **module:** vae-and-gan
-- **question:** Tim membutuhkan latent space terstruktur. Model mana yang paling masuk akal?
-##### options
-
-- VAE
-- Rule engine
-- DQN
-- Pure prompt
-
-- **answer:** 0
-- **explanation:** VAE mendorong latent space lebih teratur dan dapat disampling.
-- **difficulty:** penerapan
-- **tag:** vae-and-gan
-
-#### Item 14
-
-- **id:** evo-q-14
-- **module:** vae-and-gan
-- **question:** GAN terdiri dari...
-##### options
-
-- Generator dan discriminator
-- Agent dan environment
-- Facts dan rules
-- Query dan context window
-
-- **answer:** 0
-- **explanation:** GAN melatih generator melawan discriminator.
-- **difficulty:** pemahaman
-- **tag:** vae-and-gan
-
-#### Item 15
-
-- **id:** evo-q-15
-- **module:** vae-and-gan
-- **question:** Sampel terlihat tajam tetapi mode variasinya sedikit. Risiko yang mungkin?
-##### options
-
-- Mode collapse
-- Forward chaining
-- Reward hacking
-- Data leakage router
-
-- **answer:** 0
-- **explanation:** Mode collapse dapat membuat generator menghasilkan variasi terbatas.
-- **difficulty:** analisis
-- **tag:** vae-and-gan
-
-#### Item 16
-
-- **id:** evo-q-16
-- **module:** diffusion-models
-- **question:** Inti generasi diffusion adalah...
-##### options
-
-- Mulai dari noise lalu denoise bertahap
-- Menulis aturan IF/THEN
-- Mencari reward tertinggi saja
-- Menghapus context window
-
-- **answer:** 0
-- **explanation:** Diffusion menjalankan reverse denoising saat generasi.
-- **difficulty:** pemahaman
-- **tag:** diffusion-models
-
-#### Item 17
-
-- **id:** evo-q-17
-- **module:** diffusion-models
-- **question:** Mengurangi inference steps biasanya berdampak pada...
-##### options
-
-- Latency turun tetapi kualitas bisa turun
-- Audit trail otomatis muncul
-- Model menjadi symbolic
-- Reward menjadi sempurna
-
-- **answer:** 0
-- **explanation:** Fewer steps mempercepat generasi, tetapi trade-off kualitas perlu diuji.
-- **difficulty:** penerapan
-- **tag:** diffusion-models
-
-#### Item 18
-
-- **id:** evo-q-18
-- **module:** diffusion-models
-- **question:** Kualitas visual tinggi belum cukup karena...
-##### options
-
-- Factuality, bias, hak penggunaan, dan konteks tetap perlu diperiksa
-- Gambar selalu salah
-- Diffusion tidak bisa dipakai
-- Compute tidak penting
-
-- **answer:** 0
-- **explanation:** Output generatif tetap perlu evaluasi produk dan risiko.
-- **difficulty:** analisis
-- **tag:** diffusion-models
-
-#### Item 19
-
-- **id:** evo-q-19
-- **module:** transformer-llm-hybrid-ai
-- **question:** Aplikasi butuh jawaban fleksibel tetapi harus patuh kebijakan pasti. Arsitektur paling tepat?
-##### options
-
-- Hybrid: rules, retrieval, LLM, validator
-- LLM tanpa sumber
-- GAN saja
-- K-means saja
-
-- **answer:** 0
-- **explanation:** Hybrid menggabungkan fleksibilitas LLM dan kontrol eksplisit.
-- **difficulty:** penerapan
-- **tag:** transformer-llm-hybrid-ai
-
-#### Item 20
-
-- **id:** evo-q-20
-- **module:** transformer-llm-hybrid-ai
-- **question:** RAG membantu LLM dengan...
-##### options
-
-- Mengambil dokumen relevan sebagai konteks
-- Menghilangkan semua hallucination secara pasti
-- Mengubah reward
-- Mengganti semua aturan
-
-- **answer:** 0
-- **explanation:** RAG memberi grounding, tetapi tetap perlu evaluasi dan guardrail.
-- **difficulty:** pemahaman
-- **tag:** transformer-llm-hybrid-ai
-
-#### Item 21
-
-- **id:** evo-q-21
-- **module:** transformer-llm-hybrid-ai
-- **question:** LLM menjawab aturan yang tidak ada di dokumen. Mitigasi paling tepat?
-##### options
-
-- Grounding, abstain behavior, rule checks, dan eskalasi manusia
-- Menambah warna UI
-- Menghapus retrieval
-- Menambah inference steps diffusion
-
-- **answer:** 0
-- **explanation:** Masalah grounding perlu mitigasi sistem, bukan sekadar prompt.
-- **difficulty:** analisis
-- **tag:** transformer-llm-hybrid-ai
-
-#### DISCUSSIONS
-
-- **reading-ai-evolution:** Apakah teknologi AI baru selalu membuat pendekatan lama tidak berguna? Beri satu contoh produk.
-- **symbolic-ai:** Kapan aturan eksplisit lebih tepat daripada model statistik pada sistem peserta fellowship?
-- **learning-from-data:** Apakah data dapat menggantikan pengetahuan manusia sepenuhnya? Kapan human review tetap perlu?
-- **reinforcement-learning:** Apa risiko ketika reward tidak mewakili tujuan manusia?
-- **vae-and-gan:** Mengapa kualitas sampel tinggi belum tentu berarti model mudah dikontrol?
-- **diffusion-models:** Bagaimana menyeimbangkan kualitas generasi dan biaya compute dalam produk nyata?
-- **transformer-llm-hybrid-ai:** Mengapa sistem AI modern sering membutuhkan lebih dari satu model atau satu paradigma?
+**Paradigma**  
+Cara utama dalam merepresentasikan dan menyelesaikan masalah.
+
+**Policy**  
+Strategi agent dalam memilih tindakan.
+
+**RAG**  
+Retrieval augmented generation, yaitu mengambil dokumen sebelum menghasilkan jawaban.
+
+**Reward hacking**  
+Perilaku agent yang memaksimalkan reward tanpa memenuhi tujuan sebenarnya.
+
+**Rule coverage**  
+Tingkat cakupan aturan terhadap kasus yang perlu ditangani.
+
+# Referensi
+
+1. Newell, Shaw, and Simon, *Logic Theorist*, 1956.
+2. Rosenblatt, *The Perceptron*, 1958.
+3. McCarthy, *Programs with Common Sense*, 1959.
+4. Rumelhart, Hinton, and Williams, *Learning Representations by Back-Propagating Errors*, 1986.
+5. Watkins and Dayan, *Q-learning*, 1992.
+6. Sutton and Barto, *Reinforcement Learning: An Introduction*.
+7. Kingma and Welling, *Auto-Encoding Variational Bayes*, 2013.
+8. Goodfellow et al., *Generative Adversarial Nets*, 2014.
+9. Ho, Jain, and Abbeel, *Denoising Diffusion Probabilistic Models*, 2020.
+10. Vaswani et al., *Attention Is All You Need*, 2017.
+11. Brown et al., *Language Models are Few-Shot Learners*, 2020.

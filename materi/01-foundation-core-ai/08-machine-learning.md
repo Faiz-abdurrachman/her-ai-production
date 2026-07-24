@@ -3249,7 +3249,7 @@ VC-dim memberi kita upper bound teoritis. Bias-Variance decomposition memberi pe
 
 Dari regresi linear hingga neural network — kurikulum lengkap untuk membangun fondasi ML yang kuat.
 
-** 8 Modul ** 50+ Topik **** AI Lab · Marchel Andrian Shevchenko**
+** 8 Modul ** 50+ Topik **** AI Lab · HerAI**
 
 ![HerAI ML learning](/assets/messaging/herai-chat-persona.png)
 
