@@ -2130,7 +2130,7 @@ var SOURCE_VISUALS = {
         list.innerHTML = QUIZ.map(function (question, index) {
             return `<article data-quiz-index="${index}" tabindex="-1">
                 <span>${index + 1}</span>
-                <small>Python untuk AI</small>
+                <small>Evaluasi Modul</small>
                 <h3>${escapeHtml(question[0])}</h3>
                 <div class="reasoning-scaffold-options">
                     ${question[1].map(function (option, optionIndex) {

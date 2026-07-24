@@ -181,3 +181,13 @@ Pada saat melakukan *UI Audit* Desktop di halaman Diskusi, terungkap bahwa teks 
   - Semua opsi tombol *prompt* diskusi Python menjadi *prompt* studi kasus yang generik dan berorientasi *Project Building*.
   - Menghapus referensi file `materi/baru/Python-baru.md`.
 - Seluruh halaman diskusi modul selain Python kini menampilkan kalimat instruksional yang universal dan premium.
+
+## 17. Bug Konten: Label Pertanyaan Kuis Masih "Python untuk AI" di JavaScript Modul Lain
+**Deskripsi:**
+Pada saat melakukan verifikasi *UI Mobile* di halaman Kuis, ditemukan bahwa label kecil di atas setiap soal kuis (di dalam *card* soal) bertuliskan "PYTHON UNTUK AI", meskipun kuis tersebut berada di modul UI/UX atau modul lainnya.
+**Penyebab:**
+- Render UI kuis ditangani oleh JavaScript (`ai-[nama-modul].js`). Logika *render* ini juga merupakan hasil *cloning* dari modul Python, sehingga mengandung string `<small>Python untuk AI</small>` yang *hardcoded* di dalam fungsi `renderQuizList`.
+**Solusi:**
+- Membuat script `fix_js_quiz_label.js` untuk memindai direktori `js/frontend/fellow-dashboard/` dan mengedit seluruh file JavaScript modul, kecuali `ai-python.js` dan `ai-python-basic.js`.
+- Melakukan Regex replace dari `<small>Python untuk AI</small>` menjadi label netral `<small>Evaluasi Modul</small>`.
+- Merender ulang halaman di browser untuk memastikan label soal berubah dengan benar.
