@@ -1,0 +1,141 @@
+<h1>Mini Project: Klasifikasi Gambar</h1>
+<p>Menerapkan seluruh alur kerja deep learning dari definisi masalah sampai laporan evaluasi.</p>
+<h2>10.1 Tujuan Proyek</h2>
+<p>Membangun model klasifikasi gambar minimal tiga kelas. Dataset dapat berupa jenis sampah, jenis makanan, kondisi daun, kategori produk, atau objek lain yang relevan.</p>
+<p>Fokus penilaian bukan hanya accuracy, tetapi kualitas proses dan kemampuan menjelaskan keputusan.</p>
+<h2>10.2 Batasan Proyek</h2>
+<ul>
+<li>Minimal 300 gambar secara keseluruhan dan minimal 3 kelas.</li>
+<li>Pisahkan training, validation, dan test secara jelas.</li>
+<li>Buat baseline sederhana sebelum mencoba model kompleks.</li>
+<li>Gunakan minimal satu teknik regularisasi atau augmentation.</li>
+<li>Laporkan confusion matrix dan minimal tiga contoh prediksi salah.</li>
+<li>Simpan model terbaik berdasarkan validation metric.</li>
+</ul>
+<h2>10.3 Tahapan Pengerjaan</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Tahap</th>
+<th>Aktivitas utama</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Definisi masalah</td>
+<td>Tentukan pengguna, tujuan prediksi, kelas, dan dampak kesalahan</td>
+</tr>
+<tr>
+<td>Audit data</td>
+<td>Periksa jumlah data, duplikat, kualitas gambar, label, dan ketidakseimbangan kelas</td>
+</tr>
+<tr>
+<td>Split data</td>
+<td>Buat training, validation, dan test tanpa kebocoran</td>
+</tr>
+<tr>
+<td>Baseline</td>
+<td>Bangun CNN kecil atau transfer learning sederhana</td>
+</tr>
+<tr>
+<td>Eksperimen</td>
+<td>Ubah satu faktor setiap kali dan catat hasil</td>
+</tr>
+<tr>
+<td>Evaluasi</td>
+<td>Gunakan metrik, confusion matrix, dan analisis error</td>
+</tr>
+<tr>
+<td>Kesimpulan</td>
+<td>Jelaskan keterbatasan dan langkah pengembangan</td>
+</tr>
+</tbody></table></div>
+<h2>10.4 Template Laporan</h2>
+<p>Laporan proyek minimal memuat:</p>
+<ol>
+<li>Judul dan ringkasan proyek.</li>
+<li>Latar belakang dan tujuan.</li>
+<li>Deskripsi dataset dan distribusi kelas.</li>
+<li>Preprocessing dan augmentation.</li>
+<li>Arsitektur atau model pralatih yang digunakan.</li>
+<li>Konfigurasi training dan hyperparameter.</li>
+<li>Hasil eksperimen dalam tabel.</li>
+<li>Confusion matrix dan analisis kesalahan.</li>
+<li>Risiko, keterbatasan, dan rencana peningkatan.</li>
+</ol>
+<h2>10.5 Template Log Eksperimen</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>ID</th>
+<th>Perubahan</th>
+<th>Hipotesis</th>
+<th>Validation metric</th>
+<th>Catatan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>E01</td>
+<td>Baseline CNN</td>
+<td>Mendapatkan titik awal</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<td>E02</td>
+<td>Tambah augmentation</td>
+<td>Mengurangi overfitting</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<td>E03</td>
+<td>Transfer learning</td>
+<td>Meningkatkan kualitas fitur</td>
+<td>...</td>
+<td>...</td>
+</tr>
+</tbody></table></div>
+<h2>10.6 Rubrik Penilaian</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aspek</th>
+<th align="right">Bobot</th>
+<th>Kriteria</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Definisi masalah</td>
+<td align="right">10%</td>
+<td>Tujuan, pengguna, kelas, dan dampak kesalahan jelas</td>
+</tr>
+<tr>
+<td>Kualitas data</td>
+<td align="right">15%</td>
+<td>Audit, split, dan preprocessing benar</td>
+</tr>
+<tr>
+<td>Metodologi</td>
+<td align="right">20%</td>
+<td>Baseline dan eksperimen terstruktur</td>
+</tr>
+<tr>
+<td>Evaluasi</td>
+<td align="right">25%</td>
+<td>Metrik sesuai, confusion matrix, dan error analysis</td>
+</tr>
+<tr>
+<td>Pemahaman</td>
+<td align="right">20%</td>
+<td>Mampu menjelaskan alasan desain dan hasil</td>
+</tr>
+<tr>
+<td>Dokumentasi</td>
+<td align="right">10%</td>
+<td>Laporan rapi dan dapat direproduksi</td>
+</tr>
+</tbody></table></div>
+<h3>Kriteria Kelulusan</h3>
+<p>Peserta dinyatakan memenuhi kompetensi apabila memperoleh nilai minimal <strong>70/100</strong> dan tidak melakukan data leakage yang mendasar.</p>
+<hr>
+

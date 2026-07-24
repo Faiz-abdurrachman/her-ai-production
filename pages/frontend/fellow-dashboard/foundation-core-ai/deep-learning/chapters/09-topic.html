@@ -1,0 +1,130 @@
+<h1>Evaluasi dan Implementasi</h1>
+<p>Menilai model secara benar, menganalisis kesalahan, dan menyiapkan penggunaan nyata.</p>
+<h2>9.1 Pembagian Data</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Bagian</th>
+<th>Fungsi</th>
+<th>Catatan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Training</td>
+<td>Memperbarui parameter</td>
+<td>Boleh menerima augmentation</td>
+</tr>
+<tr>
+<td>Validation</td>
+<td>Memilih model dan hyperparameter</td>
+<td>Tidak dipakai untuk update weight</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>Estimasi akhir pada data yang belum terlihat</td>
+<td>Digunakan setelah keputusan final</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>Hindari data leakage:</strong> informasi dari validation atau test tidak boleh bocor ke proses training. Contohnya, parameter normalisasi harus dihitung dari training data, kemudian diterapkan ke validation dan test.</p>
+</blockquote>
+<h2>9.2 Metrik Klasifikasi</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Metrik</th>
+<th>Makna sederhana</th>
+<th>Penting ketika</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Accuracy</td>
+<td>Proporsi prediksi benar</td>
+<td>Kelas relatif seimbang</td>
+</tr>
+<tr>
+<td>Precision</td>
+<td>Dari prediksi positif, berapa yang benar</td>
+<td>False positive mahal</td>
+</tr>
+<tr>
+<td>Recall</td>
+<td>Dari semua kasus positif, berapa yang ditemukan</td>
+<td>False negative mahal</td>
+</tr>
+<tr>
+<td>F1-score</td>
+<td>Keseimbangan precision dan recall</td>
+<td>Kelas tidak seimbang</td>
+</tr>
+<tr>
+<td>Confusion matrix</td>
+<td>Rincian jenis kesalahan per kelas</td>
+<td>Analisis error</td>
+</tr>
+</tbody></table></div>
+<h2>9.3 Analisis Kesalahan</h2>
+<ul>
+<li>Lihat contoh yang salah, bukan hanya angka agregat.</li>
+<li>Kelompokkan error berdasarkan kualitas data, label ambigu, kelas mirip, kondisi ekstrem, atau bias domain.</li>
+<li>Periksa performa per kelas dan per segmen pengguna.</li>
+<li>Pastikan sampel salah tidak berasal dari data duplikat atau preprocessing yang rusak.</li>
+</ul>
+<h2>9.4 Reproducibility</h2>
+<p>Catat versi data, kode, library, seed, hyperparameter, dan checkpoint. Hasil deep learning dapat berubah karena inisialisasi acak, urutan batch, dan operasi GPU. Reproducibility memudahkan perbandingan eksperimen.</p>
+<h2>9.5 Inference dan Deployment</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Pertimbangan</th>
+<th>Pertanyaan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Latency</td>
+<td>Seberapa cepat prediksi harus tersedia?</td>
+</tr>
+<tr>
+<td>Ukuran model</td>
+<td>Apakah model berjalan di server, browser, atau perangkat mobile?</td>
+</tr>
+<tr>
+<td>Throughput</td>
+<td>Berapa banyak request yang harus diproses?</td>
+</tr>
+<tr>
+<td>Monitoring</td>
+<td>Bagaimana mendeteksi penurunan kualitas atau data drift?</td>
+</tr>
+<tr>
+<td>Privasi</td>
+<td>Apakah data sensitif boleh dikirim ke server?</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p><strong>Model terbaik belum tentu model terbesar:</strong> dalam produk nyata, model yang sedikit kurang akurat tetapi jauh lebih cepat, murah, dan stabil bisa menjadi pilihan yang lebih baik.</p>
+</blockquote>
+<h2>Checkpoint Bab 9</h2>
+<ol>
+<li>Apa perbedaan validation set dan test set?</li>
+<li>Kapan recall lebih penting daripada precision?</li>
+<li>Mengapa analisis contoh yang salah penting setelah melihat metrik?</li>
+</ol>
+<h2>Latihan Bab 9 - Menentukan Metrik</h2>
+<p><strong>Tujuan:</strong> memilih metrik berdasarkan dampak kesalahan.</p>
+<p><strong>Tingkat kesulitan:</strong> Menengah</p>
+<p>Bandingkan dua kasus berikut:</p>
+<ol>
+<li>Deteksi penyakit berisiko tinggi.</li>
+<li>Penyaringan komentar spam.</li>
+</ol>
+<p>Untuk masing-masing kasus:</p>
+<ul>
+<li>Jelaskan dampak false positive.</li>
+<li>Jelaskan dampak false negative.</li>
+<li>Pilih metrik utama dan metrik pendamping.</li>
+<li>Jelaskan mengapa accuracy saja mungkin menyesatkan.</li>
+</ul>
+<p><strong>Hasil yang dikumpulkan:</strong> analisis dampak kesalahan dan rekomendasi metrik.</p>
+<hr>
+

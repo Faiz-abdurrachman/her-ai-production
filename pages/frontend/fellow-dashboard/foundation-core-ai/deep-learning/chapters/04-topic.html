@@ -1,0 +1,151 @@
+<h1>Training dan Optimizer</h1>
+<p>Menjalankan proses belajar model secara terukur dan mengenali gejala kegagalan training.</p>
+<h2>4.1 Epoch, Batch, dan Iteration</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Istilah</th>
+<th>Arti</th>
+<th>Contoh</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Epoch</td>
+<td>Satu kali seluruh data training digunakan</td>
+<td>10.000 data selesai dilalui</td>
+</tr>
+<tr>
+<td>Batch</td>
+<td>Sekelompok data yang diproses bersama</td>
+<td>32 sampel</td>
+</tr>
+<tr>
+<td>Iteration</td>
+<td>Satu kali pembaruan parameter</td>
+<td>Satu batch menghasilkan satu update</td>
+</tr>
+</tbody></table></div>
+<p>Jika terdapat 1.000 sampel dan batch size 100, maka satu epoch memiliki sekitar 10 iteration.</p>
+<h2>4.2 Learning Rate</h2>
+<p>Learning rate menentukan seberapa besar langkah pembaruan parameter. Nilai terlalu besar dapat membuat loss berosilasi atau bahkan meningkat. Nilai terlalu kecil membuat training sangat lambat.</p>
+<p><strong>Tanda learning rate terlalu besar:</strong></p>
+<ul>
+<li>Loss tidak stabil atau melonjak.</li>
+<li>Loss menghasilkan <code>NaN</code>.</li>
+<li>Accuracy tidak pernah membaik.</li>
+</ul>
+<p><strong>Tanda learning rate terlalu kecil:</strong></p>
+<ul>
+<li>Loss turun sangat lambat.</li>
+<li>Model membutuhkan banyak epoch untuk mencapai hasil yang layak.</li>
+</ul>
+<h2>4.3 Optimizer Populer</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Optimizer</th>
+<th>Karakteristik</th>
+<th>Kapan dicoba</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SGD</td>
+<td>Sederhana dan mudah dipahami</td>
+<td>Baseline atau saat ingin kontrol lebih jelas</td>
+</tr>
+<tr>
+<td>SGD + Momentum</td>
+<td>Mengurangi gerakan zig-zag</td>
+<td>Masalah dengan arah gradient yang berubah-ubah</td>
+</tr>
+<tr>
+<td>Adam</td>
+<td>Adaptif dan sering cepat pada awal training</td>
+<td>Pilihan awal praktis untuk banyak tugas</td>
+</tr>
+<tr>
+<td>AdamW</td>
+<td>Adam dengan weight decay yang lebih terpisah</td>
+<td>Transformer dan model modern</td>
+</tr>
+</tbody></table></div>
+<h2>4.4 Training Loop</h2>
+<p>Contoh pseudocode training loop dengan PyTorch:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">for epoch in range(num_epochs):
+    for x_batch, y_batch in train_loader:
+        predictions = model(x_batch)
+        loss = loss_function(predictions, y_batch)
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    evaluate_on_validation_data()
+</code></pre></div>
+<p>Langkah <code>zero_grad()</code> penting pada framework seperti PyTorch karena gradient dapat terakumulasi. Evaluasi validation dilakukan tanpa memperbarui parameter.</p>
+<h2>4.5 Masalah Umum Saat Training</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Gejala</th>
+<th>Kemungkinan penyebab</th>
+<th>Tindakan awal</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Loss tidak turun</td>
+<td>Learning rate tidak cocok, label salah, data tidak ternormalisasi</td>
+<td>Periksa pipeline data dan coba overfit batch kecil</td>
+</tr>
+<tr>
+<td>Loss menjadi <code>NaN</code></td>
+<td>Learning rate terlalu besar, input ekstrem, operasi numerik tidak stabil</td>
+<td>Turunkan learning rate dan periksa data</td>
+</tr>
+<tr>
+<td>Training bagus, validation buruk</td>
+<td>Overfitting</td>
+<td>Gunakan regularisasi, augmentation, atau lebih banyak data</td>
+</tr>
+<tr>
+<td>Accuracy stagnan pada tebakan acak</td>
+<td>Output/loss tidak cocok, mapping label salah</td>
+<td>Periksa activation function dan loss</td>
+</tr>
+<tr>
+<td>Training sangat lambat</td>
+<td>Model atau input terlalu besar, pipeline lambat</td>
+<td>Lakukan profiling dan sederhanakan baseline</td>
+</tr>
+</tbody></table></div>
+<h2>4.6 Teknik Debugging Penting</h2>
+<ul>
+<li>Coba overfit 10-50 sampel. Jika model tidak bisa menghafal data kecil, kemungkinan terdapat bug.</li>
+<li>Periksa bentuk tensor pada setiap tahap.</li>
+<li>Lihat distribusi label dan pastikan tidak tertukar.</li>
+<li>Pastikan preprocessing training dan validation konsisten.</li>
+<li>Catat arsitektur, learning rate, batch size, seed, dan hasil setiap eksperimen.</li>
+</ul>
+<h2>Checkpoint Bab 4</h2>
+<ol>
+<li>Apa perbedaan epoch dan iteration?</li>
+<li>Mengapa validation data tidak boleh dipakai untuk memperbarui weight?</li>
+<li>Apa tes sederhana untuk mengecek apakah pipeline dan model dapat belajar?</li>
+</ol>
+<h2>Latihan Bab 4 - Diagnosis Kurva Training</h2>
+<p><strong>Tujuan:</strong> membaca pola loss dan accuracy untuk menentukan tindakan berikutnya.</p>
+<p><strong>Tingkat kesulitan:</strong> Menengah</p>
+<p>Analisis tiga skenario berikut:</p>
+<ol>
+<li>Training loss dan validation loss sama-sama turun.</li>
+<li>Training loss turun, tetapi validation loss naik.</li>
+<li>Training loss dan validation loss sama-sama datar.</li>
+</ol>
+<p>Untuk setiap skenario:</p>
+<ul>
+<li>Jelaskan diagnosis yang paling mungkin.</li>
+<li>Tuliskan dua tindakan yang dapat dicoba.</li>
+</ul>
+<p><strong>Hasil yang dikumpulkan:</strong> tabel diagnosis dan tindakan untuk setiap skenario.</p>
+<hr>
+

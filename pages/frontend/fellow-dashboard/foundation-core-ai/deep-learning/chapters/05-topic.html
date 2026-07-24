@@ -1,0 +1,88 @@
+<h1>Regularisasi dan Generalisasi</h1>
+<p>Membuat model tidak hanya menghafal data training, tetapi juga bekerja pada data baru.</p>
+<h2>5.1 Overfitting dan Underfitting</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Kondisi</th>
+<th>Ciri</th>
+<th>Makna</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Underfitting</td>
+<td>Training dan validation sama-sama buruk</td>
+<td>Model belum menangkap pola</td>
+</tr>
+<tr>
+<td>Fit yang baik</td>
+<td>Training baik, validation juga baik dan stabil</td>
+<td>Model belajar pola yang dapat digeneralisasi</td>
+</tr>
+<tr>
+<td>Overfitting</td>
+<td>Training sangat baik, validation jauh lebih buruk</td>
+<td>Model terlalu menghafal data training</td>
+</tr>
+</tbody></table></div>
+<h2>5.2 Dropout</h2>
+<p>Dropout menonaktifkan sebagian neuron secara acak selama training. Tujuannya agar model tidak terlalu bergantung pada jalur tertentu. Saat inference, seluruh neuron digunakan dengan penyesuaian skala yang ditangani framework.</p>
+<blockquote>
+<p><strong>Intuisi dropout:</strong> seperti melatih tim tanpa selalu mengandalkan satu orang. Setiap anggota harus mampu berkontribusi sehingga tim lebih tahan ketika kondisi berubah.</p>
+</blockquote>
+<h2>5.3 Weight Decay</h2>
+<p>Weight decay mendorong parameter agar tidak tumbuh terlalu besar. Model dengan parameter yang lebih terkendali sering memiliki batas keputusan yang lebih halus dan lebih mudah melakukan generalisasi.</p>
+<h2>5.4 Normalization</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Teknik</th>
+<th>Ide dasar</th>
+<th>Catatan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Input normalization</td>
+<td>Menyetarakan skala data input</td>
+<td>Hampir selalu penting</td>
+</tr>
+<tr>
+<td>Batch Normalization</td>
+<td>Menormalkan aktivasi berdasarkan batch</td>
+<td>Umum pada CNN</td>
+</tr>
+<tr>
+<td>Layer Normalization</td>
+<td>Menormalkan fitur dalam satu sampel</td>
+<td>Umum pada Transformer</td>
+</tr>
+</tbody></table></div>
+<h2>5.5 Data Augmentation</h2>
+<p>Data augmentation membuat variasi baru dari data training tanpa mengubah label. Pada gambar, contohnya adalah flip, crop, rotasi kecil, perubahan brightness, atau noise ringan. Transformasi harus tetap masuk akal untuk konteks masalah.</p>
+<blockquote>
+<p><strong>Hati-hati pada transformasi:</strong> membalik gambar angka 6 dapat mengubah makna menjadi 9. Rotasi besar pada citra medis juga bisa tidak realistis. Augmentation harus mengikuti karakteristik domain.</p>
+</blockquote>
+<h2>5.6 Early Stopping</h2>
+<p>Early stopping menghentikan training ketika performa validation tidak membaik selama beberapa epoch. Simpan checkpoint terbaik, bukan hanya model dari epoch terakhir.</p>
+<h2>Checkpoint Bab 5</h2>
+<ol>
+<li>Apa perbedaan overfitting dan underfitting?</li>
+<li>Mengapa data augmentation hanya diterapkan pada training data?</li>
+<li>Apa manfaat menyimpan model dengan validation loss terbaik?</li>
+</ol>
+<h2>Latihan Bab 5 - Rencana Mengurangi Overfitting</h2>
+<p><strong>Tujuan:</strong> menyusun intervensi bertahap untuk model yang menghafal data training.</p>
+<p><strong>Tingkat kesulitan:</strong> Menengah</p>
+<p>Gunakan skenario berikut:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Training accuracy: 99%
+Validation accuracy: 72%
+</code></pre></div>
+<p>Kerjakan:</p>
+<ol>
+<li>Susun urutan tiga eksperimen dari yang paling murah.</li>
+<li>Tentukan metrik yang diamati dan kriteria keberhasilan.</li>
+<li>Jelaskan mengapa mengubah banyak hal sekaligus membuat eksperimen sulit dianalisis.</li>
+</ol>
+<p><strong>Hasil yang dikumpulkan:</strong> rencana eksperimen berurutan lengkap dengan hipotesis dan metrik.</p>
+<hr>
+
