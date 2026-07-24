@@ -1,0 +1,522 @@
+{
+  "scenarios": [
+    {
+      "id": "DL-P-1",
+      "title": "Definisi masalah",
+      "instruction": "<p>Lakukan tahap: <strong>Definisi masalah</strong></p><p>Tentukan pengguna, tujuan prediksi, kelas, dan dampak kesalahan</p>",
+      "hints": [
+        "Fokus pada definisi masalah terlebih dahulu."
+      ]
+    },
+    {
+      "id": "DL-P-2",
+      "title": "Audit data",
+      "instruction": "<p>Lakukan tahap: <strong>Audit data</strong></p><p>Periksa jumlah data, duplikat, kualitas gambar, label, dan ketidakseimbangan kelas</p>",
+      "hints": [
+        "Fokus pada audit data terlebih dahulu."
+      ]
+    },
+    {
+      "id": "DL-P-3",
+      "title": "Split data",
+      "instruction": "<p>Lakukan tahap: <strong>Split data</strong></p><p>Buat training, validation, dan test tanpa kebocoran</p>",
+      "hints": [
+        "Fokus pada split data terlebih dahulu."
+      ]
+    },
+    {
+      "id": "DL-P-4",
+      "title": "Baseline",
+      "instruction": "<p>Lakukan tahap: <strong>Baseline</strong></p><p>Bangun CNN kecil atau transfer learning sederhana</p>",
+      "hints": [
+        "Fokus pada baseline terlebih dahulu."
+      ]
+    },
+    {
+      "id": "DL-P-5",
+      "title": "Eksperimen",
+      "instruction": "<p>Lakukan tahap: <strong>Eksperimen</strong></p><p>Ubah satu faktor setiap kali dan catat hasil</p>",
+      "hints": [
+        "Fokus pada eksperimen terlebih dahulu."
+      ]
+    },
+    {
+      "id": "DL-P-6",
+      "title": "Evaluasi",
+      "instruction": "<p>Lakukan tahap: <strong>Evaluasi</strong></p><p>Gunakan metrik, confusion matrix, dan analisis error</p>",
+      "hints": [
+        "Fokus pada evaluasi terlebih dahulu."
+      ]
+    },
+    {
+      "id": "DL-P-7",
+      "title": "Kesimpulan",
+      "instruction": "<p>Lakukan tahap: <strong>Kesimpulan</strong></p><p>Jelaskan keterbatasan dan langkah pengembangan</p>",
+      "hints": [
+        "Fokus pada kesimpulan terlebih dahulu."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "id": "DL-Q-1",
+      "text": "Istilah *deep* pada deep learning terutama mengacu pada ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "ukuran dataset"
+        },
+        {
+          "id": "B",
+          "text": "jumlah lapisan pemrosesan"
+        },
+        {
+          "id": "C",
+          "text": "panjang kode"
+        },
+        {
+          "id": "D",
+          "text": "jenis komputer"
+        }
+      ],
+      "correctOption": "B"
+    },
+    {
+      "id": "DL-Q-2",
+      "text": "Komponen yang dipelajari langsung selama training adalah ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "batch size"
+        },
+        {
+          "id": "B",
+          "text": "learning rate"
+        },
+        {
+          "id": "C",
+          "text": "weight dan bias"
+        },
+        {
+          "id": "D",
+          "text": "jumlah epoch"
+        }
+      ],
+      "correctOption": "C"
+    },
+    {
+      "id": "DL-Q-3",
+      "text": "Activation function dibutuhkan terutama untuk ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "menambah data"
+        },
+        {
+          "id": "B",
+          "text": "memberi non-linearitas"
+        },
+        {
+          "id": "C",
+          "text": "membagi dataset"
+        },
+        {
+          "id": "D",
+          "text": "menyimpan checkpoint"
+        }
+      ],
+      "correctOption": "B"
+    },
+    {
+      "id": "DL-Q-4",
+      "text": "Fungsi utama loss adalah ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "mengukur kesalahan prediksi"
+        },
+        {
+          "id": "B",
+          "text": "memperbesar input"
+        },
+        {
+          "id": "C",
+          "text": "memilih batch"
+        },
+        {
+          "id": "D",
+          "text": "menghapus noise"
+        }
+      ],
+      "correctOption": "A"
+    },
+    {
+      "id": "DL-Q-5",
+      "text": "Backpropagation digunakan untuk ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "membagi data"
+        },
+        {
+          "id": "B",
+          "text": "menghitung gradient"
+        },
+        {
+          "id": "C",
+          "text": "melakukan augmentation"
+        },
+        {
+          "id": "D",
+          "text": "menambah kelas"
+        }
+      ],
+      "correctOption": "B"
+    },
+    {
+      "id": "DL-Q-6",
+      "text": "Learning rate terlalu besar sering menyebabkan ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "loss tidak stabil"
+        },
+        {
+          "id": "B",
+          "text": "parameter tidak berubah sama sekali"
+        },
+        {
+          "id": "C",
+          "text": "dataset bertambah"
+        },
+        {
+          "id": "D",
+          "text": "output selalu satu kelas karena softmax"
+        }
+      ],
+      "correctOption": "A"
+    },
+    {
+      "id": "DL-Q-7",
+      "text": "Training accuracy sangat tinggi tetapi validation accuracy rendah adalah tanda ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "underfitting"
+        },
+        {
+          "id": "B",
+          "text": "overfitting"
+        },
+        {
+          "id": "C",
+          "text": "data augmentation"
+        },
+        {
+          "id": "D",
+          "text": "normalisasi"
+        }
+      ],
+      "correctOption": "B"
+    },
+    {
+      "id": "DL-Q-8",
+      "text": "Dropout bekerja dengan cara ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "menghapus label"
+        },
+        {
+          "id": "B",
+          "text": "menonaktifkan neuron secara acak saat training"
+        },
+        {
+          "id": "C",
+          "text": "memperbesar gambar"
+        },
+        {
+          "id": "D",
+          "text": "mengganti optimizer"
+        }
+      ],
+      "correctOption": "B"
+    },
+    {
+      "id": "DL-Q-9",
+      "text": "CNN efektif untuk gambar karena ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "mengabaikan posisi piksel"
+        },
+        {
+          "id": "B",
+          "text": "memakai filter lokal dan weight sharing"
+        },
+        {
+          "id": "C",
+          "text": "selalu memiliki parameter paling banyak"
+        },
+        {
+          "id": "D",
+          "text": "tidak memerlukan data"
+        }
+      ],
+      "correctOption": "B"
+    },
+    {
+      "id": "DL-Q-10",
+      "text": "Pooling biasanya digunakan untuk ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "memperbesar resolusi"
+        },
+        {
+          "id": "B",
+          "text": "mengurangi ukuran feature map"
+        },
+        {
+          "id": "C",
+          "text": "menambah kelas"
+        },
+        {
+          "id": "D",
+          "text": "menghitung loss"
+        }
+      ],
+      "correctOption": "B"
+    },
+    {
+      "id": "DL-Q-11",
+      "text": "Transfer learning berarti ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "memindahkan file dataset"
+        },
+        {
+          "id": "B",
+          "text": "memakai pengetahuan model pralatih"
+        },
+        {
+          "id": "C",
+          "text": "mengganti bahasa pemrograman"
+        },
+        {
+          "id": "D",
+          "text": "menghapus semua weight"
+        }
+      ],
+      "correctOption": "B"
+    },
+    {
+      "id": "DL-Q-12",
+      "text": "Hidden state pada RNN berfungsi sebagai ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "ringkasan konteks sebelumnya"
+        },
+        {
+          "id": "B",
+          "text": "label tambahan"
+        },
+        {
+          "id": "C",
+          "text": "loss function"
+        },
+        {
+          "id": "D",
+          "text": "jenis optimizer"
+        }
+      ],
+      "correctOption": "A"
+    },
+    {
+      "id": "DL-Q-13",
+      "text": "Self-attention membantu setiap token ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "menghapus token lain"
+        },
+        {
+          "id": "B",
+          "text": "mempertimbangkan token lain secara langsung"
+        },
+        {
+          "id": "C",
+          "text": "selalu fokus pada token terdekat"
+        },
+        {
+          "id": "D",
+          "text": "menjadi gambar"
+        }
+      ],
+      "correctOption": "B"
+    },
+    {
+      "id": "DL-Q-14",
+      "text": "Positional encoding dibutuhkan karena ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "attention tidak otomatis mengetahui urutan"
+        },
+        {
+          "id": "B",
+          "text": "embedding terlalu kecil"
+        },
+        {
+          "id": "C",
+          "text": "optimizer tidak mengenal token"
+        },
+        {
+          "id": "D",
+          "text": "loss tidak memiliki gradient"
+        }
+      ],
+      "correctOption": "A"
+    },
+    {
+      "id": "DL-Q-15",
+      "text": "Test set sebaiknya digunakan ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "untuk update weight"
+        },
+        {
+          "id": "B",
+          "text": "berulang kali memilih hyperparameter"
+        },
+        {
+          "id": "C",
+          "text": "untuk evaluasi akhir"
+        },
+        {
+          "id": "D",
+          "text": "sebagai augmentation"
+        }
+      ],
+      "correctOption": "C"
+    },
+    {
+      "id": "DL-Q-16",
+      "text": "Recall penting ketika ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "false negative mahal"
+        },
+        {
+          "id": "B",
+          "text": "false positive satu-satunya masalah"
+        },
+        {
+          "id": "C",
+          "text": "semua kelas seimbang pasti"
+        },
+        {
+          "id": "D",
+          "text": "tidak ada label"
+        }
+      ],
+      "correctOption": "A"
+    },
+    {
+      "id": "DL-Q-17",
+      "text": "Data leakage terjadi ketika ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "training lambat"
+        },
+        {
+          "id": "B",
+          "text": "informasi test masuk ke proses training"
+        },
+        {
+          "id": "C",
+          "text": "batch size kecil"
+        },
+        {
+          "id": "D",
+          "text": "model disimpan"
+        }
+      ],
+      "correctOption": "B"
+    },
+    {
+      "id": "DL-Q-18",
+      "text": "Tes overfit batch kecil berguna untuk ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "mengecek apakah model dan pipeline bisa belajar"
+        },
+        {
+          "id": "B",
+          "text": "mengukur performa final"
+        },
+        {
+          "id": "C",
+          "text": "membuat dataset lebih besar"
+        },
+        {
+          "id": "D",
+          "text": "menghapus gradient"
+        }
+      ],
+      "correctOption": "A"
+    },
+    {
+      "id": "DL-Q-19",
+      "text": "Model terbaik untuk produk nyata selalu ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "model terbesar"
+        },
+        {
+          "id": "B",
+          "text": "model paling baru"
+        },
+        {
+          "id": "C",
+          "text": "model dengan kompromi kualitas, biaya, dan latency yang tepat"
+        },
+        {
+          "id": "D",
+          "text": "model dengan epoch terbanyak"
+        }
+      ],
+      "correctOption": "C"
+    },
+    {
+      "id": "DL-Q-20",
+      "text": "Eksperimen yang baik sebaiknya ...",
+      "options": [
+        {
+          "id": "A",
+          "text": "mengubah semua hal sekaligus"
+        },
+        {
+          "id": "B",
+          "text": "tidak mencatat konfigurasi"
+        },
+        {
+          "id": "C",
+          "text": "mengubah satu faktor utama setiap kali"
+        },
+        {
+          "id": "D",
+          "text": "hanya melihat training accuracy"
+        }
+      ],
+      "correctOption": "C"
+    }
+  ]
+}
