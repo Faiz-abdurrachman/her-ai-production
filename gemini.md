@@ -158,3 +158,13 @@ Pada halaman modul (`materi.html`), tombol hamburger menu menumpuk dengan teks b
 - Menggunakan deklarasi `!important` secara taktis pada elemen `.lesson-detail-page .lesson-topbar` untuk memaksakan pemakaian struktur `grid-template-areas` yang sejajar dengan layout utama dashboard.
 - Menyembunyikan *scrollbar* default pada elemen `.lesson-tabs` menggunakan sintaks pseudo-element `::-webkit-scrollbar { display: none; }` untuk pengalaman *swipe* horizontal yang elegan.
 - Semua masalah UI visual pada perangkat *mobile* berhasil diperbaiki.
+
+## 15. Bug Konten: Teks Heading "Kuis Python" Masih Hardcoded di Halaman Kuis Modul Lain
+**Deskripsi:**
+Pada saat melakukan *UI Audit* Desktop di halaman Kuis (contoh: UI/UX), ditemukan bahwa judul besar halaman (`<h1>`) dan sub-judul (`<h2>`) masih bertuliskan "Kuis Python", meskipun deskripsi paragrafnya sudah dinetralkan pada perbaikan sebelumnya. Selain itu, tombol kembali (back) di halaman Diskusi juga bertuliskan "Kuis Python".
+**Penyebab:**
+- Script `fix_html_shells.js` pada perbaikan Bug 13 sebelumnya hanya menyasar paragraf deskripsi dan *alt-text* gambar, dan luput untuk melakukan pencarian pada elemen-elemen *heading* dan navigasi.
+**Solusi:**
+- Membuat script tambahan `fix_kuis_titles.js` yang secara spesifik memindai direktori *frontend* (termasuk modul Deep Learning, UI/UX, Data Engineering, dll).
+- Melakukan penggantian masal secara *Regex* untuk mengubah string "Kuis Python" menjadi "Kuis Modul" pada semua file `kuis.html` dan `diskusi.html`.
+- Melakukan verifikasi *render* ulang untuk memastikan judul halaman berubah menjadi generik dan relevan untuk semua modul non-Python.
