@@ -13028,3 +13028,72 @@
     align-items: center !important;
     justify-content: center !important;
 }
+
+
+/* Phase 2: Mobile UI Polish for Lesson Topbar & Tabs */
+@media (max-width: 920px) {
+    .lesson-detail-page .fellow-main {
+        padding-top: 24px;
+    }
+
+    .lesson-detail-page .lesson-topbar {
+        position: relative;
+        display: grid !important;
+        grid-template-areas:
+            "empty bell avatar"
+            "breadcrumb breadcrumb breadcrumb"
+            "search search search";
+        grid-template-columns: 1fr 46px 46px;
+        gap: 16px 12px;
+        margin-bottom: 20px;
+    }
+
+    .lesson-detail-page .lesson-breadcrumb {
+        grid-area: breadcrumb !important;
+        min-height: 0;
+        padding-top: 6px;
+    }
+
+    .lesson-detail-page .lesson-topbar .fellow-actions {
+        display: contents !important;
+    }
+
+    .lesson-detail-page .lesson-topbar .fellow-search {
+        grid-area: search !important;
+        min-height: 48px;
+        padding: 0 14px;
+        align-items: center;
+        background: #fff;
+        border: 1px solid #dfe3ed;
+        border-radius: 12px;
+        box-shadow: 0 12px 28px rgba(170, 52, 104, 0.05);
+        color: #737c95;
+        cursor: text;
+        display: flex;
+        font-size: 0.95rem;
+    }
+
+    .lesson-detail-page .lesson-topbar .fellow-icon-button {
+        grid-area: bell !important;
+        display: inline-flex;
+    }
+
+    .lesson-detail-page .lesson-topbar .fellow-user-button {
+        grid-area: avatar !important;
+        min-width: 0;
+    }
+    
+    .lesson-detail-page .lesson-topbar .fellow-user-button span:not(.avatar-img),
+    .lesson-detail-page .lesson-topbar .fellow-user-button > i {
+        display: none !important;
+    }
+
+    .lesson-tabs::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .lesson-tabs {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+}
