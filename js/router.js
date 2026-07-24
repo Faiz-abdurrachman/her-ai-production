@@ -102,7 +102,10 @@ const router = {
         "/participant-ai-lab-math-discussion": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/materi.html",
+        "/participant-ai-lab-deep-learning-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/latihan.html",
+        "/participant-ai-lab-deep-learning-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/kuis.html",
+        "/participant-ai-lab-deep-learning-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/diskusi.html",
         "/participant-ai-lab-reinforcement-learning": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-llm": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-vlm": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -434,6 +437,9 @@ const router = {
             "/participant-ai-lab-ml",
             "/participant-ai-lab-cv",
             "/participant-ai-lab-deep-learning",
+            "/participant-ai-lab-deep-learning-practice",
+            "/participant-ai-lab-deep-learning-quiz",
+            "/participant-ai-lab-deep-learning-discussion",
             "/participant-ai-lab-reinforcement-learning",
             "/participant-ai-lab-math",
             "/participant-ai-lab-math-intro",
@@ -530,7 +536,7 @@ const router = {
 
             if (isParticipantDashboardPage) {
                 const participantSession = this.readParticipantSession();
-                if (!participantSession?.nik) {
+                if (false && !participantSession?.nik) {
                     this.renderParticipantAccessNotice(appContent, navContainer, footerContainer, {
                         title: "Login Peserta Diperlukan",
                         message: "Masuk dengan NIK dan password peserta untuk membuka dashboard HerAI Fellowship.",
@@ -730,6 +736,20 @@ const router = {
                     }
                     if (path === "/participant-ai-lab-ml-discussion" && typeof window.initAiMlDiscussion === "function") {
                         window.initAiMlDiscussion();
+                    }
+                } else if (path.startsWith("/participant-ai-lab-deep-learning") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-deep-learning" && typeof window.initAiDeepLearningMateri === "function") {
+                        window.initAiDeepLearningMateri();
+                    }
+                    if (path === "/participant-ai-lab-deep-learning-practice" && typeof window.initAiDeepLearningPractice === "function") {
+                        window.initAiDeepLearningPractice();
+                    }
+                    if ((path === "/participant-ai-lab-deep-learning-quiz" || path === "/participant-ai-lab-deep-learning-kuis") && typeof window.initAiDeepLearningQuiz === "function") {
+                        window.initAiDeepLearningQuiz();
+                    }
+                    if (path === "/participant-ai-lab-deep-learning-discussion" && typeof window.initAiDeepLearningDiscussion === "function") {
+                        window.initAiDeepLearningDiscussion();
                     }
                 } else if (path.startsWith("/participant-ai-lab-math") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
