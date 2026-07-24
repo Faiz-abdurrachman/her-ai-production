@@ -388,7 +388,7 @@ const CHAPTERS = [
     const PRACTICES = [
     {
         "id": "PRACTICE-1",
-        "prompt": "**Tujuan:** melatih kemampuan memilih apakah suatu masalah memerlukan deep learning.\\n\\n**Tingkat kesulitan:** Dasar\\n\\nGunakan tiga kasus berikut:\\n\\n1. Prediksi kelulusan dari 500 baris data tabular.\n2. Klasifikasi 100.000 gambar produk.\n3. Deteksi spam dari 2.000 email.\\n\\nUntuk setiap kasus:\\n\\n- Tuliskan kandidat model awal yang paling sederhana.\n- Jelaskan alasan pemilihannya.\n- Jelaskan kapan deep learning baru layak dicoba.\n- Tuliskan risiko penggunaan deep learning.\\n\\n**Hasil yang dikumpulkan:** tabel berisi kasus, pendekatan awal, alasan, dan risiko penggunaan deep learning.",
+        "prompt": "**Tujuan:** melatih kemampuan memilih apakah suatu masalah memerlukan deep learning.\n\n**Tingkat kesulitan:** Dasar\n\nGunakan tiga kasus berikut:\n\n1. Prediksi kelulusan dari 500 baris data tabular.\n2. Klasifikasi 100.000 gambar produk.\n3. Deteksi spam dari 2.000 email.\n\nUntuk setiap kasus:\n\n- Tuliskan kandidat model awal yang paling sederhana.\n- Jelaskan alasan pemilihannya.\n- Jelaskan kapan deep learning baru layak dicoba.\n- Tuliskan risiko penggunaan deep learning.\n\n**Hasil yang dikumpulkan:** tabel berisi kasus, pendekatan awal, alasan, dan risiko penggunaan deep learning.",
         "fields": [
             [
                 "step",
@@ -399,7 +399,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-2",
-        "prompt": "**Tujuan:** mengenali bentuk tensor dan jumlah parameter pada neural network sederhana.\\n\\n**Tingkat kesulitan:** Dasar\\n\\nGunakan arsitektur berikut:\\n\\n```text\nInput 20 fitur\n→ Hidden layer 16 neuron\n→ Hidden layer 8 neuron\n→ Output 3 kelas\n```\\n\\nKerjakan hal berikut:\\n\\n1. Hitung jumlah parameter pada setiap layer.\n2. Tentukan activation function yang masuk akal untuk hidden dan output layer.\n3. Jelaskan bentuk output untuk satu sampel.\\n\\n**Hasil yang dikumpulkan:** perhitungan parameter, pilihan activation function, dan penjelasan bentuk output.",
+        "prompt": "**Tujuan:** mengenali bentuk tensor dan jumlah parameter pada neural network sederhana.\n\n**Tingkat kesulitan:** Dasar\n\nGunakan arsitektur berikut:\n\n```text\nInput 20 fitur\n→ Hidden layer 16 neuron\n→ Hidden layer 8 neuron\n→ Output 3 kelas\n```\n\nKerjakan hal berikut:\n\n1. Hitung jumlah parameter pada setiap layer.\n2. Tentukan activation function yang masuk akal untuk hidden dan output layer.\n3. Jelaskan bentuk output untuk satu sampel.\n\n**Hasil yang dikumpulkan:** perhitungan parameter, pilihan activation function, dan penjelasan bentuk output.",
         "fields": [
             [
                 "step",
@@ -410,7 +410,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-3",
-        "prompt": "**Tujuan:** melihat hubungan antara prediksi, loss, dan pembaruan parameter.\\n\\n**Tingkat kesulitan:** Dasar\\n\\nGunakan nilai berikut:\\n\\n```text\nx = 2\nw = 0.5\nb = 0\ntarget y = 3\n```\\n\\nKerjakan:\\n\\n1. Hitung prediksi linear `y_hat = x × w + b`.\n2. Hitung squared error `(y_hat - y)²`.\n3. Ubah `w` menjadi `1.0`, kemudian hitung kembali prediksi dan loss.\n4. Jelaskan perubahan mana yang membuat prediksi lebih dekat dengan target.\\n\\n**Hasil yang dikumpulkan:** perhitungan dua percobaan dan kesimpulan singkat.",
+        "prompt": "**Tujuan:** melihat hubungan antara prediksi, loss, dan pembaruan parameter.\n\n**Tingkat kesulitan:** Dasar\n\nGunakan nilai berikut:\n\n```text\nx = 2\nw = 0.5\nb = 0\ntarget y = 3\n```\n\nKerjakan:\n\n1. Hitung prediksi linear `y_hat = x × w + b`.\n2. Hitung squared error `(y_hat - y)²`.\n3. Ubah `w` menjadi `1.0`, kemudian hitung kembali prediksi dan loss.\n4. Jelaskan perubahan mana yang membuat prediksi lebih dekat dengan target.\n\n**Hasil yang dikumpulkan:** perhitungan dua percobaan dan kesimpulan singkat.",
         "fields": [
             [
                 "step",
@@ -421,7 +421,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-4",
-        "prompt": "**Tujuan:** membaca pola loss dan accuracy untuk menentukan tindakan berikutnya.\\n\\n**Tingkat kesulitan:** Menengah\\n\\nAnalisis tiga skenario berikut:\\n\\n1. Training loss dan validation loss sama-sama turun.\n2. Training loss turun, tetapi validation loss naik.\n3. Training loss dan validation loss sama-sama datar.\\n\\nUntuk setiap skenario:\\n\\n- Jelaskan diagnosis yang paling mungkin.\n- Tuliskan dua tindakan yang dapat dicoba.\\n\\n**Hasil yang dikumpulkan:** tabel diagnosis dan tindakan untuk setiap skenario.",
+        "prompt": "**Tujuan:** membaca pola loss dan accuracy untuk menentukan tindakan berikutnya.\n\n**Tingkat kesulitan:** Menengah\n\nAnalisis tiga skenario berikut:\n\n1. Training loss dan validation loss sama-sama turun.\n2. Training loss turun, tetapi validation loss naik.\n3. Training loss dan validation loss sama-sama datar.\n\nUntuk setiap skenario:\n\n- Jelaskan diagnosis yang paling mungkin.\n- Tuliskan dua tindakan yang dapat dicoba.\n\n**Hasil yang dikumpulkan:** tabel diagnosis dan tindakan untuk setiap skenario.",
         "fields": [
             [
                 "step",
@@ -432,7 +432,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-5",
-        "prompt": "**Tujuan:** menyusun intervensi bertahap untuk model yang menghafal data training.\\n\\n**Tingkat kesulitan:** Menengah\\n\\nGunakan skenario berikut:\\n\\n```text\nTraining accuracy: 99%\nValidation accuracy: 72%\n```\\n\\nKerjakan:\\n\\n1. Susun urutan tiga eksperimen dari yang paling murah.\n2. Tentukan metrik yang diamati dan kriteria keberhasilan.\n3. Jelaskan mengapa mengubah banyak hal sekaligus membuat eksperimen sulit dianalisis.\\n\\n**Hasil yang dikumpulkan:** rencana eksperimen berurutan lengkap dengan hipotesis dan metrik.",
+        "prompt": "**Tujuan:** menyusun intervensi bertahap untuk model yang menghafal data training.\n\n**Tingkat kesulitan:** Menengah\n\nGunakan skenario berikut:\n\n```text\nTraining accuracy: 99%\nValidation accuracy: 72%\n```\n\nKerjakan:\n\n1. Susun urutan tiga eksperimen dari yang paling murah.\n2. Tentukan metrik yang diamati dan kriteria keberhasilan.\n3. Jelaskan mengapa mengubah banyak hal sekaligus membuat eksperimen sulit dianalisis.\n\n**Hasil yang dikumpulkan:** rencana eksperimen berurutan lengkap dengan hipotesis dan metrik.",
         "fields": [
             [
                 "step",
@@ -443,7 +443,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-6",
-        "prompt": "**Tujuan:** menyusun CNN kecil yang sesuai dengan ukuran data dan jumlah kelas.\\n\\n**Tingkat kesulitan:** Menengah\\n\\nGunakan kebutuhan berikut:\\n\\n```text\nInput: gambar RGB 128 × 128\nJumlah kelas: 5\n```\\n\\nKerjakan:\\n\\n1. Rancang dua blok convolution dan satu output layer.\n2. Tuliskan bentuk output setelah setiap tahap secara kasar.\n3. Tambahkan satu strategi regularisasi.\n4. Jelaskan alasan desain tersebut.\\n\\n**Hasil yang dikumpulkan:** diagram arsitektur, alasan desain, dan estimasi perubahan bentuk tensor.",
+        "prompt": "**Tujuan:** menyusun CNN kecil yang sesuai dengan ukuran data dan jumlah kelas.\n\n**Tingkat kesulitan:** Menengah\n\nGunakan kebutuhan berikut:\n\n```text\nInput: gambar RGB 128 × 128\nJumlah kelas: 5\n```\n\nKerjakan:\n\n1. Rancang dua blok convolution dan satu output layer.\n2. Tuliskan bentuk output setelah setiap tahap secara kasar.\n3. Tambahkan satu strategi regularisasi.\n4. Jelaskan alasan desain tersebut.\n\n**Hasil yang dikumpulkan:** diagram arsitektur, alasan desain, dan estimasi perubahan bentuk tensor.",
         "fields": [
             [
                 "step",
@@ -454,7 +454,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-7",
-        "prompt": "**Tujuan:** mengenali input-output pada masalah berurutan.\\n\\n**Tingkat kesulitan:** Dasar\\n\\nGunakan tiga kasus berikut:\\n\\n1. Sentiment analysis.\n2. Prediksi suhu harian.\n3. Named entity recognition.\\n\\nUntuk setiap kasus:\\n\\n- Tentukan bentuk input dan output.\n- Tentukan apakah masalahnya many-to-one atau many-to-many.\n- Jelaskan satu risiko preprocessing yang dapat merusak urutan.\\n\\n**Hasil yang dikumpulkan:** tabel kasus, bentuk sequence, tipe mapping, dan risiko preprocessing.",
+        "prompt": "**Tujuan:** mengenali input-output pada masalah berurutan.\n\n**Tingkat kesulitan:** Dasar\n\nGunakan tiga kasus berikut:\n\n1. Sentiment analysis.\n2. Prediksi suhu harian.\n3. Named entity recognition.\n\nUntuk setiap kasus:\n\n- Tentukan bentuk input dan output.\n- Tentukan apakah masalahnya many-to-one atau many-to-many.\n- Jelaskan satu risiko preprocessing yang dapat merusak urutan.\n\n**Hasil yang dikumpulkan:** tabel kasus, bentuk sequence, tipe mapping, dan risiko preprocessing.",
         "fields": [
             [
                 "step",
@@ -465,7 +465,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-8",
-        "prompt": "**Tujuan:** mengomunikasikan ide self-attention menggunakan bahasa nonteknis.\\n\\n**Tingkat kesulitan:** Menengah\\n\\nGunakan kalimat berikut atau buat contoh serupa:\\n\\n> “Rina memberi buku kepada Sari karena ia lulus.”\\n\\nKerjakan:\\n\\n1. Jelaskan token mana yang perlu saling memperhatikan untuk memahami kata “ia”.\n2. Tuliskan penjelasan self-attention dalam maksimal 150 kata.\\n\\n**Hasil yang dikumpulkan:** penjelasan maksimal 150 kata yang dapat dipahami pemula.",
+        "prompt": "**Tujuan:** mengomunikasikan ide self-attention menggunakan bahasa nonteknis.\n\n**Tingkat kesulitan:** Menengah\n\nGunakan kalimat berikut atau buat contoh serupa:\n\n> “Rina memberi buku kepada Sari karena ia lulus.”\n\nKerjakan:\n\n1. Jelaskan token mana yang perlu saling memperhatikan untuk memahami kata “ia”.\n2. Tuliskan penjelasan self-attention dalam maksimal 150 kata.\n\n**Hasil yang dikumpulkan:** penjelasan maksimal 150 kata yang dapat dipahami pemula.",
         "fields": [
             [
                 "step",
@@ -476,7 +476,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-9",
-        "prompt": "**Tujuan:** memilih metrik berdasarkan dampak kesalahan.\\n\\n**Tingkat kesulitan:** Menengah\\n\\nBandingkan dua kasus berikut:\\n\\n1. Deteksi penyakit berisiko tinggi.\n2. Penyaringan komentar spam.\\n\\nUntuk masing-masing kasus:\\n\\n- Jelaskan dampak false positive.\n- Jelaskan dampak false negative.\n- Pilih metrik utama dan metrik pendamping.\n- Jelaskan mengapa accuracy saja mungkin menyesatkan.\\n\\n**Hasil yang dikumpulkan:** analisis dampak kesalahan dan rekomendasi metrik.",
+        "prompt": "**Tujuan:** memilih metrik berdasarkan dampak kesalahan.\n\n**Tingkat kesulitan:** Menengah\n\nBandingkan dua kasus berikut:\n\n1. Deteksi penyakit berisiko tinggi.\n2. Penyaringan komentar spam.\n\nUntuk masing-masing kasus:\n\n- Jelaskan dampak false positive.\n- Jelaskan dampak false negative.\n- Pilih metrik utama dan metrik pendamping.\n- Jelaskan mengapa accuracy saja mungkin menyesatkan.\n\n**Hasil yang dikumpulkan:** analisis dampak kesalahan dan rekomendasi metrik.",
         "fields": [
             [
                 "step",

@@ -364,7 +364,7 @@ const CHAPTERS = [
     const PRACTICES = [
     {
         "id": "PRACTICE-1",
-        "prompt": "Pilih satu skenario berikut: penghemat energi, robot gudang, rekomendasi materi belajar, atau penjadwalan mesin. Tuliskan:\\n\\n- keputusan apa yang perlu dibuat,\n- feedback apa yang mungkin tersedia,\n- konsekuensi jangka panjangnya,\n- risiko jika agent melakukan eksplorasi tanpa batas.",
+        "prompt": "Pilih satu skenario berikut: penghemat energi, robot gudang, rekomendasi materi belajar, atau penjadwalan mesin. Tuliskan:\n\n- keputusan apa yang perlu dibuat,\n- feedback apa yang mungkin tersedia,\n- konsekuensi jangka panjangnya,\n- risiko jika agent melakukan eksplorasi tanpa batas.",
         "fields": [
             [
                 "step",
@@ -375,7 +375,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-2",
-        "prompt": "Rancang MDP sederhana untuk sistem pengatur lampu lalu lintas. Tentukan:\\n\\n- state,\n- observation yang tersedia,\n- action,\n- reward,\n- kondisi akhir atau horizon,\n- risiko jika state terlalu sederhana.",
+        "prompt": "Rancang MDP sederhana untuk sistem pengatur lampu lalu lintas. Tentukan:\n\n- state,\n- observation yang tersedia,\n- action,\n- reward,\n- kondisi akhir atau horizon,\n- risiko jika state terlalu sederhana.",
         "fields": [
             [
                 "step",
@@ -408,7 +408,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-5",
-        "prompt": "Jalankan simulasi bandit dengan `epsilon` 0, 0.01, 0.1, dan 0.3. Bandingkan:\\n\\n- total reward,\n- frekuensi action terbaik dipilih,\n- kestabilan hasil antar-run.",
+        "prompt": "Jalankan simulasi bandit dengan `epsilon` 0, 0.01, 0.1, dan 0.3. Bandingkan:\n\n- total reward,\n- frekuensi action terbaik dipilih,\n- kestabilan hasil antar-run.",
         "fields": [
             [
                 "step",
@@ -419,7 +419,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-6",
-        "prompt": "Gunakan episode reward `[-1, -1, 5]` dengan `gamma = 0.9`.\\n\\n1. Hitung return Monte Carlo dari setiap langkah.\n2. Misalkan `V(S_t)=1.0` dan `V(S_(t+1))=2.0`. Hitung TD target dan TD error untuk reward `-1`.",
+        "prompt": "Gunakan episode reward `[-1, -1, 5]` dengan `gamma = 0.9`.\n\n1. Hitung return Monte Carlo dari setiap langkah.\n2. Misalkan `V(S_t)=1.0` dan `V(S_(t+1))=2.0`. Hitung TD target dan TD error untuk reward `-1`.",
         "fields": [
             [
                 "step",
@@ -430,7 +430,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-7",
-        "prompt": "Buat satu contoh transisi:\\n\\n```text\nQ(s,a)=2.0, reward=1, gamma=0.9, max Q(s',.)=4.0, alpha=0.1\n```\\n\\nHitung:\\n\\n1. target Q-learning,\n2. TD error,\n3. Q-value baru.",
+        "prompt": "Buat satu contoh transisi:\n\n```text\nQ(s,a)=2.0, reward=1, gamma=0.9, max Q(s',.)=4.0, alpha=0.1\n```\n\nHitung:\n\n1. target Q-learning,\n2. TD error,\n3. Q-value baru.",
         "fields": [
             [
                 "step",
@@ -441,7 +441,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-8",
-        "prompt": "Gambarkan arsitektur DQN untuk observation berukuran 8 fitur dan 4 action. Tentukan:\\n\\n- ukuran input,\n- dua hidden layer,\n- ukuran output,\n- informasi yang disimpan di replay buffer.",
+        "prompt": "Gambarkan arsitektur DQN untuk observation berukuran 8 fitur dan 4 action. Tentukan:\n\n- ukuran input,\n- dua hidden layer,\n- ukuran output,\n- informasi yang disimpan di replay buffer.",
         "fields": [
             [
                 "step",
@@ -474,7 +474,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-11",
-        "prompt": "Rancang tabel eksperimen untuk membandingkan tiga nilai epsilon decay. Sertakan:\\n\\n- variabel yang dikontrol,\n- jumlah seed,\n- metrik utama,\n- metrik keselamatan,\n- aturan memilih konfigurasi terbaik.",
+        "prompt": "Rancang tabel eksperimen untuk membandingkan tiga nilai epsilon decay. Sertakan:\n\n- variabel yang dikontrol,\n- jumlah seed,\n- metrik utama,\n- metrik keselamatan,\n- aturan memilih konfigurasi terbaik.",
         "fields": [
             [
                 "step",

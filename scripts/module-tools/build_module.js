@@ -80,7 +80,7 @@ function buildModule(mdPath, baseId, categoryFolder, moduleFolder) {
             if (paragraphs.length > 0) {
                 practices.push({
                     id: "PRACTICE-" + (idx + 1),
-                    prompt: paragraphs.join('\\n\\n'),
+                    prompt: paragraphs.join('\n\n'),
                     fields: [["step", "Langkah Pengerjaan"]],
                     guide: "Tuliskan hasil analisis Anda."
                 });
