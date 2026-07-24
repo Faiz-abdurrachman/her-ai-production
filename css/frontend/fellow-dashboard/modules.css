@@ -11257,6 +11257,7 @@
 .ai-python-practice-page .python-practice-form,
 .ai-python-quiz-page #aiPythonQuizForm ,
 .ai-python-quiz-page #aiDeepLearningQuizForm ,
+.ai-python-quiz-page #aiBioinformaticsQuizForm ,
 .ai-python-quiz-page #aiAgenticAiQuizForm ,
 .ai-python-quiz-page #aiMultimodalLlmQuizForm ,
 .ai-python-quiz-page #aiVlmQuizForm ,
@@ -11377,6 +11378,7 @@
 
 .ai-python-practice-page #aiPythonPracticeList,
 .ai-python-practice-page #aiDeepLearningPracticeList,
+.ai-python-practice-page #aiBioinformaticsPracticeList,
 .ai-python-practice-page #aiAgenticAiPracticeList,
 .ai-python-practice-page #aiMultimodalLlmPracticeList,
 .ai-python-practice-page #aiVlmPracticeList,
@@ -11386,6 +11388,7 @@
 .ai-python-practice-page #aiReinforcementLearningPracticeList,
 .ai-python-quiz-page #aiPythonQuizList ,
 .ai-python-quiz-page #aiDeepLearningQuizList ,
+.ai-python-quiz-page #aiBioinformaticsQuizList ,
 .ai-python-quiz-page #aiAgenticAiQuizList ,
 .ai-python-quiz-page #aiMultimodalLlmQuizList ,
 .ai-python-quiz-page #aiVlmQuizList ,
@@ -11399,6 +11402,7 @@
 .ai-python-practice-page .reasoning-practice-card,
 .ai-python-quiz-page #aiPythonQuizList > article ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article ,
+.ai-python-quiz-page #aiBioinformaticsQuizList > article ,
 .ai-python-quiz-page #aiAgenticAiQuizList > article ,
 .ai-python-quiz-page #aiMultimodalLlmQuizList > article ,
 .ai-python-quiz-page #aiVlmQuizList > article ,
@@ -11418,6 +11422,7 @@
 .ai-python-practice-page .reasoning-practice-card[hidden],
 .ai-python-quiz-page #aiPythonQuizList > article[hidden] ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article[hidden] ,
+.ai-python-quiz-page #aiBioinformaticsQuizList > article[hidden] ,
 .ai-python-quiz-page #aiAgenticAiQuizList > article[hidden] ,
 .ai-python-quiz-page #aiMultimodalLlmQuizList > article[hidden] ,
 .ai-python-quiz-page #aiVlmQuizList > article[hidden] ,
@@ -11666,6 +11671,7 @@
 
 .ai-python-quiz-page #aiPythonQuizNavigator ,
 .ai-python-quiz-page #aiDeepLearningQuizNavigator ,
+.ai-python-quiz-page #aiBioinformaticsQuizNavigator ,
 .ai-python-quiz-page #aiAgenticAiQuizNavigator ,
 .ai-python-quiz-page #aiMultimodalLlmQuizNavigator ,
 .ai-python-quiz-page #aiVlmQuizNavigator ,
@@ -11679,6 +11685,7 @@
 
 .ai-python-quiz-page #aiPythonQuizList > article > span ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article > span ,
+.ai-python-quiz-page #aiBioinformaticsQuizList > article > span ,
 .ai-python-quiz-page #aiAgenticAiQuizList > article > span ,
 .ai-python-quiz-page #aiMultimodalLlmQuizList > article > span ,
 .ai-python-quiz-page #aiVlmQuizList > article > span ,
@@ -11696,6 +11703,7 @@
 
 .ai-python-quiz-page #aiPythonQuizList > article > small ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article > small ,
+.ai-python-quiz-page #aiBioinformaticsQuizList > article > small ,
 .ai-python-quiz-page #aiAgenticAiQuizList > article > small ,
 .ai-python-quiz-page #aiMultimodalLlmQuizList > article > small ,
 .ai-python-quiz-page #aiVlmQuizList > article > small ,
@@ -11712,6 +11720,7 @@
 
 .ai-python-quiz-page #aiPythonQuizList > article > h3 ,
 .ai-python-quiz-page #aiDeepLearningQuizList > article > h3 ,
+.ai-python-quiz-page #aiBioinformaticsQuizList > article > h3 ,
 .ai-python-quiz-page #aiAgenticAiQuizList > article > h3 ,
 .ai-python-quiz-page #aiMultimodalLlmQuizList > article > h3 ,
 .ai-python-quiz-page #aiVlmQuizList > article > h3 ,
@@ -11950,6 +11959,7 @@
 
 .ai-python-quiz-page #aiPythonQuizForm.is-locked .reasoning-scaffold-options label ,
 .ai-python-quiz-page #aiDeepLearningQuizForm.is-locked .reasoning-scaffold-options label ,
+.ai-python-quiz-page #aiBioinformaticsQuizForm.is-locked .reasoning-scaffold-options label ,
 .ai-python-quiz-page #aiAgenticAiQuizForm.is-locked .reasoning-scaffold-options label ,
 .ai-python-quiz-page #aiMultimodalLlmQuizForm.is-locked .reasoning-scaffold-options label ,
 .ai-python-quiz-page #aiVlmQuizForm.is-locked .reasoning-scaffold-options label ,
@@ -12619,6 +12629,7 @@
     .ai-python-practice-page .reasoning-practice-card,
     .ai-python-quiz-page #aiPythonQuizList > article ,
     .ai-python-quiz-page #aiDeepLearningQuizList > article ,
+    .ai-python-quiz-page #aiBioinformaticsQuizList > article ,
     .ai-python-quiz-page #aiAgenticAiQuizList > article ,
     .ai-python-quiz-page #aiMultimodalLlmQuizList > article ,
     .ai-python-quiz-page #aiVlmQuizList > article ,
@@ -12816,6 +12827,7 @@
 
 /* FORCING QUIZ NAVIGATOR FIX FOR DEEP LEARNING */
 .ai-python-quiz-page #aiDeepLearningQuizNavigator ,
+.ai-python-quiz-page #aiBioinformaticsQuizNavigator ,
 .ai-python-quiz-page #aiAgenticAiQuizNavigator ,
 .ai-python-quiz-page #aiMultimodalLlmQuizNavigator ,
 .ai-python-quiz-page #aiVlmQuizNavigator ,
@@ -12829,6 +12841,7 @@
     justify-content: flex-start !important;
 }
 .ai-python-quiz-page #aiDeepLearningQuizNavigator button ,
+.ai-python-quiz-page #aiBioinformaticsQuizNavigator button ,
 .ai-python-quiz-page #aiAgenticAiQuizNavigator button ,
 .ai-python-quiz-page #aiMultimodalLlmQuizNavigator button ,
 .ai-python-quiz-page #aiVlmQuizNavigator button ,

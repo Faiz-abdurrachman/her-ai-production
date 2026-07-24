@@ -127,7 +127,10 @@ const router = {
         "/participant-ai-lab-agentic-ai-practice": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/agentic-ai/latihan.html",
         "/participant-ai-lab-agentic-ai-quiz": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/agentic-ai/kuis.html",
         "/participant-ai-lab-agentic-ai-discussion": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/agentic-ai/diskusi.html",
-        "/participant-ai-lab-bioinformatics": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-bioinformatics": "/pages/frontend/fellow-dashboard/data-engineering-domain/bioinformatics/materi.html",
+        "/participant-ai-lab-bioinformatics-practice": "/pages/frontend/fellow-dashboard/data-engineering-domain/bioinformatics/latihan.html",
+        "/participant-ai-lab-bioinformatics-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domain/bioinformatics/kuis.html",
+        "/participant-ai-lab-bioinformatics-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domain/bioinformatics/diskusi.html",
         "/participant-ai-lab-data-engineering": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-data-science": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-infrastructure": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -780,6 +783,21 @@ const router = {
                     if (path === "/participant-ai-lab-deep-learning-discussion" && typeof window.initAiDeepLearningDiscussion === "function") {
                         window.initAiDeepLearningDiscussion();
                     }
+                } else if (path.startsWith("/participant-ai-lab-bioinformatics") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-bioinformatics" && typeof window.initAiBioinformaticsMateri === "function") {
+                        window.initAiBioinformaticsMateri();
+                    }
+                    if (path === "/participant-ai-lab-bioinformatics-practice" && typeof window.initAiBioinformaticsPractice === "function") {
+                        window.initAiBioinformaticsPractice();
+                    }
+                    if (path === "/participant-ai-lab-bioinformatics-quiz" && typeof window.initAiBioinformaticsQuiz === "function") {
+                        window.initAiBioinformaticsQuiz();
+                    }
+                    if (path === "/participant-ai-lab-bioinformatics-discussion" && typeof window.initAiBioinformaticsDiscussion === "function") {
+                        window.initAiBioinformaticsDiscussion();
+                    }
+
                 } else if (path.startsWith("/participant-ai-lab-agentic-ai") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
                     if (path === "/participant-ai-lab-agentic-ai" && typeof window.initAiAgenticAiMateri === "function") {
