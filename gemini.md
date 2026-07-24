@@ -145,3 +145,16 @@ Template HTML pembungkus (shell) untuk `latihan.html`, `kuis.html`, dan `diskusi
 **Solusi:**
 - Menulis script `fix_html_shells.js` yang mengeksekusi *Regular Expression (Regex)* ke ratusan file HTML Latihan, Kuis, dan Diskusi di dalam direktori `fellow-dashboard`.
 - Mengubah teks bernuansa "Python" tersebut menjadi copywriting yang netral, premium, dan relevan dengan kegiatan edukasi (contoh: "Uji pemahaman Anda melalui simulasi interaktif").
+
+## 14. Bug Visual: Tata Letak Topbar dan Tab Modul Berantakan di Layar HP (Mobile View)
+**Deskripsi:**
+Pada halaman modul (`materi.html`), tombol hamburger menu menumpuk dengan teks breadcrumbs. Selain itu, baris aksi (bar pencarian, ikon notifikasi, dan avatar profil) tergencet menjadi satu baris yang menumpuk. Terakhir, deretan tab navigasi (Materi, Latihan, Kuis, Diskusi) memunculkan scrollbar bawaan sistem operasi yang tebal dan merusak estetika.
+**Penyebab:**
+- `.lesson-topbar` tidak memiliki deklarasi `display: grid` untuk tampilan mobile, sehingga elemen-elemen di dalamnya bertumpuk akibat gaya `position: absolute` dari tombol hamburger menu.
+- `.fellow-actions` (pembungkus search, bel, avatar) tidak memiliki aturan `display: contents;` sehingga gagal membaur ke dalam *grid layout* utama.
+- Deklarasi CSS dari file lain (`ai-lab-lesson.css`) melakukan *override* dengan tingkat spesifisitas (*specificity*) yang sama, membuat `.lesson-topbar` tetap menggunakan `display: flex`.
+**Solusi:**
+- Menulis ulang dan menambahkan *Media Query* baru di `modules.css` khusus untuk layar `< 920px`.
+- Menggunakan deklarasi `!important` secara taktis pada elemen `.lesson-detail-page .lesson-topbar` untuk memaksakan pemakaian struktur `grid-template-areas` yang sejajar dengan layout utama dashboard.
+- Menyembunyikan *scrollbar* default pada elemen `.lesson-tabs` menggunakan sintaks pseudo-element `::-webkit-scrollbar { display: none; }` untuk pengalaman *swipe* horizontal yang elegan.
+- Semua masalah UI visual pada perangkat *mobile* berhasil diperbaiki.
