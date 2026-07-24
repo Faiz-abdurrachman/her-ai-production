@@ -37,6 +37,9 @@ if (routerJs.includes(actualRouteKey) && routerJs.includes('under-development.ht
     
     // Insert into publicRoutes
     routerJs = routerJs.replace(/const publicRoutes = \[/, `const publicRoutes = [\n            "${actualRouteKey}",\n            "${actualRouteKey}-practice",\n            "${actualRouteKey}-quiz",\n            "${actualRouteKey}-discussion",`);
+    
+    // Insert into participantDashboardPages
+    routerJs = routerJs.replace(/const participantDashboardPages = \[/, `const participantDashboardPages = [\n            "${actualRouteKey}",\n            "${actualRouteKey}-practice",\n            "${actualRouteKey}-quiz",\n            "${actualRouteKey}-discussion",`);
 }
 
 if (!routerJs.includes(`path.startsWith("${actualRouteKey}")`)) {

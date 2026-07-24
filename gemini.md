@@ -108,3 +108,12 @@ URL statis (href) pada HTML Katalog Modul untuk LLM tertulis `#/participant-ai-l
 **Solusi:**
 - Memperbaiki HTML `modules.html` agar `href` pada card modul LLM sinkron menjadi `#/participant-ai-lab-large-language-model`.
 - Sebagai best practice, untuk modul-modul selanjutnya (seperti VLM, Multimodal LLM), ID yang di-pass saat proses *generate* dipastikan 100% konsisten dengan URL yang sudah terdefinisi di UI Katalog.
+
+## 10. Bug Visual: Navbar Publik Bocor ke Halaman Dashboard Modul
+**Deskripsi:**
+Pada halaman modul LLM (`#/participant-ai-lab-large-language-model`), navbar utama publik (landing page) muncul dan tumpang tindih dengan layout dashboard fellow.
+**Penyebab:**
+Logika *layouting* di `js/router.js` mengandalkan array `participantDashboardPages` untuk menentukan apakah halaman tersebut harus menggunakan layout Dashboard (dengan *sidebar* kiri) atau layout Publik. Script `register_module.js` sebelumnya tidak menyisipkan rute baru yang di-*generate* ke dalam array tersebut, sehingga router menganggapnya sebagai halaman publik.
+**Solusi:**
+- Memodifikasi `scripts/module-tools/register_module.js` agar secara otomatis menginjeksi rute baru (dan sub-rutenya seperti `-practice`, `-quiz`) ke dalam list `participantDashboardPages`.
+- Menambahkan secara manual rute yang sudah terlanjur di-*generate* sebelumnya ke dalam `participantDashboardPages` di `js/router.js`.

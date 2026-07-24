@@ -401,6 +401,19 @@ const router = {
         const isMessagingPage = path === "/messaging";
         const isParticipantLoginPage = path === "/profile" || path === "/participant-login";
         const participantDashboardPages = [
+            "/participant-ai-lab-large-language-model",
+            "/participant-ai-lab-large-language-model-practice",
+            "/participant-ai-lab-large-language-model-quiz",
+            "/participant-ai-lab-large-language-model-discussion",
+            "/participant-ai-lab-vlm-practice",
+            "/participant-ai-lab-vlm-quiz",
+            "/participant-ai-lab-vlm-discussion",
+            "/participant-ai-lab-multimodal-llm-practice",
+            "/participant-ai-lab-multimodal-llm-quiz",
+            "/participant-ai-lab-multimodal-llm-discussion",
+            "/participant-ai-lab-agentic-ai-practice",
+            "/participant-ai-lab-agentic-ai-quiz",
+            "/participant-ai-lab-agentic-ai-discussion",
             "/participant-dashboard",
             "/participant-modules",
             "/participant-ai-fundamentals",
