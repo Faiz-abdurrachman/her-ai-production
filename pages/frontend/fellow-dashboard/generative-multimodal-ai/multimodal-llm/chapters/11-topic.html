@@ -1,0 +1,165 @@
+<h1>Hallucination, Bias, Privacy, dan Safety</h1>
+<h2>11.1 Risiko Bertambah Bersama Modalitas</h2>
+<p>Setiap modalitas menambah permukaan risiko:</p>
+<ul>
+<li>gambar dapat memuat wajah atau data sensitif,</li>
+<li>audio dapat memuat identitas suara,</li>
+<li>video dapat merekam orang yang tidak memberi consent,</li>
+<li>dokumen dapat memuat nomor identitas,</li>
+<li>metadata dapat mengungkap lokasi,</li>
+<li>teks di gambar dapat membawa prompt injection.</li>
+</ul>
+<h2>11.2 Hallucination Multimodal</h2>
+<p>Model dapat:</p>
+<ul>
+<li>menyebut objek yang tidak ada,</li>
+<li>membaca angka yang salah,</li>
+<li>mengarang isi bagian audio yang tidak jelas,</li>
+<li>menyatakan urutan waktu yang tidak didukung,</li>
+<li>menggabungkan informasi dari kasus berbeda,</li>
+<li>menciptakan citation palsu.</li>
+</ul>
+<p>Mitigasi:</p>
+<ul>
+<li>evidence requirement,</li>
+<li>abstention,</li>
+<li>tool verification,</li>
+<li>multi-pass checking,</li>
+<li>schema validation,</li>
+<li>human review.</li>
+</ul>
+<h2>11.3 Bias</h2>
+<p>Bias dapat berasal dari:</p>
+<ul>
+<li>distribusi data tidak seimbang,</li>
+<li>kualitas sensor berbeda,</li>
+<li>caption stereotip,</li>
+<li>performa ASR tidak merata,</li>
+<li>variasi bahasa dan aksen,</li>
+<li>label annotator,</li>
+<li>pemilihan benchmark.</li>
+</ul>
+<p>Evaluasi per slice diperlukan sebelum deployment.</p>
+<h2>11.4 Privasi dan Consent</h2>
+<p>Pertanyaan privacy by design:</p>
+<ol>
+<li>Apakah data benar-benar diperlukan?</li>
+<li>Apakah pengguna memahami tujuan penggunaan?</li>
+<li>Berapa lama data disimpan?</li>
+<li>Siapa yang dapat mengakses?</li>
+<li>Apakah data dipakai untuk training?</li>
+<li>Bagaimana permintaan penghapusan diproses?</li>
+<li>Apakah data dikirim ke pihak ketiga?</li>
+</ol>
+<h2>11.5 Data Minimization</h2>
+<p>Kumpulkan dan kirim hanya bagian yang diperlukan. Contoh:</p>
+<ul>
+<li>crop region relevan,</li>
+<li>blur wajah yang tidak diperlukan,</li>
+<li>potong audio ke segmen penting,</li>
+<li>hapus metadata lokasi,</li>
+<li>redaksi field sensitif,</li>
+<li>retrieval hanya dokumen yang berhak diakses.</li>
+</ul>
+<h2>11.6 Multimodal Prompt Injection</h2>
+<p>Serangan dapat berada pada:</p>
+<ul>
+<li>teks dokumen,</li>
+<li>tulisan di gambar,</li>
+<li>subtitle video,</li>
+<li>ucapan audio,</li>
+<li>QR code,</li>
+<li>metadata file.</li>
+</ul>
+<p>Contoh berbahaya: dokumen berisi instruksi untuk mengirim data ke alamat tertentu. Sistem harus menganggapnya sebagai konten, bukan perintah tepercaya.</p>
+<h2>11.7 Tool Safety</h2>
+<p>Tool call perlu:</p>
+<ul>
+<li>allowlist fungsi,</li>
+<li>schema parameter,</li>
+<li>autentikasi terpisah,</li>
+<li>least privilege,</li>
+<li>sandbox,</li>
+<li>timeout,</li>
+<li>rate limit,</li>
+<li>confirmation untuk aksi berisiko,</li>
+<li>audit log.</li>
+</ul>
+<p>MLLM tidak boleh langsung mengeksekusi tindakan penting hanya karena melihat instruksi pada input.</p>
+<h2>11.8 Content Safety</h2>
+<p>Input atau output dapat mengandung konten berbahaya. Sistem perlu mempertimbangkan:</p>
+<ul>
+<li>moderation per modalitas,</li>
+<li>kebijakan akses,</li>
+<li>age-appropriate design,</li>
+<li>escalation,</li>
+<li>safe completion,</li>
+<li>penyimpanan bukti yang aman.</li>
+</ul>
+<h2>11.9 High-Stakes Use</h2>
+<p>Untuk kesehatan, hukum, keselamatan, kredit, pendidikan formal, atau keputusan kerja:</p>
+<ul>
+<li>batasi peran model,</li>
+<li>tampilkan sumber,</li>
+<li>wajibkan review ahli,</li>
+<li>dokumentasikan limitation,</li>
+<li>sediakan jalur banding atau koreksi,</li>
+<li>monitor dampak nyata.</li>
+</ul>
+<h2>11.10 Threat Model Sederhana</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aset</th>
+<th>Ancaman</th>
+<th>Dampak</th>
+<th>Mitigasi</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dokumen rahasia</td>
+<td>Retrieval tanpa filter akses</td>
+<td>Kebocoran data</td>
+<td>ACL dan authorization filter</td>
+</tr>
+<tr>
+<td>Tool operasi</td>
+<td>Prompt injection visual</td>
+<td>Aksi tidak sah</td>
+<td>Tool allowlist dan confirmation</td>
+</tr>
+<tr>
+<td>Audio pengguna</td>
+<td>Penyimpanan berlebihan</td>
+<td>Risiko privasi</td>
+<td>Retensi minimum dan enkripsi</td>
+</tr>
+<tr>
+<td>Model output</td>
+<td>Hallucination</td>
+<td>Keputusan salah</td>
+<td>Evidence, abstention, review</td>
+</tr>
+</tbody></table></div>
+<h2>11.11 Responsible Use Checklist</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Tujuan penggunaan jelas.</li>
+<li><input disabled="" type="checkbox"> Modalitas yang dikumpulkan benar-benar diperlukan.</li>
+<li><input disabled="" type="checkbox"> Consent dan dasar akses tersedia.</li>
+<li><input disabled="" type="checkbox"> Data sensitif diminimalkan.</li>
+<li><input disabled="" type="checkbox"> Retrieved content diperlakukan sebagai data tidak tepercaya.</li>
+<li><input disabled="" type="checkbox"> Tool permission mengikuti least privilege.</li>
+<li><input disabled="" type="checkbox"> Output menyertakan evidence dan uncertainty.</li>
+<li><input disabled="" type="checkbox"> Human review tersedia untuk high-risk case.</li>
+<li><input disabled="" type="checkbox"> Incident response dan rollback tersedia.</li>
+</ul>
+<h2>Checkpoint Bab 11</h2>
+<ol>
+<li>Mengapa prompt injection multimodal lebih sulit dideteksi?</li>
+<li>Apa contoh data minimization untuk audio atau gambar?</li>
+<li>Apa kontrol minimum sebelum model boleh memanggil tool berisiko?</li>
+</ol>
+<h2>Latihan Bab 11 - Threat Modeling</h2>
+<p>Buat threat model untuk mini projectmu. Identifikasi aset, aktor, ancaman, dampak, likelihood, dan mitigasi. Sertakan minimal satu ancaman dari setiap modalitas.</p>
+<hr>
+

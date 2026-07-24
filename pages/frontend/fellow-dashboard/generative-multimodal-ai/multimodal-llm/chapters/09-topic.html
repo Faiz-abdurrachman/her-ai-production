@@ -1,0 +1,129 @@
+<h1>Adaptasi dan Fine-Tuning</h1>
+<h2>9.1 Urutan Perbaikan</h2>
+<p>Sebelum fine-tuning, periksa:</p>
+<ol>
+<li>preprocessing,</li>
+<li>kualitas prompt,</li>
+<li>retrieval,</li>
+<li>tool selection,</li>
+<li>schema validation,</li>
+<li>model yang lebih sesuai,</li>
+<li>baru kemudian fine-tuning.</li>
+</ol>
+<p>Fine-tuning tidak dapat memperbaiki input yang salah atau target yang tidak jelas.</p>
+<h2>9.2 Prompt dan Processor Adaptation</h2>
+<p>Perbaikan paling ringan:</p>
+<ul>
+<li>template prompt,</li>
+<li>input labeling,</li>
+<li>image tiling,</li>
+<li>audio segmentation,</li>
+<li>keyframe selection,</li>
+<li>output schema,</li>
+<li>few-shot examples.</li>
+</ul>
+<p>Sering kali peningkatan terbesar berasal dari pipeline, bukan parameter model.</p>
+<h2>9.3 Linear Probe dan Task Head</h2>
+<p>Encoder dibekukan, lalu head kecil dilatih untuk tugas tertentu. Cocok ketika output berupa kelas atau skor, bukan generasi bebas.</p>
+<p>Kelebihan:</p>
+<ul>
+<li>murah,</li>
+<li>cepat,</li>
+<li>mudah dibandingkan dengan baseline.</li>
+</ul>
+<h2>9.4 Melatih Projector atau Connector</h2>
+<p>LLM dan encoder dapat dibekukan, sementara connector dilatih agar representasi domain masuk ke ruang LLM.</p>
+<p>Cocok ketika:</p>
+<ul>
+<li>encoder dan LLM sudah kuat,</li>
+<li>domain memiliki visual atau audio khusus,</li>
+<li>resource terbatas.</li>
+</ul>
+<h2>9.5 Adapter dan LoRA</h2>
+<p>Adapter dan LoRA menambahkan parameter kecil. Dapat diterapkan pada:</p>
+<ul>
+<li>language model,</li>
+<li>vision encoder,</li>
+<li>audio encoder,</li>
+<li>cross-attention,</li>
+<li>connector.</li>
+</ul>
+<p>Pilih target module berdasarkan sumber error. Jangan otomatis memasang LoRA di semua lapisan.</p>
+<h2>9.6 Full Fine-Tuning</h2>
+<p>Full fine-tuning mengubah banyak atau seluruh parameter. Biaya dan risiko lebih tinggi:</p>
+<ul>
+<li>kebutuhan GPU besar,</li>
+<li>catastrophic forgetting,</li>
+<li>overfitting,</li>
+<li>perubahan safety behavior,</li>
+<li>sulit rollback.</li>
+</ul>
+<p>Gunakan hanya ketika ada data, komputasi, dan evaluasi yang memadai.</p>
+<h2>9.7 Curriculum Training</h2>
+<p>Training dapat dimulai dari tugas sederhana ke kompleks:</p>
+<ol>
+<li>alignment pasangan,</li>
+<li>single-modality instruction,</li>
+<li>two-modality reasoning,</li>
+<li>multi-image atau multi-page,</li>
+<li>konflik modalitas,</li>
+<li>tool use,</li>
+<li>domain-specific cases.</li>
+</ol>
+<h2>9.8 Menyusun Dataset Adaptasi</h2>
+<p>Dataset harus mencakup:</p>
+<ul>
+<li>penggunaan umum,</li>
+<li>kasus sulit,</li>
+<li>variasi kualitas input,</li>
+<li>data dari perangkat berbeda,</li>
+<li>missing modality,</li>
+<li>konflik sumber,</li>
+<li>abstention,</li>
+<li>safety cases.</li>
+</ul>
+<h2>9.9 Split dan Leakage</h2>
+<p>Gunakan group split berdasarkan:</p>
+<ul>
+<li>pengguna,</li>
+<li>asset,</li>
+<li>dokumen,</li>
+<li>video,</li>
+<li>sesi,</li>
+<li>lokasi,</li>
+<li>waktu.</li>
+</ul>
+<p>Contoh: semua frame dari video yang sama harus berada pada split yang sama.</p>
+<h2>9.10 Experiment Tracking</h2>
+<p>Catat:</p>
+<ul>
+<li>model dan processor version,</li>
+<li>dataset version,</li>
+<li>prompt template,</li>
+<li>augmentation,</li>
+<li>learning rate,</li>
+<li>trainable module,</li>
+<li>seed,</li>
+<li>metric per modality,</li>
+<li>latency dan memory,</li>
+<li>failure examples.</li>
+</ul>
+<h2>9.11 Acceptance Criteria</h2>
+<p>Sebelum training, tetapkan target:</p>
+<ul>
+<li>grounding meningkat,</li>
+<li>false claim turun,</li>
+<li>performa tidak turun pada modalitas lain,</li>
+<li>latency tetap dalam batas,</li>
+<li>safety regression tidak terjadi.</li>
+</ul>
+<h2>Checkpoint Bab 9</h2>
+<ol>
+<li>Mengapa fine-tuning bukan langkah pertama?</li>
+<li>Kapan melatih connector menjadi pilihan yang masuk akal?</li>
+<li>Mengapa metric harus dilihat per modalitas setelah adaptasi?</li>
+</ol>
+<h2>Latihan Bab 9 - Rencana Eksperimen</h2>
+<p>Susun tiga eksperimen bertahap untuk memperbaiki use case pilihanmu. Setiap eksperimen harus memiliki hipotesis, perubahan, metrik, biaya, dan kriteria berhenti.</p>
+<hr>
+

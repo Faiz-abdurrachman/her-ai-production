@@ -1,0 +1,281 @@
+<h1>Mini Project: Asisten Analisis Gambar</h1>
+<h2>13.1 Tujuan Project</h2>
+<p>Peserta membuat prototipe asisten yang menerima gambar dan pertanyaan, lalu menghasilkan jawaban terstruktur yang:</p>
+<ul>
+<li>berdasarkan bukti visual,</li>
+<li>menandai ketidakpastian,</li>
+<li>memiliki format yang dapat divalidasi,</li>
+<li>dievaluasi pada golden set,</li>
+<li>memiliki dokumentasi risiko.</li>
+</ul>
+<h2>13.2 Pilihan Tema</h2>
+<p>Pilih satu tema:</p>
+<ol>
+<li>analisis rak produk,</li>
+<li>pembaca informasi pada struk atau formulir sederhana,</li>
+<li>tutor diagram pembelajaran,</li>
+<li>pemeriksa kondisi fasilitas non-kritis,</li>
+<li>katalog visual dengan pencarian teks.</li>
+</ol>
+<p>Hindari penggunaan yang langsung menentukan diagnosis, identitas, kelayakan kredit, atau keputusan keselamatan.</p>
+<h2>13.3 User Story</h2>
+<p>Contoh:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Sebagai petugas inventaris,
+saya ingin mengunggah foto rak dan mendapatkan daftar kategori barang yang terlihat,
+agar saya dapat melakukan pemeriksaan awal sebelum verifikasi manual.
+</code></pre></div>
+<h2>13.4 Ruang Lingkup Minimum</h2>
+<p>Project minimal memiliki:</p>
+<ul>
+<li>input gambar yang tervalidasi,</li>
+<li>satu prompt template,</li>
+<li>output JSON,</li>
+<li>penanganan error,</li>
+<li>field ketidakpastian,</li>
+<li>golden set minimal 30 contoh,</li>
+<li>evaluation script atau spreadsheet hasil,</li>
+<li>dokumentasi keterbatasan.</li>
+</ul>
+<h2>13.5 Schema Output</h2>
+<p>Contoh untuk inventaris visual:</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;summary&quot;: &quot;Rak berisi beberapa produk kemasan.&quot;,
+  &quot;objects&quot;: [
+    {
+      &quot;label&quot;: &quot;botol&quot;,
+      &quot;estimated_count&quot;: 6,
+      &quot;evidence&quot;: &quot;terlihat pada dua baris rak bagian tengah&quot;,
+      &quot;uncertain&quot;: true
+    }
+  ],
+  &quot;visible_text&quot;: [],
+  &quot;limitations&quot;: [
+    &quot;sebagian objek tertutup&quot;,
+    &quot;resolusi tidak cukup untuk membaca label&quot;
+  ]
+}
+</code></pre></div>
+<h2>13.6 Struktur Folder</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">vlm-mini-project/
+├── README.md
+├── requirements.txt
+├── data/
+│   ├── images/
+│   └── golden_set.jsonl
+├── src/
+│   ├── preprocess.py
+│   ├── prompt.py
+│   ├── inference.py
+│   ├── schema.py
+│   └── evaluate.py
+├── reports/
+│   ├── metrics.json
+│   └── error_analysis.md
+└── tests/
+    └── test_schema.py
+</code></pre></div>
+<h2>13.7 Contoh Kontrak Inference</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+
+@dataclass
+class InferenceRequest:
+    image_path: Path
+    question: str
+
+
+@dataclass
+class InferenceResponse:
+    answer: str
+    evidence: list[str]
+    limitations: list[str]
+    uncertain: bool
+    raw: dict[str, Any]
+
+
+def run_inference(request: InferenceRequest) -&gt; InferenceResponse:
+    &quot;&quot;&quot;Hubungkan fungsi ini ke model yang dipilih peserta.&quot;&quot;&quot;
+    raise NotImplementedError
+</code></pre></div>
+<h2>13.8 Preprocessing</h2>
+<p>Peserta harus mendokumentasikan:</p>
+<ul>
+<li>format yang diterima,</li>
+<li>ukuran maksimum,</li>
+<li>cara memperbaiki orientasi,</li>
+<li>resize atau crop,</li>
+<li>apakah metadata dihapus,</li>
+<li>bagaimana file sementara dihapus.</li>
+</ul>
+<h2>13.9 Prompt Template</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">Anda membantu analisis visual awal.
+Jawab hanya berdasarkan gambar.
+Jangan menebak identitas, lokasi, penyebab, atau informasi yang tidak terlihat.
+
+Pertanyaan pengguna:
+{question}
+
+Lakukan:
+1. Catat observasi visual yang relevan.
+2. Jawab pertanyaan menggunakan observasi tersebut.
+3. Tandai keterbatasan seperti blur, occlusion, atau teks kecil.
+4. Gunakan uncertain=true bila jawaban tidak dapat dipastikan.
+5. Kembalikan JSON valid sesuai schema.
+</code></pre></div>
+<h2>13.10 Golden Set</h2>
+<p>Setiap contoh minimal berisi:</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;id&quot;: &quot;sample-001&quot;,
+  &quot;image&quot;: &quot;images/sample-001.jpg&quot;,
+  &quot;question&quot;: &quot;Berapa botol yang terlihat jelas?&quot;,
+  &quot;expected&quot;: {
+    &quot;answer&quot;: &quot;4&quot;,
+    &quot;uncertain&quot;: false
+  },
+  &quot;tags&quot;: [&quot;counting&quot;, &quot;clear&quot;, &quot;indoor&quot;]
+}
+</code></pre></div>
+<p>Masukkan edge cases:</p>
+<ul>
+<li>gambar blur,</li>
+<li>objek sebagian tertutup,</li>
+<li>pertanyaan di luar gambar,</li>
+<li>teks terlalu kecil,</li>
+<li>beberapa objek mirip,</li>
+<li>gambar tanpa objek target.</li>
+</ul>
+<h2>13.11 Metrik Minimum</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Metrik</th>
+<th>Tujuan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Task accuracy</td>
+<td>Mengukur jawaban utama</td>
+</tr>
+<tr>
+<td>Hallucination rate</td>
+<td>Mengukur klaim tanpa bukti</td>
+</tr>
+<tr>
+<td>Abstention precision</td>
+<td>Mengukur ketepatan menolak</td>
+</tr>
+<tr>
+<td>Schema validity</td>
+<td>Mengukur output dapat diproses</td>
+</tr>
+<tr>
+<td>Latency p50 dan p95</td>
+<td>Mengukur pengalaman pengguna</td>
+</tr>
+<tr>
+<td>Cost per request</td>
+<td>Mengukur kelayakan operasional</td>
+</tr>
+</tbody></table></div>
+<h2>13.12 Error Analysis</h2>
+<p>Kelompokkan kegagalan:</p>
+<ul>
+<li>preprocessing,</li>
+<li>objek tidak terdeteksi,</li>
+<li>counting,</li>
+<li>OCR,</li>
+<li>hubungan spasial,</li>
+<li>prompt ambiguity,</li>
+<li>schema error,</li>
+<li>hallucination,</li>
+<li>data di luar domain.</li>
+</ul>
+<p>Untuk setiap kategori, catat contoh, frekuensi, dampak, dan tindakan perbaikan.</p>
+<h2>13.13 Tahapan Pengerjaan</h2>
+<h3>Tahap 1 - Definisi</h3>
+<ul>
+<li>pilih tema,</li>
+<li>tulis user story,</li>
+<li>tentukan batasan dan non-goals,</li>
+<li>buat schema output.</li>
+</ul>
+<h3>Tahap 2 - Data</h3>
+<ul>
+<li>siapkan minimal 30 gambar yang boleh digunakan,</li>
+<li>buat pertanyaan dan expected answer,</li>
+<li>tandai tag dan tingkat kesulitan.</li>
+</ul>
+<h3>Tahap 3 - Baseline</h3>
+<ul>
+<li>buat preprocessing sederhana,</li>
+<li>buat prompt awal,</li>
+<li>jalankan semua contoh,</li>
+<li>simpan output dan latency.</li>
+</ul>
+<h3>Tahap 4 - Perbaikan</h3>
+<ul>
+<li>analisis kegagalan,</li>
+<li>perbaiki prompt atau preprocessing,</li>
+<li>tambah validasi,</li>
+<li>bandingkan dengan baseline pada set yang sama.</li>
+</ul>
+<h3>Tahap 5 - Laporan</h3>
+<ul>
+<li>jelaskan arsitektur,</li>
+<li>tampilkan metrik,</li>
+<li>sertakan contoh berhasil dan gagal,</li>
+<li>jelaskan risiko dan batas penggunaan,</li>
+<li>tulis rekomendasi pengembangan.</li>
+</ul>
+<h2>13.14 Rubrik Penilaian</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Komponen</th>
+<th align="right">Bobot</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Definisi masalah dan scope</td>
+<td align="right">10%</td>
+</tr>
+<tr>
+<td>Kualitas data dan golden set</td>
+<td align="right">15%</td>
+</tr>
+<tr>
+<td>Desain pipeline</td>
+<td align="right">20%</td>
+</tr>
+<tr>
+<td>Prompt, schema, dan validasi</td>
+<td align="right">15%</td>
+</tr>
+<tr>
+<td>Evaluasi dan error analysis</td>
+<td align="right">20%</td>
+</tr>
+<tr>
+<td>Safety, privacy, dan dokumentasi</td>
+<td align="right">10%</td>
+</tr>
+<tr>
+<td>Presentasi dan reproducibility</td>
+<td align="right">10%</td>
+</tr>
+</tbody></table></div>
+<h2>13.15 Kriteria Selesai</h2>
+<p>Project dianggap selesai bila:</p>
+<ul>
+<li>pipeline dapat dijalankan ulang,</li>
+<li>output dapat divalidasi,</li>
+<li>metrik baseline tersedia,</li>
+<li>perubahan dibandingkan secara adil,</li>
+<li>error analysis memuat contoh nyata,</li>
+<li>batasan dan risiko ditulis dengan jelas,</li>
+<li>tidak ada data yang digunakan tanpa izin.</li>
+</ul>
+<hr>
+

@@ -1,0 +1,130 @@
+<h1>Data dan Proses Pembelajaran Multimodal</h1>
+<h2>6.1 Jenis Data</h2>
+<p>VLM dapat belajar dari beberapa bentuk data:</p>
+<ul>
+<li>pasangan gambar-caption,</li>
+<li>gambar-label,</li>
+<li>gambar-pertanyaan-jawaban,</li>
+<li>gambar dengan bounding box atau mask,</li>
+<li>dokumen dengan teks dan layout,</li>
+<li>percakapan multimodal,</li>
+<li>data sintetik yang kemudian disaring.</li>
+</ul>
+<p>Kualitas pasangan lebih penting daripada jumlah mentah. Caption yang terlalu umum tidak mengajarkan detail. Caption yang salah dapat menguatkan hubungan yang keliru.</p>
+<h2>6.2 Sumber Noise</h2>
+<p>Noise umum pada dataset multimodal:</p>
+<ul>
+<li>caption tidak sesuai gambar,</li>
+<li>duplikasi gambar,</li>
+<li>watermark atau template berulang,</li>
+<li>teks alternatif yang hanya berisi nama file,</li>
+<li>label dibuat dari metadata yang salah,</li>
+<li>gambar rusak atau sangat kecil,</li>
+<li>konten sensitif tanpa izin,</li>
+<li>bahasa dan domain tidak seimbang.</li>
+</ul>
+<h2>6.3 Data Leakage</h2>
+<p>Data leakage terjadi ketika contoh evaluasi atau turunannya masuk ke data training. Model dapat terlihat sangat baik karena pernah melihat konten yang sama.</p>
+<p>Pencegahan:</p>
+<ul>
+<li>deduplikasi berdasarkan hash dan similarity,</li>
+<li>pisahkan sumber data menurut waktu atau entitas,</li>
+<li>periksa near-duplicate,</li>
+<li>hindari membuat train-test split setelah augmentasi,</li>
+<li>dokumentasikan sumber dan versi dataset.</li>
+</ul>
+<h2>6.4 Tahap Pembelajaran</h2>
+<p>Pipeline dapat terdiri dari beberapa tahap:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">1. Pretraining vision encoder atau memakai encoder siap pakai
+2. Image-text alignment
+3. Melatih connector ke language model
+4. Multimodal instruction tuning
+5. Preference atau safety tuning
+6. Evaluasi domain dan deployment
+</code></pre></div>
+<p>Tidak semua project membutuhkan seluruh tahap. Untuk aplikasi internal dengan data terbatas, adapter atau prompt terstruktur sering lebih realistis daripada pretraining.</p>
+<h2>6.5 Data Augmentation</h2>
+<p>Augmentasi visual dapat meningkatkan generalisasi, tetapi harus mempertahankan label.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Augmentasi</th>
+<th>Risiko</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Horizontal flip</td>
+<td>Teks menjadi terbalik atau arah berubah</td>
+</tr>
+<tr>
+<td>Random crop</td>
+<td>Objek atau label penting hilang</td>
+</tr>
+<tr>
+<td>Color jitter</td>
+<td>Warna label tidak lagi valid</td>
+</tr>
+<tr>
+<td>Rotation</td>
+<td>Layout dokumen berubah</td>
+</tr>
+<tr>
+<td>Blur</td>
+<td>Teks kecil tidak terbaca</td>
+</tr>
+</tbody></table></div>
+<p>Untuk tugas membaca warna, color jitter berlebihan merusak target. Untuk OCR, flip horizontal hampir selalu tidak sesuai.</p>
+<h2>6.6 Caption dan Instruksi yang Baik</h2>
+<p>Caption berkualitas sebaiknya:</p>
+<ul>
+<li>menjelaskan objek penting,</li>
+<li>menyebut atribut yang terlihat,</li>
+<li>menghindari informasi yang tidak tampak,</li>
+<li>menggunakan bahasa yang jelas,</li>
+<li>tidak menambahkan identitas sensitif,</li>
+<li>memiliki tingkat detail yang sesuai tujuan.</li>
+</ul>
+<p>Instruksi training sebaiknya mencerminkan bentuk penggunaan sebenarnya. Bila aplikasi membutuhkan JSON, sebagian data training dan evaluasi perlu menguji format tersebut.</p>
+<h2>6.7 Dataset Card</h2>
+<p>Dataset card membantu tim memahami batasan data. Minimal memuat:</p>
+<ul>
+<li>tujuan dan ruang lingkup,</li>
+<li>sumber data dan lisensi,</li>
+<li>cara pengumpulan,</li>
+<li>bahasa dan domain,</li>
+<li>distribusi label,</li>
+<li>proses filtering,</li>
+<li>potensi bias,</li>
+<li>data sensitif,</li>
+<li>split training, validation, dan test,</li>
+<li>larangan penggunaan.</li>
+</ul>
+<h2>6.8 Contoh Validasi Data</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">from pathlib import Path
+from PIL import Image
+
+
+def validate_image(path: Path, min_size: int = 128) -&gt; list[str]:
+    issues: list[str] = []
+    try:
+        with Image.open(path) as image:
+            width, height = image.size
+            if width &lt; min_size or height &lt; min_size:
+                issues.append(&quot;resolusi terlalu kecil&quot;)
+            if image.mode not in {&quot;RGB&quot;, &quot;RGBA&quot;, &quot;L&quot;}:
+                issues.append(f&quot;mode tidak umum: {image.mode}&quot;)
+    except Exception as exc:
+        issues.append(f&quot;gagal dibuka: {exc}&quot;)
+    return issues
+</code></pre></div>
+<p>Validasi teknis belum memeriksa kecocokan caption, privasi, atau bias. Pemeriksaan kualitas memerlukan sampling dan review manusia.</p>
+<h2>Checkpoint Bab 6</h2>
+<ol>
+<li>Mengapa pasangan gambar-caption dapat mengandung noise?</li>
+<li>Berikan contoh augmentasi yang merusak label.</li>
+<li>Apa fungsi dataset card?</li>
+</ol>
+<h2>Latihan Bab 6 - Data Audit</h2>
+<p>Buat checklist audit untuk 100 pasangan gambar-caption. Sertakan aspek teknis, kesesuaian isi, privasi, duplikasi, variasi domain, dan bahasa.</p>
+<hr>
+

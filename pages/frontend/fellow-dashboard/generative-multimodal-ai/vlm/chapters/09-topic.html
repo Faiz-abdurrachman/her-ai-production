@@ -1,0 +1,119 @@
+<h1>Adaptasi dan Fine-Tuning</h1>
+<h2>9.1 Apakah Fine-Tuning Selalu Diperlukan?</h2>
+<p>Sebelum fine-tuning, periksa apakah masalah dapat diselesaikan melalui:</p>
+<ul>
+<li>preprocessing lebih baik,</li>
+<li>prompt yang lebih jelas,</li>
+<li>crop region,</li>
+<li>retrieval contoh atau metadata,</li>
+<li>output schema,</li>
+<li>post-processing,</li>
+<li>model yang lebih sesuai tugas.</li>
+</ul>
+<p>Fine-tuning berguna ketika model perlu mempelajari domain, format, label, atau perilaku yang konsisten dan tidak cukup dicapai melalui prompt.</p>
+<h2>9.2 Linear Probing</h2>
+<p>Vision encoder dibekukan, lalu classifier kecil dilatih di atas embedding.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Gambar -&gt; frozen encoder -&gt; embedding -&gt; trainable classifier
+</code></pre></div>
+<p>Kelebihan:</p>
+<ul>
+<li>murah,</li>
+<li>cepat,</li>
+<li>cocok untuk baseline klasifikasi.</li>
+</ul>
+<p>Keterbatasan:</p>
+<ul>
+<li>representasi encoder tidak berubah,</li>
+<li>kurang cocok bila domain sangat berbeda.</li>
+</ul>
+<h2>9.3 Full Fine-Tuning</h2>
+<p>Semua atau sebagian besar parameter diperbarui. Pendekatan ini dapat memberi fleksibilitas tinggi tetapi membutuhkan data, komputasi, dan kontrol eksperimen yang lebih besar.</p>
+<p>Risiko:</p>
+<ul>
+<li>overfitting,</li>
+<li>catastrophic forgetting,</li>
+<li>instabilitas training,</li>
+<li>biaya tinggi,</li>
+<li>penurunan kemampuan umum.</li>
+</ul>
+<h2>9.4 Adapter dan LoRA</h2>
+<p>Parameter-efficient fine-tuning menambahkan atau melatih sebagian kecil parameter.</p>
+<p>Kelebihan:</p>
+<ul>
+<li>lebih hemat memori,</li>
+<li>checkpoint lebih kecil,</li>
+<li>beberapa adapter dapat dipakai untuk domain berbeda,</li>
+<li>model dasar dapat tetap dibekukan.</li>
+</ul>
+<p>Pemilihan target module perlu diuji. Mengadaptasi projector saja berbeda dampaknya dengan mengadaptasi attention pada language model atau vision encoder.</p>
+<h2>9.5 Melatih Connector</h2>
+<p>Ketika vision encoder dan language model sudah tersedia, connector dapat dilatih menggunakan pasangan gambar-teks.</p>
+<p>Tahap umum:</p>
+<ol>
+<li>bekukan vision encoder dan language model,</li>
+<li>latih connector untuk menyelaraskan visual feature,</li>
+<li>lakukan instruction tuning pada data multimodal,</li>
+<li>buka sebagian parameter bila diperlukan,</li>
+<li>evaluasi kemampuan umum dan domain.</li>
+</ol>
+<h2>9.6 Multimodal Instruction Tuning</h2>
+<p>Data berisi gambar, instruksi, dan jawaban yang diharapkan.</p>
+<p>Contoh:</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;image&quot;: &quot;produk_001.jpg&quot;,
+  &quot;instruction&quot;: &quot;Sebutkan warna utama produk dan kondisi kemasannya.&quot;,
+  &quot;answer&quot;: {
+    &quot;warna&quot;: &quot;biru&quot;,
+    &quot;kondisi_kemasan&quot;: &quot;penyok ringan&quot;,
+    &quot;ketidakpastian&quot;: false
+  }
+}
+</code></pre></div>
+<p>Jawaban training harus berdasarkan gambar. Instruksi yang menyuruh menebak akan mengajarkan perilaku yang tidak aman.</p>
+<h2>9.7 Menyusun Training Set</h2>
+<p>Training set perlu mencakup:</p>
+<ul>
+<li>contoh mudah dan sulit,</li>
+<li>variasi pencahayaan dan sudut,</li>
+<li>objek tertutup sebagian,</li>
+<li>gambar berkualitas rendah,</li>
+<li>negative examples,</li>
+<li>pertanyaan yang tidak dapat dijawab,</li>
+<li>format keluaran yang benar,</li>
+<li>variasi bahasa pengguna.</li>
+</ul>
+<h2>9.8 Split yang Aman</h2>
+<p>Untuk dataset produk, jangan membagi gambar acak bila produk yang sama memiliki banyak foto. Foto produk yang sama dapat masuk train dan test sehingga skor terlalu optimistis.</p>
+<p>Pilihan split:</p>
+<ul>
+<li>berdasarkan product ID,</li>
+<li>berdasarkan lokasi,</li>
+<li>berdasarkan pengguna atau dokumen,</li>
+<li>berdasarkan periode waktu,</li>
+<li>berdasarkan sumber kamera.</li>
+</ul>
+<h2>9.9 Experiment Tracking</h2>
+<p>Catat minimal:</p>
+<ul>
+<li>model dan versi,</li>
+<li>dataset dan split,</li>
+<li>preprocessing,</li>
+<li>prompt template,</li>
+<li>parameter training,</li>
+<li>seed,</li>
+<li>checkpoint,</li>
+<li>metrik,</li>
+<li>contoh kegagalan,</li>
+<li>biaya dan waktu.</li>
+</ul>
+<p>Tanpa catatan tersebut, peningkatan sulit dibuktikan dan eksperimen sulit direproduksi.</p>
+<h2>Checkpoint Bab 9</h2>
+<ol>
+<li>Kapan linear probing cocok digunakan?</li>
+<li>Apa kelebihan adapter atau LoRA?</li>
+<li>Mengapa split acak dapat menimbulkan leakage pada dataset gambar produk?</li>
+</ol>
+<h2>Latihan Bab 9 - Rencana Adaptasi</h2>
+<p>Pilih satu domain visual. Buat tabel perbandingan prompting, linear probing, LoRA, dan full fine-tuning berdasarkan data, biaya, risiko, waktu, dan target kualitas.</p>
+<hr>
+

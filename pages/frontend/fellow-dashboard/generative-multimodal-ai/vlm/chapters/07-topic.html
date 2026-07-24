@@ -1,0 +1,106 @@
+<h1>Tugas Utama Vision Language Model</h1>
+<h2>7.1 Image-Text Retrieval</h2>
+<p>Text-to-image retrieval mencari gambar paling relevan untuk kueri teks. Image-to-text retrieval mencari caption atau dokumen yang cocok untuk gambar.</p>
+<p>Pipeline:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Offline:
+semua gambar -&gt; image encoder -&gt; embeddings -&gt; vector index
+
+Online:
+kueri teks -&gt; text encoder -&gt; query embedding
+          -&gt; similarity search -&gt; top-k images
+</code></pre></div>
+<p>Metrik umum meliputi Recall@K, Mean Reciprocal Rank, dan kualitas manual pada kueri sulit.</p>
+<h2>7.2 Image Captioning</h2>
+<p>Captioning menghasilkan deskripsi gambar. Caption yang baik perlu benar, relevan, cukup lengkap, dan tidak menambah detail palsu.</p>
+<p>Tingkat detail dapat berbeda:</p>
+<ul>
+<li>caption singkat untuk galeri,</li>
+<li>alt text untuk aksesibilitas,</li>
+<li>deskripsi objek untuk anotasi,</li>
+<li>laporan visual untuk workflow internal.</li>
+</ul>
+<p>Satu prompt tidak cocok untuk semua tujuan.</p>
+<h2>7.3 Visual Question Answering</h2>
+<p>Visual Question Answering atau VQA menjawab pertanyaan berdasarkan gambar.</p>
+<p>Contoh:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Pertanyaan: &quot;Berapa cangkir yang berada di atas meja?&quot;
+Jawaban: &quot;Dua.&quot;
+</code></pre></div>
+<p>Kesulitan VQA:</p>
+<ul>
+<li>objek kecil,</li>
+<li>occlusion,</li>
+<li>counting,</li>
+<li>hubungan spasial,</li>
+<li>pertanyaan ambigu,</li>
+<li>jawaban memerlukan pengetahuan di luar gambar.</li>
+</ul>
+<p>Sistem harus membedakan pertanyaan yang dapat dijawab dari piksel dan pertanyaan yang memerlukan data eksternal.</p>
+<h2>7.4 OCR dan Document Understanding</h2>
+<p>OCR mengubah gambar teks menjadi karakter. Document understanding menambahkan pemahaman layout, field, tabel, dan hubungan antarbagian.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Dokumen gambar
+  -&gt; deteksi orientasi
+  -&gt; OCR / visual encoder
+  -&gt; layout atau region understanding
+  -&gt; ekstraksi field
+  -&gt; validasi schema
+</code></pre></div>
+<p>Untuk angka penting seperti total pembayaran, hasil perlu divalidasi dengan aturan, misalnya jumlah subtotal, pajak, dan total.</p>
+<h2>7.5 Chart dan Diagram Understanding</h2>
+<p>Model dapat diminta membaca grafik, tetapi rentan terhadap:</p>
+<ul>
+<li>sumbu yang tidak terlihat,</li>
+<li>warna mirip,</li>
+<li>legenda kecil,</li>
+<li>nilai estimasi yang dianggap pasti,</li>
+<li>grafik tiga dimensi yang menipu,</li>
+<li>hubungan sebab-akibat yang tidak didukung.</li>
+</ul>
+<p>Prompt sebaiknya meminta model menyebutkan nilai yang dibaca, tingkat ketidakpastian, dan batas interpretasi.</p>
+<h2>7.6 Grounding dan Region</h2>
+<p>Grounding menghubungkan kata atau jawaban dengan region pada gambar. Output dapat berupa bounding box, titik, mask, atau referensi region.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">&quot;tas merah&quot; -&gt; [x_min, y_min, x_max, y_max]
+</code></pre></div>
+<p>Koordinat perlu didefinisikan dengan jelas:</p>
+<ul>
+<li>piksel absolut atau nilai 0-1,</li>
+<li>urutan sumbu,</li>
+<li>ukuran gambar setelah preprocessing,</li>
+<li>apakah box inklusif atau eksklusif.</li>
+</ul>
+<h2>7.7 Visual Reasoning</h2>
+<p>Visual reasoning menggabungkan beberapa bukti, misalnya:</p>
+<ul>
+<li>membandingkan dua objek,</li>
+<li>menentukan urutan langkah dari diagram,</li>
+<li>mengikuti jalur pada peta sederhana,</li>
+<li>menemukan perbedaan antara dua gambar,</li>
+<li>menjawab berdasarkan beberapa panel.</li>
+</ul>
+<p>Model dapat memberi alasan yang terdengar baik tetapi tidak sesuai gambar. Karena itu, evaluasi reasoning harus memeriksa jawaban dan bukti visual secara terpisah.</p>
+<h2>7.8 Multi-Image Understanding</h2>
+<p>Beberapa aplikasi membutuhkan perbandingan beberapa gambar:</p>
+<ul>
+<li>sebelum dan sesudah,</li>
+<li>halaman dokumen berurutan,</li>
+<li>beberapa sudut produk,</li>
+<li>rangkaian frame.</li>
+</ul>
+<p>Tantangan:</p>
+<ul>
+<li>model dapat mencampur objek antar gambar,</li>
+<li>urutan gambar dapat berubah,</li>
+<li>detail kecil hilang,</li>
+<li>context window cepat terpakai.</li>
+</ul>
+<p>Gunakan label eksplisit seperti <code>Gambar A</code>, <code>Gambar B</code>, dan minta output menyebut sumber setiap temuan.</p>
+<h2>Checkpoint Bab 7</h2>
+<ol>
+<li>Apa perbedaan captioning dan VQA?</li>
+<li>Mengapa document understanding tidak sama dengan OCR?</li>
+<li>Apa yang harus didefinisikan ketika model mengeluarkan koordinat?</li>
+</ol>
+<h2>Latihan Bab 7 - Task Decomposition</h2>
+<p>Pilih aplikasi pembacaan struk. Pecah menjadi tugas kecil: orientasi, OCR, deteksi field, normalisasi nilai, validasi total, dan review. Tentukan bagian yang memakai VLM dan bagian yang memakai kode deterministik.</p>
+<hr>
+

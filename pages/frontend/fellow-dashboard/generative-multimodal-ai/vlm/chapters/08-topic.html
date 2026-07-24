@@ -1,0 +1,142 @@
+<h1>Visual Prompting dan Inference</h1>
+<h2>8.1 Struktur Prompt Visual</h2>
+<p>Prompt yang baik menjelaskan tujuan dan batas bukti.</p>
+<p>Template dasar:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Tujuan:
+[apa yang harus dilakukan]
+
+Objek perhatian:
+[bagian gambar yang relevan]
+
+Aturan:
+- hanya gunakan informasi yang terlihat,
+- tulis &quot;tidak dapat ditentukan&quot; bila bukti tidak cukup,
+- jangan menebak identitas atau penyebab,
+- pisahkan observasi dan interpretasi.
+
+Format keluaran:
+[schema atau contoh]
+</code></pre></div>
+<h2>8.2 Prompt untuk Ekstraksi Terstruktur</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">Ekstrak informasi dari gambar struk ini.
+Kembalikan JSON dengan field:
+- merchant_name: string | null
+- transaction_date: string | null
+- items: array
+- subtotal: number | null
+- tax: number | null
+- total: number | null
+- uncertain_fields: array
+
+Jangan mengisi nilai yang tidak terbaca. Gunakan null.
+</code></pre></div>
+<p>JSON harus divalidasi setelah generation. Model dapat menghasilkan tipe data salah atau format tidak valid.</p>
+<h2>8.3 Few-Shot Multimodal Prompting</h2>
+<p>Beberapa sistem mendukung contoh gambar dan jawaban. Contoh membantu menjelaskan format dan label.</p>
+<p>Risiko:</p>
+<ul>
+<li>contoh terlalu sedikit,</li>
+<li>contoh tidak mewakili kondisi nyata,</li>
+<li>model meniru kesalahan contoh,</li>
+<li>contoh menggunakan data sensitif.</li>
+</ul>
+<p>Gunakan contoh yang telah dianonimkan dan mencakup kasus normal serta kasus ambigu.</p>
+<h2>8.4 Region-of-Interest</h2>
+<p>Jika gambar besar memiliki banyak detail, crop region yang relevan dapat meningkatkan fokus.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Gambar penuh -&gt; deteksi/crop area -&gt; VLM pada region -&gt; gabungkan hasil
+</code></pre></div>
+<p>Namun crop kehilangan konteks. Strategi yang lebih aman:</p>
+<ol>
+<li>analisis gambar penuh,</li>
+<li>identifikasi region kandidat,</li>
+<li>analisis crop beresolusi tinggi,</li>
+<li>cocokkan hasil dengan gambar penuh.</li>
+</ol>
+<h2>8.5 Multi-Pass Inference</h2>
+<p>Satu kali generation tidak selalu cukup. Pipeline dapat memakai beberapa tahap:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Pass 1: inventaris objek dan teks
+Pass 2: jawab pertanyaan menggunakan inventaris
+Pass 3: verifikasi klaim terhadap gambar
+Pass 4: format hasil dan tandai ketidakpastian
+</code></pre></div>
+<p>Multi-pass menambah latency dan biaya. Gunakan ketika peningkatan reliability sepadan dengan kebutuhan aplikasi.</p>
+<h2>8.6 Parameter Decoding</h2>
+<p>Untuk ekstraksi, gunakan decoding yang lebih stabil. Untuk caption kreatif, variasi dapat lebih tinggi.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Kebutuhan</th>
+<th>Arah pengaturan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ekstraksi field</td>
+<td>Temperature rendah, schema ketat</td>
+</tr>
+<tr>
+<td>Jawaban faktual visual</td>
+<td>Variasi rendah, instruksi bukti</td>
+</tr>
+<tr>
+<td>Caption kreatif</td>
+<td>Variasi lebih tinggi dengan review</td>
+</tr>
+<tr>
+<td>Klasifikasi</td>
+<td>Batasi pilihan label</td>
+</tr>
+</tbody></table></div>
+<p>Nama dan rentang parameter berbeda antar platform. Prinsipnya adalah mengontrol variasi sesuai risiko.</p>
+<h2>8.7 Validasi Output</h2>
+<p>Validasi dapat meliputi:</p>
+<ul>
+<li>parsing JSON,</li>
+<li>pengecekan enum,</li>
+<li>tipe dan rentang angka,</li>
+<li>konsistensi jumlah,</li>
+<li>panjang jawaban,</li>
+<li>larangan field sensitif,</li>
+<li>confidence atau uncertain flag,</li>
+<li>verifikasi ulang dengan model atau rule lain.</li>
+</ul>
+<p>Contoh validasi sederhana:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">from dataclasses import dataclass
+
+
+@dataclass
+class VisualCountResult:
+    label: str
+    count: int
+    uncertain: bool
+
+
+def validate_count(result: VisualCountResult) -&gt; None:
+    if result.count &lt; 0:
+        raise ValueError(&quot;count tidak boleh negatif&quot;)
+    if not result.label.strip():
+        raise ValueError(&quot;label wajib diisi&quot;)
+</code></pre></div>
+<h2>8.8 Menangani Ketidakpastian</h2>
+<p>Jangan memaksa model selalu menjawab. Sediakan keluaran seperti:</p>
+<ul>
+<li>tidak terlihat,</li>
+<li>tertutup sebagian,</li>
+<li>resolusi terlalu rendah,</li>
+<li>teks tidak terbaca,</li>
+<li>pertanyaan membutuhkan data di luar gambar,</li>
+<li>terdapat beberapa interpretasi.</li>
+</ul>
+<blockquote>
+<p><strong>Prinsip operasional:</strong> abstention yang benar lebih berguna daripada jawaban meyakinkan yang salah.</p>
+</blockquote>
+<h2>Checkpoint Bab 8</h2>
+<ol>
+<li>Apa unsur utama prompt visual yang baik?</li>
+<li>Mengapa crop dapat membantu sekaligus merugikan?</li>
+<li>Kapan multi-pass inference layak digunakan?</li>
+<li>Mengapa JSON dari model tetap perlu divalidasi?</li>
+</ol>
+<h2>Latihan Bab 8 - Prompt Benchmark</h2>
+<p>Buat tiga versi prompt untuk tugas menghitung objek kecil. Uji pada set gambar yang sama. Catat akurasi, jawaban kosong, hallucination, latency, dan panjang output.</p>
+<hr>
+

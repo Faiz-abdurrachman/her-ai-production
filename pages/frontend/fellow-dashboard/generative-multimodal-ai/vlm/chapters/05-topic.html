@@ -1,0 +1,160 @@
+<h1>Pola Arsitektur Vision Language Model</h1>
+<h2>5.1 Mengapa Ada Banyak Arsitektur?</h2>
+<p>Tugas image retrieval membutuhkan arsitektur berbeda dari sistem yang harus menghasilkan jawaban panjang. Beberapa pola mengutamakan efisiensi embedding, sementara pola lain mengutamakan interaksi detail dan kemampuan generatif.</p>
+<p>Tiga pola umum:</p>
+<ol>
+<li>dual encoder,</li>
+<li>fusion encoder atau cross-modal encoder,</li>
+<li>vision encoder yang dihubungkan ke language decoder.</li>
+</ol>
+<h2>5.2 Dual Encoder</h2>
+<p>Dual encoder menghasilkan embedding terpisah dan membandingkannya.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Image encoder ----- image vector --\
+                                  similarity
+Text encoder  ----- text vector  --/
+</code></pre></div>
+<p>Cocok untuk:</p>
+<ul>
+<li>text-to-image retrieval,</li>
+<li>image-to-text retrieval,</li>
+<li>zero-shot classification,</li>
+<li>deduplication atau clustering berbasis makna.</li>
+</ul>
+<h2>5.3 Fusion Encoder</h2>
+<p>Fusion encoder menggabungkan token visual dan token teks lebih awal atau di tengah jaringan.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">visual tokens + text tokens
+            |
+            v
+cross-modal Transformer
+            |
+            v
+classification / matching / answer head
+</code></pre></div>
+<p>Kelebihan:</p>
+<ul>
+<li>interaksi lintas modalitas lebih kaya,</li>
+<li>cocok untuk matching detail atau pertanyaan visual.</li>
+</ul>
+<p>Keterbatasan:</p>
+<ul>
+<li>pasangan gambar-teks harus diproses bersama,</li>
+<li>kurang efisien untuk retrieval pada jutaan gambar.</li>
+</ul>
+<h2>5.4 Vision Encoder ke Language Model</h2>
+<p>Pola generatif modern sering menghubungkan vision encoder dengan language model.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Gambar
+  -&gt; vision encoder
+  -&gt; visual features
+  -&gt; connector
+  -&gt; visual tokens
+  -&gt; language model
+  -&gt; jawaban teks
+</code></pre></div>
+<p>Beberapa komponen dapat dibekukan pada tahap awal agar training lebih stabil dan murah. Connector dilatih agar output vision encoder dapat dipahami oleh language model.</p>
+<h2>5.5 Query-Based Connector</h2>
+<p>Jumlah patch dapat sangat besar. Query-based connector menggunakan sejumlah query yang dipelajari untuk mengambil informasi penting dari fitur gambar.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">ratusan patch features
+        |
+learned queries + cross-attention
+        |
+sejumlah kecil visual tokens
+</code></pre></div>
+<p>Pendekatan ini mengurangi panjang urutan, tetapi ringkasan yang terlalu agresif dapat kehilangan detail kecil.</p>
+<h2>5.6 Early Fusion dan Late Fusion</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Pendekatan</th>
+<th>Penjelasan</th>
+<th>Kelebihan</th>
+<th>Keterbatasan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Early fusion</td>
+<td>Modalitas digabung sejak awal</td>
+<td>Interaksi detail</td>
+<td>Biaya tinggi dan desain kompleks</td>
+</tr>
+<tr>
+<td>Middle fusion</td>
+<td>Modalitas diproses terpisah lalu digabung</td>
+<td>Kompromi fleksibel</td>
+<td>Memerlukan connector yang baik</td>
+</tr>
+<tr>
+<td>Late fusion</td>
+<td>Prediksi tiap modalitas digabung di akhir</td>
+<td>Sederhana dan modular</td>
+<td>Interaksi lintas modalitas terbatas</td>
+</tr>
+</tbody></table></div>
+<h2>5.7 Model Generatif dan Model Embedding</h2>
+<p>Model embedding menghasilkan vektor. Model generatif menghasilkan urutan token.</p>
+<p>Gunakan model embedding ketika:</p>
+<ul>
+<li>perlu mencari gambar yang relevan,</li>
+<li>perlu indeks yang dapat dipakai berulang,</li>
+<li>output utama adalah ranking.</li>
+</ul>
+<p>Gunakan model generatif ketika:</p>
+<ul>
+<li>perlu jawaban bahasa alami,</li>
+<li>perlu deskripsi atau ekstraksi terstruktur,</li>
+<li>pertanyaan berubah-ubah dan membutuhkan konteks.</li>
+</ul>
+<p>Sistem dapat menggabungkan keduanya: dual encoder memilih gambar atau region relevan, lalu model generatif membuat jawaban.</p>
+<h2>5.8 Memilih Arsitektur Berdasarkan Tugas</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Tugas</th>
+<th>Pola yang lazim</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Pencarian gambar dari teks</td>
+<td>Dual encoder</td>
+</tr>
+<tr>
+<td>Klasifikasi zero-shot</td>
+<td>Dual encoder</td>
+</tr>
+<tr>
+<td>Image-text matching detail</td>
+<td>Fusion encoder</td>
+</tr>
+<tr>
+<td>Captioning</td>
+<td>Vision encoder + language decoder</td>
+</tr>
+<tr>
+<td>Visual question answering</td>
+<td>Fusion atau vision encoder + LLM</td>
+</tr>
+<tr>
+<td>Document QA</td>
+<td>Encoder visual/OCR + language model</td>
+</tr>
+<tr>
+<td>Grounded generation</td>
+<td>VLM dengan region/coordinate support</td>
+</tr>
+</tbody></table></div>
+<h2>Checkpoint Bab 5</h2>
+<ol>
+<li>Mengapa dual encoder efisien untuk retrieval?</li>
+<li>Apa perbedaan fusion encoder dan vision-encoder-to-LLM?</li>
+<li>Kapan query-based connector dapat merugikan kualitas?</li>
+</ol>
+<h2>Latihan Bab 5 - Desain Sistem</h2>
+<p>Rancang sistem pencarian produk dengan input kalimat pengguna dan katalog gambar. Tentukan:</p>
+<ul>
+<li>model untuk indexing,</li>
+<li>data yang disimpan,</li>
+<li>cara menghitung ranking,</li>
+<li>kapan model generatif digunakan,</li>
+<li>metrik evaluasi dan risiko.</li>
+</ul>
+<hr>
+

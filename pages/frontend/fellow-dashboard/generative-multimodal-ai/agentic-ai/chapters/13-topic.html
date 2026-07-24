@@ -1,0 +1,406 @@
+<h1>Deployment dan Mini Project Agent Asisten Operasional</h1>
+<h2>13.1 Arsitektur Produksi</h2>
+<p>Arsitektur dasar:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Client / UI
+    ↓
+API Gateway dan Authentication
+    ↓
+Agent Runtime / Orchestrator
+    ├─ Model Gateway
+    ├─ Tool Registry
+    ├─ Policy Engine
+    ├─ State Store
+    ├─ Memory Store
+    ├─ Retrieval Service
+    ├─ Approval Service
+    └─ Trace / Evaluation Store
+            ↓
+External Systems
+</code></pre></div>
+<h2>13.2 Sinkron dan Asinkron</h2>
+<h3>Sinkron</h3>
+<p>Cocok untuk tugas cepat.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Request → Agent → Result
+</code></pre></div>
+<h3>Asinkron</h3>
+<p>Cocok untuk tugas lama atau menunggu approval.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Request → Job Queue → Worker → Pause
+                         ↓
+                    Approval Event
+                         ↓
+                    Resume → Result
+</code></pre></div>
+<p>Gunakan <code>run_id</code> agar pengguna dapat memeriksa status.</p>
+<h2>13.3 Persistence</h2>
+<p>Simpan state setelah langkah penting:</p>
+<ul>
+<li>setelah planning;</li>
+<li>setelah tool call;</li>
+<li>sebelum approval;</li>
+<li>setelah approval;</li>
+<li>sebelum tindakan eksternal;</li>
+<li>setelah final result.</li>
+</ul>
+<p>Dengan persistence, agent dapat pulih setelah worker restart.</p>
+<h2>13.4 Concurrency</h2>
+<p>Masalah concurrency:</p>
+<ul>
+<li>dua worker mengubah task sama;</li>
+<li>approval lama digunakan setelah draft berubah;</li>
+<li>dua agent mengirim pesan yang sama;</li>
+<li>state update hilang.</li>
+</ul>
+<p>Mitigasi:</p>
+<ul>
+<li>optimistic locking;</li>
+<li>version number;</li>
+<li>idempotency key;</li>
+<li>distributed lock bila perlu;</li>
+<li>immutable event log.</li>
+</ul>
+<h2>13.5 Versioning</h2>
+<p>Versi yang perlu dicatat:</p>
+<ul>
+<li>instructions;</li>
+<li>model;</li>
+<li>tool schema;</li>
+<li>policy;</li>
+<li>retrieval index;</li>
+<li>workflow graph;</li>
+<li>evaluation dataset.</li>
+</ul>
+<p>Tanpa versioning, sulit menjelaskan mengapa perilaku berubah.</p>
+<h2>13.6 Rollout</h2>
+<p>Tahapan rollout:</p>
+<ol>
+<li>local simulation;</li>
+<li>offline evaluation;</li>
+<li>internal sandbox;</li>
+<li>shadow mode;</li>
+<li>limited pilot;</li>
+<li>approval-only execution;</li>
+<li>limited automation;</li>
+<li>broader production.</li>
+</ol>
+<h3>Shadow mode</h3>
+<p>Agent berjalan pada input nyata, tetapi tindakannya tidak dieksekusi. Hasil dibandingkan dengan proses manusia.</p>
+<h2>13.7 Mini Project</h2>
+<h3>Judul</h3>
+<p><strong>Agent Asisten Operasional HerAI</strong></p>
+<h3>Tujuan</h3>
+<p>Membangun agent yang membantu koordinator:</p>
+<ul>
+<li>membaca tugas proyek;</li>
+<li>mengidentifikasi tugas terlambat;</li>
+<li>mencari SOP tindak lanjut;</li>
+<li>menghitung prioritas;</li>
+<li>menyusun rencana;</li>
+<li>membuat draft pesan;</li>
+<li>meminta approval;</li>
+<li>menyimpan audit trace.</li>
+</ul>
+<p>Agen tidak boleh mengirim pesan atau mengubah status tanpa persetujuan.</p>
+<h2>13.8 User Story</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">Sebagai koordinator,
+saya ingin mengetahui tugas yang terlambat dan memiliki draft tindak lanjut,
+agar saya dapat meninjau dan menyetujui komunikasi dengan cepat.
+</code></pre></div>
+<h2>13.9 Acceptance Criteria</h2>
+<ul>
+<li>Agen hanya membaca proyek yang diizinkan.</li>
+<li>Tugas terlambat dihitung menggunakan waktu sistem.</li>
+<li>Setiap rekomendasi menyertakan <code>task_id</code>.</li>
+<li>SOP yang digunakan memiliki source ID dan versi.</li>
+<li>Draft pesan belum dikirim.</li>
+<li>Approval diperlukan sebelum pengiriman.</li>
+<li>Maksimum 10 langkah.</li>
+<li>Maksimum dua retry per tool.</li>
+<li>Semua tool call masuk trace.</li>
+<li>Jika evidence kurang, agent meminta klarifikasi atau berhenti.</li>
+</ul>
+<h2>13.10 Data Contoh</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">TASKS = [
+    {
+        &quot;task_id&quot;: &quot;TASK-1001&quot;,
+        &quot;title&quot;: &quot;Finalisasi materi&quot;,
+        &quot;owner&quot;: &quot;Alya&quot;,
+        &quot;due_at&quot;: &quot;2026-07-22T16:00:00+07:00&quot;,
+        &quot;status&quot;: &quot;in_progress&quot;,
+        &quot;priority&quot;: &quot;high&quot;,
+    },
+    {
+        &quot;task_id&quot;: &quot;TASK-1002&quot;,
+        &quot;title&quot;: &quot;Verifikasi daftar peserta&quot;,
+        &quot;owner&quot;: &quot;Bima&quot;,
+        &quot;due_at&quot;: &quot;2026-07-25T12:00:00+07:00&quot;,
+        &quot;status&quot;: &quot;todo&quot;,
+        &quot;priority&quot;: &quot;medium&quot;,
+    },
+]
+</code></pre></div>
+<h2>13.11 State Schema</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">from typing import Literal, TypedDict
+
+class AgentState(TypedDict):
+    run_id: str
+    user_id: str
+    project_id: str
+    goal: str
+    tasks: list[dict]
+    late_tasks: list[dict]
+    policy_evidence: list[dict]
+    plan: list[dict]
+    drafts: list[dict]
+    approval_status: Literal[
+        &quot;not_requested&quot;, &quot;pending&quot;, &quot;approved&quot;, &quot;rejected&quot;
+    ]
+    step_count: int
+    tool_error_count: int
+    status: Literal[
+        &quot;running&quot;, &quot;waiting_approval&quot;, &quot;completed&quot;, &quot;failed&quot;, &quot;cancelled&quot;
+    ]
+</code></pre></div>
+<h2>13.12 Tool Specifications</h2>
+<h3><code>get_project_tasks</code></h3>
+<div class="reasoning-code-block"><pre><code class="language-python">def get_project_tasks(project_id: str, user_id: str) -&gt; dict:
+    &quot;&quot;&quot;Read tasks only when user has access to the project.&quot;&quot;&quot;
+</code></pre></div>
+<p>Risiko: read-only.</p>
+<h3><code>search_operational_policy</code></h3>
+<div class="reasoning-code-block"><pre><code class="language-python">def search_operational_policy(query: str, project_id: str) -&gt; dict:
+    &quot;&quot;&quot;Return trusted policy passages with source metadata.&quot;&quot;&quot;
+</code></pre></div>
+<p>Risiko: read-only, retrieved content untrusted as instruction.</p>
+<h3><code>calculate_task_priority</code></h3>
+<div class="reasoning-code-block"><pre><code class="language-python">def calculate_task_priority(task: dict, now: str) -&gt; dict:
+    &quot;&quot;&quot;Calculate deterministic urgency score.&quot;&quot;&quot;
+</code></pre></div>
+<p>Risiko: compute.</p>
+<h3><code>create_message_draft</code></h3>
+<div class="reasoning-code-block"><pre><code class="language-python">def create_message_draft(
+    recipient_id: str,
+    task_id: str,
+    body: str,
+) -&gt; dict:
+    &quot;&quot;&quot;Create draft only. Does not send.&quot;&quot;&quot;
+</code></pre></div>
+<p>Risiko: draft.</p>
+<h3><code>request_send_approval</code></h3>
+<div class="reasoning-code-block"><pre><code class="language-python">def request_send_approval(run_id: str, draft_ids: list[str]) -&gt; dict:
+    &quot;&quot;&quot;Pause the run and request coordinator approval.&quot;&quot;&quot;
+</code></pre></div>
+<p>Risiko: workflow.</p>
+<h3><code>send_approved_messages</code></h3>
+<div class="reasoning-code-block"><pre><code class="language-python">def send_approved_messages(
+    run_id: str,
+    approval_token: str,
+    idempotency_key: str,
+) -&gt; dict:
+    &quot;&quot;&quot;Send only immutable drafts covered by the approval token.&quot;&quot;&quot;
+</code></pre></div>
+<p>Risiko: external action, approval wajib.</p>
+<h2>13.13 Deterministic Priority</h2>
+<p>Jangan meminta model menghitung waktu jika kode dapat melakukannya.</p>
+<div class="reasoning-code-block"><pre><code class="language-python">from datetime import datetime
+
+PRIORITY_WEIGHT = {&quot;low&quot;: 1, &quot;medium&quot;: 2, &quot;high&quot;: 3}
+
+def urgency_score(task: dict, now: datetime) -&gt; int:
+    due_at = datetime.fromisoformat(task[&quot;due_at&quot;])
+    hours_late = max(0, int((now - due_at).total_seconds() // 3600))
+    return hours_late + 12 * PRIORITY_WEIGHT[task[&quot;priority&quot;]]
+</code></pre></div>
+<h2>13.14 Agent Loop Sederhana</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">MAX_STEPS = 10
+MAX_TOOL_ERRORS = 3
+
+while state[&quot;status&quot;] == &quot;running&quot;:
+    if state[&quot;step_count&quot;] &gt;= MAX_STEPS:
+        state[&quot;status&quot;] = &quot;failed&quot;
+        state[&quot;failure_reason&quot;] = &quot;MAX_STEPS_EXCEEDED&quot;
+        break
+
+    decision = decide_next_action(state)
+    validate_decision(decision)
+
+    if decision[&quot;type&quot;] == &quot;tool_call&quot;:
+        try:
+            result = execute_tool(decision)
+            state = apply_result(state, decision, result)
+        except RetryableToolError:
+            state[&quot;tool_error_count&quot;] += 1
+            if state[&quot;tool_error_count&quot;] &gt;= MAX_TOOL_ERRORS:
+                state[&quot;status&quot;] = &quot;failed&quot;
+
+    elif decision[&quot;type&quot;] == &quot;request_approval&quot;:
+        state = create_approval_request(state)
+        state[&quot;status&quot;] = &quot;waiting_approval&quot;
+
+    elif decision[&quot;type&quot;] == &quot;final&quot;:
+        assert_acceptance_criteria(state)
+        state[&quot;status&quot;] = &quot;completed&quot;
+
+    state[&quot;step_count&quot;] += 1
+    persist_state(state)
+</code></pre></div>
+<h2>13.15 Suggested Workflow</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">1. Authenticate user
+2. Validate project access
+3. Get project tasks
+4. Filter late tasks deterministically
+5. Retrieve active SOP
+6. Rank tasks
+7. Draft follow-up messages
+8. Run safety and quality checks
+9. Present summary and request approval
+10. Pause
+11. After approval, verify immutable draft hash
+12. Send with idempotency key
+13. Save final audit
+</code></pre></div>
+<h2>13.16 Output untuk Koordinator</h2>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;summary&quot;: &quot;2 tasks are overdue&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;task_id&quot;: &quot;TASK-1001&quot;,
+      &quot;owner&quot;: &quot;Alya&quot;,
+      &quot;hours_late&quot;: 26,
+      &quot;priority_score&quot;: 62,
+      &quot;policy_source&quot;: &quot;SOP-OPS-04#3.2&quot;,
+      &quot;draft_id&quot;: &quot;DRAFT-778&quot;
+    }
+  ],
+  &quot;action&quot;: &quot;approval_required&quot;,
+  &quot;approval_request_id&quot;: &quot;APR-301&quot;
+}
+</code></pre></div>
+<h2>13.17 Evaluasi Mini Project</h2>
+<h3>Functional tests</h3>
+<ul>
+<li>project access benar;</li>
+<li>filtering keterlambatan benar;</li>
+<li>source policy aktif;</li>
+<li>draft sesuai data;</li>
+<li>approval bekerja;</li>
+<li>send idempotent.</li>
+</ul>
+<h3>Safety tests</h3>
+<ul>
+<li>prompt injection pada SOP;</li>
+<li>user meminta skip approval;</li>
+<li>recipient ambigu;</li>
+<li>tool send dipanggil tanpa token;</li>
+<li>draft berubah setelah approval;</li>
+<li>cross-project data access.</li>
+</ul>
+<h3>Reliability tests</h3>
+<ul>
+<li>task service timeout;</li>
+<li>policy search kosong;</li>
+<li>duplicate event;</li>
+<li>worker restart saat pause;</li>
+<li>approval kedaluwarsa;</li>
+<li>maximum steps.</li>
+</ul>
+<h3>Metrik target contoh</h3>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Metrik</th>
+<th>Target awal</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Task identification accuracy</td>
+<td>≥ 95%</td>
+</tr>
+<tr>
+<td>Unauthorized action rate</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>Approval bypass rate</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>Draft factual accuracy</td>
+<td>≥ 95%</td>
+</tr>
+<tr>
+<td>Successful recovery from retryable error</td>
+<td>≥ 90%</td>
+</tr>
+<tr>
+<td>Median steps</td>
+<td>≤ 8</td>
+</tr>
+<tr>
+<td>Trace completeness</td>
+<td>100%</td>
+</tr>
+</tbody></table></div>
+<h2>13.18 Deliverables</h2>
+<p>Peserta mengumpulkan:</p>
+<ol>
+<li>diagram arsitektur;</li>
+<li>threat model;</li>
+<li>state schema;</li>
+<li>tool schemas;</li>
+<li>workflow atau graph;</li>
+<li>implementasi prototype;</li>
+<li>golden dataset minimal 20 kasus;</li>
+<li>hasil evaluasi;</li>
+<li>contoh trace;</li>
+<li>laporan keterbatasan dan rencana perbaikan.</li>
+</ol>
+<h2>13.19 Rubrik Mini Project</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aspek</th>
+<th align="right">Bobot</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Kejelasan tujuan dan scope</td>
+<td align="right">10%</td>
+</tr>
+<tr>
+<td>Desain tools dan schema</td>
+<td align="right">15%</td>
+</tr>
+<tr>
+<td>State, memory, dan persistence</td>
+<td align="right">10%</td>
+</tr>
+<tr>
+<td>Orkestrasi dan stopping condition</td>
+<td align="right">15%</td>
+</tr>
+<tr>
+<td>Safety dan approval</td>
+<td align="right">20%</td>
+</tr>
+<tr>
+<td>Evaluation dan tracing</td>
+<td align="right">15%</td>
+</tr>
+<tr>
+<td>Reliability dan error handling</td>
+<td align="right">10%</td>
+</tr>
+<tr>
+<td>Dokumentasi</td>
+<td align="right">5%</td>
+</tr>
+</tbody></table></div>
+<h2>Checkpoint Bab 13</h2>
+<ol>
+<li>Mengapa agent run perlu persistence?</li>
+<li>Apa fungsi shadow mode?</li>
+<li>Mengapa draft hash perlu diverifikasi setelah approval?</li>
+<li>Sebutkan empat deliverables mini project.</li>
+</ol>
+<hr>
+

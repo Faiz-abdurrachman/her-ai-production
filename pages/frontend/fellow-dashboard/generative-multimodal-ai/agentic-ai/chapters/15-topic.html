@@ -1,0 +1,214 @@
+<h1>Glosarium, Ringkasan, Checklist, dan Referensi</h1>
+<h2>15.1 Glosarium</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Istilah</th>
+<th>Arti</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent</td>
+<td>Sistem yang memilih tindakan untuk mencapai tujuan dalam batas tertentu</td>
+</tr>
+<tr>
+<td>Agent loop</td>
+<td>Siklus plan, act, observe, dan evaluate</td>
+</tr>
+<tr>
+<td>Approval gate</td>
+<td>Titik yang membutuhkan persetujuan manusia</td>
+</tr>
+<tr>
+<td>Audit log</td>
+<td>Catatan tindakan dan keputusan untuk penelusuran</td>
+</tr>
+<tr>
+<td>Circuit breaker</td>
+<td>Mekanisme menghentikan panggilan ke service yang terus gagal</td>
+</tr>
+<tr>
+<td>Context</td>
+<td>Informasi yang diberikan kepada model pada suatu langkah</td>
+</tr>
+<tr>
+<td>Guardrail</td>
+<td>Kontrol untuk memvalidasi dan membatasi perilaku</td>
+</tr>
+<tr>
+<td>Handoff</td>
+<td>Pengalihan kendali dari satu agent ke agent lain</td>
+</tr>
+<tr>
+<td>Idempotency</td>
+<td>Sifat operasi yang tidak menggandakan efek ketika diulang</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>Informasi yang dipertahankan untuk penggunaan selanjutnya</td>
+</tr>
+<tr>
+<td>Orchestrator</td>
+<td>Komponen yang mengatur agent, workers, state, dan alur</td>
+</tr>
+<tr>
+<td>Prompt injection</td>
+<td>Upaya input tidak tepercaya untuk mengubah instruksi sistem</td>
+</tr>
+<tr>
+<td>RAG</td>
+<td>Penggunaan retrieval untuk menyediakan evidence kepada model</td>
+</tr>
+<tr>
+<td>Runtime</td>
+<td>Infrastruktur yang menjalankan agent loop</td>
+</tr>
+<tr>
+<td>Side effect</td>
+<td>Perubahan pada sistem atau dunia luar akibat tool call</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Kondisi pekerjaan saat agent berjalan</td>
+</tr>
+<tr>
+<td>Stopping condition</td>
+<td>Aturan yang menentukan kapan agent berhenti</td>
+</tr>
+<tr>
+<td>Tool</td>
+<td>Fungsi atau API yang dapat digunakan agent</td>
+</tr>
+<tr>
+<td>Trace</td>
+<td>Rekaman terstruktur dari eksekusi agent</td>
+</tr>
+<tr>
+<td>Trajectory</td>
+<td>Urutan keputusan dan tindakan selama satu run</td>
+</tr>
+<tr>
+<td>Workflow</td>
+<td>Urutan langkah untuk menyelesaikan proses</td>
+</tr>
+</tbody></table></div>
+<h2>15.2 Ringkasan Cepat</h2>
+<ol>
+<li>Agentic AI menggabungkan model, instructions, tools, state, memory, dan runtime.</li>
+<li>Gunakan workflow biasa untuk proses tetap.</li>
+<li>Gunakan agent hanya ketika keputusan dinamis memberi manfaat nyata.</li>
+<li>Mulai dari otonomi rendah dan tingkatkan berdasarkan evaluasi.</li>
+<li>Tool adalah kontrak yang harus memiliki schema, permission, error, dan audit.</li>
+<li>Pisahkan tool read, draft, write, destructive, dan external communication.</li>
+<li>Gunakan idempotency, timeout, retry, dan circuit breaker.</li>
+<li>State machine membatasi transisi dan membuat proses dapat dipahami.</li>
+<li>Memory harus memiliki owner, consent, retention, dan isolation.</li>
+<li>Retrieved content adalah data tidak tepercaya, bukan instruction.</li>
+<li>Multi-agent digunakan jika pemisahan peran benar-benar diperlukan.</li>
+<li>Human approval wajib untuk tindakan berisiko dan sulit dibatalkan.</li>
+<li>Stopping condition mencegah infinite loop dan biaya tak terkendali.</li>
+<li>Evaluasi harus mencakup component, trajectory, dan end-to-end outcome.</li>
+<li>Tracing, versioning, dan regression testing wajib untuk produksi.</li>
+<li>Security harus berlapis: least privilege, policy, sandbox, approval, dan audit.</li>
+<li>Kualitas agent diukur dari keberhasilan yang aman, benar, dan efisien.</li>
+</ol>
+<h2>15.3 Checklist Desain</h2>
+<h3>Scope</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Tujuan dan non-goal jelas.</li>
+<li><input disabled="" type="checkbox"> Acceptance criteria dapat diuji.</li>
+<li><input disabled="" type="checkbox"> Alasan menggunakan agent terdokumentasi.</li>
+<li><input disabled="" type="checkbox"> Tingkat otonomi ditentukan.</li>
+</ul>
+<h3>Tools</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Setiap tool memiliki schema.</li>
+<li><input disabled="" type="checkbox"> Read dan write dipisahkan.</li>
+<li><input disabled="" type="checkbox"> Side effect membutuhkan approval.</li>
+<li><input disabled="" type="checkbox"> Retry dan timeout didefinisikan.</li>
+<li><input disabled="" type="checkbox"> Idempotency diterapkan.</li>
+</ul>
+<h3>State dan memory</h3>
+<ul>
+<li><input disabled="" type="checkbox"> State machine tersedia.</li>
+<li><input disabled="" type="checkbox"> Session dan tenant terisolasi.</li>
+<li><input disabled="" type="checkbox"> Memory write policy tersedia.</li>
+<li><input disabled="" type="checkbox"> Retention dan deletion tersedia.</li>
+<li><input disabled="" type="checkbox"> Konflik memory ditangani.</li>
+</ul>
+<h3>Reliability</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Maximum steps tersedia.</li>
+<li><input disabled="" type="checkbox"> Budget limit tersedia.</li>
+<li><input disabled="" type="checkbox"> Error taxonomy tersedia.</li>
+<li><input disabled="" type="checkbox"> Fallback tersedia.</li>
+<li><input disabled="" type="checkbox"> Pause dan resume diuji.</li>
+</ul>
+<h3>Security</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Least privilege diterapkan.</li>
+<li><input disabled="" type="checkbox"> Prompt injection diuji.</li>
+<li><input disabled="" type="checkbox"> Secrets tidak masuk konteks.</li>
+<li><input disabled="" type="checkbox"> Authorization dicek pada tool.</li>
+<li><input disabled="" type="checkbox"> Audit log tersedia.</li>
+</ul>
+<h3>Evaluation</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Golden dataset tersedia.</li>
+<li><input disabled="" type="checkbox"> Deterministic checks tersedia.</li>
+<li><input disabled="" type="checkbox"> Trajectory dievaluasi.</li>
+<li><input disabled="" type="checkbox"> Safety metrics dipantau.</li>
+<li><input disabled="" type="checkbox"> Regression test berjalan sebelum rilis.</li>
+</ul>
+<h3>Deployment</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Persistence tersedia.</li>
+<li><input disabled="" type="checkbox"> Versioning tersedia.</li>
+<li><input disabled="" type="checkbox"> Shadow mode dilakukan.</li>
+<li><input disabled="" type="checkbox"> Monitoring dan alerting aktif.</li>
+<li><input disabled="" type="checkbox"> Rollback atau compensating action tersedia.</li>
+</ul>
+<h2>15.4 Referensi Utama</h2>
+<ol>
+<li>Yao, S. et al. <strong>ReAct: Synergizing Reasoning and Acting in Language Models</strong>. arXiv:2210.03629.</li>
+<li>Schick, T. et al. <strong>Toolformer: Language Models Can Teach Themselves to Use Tools</strong>. arXiv:2302.04761.</li>
+<li>Shinn, N. et al. <strong>Reflexion: Language Agents with Verbal Reinforcement Learning</strong>. arXiv:2303.11366.</li>
+<li>OpenAI. <strong>OpenAI Agents SDK Documentation</strong> - konsep agents, tools, handoffs, guardrails, sessions, dan tracing.</li>
+<li>LangChain. <strong>LangGraph Documentation</strong> - workflow graphs, state, persistence, human-in-the-loop, dan durable execution.</li>
+<li>Microsoft. <strong>AutoGen Documentation</strong> - single-agent, multi-agent, teams, state, termination, dan human feedback.</li>
+<li>NIST. <strong>AI Risk Management Framework</strong> - kerangka pengelolaan risiko sistem AI.</li>
+<li>OWASP. <strong>Top 10 for Large Language Model Applications</strong> - risiko keamanan aplikasi berbasis LLM.</li>
+</ol>
+<h2>15.5 Bacaan Lanjutan</h2>
+<p>Pelajari topik berikut setelah modul ini:</p>
+<ul>
+<li>durable execution;</li>
+<li>event sourcing;</li>
+<li>distributed systems;</li>
+<li>model context protocol;</li>
+<li>policy-as-code;</li>
+<li>confidential computing;</li>
+<li>agent simulation;</li>
+<li>automated evaluation;</li>
+<li>adversarial testing;</li>
+<li>human-computer interaction untuk approval;</li>
+<li>economics of agent systems;</li>
+<li>embodied agents dan robotics.</li>
+</ul>
+<h2>15.6 Penutup</h2>
+<p>Agentic AI memiliki potensi besar untuk membantu manusia menyelesaikan pekerjaan yang melibatkan banyak informasi, sistem, dan keputusan. Namun nilai tersebut hanya muncul ketika agen dibangun dengan disiplin rekayasa.</p>
+<p>Bangun sistem yang:</p>
+<ul>
+<li>memahami tujuan secara terbatas dan jelas;</li>
+<li>hanya memiliki tools yang diperlukan;</li>
+<li>menyimpan state secara terstruktur;</li>
+<li>meminta persetujuan pada saat yang tepat;</li>
+<li>dapat berhenti dengan aman;</li>
+<li>memiliki bukti dan audit;</li>
+<li>diuji dengan kasus nyata dan kasus berbahaya;</li>
+<li>dapat dipantau, diperbaiki, dan dinonaktifkan.</li>
+</ul>
+<blockquote>
+<p><strong>Agen yang dapat dipercaya adalah agen yang kemampuannya dapat dijelaskan, tindakannya dapat dilacak, dan batasnya dapat ditegakkan.</strong></p>
+</blockquote>
+

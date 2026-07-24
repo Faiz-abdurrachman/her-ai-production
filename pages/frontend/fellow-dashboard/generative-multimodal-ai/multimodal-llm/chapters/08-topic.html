@@ -1,0 +1,200 @@
+<h1>Multimodal RAG dan Tool Use</h1>
+<h2>8.1 Mengapa Multimodal RAG?</h2>
+<p>Retrieval-Augmented Generation menambahkan informasi eksternal yang relevan saat inference. Pada multimodal RAG, item yang diambil dapat berupa teks, gambar, halaman dokumen, audio clip, video segment, atau data terstruktur.</p>
+<p>Tujuan:</p>
+<ul>
+<li>mengurangi context overload,</li>
+<li>menjaga informasi tetap mutakhir,</li>
+<li>menyediakan bukti,</li>
+<li>membatasi data yang dikirim ke model,</li>
+<li>meningkatkan kemampuan domain.</li>
+</ul>
+<h2>8.2 Pipeline Dasar</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">Data multimodal
+-&gt; parsing dan chunking
+-&gt; embedding per modalitas
+-&gt; index
+-&gt; query understanding
+-&gt; retrieval
+-&gt; reranking
+-&gt; context assembly
+-&gt; MLLM response
+</code></pre></div>
+<h2>8.3 Unimodal vs Cross-Modal Retrieval</h2>
+<h3>Unimodal Retrieval</h3>
+<ul>
+<li>teks mencari teks,</li>
+<li>gambar mencari gambar,</li>
+<li>audio mencari audio.</li>
+</ul>
+<h3>Cross-Modal Retrieval</h3>
+<ul>
+<li>teks mencari gambar,</li>
+<li>gambar mencari dokumen,</li>
+<li>audio query mencari video segment,</li>
+<li>gambar komponen mencari manual terkait.</li>
+</ul>
+<p>Cross-modal retrieval membutuhkan embedding space yang selaras atau query transformation.</p>
+<h2>8.4 Chunking Per Modalitas</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Modalitas</th>
+<th>Unit chunk yang mungkin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Teks</td>
+<td>paragraf, section, atau semantic chunk</td>
+</tr>
+<tr>
+<td>Dokumen</td>
+<td>halaman, block, tabel, atau section</td>
+</tr>
+<tr>
+<td>Gambar</td>
+<td>seluruh gambar, region, atau object crop</td>
+</tr>
+<tr>
+<td>Audio</td>
+<td>segmen berdasarkan jeda atau topik</td>
+</tr>
+<tr>
+<td>Video</td>
+<td>scene, shot, atau temporal window</td>
+</tr>
+<tr>
+<td>Tabel</td>
+<td>baris, kelompok baris, atau hasil query</td>
+</tr>
+</tbody></table></div>
+<p>Chunk terlalu besar meningkatkan noise. Chunk terlalu kecil kehilangan konteks.</p>
+<h2>8.5 Metadata</h2>
+<p>Metadata penting untuk filter dan audit:</p>
+<ul>
+<li>source ID,</li>
+<li>timestamp,</li>
+<li>page number,</li>
+<li>region coordinate,</li>
+<li>document version,</li>
+<li>access level,</li>
+<li>entity ID,</li>
+<li>modality,</li>
+<li>confidence.</li>
+</ul>
+<h2>8.6 Hybrid Retrieval</h2>
+<p>Hybrid retrieval menggabungkan:</p>
+<ul>
+<li>keyword search,</li>
+<li>dense embedding,</li>
+<li>metadata filter,</li>
+<li>multimodal similarity,</li>
+<li>graph relation,</li>
+<li>reranker.</li>
+</ul>
+<p>Contoh: cari “indikator tekanan” dengan keyword, filter asset ID, lalu rerank berdasarkan gambar dan teks.</p>
+<h2>8.7 Context Assembly</h2>
+<p>Context assembly harus menjaga sumber.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">[SOURCE DOC_3, page 8]
+...
+
+[SOURCE IMG_7, region x1,y1,x2,y2]
+...
+
+[SOURCE AUD_2, 00:02:13-00:02:29]
+...
+</code></pre></div>
+<p>Tanpa source marker, model sulit menghasilkan evidence yang dapat diperiksa.</p>
+<h2>8.8 Tool Use</h2>
+<p>MLLM dapat memilih alat berdasarkan kebutuhan:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Kebutuhan</th>
+<th>Alat</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Membaca teks kecil</td>
+<td>OCR</td>
+</tr>
+<tr>
+<td>Menghitung</td>
+<td>Calculator atau Python</td>
+</tr>
+<tr>
+<td>Mencari data</td>
+<td>Database query</td>
+</tr>
+<tr>
+<td>Menemukan objek</td>
+<td>Detector</td>
+</tr>
+<tr>
+<td>Memotong video</td>
+<td>Video processing</td>
+</tr>
+<tr>
+<td>Mengambil lokasi</td>
+<td>Geospatial service</td>
+</tr>
+<tr>
+<td>Memeriksa format</td>
+<td>JSON schema validator</td>
+</tr>
+</tbody></table></div>
+<p>Model tidak boleh memiliki akses alat tanpa batas. Terapkan allowlist, parameter validation, timeout, dan audit log.</p>
+<h2>8.9 Prompt Injection dari Retrieved Content</h2>
+<p>Dokumen, gambar, atau transkrip dapat berisi instruksi berbahaya seperti “abaikan aturan sebelumnya”. Retrieved content harus diperlakukan sebagai data, bukan instruksi sistem.</p>
+<p>Mitigasi:</p>
+<ul>
+<li>pisahkan system instruction dan retrieved content,</li>
+<li>sanitasi konten,</li>
+<li>batasi tool permission,</li>
+<li>jangan mengeksekusi perintah dari data secara otomatis,</li>
+<li>gunakan policy check sebelum tool call.</li>
+</ul>
+<h2>8.10 Contoh Pseudocode Multimodal RAG</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">def answer(query, case_id):
+    candidates = retrieve(
+        query=query,
+        filters={&quot;case_id&quot;: case_id},
+        modalities=[&quot;text&quot;, &quot;image&quot;, &quot;audio&quot;, &quot;video&quot;]
+    )
+
+    ranked = rerank(query, candidates)
+    context = assemble_with_citations(ranked[:8])
+
+    result = multimodal_model.generate(
+        instruction=SYSTEM_RULES,
+        query=query,
+        context=context,
+        output_schema=&quot;answer_with_evidence_v1&quot;
+    )
+
+    validate_schema(result)
+    verify_citations(result, context)
+    return result
+</code></pre></div>
+<h2>8.11 Evaluasi Retrieval</h2>
+<p>Metrik:</p>
+<ul>
+<li>Recall@K,</li>
+<li>Precision@K,</li>
+<li>Mean Reciprocal Rank,</li>
+<li>nDCG,</li>
+<li>source coverage,</li>
+<li>temporal hit rate,</li>
+<li>region hit rate.</li>
+</ul>
+<p>Retrieval yang salah tidak dapat diperbaiki hanya dengan prompt yang lebih panjang.</p>
+<h2>Checkpoint Bab 8</h2>
+<ol>
+<li>Apa perbedaan unimodal dan cross-modal retrieval?</li>
+<li>Mengapa metadata penting pada multimodal RAG?</li>
+<li>Bagaimana retrieved content dapat menjadi sumber prompt injection?</li>
+</ol>
+<h2>Latihan Bab 8 - Merancang Index</h2>
+<p>Buat skema index untuk satu koleksi multimodal. Tentukan unit chunk, embedding, metadata, filter akses, reranking, dan metrik retrieval.</p>
+<hr>
+

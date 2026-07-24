@@ -1,0 +1,175 @@
+<h1>Evaluasi Multimodal</h1>
+<h2>10.1 Evaluasi Berlapis</h2>
+<p>Evaluasi MLLM sebaiknya dilakukan pada empat lapisan:</p>
+<ol>
+<li>preprocessing,</li>
+<li>persepsi per modalitas,</li>
+<li>reasoning lintas modalitas,</li>
+<li>kualitas sistem end-to-end.</li>
+</ol>
+<p>Jika hanya mengukur jawaban akhir, sumber kegagalan sulit ditemukan.</p>
+<h2>10.2 Evaluasi Per Modalitas</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Modalitas</th>
+<th>Contoh metrik</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Teks</td>
+<td>exact match, F1, faithfulness, relevance</td>
+</tr>
+<tr>
+<td>Gambar</td>
+<td>accuracy, IoU, OCR error, grounding</td>
+</tr>
+<tr>
+<td>Audio</td>
+<td>Word Error Rate, diarization error, event accuracy</td>
+</tr>
+<tr>
+<td>Video</td>
+<td>temporal localization, event recall, timestamp accuracy</td>
+</tr>
+<tr>
+<td>Dokumen</td>
+<td>field accuracy, table accuracy, page citation accuracy</td>
+</tr>
+<tr>
+<td>Retrieval</td>
+<td>Recall@K, MRR, nDCG</td>
+</tr>
+</tbody></table></div>
+<h2>10.3 Cross-Modal Consistency</h2>
+<p>Model harus konsisten dengan semua sumber yang relevan.</p>
+<p>Contoh tes:</p>
+<ul>
+<li>jawaban menyebut warna yang sesuai gambar,</li>
+<li>angka sesuai tabel,</li>
+<li>urutan sesuai video,</li>
+<li>kutipan sesuai halaman,</li>
+<li>speaker sesuai timestamp.</li>
+</ul>
+<h2>10.4 Grounding dan Evidence</h2>
+<p>Setiap klaim penting sebaiknya memiliki evidence:</p>
+<ul>
+<li>source ID,</li>
+<li>page,</li>
+<li>timestamp,</li>
+<li>bounding box,</li>
+<li>baris tabel,</li>
+<li>tool result.</li>
+</ul>
+<p>Metrik dapat menilai apakah evidence benar-benar mendukung klaim.</p>
+<h2>10.5 Hallucination Rate</h2>
+<p>Jenis hallucination:</p>
+<ul>
+<li>object hallucination,</li>
+<li>attribute hallucination,</li>
+<li>OCR hallucination,</li>
+<li>temporal hallucination,</li>
+<li>source hallucination,</li>
+<li>causal hallucination.</li>
+</ul>
+<p>Definisikan unit pengukuran. Misalnya persentase klaim faktual yang tidak didukung evidence.</p>
+<h2>10.6 Conflict Handling</h2>
+<p>Buat contoh sumber bertentangan dan nilai apakah model:</p>
+<ul>
+<li>mendeteksi konflik,</li>
+<li>menyebut sumber,</li>
+<li>tidak memilih tanpa alasan,</li>
+<li>meminta verifikasi,</li>
+<li>mengikuti aturan prioritas.</li>
+</ul>
+<h2>10.7 Robustness Testing</h2>
+<p>Uji variasi:</p>
+<ul>
+<li>blur,</li>
+<li>noise,</li>
+<li>rotasi,</li>
+<li>crop,</li>
+<li>audio bising,</li>
+<li>accent berbeda,</li>
+<li>frame drop,</li>
+<li>halaman tertukar,</li>
+<li>metadata hilang,</li>
+<li>format file berbeda.</li>
+</ul>
+<h2>10.8 Slice Evaluation</h2>
+<p>Slice yang relevan:</p>
+<ul>
+<li>jenis perangkat,</li>
+<li>kondisi pencahayaan,</li>
+<li>bahasa,</li>
+<li>durasi video,</li>
+<li>kualitas mikrofon,</li>
+<li>tipe dokumen,</li>
+<li>kelompok pengguna,</li>
+<li>tingkat risiko.</li>
+</ul>
+<p>Rata-rata global dapat menyembunyikan kegagalan pada kelompok tertentu.</p>
+<h2>10.9 Human Evaluation</h2>
+<p>Rubrik penilai manusia dapat mencakup:</p>
+<ol>
+<li>correctness,</li>
+<li>completeness,</li>
+<li>evidence quality,</li>
+<li>uncertainty calibration,</li>
+<li>clarity,</li>
+<li>safety,</li>
+<li>actionability.</li>
+</ol>
+<p>Gunakan instruksi penilaian dan contoh agar antar-penilai konsisten.</p>
+<h2>10.10 Pairwise Evaluation</h2>
+<p>Bandingkan dua versi sistem pada contoh yang sama. Penilai memilih mana yang lebih baik dan mengapa. Pairwise evaluation berguna untuk membandingkan prompt atau model, tetapi tetap memerlukan analisis per kategori error.</p>
+<h2>10.11 Sistem End-to-End</h2>
+<p>Ukur:</p>
+<ul>
+<li>latency p50, p95, p99,</li>
+<li>token dan compute cost,</li>
+<li>upload failure,</li>
+<li>tool error,</li>
+<li>schema validity,</li>
+<li>review rate,</li>
+<li>abstention rate,</li>
+<li>user correction rate,</li>
+<li>incident rate.</li>
+</ul>
+<h2>10.12 Golden Set</h2>
+<p>Golden set harus:</p>
+<ul>
+<li>mewakili use case nyata,</li>
+<li>memiliki sumber dan anotasi jelas,</li>
+<li>mencakup kasus sulit,</li>
+<li>berversi,</li>
+<li>tidak dipakai training,</li>
+<li>dapat dijalankan ulang untuk regression test.</li>
+</ul>
+<h2>10.13 Contoh Evaluation Record</h2>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;case_id&quot;: &quot;EVAL-041&quot;,
+  &quot;modalities&quot;: [&quot;image&quot;, &quot;text&quot;, &quot;sensor&quot;],
+  &quot;expected&quot;: {
+    &quot;conflict_detected&quot;: true,
+    &quot;risk_level&quot;: &quot;high&quot;
+  },
+  &quot;model_output&quot;: {},
+  &quot;scores&quot;: {
+    &quot;grounding&quot;: 0,
+    &quot;consistency&quot;: 0,
+    &quot;schema_valid&quot;: 0
+  },
+  &quot;error_tags&quot;: []
+}
+</code></pre></div>
+<h2>Checkpoint Bab 10</h2>
+<ol>
+<li>Mengapa evaluasi harus dipisah per lapisan?</li>
+<li>Apa yang dimaksud cross-modal consistency?</li>
+<li>Sebutkan dua metrik sistem selain kualitas jawaban.</li>
+</ol>
+<h2>Latihan Bab 10 - Evaluation Plan</h2>
+<p>Buat evaluation plan berisi 30 contoh. Bagi menjadi kasus normal, sulit, missing modality, konflik, safety, dan out-of-scope. Tentukan metrik serta acceptance threshold.</p>
+<hr>
+

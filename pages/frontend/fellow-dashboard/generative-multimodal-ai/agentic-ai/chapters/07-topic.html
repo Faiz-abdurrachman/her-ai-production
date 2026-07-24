@@ -1,0 +1,194 @@
+<h1>Pola Orkestrasi Agentic</h1>
+<h2>7.1 Mengapa Menggunakan Pola?</h2>
+<p>Pola orkestrasi membantu tim membangun sistem yang dapat dipahami. Daripada membiarkan model memilih semua hal, kita menentukan struktur kolaborasi.</p>
+<p>Pola umum:</p>
+<ul>
+<li>prompt chaining;</li>
+<li>routing;</li>
+<li>parallelization;</li>
+<li>evaluator-optimizer;</li>
+<li>orchestrator-worker;</li>
+<li>human-in-the-loop;</li>
+<li>event-driven agent.</li>
+</ul>
+<h2>7.2 Prompt Chaining atau Sequential Workflow</h2>
+<p>Output langkah sebelumnya menjadi input langkah berikutnya.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Extract facts
+→ Validate facts
+→ Draft report
+→ Format report
+</code></pre></div>
+<p>Cocok ketika:</p>
+<ul>
+<li>urutan jelas;</li>
+<li>setiap tahap memiliki acceptance criteria;</li>
+<li>hasil perlu diubah bertahap.</li>
+</ul>
+<p>Kelemahan: error awal dapat merambat. Tambahkan validation gate.</p>
+<h2>7.3 Routing</h2>
+<p>Router memilih jalur.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Permintaan
+  ├─ pertanyaan kebijakan → RAG agent
+  ├─ permintaan data → data workflow
+  ├─ masalah teknis → support workflow
+  └─ risiko tinggi → human escalation
+</code></pre></div>
+<p>Gunakan structured output:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">class RouteDecision(BaseModel):
+    route: Literal[&quot;policy&quot;, &quot;data&quot;, &quot;support&quot;, &quot;human&quot;]
+    confidence: float
+    reason_summary: str
+</code></pre></div>
+<p>Jika confidence rendah, gunakan fallback.</p>
+<h2>7.4 Parallelization</h2>
+<p>Beberapa pekerjaan independen dijalankan bersamaan.</p>
+<p>Contoh:</p>
+<ul>
+<li>mengambil data dari tiga sistem;</li>
+<li>mengevaluasi draft dengan beberapa rubric;</li>
+<li>mencari bukti dari sumber berbeda.</li>
+</ul>
+<p>Risiko:</p>
+<ul>
+<li>biaya meningkat;</li>
+<li>hasil bertentangan;</li>
+<li>race condition;</li>
+<li>tool write saling mengganggu.</li>
+</ul>
+<p>Gunakan parallel hanya untuk tugas read-only atau independen.</p>
+<h2>7.5 Evaluator-Optimizer</h2>
+<p>Satu komponen menghasilkan, komponen lain memeriksa.</p>
+<p>Rubric contoh:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Kriteria</th>
+<th>Skor 0</th>
+<th>Skor 1</th>
+<th>Skor 2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Kelengkapan</td>
+<td>Banyak bagian hilang</td>
+<td>Ada bagian minor hilang</td>
+<td>Lengkap</td>
+</tr>
+<tr>
+<td>Grounding</td>
+<td>Tanpa sumber</td>
+<td>Sebagian bersumber</td>
+<td>Semua klaim penting bersumber</td>
+</tr>
+<tr>
+<td>Format</td>
+<td>Tidak sesuai</td>
+<td>Sedikit kesalahan</td>
+<td>Sesuai schema</td>
+</tr>
+<tr>
+<td>Safety</td>
+<td>Ada tindakan berisiko</td>
+<td>Perlu revisi kecil</td>
+<td>Aman</td>
+</tr>
+</tbody></table></div>
+<p>Berhenti jika skor minimum tercapai atau revisi maksimum habis.</p>
+<h2>7.6 Orchestrator-Worker</h2>
+<p>Orchestrator membagi tugas dan menggabungkan hasil.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Orchestrator
+  ├─ Worker A: data jadwal
+  ├─ Worker B: data anggaran
+  ├─ Worker C: data risiko
+  └─ Worker D: kepatuhan format
+        ↓
+Synthesis dan verification
+</code></pre></div>
+<p>Cocok untuk tugas yang dapat dipecah dinamis.</p>
+<p>Orchestrator perlu menentukan:</p>
+<ul>
+<li>worker yang diperlukan;</li>
+<li>input masing-masing worker;</li>
+<li>output schema;</li>
+<li>deadline;</li>
+<li>cara menggabungkan hasil;</li>
+<li>penanganan konflik.</li>
+</ul>
+<h2>7.7 Human-in-the-Loop</h2>
+<p>Human-in-the-loop tidak hanya berada di akhir. Manusia dapat terlibat untuk:</p>
+<ul>
+<li>memberi klarifikasi;</li>
+<li>menyetujui rencana;</li>
+<li>memperbaiki data;</li>
+<li>menyetujui tool write;</li>
+<li>menangani pengecualian;</li>
+<li>memilih di antara opsi;</li>
+<li>melakukan final review.</li>
+</ul>
+<p>Titik interupsi harus menyertakan konteks yang cukup.</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;approval_type&quot;: &quot;external_message&quot;,
+  &quot;summary&quot;: &quot;Send reminder to 12 participants&quot;,
+  &quot;risk&quot;: &quot;medium&quot;,
+  &quot;evidence&quot;: [&quot;TASK-101&quot;, &quot;TASK-109&quot;],
+  &quot;options&quot;: [&quot;approve&quot;, &quot;edit&quot;, &quot;reject&quot;]
+}
+</code></pre></div>
+<h2>7.8 Event-Driven Agent</h2>
+<p>Agen dapat dipicu oleh event:</p>
+<ul>
+<li>tiket baru;</li>
+<li>dokumen diunggah;</li>
+<li>deadline mendekat;</li>
+<li>error terjadi;</li>
+<li>approval diberikan.</li>
+</ul>
+<p>Namun event tidak boleh langsung memicu tindakan berisiko tanpa policy check.</p>
+<h2>7.9 Memilih Pola</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Kebutuhan</th>
+<th>Pola</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tahap berurutan</td>
+<td>Sequential</td>
+</tr>
+<tr>
+<td>Pilih alur berbeda</td>
+<td>Routing</td>
+</tr>
+<tr>
+<td>Tugas independen</td>
+<td>Parallelization</td>
+</tr>
+<tr>
+<td>Perlu perbaikan kualitas</td>
+<td>Evaluator-optimizer</td>
+</tr>
+<tr>
+<td>Banyak subtugas dinamis</td>
+<td>Orchestrator-worker</td>
+</tr>
+<tr>
+<td>Risiko atau ambiguitas</td>
+<td>Human-in-the-loop</td>
+</tr>
+<tr>
+<td>Respons terhadap perubahan sistem</td>
+<td>Event-driven</td>
+</tr>
+</tbody></table></div>
+<h2>Checkpoint Bab 7</h2>
+<ol>
+<li>Kapan parallelization aman digunakan?</li>
+<li>Apa peran orchestrator?</li>
+<li>Mengapa evaluator membutuhkan rubric?</li>
+<li>Apa informasi minimum pada approval request?</li>
+</ol>
+<h2>Latihan Bab 7</h2>
+<p>Rancang orkestrasi untuk proses “membuat laporan evaluasi kegiatan” dengan minimal tiga pola. Gambarkan alur dan jelaskan mengapa setiap pola dipilih.</p>
+<hr>
+

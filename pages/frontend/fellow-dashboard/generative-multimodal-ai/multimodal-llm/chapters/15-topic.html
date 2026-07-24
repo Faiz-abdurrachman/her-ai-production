@@ -1,0 +1,219 @@
+<h1>Diskusi, Glosarium, Ringkasan, dan Referensi</h1>
+<h2>15.1 Topik Diskusi</h2>
+<h3>Diskusi 1 - Unified Model atau Modular?</h3>
+<p>Bandingkan satu model besar dengan pipeline beberapa model khusus untuk use case yang sama. Bahas kualitas, debugging, biaya, governance, dan vendor lock-in.</p>
+<h3>Diskusi 2 - Konflik Sumber</h3>
+<p>Tentukan aturan ketika laporan manusia, gambar, dan sensor memberi informasi berbeda. Sumber mana yang menjadi rujukan dan kapan review wajib dilakukan?</p>
+<h3>Diskusi 3 - Privasi Multimodal</h3>
+<p>Apakah rekaman audio atau video selalu diperlukan? Bahas consent, retensi, redaksi, dan penghapusan.</p>
+<h3>Diskusi 4 - Tool Permission</h3>
+<p>Batas apa yang harus diterapkan sebelum MLLM boleh mengirim email, mengubah database, atau menjalankan tindakan fisik?</p>
+<h2>15.2 Glosarium</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Istilah</th>
+<th>Arti</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Modalitas</td>
+<td>Bentuk atau saluran informasi, misalnya teks, gambar, audio, dan video</td>
+</tr>
+<tr>
+<td>MLLM</td>
+<td>Large Language Model yang dapat menggunakan beberapa modalitas</td>
+</tr>
+<tr>
+<td>Encoder</td>
+<td>Komponen yang mengubah input menjadi representasi</td>
+</tr>
+<tr>
+<td>Projector</td>
+<td>Lapisan yang memetakan representasi ke dimensi atau ruang lain</td>
+</tr>
+<tr>
+<td>Connector</td>
+<td>Komponen penghubung encoder dan model bahasa</td>
+</tr>
+<tr>
+<td>Fusion</td>
+<td>Proses menggabungkan informasi dari beberapa modalitas</td>
+</tr>
+<tr>
+<td>Early fusion</td>
+<td>Penggabungan representasi pada tahap awal</td>
+</tr>
+<tr>
+<td>Intermediate fusion</td>
+<td>Penggabungan pada lapisan menengah</td>
+</tr>
+<tr>
+<td>Late fusion</td>
+<td>Penggabungan prediksi atau embedding pada tahap akhir</td>
+</tr>
+<tr>
+<td>Tool-mediated fusion</td>
+<td>Integrasi informasi melalui hasil alat eksternal</td>
+</tr>
+<tr>
+<td>Visual token</td>
+<td>Vektor yang mewakili bagian gambar</td>
+</tr>
+<tr>
+<td>Audio token</td>
+<td>Representasi diskret atau laten dari segmen audio</td>
+</tr>
+<tr>
+<td>Temporal encoding</td>
+<td>Representasi posisi waktu</td>
+</tr>
+<tr>
+<td>Alignment</td>
+<td>Penyelarasan representasi dari modalitas berbeda</td>
+</tr>
+<tr>
+<td>Grounding</td>
+<td>Hubungan klaim dengan bukti sumber</td>
+</tr>
+<tr>
+<td>Context budget</td>
+<td>Alokasi kapasitas konteks untuk seluruh input dan output</td>
+</tr>
+<tr>
+<td>Token compression</td>
+<td>Pengurangan jumlah token sambil mempertahankan informasi penting</td>
+</tr>
+<tr>
+<td>Modality dropout</td>
+<td>Kondisi atau teknik ketika satu modalitas tidak tersedia</td>
+</tr>
+<tr>
+<td>Multimodal RAG</td>
+<td>Retrieval-Augmented Generation dengan sumber beberapa modalitas</td>
+</tr>
+<tr>
+<td>Cross-modal retrieval</td>
+<td>Pencarian item beda modalitas dari kueri tertentu</td>
+</tr>
+<tr>
+<td>Keyframe</td>
+<td>Frame yang mewakili bagian penting video</td>
+</tr>
+<tr>
+<td>ASR</td>
+<td>Automatic Speech Recognition</td>
+</tr>
+<tr>
+<td>Diarization</td>
+<td>Pemisahan segmen audio berdasarkan pembicara</td>
+</tr>
+<tr>
+<td>Abstention</td>
+<td>Keputusan model untuk tidak menjawab ketika bukti tidak cukup</td>
+</tr>
+<tr>
+<td>Hallucination temporal</td>
+<td>Klaim waktu atau urutan yang tidak didukung</td>
+</tr>
+<tr>
+<td>Schema validation</td>
+<td>Pemeriksaan output terhadap struktur yang diwajibkan</td>
+</tr>
+<tr>
+<td>Golden set</td>
+<td>Kumpulan evaluasi terkurasi dan berversi</td>
+</tr>
+<tr>
+<td>Graceful degradation</td>
+<td>Perilaku terbatas tetapi aman ketika komponen gagal</td>
+</tr>
+<tr>
+<td>Human-in-the-loop</td>
+<td>Keterlibatan manusia dalam review atau keputusan</td>
+</tr>
+</tbody></table></div>
+<h2>15.3 Ringkasan Cepat</h2>
+<ol>
+<li>MLLM menghubungkan beberapa modalitas melalui encoder, connector, fusion, atau tool.</li>
+<li>Setiap modalitas memiliki struktur dan sumber error berbeda.</li>
+<li>Preprocessing menentukan informasi apa yang dipertahankan atau hilang.</li>
+<li>Early, intermediate, late, dan tool-mediated fusion memiliki trade-off.</li>
+<li>Posisi spasial, temporal, dan halaman harus dipertahankan.</li>
+<li>Alignment global tidak menjamin grounding detail.</li>
+<li>Context budget perlu direncanakan sejak desain awal.</li>
+<li>Token compression menghemat biaya tetapi dapat menghilangkan informasi.</li>
+<li>Instruction tuning perlu mencakup negative example dan abstention.</li>
+<li>Input labeling mencegah sumber tertukar.</li>
+<li>Dokumen panjang, audio, dan video membutuhkan chunking atau retrieval.</li>
+<li>Multimodal RAG harus menjaga metadata dan source marker.</li>
+<li>Tool use memerlukan least privilege dan validasi.</li>
+<li>Fine-tuning dilakukan setelah pipeline dasar dievaluasi.</li>
+<li>Evaluasi harus memisahkan preprocessing, perception, reasoning, dan sistem.</li>
+<li>Cross-modal consistency dan evidence penting untuk reliability.</li>
+<li>Prompt injection dapat tersembunyi pada semua modalitas.</li>
+<li>Privacy by design berarti meminimalkan data sejak awal.</li>
+<li>Deployment memerlukan versioning, monitoring, fallback, dan rollback.</li>
+<li>Keputusan berisiko tinggi memerlukan human review.</li>
+</ol>
+<h2>15.4 Checklist Sebelum Menggunakan MLLM</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Masalah benar-benar memerlukan lebih dari satu modalitas.</li>
+<li><input disabled="" type="checkbox"> Peran setiap modalitas didefinisikan.</li>
+<li><input disabled="" type="checkbox"> Hak akses dan consent diperiksa.</li>
+<li><input disabled="" type="checkbox"> Preprocessing diuji per perangkat dan kondisi.</li>
+<li><input disabled="" type="checkbox"> Source ID, page, region, dan timestamp dipertahankan.</li>
+<li><input disabled="" type="checkbox"> Context budget telah dihitung.</li>
+<li><input disabled="" type="checkbox"> Strategi retrieval atau kompresi tersedia.</li>
+<li><input disabled="" type="checkbox"> Prompt memisahkan observasi, interpretasi, dan rekomendasi.</li>
+<li><input disabled="" type="checkbox"> Output memiliki schema dan validator.</li>
+<li><input disabled="" type="checkbox"> Missing modality dan konflik sumber ditangani.</li>
+<li><input disabled="" type="checkbox"> Tool menggunakan allowlist dan least privilege.</li>
+<li><input disabled="" type="checkbox"> Golden set mencakup kasus normal dan sulit.</li>
+<li><input disabled="" type="checkbox"> Evaluasi dilakukan per modalitas dan end-to-end.</li>
+<li><input disabled="" type="checkbox"> Bias dan kualitas per slice diperiksa.</li>
+<li><input disabled="" type="checkbox"> Data sensitif tidak masuk log tanpa kebutuhan.</li>
+<li><input disabled="" type="checkbox"> Fallback dan graceful degradation tersedia.</li>
+<li><input disabled="" type="checkbox"> Model, processor, prompt, index, dan policy berversi.</li>
+<li><input disabled="" type="checkbox"> Monitoring dan incident response disiapkan.</li>
+<li><input disabled="" type="checkbox"> Human review tersedia untuk kasus high-risk atau unknown.</li>
+</ul>
+<h2>15.5 Referensi Belajar</h2>
+<h3>Fondasi Transformer dan Multimodal</h3>
+<ol>
+<li>Vaswani, A. et al. <em>Attention Is All You Need</em>.</li>
+<li>Dosovitskiy, A. et al. <em>An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale</em>.</li>
+<li>Radford, A. et al. <em>Learning Transferable Visual Models From Natural Language Supervision</em>.</li>
+<li>Jaegle, A. et al. <em>Perceiver: General Perception with Iterative Attention</em>.</li>
+<li>Jaegle, A. et al. <em>Perceiver IO: A General Architecture for Structured Inputs and Outputs</em>.</li>
+</ol>
+<h3>Vision-Language dan Multimodal LLM</h3>
+<ol start="6">
+<li>Alayrac, J.-B. et al. <em>Flamingo: a Visual Language Model for Few-Shot Learning</em>.</li>
+<li>Li, J. et al. <em>BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models</em>.</li>
+<li>Liu, H. et al. <em>Visual Instruction Tuning</em>.</li>
+<li>Girdhar, R. et al. <em>ImageBind: One Embedding Space To Bind Them All</em>.</li>
+<li>Huang, S. et al. <em>Language Is Not All You Need: Aligning Perception with Language Models</em>.</li>
+</ol>
+<h3>Audio, Video, dan Dokumen</h3>
+<ol start="11">
+<li>Baevski, A. et al. <em>wav2vec 2.0: A Framework for Self-Supervised Learning of Speech Representations</em>.</li>
+<li>Radford, A. et al. <em>Robust Speech Recognition via Large-Scale Weak Supervision</em>.</li>
+<li>Arnab, A. et al. <em>ViViT: A Video Vision Transformer</em>.</li>
+<li>Xu, Y. et al. <em>LayoutLM: Pre-training of Text and Layout for Document Image Understanding</em>.</li>
+</ol>
+<h3>Retrieval, Evaluasi, dan Responsible AI</h3>
+<ol start="15">
+<li>Lewis, P. et al. <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</em>.</li>
+<li>Model card dan dataset card dari komponen yang digunakan.</li>
+<li>Dokumentasi resmi framework, processor, dan model pada versi yang dipakai.</li>
+<li>Pedoman perlindungan data, keamanan, dan tata kelola organisasi tempat sistem diterapkan.</li>
+</ol>
+<blockquote>
+<p><strong>Catatan referensi:</strong> arsitektur dan library berkembang cepat. Untuk implementasi, selalu cocokkan contoh dengan dokumentasi resmi versi model, processor, framework, dan layanan yang benar-benar digunakan.</p>
+</blockquote>
+<h2>Penutup</h2>
+<p>Multimodal Large Language Model memungkinkan sistem menghubungkan informasi yang sebelumnya terpisah: kalimat, gambar, suara, video, dokumen, dan data terstruktur. Kemampuan tersebut sangat berguna ketika masalah nyata memang tersebar di berbagai sumber.</p>
+<p>Namun, semakin banyak modalitas, semakin banyak pula cara sistem dapat salah. Kesalahan dapat berasal dari input, sinkronisasi, preprocessing, retrieval, fusion, reasoning, tool use, atau validasi output. Respons yang lancar tidak membuktikan bahwa seluruh bukti telah dipahami dengan benar.</p>
+<p>Engineer yang baik membangun MLLM sebagai sistem terukur: sumber diberi identitas, konteks dibatasi, konflik dilaporkan, output divalidasi, tool dibatasi, risiko dipantau, dan manusia tetap memiliki kendali pada keputusan penting.</p>
+

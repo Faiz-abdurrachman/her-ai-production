@@ -1,0 +1,181 @@
+<h1>Deployment dan Monitoring</h1>
+<h2>12.1 Pola Deployment</h2>
+<p>Pilihan umum:</p>
+<ul>
+<li>API model terkelola,</li>
+<li>model self-hosted,</li>
+<li>hybrid: preprocessing lokal dan inference eksternal,</li>
+<li>edge untuk model kecil,</li>
+<li>batch processing untuk volume besar non-real-time.</li>
+</ul>
+<p>Pertimbangan:</p>
+<ul>
+<li>kualitas,</li>
+<li>latency,</li>
+<li>biaya,</li>
+<li>privasi,</li>
+<li>kapasitas tim,</li>
+<li>dukungan hardware,</li>
+<li>kebutuhan audit,</li>
+<li>lokasi penyimpanan data.</li>
+</ul>
+<h2>12.2 Pipeline Produksi</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">Upload gambar
+  -&gt; autentikasi dan otorisasi
+  -&gt; validasi file
+  -&gt; malware scan bila relevan
+  -&gt; metadata stripping
+  -&gt; preprocessing
+  -&gt; model inference
+  -&gt; output validation
+  -&gt; policy check
+  -&gt; result + uncertainty
+  -&gt; logging aman
+</code></pre></div>
+<h2>12.3 Validasi Input</h2>
+<p>Periksa:</p>
+<ul>
+<li>tipe file,</li>
+<li>ukuran file,</li>
+<li>dimensi,</li>
+<li>jumlah gambar,</li>
+<li>file rusak,</li>
+<li>format animasi,</li>
+<li>ekstensi tidak sesuai MIME type,</li>
+<li>konten yang dilarang,</li>
+<li>batas resolusi.</li>
+</ul>
+<p>Hindari memercayai nama file atau ekstensi saja.</p>
+<h2>12.4 Batching dan Caching</h2>
+<p>Batching meningkatkan throughput, tetapi dapat menambah waktu tunggu. Caching dapat mengurangi biaya jika gambar dan prompt sama, tetapi memerlukan kebijakan privasi dan invalidasi.</p>
+<p>Kunci cache dapat mencakup:</p>
+<ul>
+<li>hash gambar setelah preprocessing,</li>
+<li>versi model,</li>
+<li>versi prompt,</li>
+<li>parameter decoding,</li>
+<li>schema output.</li>
+</ul>
+<p>Jangan memakai cache lintas pengguna bila output dapat memuat data privat.</p>
+<h2>12.5 Latency Budget</h2>
+<p>Pecah latency:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">upload + decode + preprocessing + queue + inference + validation + response
+</code></pre></div>
+<p>Contoh budget:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Komponen</th>
+<th align="right">Target</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Upload dan decode</td>
+<td align="right">300 ms</td>
+</tr>
+<tr>
+<td>Preprocessing</td>
+<td align="right">100 ms</td>
+</tr>
+<tr>
+<td>Queue</td>
+<td align="right">200 ms</td>
+</tr>
+<tr>
+<td>Inference</td>
+<td align="right">2.500 ms</td>
+</tr>
+<tr>
+<td>Validasi</td>
+<td align="right">200 ms</td>
+</tr>
+<tr>
+<td>Total target</td>
+<td align="right">3.300 ms</td>
+</tr>
+</tbody></table></div>
+<p>Angka hanya contoh. Target harus mengikuti kebutuhan produk.</p>
+<h2>12.6 Cost Drivers</h2>
+<p>Biaya dipengaruhi oleh:</p>
+<ul>
+<li>resolusi dan jumlah gambar,</li>
+<li>jumlah visual token,</li>
+<li>panjang prompt,</li>
+<li>panjang output,</li>
+<li>model size,</li>
+<li>retry,</li>
+<li>multi-pass,</li>
+<li>concurrency,</li>
+<li>penyimpanan.</li>
+</ul>
+<p>Optimasi:</p>
+<ul>
+<li>gunakan resolusi adaptif,</li>
+<li>crop region penting,</li>
+<li>batasi output,</li>
+<li>gunakan model kecil untuk routing,</li>
+<li>cache aman,</li>
+<li>lakukan batch untuk workload offline,</li>
+<li>hentikan pipeline bila validasi awal gagal.</li>
+</ul>
+<h2>12.7 Monitoring</h2>
+<p>Pantau:</p>
+<ul>
+<li>volume request,</li>
+<li>error preprocessing,</li>
+<li>timeout,</li>
+<li>latency percentile,</li>
+<li>biaya,</li>
+<li>schema failure,</li>
+<li>abstention rate,</li>
+<li>human override,</li>
+<li>hallucination report,</li>
+<li>drift distribusi gambar,</li>
+<li>perubahan performa per slice.</li>
+</ul>
+<p>Jangan menyimpan gambar mentah dalam log tanpa kebutuhan, izin, dan kontrol yang jelas.</p>
+<h2>12.8 Drift</h2>
+<p>Drift dapat terjadi ketika:</p>
+<ul>
+<li>kamera baru digunakan,</li>
+<li>layout dokumen berubah,</li>
+<li>jenis produk baru masuk,</li>
+<li>kondisi pencahayaan berubah,</li>
+<li>prompt pengguna berubah,</li>
+<li>model atau image processor diperbarui.</li>
+</ul>
+<p>Gunakan sampling berkala, golden set, canary deployment, dan rollback.</p>
+<h2>12.9 Versioning</h2>
+<p>Satu hasil harus dapat ditelusuri ke:</p>
+<ul>
+<li>versi model,</li>
+<li>versi processor,</li>
+<li>versi prompt,</li>
+<li>versi schema,</li>
+<li>versi post-processing,</li>
+<li>timestamp,</li>
+<li>konfigurasi inference.</li>
+</ul>
+<p>Tanpa versioning, sulit menemukan penyebab perubahan kualitas.</p>
+<h2>12.10 Human-in-the-Loop</h2>
+<p>Human review cocok untuk:</p>
+<ul>
+<li>confidence rendah,</li>
+<li>teks tidak terbaca,</li>
+<li>nilai finansial tinggi,</li>
+<li>keputusan yang memengaruhi hak pengguna,</li>
+<li>konflik antar model,</li>
+<li>gambar di luar domain.</li>
+</ul>
+<p>Interface review sebaiknya menampilkan gambar, crop relevan, output model, alasan eskalasi, dan cara memperbaiki hasil.</p>
+<h2>Checkpoint Bab 12</h2>
+<ol>
+<li>Apa komponen utama pipeline produksi VLM?</li>
+<li>Mengapa hash gambar saja tidak selalu cukup sebagai cache key?</li>
+<li>Apa contoh drift pada aplikasi dokumen?</li>
+<li>Kapan human review diperlukan?</li>
+</ol>
+<h2>Latihan Bab 12 - Production Readiness</h2>
+<p>Buat checklist production readiness dengan kategori security, privacy, reliability, quality, observability, cost, dan rollback.</p>
+<hr>
+

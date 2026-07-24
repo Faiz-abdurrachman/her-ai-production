@@ -115,9 +115,18 @@ const router = {
         "/participant-ai-lab-reinforcement-learning-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/reinforcement-learning/kuis.html",
         "/participant-ai-lab-reinforcement-learning-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/reinforcement-learning/diskusi.html",
         "/participant-ai-lab-llm": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-vlm": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-multimodal-llm": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-agentic-ai": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-vlm": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/vlm/materi.html",
+        "/participant-ai-lab-vlm-practice": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/vlm/latihan.html",
+        "/participant-ai-lab-vlm-quiz": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/vlm/kuis.html",
+        "/participant-ai-lab-vlm-discussion": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/vlm/diskusi.html",
+        "/participant-ai-lab-multimodal-llm": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/multimodal-llm/materi.html",
+        "/participant-ai-lab-multimodal-llm-practice": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/multimodal-llm/latihan.html",
+        "/participant-ai-lab-multimodal-llm-quiz": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/multimodal-llm/kuis.html",
+        "/participant-ai-lab-multimodal-llm-discussion": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/multimodal-llm/diskusi.html",
+        "/participant-ai-lab-agentic-ai": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/agentic-ai/materi.html",
+        "/participant-ai-lab-agentic-ai-practice": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/agentic-ai/latihan.html",
+        "/participant-ai-lab-agentic-ai-quiz": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/agentic-ai/kuis.html",
+        "/participant-ai-lab-agentic-ai-discussion": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/agentic-ai/diskusi.html",
         "/participant-ai-lab-bioinformatics": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-data-engineering": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-data-science": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -758,6 +767,51 @@ const router = {
                     if (path === "/participant-ai-lab-deep-learning-discussion" && typeof window.initAiDeepLearningDiscussion === "function") {
                         window.initAiDeepLearningDiscussion();
                     }
+                } else if (path.startsWith("/participant-ai-lab-agentic-ai") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-agentic-ai" && typeof window.initAiAgenticAiMateri === "function") {
+                        window.initAiAgenticAiMateri();
+                    }
+                    if (path === "/participant-ai-lab-agentic-ai-practice" && typeof window.initAiAgenticAiPractice === "function") {
+                        window.initAiAgenticAiPractice();
+                    }
+                    if (path === "/participant-ai-lab-agentic-ai-quiz" && typeof window.initAiAgenticAiQuiz === "function") {
+                        window.initAiAgenticAiQuiz();
+                    }
+                    if (path === "/participant-ai-lab-agentic-ai-discussion" && typeof window.initAiAgenticAiDiscussion === "function") {
+                        window.initAiAgenticAiDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-multimodal-llm") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-multimodal-llm" && typeof window.initAiMultimodalLlmMateri === "function") {
+                        window.initAiMultimodalLlmMateri();
+                    }
+                    if (path === "/participant-ai-lab-multimodal-llm-practice" && typeof window.initAiMultimodalLlmPractice === "function") {
+                        window.initAiMultimodalLlmPractice();
+                    }
+                    if (path === "/participant-ai-lab-multimodal-llm-quiz" && typeof window.initAiMultimodalLlmQuiz === "function") {
+                        window.initAiMultimodalLlmQuiz();
+                    }
+                    if (path === "/participant-ai-lab-multimodal-llm-discussion" && typeof window.initAiMultimodalLlmDiscussion === "function") {
+                        window.initAiMultimodalLlmDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-vlm") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-vlm" && typeof window.initAiVlmMateri === "function") {
+                        window.initAiVlmMateri();
+                    }
+                    if (path === "/participant-ai-lab-vlm-practice" && typeof window.initAiVlmPractice === "function") {
+                        window.initAiVlmPractice();
+                    }
+                    if (path === "/participant-ai-lab-vlm-quiz" && typeof window.initAiVlmQuiz === "function") {
+                        window.initAiVlmQuiz();
+                    }
+                    if (path === "/participant-ai-lab-vlm-discussion" && typeof window.initAiVlmDiscussion === "function") {
+                        window.initAiVlmDiscussion();
+                    }
+
                 } else if (path.startsWith("/participant-ai-lab-large-language-model") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
                     if (path === "/participant-ai-lab-large-language-model" && typeof window.initAiLargeLanguageModelMateri === "function") {

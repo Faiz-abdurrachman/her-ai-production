@@ -1,0 +1,151 @@
+<h1>Agentic RAG dan Integrasi Pengetahuan</h1>
+<h2>9.1 Dari RAG ke Agentic RAG</h2>
+<p>RAG biasa mengikuti alur:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Query → Retrieve → Generate
+</code></pre></div>
+<p>Agentic RAG dapat memilih:</p>
+<ul>
+<li>apakah retrieval diperlukan;</li>
+<li>sumber mana yang digunakan;</li>
+<li>bagaimana query dipecah;</li>
+<li>apakah hasil cukup;</li>
+<li>apakah perlu pencarian ulang;</li>
+<li>apakah konflik perlu diselesaikan;</li>
+<li>kapan harus berhenti.</li>
+</ul>
+<h2>9.2 Retrieval sebagai Tool</h2>
+<p>Contoh tools:</p>
+<ul>
+<li><code>search_policy_documents</code>;</li>
+<li><code>search_project_files</code>;</li>
+<li><code>get_database_record</code>;</li>
+<li><code>search_web_sources</code>;</li>
+<li><code>fetch_document_section</code>.</li>
+</ul>
+<p>Pisahkan sumber berdasarkan trust level dan access control.</p>
+<h2>9.3 Query Planning</h2>
+<p>Pertanyaan kompleks dapat dipecah.</p>
+<p>Pertanyaan:</p>
+<blockquote>
+<p>“Apakah perubahan jadwal kegiatan sesuai SOP dan siapa yang harus menyetujui?”</p>
+</blockquote>
+<p>Subquery:</p>
+<ol>
+<li>cari SOP perubahan jadwal;</li>
+<li>cari definisi perubahan mayor;</li>
+<li>cari matriks approval;</li>
+<li>cari data jadwal saat ini;</li>
+<li>bandingkan perubahan;</li>
+<li>simpulkan approval yang diperlukan.</li>
+</ol>
+<h2>9.4 Source Metadata</h2>
+<p>Setiap hasil retrieval perlu metadata:</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;source_id&quot;: &quot;SOP-OPS-12&quot;,
+  &quot;title&quot;: &quot;Perubahan Jadwal Kegiatan&quot;,
+  &quot;version&quot;: &quot;3.2&quot;,
+  &quot;effective_date&quot;: &quot;2026-05-01&quot;,
+  &quot;section&quot;: &quot;4.3&quot;,
+  &quot;access_scope&quot;: &quot;internal&quot;,
+  &quot;content&quot;: &quot;...&quot;
+}
+</code></pre></div>
+<p>Metadata membantu:</p>
+<ul>
+<li>citation;</li>
+<li>freshness check;</li>
+<li>conflict resolution;</li>
+<li>permission;</li>
+<li>audit.</li>
+</ul>
+<h2>9.5 Retrieval Quality</h2>
+<p>Ukuran yang dapat digunakan:</p>
+<ul>
+<li>recall sumber relevan;</li>
+<li>precision hasil;</li>
+<li>freshness;</li>
+<li>authority;</li>
+<li>citation correctness;</li>
+<li>answer groundedness.</li>
+</ul>
+<p>Agen tidak boleh menganggap hasil teratas selalu benar.</p>
+<h2>9.6 Retrieval Retry</h2>
+<p>Agen dapat memperbaiki query jika:</p>
+<ul>
+<li>hasil kosong;</li>
+<li>sumber terlalu umum;</li>
+<li>versi dokumen lama;</li>
+<li>istilah berbeda;</li>
+<li>evidence tidak cukup.</li>
+</ul>
+<p>Namun jumlah retry harus dibatasi.</p>
+<div class="reasoning-code-block"><pre><code class="language-python">MAX_RETRIEVAL_ATTEMPTS = 3
+
+if evidence_score &lt; 0.7 and attempts &lt; MAX_RETRIEVAL_ATTEMPTS:
+    query = rewrite_query(query, missing_evidence)
+else:
+    escalate_or_answer_with_uncertainty()
+</code></pre></div>
+<h2>9.7 Conflict-Aware RAG</h2>
+<p>Ketika sumber bertentangan:</p>
+<ol>
+<li>bandingkan tanggal efektif;</li>
+<li>cek status aktif atau arsip;</li>
+<li>cek otoritas penerbit;</li>
+<li>cek scope;</li>
+<li>tampilkan konflik;</li>
+<li>minta keputusan manusia jika tidak dapat diselesaikan.</li>
+</ol>
+<h2>9.8 Prompt Injection pada RAG</h2>
+<p>Dokumen yang diambil dapat berisi instruksi jahat.</p>
+<p>Mitigasi:</p>
+<ul>
+<li>perlakukan dokumen sebagai data;</li>
+<li>jangan memberikan tools berisiko selama fase ekstraksi;</li>
+<li>gunakan content sanitization;</li>
+<li>deteksi instruksi tersembunyi;</li>
+<li>gunakan domain allowlist;</li>
+<li>pisahkan retrieval agent dan action agent;</li>
+<li>minta approval sebelum tindakan eksternal.</li>
+</ul>
+<h2>9.9 RAG dan Memory</h2>
+<p>Bedakan:</p>
+<ul>
+<li><strong>knowledge base</strong>: informasi organisasi yang dikelola;</li>
+<li><strong>memory</strong>: informasi kontekstual pengguna atau sesi;</li>
+<li><strong>tool result</strong>: data sementara dari sistem;</li>
+<li><strong>model knowledge</strong>: pengetahuan internal model yang bisa usang.</li>
+</ul>
+<p>Prioritas sumber untuk keputusan organisasi biasanya:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Policy resmi aktif
+&gt; database sistem
+&gt; dokumen proyek terverifikasi
+&gt; memory pengguna
+&gt; pengetahuan internal model
+</code></pre></div>
+<h2>9.10 Citation-First Output</h2>
+<p>Format hasil:</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;answer&quot;: &quot;Perubahan memerlukan persetujuan koordinator.&quot;,
+  &quot;claims&quot;: [
+    {
+      &quot;claim&quot;: &quot;Perubahan lebih dari 2 jam dikategorikan mayor&quot;,
+      &quot;source_id&quot;: &quot;SOP-OPS-12&quot;,
+      &quot;section&quot;: &quot;4.3&quot;
+    }
+  ],
+  &quot;uncertainties&quot;: [],
+  &quot;recommended_action&quot;: &quot;Create approval request&quot;
+}
+</code></pre></div>
+<h2>Checkpoint Bab 9</h2>
+<ol>
+<li>Apa perbedaan RAG biasa dan Agentic RAG?</li>
+<li>Mengapa source metadata penting?</li>
+<li>Bagaimana menangani dua dokumen yang bertentangan?</li>
+<li>Mengapa retrieval content tidak boleh diperlakukan sebagai instruction?</li>
+</ol>
+<h2>Latihan Bab 9</h2>
+<p>Rancang Agentic RAG untuk kebijakan akademik. Sertakan sumber, metadata, access control, retry, conflict resolution, citation, dan human escalation.</p>
+<hr>
+

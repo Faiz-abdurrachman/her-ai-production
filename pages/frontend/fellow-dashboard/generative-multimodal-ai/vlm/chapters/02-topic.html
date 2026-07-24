@@ -1,0 +1,129 @@
+<h1>Dari Gambar Menjadi Representasi Numerik</h1>
+<h2>2.1 Gambar sebagai Tensor</h2>
+<p>Gambar digital dapat direpresentasikan sebagai tensor dengan tinggi, lebar, dan channel warna.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Gambar RGB berukuran 224 x 224
+-&gt; tensor dengan bentuk [224, 224, 3]
+</code></pre></div>
+<p>Nilai piksel umumnya berada pada rentang 0 sampai 255, kemudian dinormalisasi ke rentang tertentu. Model tidak melihat apel, meja, atau tulisan secara langsung. Model menerima pola angka yang kemudian diubah menjadi fitur.</p>
+<h2>2.2 Preprocessing Visual</h2>
+<p>Preprocessing harus konsisten dengan kebutuhan model. Langkah umum meliputi:</p>
+<ul>
+<li>memperbaiki orientasi,</li>
+<li>mengubah ukuran,</li>
+<li>crop atau padding,</li>
+<li>konversi warna,</li>
+<li>normalisasi,</li>
+<li>mengubah ke tensor,</li>
+<li>menyusun batch.</li>
+</ul>
+<p>Dua strategi resize yang sering dipakai:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Strategi</th>
+<th>Dampak</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Resize langsung</td>
+<td>Sederhana, tetapi rasio objek dapat berubah</td>
+</tr>
+<tr>
+<td>Pertahankan aspect ratio + padding/crop</td>
+<td>Bentuk lebih stabil, tetapi area tertentu dapat terpotong atau bertambah</td>
+</tr>
+</tbody></table></div>
+<p>Untuk dokumen, teks kecil dapat hilang ketika gambar dikecilkan terlalu agresif. Untuk foto, crop dapat menghilangkan objek penting di tepi gambar.</p>
+<h2>2.3 CNN sebagai Vision Encoder</h2>
+<p>Convolutional Neural Network mengekstrak pola lokal menggunakan filter. Lapisan awal sering menangkap tepi dan tekstur. Lapisan lebih dalam membentuk fitur yang lebih abstrak.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Piksel
+  -&gt; tepi dan warna
+  -&gt; tekstur dan pola
+  -&gt; bagian objek
+  -&gt; representasi objek atau adegan
+</code></pre></div>
+<p>CNN menghasilkan feature map. Untuk menghubungkannya dengan bahasa, feature map dapat diringkas, diproyeksikan, atau diubah menjadi urutan visual token.</p>
+<h2>2.4 Vision Transformer dan Patch</h2>
+<p>Vision Transformer membagi gambar menjadi patch. Setiap patch diubah menjadi vektor, lalu diperlakukan seperti token dalam Transformer.</p>
+<p>Misalnya gambar 224 x 224 dengan patch 16 x 16:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">jumlah patch = (224 / 16) x (224 / 16)
+             = 14 x 14
+             = 196 patch
+</code></pre></div>
+<p>Setelah ditambah token khusus atau informasi posisi, urutan tersebut diproses oleh self-attention.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Gambar
+  -&gt; patch
+  -&gt; flatten
+  -&gt; linear projection
+  -&gt; positional embedding
+  -&gt; Transformer encoder
+  -&gt; visual embeddings
+</code></pre></div>
+<h2>2.5 Mengapa Posisi Penting?</h2>
+<p>Tanpa informasi posisi, model hanya memiliki sekumpulan patch. Padahal hubungan seperti di atas, di kiri, dekat, atau di dalam sangat penting.</p>
+<p>Positional embedding membantu model membedakan patch dari lokasi berbeda. Namun, posisi yang dipelajari pada resolusi tertentu dapat memerlukan penyesuaian ketika resolusi inference berubah.</p>
+<h2>2.6 Resolusi dan Jumlah Visual Token</h2>
+<p>Resolusi lebih tinggi dapat mempertahankan detail, tetapi menambah jumlah patch dan biaya komputasi.</p>
+<p>Contoh sederhana:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Ukuran gambar</th>
+<th align="right">Patch 16 x 16</th>
+<th align="right">Jumlah patch</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>224 x 224</td>
+<td align="right">16</td>
+<td align="right">196</td>
+</tr>
+<tr>
+<td>336 x 336</td>
+<td align="right">16</td>
+<td align="right">441</td>
+</tr>
+<tr>
+<td>448 x 448</td>
+<td align="right">16</td>
+<td align="right">784</td>
+</tr>
+</tbody></table></div>
+<p>Jumlah visual token yang lebih besar dapat meningkatkan latency dan penggunaan memori. Karena itu, sistem perlu memilih resolusi sesuai tugas, bukan selalu memakai ukuran terbesar.</p>
+<h2>2.7 Contoh Preprocessing dengan Python</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">from PIL import Image
+import numpy as np
+
+
+def prepare_image(path: str, size: tuple[int, int] = (224, 224)) -&gt; np.ndarray:
+    image = Image.open(path).convert(&quot;RGB&quot;)
+    image = image.resize(size)
+
+    pixels = np.asarray(image, dtype=np.float32) / 255.0
+
+    # Bentuk awal: [height, width, channel]
+    # Banyak framework mengharapkan: [channel, height, width]
+    tensor = np.transpose(pixels, (2, 0, 1))
+    return tensor
+
+
+image_tensor = prepare_image(&quot;contoh.jpg&quot;)
+print(image_tensor.shape)
+</code></pre></div>
+<p>Kode tersebut hanya ilustrasi. Model produksi biasanya memiliki image processor khusus dengan mean, standard deviation, interpolation, crop, dan ukuran yang telah ditentukan.</p>
+<h2>Checkpoint Bab 2</h2>
+<ol>
+<li>Mengapa gambar harus diproses sebelum masuk ke model?</li>
+<li>Apa hubungan patch dengan visual token?</li>
+<li>Mengapa resolusi tinggi tidak selalu menjadi pilihan terbaik?</li>
+</ol>
+<h2>Latihan Bab 2 - Audit Preprocessing</h2>
+<p>Ambil satu gambar foto dan satu gambar dokumen. Buat tiga versi: resize langsung, center crop, dan padding. Bandingkan:</p>
+<ul>
+<li>bagian apa yang hilang,</li>
+<li>apakah teks masih terbaca,</li>
+<li>apakah bentuk objek berubah,</li>
+<li>strategi mana yang paling sesuai untuk masing-masing jenis gambar.</li>
+</ul>
+<hr>
+

@@ -1,0 +1,176 @@
+<h1>Agent Loop, Planning, dan Decomposition</h1>
+<h2>4.1 Siklus Plan-Act-Observe-Evaluate</h2>
+<p>Agent loop dapat dijelaskan dengan empat tahap:</p>
+<ol>
+<li><strong>Plan</strong> - memilih langkah atau subtugas.</li>
+<li><strong>Act</strong> - menjalankan tool atau menghasilkan tindakan.</li>
+<li><strong>Observe</strong> - membaca hasil tindakan.</li>
+<li><strong>Evaluate</strong> - menilai kemajuan dan menentukan langkah selanjutnya.</li>
+</ol>
+<div class="reasoning-code-block"><pre><code class="language-text">Goal
+ ↓
+Plan → Act → Observe → Evaluate
+ ↑                         ↓
+ └──── lanjut / revisi / berhenti
+</code></pre></div>
+<h2>4.2 Planning</h2>
+<p>Planning membantu memecah tujuan menjadi langkah. Namun rencana tidak selalu perlu dibuat sangat panjang sebelum bekerja.</p>
+<h3>Upfront planning</h3>
+<p>Seluruh rencana dibuat di awal.</p>
+<p>Kelebihan:</p>
+<ul>
+<li>mudah ditinjau;</li>
+<li>cocok untuk approval;</li>
+<li>baik untuk tugas dengan dependensi jelas.</li>
+</ul>
+<p>Kekurangan:</p>
+<ul>
+<li>rencana cepat usang jika hasil tool tidak sesuai;</li>
+<li>dapat membuang token.</li>
+</ul>
+<h3>Incremental planning</h3>
+<p>Agen menentukan satu atau beberapa langkah terdekat, lalu memperbarui rencana setelah mendapat observasi.</p>
+<p>Kelebihan:</p>
+<ul>
+<li>adaptif;</li>
+<li>cocok untuk lingkungan dinamis.</li>
+</ul>
+<p>Kekurangan:</p>
+<ul>
+<li>lebih sulit diprediksi;</li>
+<li>membutuhkan stopping condition kuat.</li>
+</ul>
+<h2>4.3 Task Decomposition</h2>
+<p>Tujuan yang baik dapat dipecah menjadi subtugas yang:</p>
+<ul>
+<li>memiliki output jelas;</li>
+<li>dapat diuji;</li>
+<li>tidak tumpang tindih;</li>
+<li>memiliki dependensi yang diketahui;</li>
+<li>memiliki batas waktu dan biaya.</li>
+</ul>
+<p>Contoh tujuan: “Siapkan ringkasan risiko proyek minggu ini.”</p>
+<p>Decomposition:</p>
+<ol>
+<li>ambil daftar milestone;</li>
+<li>ambil issue terbuka;</li>
+<li>tandai item terlambat;</li>
+<li>kelompokkan risiko;</li>
+<li>ambil pemilik risiko;</li>
+<li>susun draft ringkasan;</li>
+<li>validasi sumber;</li>
+<li>minta persetujuan.</li>
+</ol>
+<h2>4.4 ReAct sebagai Pola Konseptual</h2>
+<p>Pola ReAct menggabungkan proses penalaran dan tindakan secara bergantian. Secara praktis, sistem menerima konteks, memilih tindakan, memperoleh observasi, lalu memperbarui keputusan.</p>
+<p>Dalam aplikasi produksi:</p>
+<ul>
+<li>jangan bergantung pada penyimpanan reasoning internal panjang;</li>
+<li>simpan <strong>decision summary</strong> yang ringkas;</li>
+<li>simpan tool call dan hasilnya;</li>
+<li>simpan alasan operasional yang dapat diaudit;</li>
+<li>jangan menampilkan data rahasia dalam trace.</li>
+</ul>
+<p>Contoh trace yang aman:</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;step&quot;: 3,
+  &quot;decision&quot;: &quot;Need current task status before drafting follow-up&quot;,
+  &quot;tool&quot;: &quot;get_tasks&quot;,
+  &quot;arguments&quot;: {&quot;project_id&quot;: &quot;PRJ-42&quot;},
+  &quot;result_status&quot;: &quot;success&quot;
+}
+</code></pre></div>
+<h2>4.5 Planner dan Executor</h2>
+<p>Untuk tugas kompleks, planning dapat dipisahkan dari execution.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Planner
+  ↓ menghasilkan rencana terstruktur
+Executor
+  ↓ menjalankan satu langkah
+Verifier
+  ↓ memeriksa hasil
+Planner memperbarui rencana
+</code></pre></div>
+<p>Contoh schema rencana:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">from typing import Literal, TypedDict
+
+class PlanStep(TypedDict):
+    step_id: str
+    objective: str
+    tool: str | None
+    depends_on: list[str]
+    status: Literal[&quot;pending&quot;, &quot;running&quot;, &quot;done&quot;, &quot;failed&quot;]
+    requires_approval: bool
+</code></pre></div>
+<h2>4.6 Evaluator-Optimizer Loop</h2>
+<p>Pola ini menggunakan satu komponen untuk menghasilkan dan satu komponen untuk mengevaluasi.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Generator → Draft
+              ↓
+Evaluator → Feedback
+              ↓
+Optimizer → Revised draft
+</code></pre></div>
+<p>Gunakan pola ini ketika kualitas memiliki kriteria jelas, seperti:</p>
+<ul>
+<li>seluruh sumber harus dicantumkan;</li>
+<li>format wajib lengkap;</li>
+<li>tidak boleh ada klaim tanpa bukti;</li>
+<li>laporan harus mengikuti template.</li>
+</ul>
+<p>Batasi jumlah revisi agar tidak terjadi loop tanpa akhir.</p>
+<h2>4.7 Stopping Condition</h2>
+<p>Agen harus berhenti ketika salah satu kondisi terpenuhi:</p>
+<ul>
+<li>tujuan selesai;</li>
+<li>hasil memenuhi acceptance criteria;</li>
+<li>pengguna meminta berhenti;</li>
+<li>langkah maksimum tercapai;</li>
+<li>biaya maksimum tercapai;</li>
+<li>waktu maksimum tercapai;</li>
+<li>tool penting gagal berulang;</li>
+<li>approval ditolak;</li>
+<li>risiko melebihi batas;</li>
+<li>data tidak cukup dan klarifikasi diperlukan.</li>
+</ul>
+<p>Contoh:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">MAX_STEPS = 10
+MAX_TOOL_ERRORS = 3
+MAX_COST_USD = 0.50
+
+should_stop = (
+    state[&quot;goal_completed&quot;]
+    or state[&quot;step_count&quot;] &gt;= MAX_STEPS
+    or state[&quot;tool_errors&quot;] &gt;= MAX_TOOL_ERRORS
+    or state[&quot;estimated_cost&quot;] &gt;= MAX_COST_USD
+)
+</code></pre></div>
+<h2>4.8 Anti-Pattern Planning</h2>
+<p>Hindari:</p>
+<ul>
+<li>rencana terlalu abstrak;</li>
+<li>subtugas tanpa output;</li>
+<li>langkah yang tidak dapat diverifikasi;</li>
+<li>rencana yang mengabaikan izin;</li>
+<li>re-planning pada setiap token;</li>
+<li>evaluasi oleh model yang sama tanpa rubric;</li>
+<li>tidak ada batas revisi.</li>
+</ul>
+<h2>Checkpoint Bab 4</h2>
+<ol>
+<li>Apa perbedaan upfront planning dan incremental planning?</li>
+<li>Mengapa decision summary lebih tepat untuk audit daripada reasoning panjang?</li>
+<li>Apa peran verifier?</li>
+<li>Sebutkan lima stopping condition.</li>
+</ol>
+<h2>Latihan Bab 4</h2>
+<p>Buat rencana terstruktur untuk tujuan: “Periksa kesiapan pelaksanaan seminar minggu depan.”</p>
+<p>Setiap langkah harus memiliki:</p>
+<ul>
+<li><code>step_id</code>;</li>
+<li>objective;</li>
+<li>tool atau sumber data;</li>
+<li>dependensi;</li>
+<li>acceptance criteria;</li>
+<li>kebutuhan approval.</li>
+</ul>
+<hr>
+

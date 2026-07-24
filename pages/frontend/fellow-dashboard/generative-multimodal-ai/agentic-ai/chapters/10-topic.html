@@ -1,0 +1,203 @@
+<h1>Reliability, Error Handling, dan Human Approval</h1>
+<h2>10.1 Agen Pasti Mengalami Kegagalan</h2>
+<p>Sistem yang andal tidak mengasumsikan semua langkah berhasil. Ia merancang respons terhadap kegagalan.</p>
+<p>Jenis kegagalan:</p>
+<ul>
+<li>model tidak memahami tujuan;</li>
+<li>routing salah;</li>
+<li>tool tidak tersedia;</li>
+<li>output schema tidak valid;</li>
+<li>data tidak ditemukan;</li>
+<li>permission ditolak;</li>
+<li>hasil bertentangan;</li>
+<li>biaya melebihi batas;</li>
+<li>pengguna mengubah tujuan;</li>
+<li>approval tertunda.</li>
+</ul>
+<h2>10.2 Error Taxonomy</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">class AgentError(Exception):
+    pass
+
+class ValidationError(AgentError):
+    retryable = False
+
+class ToolTimeoutError(AgentError):
+    retryable = True
+
+class PermissionError(AgentError):
+    retryable = False
+
+class InsufficientEvidenceError(AgentError):
+    retryable = False
+</code></pre></div>
+<p>Error terstruktur membantu runtime memilih tindakan yang benar.</p>
+<h2>10.3 Recovery Strategy</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Kondisi</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Schema model tidak valid</td>
+<td>Minta structured retry satu kali</td>
+</tr>
+<tr>
+<td>Tool timeout</td>
+<td>Retry terbatas</td>
+</tr>
+<tr>
+<td>Tool tidak tersedia</td>
+<td>Gunakan fallback atau informasikan</td>
+</tr>
+<tr>
+<td>Data kurang</td>
+<td>Minta klarifikasi</td>
+</tr>
+<tr>
+<td>Permission denied</td>
+<td>Hentikan dan minta akses</td>
+</tr>
+<tr>
+<td>Konflik sumber</td>
+<td>Escalate</td>
+</tr>
+<tr>
+<td>Loop tanpa progress</td>
+<td>Hentikan</td>
+</tr>
+<tr>
+<td>Approval ditolak</td>
+<td>Revisi atau batalkan</td>
+</tr>
+</tbody></table></div>
+<h2>10.4 Circuit Breaker</h2>
+<p>Circuit breaker menghentikan panggilan ke service yang terus gagal.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">CLOSED: panggilan normal
+→ kegagalan melewati threshold
+OPEN: panggilan dihentikan sementara
+→ waktu pemulihan
+HALF-OPEN: uji satu panggilan
+→ berhasil: CLOSED
+→ gagal: OPEN
+</code></pre></div>
+<h2>10.5 Budget Control</h2>
+<p>Budget mencakup:</p>
+<ul>
+<li>model calls;</li>
+<li>input tokens;</li>
+<li>output tokens;</li>
+<li>tool calls;</li>
+<li>execution time;</li>
+<li>biaya uang;</li>
+<li>jumlah agent turns.</li>
+</ul>
+<div class="reasoning-code-block"><pre><code class="language-python">class Budget:
+    max_steps = 12
+    max_model_calls = 15
+    max_tool_calls = 20
+    max_seconds = 120
+    max_cost_usd = 1.00
+</code></pre></div>
+<p>Ketika mendekati batas, agent dapat:</p>
+<ul>
+<li>meringkas konteks;</li>
+<li>memilih model lebih kecil;</li>
+<li>berhenti dengan partial result;</li>
+<li>meminta pengguna mempersempit tujuan.</li>
+</ul>
+<h2>10.6 Human Approval Matrix</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Tindakan</th>
+<th>Risiko</th>
+<th>Approval</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Membaca dokumen internal sesuai izin</td>
+<td>Rendah</td>
+<td>Tidak</td>
+</tr>
+<tr>
+<td>Membuat draft</td>
+<td>Rendah-menengah</td>
+<td>Tidak</td>
+</tr>
+<tr>
+<td>Mengubah status tugas</td>
+<td>Menengah</td>
+<td>Ya</td>
+</tr>
+<tr>
+<td>Mengirim pesan eksternal</td>
+<td>Tinggi</td>
+<td>Ya</td>
+</tr>
+<tr>
+<td>Memproses pembayaran</td>
+<td>Tinggi</td>
+<td>Multi-step approval</td>
+</tr>
+<tr>
+<td>Menghapus data</td>
+<td>Sangat tinggi</td>
+<td>Approval dan recovery plan</td>
+</tr>
+</tbody></table></div>
+<h2>10.7 Pause and Resume</h2>
+<p>Agent harus dapat berhenti sambil menunggu approval, lalu melanjutkan dari state yang sama.</p>
+<p>State pause:</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;run_id&quot;: &quot;RUN-7781&quot;,
+  &quot;status&quot;: &quot;waiting_approval&quot;,
+  &quot;pending_action&quot;: {
+    &quot;tool&quot;: &quot;send_messages&quot;,
+    &quot;arguments_hash&quot;: &quot;sha256:...&quot;,
+    &quot;summary&quot;: &quot;Send 12 reminders&quot;
+  },
+  &quot;expires_at&quot;: &quot;2026-07-24T10:00:00+07:00&quot;
+}
+</code></pre></div>
+<p>Setelah approval, pastikan arguments belum berubah.</p>
+<h2>10.8 Compensating Action</h2>
+<p>Beberapa tindakan tidak dapat di-rollback langsung. Siapkan compensating action.</p>
+<p>Contoh:</p>
+<ul>
+<li>event salah dibuat → batalkan event;</li>
+<li>status salah diubah → pulihkan status lama;</li>
+<li>file salah dipindahkan → kembalikan lokasi;</li>
+<li>pesan salah terkirim → kirim koreksi, karena pesan tidak dapat ditarik.</li>
+</ul>
+<h2>10.9 Graceful Degradation</h2>
+<p>Jika komponen gagal, sistem tetap memberi hasil yang aman.</p>
+<p>Contoh:</p>
+<ul>
+<li>retrieval gagal → jawab bahwa sumber belum dapat diverifikasi;</li>
+<li>tool kalender gagal → buat draft jadwal tanpa menyimpan;</li>
+<li>model utama gagal → gunakan fallback untuk ringkasan sederhana;</li>
+<li>evaluasi gagal → minta human review.</li>
+</ul>
+<h2>10.10 Acceptance Criteria</h2>
+<p>Setiap tugas harus memiliki kondisi yang dapat diperiksa.</p>
+<p>Contoh:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Tugas selesai jika:
+- semua item terlambat teridentifikasi;
+- setiap item memiliki owner;
+- draft pengingat tersedia;
+- tidak ada pesan terkirim tanpa approval;
+- sumber data dan timestamp tercatat.
+</code></pre></div>
+<h2>Checkpoint Bab 10</h2>
+<ol>
+<li>Mengapa error harus diklasifikasikan?</li>
+<li>Apa fungsi circuit breaker?</li>
+<li>Bagaimana pause and resume mencegah tindakan tidak konsisten?</li>
+<li>Apa perbedaan rollback dan compensating action?</li>
+</ol>
+<h2>Latihan Bab 10</h2>
+<p>Buat failure mode table untuk agent layanan pelanggan. Sertakan penyebab, dampak, deteksi, retry, fallback, approval, dan severity.</p>
+<hr>
+

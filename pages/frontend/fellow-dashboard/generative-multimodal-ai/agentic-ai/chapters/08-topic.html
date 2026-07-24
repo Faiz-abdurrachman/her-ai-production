@@ -1,0 +1,179 @@
+<h1>Multi-Agent Systems</h1>
+<h2>8.1 Apa Itu Multi-Agent System?</h2>
+<p>Multi-agent system menggunakan lebih dari satu agent atau worker dengan peran berbeda. Tujuannya bukan membuat sistem tampak lebih kompleks, tetapi memisahkan tanggung jawab yang memang berbeda.</p>
+<p>Contoh peran:</p>
+<ul>
+<li>triage agent;</li>
+<li>research agent;</li>
+<li>data agent;</li>
+<li>policy agent;</li>
+<li>reviewer agent;</li>
+<li>coordinator agent.</li>
+</ul>
+<h2>8.2 Kapan Multi-Agent Layak?</h2>
+<p>Gunakan multi-agent jika:</p>
+<ul>
+<li>subtugas membutuhkan instruksi dan tools berbeda;</li>
+<li>konteks setiap peran perlu dipisahkan;</li>
+<li>pekerjaan dapat dilakukan paralel;</li>
+<li>ada kebutuhan reviewer independen;</li>
+<li>satu agent menjadi terlalu kompleks;</li>
+<li>akses perlu dipisah berdasarkan least privilege.</li>
+</ul>
+<p>Jangan menggunakan multi-agent hanya karena terlihat canggih.</p>
+<h2>8.3 Single Agent vs Multi-Agent</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aspek</th>
+<th>Single agent</th>
+<th>Multi-agent</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Kompleksitas</td>
+<td>Lebih rendah</td>
+<td>Lebih tinggi</td>
+</tr>
+<tr>
+<td>Debugging</td>
+<td>Lebih mudah</td>
+<td>Lebih sulit</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>Cenderung lebih rendah</td>
+<td>Cenderung lebih tinggi</td>
+</tr>
+<tr>
+<td>Pemisahan peran</td>
+<td>Terbatas</td>
+<td>Kuat</td>
+</tr>
+<tr>
+<td>Parallelism</td>
+<td>Terbatas</td>
+<td>Lebih fleksibel</td>
+</tr>
+<tr>
+<td>Risiko koordinasi</td>
+<td>Rendah</td>
+<td>Tinggi</td>
+</tr>
+</tbody></table></div>
+<p>Mulailah dengan single agent. Beralih ke multi-agent setelah bottleneck terbukti.</p>
+<h2>8.4 Pola Koordinasi</h2>
+<h3>Manager pattern</h3>
+<p>Satu manager memanggil agent lain sebagai tools.</p>
+<p>Kelebihan:</p>
+<ul>
+<li>kontrol terpusat;</li>
+<li>output mudah digabung;</li>
+<li>user experience konsisten.</li>
+</ul>
+<h3>Handoff pattern</h3>
+<p>Agent menyerahkan kendali ke agent lain.</p>
+<p>Kelebihan:</p>
+<ul>
+<li>spesialis menangani percakapan secara langsung;</li>
+<li>konteks peran lebih jelas.</li>
+</ul>
+<p>Risiko:</p>
+<ul>
+<li>handoff bolak-balik;</li>
+<li>kehilangan konteks;</li>
+<li>kepemilikan tugas tidak jelas.</li>
+</ul>
+<h3>Group conversation</h3>
+<p>Beberapa agent bertukar pesan dalam ruang bersama.</p>
+<p>Cocok untuk eksplorasi, tetapi memerlukan termination condition dan moderator.</p>
+<h3>Blackboard pattern</h3>
+<p>Agent menulis hasil ke state bersama. Orchestrator membaca state dan menentukan langkah berikutnya.</p>
+<p>Cocok untuk tugas dengan banyak kontribusi terstruktur.</p>
+<h2>8.5 Message Contract</h2>
+<p>Komunikasi antar-agent harus terstruktur.</p>
+<div class="reasoning-code-block"><pre><code class="language-python">class AgentMessage(TypedDict):
+    message_id: str
+    sender: str
+    recipient: str
+    task_id: str
+    message_type: str
+    payload: dict
+    evidence: list[str]
+    confidence: float
+    created_at: str
+</code></pre></div>
+<p>Hindari pesan panjang tanpa schema karena sulit digabung dan diuji.</p>
+<h2>8.6 Shared State</h2>
+<p>Shared state harus memiliki owner dan aturan update.</p>
+<p>Contoh:</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;task_id&quot;: &quot;REPORT-2026-W30&quot;,
+  &quot;facts&quot;: [],
+  &quot;risks&quot;: [],
+  &quot;open_questions&quot;: [],
+  &quot;worker_status&quot;: {},
+  &quot;conflicts&quot;: [],
+  &quot;final_status&quot;: &quot;in_progress&quot;
+}
+</code></pre></div>
+<p>Gunakan versioning atau locking untuk mencegah update saling menimpa.</p>
+<h2>8.7 Conflict Resolution</h2>
+<p>Dua agent dapat menghasilkan kesimpulan berbeda. Penyelesaian konflik dapat menggunakan:</p>
+<ul>
+<li>prioritas sumber;</li>
+<li>evidence comparison;</li>
+<li>rule engine;</li>
+<li>reviewer agent;</li>
+<li>human decision;</li>
+<li>majority vote, hanya jika sesuai;</li>
+<li>confidence threshold.</li>
+</ul>
+<p>Jangan menggabungkan dua jawaban yang bertentangan menjadi satu fakta baru tanpa bukti.</p>
+<h2>8.8 Termination</h2>
+<p>Multi-agent system mudah terjebak percakapan panjang. Gunakan:</p>
+<ul>
+<li>maximum turns;</li>
+<li>task completion signal;</li>
+<li>no-progress detection;</li>
+<li>budget limit;</li>
+<li>explicit finalizer;</li>
+<li>human escalation.</li>
+</ul>
+<p>No-progress detection:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">if state[&quot;new_facts_last_3_turns&quot;] == 0:
+    state[&quot;status&quot;] = &quot;needs_human_review&quot;
+</code></pre></div>
+<h2>8.9 Role Design</h2>
+<p>Peran yang baik memiliki:</p>
+<ul>
+<li>tujuan tunggal;</li>
+<li>tools minimum;</li>
+<li>input schema;</li>
+<li>output schema;</li>
+<li>batas keputusan;</li>
+<li>kriteria selesai.</li>
+</ul>
+<p>Contoh peran buruk: “Super Agent yang meneliti, menulis, mengecek, mengirim, dan memperbaiki semua hal.”</p>
+<h2>8.10 Anti-Pattern Multi-Agent</h2>
+<ul>
+<li>agent terlalu banyak;</li>
+<li>peran tumpang tindih;</li>
+<li>semua agent memiliki semua tools;</li>
+<li>tidak ada orchestrator;</li>
+<li>percakapan bebas tanpa termination;</li>
+<li>reviewer menerima reasoning yang sama persis;</li>
+<li>tidak ada trace per agent;</li>
+<li>biaya tidak diukur.</li>
+</ul>
+<h2>Checkpoint Bab 8</h2>
+<ol>
+<li>Mengapa single agent sebaiknya menjadi titik awal?</li>
+<li>Apa perbedaan manager dan handoff pattern?</li>
+<li>Bagaimana menangani konflik antar-agent?</li>
+<li>Apa fungsi message contract?</li>
+</ol>
+<h2>Latihan Bab 8</h2>
+<p>Rancang multi-agent system untuk “asisten penyelenggaraan konferensi.” Gunakan maksimal empat agent. Definisikan peran, tools, input-output, shared state, dan termination condition.</p>
+<hr>
+

@@ -1,0 +1,153 @@
+<h1>Multimodal Prompting dan Inference</h1>
+<h2>6.1 Prompt sebagai Kontrak</h2>
+<p>Prompt multimodal harus menjelaskan:</p>
+<ol>
+<li>tujuan,</li>
+<li>peran setiap input,</li>
+<li>sumber yang boleh digunakan,</li>
+<li>langkah analisis,</li>
+<li>format output,</li>
+<li>aturan ketidakpastian,</li>
+<li>larangan atau batasan.</li>
+</ol>
+<p>Contoh:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Tugas: buat ringkasan kondisi aset.
+Input:
+- Foto A: tampilan keseluruhan.
+- Foto B: close-up indikator.
+- Catatan teknisi: observasi lapangan.
+- Data sensor: nilai 10 menit terakhir.
+
+Aturan:
+1. Pisahkan fakta yang terlihat, data terukur, dan interpretasi.
+2. Bila sumber bertentangan, laporkan konflik.
+3. Jangan menebak komponen yang tidak terlihat.
+4. Keluarkan JSON sesuai schema.
+</code></pre></div>
+<h2>6.2 Menamai dan Mengurutkan Input</h2>
+<p>Untuk banyak input, gunakan label stabil:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">[IMAGE_1: before]
+[IMAGE_2: after]
+[DOC_1: inspection_form]
+[AUDIO_1: operator_note]
+</code></pre></div>
+<p>Tanpa label, model dapat tertukar saat membandingkan beberapa sumber.</p>
+<h2>6.3 Observasi, Interpretasi, dan Rekomendasi</h2>
+<p>Pisahkan tiga level:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Level</th>
+<th>Contoh</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Observasi</td>
+<td>Lampu indikator merah terlihat menyala</td>
+</tr>
+<tr>
+<td>Interpretasi</td>
+<td>Kondisi mungkin menunjukkan alarm aktif</td>
+</tr>
+<tr>
+<td>Rekomendasi</td>
+<td>Verifikasi kode alarm pada panel dan manual</td>
+</tr>
+</tbody></table></div>
+<p>Model harus memberi tahu kapan berpindah dari bukti ke interpretasi.</p>
+<h2>6.4 Output Terstruktur</h2>
+<p>Schema membantu integrasi sistem.</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;observations&quot;: [],
+  &quot;cross_modal_conflicts&quot;: [],
+  &quot;risk_level&quot;: &quot;low|medium|high|unknown&quot;,
+  &quot;recommended_actions&quot;: [],
+  &quot;evidence&quot;: [
+    {
+      &quot;source&quot;: &quot;IMAGE_2&quot;,
+      &quot;detail&quot;: &quot;indikator merah&quot;
+    }
+  ],
+  &quot;needs_human_review&quot;: true
+}
+</code></pre></div>
+<p>Output tetap harus divalidasi. Model dapat menghasilkan JSON tidak valid, field hilang, atau nilai di luar enum.</p>
+<h2>6.5 Few-Shot Multimodal Prompting</h2>
+<p>Few-shot example dapat menunjukkan:</p>
+<ul>
+<li>cara merujuk input,</li>
+<li>tingkat detail,</li>
+<li>format bukti,</li>
+<li>respons ketika tidak yakin,</li>
+<li>penanganan konflik.</li>
+</ul>
+<p>Contoh harus singkat dan mewakili pola, bukan sekadar kasus mudah.</p>
+<h2>6.6 Decomposition</h2>
+<p>Tugas kompleks sebaiknya dipecah:</p>
+<ol>
+<li>ekstraksi fakta per modalitas,</li>
+<li>validasi sumber,</li>
+<li>penyelarasan waktu atau entitas,</li>
+<li>identifikasi konflik,</li>
+<li>sintesis,</li>
+<li>pembuatan output.</li>
+</ol>
+<p>Decomposition dapat dilakukan dalam satu prompt atau beberapa tahap pipeline.</p>
+<h2>6.7 Multi-Pass Inference</h2>
+<p>Contoh alur:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Pass 1: ekstrak fakta dari setiap sumber
+Pass 2: bandingkan dan cari konflik
+Pass 3: susun kesimpulan dengan bukti
+Pass 4: validasi schema dan safety
+</code></pre></div>
+<p>Multi-pass meningkatkan kontrol tetapi menambah latency dan biaya.</p>
+<h2>6.8 Parameter Decoding</h2>
+<p>Untuk ekstraksi dan analisis, decoding sebaiknya lebih stabil. Untuk ide kreatif, variasi dapat ditingkatkan.</p>
+<p>Parameter umum:</p>
+<ul>
+<li>temperature,</li>
+<li>top-p,</li>
+<li>max output token,</li>
+<li>stop sequence,</li>
+<li>repetition penalty.</li>
+</ul>
+<p>Kualitas tidak boleh hanya bergantung pada menurunkan temperature. Grounding dan validasi tetap diperlukan.</p>
+<h2>6.9 Abstention</h2>
+<p>Model perlu dapat menjawab:</p>
+<ul>
+<li>tidak cukup informasi,</li>
+<li>input tidak terbaca,</li>
+<li>sumber bertentangan,</li>
+<li>tugas di luar kemampuan,</li>
+<li>keputusan memerlukan ahli.</li>
+</ul>
+<p>Abstention bukan kegagalan. Dalam banyak sistem, abstention adalah perilaku benar.</p>
+<h2>6.10 Contoh Validator Sederhana</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">ALLOWED_RISK = {&quot;low&quot;, &quot;medium&quot;, &quot;high&quot;, &quot;unknown&quot;}
+
+
+def validate_result(result: dict) -&gt; list[str]:
+    errors = []
+
+    if result.get(&quot;risk_level&quot;) not in ALLOWED_RISK:
+        errors.append(&quot;risk_level tidak valid&quot;)
+
+    if not isinstance(result.get(&quot;observations&quot;), list):
+        errors.append(&quot;observations harus berupa list&quot;)
+
+    if result.get(&quot;risk_level&quot;) in {&quot;high&quot;, &quot;unknown&quot;}:
+        if result.get(&quot;needs_human_review&quot;) is not True:
+            errors.append(&quot;kasus high/unknown wajib human review&quot;)
+
+    return errors
+</code></pre></div>
+<h2>Checkpoint Bab 6</h2>
+<ol>
+<li>Mengapa setiap input perlu diberi label?</li>
+<li>Apa manfaat memisahkan observasi dan interpretasi?</li>
+<li>Kapan multi-pass inference layak digunakan?</li>
+</ol>
+<h2>Latihan Bab 6 - Prompt Benchmark</h2>
+<p>Buat tiga versi prompt untuk tugas yang sama. Uji pada lima contoh. Catat kualitas grounding, kelengkapan output, konsistensi, dan jumlah token.</p>
+<hr>
+

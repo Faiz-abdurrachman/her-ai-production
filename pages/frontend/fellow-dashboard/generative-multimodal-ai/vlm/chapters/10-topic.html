@@ -1,0 +1,154 @@
+<h1>Evaluasi Vision Language Model</h1>
+<h2>10.1 Evaluasi Harus Mengikuti Tugas</h2>
+<p>Tidak ada satu skor yang mewakili seluruh kemampuan VLM. Sistem retrieval, captioning, VQA, dan ekstraksi dokumen memerlukan metrik berbeda.</p>
+<p>Evaluasi sebaiknya memiliki tiga lapisan:</p>
+<ol>
+<li>kualitas model pada dataset,</li>
+<li>kualitas pipeline aplikasi,</li>
+<li>dampak pada workflow pengguna.</li>
+</ol>
+<h2>10.2 Retrieval Metrics</h2>
+<p>Metrik umum:</p>
+<ul>
+<li>Recall@1,</li>
+<li>Recall@5,</li>
+<li>Recall@10,</li>
+<li>Mean Reciprocal Rank,</li>
+<li>normalized Discounted Cumulative Gain untuk relevance bertingkat.</li>
+</ul>
+<p>Contoh Recall@5: berapa banyak kueri yang memiliki setidaknya satu gambar relevan dalam lima hasil teratas.</p>
+<h2>10.3 Caption Metrics</h2>
+<p>Caption dapat dibandingkan dengan reference menggunakan metrik berbasis overlap atau similarity. Namun, satu gambar dapat memiliki banyak caption benar.</p>
+<p>Karena itu, evaluasi caption sebaiknya menggabungkan:</p>
+<ul>
+<li>semantic similarity,</li>
+<li>object and attribute correctness,</li>
+<li>detail coverage,</li>
+<li>hallucination rate,</li>
+<li>penilaian manusia sesuai tujuan.</li>
+</ul>
+<h2>10.4 VQA Accuracy</h2>
+<p>Untuk jawaban pendek, normalisasi dapat diperlukan:</p>
+<ul>
+<li>huruf besar-kecil,</li>
+<li>tanda baca,</li>
+<li>angka kata dan angka digit,</li>
+<li>sinonim yang diizinkan.</li>
+</ul>
+<p>Namun normalisasi jangan menyamarkan kesalahan penting. <code>dua</code> dan <code>tiga</code> tidak boleh dianggap sama walaupun format lain serupa.</p>
+<h2>10.5 Evaluasi Grounding</h2>
+<p>Bounding box dapat dievaluasi dengan Intersection over Union.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">IoU = luas irisan prediksi dan ground truth
+      --------------------------------------
+      luas gabungan prediksi dan ground truth
+</code></pre></div>
+<p>Untuk jawaban berbasis region, periksa apakah region benar-benar mendukung klaim, bukan hanya berada dekat objek.</p>
+<h2>10.6 Hallucination Visual</h2>
+<p>Hallucination visual terjadi ketika model menyebut objek, teks, atribut, atau hubungan yang tidak didukung gambar.</p>
+<p>Kategori evaluasi:</p>
+<ul>
+<li>object hallucination,</li>
+<li>attribute hallucination,</li>
+<li>counting error,</li>
+<li>spatial error,</li>
+<li>OCR fabrication,</li>
+<li>identity inference,</li>
+<li>causal claim tanpa bukti.</li>
+</ul>
+<p>Ukur tidak hanya jumlah kesalahan, tetapi juga tingkat dampaknya.</p>
+<h2>10.7 Robustness Testing</h2>
+<p>Uji variasi yang wajar:</p>
+<ul>
+<li>resolusi turun,</li>
+<li>blur ringan,</li>
+<li>pencahayaan berbeda,</li>
+<li>crop kecil,</li>
+<li>rotasi,</li>
+<li>kompresi,</li>
+<li>latar belakang berbeda,</li>
+<li>variasi bahasa prompt.</li>
+</ul>
+<p>Robustness test tidak boleh mengubah label secara tidak sengaja.</p>
+<h2>10.8 Slice Evaluation</h2>
+<p>Nilai performa per kelompok atau kondisi:</p>
+<ul>
+<li>jenis perangkat,</li>
+<li>indoor vs outdoor,</li>
+<li>resolusi,</li>
+<li>bahasa,</li>
+<li>kategori objek,</li>
+<li>tingkat occlusion,</li>
+<li>kualitas dokumen,</li>
+<li>lokasi atau domain.</li>
+</ul>
+<p>Rata-rata tinggi dapat menyembunyikan kegagalan pada kelompok tertentu.</p>
+<h2>10.9 Human Evaluation</h2>
+<p>Rubrik manusia dapat memakai skala 1 sampai 5 untuk:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Dimensi</th>
+<th>Pertanyaan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Correctness</td>
+<td>Apakah klaim sesuai gambar?</td>
+</tr>
+<tr>
+<td>Completeness</td>
+<td>Apakah detail penting tercakup?</td>
+</tr>
+<tr>
+<td>Relevance</td>
+<td>Apakah jawaban menjawab tugas?</td>
+</tr>
+<tr>
+<td>Grounding</td>
+<td>Apakah klaim punya bukti visual?</td>
+</tr>
+<tr>
+<td>Clarity</td>
+<td>Apakah bahasa jelas?</td>
+</tr>
+<tr>
+<td>Safety</td>
+<td>Apakah model menghindari inferensi sensitif?</td>
+</tr>
+</tbody></table></div>
+<p>Gunakan panduan dan contoh agar penilai konsisten. Ukur agreement bila keputusan penting.</p>
+<h2>10.10 Evaluasi Sistem</h2>
+<p>Selain kualitas model, ukur:</p>
+<ul>
+<li>latency p50, p95, p99,</li>
+<li>biaya per gambar,</li>
+<li>failure rate preprocessing,</li>
+<li>parsing error,</li>
+<li>retry rate,</li>
+<li>persentase human review,</li>
+<li>waktu penyelesaian workflow,</li>
+<li>keluhan atau koreksi pengguna.</li>
+</ul>
+<h2>10.11 Membuat Golden Set</h2>
+<p>Golden set adalah kumpulan contoh yang telah ditinjau dan mewakili penggunaan penting. Isi sebaiknya mencakup:</p>
+<ul>
+<li>kasus umum,</li>
+<li>edge cases,</li>
+<li>gambar ambigu,</li>
+<li>pertanyaan tidak dapat dijawab,</li>
+<li>data dengan teks kecil,</li>
+<li>variasi device dan domain,</li>
+<li>kasus berisiko tinggi.</li>
+</ul>
+<p>Golden set harus berversi dan tidak dipakai sebagai data training tanpa dokumentasi.</p>
+<h2>Checkpoint Bab 10</h2>
+<ol>
+<li>Mengapa caption tidak cukup dinilai dengan word overlap?</li>
+<li>Apa yang diukur oleh Recall@K?</li>
+<li>Mengapa slice evaluation diperlukan?</li>
+<li>Sebutkan dua metrik sistem di luar akurasi model.</li>
+</ol>
+<h2>Latihan Bab 10 - Evaluation Plan</h2>
+<p>Buat evaluation plan untuk sistem pembaca dokumen. Sertakan golden set, metrik field-level, exact match, numeric tolerance, hallucination rate, latency, biaya, dan aturan human review.</p>
+<hr>
+

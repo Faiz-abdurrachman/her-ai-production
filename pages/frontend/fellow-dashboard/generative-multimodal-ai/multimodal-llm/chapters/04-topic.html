@@ -1,0 +1,138 @@
+<h1>Tokenisasi, Alignment, dan Context Budget</h1>
+<h2>4.1 Token Multimodal</h2>
+<p>MLLM sering mengubah informasi non-teks menjadi urutan token laten. Token tersebut bukan kata, melainkan vektor yang mewakili bagian atau ringkasan data.</p>
+<p>Contoh:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Gambar -&gt; 576 visual token
+Audio 10 detik -&gt; 250 audio token
+Teks -&gt; 120 language token
+</code></pre></div>
+<p>Jumlah token memengaruhi biaya komputasi dan kapasitas konteks.</p>
+<h2>4.2 Positional dan Temporal Encoding</h2>
+<p>Teks memerlukan urutan. Gambar memerlukan posisi dua dimensi. Video dan audio memerlukan waktu.</p>
+<ul>
+<li>1D position: urutan token teks,</li>
+<li>2D position: lokasi patch pada gambar,</li>
+<li>temporal position: urutan frame atau segmen audio,</li>
+<li>page position: halaman dan koordinat dokumen.</li>
+</ul>
+<p>Jika informasi posisi hilang, model dapat mengetahui objek apa yang ada tetapi tidak tahu hubungan kiri-kanan, sebelum-sesudah, atau halaman sumbernya.</p>
+<h2>4.3 Alignment Lintas Modalitas</h2>
+<p>Alignment berarti representasi dari modalitas berbeda dapat dihubungkan dengan benar.</p>
+<p>Contoh pasangan:</p>
+<ul>
+<li>gambar mesin dan deskripsi kondisi,</li>
+<li>audio ucapan dan transkrip,</li>
+<li>frame video dan timestamp kejadian,</li>
+<li>sel tabel dan label kolom.</li>
+</ul>
+<p>Contrastive learning dapat mendekatkan embedding pasangan yang cocok dan menjauhkan pasangan yang tidak cocok.</p>
+<p>Secara intuitif:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">similarity(gambar_kucing, &quot;seekor kucing&quot;) -&gt; tinggi
+similarity(gambar_kucing, &quot;mesin industri&quot;) -&gt; rendah
+</code></pre></div>
+<h2>4.4 Alignment Bukan Grounding Sempurna</h2>
+<p>Model dapat memiliki alignment global yang baik tetapi tetap salah pada detail. Gambar dan caption mungkin serupa secara umum, namun model bisa keliru menghitung objek, membaca angka, atau menentukan urutan kejadian.</p>
+<p>Karena itu, evaluasi harus mengukur:</p>
+<ul>
+<li>kesesuaian global,</li>
+<li>detail lokal,</li>
+<li>grounding region,</li>
+<li>urutan temporal,</li>
+<li>konsistensi antarinput.</li>
+</ul>
+<h2>4.5 Context Window Multimodal</h2>
+<p>Context window adalah kapasitas token yang dapat diproses dalam satu inference. Pada MLLM, token teks berbagi ruang dengan token visual, audio, video, dan tool result.</p>
+<p>Contoh anggaran:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Komponen</th>
+<th align="right">Token perkiraan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Instruksi sistem</td>
+<td align="right">800</td>
+</tr>
+<tr>
+<td>Riwayat percakapan</td>
+<td align="right">2.000</td>
+</tr>
+<tr>
+<td>4 gambar</td>
+<td align="right">2.304</td>
+</tr>
+<tr>
+<td>10 halaman dokumen</td>
+<td align="right">8.000</td>
+</tr>
+<tr>
+<td>Transkrip audio</td>
+<td align="right">3.000</td>
+</tr>
+<tr>
+<td>Ruang output</td>
+<td align="right">1.500</td>
+</tr>
+<tr>
+<td>Total</td>
+<td align="right">17.604</td>
+</tr>
+</tbody></table></div>
+<p>Angka aktual bergantung pada model dan processor. Intinya, memasukkan semua data sekaligus dapat membuat informasi penting terpotong.</p>
+<h2>4.6 Token Compression</h2>
+<p>Teknik untuk mengurangi token:</p>
+<ul>
+<li>pooling patch visual,</li>
+<li>resampler dengan latent token tetap,</li>
+<li>keyframe selection,</li>
+<li>scene summary,</li>
+<li>speech transcription,</li>
+<li>document chunking,</li>
+<li>retrieval top-k,</li>
+<li>hierarchical summarization.</li>
+</ul>
+<p>Kompresi selalu memiliki trade-off. Token lebih sedikit menghemat biaya, tetapi detail kecil dapat hilang.</p>
+<h2>4.7 Modality Dropout</h2>
+<p>Dalam data nyata, suatu modalitas dapat hilang. Kamera tertutup, mikrofon rusak, metadata kosong, atau OCR gagal. Sistem perlu diuji ketika input tidak lengkap.</p>
+<p>Strategi:</p>
+<ul>
+<li>modality mask,</li>
+<li>fallback pipeline,</li>
+<li>confidence per modalitas,</li>
+<li>training dengan modality dropout,</li>
+<li>user-facing warning.</li>
+</ul>
+<h2>4.8 Konflik Lintas Modalitas</h2>
+<p>Terkadang modalitas memberikan informasi berbeda.</p>
+<p>Contoh:</p>
+<ul>
+<li>teks laporan menyebut mesin normal,</li>
+<li>sensor menunjukkan suhu tinggi,</li>
+<li>foto memperlihatkan indikator merah.</li>
+</ul>
+<p>Sistem tidak boleh otomatis memilih satu sumber tanpa aturan. Prompt dan business logic perlu menentukan prioritas, freshness, dan sumber otoritatif.</p>
+<h2>4.9 Contoh Perhitungan Context Budget</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">budget = {
+    &quot;system&quot;: 700,
+    &quot;history&quot;: 1500,
+    &quot;images&quot;: 4 * 576,
+    &quot;document&quot;: 6000,
+    &quot;tool_results&quot;: 1200,
+    &quot;reserved_output&quot;: 1400,
+}
+
+total = sum(budget.values())
+print(f&quot;Perkiraan total token: {total}&quot;)
+</code></pre></div>
+<p>Perhitungan sederhana membantu mencegah desain yang tidak realistis.</p>
+<h2>Checkpoint Bab 4</h2>
+<ol>
+<li>Mengapa positional encoding berbeda antar modalitas?</li>
+<li>Apa perbedaan alignment dan grounding?</li>
+<li>Sebutkan tiga strategi mengurangi context overload.</li>
+</ol>
+<h2>Latihan Bab 4 - Menyusun Anggaran Konteks</h2>
+<p>Buat context budget untuk aplikasi yang menerima dua gambar, lima halaman dokumen, dan percakapan pengguna. Tentukan data yang dimasukkan langsung, diringkas, atau diambil melalui retrieval.</p>
+<hr>
+

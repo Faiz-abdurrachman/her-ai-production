@@ -1,0 +1,188 @@
+<h1>Arsitektur Inti dan Strategi Fusion</h1>
+<h2>3.1 Komponen Dasar</h2>
+<p>MLLM dapat terdiri dari beberapa komponen berikut:</p>
+<ul>
+<li>encoder per modalitas,</li>
+<li>tokenizer atau feature extractor,</li>
+<li>projector atau connector,</li>
+<li>fusion module,</li>
+<li>language model,</li>
+<li>decoder khusus modalitas,</li>
+<li>tool router,</li>
+<li>memory atau retrieval system.</li>
+</ul>
+<p>Tidak semua sistem memakai seluruh komponen. Arsitektur dipilih sesuai tugas, data, dan batas komputasi.</p>
+<h2>3.2 Encoder Per Modalitas</h2>
+<p>Encoder mengubah data mentah menjadi representasi.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Modalitas</th>
+<th>Contoh encoder</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Teks</td>
+<td>Transformer text encoder atau embedding model</td>
+</tr>
+<tr>
+<td>Gambar</td>
+<td>CNN atau Vision Transformer</td>
+</tr>
+<tr>
+<td>Audio</td>
+<td>Conformer, audio Transformer, atau speech encoder</td>
+</tr>
+<tr>
+<td>Video</td>
+<td>Video Transformer atau kombinasi frame encoder dan temporal module</td>
+</tr>
+<tr>
+<td>Dokumen</td>
+<td>OCR + layout encoder atau vision encoder</td>
+</tr>
+</tbody></table></div>
+<p>Encoder dapat dibekukan atau dilatih bersama. Membekukan encoder mengurangi kebutuhan komputasi tetapi dapat membatasi adaptasi ke domain baru.</p>
+<h2>3.3 Projector dan Connector</h2>
+<p>Dimensi embedding dari encoder mungkin berbeda dengan dimensi hidden state LLM. Projector memetakan representasi tersebut ke ruang yang kompatibel.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">visual embedding 1024 dim
+        |
+        v
+linear / MLP / query connector
+        |
+        v
+LLM embedding 4096 dim
+</code></pre></div>
+<p>Connector dapat berupa:</p>
+<ul>
+<li>linear layer,</li>
+<li>multilayer perceptron,</li>
+<li>resampler,</li>
+<li>query transformer,</li>
+<li>cross-attention block,</li>
+<li>perceiver-style latent bottleneck.</li>
+</ul>
+<p>Connector sederhana mudah dilatih. Connector yang lebih kompleks dapat mengompres token dan memilih informasi yang relevan.</p>
+<h2>3.4 Early Fusion</h2>
+<p>Pada early fusion, representasi beberapa modalitas digabung lebih awal menjadi satu urutan token.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">[text token] [image token] [audio token] -&gt; Transformer bersama
+</code></pre></div>
+<p>Kelebihan:</p>
+<ul>
+<li>interaksi lintas modalitas dapat terjadi sejak awal,</li>
+<li>cocok untuk reasoning yang sangat terintegrasi.</li>
+</ul>
+<p>Kekurangan:</p>
+<ul>
+<li>sequence menjadi panjang,</li>
+<li>biaya attention meningkat,</li>
+<li>sulit mengatur jumlah token setiap modalitas.</li>
+</ul>
+<h2>3.5 Intermediate Fusion</h2>
+<p>Pada intermediate fusion, setiap modalitas diproses lebih dahulu, lalu digabung pada lapisan tertentu melalui cross-attention atau fusion block.</p>
+<p>Kelebihan:</p>
+<ul>
+<li>representasi lokal dapat dibangun sebelum fusion,</li>
+<li>lebih fleksibel untuk encoder yang berbeda.</li>
+</ul>
+<p>Kekurangan:</p>
+<ul>
+<li>desain dan training lebih kompleks,</li>
+<li>alignment antarkomponen perlu dijaga.</li>
+</ul>
+<h2>3.6 Late Fusion</h2>
+<p>Pada late fusion, setiap modalitas menghasilkan prediksi atau embedding secara terpisah. Hasil kemudian digabung.</p>
+<p>Contoh:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">model gambar -&gt; skor kondisi visual
+model audio -&gt; skor anomali bunyi
+model teks -&gt; klasifikasi laporan
+                 |
+                 v
+            decision fusion
+</code></pre></div>
+<p>Late fusion mudah diuji per komponen dan cocok untuk sistem modular. Namun, interaksi mendalam antarinput dapat terbatas.</p>
+<h2>3.7 Tool-Mediated Fusion</h2>
+<p>Tidak semua modalitas harus dimasukkan sebagai token. LLM dapat memanggil alat khusus:</p>
+<ul>
+<li>OCR engine,</li>
+<li>speech-to-text,</li>
+<li>object detector,</li>
+<li>video search,</li>
+<li>SQL query,</li>
+<li>kalkulator,</li>
+<li>geospatial service.</li>
+</ul>
+<p>Hasil alat dikembalikan sebagai konteks terstruktur. Pola ini memisahkan fungsi reasoning dan fungsi persepsi.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">User request
+   |
+   v
+LLM memilih alat
+   |
+   +--&gt; OCR / detector / ASR / database
+   |          |
+   |          v
+   +----- hasil terstruktur
+              |
+              v
+         LLM menyusun jawaban
+</code></pre></div>
+<h2>3.8 Unified Encoder vs Modular System</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aspek</th>
+<th>Unified model</th>
+<th>Sistem modular</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Integrasi</td>
+<td>Sangat terintegrasi</td>
+<td>Bergantung kontrak antarkomponen</td>
+</tr>
+<tr>
+<td>Debugging</td>
+<td>Sulit memisahkan sumber error</td>
+<td>Lebih mudah diuji per modul</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td>Satu model besar</td>
+<td>Beberapa service</td>
+</tr>
+<tr>
+<td>Fleksibilitas</td>
+<td>Terikat kemampuan model</td>
+<td>Komponen dapat diganti</td>
+</tr>
+<tr>
+<td>Latency</td>
+<td>Dapat sederhana, tetapi berat</td>
+<td>Ada overhead orchestration</td>
+</tr>
+<tr>
+<td>Governance</td>
+<td>Model card tunggal tidak cukup</td>
+<td>Perlu governance setiap komponen</td>
+</tr>
+</tbody></table></div>
+<h2>3.9 Memilih Pola Arsitektur</h2>
+<p>Gunakan pertanyaan berikut:</p>
+<ol>
+<li>Apakah tugas membutuhkan interaksi detail lintas modalitas?</li>
+<li>Berapa ukuran input dan context budget?</li>
+<li>Apakah komponen khusus perlu dapat diaudit?</li>
+<li>Apakah sistem harus berjalan offline atau edge?</li>
+<li>Seberapa sering satu modalitas tidak tersedia?</li>
+<li>Apakah output perlu real-time?</li>
+</ol>
+<h2>Checkpoint Bab 3</h2>
+<ol>
+<li>Apa perbedaan fungsi encoder dan projector?</li>
+<li>Mengapa early fusion cenderung mahal untuk video panjang?</li>
+<li>Apa keuntungan tool-mediated fusion untuk sistem produksi?</li>
+</ol>
+<h2>Latihan Bab 3 - Membandingkan Arsitektur</h2>
+<p>Rancang dua solusi untuk asisten inspeksi: satu memakai unified MLLM, satu memakai detector + sensor model + LLM. Bandingkan kualitas, explainability, latency, cost, dan maintenance.</p>
+<hr>
+

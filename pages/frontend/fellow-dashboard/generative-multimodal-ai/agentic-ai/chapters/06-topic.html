@@ -1,0 +1,168 @@
+<h1>State, Memory, dan Context Management</h1>
+<h2>6.1 Mengapa Context Management Penting?</h2>
+<p>Agent dapat mengalami kegagalan bukan karena model lemah, tetapi karena konteks:</p>
+<ul>
+<li>terlalu panjang;</li>
+<li>berisi data tidak relevan;</li>
+<li>mencampur beberapa pengguna;</li>
+<li>memuat informasi lama;</li>
+<li>tidak mencatat hasil tool;</li>
+<li>kehilangan keputusan sebelumnya.</li>
+</ul>
+<p>Context management adalah proses memilih informasi yang tepat untuk langkah yang tepat.</p>
+<h2>6.2 State Machine</h2>
+<p>State machine mendefinisikan status dan transisi.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">received
+  ↓
+planning
+  ↓
+executing
+  ↓
+waiting_approval ↔ revising
+  ↓
+completed
+
+error → recovery → executing
+error → failed
+</code></pre></div>
+<p>Contoh definisi:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">ALLOWED_TRANSITIONS = {
+    &quot;received&quot;: {&quot;planning&quot;},
+    &quot;planning&quot;: {&quot;executing&quot;, &quot;needs_clarification&quot;},
+    &quot;executing&quot;: {&quot;waiting_approval&quot;, &quot;completed&quot;, &quot;recovery&quot;},
+    &quot;waiting_approval&quot;: {&quot;executing&quot;, &quot;revising&quot;, &quot;cancelled&quot;},
+    &quot;recovery&quot;: {&quot;executing&quot;, &quot;failed&quot;},
+}
+</code></pre></div>
+<p>Model tidak boleh memindahkan state ke transisi yang tidak diizinkan.</p>
+<h2>6.3 Working Memory</h2>
+<p>Working memory berisi informasi aktif:</p>
+<ul>
+<li>tujuan;</li>
+<li>rencana;</li>
+<li>hasil tool terbaru;</li>
+<li>progress;</li>
+<li>unresolved questions;</li>
+<li>error;</li>
+<li>budget;</li>
+<li>approval status.</li>
+</ul>
+<p>Working memory dapat diringkas secara berkala agar context window tidak penuh.</p>
+<h2>6.4 Long-Term Memory</h2>
+<p>Long-term memory hanya disimpan ketika ada manfaat jelas.</p>
+<p>Contoh informasi yang mungkin berguna:</p>
+<ul>
+<li>preferensi format laporan;</li>
+<li>bahasa pilihan;</li>
+<li>unit kerja;</li>
+<li>aturan proyek;</li>
+<li>keputusan yang telah disetujui.</li>
+</ul>
+<p>Informasi yang tidak seharusnya disimpan tanpa alasan:</p>
+<ul>
+<li>rahasia akses;</li>
+<li>data sensitif yang tidak relevan;</li>
+<li>asumsi model;</li>
+<li>temporary identifier;</li>
+<li>isi lengkap percakapan tanpa retention policy.</li>
+</ul>
+<h2>6.5 Memory Write Policy</h2>
+<p>Agen sebaiknya tidak otomatis menyimpan semua hal. Gunakan policy.</p>
+<div class="reasoning-code-block"><pre><code class="language-python">def can_write_memory(item: dict) -&gt; bool:
+    return (
+        item[&quot;user_consented&quot;]
+        and item[&quot;category&quot;] in ALLOWED_CATEGORIES
+        and not item[&quot;contains_secret&quot;]
+        and item[&quot;retention_days&quot;] &lt;= 90
+    )
+</code></pre></div>
+<p>Simpan metadata:</p>
+<ul>
+<li><code>owner_id</code>;</li>
+<li><code>source</code>;</li>
+<li><code>created_at</code>;</li>
+<li><code>expires_at</code>;</li>
+<li><code>confidence</code>;</li>
+<li><code>consent</code>;</li>
+<li><code>version</code>.</li>
+</ul>
+<h2>6.6 Memory Retrieval</h2>
+<p>Retrieval memory harus memperhatikan:</p>
+<ul>
+<li>identitas pengguna;</li>
+<li>scope proyek;</li>
+<li>recency;</li>
+<li>relevance;</li>
+<li>confidence;</li>
+<li>conflict;</li>
+<li>permission.</li>
+</ul>
+<p>Jangan hanya mengambil memori dengan similarity tertinggi. Terapkan filter akses terlebih dahulu.</p>
+<h2>6.7 Memory Conflict</h2>
+<p>Contoh:</p>
+<ul>
+<li>memori lama: “laporan dibuat mingguan”;</li>
+<li>instruksi terbaru: “laporan dibuat harian.”</li>
+</ul>
+<p>Aturan umum:</p>
+<ol>
+<li>instruksi eksplisit terbaru mengalahkan memori lama;</li>
+<li>policy organisasi mengalahkan preferensi pengguna;</li>
+<li>sumber resmi mengalahkan ringkasan model;</li>
+<li>konflik harus ditandai, bukan disembunyikan.</li>
+</ol>
+<h2>6.8 Context Compression</h2>
+<p>Teknik yang dapat digunakan:</p>
+<ul>
+<li>summarization;</li>
+<li>remove duplicates;</li>
+<li>store references instead of full content;</li>
+<li>retrieve on demand;</li>
+<li>keep only unresolved items;</li>
+<li>separate public and sensitive context;</li>
+<li>compress tool outputs into structured facts.</li>
+</ul>
+<p>Contoh ringkasan state:</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;goal&quot;: &quot;Prepare weekly risk update&quot;,
+  &quot;completed_steps&quot;: [&quot;loaded milestones&quot;, &quot;loaded issues&quot;],
+  &quot;open_risks&quot;: 4,
+  &quot;pending&quot;: [&quot;resolve owners&quot;, &quot;draft summary&quot;],
+  &quot;approval&quot;: &quot;not_required_yet&quot;
+}
+</code></pre></div>
+<h2>6.9 Session Isolation</h2>
+<p>Setiap sesi harus memiliki namespace.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">organization_id / project_id / user_id / session_id
+</code></pre></div>
+<p>Jangan menggunakan cache global untuk data sensitif tanpa pemisahan tenant.</p>
+<h2>6.10 Memory Evaluation</h2>
+<p>Uji memory melalui skenario:</p>
+<ul>
+<li>preferensi tersimpan dengan benar;</li>
+<li>pengguna dapat memperbarui preferensi;</li>
+<li>data kedaluwarsa tidak digunakan;</li>
+<li>data pengguna lain tidak muncul;</li>
+<li>konflik ditangani;</li>
+<li>permintaan penghapusan dijalankan;</li>
+<li>agent tidak menciptakan memori dari asumsi.</li>
+</ul>
+<h2>Checkpoint Bab 6</h2>
+<ol>
+<li>Apa fungsi state machine?</li>
+<li>Mengapa memory write membutuhkan policy?</li>
+<li>Apa risiko cache global pada aplikasi multi-user?</li>
+<li>Bagaimana menangani konflik antara memori lama dan instruksi terbaru?</li>
+</ol>
+<h2>Latihan Bab 6</h2>
+<p>Rancang schema memory untuk asisten pembelajaran. Pisahkan:</p>
+<ul>
+<li>informasi sesi;</li>
+<li>preferensi peserta;</li>
+<li>progress belajar;</li>
+<li>catatan yang tidak boleh disimpan;</li>
+<li>retention policy;</li>
+<li>prosedur penghapusan.</li>
+</ul>
+<hr>
+

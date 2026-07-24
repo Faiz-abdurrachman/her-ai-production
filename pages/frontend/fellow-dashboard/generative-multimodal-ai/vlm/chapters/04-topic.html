@@ -1,0 +1,99 @@
+<h1>Menyelaraskan Gambar dan Teks</h1>
+<h2>4.1 Masalah Image-Text Alignment</h2>
+<p>Agar model dapat menghubungkan gambar dengan bahasa, representasi visual dan teks harus berada dalam ruang yang dapat dibandingkan atau digabungkan.</p>
+<p>Contoh pasangan:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Gambar: seekor kucing tidur di sofa
+Teks:   &quot;kucing sedang tidur di atas sofa&quot;
+</code></pre></div>
+<p>Model perlu belajar bahwa pasangan tersebut lebih cocok dibandingkan teks seperti &quot;pesawat sedang lepas landas&quot;.</p>
+<h2>4.2 Contrastive Learning</h2>
+<p>Contrastive learning mendorong pasangan yang cocok agar memiliki embedding yang dekat dan pasangan yang tidak cocok agar lebih jauh.</p>
+<p>Dalam satu batch terdapat beberapa gambar dan caption:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Gambar 1 &lt;-&gt; Teks 1  pasangan positif
+Gambar 1 &lt;-&gt; Teks 2  pasangan negatif
+Gambar 1 &lt;-&gt; Teks 3  pasangan negatif
+</code></pre></div>
+<p>Secara intuitif:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">similarity(gambar_i, teks_i)      -&gt; dinaikkan
+similarity(gambar_i, teks_j != i) -&gt; diturunkan
+</code></pre></div>
+<p>Similarity sering dihitung menggunakan cosine similarity.</p>
+<div class="reasoning-code-block"><pre><code class="language-python">import numpy as np
+
+
+def cosine_similarity(a: np.ndarray, b: np.ndarray) -&gt; float:
+    a = a / (np.linalg.norm(a) + 1e-8)
+    b = b / (np.linalg.norm(b) + 1e-8)
+    return float(np.dot(a, b))
+</code></pre></div>
+<h2>4.3 Dual Encoder</h2>
+<p>Dual encoder memakai dua encoder terpisah:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Gambar -&gt; vision encoder -&gt; image embedding
+Teks   -&gt; text encoder   -&gt; text embedding
+                         -&gt; similarity score
+</code></pre></div>
+<p>Kelebihan:</p>
+<ul>
+<li>image embedding dapat dihitung dan disimpan lebih dulu,</li>
+<li>cocok untuk pencarian skala besar,</li>
+<li>inference similarity relatif efisien.</li>
+</ul>
+<p>Keterbatasan:</p>
+<ul>
+<li>interaksi detail antara token visual dan token teks lebih terbatas,</li>
+<li>kurang ideal untuk penalaran generatif kompleks tanpa komponen tambahan.</li>
+</ul>
+<h2>4.4 Zero-Shot Classification</h2>
+<p>Dual encoder dapat melakukan klasifikasi tanpa head khusus dengan membandingkan gambar terhadap beberapa label berbentuk teks.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Gambar
+  -&gt; embedding gambar
+
+&quot;foto kucing&quot; -&gt; embedding teks
+&quot;foto anjing&quot; -&gt; embedding teks
+&quot;foto burung&quot; -&gt; embedding teks
+
+Pilih teks dengan similarity tertinggi.
+</code></pre></div>
+<p>Kualitas sangat dipengaruhi template label. Label <code>kucing</code> dapat memberikan hasil berbeda dari <code>sebuah foto kucing domestik</code>.</p>
+<h2>4.5 Projection Layer</h2>
+<p>Vision encoder dan language model dapat memiliki dimensi embedding berbeda. Projection layer mengubah visual embedding ke dimensi yang dapat diterima model bahasa.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Visual features: [jumlah_patch, dim_vision]
+        |
+        v
+Projection / connector
+        |
+        v
+Visual tokens: [jumlah_token, dim_language]
+</code></pre></div>
+<p>Projection dapat berupa linear layer, multilayer perceptron, resampler, atau modul query yang lebih kompleks.</p>
+<h2>4.6 Cross-Attention</h2>
+<p>Cross-attention memungkinkan satu modalitas mengambil informasi dari modalitas lain.</p>
+<p>Contoh:</p>
+<ul>
+<li>query berasal dari token teks,</li>
+<li>key dan value berasal dari fitur gambar.</li>
+</ul>
+<p>Ketika menjawab &quot;warna payung&quot;, token teks dapat memberi bobot lebih besar pada region visual yang berkaitan dengan payung.</p>
+<h2>4.7 Alignment Tidak Menjamin Grounding</h2>
+<p>Model dapat memiliki embedding gambar-teks yang baik untuk retrieval tetapi masih membuat detail palsu ketika menghasilkan caption. Alignment tingkat gambar tidak selalu menjamin setiap kata terhubung ke region yang tepat.</p>
+<p>Karena itu, evaluasi perlu memeriksa:</p>
+<ul>
+<li>kecocokan global,</li>
+<li>detail objek,</li>
+<li>atribut,</li>
+<li>jumlah,</li>
+<li>hubungan spasial,</li>
+<li>teks yang terbaca,</li>
+<li>bukti visual untuk setiap klaim.</li>
+</ul>
+<h2>Checkpoint Bab 4</h2>
+<ol>
+<li>Apa tujuan contrastive learning?</li>
+<li>Mengapa dual encoder cocok untuk retrieval?</li>
+<li>Apa fungsi projection layer?</li>
+<li>Mengapa alignment global belum cukup untuk menjamin grounding detail?</li>
+</ol>
+<h2>Latihan Bab 4 - Simulasi Similarity</h2>
+<p>Buat lima deskripsi untuk satu gambar. Beri skor manual 0 sampai 5 berdasarkan kecocokan. Jelaskan aspek apa yang membuat deskripsi cocok atau tidak cocok: objek, atribut, jumlah, posisi, atau konteks.</p>
+<hr>
+

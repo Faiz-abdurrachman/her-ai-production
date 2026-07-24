@@ -1,0 +1,203 @@
+<h1>Multimodal Large Language Model</h1>
+<blockquote>
+<p>Modul praktis untuk peserta HerAI Fellowship yang membahas cara Large Language Model menerima, menghubungkan, dan menghasilkan informasi dari beberapa modalitas seperti teks, gambar, dokumen, audio, video, dan data terstruktur. Materi bergerak dari fondasi representasi hingga Multimodal RAG, tool use, evaluasi, safety, deployment, dan mini project.</p>
+</blockquote>
+<h2>Informasi Course</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Komponen</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Level</td>
+<td>Advanced</td>
+</tr>
+<tr>
+<td>Estimasi belajar</td>
+<td>22-28 jam</td>
+</tr>
+<tr>
+<td>Prasyarat</td>
+<td>Python, deep learning, Transformer, LLM, dan Vision Language Model</td>
+</tr>
+<tr>
+<td>Bentuk pembelajaran</td>
+<td>Penjelasan, analogi, diagram teks, contoh kode, latihan, checkpoint, kuis, diskusi, dan mini project</td>
+</tr>
+<tr>
+<td>Hasil akhir</td>
+<td>Peserta mampu merancang, mengevaluasi, dan mendokumentasikan prototipe aplikasi Multimodal Large Language Model secara terukur dan bertanggung jawab</td>
+</tr>
+</tbody></table></div>
+<h2>Tentang Modul Ini</h2>
+<p>Multimodal Large Language Model, disingkat MLLM, adalah sistem model bahasa yang dapat menerima dan menghubungkan lebih dari satu jenis data. Inputnya dapat berupa teks, gambar, beberapa halaman dokumen, audio, potongan video, tabel, atau keluaran alat eksternal. Model kemudian menghasilkan respons berupa teks, data terstruktur, keputusan untuk memanggil alat, atau instruksi lanjutan.</p>
+<p>Kemampuan multimodal bukan sekadar menambahkan gambar ke prompt. Setiap modalitas memiliki struktur, ukuran, noise, dan risiko yang berbeda. Gambar memiliki piksel dan hubungan spasial. Audio memiliki urutan waktu. Video memiliki ruang sekaligus waktu. Dokumen memiliki teks, tata letak, tabel, dan halaman. Agar semua informasi dapat dipakai bersama, sistem perlu mengubahnya menjadi representasi yang kompatibel, mengatur context budget, menjaga grounding, dan memvalidasi hasil.</p>
+<blockquote>
+<p><strong>Prinsip utama:</strong> model yang menerima banyak modalitas belum tentu memahami semuanya dengan kualitas yang sama. Setiap kemampuan harus diuji per modalitas, per tugas, dan per kondisi penggunaan.</p>
+</blockquote>
+<p>Modul ini bersifat model-neutral. Nama arsitektur dan paper dipakai untuk memahami pola desain, bukan untuk mengarahkan peserta pada satu penyedia atau produk tertentu.</p>
+<h2>Capaian Pembelajaran</h2>
+<p>Setelah menyelesaikan modul ini, peserta diharapkan mampu:</p>
+<ol>
+<li>Menjelaskan perbedaan LLM, VLM, dan Multimodal Large Language Model.</li>
+<li>Mengidentifikasi karakteristik teks, gambar, audio, video, dokumen, dan data terstruktur.</li>
+<li>Menjelaskan fungsi encoder, tokenizer, projector, connector, fusion layer, dan language decoder.</li>
+<li>Membedakan early fusion, intermediate fusion, late fusion, dan tool-mediated fusion.</li>
+<li>Memahami alignment lintas modalitas dan multimodal instruction tuning.</li>
+<li>Menyusun prompt yang mengatur peran setiap input dan batas bukti.</li>
+<li>Merancang pipeline multi-image, dokumen, audio, atau video dengan context budget yang realistis.</li>
+<li>Merancang Multimodal RAG dan penggunaan alat eksternal.</li>
+<li>Memilih strategi adaptasi seperti prompt tuning, adapter, LoRA, atau fine-tuning terkontrol.</li>
+<li>Menyusun evaluasi berdasarkan kualitas per modalitas, grounding, konsistensi lintas modalitas, latency, cost, privacy, dan safety.</li>
+<li>Mengidentifikasi serangan prompt injection, data leakage, hallucination, serta kegagalan temporal dan spasial.</li>
+<li>Membuat mini project asisten multimodal dengan golden set, error analysis, guardrail, dan dokumentasi.</li>
+</ol>
+<h2>Prasyarat</h2>
+<p>Peserta sebaiknya memahami:</p>
+<ul>
+<li>variabel, fungsi, class, file, JSON, dan API pada Python,</li>
+<li>tensor, neural network, loss, optimizer, dan inference,</li>
+<li>tokenisasi, embedding, attention, Transformer, context window, dan decoding,</li>
+<li>image encoder, visual token, image-text alignment, dan visual prompting,</li>
+<li>konsep dasar retrieval, vector database, evaluasi model, dan deployment.</li>
+</ul>
+<p>Peserta tidak diwajibkan melatih model multimodal besar dari awal. Fokus utama adalah memahami cara kerja, merancang sistem aplikasi, melakukan eksperimen terkontrol, dan mengevaluasi risiko.</p>
+<h2>Peta Materi</h2>
+<ol>
+<li>Pengantar Multimodal Large Language Model</li>
+<li>Modalitas dan Representasi</li>
+<li>Arsitektur Inti dan Strategi Fusion</li>
+<li>Tokenisasi, Alignment, dan Context Budget</li>
+<li>Pretraining dan Multimodal Instruction Tuning</li>
+<li>Multimodal Prompting dan Inference</li>
+<li>Multi-Image, Dokumen, Audio, dan Video</li>
+<li>Multimodal RAG dan Tool Use</li>
+<li>Adaptasi dan Fine-Tuning</li>
+<li>Evaluasi Multimodal</li>
+<li>Hallucination, Bias, Privacy, dan Safety</li>
+<li>Deployment, Optimasi, dan Monitoring</li>
+<li>Mini Project Asisten Operasional Multimodal</li>
+<li>Kuis Akhir dan Pembahasan</li>
+<li>Diskusi, Glosarium, Ringkasan, dan Referensi</li>
+</ol>
+<hr>
+<h1>Pengantar Multimodal Large Language Model</h1>
+<h2>1.1 Apa Itu Modalitas?</h2>
+<p>Modalitas adalah bentuk atau saluran informasi. Teks, gambar, audio, video, tabel, data sensor, dan posisi geografis dapat dianggap sebagai modalitas karena masing-masing memiliki struktur data dan cara interpretasi yang berbeda.</p>
+<p>Contoh:</p>
+<ul>
+<li>kalimat memiliki urutan token,</li>
+<li>gambar memiliki hubungan spasial antarpiksel,</li>
+<li>audio memiliki gelombang dan urutan waktu,</li>
+<li>video memiliki frame, gerakan, dan suara,</li>
+<li>dokumen memiliki isi sekaligus tata letak,</li>
+<li>tabel memiliki baris, kolom, tipe data, dan relasi.</li>
+</ul>
+<p>Sistem multimodal mencoba menghubungkan informasi dari dua atau lebih modalitas untuk menyelesaikan tugas yang tidak dapat diselesaikan dengan baik oleh satu modalitas saja.</p>
+<h2>1.2 Dari LLM ke MLLM</h2>
+<p>LLM pada dasarnya memproses token bahasa. Agar LLM dapat memakai gambar, audio, atau video, informasi tersebut perlu diubah menjadi representasi yang dapat dibaca oleh model bahasa atau diakses melalui alat eksternal.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Gambar / audio / video / dokumen
+              |
+              v
+Encoder dan preprocessing per modalitas
+              |
+              v
+Projector, connector, atau tool result
+              |
+              v
+Ruang representasi yang dapat dipakai LLM
+              |
+              v
+Reasoning, generation, atau tool call
+</code></pre></div>
+<p>MLLM sering memakai LLM sebagai pusat orkestrasi. Komponen non-teks mengubah data menjadi token atau embedding. LLM kemudian menyusun respons berdasarkan instruksi, konteks, dan representasi tersebut.</p>
+<h2>1.3 Perbedaan LLM, VLM, dan MLLM</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aspek</th>
+<th>LLM</th>
+<th>VLM</th>
+<th>MLLM</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Modalitas utama</td>
+<td>Teks</td>
+<td>Gambar dan teks</td>
+<td>Teks, gambar, audio, video, dokumen, atau modalitas lain</td>
+</tr>
+<tr>
+<td>Fokus umum</td>
+<td>Pemahaman dan generasi bahasa</td>
+<td>Hubungan visual-bahasa</td>
+<td>Integrasi banyak sumber informasi</td>
+</tr>
+<tr>
+<td>Tantangan khas</td>
+<td>Hallucination teks</td>
+<td>Salah melihat atau salah grounding</td>
+<td>Konflik lintas modalitas, context overload, dan safety yang lebih kompleks</td>
+</tr>
+<tr>
+<td>Contoh</td>
+<td>Ringkasan artikel</td>
+<td>Menjawab pertanyaan dari gambar</td>
+<td>Menganalisis video rapat, slide, transkrip, dan tabel sekaligus</td>
+</tr>
+</tbody></table></div>
+<p>VLM dapat dianggap sebagai salah satu bentuk model multimodal. Namun, istilah MLLM biasanya digunakan untuk sistem yang lebih luas, mampu menangani lebih dari satu jenis input non-teks atau mengorkestrasi beberapa encoder dan alat.</p>
+<h2>1.4 Contoh Use Case</h2>
+<ul>
+<li>Asisten rapat yang membaca slide, mendengar audio, dan membuat action item.</li>
+<li>Asisten inspeksi yang menggabungkan foto, catatan teknisi, dan data sensor.</li>
+<li>Asisten pembelajaran yang memahami diagram, narasi audio, dan pertanyaan peserta.</li>
+<li>Asisten dokumen yang membaca scan, tabel, stempel, dan lampiran.</li>
+<li>Asisten media yang mencari momen tertentu di dalam video berdasarkan pertanyaan bahasa alami.</li>
+<li>Asisten kesehatan yang membantu menyusun informasi dari laporan, citra, dan catatan, dengan review tenaga profesional.</li>
+</ul>
+<h2>1.5 Kapan Multimodal Tidak Diperlukan?</h2>
+<p>MLLM tidak selalu menjadi pilihan terbaik. Gunakan pendekatan lebih sederhana ketika:</p>
+<ul>
+<li>satu modalitas sudah cukup menjawab kebutuhan,</li>
+<li>keputusan membutuhkan akurasi deterministik yang dapat ditangani rule-based,</li>
+<li>latency sangat ketat,</li>
+<li>data sensitif tidak boleh keluar dari lingkungan tertentu,</li>
+<li>model khusus lebih mudah diuji dan lebih murah,</li>
+<li>volume data multimodal terlalu besar untuk context window.</li>
+</ul>
+<blockquote>
+<p><strong>Prinsip desain:</strong> gunakan kompleksitas paling rendah yang tetap memenuhi kebutuhan kualitas, risiko, dan pengalaman pengguna.</p>
+</blockquote>
+<h2>1.6 Lapisan Sistem Multimodal</h2>
+<p>Aplikasi MLLM biasanya terdiri atas:</p>
+<ol>
+<li>akuisisi input,</li>
+<li>validasi dan kontrol akses,</li>
+<li>preprocessing per modalitas,</li>
+<li>ekstraksi representasi,</li>
+<li>fusion atau orchestration,</li>
+<li>inference dan tool use,</li>
+<li>validasi output,</li>
+<li>logging, monitoring, dan human review.</li>
+</ol>
+<p>Kualitas sistem dapat gagal pada salah satu lapisan. Audio yang terpotong, gambar terbalik, halaman dokumen tertukar, atau timestamp yang salah dapat menyebabkan jawaban yang tampak masuk akal tetapi tidak benar.</p>
+<h2>Checkpoint Bab 1</h2>
+<ol>
+<li>Apa yang dimaksud dengan modalitas?</li>
+<li>Mengapa MLLM tidak cukup didefinisikan sebagai LLM yang menerima gambar?</li>
+<li>Sebutkan dua keadaan ketika model khusus lebih tepat daripada MLLM.</li>
+</ol>
+<h2>Latihan Bab 1 - Memetakan Use Case</h2>
+<p>Pilih satu masalah di pendidikan, operasi, layanan publik, manufaktur, atau bisnis. Tuliskan:</p>
+<ol>
+<li>modalitas yang tersedia,</li>
+<li>informasi unik dari setiap modalitas,</li>
+<li>output yang dibutuhkan,</li>
+<li>risiko bila salah satu modalitas diabaikan,</li>
+<li>keputusan yang memerlukan review manusia.</li>
+</ol>
+<hr>
+

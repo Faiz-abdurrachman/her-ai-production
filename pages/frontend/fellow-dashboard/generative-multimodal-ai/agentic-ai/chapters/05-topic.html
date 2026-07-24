@@ -1,0 +1,236 @@
+<h1>Tool Calling yang Aman dan Andal</h1>
+<h2>5.1 Tool sebagai Kontrak</h2>
+<p>Tool bukan sekadar fungsi yang bisa dipanggil model. Tool adalah kontrak antara model dan sistem.</p>
+<p>Kontrak tersebut mencakup:</p>
+<ul>
+<li>nama;</li>
+<li>deskripsi;</li>
+<li>parameter;</li>
+<li>tipe data;</li>
+<li>nilai yang diizinkan;</li>
+<li>hasil;</li>
+<li>jenis error;</li>
+<li>efek samping;</li>
+<li>aturan izin.</li>
+</ul>
+<h2>5.2 Tool Read dan Write</h2>
+<p>Pisahkan tools berdasarkan efeknya.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Kategori</th>
+<th>Contoh</th>
+<th>Risiko</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Read-only</td>
+<td>Cari dokumen, baca status</td>
+<td>Rendah-menengah</td>
+</tr>
+<tr>
+<td>Compute</td>
+<td>Kalkulasi, validasi</td>
+<td>Rendah</td>
+</tr>
+<tr>
+<td>Draft</td>
+<td>Buat draft email</td>
+<td>Menengah</td>
+</tr>
+<tr>
+<td>Write</td>
+<td>Ubah status, buat event</td>
+<td>Menengah-tinggi</td>
+</tr>
+<tr>
+<td>Destructive</td>
+<td>Hapus data, batalkan transaksi</td>
+<td>Tinggi</td>
+</tr>
+<tr>
+<td>External communication</td>
+<td>Kirim email, pesan, publikasi</td>
+<td>Tinggi</td>
+</tr>
+</tbody></table></div>
+<p>Tools write, destructive, dan komunikasi eksternal biasanya membutuhkan approval.</p>
+<h2>5.3 Deskripsi Tool</h2>
+<p>Deskripsi tool harus menjelaskan <strong>kapan digunakan</strong> dan <strong>kapan tidak digunakan</strong>.</p>
+<p>Contoh buruk:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">def send_message(...):
+    &quot;&quot;&quot;Send a message.&quot;&quot;&quot;
+</code></pre></div>
+<p>Contoh lebih baik:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">def create_message_draft(recipient_id: str, body: str) -&gt; dict:
+    &quot;&quot;&quot;
+    Create a reviewable draft for an existing recipient.
+    This tool does not send the message.
+    Use only after recipient_id has been resolved from trusted data.
+    &quot;&quot;&quot;
+</code></pre></div>
+<h2>5.4 Input Schema</h2>
+<p>Gunakan schema ketat.</p>
+<div class="reasoning-code-block"><pre><code class="language-python">from pydantic import BaseModel, Field
+from typing import Literal
+
+class UpdateTaskInput(BaseModel):
+    task_id: str = Field(pattern=r&quot;^TASK-[0-9]{4}$&quot;)
+    new_status: Literal[&quot;todo&quot;, &quot;in_progress&quot;, &quot;blocked&quot;, &quot;done&quot;]
+    reason: str = Field(min_length=10, max_length=300)
+    approval_token: str
+</code></pre></div>
+<p>Manfaat schema:</p>
+<ul>
+<li>mencegah argumen tidak lengkap;</li>
+<li>membatasi nilai;</li>
+<li>meningkatkan konsistensi;</li>
+<li>memudahkan pengujian;</li>
+<li>menolak input sebelum menyentuh sistem utama.</li>
+</ul>
+<h2>5.5 Output Schema</h2>
+<p>Tool sebaiknya mengembalikan hasil terstruktur.</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;ok&quot;: true,
+  &quot;data&quot;: {
+    &quot;task_id&quot;: &quot;TASK-1034&quot;,
+    &quot;old_status&quot;: &quot;blocked&quot;,
+    &quot;new_status&quot;: &quot;in_progress&quot;
+  },
+  &quot;error&quot;: null,
+  &quot;audit_id&quot;: &quot;AUD-8F21&quot;
+}
+</code></pre></div>
+<p>Untuk error:</p>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;ok&quot;: false,
+  &quot;data&quot;: null,
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;APPROVAL_REQUIRED&quot;,
+    &quot;message&quot;: &quot;A valid approval token is required&quot;,
+    &quot;retryable&quot;: false
+  },
+  &quot;audit_id&quot;: &quot;AUD-8F22&quot;
+}
+</code></pre></div>
+<h2>5.6 Idempotency</h2>
+<p>Tool idempotent dapat dipanggil ulang tanpa menggandakan efek.</p>
+<p>Masalah:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Agent memanggil create_payment
+→ koneksi timeout
+→ agent tidak tahu pembayaran berhasil
+→ agent mencoba lagi
+→ pembayaran ganda
+</code></pre></div>
+<p>Solusi menggunakan idempotency key:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">def create_request(payload: dict, idempotency_key: str) -&gt; dict:
+    existing = lookup_by_key(idempotency_key)
+    if existing:
+        return existing
+    return persist_once(payload, idempotency_key)
+</code></pre></div>
+<h2>5.7 Timeout dan Retry</h2>
+<p>Retry hanya untuk error yang memang dapat dicoba kembali.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Error</th>
+<th>Retry?</th>
+<th>Tindakan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Network timeout</td>
+<td>Ya, terbatas</td>
+<td>Exponential backoff</td>
+</tr>
+<tr>
+<td>Rate limit</td>
+<td>Ya</td>
+<td>Tunggu sesuai header</td>
+</tr>
+<tr>
+<td>Invalid input</td>
+<td>Tidak</td>
+<td>Perbaiki argumen</td>
+</tr>
+<tr>
+<td>Permission denied</td>
+<td>Tidak</td>
+<td>Minta akses atau berhenti</td>
+</tr>
+<tr>
+<td>Not found</td>
+<td>Bergantung</td>
+<td>Verifikasi identifier</td>
+</tr>
+<tr>
+<td>Server error</td>
+<td>Ya, terbatas</td>
+<td>Retry lalu fallback</td>
+</tr>
+</tbody></table></div>
+<p>Contoh:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">for attempt in range(3):
+    try:
+        return call_service()
+    except RetryableError:
+        sleep(2 ** attempt)
+raise ToolUnavailable(&quot;Service unavailable after 3 attempts&quot;)
+</code></pre></div>
+<h2>5.8 Tool Confirmation</h2>
+<p>Sebelum tindakan berisiko, tampilkan ringkasan:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Tindakan: Mengirim 12 pengingat tugas
+Penerima: 12 anggota tim
+Isi: Draft versi 3
+Dampak: Pesan eksternal akan terkirim
+Tidak dapat dibatalkan: Ya
+</code></pre></div>
+<p>Pengguna kemudian memilih setujui, revisi, atau batalkan.</p>
+<h2>5.9 Tool Result Injection</h2>
+<p>Hasil tool adalah data, bukan instruksi. Jika tool mengambil dokumen yang berisi “abaikan aturan sebelumnya,” kalimat tersebut tidak boleh dianggap sebagai system instruction.</p>
+<p>Praktik:</p>
+<ul>
+<li>beri label hasil sebagai untrusted data;</li>
+<li>pisahkan instructions dan retrieved content;</li>
+<li>batasi tools yang tersedia setelah membaca konten eksternal;</li>
+<li>validasi tindakan terhadap policy engine;</li>
+<li>gunakan allowlist domain dan sumber.</li>
+</ul>
+<h2>5.10 Tool Registry</h2>
+<p>Dalam sistem besar, gunakan registry.</p>
+<div class="reasoning-code-block"><pre><code class="language-python">TOOL_REGISTRY = {
+    &quot;get_tasks&quot;: {
+        &quot;risk&quot;: &quot;read&quot;,
+        &quot;requires_approval&quot;: False,
+        &quot;timeout_seconds&quot;: 5,
+    },
+    &quot;update_task&quot;: {
+        &quot;risk&quot;: &quot;write&quot;,
+        &quot;requires_approval&quot;: True,
+        &quot;timeout_seconds&quot;: 5,
+    },
+    &quot;delete_task&quot;: {
+        &quot;risk&quot;: &quot;destructive&quot;,
+        &quot;requires_approval&quot;: True,
+        &quot;enabled&quot;: False,
+    },
+}
+</code></pre></div>
+<h2>Checkpoint Bab 5</h2>
+<ol>
+<li>Apa arti tool sebagai kontrak?</li>
+<li>Mengapa tool write sebaiknya dipisahkan dari tool read?</li>
+<li>Apa fungsi idempotency key?</li>
+<li>Mengapa hasil retrieval harus dianggap sebagai data tidak tepercaya?</li>
+</ol>
+<h2>Latihan Bab 5</h2>
+<p>Buat spesifikasi tiga tools untuk agent akademik:</p>
+<ul>
+<li>membaca jadwal;</li>
+<li>membuat draft pengingat;</li>
+<li>mengubah status kehadiran.</li>
+</ul>
+<p>Untuk setiap tool, tentukan schema, output, error, risiko, approval, dan idempotency.</p>
+<hr>
+

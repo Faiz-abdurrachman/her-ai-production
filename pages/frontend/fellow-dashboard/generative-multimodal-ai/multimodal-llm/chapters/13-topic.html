@@ -1,0 +1,296 @@
+<h1>Mini Project: Asisten Operasional Multimodal</h1>
+<h2>13.1 Tujuan Project</h2>
+<p>Membangun prototipe asisten yang menerima setidaknya tiga jenis sumber dan menghasilkan ringkasan terstruktur dengan evidence, uncertainty, serta rekomendasi review manusia.</p>
+<h2>13.2 Pilihan Tema</h2>
+<p>Pilih salah satu:</p>
+<ol>
+<li>asisten inspeksi aset,</li>
+<li>asisten rapat dan presentasi,</li>
+<li>asisten analisis dokumen operasional,</li>
+<li>asisten pembelajaran multimodal,</li>
+<li>asisten analisis katalog produk,</li>
+<li>tema lain yang disetujui mentor.</li>
+</ol>
+<h2>13.3 Contoh User Story</h2>
+<blockquote>
+<p>Sebagai koordinator operasi, saya ingin mengunggah foto kondisi, catatan suara, dan laporan PDF agar sistem membuat ringkasan temuan beserta sumber buktinya, sehingga saya dapat menentukan kasus yang perlu diperiksa teknisi.</p>
+</blockquote>
+<h2>13.4 Ruang Lingkup Minimum</h2>
+<p>Proyek harus memiliki:</p>
+<ul>
+<li>minimal tiga modalitas atau dua modalitas + satu tool,</li>
+<li>preprocessing terpisah,</li>
+<li>manifest sumber,</li>
+<li>prompt dengan input labeling,</li>
+<li>output JSON tervalidasi,</li>
+<li>evidence per klaim penting,</li>
+<li>abstention,</li>
+<li>golden set minimal 30 kasus,</li>
+<li>error analysis,</li>
+<li>safety dan privacy checklist.</li>
+</ul>
+<h2>13.5 Arsitektur Referensi</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">User input
+  |
+  v
+Upload dan access control
+  |
+  +--&gt; image processor
+  +--&gt; document parser / OCR
+  +--&gt; audio transcription
+  +--&gt; structured data tool
+              |
+              v
+       normalized evidence store
+              |
+              v
+       retrieval dan context builder
+              |
+              v
+              MLLM
+              |
+              v
+      schema + policy validation
+              |
+              v
+        result + human review
+</code></pre></div>
+<h2>13.6 Struktur Folder</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">multimodal-assistant/
+├── README.md
+├── requirements.txt
+├── config/
+│   ├── prompt.yaml
+│   └── schema.json
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── evaluation/
+├── src/
+│   ├── ingest.py
+│   ├── preprocess_image.py
+│   ├── preprocess_document.py
+│   ├── preprocess_audio.py
+│   ├── retrieval.py
+│   ├── inference.py
+│   ├── validators.py
+│   └── monitoring.py
+├── tests/
+│   ├── test_preprocessing.py
+│   ├── test_schema.py
+│   └── test_regression.py
+└── reports/
+    └── evaluation_report.md
+</code></pre></div>
+<h2>13.7 Manifest Sumber</h2>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;case_id&quot;: &quot;OPS-001&quot;,
+  &quot;sources&quot;: [
+    {
+      &quot;source_id&quot;: &quot;IMG_1&quot;,
+      &quot;type&quot;: &quot;image&quot;,
+      &quot;path&quot;: &quot;data/raw/panel.jpg&quot;,
+      &quot;captured_at&quot;: &quot;2026-07-10T08:20:00+07:00&quot;
+    },
+    {
+      &quot;source_id&quot;: &quot;DOC_1&quot;,
+      &quot;type&quot;: &quot;document&quot;,
+      &quot;path&quot;: &quot;data/raw/report.pdf&quot;
+    },
+    {
+      &quot;source_id&quot;: &quot;AUD_1&quot;,
+      &quot;type&quot;: &quot;audio&quot;,
+      &quot;path&quot;: &quot;data/raw/technician_note.wav&quot;
+    }
+  ]
+}
+</code></pre></div>
+<h2>13.8 Output Schema</h2>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;case_id&quot;: &quot;OPS-001&quot;,
+  &quot;summary&quot;: &quot;&quot;,
+  &quot;observations&quot;: [
+    {
+      &quot;claim&quot;: &quot;&quot;,
+      &quot;evidence&quot;: [&quot;IMG_1&quot;],
+      &quot;confidence&quot;: &quot;low|medium|high&quot;
+    }
+  ],
+  &quot;conflicts&quot;: [],
+  &quot;missing_information&quot;: [],
+  &quot;risk_level&quot;: &quot;low|medium|high|unknown&quot;,
+  &quot;recommended_actions&quot;: [],
+  &quot;needs_human_review&quot;: true
+}
+</code></pre></div>
+<h2>13.9 Baseline</h2>
+<p>Baseline sederhana:</p>
+<ol>
+<li>proses setiap modalitas,</li>
+<li>gabungkan hasil menjadi prompt,</li>
+<li>panggil MLLM,</li>
+<li>validasi schema,</li>
+<li>simpan evidence.</li>
+</ol>
+<p>Jangan langsung menambah fine-tuning. Ukur baseline terlebih dahulu.</p>
+<h2>13.10 Pseudocode Inference</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">def run_case(manifest: dict) -&gt; dict:
+    evidence = []
+
+    for source in manifest[&quot;sources&quot;]:
+        if source[&quot;type&quot;] == &quot;image&quot;:
+            evidence.append(process_image(source))
+        elif source[&quot;type&quot;] == &quot;document&quot;:
+            evidence.extend(process_document(source))
+        elif source[&quot;type&quot;] == &quot;audio&quot;:
+            evidence.append(process_audio(source))
+
+    selected = retrieve_relevant_evidence(evidence)
+    prompt = build_prompt(manifest[&quot;case_id&quot;], selected)
+    result = generate_multimodal_response(prompt, selected)
+
+    errors = validate_result(result)
+    if errors:
+        return {
+            &quot;status&quot;: &quot;needs_review&quot;,
+            &quot;validation_errors&quot;: errors,
+            &quot;raw_result&quot;: result,
+        }
+
+    return {&quot;status&quot;: &quot;ok&quot;, &quot;result&quot;: result}
+</code></pre></div>
+<h2>13.11 Golden Set</h2>
+<p>Minimal 30 kasus:</p>
+<ul>
+<li>10 normal,</li>
+<li>5 kualitas rendah,</li>
+<li>5 missing modality,</li>
+<li>4 konflik modalitas,</li>
+<li>3 prompt injection,</li>
+<li>3 out-of-scope.</li>
+</ul>
+<p>Setiap kasus memiliki expected behavior, bukan hanya jawaban akhir.</p>
+<h2>13.12 Metrik Minimum</h2>
+<ul>
+<li>schema validity,</li>
+<li>claim grounding,</li>
+<li>conflict detection,</li>
+<li>evidence correctness,</li>
+<li>abstention accuracy,</li>
+<li>review routing accuracy,</li>
+<li>latency,</li>
+<li>cost per case.</li>
+</ul>
+<h2>13.13 Error Taxonomy</h2>
+<p>Gunakan tag:</p>
+<ul>
+<li>preprocessing_error,</li>
+<li>wrong_source,</li>
+<li>visual_hallucination,</li>
+<li>audio_transcription_error,</li>
+<li>temporal_error,</li>
+<li>conflict_missed,</li>
+<li>unsupported_claim,</li>
+<li>schema_error,</li>
+<li>unsafe_tool_call,</li>
+<li>privacy_issue.</li>
+</ul>
+<h2>13.14 Tahapan Pengerjaan</h2>
+<h3>Tahap 1 - Definisi</h3>
+<ul>
+<li>tentukan user story,</li>
+<li>pilih modalitas,</li>
+<li>definisikan output,</li>
+<li>identifikasi risiko.</li>
+</ul>
+<h3>Tahap 2 - Data dan Preprocessing</h3>
+<ul>
+<li>siapkan contoh,</li>
+<li>buat manifest,</li>
+<li>proses setiap modalitas,</li>
+<li>catat confidence dan metadata.</li>
+</ul>
+<h3>Tahap 3 - Baseline</h3>
+<ul>
+<li>buat prompt,</li>
+<li>jalankan inference,</li>
+<li>validasi output,</li>
+<li>ukur metrik awal.</li>
+</ul>
+<h3>Tahap 4 - Perbaikan</h3>
+<ul>
+<li>analisis error,</li>
+<li>ubah preprocessing, prompt, retrieval, atau tool,</li>
+<li>bandingkan dengan baseline.</li>
+</ul>
+<h3>Tahap 5 - Safety dan Production Readiness</h3>
+<ul>
+<li>threat model,</li>
+<li>access control,</li>
+<li>logging minimal,</li>
+<li>fallback,</li>
+<li>human review.</li>
+</ul>
+<h3>Tahap 6 - Laporan</h3>
+<p>Laporan berisi:</p>
+<ul>
+<li>masalah,</li>
+<li>arsitektur,</li>
+<li>data,</li>
+<li>evaluasi,</li>
+<li>error analysis,</li>
+<li>limitation,</li>
+<li>rekomendasi.</li>
+</ul>
+<h2>13.15 Rubrik Penilaian</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aspek</th>
+<th align="right">Bobot</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Definisi masalah dan scope</td>
+<td align="right">10%</td>
+</tr>
+<tr>
+<td>Desain pipeline multimodal</td>
+<td align="right">20%</td>
+</tr>
+<tr>
+<td>Kualitas preprocessing dan evidence</td>
+<td align="right">15%</td>
+</tr>
+<tr>
+<td>Prompt, retrieval, dan output schema</td>
+<td align="right">15%</td>
+</tr>
+<tr>
+<td>Evaluasi dan error analysis</td>
+<td align="right">20%</td>
+</tr>
+<tr>
+<td>Safety, privacy, dan human review</td>
+<td align="right">10%</td>
+</tr>
+<tr>
+<td>Dokumentasi dan reproducibility</td>
+<td align="right">10%</td>
+</tr>
+</tbody></table></div>
+<h2>13.16 Kriteria Selesai</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Aplikasi menerima modalitas sesuai scope.</li>
+<li><input disabled="" type="checkbox"> Setiap sumber memiliki ID dan metadata.</li>
+<li><input disabled="" type="checkbox"> Output mengikuti schema.</li>
+<li><input disabled="" type="checkbox"> Klaim penting memiliki evidence.</li>
+<li><input disabled="" type="checkbox"> Missing modality ditangani.</li>
+<li><input disabled="" type="checkbox"> Konflik sumber dapat dilaporkan.</li>
+<li><input disabled="" type="checkbox"> Golden set dapat dijalankan ulang.</li>
+<li><input disabled="" type="checkbox"> Error analysis tersedia.</li>
+<li><input disabled="" type="checkbox"> Safety dan privacy control terdokumentasi.</li>
+<li><input disabled="" type="checkbox"> Demo tidak menggunakan data sensitif tanpa izin.</li>
+</ul>
+<hr>
+

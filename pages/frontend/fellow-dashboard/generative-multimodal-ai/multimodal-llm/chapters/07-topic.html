@@ -1,0 +1,120 @@
+<h1>Multi-Image, Dokumen, Audio, dan Video</h1>
+<h2>7.1 Multi-Image Reasoning</h2>
+<p>Multi-image task dapat berupa:</p>
+<ul>
+<li>perbandingan before-after,</li>
+<li>pemilihan produk dari beberapa foto,</li>
+<li>analisis beberapa sudut objek,</li>
+<li>urutan proses,</li>
+<li>pencarian perbedaan.</li>
+</ul>
+<p>Tantangan utama:</p>
+<ul>
+<li>identitas objek antar foto,</li>
+<li>urutan input,</li>
+<li>sudut pandang,</li>
+<li>pencahayaan,</li>
+<li>perubahan yang tidak relevan.</li>
+</ul>
+<p>Gunakan label dan pertanyaan spesifik. Hindari pertanyaan terlalu umum seperti “Apa bedanya?” tanpa konteks.</p>
+<h2>7.2 Dokumen Multi-Halaman</h2>
+<p>Pipeline dokumen dapat meliputi:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">file -&gt; page render -&gt; OCR -&gt; layout extraction -&gt; chunking -&gt; retrieval -&gt; MLLM
+</code></pre></div>
+<p>Hal yang harus dipertahankan:</p>
+<ul>
+<li>nomor halaman,</li>
+<li>heading,</li>
+<li>tabel,</li>
+<li>posisi field,</li>
+<li>hubungan referensi,</li>
+<li>sumber kutipan.</li>
+</ul>
+<p>Untuk dokumen panjang, gunakan retrieval dan berikan halaman sumber. Jangan mengandalkan satu ringkasan global untuk pertanyaan detail.</p>
+<h2>7.3 Tabel dan Grafik</h2>
+<p>Model dapat membaca tabel atau grafik sebagai gambar, tetapi untuk akurasi angka sebaiknya:</p>
+<ol>
+<li>ekstrak data terstruktur,</li>
+<li>lakukan perhitungan dengan kode,</li>
+<li>gunakan MLLM untuk penjelasan.</li>
+</ol>
+<div class="reasoning-code-block"><pre><code class="language-text">chart image -&gt; chart parser / data source -&gt; numeric table
+numeric table -&gt; calculator -&gt; result
+MLLM -&gt; explanation with source
+</code></pre></div>
+<h2>7.4 Audio Understanding</h2>
+<p>Audio pipeline dapat menggunakan:</p>
+<ul>
+<li>voice activity detection,</li>
+<li>speaker diarization,</li>
+<li>automatic speech recognition,</li>
+<li>audio event classification,</li>
+<li>timestamp alignment,</li>
+<li>language model summarization.</li>
+</ul>
+<p>Kesalahan transkripsi dapat mengubah arti. Simpan confidence dan timestamp untuk bagian penting.</p>
+<h2>7.5 Video Understanding</h2>
+<p>Video memerlukan strategi sampling.</p>
+<h3>Uniform Sampling</h3>
+<p>Mengambil frame dengan interval tetap. Sederhana, tetapi dapat melewatkan kejadian singkat.</p>
+<h3>Scene-Based Sampling</h3>
+<p>Mengambil frame saat terjadi perubahan scene. Cocok untuk presentasi atau video dengan shot berbeda.</p>
+<h3>Query-Guided Sampling</h3>
+<p>Mengambil segmen berdasarkan pertanyaan. Contoh: cari bagian saat “operator membuka panel”.</p>
+<h3>Hierarchical Video Analysis</h3>
+<div class="reasoning-code-block"><pre><code class="language-text">video panjang
+-&gt; segmentasi scene
+-&gt; ringkasan per scene
+-&gt; retrieval scene relevan
+-&gt; analisis detail frame
+-&gt; jawaban dengan timestamp
+</code></pre></div>
+<h2>7.6 Audio-Visual Synchronization</h2>
+<p>Gerakan bibir, suara mesin, dan kejadian visual harus diselaraskan. Offset kecil dapat menyebabkan hubungan sebab-akibat yang salah.</p>
+<p>Contoh:</p>
+<ul>
+<li>suara benturan terdengar setelah frame tertentu,</li>
+<li>pembicara berganti tetapi diarization salah,</li>
+<li>subtitle tertinggal beberapa detik.</li>
+</ul>
+<h2>7.7 Temporal Reasoning</h2>
+<p>Pertanyaan temporal:</p>
+<ul>
+<li>apa yang terjadi sebelum alarm?</li>
+<li>berapa lama proses berlangsung?</li>
+<li>kapan perubahan pertama muncul?</li>
+<li>apakah tindakan terjadi setelah instruksi?</li>
+</ul>
+<p>Model perlu menerima timestamp atau urutan yang jelas. Jangan menganggap urutan file selalu sama dengan urutan waktu.</p>
+<h2>7.8 Missing Modality</h2>
+<p>Sistem perlu menangani:</p>
+<ul>
+<li>audio kosong,</li>
+<li>frame rusak,</li>
+<li>halaman hilang,</li>
+<li>metadata tidak tersedia,</li>
+<li>OCR confidence rendah.</li>
+</ul>
+<p>Output harus menyebutkan modalitas yang tidak tersedia dan dampaknya terhadap kesimpulan.</p>
+<h2>7.9 Contoh Manifest Input</h2>
+<div class="reasoning-code-block"><pre><code class="language-json">{
+  &quot;case_id&quot;: &quot;CASE-2026-014&quot;,
+  &quot;sources&quot;: [
+    {&quot;id&quot;: &quot;IMG_1&quot;, &quot;type&quot;: &quot;image&quot;, &quot;uri&quot;: &quot;before.jpg&quot;},
+    {&quot;id&quot;: &quot;IMG_2&quot;, &quot;type&quot;: &quot;image&quot;, &quot;uri&quot;: &quot;after.jpg&quot;},
+    {&quot;id&quot;: &quot;DOC_1&quot;, &quot;type&quot;: &quot;document&quot;, &quot;uri&quot;: &quot;report.pdf&quot;},
+    {&quot;id&quot;: &quot;AUD_1&quot;, &quot;type&quot;: &quot;audio&quot;, &quot;uri&quot;: &quot;note.wav&quot;}
+  ],
+  &quot;required_output&quot;: &quot;inspection_summary_v1&quot;
+}
+</code></pre></div>
+<h2>Checkpoint Bab 7</h2>
+<ol>
+<li>Mengapa dokumen panjang perlu retrieval?</li>
+<li>Apa perbedaan uniform sampling dan query-guided sampling?</li>
+<li>Mengapa timestamp penting untuk audio-video reasoning?</li>
+</ol>
+<h2>Latihan Bab 7 - Desain Pipeline</h2>
+<p>Pilih satu input kompleks: rapat, inspeksi, kelas daring, atau formulir multi-halaman. Buat diagram pipeline dari data mentah hingga jawaban beserta fallback saat satu modalitas gagal.</p>
+<hr>
+

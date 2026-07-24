@@ -1,0 +1,103 @@
+<h1>Representasi Bahasa dalam Sistem Multimodal</h1>
+<h2>3.1 Tokenisasi Teks</h2>
+<p>Sama seperti LLM, sisi bahasa pada VLM menerima token ID. Tokenizer memecah instruksi, pertanyaan, label, atau caption menjadi unit yang dapat diproses model.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">&quot;Apa warna kendaraan itu?&quot;
+          |
+          v
+[&quot;Apa&quot;, &quot; warna&quot;, &quot; kendaraan&quot;, &quot; itu&quot;, &quot;?&quot;]
+          |
+          v
+[token_id_1, token_id_2, ...]
+</code></pre></div>
+<p>Tokenisasi memengaruhi panjang konteks, biaya, dan cara istilah khusus direpresentasikan.</p>
+<h2>3.2 Text Embedding</h2>
+<p>Token ID digunakan untuk mengambil embedding. Embedding adalah vektor yang dipelajari. Positional information ditambahkan agar urutan kata dapat dibedakan.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Token ID + posisi
+       |
+       v
+Text embeddings
+       |
+       v
+Transformer
+</code></pre></div>
+<p>Pada dual encoder, text encoder menghasilkan satu representasi untuk keseluruhan kalimat. Pada model generatif, token teks diproses sebagai urutan yang digunakan untuk menghasilkan token output.</p>
+<h2>3.3 Prompt sebagai Bagian dari Input Model</h2>
+<p>Prompt bukan hanya pertanyaan. Prompt dapat memuat:</p>
+<ul>
+<li>peran atau tujuan,</li>
+<li>konteks gambar,</li>
+<li>batasan tugas,</li>
+<li>definisi label,</li>
+<li>urutan langkah,</li>
+<li>format keluaran,</li>
+<li>aturan ketika bukti tidak cukup.</li>
+</ul>
+<p>Contoh prompt lemah:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Jelaskan gambar ini.
+</code></pre></div>
+<p>Contoh prompt lebih terstruktur:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Amati gambar ini.
+1. Sebutkan objek utama yang terlihat.
+2. Jelaskan hubungan spasial yang dapat dibuktikan.
+3. Salin teks hanya jika terbaca jelas.
+4. Jangan menebak identitas, lokasi, atau penyebab.
+5. Kembalikan hasil dalam JSON sesuai schema.
+</code></pre></div>
+<h2>3.4 Special Token untuk Gambar</h2>
+<p>Beberapa arsitektur menggunakan token khusus untuk menunjukkan posisi gambar dalam urutan percakapan.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">&lt;image&gt;
+Pengguna: Berapa jumlah kursi yang terlihat?
+Asisten:
+</code></pre></div>
+<p>Token gambar dapat mewakili satu embedding ringkasan atau menjadi penanda untuk rangkaian visual token. Implementasi bergantung pada arsitektur model.</p>
+<h2>3.5 Context Window Multimodal</h2>
+<p>Visual token dan token teks sama-sama menggunakan kapasitas konteks. Semakin banyak gambar atau semakin tinggi resolusi, semakin besar bagian konteks yang terpakai.</p>
+<p>Dampaknya:</p>
+<ul>
+<li>prompt panjang dapat terpotong,</li>
+<li>beberapa gambar membutuhkan memori lebih besar,</li>
+<li>output maksimum dapat berkurang,</li>
+<li>latency meningkat.</li>
+</ul>
+<p>Karena itu, aplikasi harus mengatur jumlah gambar, ukuran, urutan, dan panjang instruksi.</p>
+<h2>3.6 Observasi dan Interpretasi</h2>
+<p>VLM sering diminta membuat kesimpulan. Prompt sebaiknya memisahkan:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Jenis keluaran</th>
+<th>Contoh</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Observasi</td>
+<td>&quot;Terlihat tiga kotak di atas meja&quot;</td>
+</tr>
+<tr>
+<td>Interpretasi</td>
+<td>&quot;Kotak tersebut tampaknya paket pengiriman&quot;</td>
+</tr>
+<tr>
+<td>Kesimpulan berisiko</td>
+<td>&quot;Paket itu terlambat dikirim&quot;</td>
+</tr>
+</tbody></table></div>
+<p>Observasi dapat didukung langsung oleh piksel. Interpretasi membutuhkan asumsi. Kesimpulan penyebab biasanya membutuhkan data lain.</p>
+<blockquote>
+<p><strong>Aturan praktis:</strong> minta model menandai mana fakta visual, mana interpretasi, dan mana informasi yang tidak dapat ditentukan.</p>
+</blockquote>
+<h2>Checkpoint Bab 3</h2>
+<ol>
+<li>Apa fungsi tokenizer pada VLM?</li>
+<li>Mengapa visual token dapat mengurangi ruang untuk teks?</li>
+<li>Apa perbedaan observasi dengan interpretasi?</li>
+</ol>
+<h2>Latihan Bab 3 - Merancang Prompt</h2>
+<p>Buat dua prompt untuk gambar rak produk:</p>
+<ul>
+<li>prompt pertama untuk inventaris objek,</li>
+<li>prompt kedua untuk memeriksa kepatuhan tata letak.</li>
+</ul>
+<p>Sertakan format keluaran dan aturan ketika objek tidak terlihat jelas.</p>
+<hr>
+

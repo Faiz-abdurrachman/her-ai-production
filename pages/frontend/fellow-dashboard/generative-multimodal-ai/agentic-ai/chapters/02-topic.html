@@ -1,0 +1,204 @@
+<h1>Komponen Inti AI Agent</h1>
+<h2>2.1 Gambaran Umum</h2>
+<p>Sebuah agent umumnya dibangun dari enam komponen:</p>
+<ol>
+<li><strong>Model</strong> - menafsirkan konteks dan memilih tindakan.</li>
+<li><strong>Instructions</strong> - menjelaskan peran, tujuan, aturan, dan batas.</li>
+<li><strong>Tools</strong> - fungsi yang dapat digunakan untuk berinteraksi dengan sistem lain.</li>
+<li><strong>State</strong> - informasi tentang kondisi pekerjaan saat ini.</li>
+<li><strong>Memory</strong> - informasi yang dipertahankan untuk penggunaan selanjutnya.</li>
+<li><strong>Runtime atau orchestrator</strong> - mengelola loop, tool call, error, batas, dan tracing.</li>
+</ol>
+<p>Tambahan yang wajib untuk produksi:</p>
+<ul>
+<li>guardrails;</li>
+<li>approval gates;</li>
+<li>observability;</li>
+<li>evaluation;</li>
+<li>security controls.</li>
+</ul>
+<h2>2.2 Model</h2>
+<p>Model tidak selalu harus menjadi model terbesar. Pemilihan model dipengaruhi oleh:</p>
+<ul>
+<li>kompleksitas keputusan;</li>
+<li>kebutuhan tool calling;</li>
+<li>panjang konteks;</li>
+<li>latency;</li>
+<li>biaya;</li>
+<li>bahasa;</li>
+<li>kebutuhan multimodal;</li>
+<li>kebijakan privasi.</li>
+</ul>
+<p>Strategi yang umum adalah menggunakan model berbeda untuk tugas berbeda. Contohnya:</p>
+<ul>
+<li>model kecil untuk klasifikasi routing;</li>
+<li>model menengah untuk ekstraksi terstruktur;</li>
+<li>model lebih kuat untuk perencanaan kompleks;</li>
+<li>kode deterministik untuk validasi dan perhitungan.</li>
+</ul>
+<blockquote>
+<p>Jangan menggunakan model untuk pekerjaan yang dapat diselesaikan secara pasti oleh kode sederhana.</p>
+</blockquote>
+<h2>2.3 Instructions</h2>
+<p>Instructions perlu menjawab hal-hal berikut:</p>
+<ul>
+<li>Siapa agen ini?</li>
+<li>Tujuannya apa?</li>
+<li>Apa yang boleh dan tidak boleh dilakukan?</li>
+<li>Kapan harus menggunakan tool?</li>
+<li>Kapan harus meminta klarifikasi?</li>
+<li>Kapan harus meminta approval?</li>
+<li>Format hasil seperti apa?</li>
+<li>Kapan harus berhenti?</li>
+</ul>
+<p>Contoh instructions yang lemah:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Kamu adalah agen yang membantu semua pekerjaan pengguna.
+</code></pre></div>
+<p>Contoh yang lebih operasional:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Peran: Asisten operasional kegiatan.
+Tujuan: Membantu pengguna memeriksa status tugas dan menyusun tindak lanjut.
+
+Aturan:
+1. Gunakan tool get_tasks untuk membaca data tugas.
+2. Jangan mengubah status tugas tanpa approval pengguna.
+3. Untuk komunikasi eksternal, buat draft terlebih dahulu.
+4. Sertakan task_id pada setiap rekomendasi.
+5. Jika data tidak cukup, tanyakan satu klarifikasi paling penting.
+6. Berhenti setelah tujuan tercapai atau setelah 8 langkah.
+</code></pre></div>
+<h2>2.4 Tools</h2>
+<p>Tool adalah kemampuan yang disediakan aplikasi kepada agen. Contohnya:</p>
+<ul>
+<li><code>search_documents(query)</code>;</li>
+<li><code>get_order_status(order_id)</code>;</li>
+<li><code>calculate_deadline(start_date, duration)</code>;</li>
+<li><code>create_email_draft(recipient, subject, body)</code>;</li>
+<li><code>request_approval(action_summary)</code>.</li>
+</ul>
+<p>Tool yang baik memiliki:</p>
+<ul>
+<li>nama yang jelas;</li>
+<li>deskripsi yang spesifik;</li>
+<li>input schema;</li>
+<li>output schema;</li>
+<li>validasi;</li>
+<li>error yang terstruktur;</li>
+<li>izin minimum;</li>
+<li>log tindakan.</li>
+</ul>
+<h2>2.5 State</h2>
+<p>State adalah catatan kondisi pekerjaan saat agen sedang berjalan.</p>
+<p>Contoh state:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">state = {
+    &quot;goal&quot;: &quot;Susun tindak lanjut tugas terlambat&quot;,
+    &quot;user_id&quot;: &quot;usr_102&quot;,
+    &quot;tasks&quot;: [],
+    &quot;late_tasks&quot;: [],
+    &quot;draft_messages&quot;: [],
+    &quot;approval_status&quot;: &quot;pending&quot;,
+    &quot;step_count&quot;: 0,
+    &quot;status&quot;: &quot;running&quot;,
+}
+</code></pre></div>
+<p>State berbeda dari chat history. Chat history hanya salah satu bagian dari state.</p>
+<h2>2.6 Memory</h2>
+<p>Memory membantu agen mempertahankan informasi. Namun tidak semua informasi perlu disimpan.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Jenis memory</th>
+<th>Isi</th>
+<th>Contoh</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Working memory</td>
+<td>Konteks pekerjaan aktif</td>
+<td>Hasil tool dan rencana saat ini</td>
+</tr>
+<tr>
+<td>Episodic memory</td>
+<td>Riwayat pengalaman tertentu</td>
+<td>Kasus sebelumnya dan hasilnya</td>
+</tr>
+<tr>
+<td>Semantic memory</td>
+<td>Fakta atau preferensi stabil</td>
+<td>Format laporan yang disukai</td>
+</tr>
+<tr>
+<td>Procedural memory</td>
+<td>Cara melakukan tugas</td>
+<td>SOP atau aturan organisasi</td>
+</tr>
+</tbody></table></div>
+<p>Memory harus memiliki aturan:</p>
+<ul>
+<li>apa yang boleh disimpan;</li>
+<li>siapa pemilik data;</li>
+<li>berapa lama disimpan;</li>
+<li>bagaimana data dihapus;</li>
+<li>bagaimana informasi diperbarui;</li>
+<li>bagaimana mencegah konflik dan kontaminasi.</li>
+</ul>
+<h2>2.7 Runtime dan Orchestrator</h2>
+<p>Runtime menjalankan agent loop. Ia bertanggung jawab untuk:</p>
+<ul>
+<li>mengirim konteks ke model;</li>
+<li>menerima permintaan tool;</li>
+<li>memvalidasi argumen;</li>
+<li>menjalankan tool;</li>
+<li>mengembalikan hasil;</li>
+<li>menghitung jumlah langkah;</li>
+<li>melakukan timeout;</li>
+<li>menyimpan trace;</li>
+<li>menghentikan loop;</li>
+<li>menerapkan approval.</li>
+</ul>
+<p>Pseudocode sederhana:</p>
+<div class="reasoning-code-block"><pre><code class="language-python">for step in range(MAX_STEPS):
+    decision = model.decide(state)
+
+    if decision.type == &quot;final&quot;:
+        return decision.output
+
+    if decision.type == &quot;tool_call&quot;:
+        validate(decision.tool_name, decision.arguments)
+        result = execute_tool(decision.tool_name, decision.arguments)
+        state = update_state(state, result)
+
+    if requires_human_approval(state):
+        return pause_for_approval(state)
+
+raise MaxStepsExceeded(&quot;Agent stopped safely&quot;)
+</code></pre></div>
+<h2>2.8 Separation of Concerns</h2>
+<p>Jangan menaruh seluruh logika dalam prompt. Pisahkan:</p>
+<ul>
+<li>kebijakan ke rule engine;</li>
+<li>validasi ke schema validator;</li>
+<li>perhitungan ke fungsi;</li>
+<li>akses data ke service layer;</li>
+<li>approval ke workflow;</li>
+<li>keputusan bahasa alami ke model.</li>
+</ul>
+<p>Pemisahan ini membuat sistem lebih mudah diuji dan diaudit.</p>
+<h2>Checkpoint Bab 2</h2>
+<ol>
+<li>Apa fungsi runtime dalam sistem agentic?</li>
+<li>Mengapa state tidak sama dengan chat history?</li>
+<li>Apa perbedaan working memory dan semantic memory?</li>
+<li>Mengapa validasi tidak boleh hanya bergantung pada prompt?</li>
+</ol>
+<h2>Latihan Bab 2</h2>
+<p>Rancang komponen agent untuk kasus “asisten pengajuan izin kegiatan.” Tuliskan:</p>
+<ul>
+<li>model yang dibutuhkan;</li>
+<li>instructions ringkas;</li>
+<li>minimal empat tools;</li>
+<li>state yang perlu disimpan;</li>
+<li>approval gate;</li>
+<li>stopping condition.</li>
+</ul>
+<hr>
+

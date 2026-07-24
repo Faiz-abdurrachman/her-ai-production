@@ -1,0 +1,208 @@
+<h1>Agentic AI</h1>
+<h2>Modul Belajar Praktis dan Mudah Dipahami</h2>
+<p>Agentic AI adalah pendekatan untuk membangun sistem AI yang tidak hanya menjawab pertanyaan, tetapi juga mampu memahami tujuan, memilih tindakan, menggunakan alat, memeriksa hasil, dan melanjutkan pekerjaan sampai kondisi selesai terpenuhi.</p>
+<p>Modul ini menempatkan Agentic AI sebagai <strong>sistem rekayasa perangkat lunak yang dibantu model AI</strong>, bukan sebagai model yang dibiarkan bekerja tanpa batas. Peserta akan belajar membangun agen yang memiliki ruang lingkup jelas, dapat diamati, dapat diuji, dan aman digunakan.</p>
+<blockquote>
+<p><strong>Prinsip utama modul:</strong> agen yang baik bukan agen yang paling bebas, melainkan agen yang memiliki kemampuan yang cukup, batas yang jelas, bukti tindakan, dan mekanisme berhenti yang dapat dipercaya.</p>
+</blockquote>
+<h2>Capaian Pembelajaran</h2>
+<p>Setelah menyelesaikan modul, peserta mampu:</p>
+<ul>
+<li>menjelaskan perbedaan chatbot, workflow, AI assistant, dan AI agent;</li>
+<li>menentukan kapan sebuah masalah memerlukan agentic workflow;</li>
+<li>merancang agent loop yang memiliki tujuan, state, tools, dan stopping condition;</li>
+<li>mendefinisikan tools dengan skema input-output yang aman;</li>
+<li>membangun memory dan state tanpa mencampur data antar pengguna;</li>
+<li>menerapkan pola routing, sequential, parallel, evaluator-optimizer, dan orchestrator-worker;</li>
+<li>merancang single-agent dan multi-agent system secara proporsional;</li>
+<li>mengintegrasikan RAG, database, API, dan human approval;</li>
+<li>menangani timeout, retry, error, biaya, dan infinite loop;</li>
+<li>menguji kualitas agen menggunakan task success, tool accuracy, groundedness, latency, dan cost;</li>
+<li>menerapkan guardrails, least privilege, audit log, dan mitigasi prompt injection;</li>
+<li>membangun mini project Agent Asisten Operasional yang dapat dipertanggungjawabkan.</li>
+</ul>
+<h2>Prasyarat</h2>
+<p>Sebelum memulai, peserta disarankan memahami:</p>
+<ol>
+<li>Python dasar dan struktur fungsi.</li>
+<li>Konsep API dan format JSON.</li>
+<li>Dasar Large Language Model dan prompting.</li>
+<li>Retrieval-Augmented Generation atau RAG.</li>
+<li>Dasar evaluasi model dan aplikasi AI.</li>
+<li>Konsep autentikasi, otorisasi, dan keamanan data.</li>
+</ol>
+<h2>Peta Materi</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">Tujuan pengguna
+      ↓
+Workflow atau Agent?
+      ↓
+Model + Instructions + Tools + State
+      ↓
+Plan → Act → Observe → Evaluate
+      ↓
+Guardrails + Human Approval + Stopping Condition
+      ↓
+Tracing + Evaluation + Monitoring
+      ↓
+Sistem Agentic AI yang aman dan terukur
+</code></pre></div>
+<hr>
+<h1>Mengenal Agentic AI</h1>
+<h2>1.1 Apa Itu Agentic AI?</h2>
+<p>Agentic AI adalah sistem AI yang diberi kemampuan untuk menjalankan serangkaian tindakan guna mencapai tujuan tertentu. Tindakan tersebut dapat berupa:</p>
+<ul>
+<li>mencari informasi pada basis pengetahuan;</li>
+<li>memanggil API;</li>
+<li>membaca atau menulis data;</li>
+<li>melakukan perhitungan;</li>
+<li>memilih alur kerja;</li>
+<li>meminta persetujuan manusia;</li>
+<li>mendelegasikan subtugas;</li>
+<li>memeriksa apakah pekerjaan sudah selesai.</li>
+</ul>
+<p>Sistem agentic biasanya memiliki siklus berikut:</p>
+<ol>
+<li>menerima tujuan;</li>
+<li>membaca konteks dan aturan;</li>
+<li>memilih tindakan berikutnya;</li>
+<li>menjalankan tool;</li>
+<li>mengamati hasil tool;</li>
+<li>memperbarui state;</li>
+<li>menentukan apakah perlu melanjutkan, memperbaiki, meminta bantuan, atau berhenti.</li>
+</ol>
+<p>Sederhananya, chatbot biasa terutama menghasilkan <strong>jawaban</strong>, sedangkan agentic AI dapat menghasilkan <strong>jawaban dan tindakan</strong>.</p>
+<h2>1.2 Analogi Sederhana</h2>
+<p>Bayangkan perbedaan antara tiga sistem berikut.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Sistem</th>
+<th>Analogi</th>
+<th>Kemampuan utama</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Chatbot</td>
+<td>Petugas informasi</td>
+<td>Menjawab berdasarkan konteks yang diberikan</td>
+</tr>
+<tr>
+<td>Workflow otomatis</td>
+<td>Jalur produksi</td>
+<td>Menjalankan langkah yang sudah ditentukan</td>
+</tr>
+<tr>
+<td>AI agent</td>
+<td>Koordinator kerja</td>
+<td>Memilih langkah dan alat berdasarkan kondisi</td>
+</tr>
+</tbody></table></div>
+<p>Seorang koordinator kerja tidak hanya berkata, “laporan akan dibuat.” Ia perlu:</p>
+<ul>
+<li>memahami permintaan;</li>
+<li>memeriksa data yang tersedia;</li>
+<li>membagi pekerjaan;</li>
+<li>menggunakan alat yang sesuai;</li>
+<li>memeriksa hasil;</li>
+<li>meminta persetujuan bila diperlukan;</li>
+<li>menyampaikan hasil akhir.</li>
+</ul>
+<p>Namun koordinator tetap membutuhkan SOP, hak akses, tenggat, dan atasan untuk keputusan berisiko tinggi. Hal yang sama berlaku pada AI agent.</p>
+<h2>1.3 Agentic AI Bukan Berarti Otonomi Tanpa Batas</h2>
+<p>Istilah <em>agentic</em> sering disalahartikan sebagai “AI boleh melakukan apa saja.” Definisi yang lebih sehat adalah:</p>
+<blockquote>
+<p>Sistem memiliki kemampuan memilih tindakan dalam ruang keputusan yang telah dirancang.</p>
+</blockquote>
+<p>Ruang keputusan tersebut dibatasi oleh:</p>
+<ul>
+<li>daftar tools yang tersedia;</li>
+<li>izin pengguna;</li>
+<li>kebijakan organisasi;</li>
+<li>batas biaya dan waktu;</li>
+<li>validasi input-output;</li>
+<li>persetujuan manusia;</li>
+<li>stopping condition;</li>
+<li>mekanisme audit.</li>
+</ul>
+<h2>1.4 Contoh Penggunaan</h2>
+<h3>Asisten layanan pelanggan</h3>
+<p>Agen dapat membaca pertanyaan, mengambil kebijakan pengembalian, memeriksa status pesanan, menyusun opsi penyelesaian, dan meminta persetujuan staf sebelum memberikan kompensasi.</p>
+<h3>Asisten operasional acara</h3>
+<p>Agen dapat membaca daftar tugas, mengidentifikasi pekerjaan terlambat, menghitung sisa waktu, menyusun pengingat, dan meminta koordinator menyetujui pesan sebelum dikirim.</p>
+<h3>Asisten analisis data</h3>
+<p>Agen dapat memilih tabel yang relevan, menjalankan query aman, membuat ringkasan, memeriksa anomali, dan menyertakan sumber data.</p>
+<h3>Asisten pengembangan perangkat lunak</h3>
+<p>Agen dapat membaca issue, mencari file terkait, mengusulkan perubahan, menjalankan pengujian di sandbox, dan membuat draft patch untuk ditinjau manusia.</p>
+<h2>1.5 Risiko Utama</h2>
+<p>Agentic AI memiliki risiko lebih besar daripada chatbot karena output model dapat memicu tindakan nyata.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Risiko</th>
+<th>Contoh</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Salah memilih tool</td>
+<td>Mengirim pesan ketika seharusnya hanya membuat draft</td>
+</tr>
+<tr>
+<td>Argumen tool salah</td>
+<td>Mengubah data pengguna yang keliru</td>
+</tr>
+<tr>
+<td>Infinite loop</td>
+<td>Agen mengulang pencarian tanpa kondisi berhenti</td>
+</tr>
+<tr>
+<td>Prompt injection</td>
+<td>Dokumen memerintahkan agen mengabaikan aturan</td>
+</tr>
+<tr>
+<td>Privilege berlebihan</td>
+<td>Agen memiliki akses hapus padahal hanya perlu membaca</td>
+</tr>
+<tr>
+<td>Memory contamination</td>
+<td>Data pengguna A masuk ke konteks pengguna B</td>
+</tr>
+<tr>
+<td>Error propagation</td>
+<td>Kesalahan awal digunakan sebagai dasar langkah berikutnya</td>
+</tr>
+<tr>
+<td>Biaya tak terkendali</td>
+<td>Terlalu banyak panggilan model dan tool</td>
+</tr>
+</tbody></table></div>
+<h2>1.6 Checklist Kelayakan Awal</h2>
+<p>Sebelum membangun agent, tanyakan:</p>
+<ul>
+<li>Apakah tugas memiliki tujuan yang jelas?</li>
+<li>Apakah hasil dapat diperiksa?</li>
+<li>Apakah ada tools yang benar-benar diperlukan?</li>
+<li>Apakah jalur kerja berubah berdasarkan kondisi?</li>
+<li>Apakah risiko setiap tindakan sudah dipetakan?</li>
+<li>Apakah tersedia fallback dan human approval?</li>
+<li>Apakah tindakan dapat diaudit dan dibatalkan?</li>
+</ul>
+<p>Jika sebagian besar jawaban “tidak”, gunakan workflow sederhana atau aplikasi biasa terlebih dahulu.</p>
+<h2>Checkpoint Bab 1</h2>
+<ol>
+<li>Apa perbedaan utama chatbot dan AI agent?</li>
+<li>Mengapa agentic AI tidak sama dengan otonomi tanpa batas?</li>
+<li>Sebutkan tiga risiko yang muncul ketika model dapat menggunakan tools.</li>
+<li>Kapan workflow deterministik lebih tepat daripada agent?</li>
+</ol>
+<h2>Latihan Bab 1</h2>
+<p>Pilih satu aktivitas di organisasi, kampus, atau pekerjaan Anda. Tuliskan:</p>
+<ul>
+<li>tujuan aktivitas;</li>
+<li>langkah yang selalu tetap;</li>
+<li>langkah yang membutuhkan keputusan;</li>
+<li>tools yang mungkin diperlukan;</li>
+<li>tindakan yang harus disetujui manusia;</li>
+<li>kondisi selesai.</li>
+</ul>
+<hr>
+

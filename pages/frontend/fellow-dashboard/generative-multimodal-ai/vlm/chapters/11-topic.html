@@ -1,0 +1,135 @@
+<h1>Hallucination, Bias, Privacy, dan Safety</h1>
+<h2>11.1 Mengapa Risiko Multimodal Lebih Kompleks?</h2>
+<p>VLM dapat salah membaca gambar dan kemudian menjelaskan kesalahan tersebut dengan bahasa yang meyakinkan. Sistem juga dapat mengekstrak informasi sensitif yang tidak diperlukan.</p>
+<p>Risiko berasal dari:</p>
+<ul>
+<li>data training,</li>
+<li>kualitas gambar,</li>
+<li>prompt,</li>
+<li>arsitektur model,</li>
+<li>integrasi aplikasi,</li>
+<li>hak akses,</li>
+<li>interpretasi pengguna.</li>
+</ul>
+<h2>11.2 Jenis Hallucination</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Jenis</th>
+<th>Contoh</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Object hallucination</td>
+<td>Menyebut helm padahal tidak ada</td>
+</tr>
+<tr>
+<td>Attribute hallucination</td>
+<td>Menyebut kendaraan merah padahal biru</td>
+</tr>
+<tr>
+<td>Text hallucination</td>
+<td>Menyalin nomor yang tidak terbaca</td>
+</tr>
+<tr>
+<td>Spatial hallucination</td>
+<td>Mengatakan objek berada di kiri padahal kanan</td>
+</tr>
+<tr>
+<td>Identity hallucination</td>
+<td>Menebak siapa orang dalam gambar</td>
+</tr>
+<tr>
+<td>Causal hallucination</td>
+<td>Menyimpulkan penyebab kerusakan dari satu foto</td>
+</tr>
+</tbody></table></div>
+<p>Mitigasi:</p>
+<ul>
+<li>prompt berbasis bukti,</li>
+<li>abstention,</li>
+<li>crop dan resolusi tepat,</li>
+<li>verifikasi multi-pass,</li>
+<li>model khusus untuk tugas kritis,</li>
+<li>human review,</li>
+<li>menampilkan sumber gambar dan region.</li>
+</ul>
+<h2>11.3 Bias</h2>
+<p>Bias dapat muncul ketika data tidak mewakili variasi kondisi. Contoh:</p>
+<ul>
+<li>performa menurun pada pencahayaan tertentu,</li>
+<li>label objek hanya mewakili wilayah tertentu,</li>
+<li>model mengasosiasikan pekerjaan dengan atribut demografis,</li>
+<li>OCR lebih buruk pada gaya tulisan tertentu.</li>
+</ul>
+<p>Mitigasi meliputi audit dataset, slice evaluation, review label, pembatasan use case, dan mekanisme koreksi.</p>
+<h2>11.4 Privasi</h2>
+<p>Gambar dapat memuat:</p>
+<ul>
+<li>wajah,</li>
+<li>alamat,</li>
+<li>nomor identitas,</li>
+<li>informasi kesehatan,</li>
+<li>layar perangkat,</li>
+<li>dokumen rahasia,</li>
+<li>metadata lokasi.</li>
+</ul>
+<p>Prinsip privacy by design:</p>
+<ol>
+<li>kumpulkan hanya data yang diperlukan,</li>
+<li>jelaskan tujuan penggunaan,</li>
+<li>batasi masa penyimpanan,</li>
+<li>kontrol akses berdasarkan peran,</li>
+<li>enkripsi data,</li>
+<li>redact region sensitif,</li>
+<li>audit akses,</li>
+<li>sediakan prosedur penghapusan.</li>
+</ol>
+<h2>11.5 Metadata Gambar</h2>
+<p>File gambar dapat mengandung metadata seperti waktu, perangkat, atau lokasi. Menghapus tampilan visual belum tentu menghapus metadata.</p>
+<p>Pipeline harus memutuskan apakah metadata diperlukan. Bila tidak, metadata sebaiknya dibersihkan sebelum penyimpanan atau pemrosesan lebih lanjut.</p>
+<h2>11.6 Prompt Injection pada Gambar</h2>
+<p>Gambar dapat berisi teks yang mencoba mengubah instruksi model, misalnya tulisan yang memerintahkan model mengabaikan aturan. Sistem document QA atau browsing visual perlu memperlakukan teks di gambar sebagai data, bukan instruksi tepercaya.</p>
+<p>Pertahanan:</p>
+<ul>
+<li>pisahkan system instruction dan konten gambar,</li>
+<li>beri tahu model bahwa teks visual adalah data tidak tepercaya,</li>
+<li>batasi tool access,</li>
+<li>validasi aksi sebelum dijalankan,</li>
+<li>gunakan allowlist operasi,</li>
+<li>jangan mengeksekusi perintah dari hasil OCR secara otomatis.</li>
+</ul>
+<h2>11.7 Keamanan Output</h2>
+<p>Output VLM tidak boleh langsung mengendalikan sistem berisiko tanpa validasi. Contoh:</p>
+<ul>
+<li>membuka pintu,</li>
+<li>menyetujui pembayaran,</li>
+<li>menentukan diagnosis,</li>
+<li>menolak akses seseorang,</li>
+<li>mengendalikan mesin.</li>
+</ul>
+<p>Gunakan model sebagai sumber rekomendasi atau ekstraksi, lalu terapkan rule, sensor lain, atau human approval sesuai dampak.</p>
+<h2>11.8 Responsible Use Checklist</h2>
+<p>Sebelum deployment, tanyakan:</p>
+<ul>
+<li>apakah model dibutuhkan,</li>
+<li>apakah pengguna tahu gambar diproses AI,</li>
+<li>apakah data memiliki izin,</li>
+<li>apakah output dapat dikoreksi,</li>
+<li>apakah ada jalur eskalasi,</li>
+<li>apakah performa diuji per kelompok,</li>
+<li>apakah sistem dapat abstain,</li>
+<li>apakah log menyimpan data sensitif,</li>
+<li>apakah vendor atau model memproses data di lokasi yang sesuai,</li>
+<li>apakah ada prosedur incident response.</li>
+</ul>
+<h2>Checkpoint Bab 11</h2>
+<ol>
+<li>Apa perbedaan OCR error dan text hallucination?</li>
+<li>Mengapa teks di dalam gambar harus diperlakukan sebagai data tidak tepercaya?</li>
+<li>Sebutkan tiga langkah privacy by design.</li>
+</ol>
+<h2>Latihan Bab 11 - Threat Modeling</h2>
+<p>Buat threat model untuk aplikasi analisis dokumen. Daftar aset, aktor, entry point, ancaman, dampak, kontrol pencegahan, dan respons insiden.</p>
+<hr>
+
