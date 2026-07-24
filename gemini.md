@@ -168,3 +168,16 @@ Pada saat melakukan *UI Audit* Desktop di halaman Kuis (contoh: UI/UX), ditemuka
 - Membuat script tambahan `fix_kuis_titles.js` yang secara spesifik memindai direktori *frontend* (termasuk modul Deep Learning, UI/UX, Data Engineering, dll).
 - Melakukan penggantian masal secara *Regex* untuk mengubah string "Kuis Python" menjadi "Kuis Modul" pada semua file `kuis.html` dan `diskusi.html`.
 - Melakukan verifikasi *render* ulang untuk memastikan judul halaman berubah menjadi generik dan relevan untuk semua modul non-Python.
+
+## 16. Bug Konten: Prompt Diskusi dan Teks Forum Masih Mengandung Python di Modul Lain
+**Deskripsi:**
+Pada saat melakukan *UI Audit* Desktop di halaman Diskusi, terungkap bahwa teks deskripsi (contoh: "Diskusikan mengapa Python dominan..."), tombol *prompt* yang dapat di-*klik*, serta sub-judul halaman masih sangat spesifik merujuk pada modul *Python untuk AI*, meskipun sedang berada di modul lain (seperti UI/UX).
+**Penyebab:**
+- Script awal *generator* (`build_module.js`) menyalin struktur file HTML *Diskusi* dari modul referensi (Python) secara mentah-mentah ke folder-folder modul lain tanpa membersihkan isi konten teks di dalamnya (hanya mengganti variabel *path* dasar).
+**Solusi:**
+- Membuat script `fix_diskusi_content.js` untuk memindai semua file `diskusi.html` pada setiap folder kecuali folder `02-python-untuk-ai`.
+- Melakukan pergantian (replace) masal berbasis Regex dan String untuk merubah:
+  - `<h1>Diskusi Python</h1>` menjadi `<h1>Diskusi Topik</h1>`
+  - Semua opsi tombol *prompt* diskusi Python menjadi *prompt* studi kasus yang generik dan berorientasi *Project Building*.
+  - Menghapus referensi file `materi/baru/Python-baru.md`.
+- Seluruh halaman diskusi modul selain Python kini menampilkan kalimat instruksional yang universal dan premium.
