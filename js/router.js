@@ -106,7 +106,10 @@ const router = {
         "/participant-ai-lab-deep-learning-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/latihan.html",
         "/participant-ai-lab-deep-learning-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/kuis.html",
         "/participant-ai-lab-deep-learning-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/diskusi.html",
-        "/participant-ai-lab-reinforcement-learning": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-reinforcement-learning": "/pages/frontend/fellow-dashboard/foundation-core-ai/reinforcement-learning/materi.html",
+        "/participant-ai-lab-reinforcement-learning-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/reinforcement-learning/latihan.html",
+        "/participant-ai-lab-reinforcement-learning-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/reinforcement-learning/kuis.html",
+        "/participant-ai-lab-reinforcement-learning-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/reinforcement-learning/diskusi.html",
         "/participant-ai-lab-llm": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-vlm": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-multimodal-llm": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -751,6 +754,21 @@ const router = {
                     if (path === "/participant-ai-lab-deep-learning-discussion" && typeof window.initAiDeepLearningDiscussion === "function") {
                         window.initAiDeepLearningDiscussion();
                     }
+                } else if (path.startsWith("/participant-ai-lab-reinforcement-learning") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initAiReinforcementLearningMateri === "function") {
+                        window.initAiReinforcementLearningMateri();
+                    }
+                    if (path === "/participant-ai-lab-reinforcement-learning-practice" && typeof window.initAiReinforcementLearningPractice === "function") {
+                        window.initAiReinforcementLearningPractice();
+                    }
+                    if (path === "/participant-ai-lab-reinforcement-learning-quiz" && typeof window.initAiReinforcementLearningQuiz === "function") {
+                        window.initAiReinforcementLearningQuiz();
+                    }
+                    if (path === "/participant-ai-lab-reinforcement-learning-discussion" && typeof window.initAiReinforcementLearningDiscussion === "function") {
+                        window.initAiReinforcementLearningDiscussion();
+                    }
+
                 } else if (path.startsWith("/participant-ai-lab-math") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
                     if (path === "/participant-ai-lab-math" && typeof window.initAiLabMathOverview === "function") {
