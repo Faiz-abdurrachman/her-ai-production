@@ -1,55 +1,54 @@
-# Her-AI SuperApp - AI Developer Guide
+# Log Perbaikan Bug & Pengembangan Modul HerAI
+*Sesi Pengembangan - Fellowship Dashboard (AI Lab)*
 
-Dokumen ini adalah sumber kebenaran (source of truth) dan aturan main bagi AI / developer yang bekerja di repository `Her-AI`, terutama terkait UI/UX dan arsitektur front-end di Fellow Dashboard. **Setiap AI yang bekerja pada project ini wajib membaca dan mengikuti aturan di bawah ini sebelum mengeksekusi kode.**
+Dokumen ini berisi rangkuman masalah, bug visual, maupun logic yang ditemukan dan cara penyelesaiannya.
 
-## 1. UI Consistency & Modern Aesthetic (Standardisasi Layout - NEW PLAN)
-Referensi utama (Gold Standard) untuk desain antarmuka hero/header materi adalah **Pengantar AI** yang simpel, elegan, dan *full-width* tanpa sidebar yang membatasi layout materi (menggunakan desain banner pink bergradasi yang seragam).
+## 1. Bug: Modul "Deep Learning" tidak merender (404 / Route error)
+**Deskripsi:**
+Pengguna melaporkan bahwa saat mencoba mengakses modul Deep Learning atau Kuis Deep Learning (misalnya `http://localhost:3000/#/participant-ai-lab-deep-learning-quiz`), tidak ada halaman yang dimuat atau error route/URL.
 
-**Aturan Konsistensi:**
-- **Terminologi:** Jangan mencampuradukkan "Chapter" dan "Topik". Gunakan **Topik** secara konsisten di seluruh aplikasi (baik di UI sidebar, judul banner, maupun navigasi).
-- **Styling Banner:** Semua modul wajib menggunakan satu komponen banner yang konsisten (seperti di Pengantar AI). Banner ini diatur dengan class `.lesson-topic-banner` (yang akan kita buat terpusat di `modules.css`).
-  - Elemen ini menggantikan `.ai-modern-chapter-hero` maupun `.ai-evaluation-chapter-head` agar tampilan lebih seragam dan tidak terlalu memakan ruang (*compact & elegant*).
-  - Contoh HTML Banner Standar:
-    ```html
-    <header class="lesson-topic-banner">
-        <h3><i class="fas fa-book-open"></i> Topik [X]: [Judul Topik]</h3>
-        <p>Goal: [Deskripsi/Tujuan Topik]</p>
-    </header>
-    ```
+**Penyebab:**
+- Route untuk modul "Deep Learning" (termasuk praktik dan kuis) tidak diregistrasi di `js/router.js` sehingga SPA (Single Page Application) gagal memuat layout `fellow-dashboard`.
+- Pemanggilan skrip `ai-deep-learning.js` belum dimasukkan ke `index.html`.
 
-## 2. Bug History & Lessons Learned
-### 2.1 CSS Variable Omission (The "White on White" Bug)
-- **Gejala:** Elemen interaktif seperti tombol navigasi kuis atau badge angka yang aktif/di-hover teksnya berubah menjadi putih namun background-nya juga putih/hilang, sehingga konten tidak terlihat.
-- **Penyebab:** Modul baru (seperti `ai-python-page`) diatur untuk memanggil variabel CSS (contoh: `var(--python-pink)`, `var(--python-surface)`), tetapi variabel-variabel tersebut **lupa didefinisikan** pada scope utama modul tersebut. Sehingga browser menganggap nilainya transparan/kosong.
-- **Pencegahan / Aturan Utama CSS:** Setiap kali menduplikasi atau membuat scope page modul baru (`.ai-[topik]-page`), **wajib** mendefinisikan palet warnanya secara lengkap di `modules.css`.
+**Cara Perbaikan:**
+- Mendaftarkan route-route baru (contoh: `participant-ai-lab-deep-learning`, `-practice`, dan `-quiz`) ke dalam `js/router.js`.
+- Menyambungkan route tersebut ke `materi.html`, `latihan.html`, dan `kuis.html` yang benar dalam struktur folder `foundation-core-ai/deep-learning/`.
+- Memperbarui `index.html` dengan menambahkan `<script src="/js/frontend/fellow-dashboard/ai-deep-learning.js">`.
 
-### 2.2 Right Sidebar Layout Constraint
-- **Gejala:** Jarak antara main content dan right sidebar terlalu rapat atau layout tidak bisa melar 100%.
-- **Penyebab:** Adanya pembungkus (wrapper) berlebih seperti `.ai-evaluation-shell` atau `max-width` yang mengunci ukuran `div` materi padahal `lesson-layout` sudah menggunakan Grid yang otomatis membagi ruang.
-- **Pencegahan:** Selalu sandarkan elemen utama pada struktur `.lesson-layout > .lesson-main-content` dan `aside.lesson-right-panel` (jika dibutuhkan) tanpa menambah wrapper pengunci lebar (constrained wrapper).
+## 2. Bug Visual: Halaman Praktik & Kuis Hanya Menampilkan "Nomornya Doang" (Pagination tanpa Soal)
+**Deskripsi:**
+Ketika masuk ke Latihan atau Kuis, navigator pagination (1, 2, 3... 20) muncul namun tidak menampilkan teks soal yang benar. Selain itu, ada hardcoding teks "Python untuk AI" di atas soal.
 
-## 3. Execution Plan (Konsistensi "Topik" & Layout "Pengantar AI")
-Agar seluruh halaman konsisten, kita menggunakan workflow berikut:
+**Penyebab:**
+- Script Node.js generator (`build_module.js`) menghasilkan array `prompt: ["teks"]` pada data latihan, padahal fungsi `renderFormattedText()` di frontend berekspektasi terhadap string (`prompt: "teks"`). Akibatnya fungsi replace text throw error dan komponen tidak merender isi array.
+- Skrip template menyisipkan hardcode teks "Python untuk AI" (karena hasil cloning modul AI Python).
 
-**Langkah demi Langkah Eksekusi (Setelah Rencana Disetujui):**
-1. **Pusatkan CSS:** Buat class `.lesson-topic-banner` di `modules.css` yang mereplikasi desain pink gradient dari Pengantar AI.
-2. **Refactor Pengantar AI:** Ganti inline-css yang ada di `settings.js` dan `materi.html` dengan class `.lesson-topic-banner`. Ubah teks "Chapter 2" dsb menjadi "Topik 2".
-3. **Script Massal / Edit Granular Modul Lain:** Ubah struktur header di folder `chapters/` (Evaluation, Evolution, Reasoning, Modern, Python) untuk menggunakan class `.lesson-topic-banner` dan mengubah kata "Chapter" menjadi "Topik".
-4. **Refactor JS Navigation:** Pastikan JS yang merender navigasi list atau tombol prev/next mengubah labelnya menjadi "Topik Sebelumnya / Topik Selanjutnya" agar 100% konsisten.
+**Cara Perbaikan:**
+- Memperbaiki `build_module.js` agar menyatukan (join) isi array menjadi single string (`prompt: paragraphs.join('\n\n')`).
+- Menambahkan logic di `build_module.js` untuk mengganti statik text "Python untuk AI" menjadi nama asli modul (`${moduleTitle}`) pada title bar di latihan/kuis.
+- Me-_rebuild_ modul Reinforcement Learning dan mereplace manual string di modul Deep Learning yang terdampak.
 
-### 2.3 Broken CSS Selectors on ID Renaming (The "Nomornya Doang" / Giant Pill Bug)
-- **Gejala:** Navigasi Kuis atau Latihan yang tadinya berupa grid lingkaran kecil angka 1-20 tiba-tiba berubah menjadi rentetan kapsul pink raksasa yang memanjang 100% dari atas ke bawah.
-- **Penyebab:** Saat melakukan cloning modul (misal dari `ai-python` ke `ai-deep-learning`), ID di HTML seperti `#aiPythonQuizNavigator` diubah menjadi `#aiDeepLearningQuizNavigator`. Namun, *CSS rules* di `modules.css` yang sangat spesifik menggunakan ID tersebut (`.ai-python-quiz-page #aiPythonQuizNavigator`) tidak ikut diperbarui. Karena struktur *fallback*-nya adalah `display: grid` 1 kolom, maka elemen di dalamnya melar (stretch) memenuhi lebar layar.
-- **Pencegahan / Fix:** Setiap kali mengubah ID elemen fungsional di HTML, pastikan untuk menelusuri `.css` dan menambahkan selektor baru berjejeran dengan koma (contoh: `#aiPythonQuizNavigator, #aiDeepLearningQuizNavigator { ... }`), lalu jangan lupa **me-refresh query string versi CSS** di `index.html` (contoh `?v=20260724`) agar browser tidak me-load cache CSS yang lama.
+## 3. Bug: Halaman Modul "Reinforcement Learning" Putih Kosong (Blank Page)
+**Deskripsi:**
+Ketika membuka route `participant-ai-lab-reinforcement-learning`, halaman blank (putih) dan tidak menampilkan daftar isi materi, padahal DOM HTML merender ribuan baris teks (height normal).
 
-### 2.4 Literal HTML Rendered as Text in Practice Cards
-- **Gejala:** Kartu latihan (Practice) menampilkan tag `<p>Lakukan tahap...</p>` mentah-mentah di layar alih-alih merendernya sebagai teks berparagraf.
-- **Penyebab:** Skrip kloning mengambil array dari JSON yang memang sudah mengandung tag HTML, lalu memasukkannya ke dalam format `PRACTICES` di mana fungsi render *frontend* menggunakan `escapeHtml()` atau meng-append teks murni ke dalam `<p>` baru.
-- **Pencegahan:** Selalu parsing atau strip tag HTML (`str.replace(/<[^>]+>/g, '')`) saat memindahkan data teks mentah dari JSON Modul Markdown ke dalam variabel array JS yang ditujukan untuk dirender melalui fungsi UI builder yang sudah memiliki template HTML bawaannya sendiri.
+**Penyebab:**
+- Skrip `register_module.js` tidak dapat memasukkan file statik di `index.html` akibat ketiadaan tag placeholder `<!-- DASHBOARD FELLOW -->` (sudah terhapus).
+- `ai-reinforcement-learning.js` gagal disisipkan ke layout utama.
 
-## 4. Smart Clone Workflow (Next Plan)
-Berdasarkan keberhasilan konversi modul **Deep Learning**, workflow pembuatan sisa 23 modul selanjutnya adalah:
-1. **Ekstraksi (Extractor):** Gunakan skrip Node.js otomatis untuk mem-parsing file Markdown / JSON target menjadi format array/objek yang dimengerti front-end (Materi `CHAPTERS`, Latihan `PRACTICES`, Kuis `QUIZ`).
-2. **Kloning & Transformasi (Smart Clone):** Gandakan file template HTML dan JS (menggunakan modul `ai-python` sebagai basis), dan gunakan skrip *regex/replace* massal untuk mengubah semua rujukan ID, label, teks, dan penamaan variabel (`ai-python` -> `ai-[modul-baru]`).
-3. **Penyelarasan CSS (Style Sync):** Suntikkan atau duplikasi *class/id selector* di `modules.css` secara terprogram menggunakan script CLI untuk memastikan UI dan navigasi (seperti grid kuis) tidak pecah ketika ID di HTML berubah.
-4. **Cache Busting:** Selalu mutakhirkan string versi `?v=` pada pemanggilan `.css` dan `.js` di `index.html` untuk menghindari isu caching.
+**Cara Perbaikan:**
+- Mengubah injektor di `register_module.js` untuk menggunakan anchor tag lain (misalnya `<script src="/js/frontend/fellow-dashboard/ai-python.js...">`).
+- Menambahkan script injection `<script src="/js/frontend/fellow-dashboard/ai-reinforcement-learning.js"></script>` ke dalam `index.html` secara dinamis.
+
+## 4. Perbaikan Workflow Modul Builder (`build_module.js` & `register_module.js`)
+**Deskripsi:**
+Alat otomatis untuk merakit modul baru dari Markdown kurang robust.
+
+**Perbaikan:**
+- Memperbaiki duplikat variabel deklarasi (`moduleTitle`) yang membuat script crash.
+- Menambahkan fungsi escape regex dan `escapeHtml()` agar string markdown aman ketika dilempar ke string literal JavaScript template.
+- Script perakitan sekarang dapat dijalankan tanpa manual tweak pasca-eksekusi.
+
+---
+**Status:** Semua halaman modul Python, Deep Learning, dan Reinforcement Learning (Materi, Kuis, Latihan) sekarang sudah terhubung dan dapat dirender dengan baik beserta soal-soalnya.
