@@ -267,3 +267,13 @@ Halaman materi CV berhasil dimuat, tetapi komponen interaktif (seperti inspeksi 
 - Menulis script `fix_css_scoping.js` untuk mengganti *wrapper class* lama menjadi `.cv-chapter-wrapper` secara dinamis pada semua 11 chapter.
 - Memodifikasi *logic injection* di `js/frontend/fellow-dashboard/ai-cv.js` untuk membedah DOM (*DOM parsing*) dan memasukkan node `<style>` secara manual ke dalam `<head>`.
 - Mendaftarkan *hash map* untuk menghubungkan ID chapter dengan *legacy init function* masing-masing, dan mengeksekusinya menggunakan `setTimeout` sesaat setelah konten HTML dirender. Semua interaktivitas dan styling kini aktif secara sempurna.
+
+## 25. Bug Visual: Halaman Modul CNN dan Interaksi Kanvas Hilang Styling
+**Deskripsi:**
+Pengguna melaporkan bahwa setelah arsitektur modul dipecah menjadi fragment, komponen CV (khususnya CNN) menjadi "berantakan" dan kehilangan seluruh CSS khusus (seperti visualizer konvolusi dan efek interaktif).
+**Penyebab:**
+- Seluruh kelas CSS khusus CV (contoh: `.cnn-pipeline`, `.conv-stage`) di dalam file `ai-lab-lesson.css` disekop (*scoped*) di bawah *parent class* `.ai-lab-content`.
+- Pada arsitektur HTML lawas, tag `<article>` memiliki kelas `.ai-lab-content`. Namun, pada *template* arsitektur baru (`materi.html`), tag tersebut luput mewarisi kelas `.ai-lab-content`, sehingga *browser* menolak menerapkan aturan CSS ke seluruh elemen keturunannya.
+**Solusi:**
+- Menambahkan kelas `ai-lab-content` secara statis ke dalam tag `<article id="materi-...` pada ketiga file `materi.html` yang mewakili 3 sub-modul CV.
+- Seluruh *styling*, grid konvolusi CNN, dan layout kartu materi kembali utuh dan cantik (*pixel-perfect*).
