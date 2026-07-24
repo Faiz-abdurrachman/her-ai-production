@@ -11259,7 +11259,8 @@
 }
 
 .ai-python-practice-page .python-practice-form,
-.ai-python-quiz-page #aiPythonQuizForm {
+.ai-python-quiz-page #aiPythonQuizForm ,
+.ai-python-quiz-page #aiDeepLearningQuizForm {
     border-top: 0;
     display: grid;
     gap: 22px;
@@ -11372,12 +11373,15 @@
 }
 
 .ai-python-practice-page #aiPythonPracticeList,
-.ai-python-quiz-page #aiPythonQuizList {
+.ai-python-practice-page #aiDeepLearningPracticeList,
+.ai-python-quiz-page #aiPythonQuizList ,
+.ai-python-quiz-page #aiDeepLearningQuizList {
     min-width: 0;
 }
 
 .ai-python-practice-page .reasoning-practice-card,
-.ai-python-quiz-page #aiPythonQuizList > article {
+.ai-python-quiz-page #aiPythonQuizList > article ,
+.ai-python-quiz-page #aiDeepLearningQuizList > article {
     background: #ffffff;
     border: 1px solid var(--python-line);
     border-radius: 18px;
@@ -11388,7 +11392,8 @@
 }
 
 .ai-python-practice-page .reasoning-practice-card[hidden],
-.ai-python-quiz-page #aiPythonQuizList > article[hidden] {
+.ai-python-quiz-page #aiPythonQuizList > article[hidden] ,
+.ai-python-quiz-page #aiDeepLearningQuizList > article[hidden] {
     display: none !important;
 }
 
@@ -11628,12 +11633,14 @@
     max-width: 100%;
 }
 
-.ai-python-quiz-page #aiPythonQuizNavigator {
+.ai-python-quiz-page #aiPythonQuizNavigator ,
+.ai-python-quiz-page #aiDeepLearningQuizNavigator {
     display: flex;
     flex-wrap: wrap;
 }
 
-.ai-python-quiz-page #aiPythonQuizList > article > span {
+.ai-python-quiz-page #aiPythonQuizList > article > span ,
+.ai-python-quiz-page #aiDeepLearningQuizList > article > span {
     background: var(--python-pink);
     border: 0;
     border-radius: 50%;
@@ -11642,7 +11649,8 @@
     width: 38px;
 }
 
-.ai-python-quiz-page #aiPythonQuizList > article > small {
+.ai-python-quiz-page #aiPythonQuizList > article > small ,
+.ai-python-quiz-page #aiDeepLearningQuizList > article > small {
     color: var(--python-pink-deep);
     font-size: .75rem;
     font-weight: 850;
@@ -11650,7 +11658,8 @@
     text-transform: uppercase;
 }
 
-.ai-python-quiz-page #aiPythonQuizList > article > h3 {
+.ai-python-quiz-page #aiPythonQuizList > article > h3 ,
+.ai-python-quiz-page #aiDeepLearningQuizList > article > h3 {
     color: var(--python-ink);
     line-height: 1.48;
     margin: 0;
@@ -11880,7 +11889,8 @@
     color: #8b2438;
 }
 
-.ai-python-quiz-page #aiPythonQuizForm.is-locked .reasoning-scaffold-options label {
+.ai-python-quiz-page #aiPythonQuizForm.is-locked .reasoning-scaffold-options label ,
+.ai-python-quiz-page #aiDeepLearningQuizForm.is-locked .reasoning-scaffold-options label {
     cursor: not-allowed;
 }
 
@@ -12539,7 +12549,8 @@
     .ai-python-page .python-worked-example,
     .ai-python-page .python-beginner-glossary,
     .ai-python-practice-page .reasoning-practice-card,
-    .ai-python-quiz-page #aiPythonQuizList > article {
+    .ai-python-quiz-page #aiPythonQuizList > article ,
+    .ai-python-quiz-page #aiDeepLearningQuizList > article {
         padding: 15px;
     }
 
@@ -12726,4 +12737,23 @@
     font-size: 1.05rem;
     color: var(--fellow-text);
     font-weight: 500;
+}
+
+/* FORCING QUIZ NAVIGATOR FIX FOR DEEP LEARNING */
+.ai-python-quiz-page #aiDeepLearningQuizNavigator {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    justify-content: flex-start !important;
+}
+.ai-python-quiz-page #aiDeepLearningQuizNavigator button {
+    flex: 0 0 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    width: 44px !important;
+    max-width: 44px !important;
+    border-radius: 100px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
