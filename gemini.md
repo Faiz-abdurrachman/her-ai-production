@@ -52,3 +52,18 @@ Alat otomatis untuk merakit modul baru dari Markdown kurang robust.
 
 ---
 **Status:** Semua halaman modul Python, Deep Learning, dan Reinforcement Learning (Materi, Kuis, Latihan) sekarang sudah terhubung dan dapat dirender dengan baik beserta soal-soalnya.
+
+## 5. Bug Visual: Topik Card Tidak Konsisten (Design Pengantar AI)
+**Deskripsi:**
+Pengguna melaporkan bahwa banner/card topik pada modul Deep Learning, Reinforcement Learning, dan topik 2 ke atas pada modul Pengantar AI tidak konsisten. Card tersebut tidak memiliki styling kotak outline pink, huruf uppercase, gradient background, dan margin yang indah seperti pada Topik 1 Pengantar AI.
+
+**Penyebab:**
+- Terdapat *syntax error* pada file CSS utama `modules.css`. Tepatnya, ada sebuah media query `@media (max-width: 640px)` di baris ~12375 yang **tidak memiliki kurung tutup (`}`)**.
+- Hal ini menyebabkan semua deklarasi CSS yang berada di bawahnya tertelan ke dalam ruang lingkup `@media (max-width: 640px)`, termasuk styling `.lesson-topic-banner` yang krusial untuk membuat card topik.
+- Di baris ~4300 pada `modules.css` juga terdapat baris sisa yang corrupt (berisi properti warna dan kurung kurawal nyasar) yang mungkin merusak parser beberapa browser.
+
+**Cara Perbaikan:**
+- Menghapus baris corrupt / stray CSS properties pada `modules.css` (sekitar baris 4300).
+- Menambahkan kurung kurawal tutup `}` tepat sebelum media query `920px` di baris ~12521 untuk menutup block media query 640px secara proporsional.
+- Menambahkan cache-buster baru (`?v=...`) pada `index.html` untuk memuat ulang `modules.css`.
+- Hasilnya, `.lesson-topic-banner` kembali terdeteksi oleh browser sebagai top-level rule, sehingga banner Topik 1 (Deep Learning/Reinforcement) dan Topik 2+ (Pengantar AI) sekarang memiliki styling yang seragam, indah, berlatar belakang pink, font uppercase, dan outline border pink.
