@@ -1,0 +1,240 @@
+<h1>Mini Project: Q-Learning pada GridWorld</h1>
+<h2>12.1 Tujuan Project</h2>
+<p>Peserta membangun agent yang belajar mencapai tujuan pada GridWorld sederhana sambil menghindari rintangan.</p>
+<p>Capaian project:</p>
+<ul>
+<li>membuat environment sederhana,</li>
+<li>menerapkan Q-learning,</li>
+<li>menjalankan eksperimen beberapa seed,</li>
+<li>membandingkan hyperparameter,</li>
+<li>mengevaluasi return, success rate, dan panjang episode,</li>
+<li>mengaudit reward dan kegagalan agent.</li>
+</ul>
+<h2>12.2 Desain GridWorld</h2>
+<p>Gunakan grid 5 x 5.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">S . . X .
+. X . X .
+. X . . .
+. . . X .
+X . . . G
+</code></pre></div>
+<p>Keterangan:</p>
+<ul>
+<li><code>S</code>: start.</li>
+<li><code>G</code>: goal.</li>
+<li><code>X</code>: obstacle.</li>
+<li><code>.</code>: sel yang dapat dilewati.</li>
+</ul>
+<p>Action:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">0 = atas
+1 = kanan
+2 = bawah
+3 = kiri
+</code></pre></div>
+<p>Reward awal:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">+10 mencapai goal
+-5 menabrak obstacle atau keluar grid
+-0.1 setiap langkah
+</code></pre></div>
+<p>Episode selesai saat goal tercapai atau langkah maksimum 100.</p>
+<h2>12.3 Implementasi Environment</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">class GridWorld:
+    def __init__(self, size=5, max_steps=100):
+        self.size = size
+        self.max_steps = max_steps
+        self.start = (0, 0)
+        self.goal = (4, 4)
+        self.obstacles = {(0, 3), (1, 1), (1, 3), (2, 1), (3, 3), (4, 0)}
+        self.actions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+
+    def reset(self):
+        self.position = self.start
+        self.steps = 0
+        return self.position
+
+    def step(self, action):
+        self.steps += 1
+        dr, dc = self.actions[action]
+        candidate = (self.position[0] + dr, self.position[1] + dc)
+
+        out = not (0 &lt;= candidate[0] &lt; self.size and 0 &lt;= candidate[1] &lt; self.size)
+        blocked = candidate in self.obstacles
+
+        if out or blocked:
+            reward = -5.0
+            next_position = self.position
+        else:
+            next_position = candidate
+            reward = -0.1
+
+        self.position = next_position
+        terminated = self.position == self.goal
+        if terminated:
+            reward = 10.0
+
+        truncated = self.steps &gt;= self.max_steps and not terminated
+        return self.position, reward, terminated, truncated
+</code></pre></div>
+<h2>12.4 Implementasi Q-Learning</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">import random
+from collections import defaultdict
+
+
+def greedy_action(values):
+    best = max(values)
+    candidates = [i for i, value in enumerate(values) if value == best]
+    return random.choice(candidates)
+
+
+def train(seed=0, episodes=3000, alpha=0.1, gamma=0.95,
+          epsilon_start=1.0, epsilon_min=0.05, epsilon_decay=0.995):
+    random.seed(seed)
+    env = GridWorld()
+    q = defaultdict(lambda: [0.0] * 4)
+    epsilon = epsilon_start
+    history = []
+
+    for episode in range(episodes):
+        state = env.reset()
+        total_reward = 0.0
+        done = False
+
+        while not done:
+            if random.random() &lt; epsilon:
+                action = random.randrange(4)
+            else:
+                action = greedy_action(q[state])
+
+            next_state, reward, terminated, truncated = env.step(action)
+            done = terminated or truncated
+
+            future = 0.0 if terminated else max(q[next_state])
+            target = reward + gamma * future
+            q[state][action] += alpha * (target - q[state][action])
+
+            state = next_state
+            total_reward += reward
+
+        epsilon = max(epsilon_min, epsilon * epsilon_decay)
+        history.append(total_reward)
+
+    return q, history
+</code></pre></div>
+<h2>12.5 Evaluasi Policy</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">def evaluate(q, episodes=100):
+    env = GridWorld()
+    returns = []
+    successes = 0
+    lengths = []
+
+    for _ in range(episodes):
+        state = env.reset()
+        total = 0.0
+        done = False
+
+        while not done:
+            action = greedy_action(q[state])
+            state, reward, terminated, truncated = env.step(action)
+            done = terminated or truncated
+            total += reward
+
+        returns.append(total)
+        lengths.append(env.steps)
+        successes += int(terminated)
+
+    return {
+        &quot;mean_return&quot;: sum(returns) / len(returns),
+        &quot;success_rate&quot;: successes / episodes,
+        &quot;mean_length&quot;: sum(lengths) / len(lengths),
+    }
+</code></pre></div>
+<h2>12.6 Eksperimen Wajib</h2>
+<p>Jalankan minimal tiga konfigurasi:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Eksperimen</th>
+<th align="right">Alpha</th>
+<th align="right">Gamma</th>
+<th align="right">Epsilon decay</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td align="right">0.10</td>
+<td align="right">0.95</td>
+<td align="right">0.995</td>
+</tr>
+<tr>
+<td>B</td>
+<td align="right">0.30</td>
+<td align="right">0.95</td>
+<td align="right">0.995</td>
+</tr>
+<tr>
+<td>C</td>
+<td align="right">0.10</td>
+<td align="right">0.99</td>
+<td align="right">0.999</td>
+</tr>
+</tbody></table></div>
+<p>Untuk setiap konfigurasi:</p>
+<ul>
+<li>gunakan minimal lima seed,</li>
+<li>catat mean return,</li>
+<li>catat success rate,</li>
+<li>catat panjang episode,</li>
+<li>tampilkan learning curve,</li>
+<li>jelaskan variasi antar-seed.</li>
+</ul>
+<h2>12.7 Audit Reward Project</h2>
+<p>Jawab pertanyaan berikut:</p>
+<ol>
+<li>Apakah penalti <code>-5</code> membuat agent terlalu takut mengeksplorasi?</li>
+<li>Apakah biaya langkah <code>-0.1</code> cukup mendorong jalur pendek?</li>
+<li>Apa yang terjadi jika reward goal dinaikkan menjadi <code>+100</code>?</li>
+<li>Apakah agent dapat berputar tanpa akhir jika max steps dihapus?</li>
+<li>Apakah obstacle seharusnya langsung mengakhiri episode?</li>
+</ol>
+<h2>12.8 Deliverable</h2>
+<p>Kumpulkan:</p>
+<ol>
+<li>Notebook atau file Python.</li>
+<li>README singkat.</li>
+<li>Tabel konfigurasi eksperimen.</li>
+<li>Grafik learning curve.</li>
+<li>Ringkasan hasil maksimal dua halaman.</li>
+<li>Analisis minimal tiga kegagalan agent.</li>
+<li>Audit reward dan rekomendasi perbaikan.</li>
+</ol>
+<h2>12.9 Rubrik Penilaian</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Komponen</th>
+<th align="right">Bobot</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Kebenaran implementasi environment dan Q-learning</td>
+<td align="right">25%</td>
+</tr>
+<tr>
+<td>Desain eksperimen dan penggunaan beberapa seed</td>
+<td align="right">20%</td>
+</tr>
+<tr>
+<td>Evaluasi dan visualisasi</td>
+<td align="right">20%</td>
+</tr>
+<tr>
+<td>Analisis reward, risiko, dan kegagalan</td>
+<td align="right">20%</td>
+</tr>
+<tr>
+<td>Kerapian kode dan komunikasi hasil</td>
+<td align="right">15%</td>
+</tr>
+</tbody></table></div>
+<hr>
+

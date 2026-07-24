@@ -1,0 +1,90 @@
+<h1>Exploration vs Exploitation</h1>
+<h2>5.1 Dilema Utama</h2>
+<p>Agent harus memilih antara:</p>
+<ul>
+<li><strong>Exploitation:</strong> memilih action yang saat ini terlihat paling baik.</li>
+<li><strong>Exploration:</strong> mencoba action lain untuk memperoleh informasi baru.</li>
+</ul>
+<p>Terlalu banyak exploitation membuat agent cepat puas pada strategi yang mungkin belum optimal. Terlalu banyak exploration membuat hasil tidak stabil dan dapat membuang sumber daya.</p>
+<h2>5.2 Analogi Restoran</h2>
+<p>Kamu memiliki satu restoran favorit. Exploitation berarti selalu makan di sana karena sudah tahu kualitasnya. Exploration berarti mencoba restoran baru yang mungkin lebih baik, tetapi juga mungkin mengecewakan.</p>
+<p>Tujuan bukan memilih salah satu selamanya. Strategi yang baik biasanya banyak mengeksplorasi di awal, kemudian lebih banyak mengeksploitasi ketika pengetahuan meningkat.</p>
+<h2>5.3 Multi-Armed Bandit</h2>
+<p>Bandit adalah versi sederhana RL tanpa transisi state yang kompleks. Agent memilih satu dari beberapa action dan menerima reward.</p>
+<p>Contoh: tiga variasi judul materi belajar. Setiap variasi memiliki peluang berbeda untuk membuat peserta membuka materi. Sistem perlu belajar variasi yang paling efektif sambil tetap mencoba pilihan lain.</p>
+<blockquote>
+<p>Untuk konteks manusia, eksperimen semacam ini tetap memerlukan batas etika, privasi, dan evaluasi dampak. Reward klik tidak otomatis sama dengan kualitas belajar.</p>
+</blockquote>
+<h3>Estimasi Nilai Action</h3>
+<p>Rata-rata reward action <code>a</code> dapat diperbarui secara incremental:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Q_new(a) = Q_old(a) + alpha × (reward - Q_old(a))
+</code></pre></div>
+<p>Jika <code>alpha = 1/N(a)</code>, pembaruan setara dengan rata-rata sampel. Jika lingkungan berubah, alpha tetap seperti <code>0.1</code> dapat membuat estimasi lebih responsif terhadap data terbaru.</p>
+<h2>5.4 Epsilon-Greedy</h2>
+<p>Epsilon-greedy adalah strategi sederhana:</p>
+<ul>
+<li>dengan probabilitas <code>1 - epsilon</code>, pilih action terbaik saat ini,</li>
+<li>dengan probabilitas <code>epsilon</code>, pilih action acak.</li>
+</ul>
+<div class="reasoning-code-block"><pre><code class="language-python">import random
+
+if random.random() &lt; epsilon:
+    action = random.choice(actions)       # exploration
+else:
+    action = max(actions, key=q_value.get)  # exploitation
+</code></pre></div>
+<p>Contoh <code>epsilon = 0.1</code> berarti sekitar 10% keputusan digunakan untuk eksplorasi.</p>
+<h3>Epsilon Decay</h3>
+<p>Epsilon dapat dikurangi perlahan:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">epsilon = max(epsilon_min, epsilon × decay)
+</code></pre></div>
+<p>Jangan menurunkan epsilon terlalu cepat. Agent dapat berhenti mengeksplorasi sebelum menemukan strategi yang baik.</p>
+<h2>5.5 Optimistic Initialization dan UCB</h2>
+<p><strong>Optimistic initialization</strong> memberi nilai awal tinggi pada semua action. Agent tertarik mencoba setiap action karena semuanya terlihat menjanjikan pada awalnya.</p>
+<p><strong>Upper Confidence Bound</strong> atau UCB memilih action berdasarkan kombinasi:</p>
+<ul>
+<li>estimasi reward,</li>
+<li>ketidakpastian karena action jarang dicoba.</li>
+</ul>
+<p>Intuisinya:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">skor action = estimasi hasil + bonus eksplorasi
+</code></pre></div>
+<p>UCB cocok untuk bandit stasioner, tetapi implementasinya berbeda dari epsilon-greedy.</p>
+<h2>5.6 Contoh Kode Bandit</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">import random
+
+true_rates = [0.15, 0.30, 0.22]
+q = [0.0, 0.0, 0.0]
+counts = [0, 0, 0]
+epsilon = 0.1
+
+for step in range(2000):
+    if random.random() &lt; epsilon:
+        action = random.randrange(3)
+    else:
+        action = max(range(3), key=lambda i: q[i])
+
+    reward = 1 if random.random() &lt; true_rates[action] else 0
+    counts[action] += 1
+    q[action] += (reward - q[action]) / counts[action]
+
+print(&quot;Estimasi nilai:&quot;, q)
+print(&quot;Jumlah dipilih:&quot;, counts)
+</code></pre></div>
+<p>Kode tersebut mensimulasikan tiga action dengan probabilitas reward berbeda. Hasil setiap run dapat berbeda karena proses acak.</p>
+<h2>Checkpoint Bab 5</h2>
+<ol>
+<li>Apa risiko exploitation terlalu dini?</li>
+<li>Apa arti epsilon pada epsilon-greedy?</li>
+<li>Mengapa epsilon decay perlu dilakukan perlahan?</li>
+<li>Apa intuisi bonus eksplorasi pada UCB?</li>
+</ol>
+<h2>Latihan Bab 5</h2>
+<p>Jalankan simulasi bandit dengan <code>epsilon</code> 0, 0.01, 0.1, dan 0.3. Bandingkan:</p>
+<ul>
+<li>total reward,</li>
+<li>frekuensi action terbaik dipilih,</li>
+<li>kestabilan hasil antar-run.</li>
+</ul>
+<hr>
+

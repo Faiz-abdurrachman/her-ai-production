@@ -1,0 +1,162 @@
+<h1>SARSA dan Q-Learning</h1>
+<h2>7.1 Control Problem</h2>
+<p>Policy evaluation hanya menilai policy. Pada control problem, agent ingin menemukan policy yang semakin baik.</p>
+<p>SARSA dan Q-learning mempelajari action-value <code>Q(s,a)</code>, lalu menggunakan nilai itu untuk memilih action.</p>
+<h2>7.2 SARSA</h2>
+<p>Nama SARSA berasal dari urutan:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">State, Action, Reward, next State, next Action
+</code></pre></div>
+<p>Update SARSA:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Q(S_t,A_t) = Q(S_t,A_t) + alpha × [R_(t+1) + gamma Q(S_(t+1),A_(t+1)) - Q(S_t,A_t)]
+</code></pre></div>
+<p>SARSA memperbarui nilai berdasarkan action berikutnya yang benar-benar dipilih oleh policy saat ini. Karena itu, SARSA disebut <strong>on-policy</strong>.</p>
+<p>Jika policy masih banyak mengeksplorasi, nilai SARSA ikut mempertimbangkan risiko dari tindakan eksploratif.</p>
+<h2>7.3 Q-Learning</h2>
+<p>Update Q-learning:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Q(S_t,A_t) = Q(S_t,A_t) + alpha × [R_(t+1) + gamma max_a Q(S_(t+1),a) - Q(S_t,A_t)]
+</code></pre></div>
+<p>Q-learning menggunakan action terbaik menurut estimasi pada state berikutnya, walaupun agent mungkin memilih action lain untuk eksplorasi. Karena itu, Q-learning disebut <strong>off-policy</strong>.</p>
+<h2>7.4 SARSA vs Q-Learning</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aspek</th>
+<th>SARSA</th>
+<th>Q-Learning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tipe</td>
+<td>On-policy</td>
+<td>Off-policy</td>
+</tr>
+<tr>
+<td>Target berikutnya</td>
+<td>Q dari action yang benar-benar dipilih</td>
+<td>Q maksimum dari semua action</td>
+</tr>
+<tr>
+<td>Memperhitungkan eksplorasi dalam target</td>
+<td>Ya</td>
+<td>Tidak secara langsung</td>
+</tr>
+<tr>
+<td>Perilaku umum</td>
+<td>Dapat lebih konservatif saat eksplorasi berisiko</td>
+<td>Mengejar policy greedy optimal berdasarkan estimasi</td>
+</tr>
+</tbody></table></div>
+<h3>Ilustrasi Jalur Berbahaya</h3>
+<p>Bayangkan jalur tercepat berada di dekat tebing. Dengan epsilon-greedy, agent kadang mengambil action acak.</p>
+<ul>
+<li>Q-learning dapat menilai jalur tepi tebing sebagai terbaik karena targetnya selalu memakai action maksimum berikutnya.</li>
+<li>SARSA dapat memilih jalur lebih aman karena targetnya mempertimbangkan action aktual, termasuk kemungkinan eksplorasi.</li>
+</ul>
+<p>Hasil bergantung pada environment, epsilon, dan hyperparameter. Ini adalah intuisi, bukan jaminan universal.</p>
+<h2>7.5 Q-Table</h2>
+<p>Untuk state dan action diskret kecil, Q-value dapat disimpan dalam tabel.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>State</th>
+<th align="right">Atas</th>
+<th align="right">Bawah</th>
+<th align="right">Kiri</th>
+<th align="right">Kanan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S0</td>
+<td align="right">0.4</td>
+<td align="right">-0.2</td>
+<td align="right">0.1</td>
+<td align="right">0.8</td>
+</tr>
+<tr>
+<td>S1</td>
+<td align="right">0.7</td>
+<td align="right">0.0</td>
+<td align="right">0.3</td>
+<td align="right">0.2</td>
+</tr>
+<tr>
+<td>S2</td>
+<td align="right">-0.5</td>
+<td align="right">0.9</td>
+<td align="right">0.4</td>
+<td align="right">0.1</td>
+</tr>
+</tbody></table></div>
+<p>Policy greedy memilih nilai terbesar pada setiap baris.</p>
+<h2>7.6 Pseudocode Q-Learning</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">inisialisasi Q(s,a)
+untuk setiap episode:
+    reset environment, dapatkan state
+    selama episode belum selesai:
+        pilih action dengan epsilon-greedy
+        jalankan action
+        terima reward dan next_state
+        target = reward + gamma × max Q(next_state, semua_action)
+        Q(state, action) += alpha × (target - Q(state, action))
+        state = next_state
+</code></pre></div>
+<p>Pada state terminal, nilai masa depan biasanya dianggap nol:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">target terminal = reward
+</code></pre></div>
+<h2>7.7 Implementasi Ringkas</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">import random
+from collections import defaultdict
+
+Q = defaultdict(lambda: [0.0, 0.0, 0.0, 0.0])
+alpha = 0.1
+gamma = 0.99
+epsilon = 0.2
+
+for episode in range(1000):
+    state, info = env.reset()
+    done = False
+
+    while not done:
+        if random.random() &lt; epsilon:
+            action = env.action_space.sample()
+        else:
+            action = max(range(4), key=lambda a: Q[state][a])
+
+        next_state, reward, terminated, truncated, info = env.step(action)
+        done = terminated or truncated
+
+        future = 0.0 if terminated else max(Q[next_state])
+        target = reward + gamma * future
+        Q[state][action] += alpha * (target - Q[state][action])
+        state = next_state
+</code></pre></div>
+<p>Kode di atas adalah pola umum. Bentuk state harus dapat digunakan sebagai key dictionary. Pada environment nyata, perhatikan perbedaan terminal dan time limit dengan lebih teliti.</p>
+<h2>7.8 Hyperparameter Penting</h2>
+<ul>
+<li><code>alpha</code>: kecepatan pembaruan.</li>
+<li><code>gamma</code>: bobot masa depan.</li>
+<li><code>epsilon</code>: tingkat eksplorasi.</li>
+<li>jumlah episode: banyaknya pengalaman.</li>
+<li>epsilon decay: perubahan eksplorasi sepanjang training.</li>
+<li>max steps: batas panjang episode.</li>
+</ul>
+<p>Jangan menilai algoritma hanya dari satu kombinasi hyperparameter atau satu random seed.</p>
+<h2>Checkpoint Bab 7</h2>
+<ol>
+<li>Apa arti on-policy dan off-policy?</li>
+<li>Apa perbedaan target SARSA dan Q-learning?</li>
+<li>Mengapa Q-table tidak cocok untuk state berukuran sangat besar?</li>
+<li>Kapan nilai masa depan dibuat nol?</li>
+</ol>
+<h2>Latihan Bab 7</h2>
+<p>Buat satu contoh transisi:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Q(s,a)=2.0, reward=1, gamma=0.9, max Q(s&#39;,.)=4.0, alpha=0.1
+</code></pre></div>
+<p>Hitung:</p>
+<ol>
+<li>target Q-learning,</li>
+<li>TD error,</li>
+<li>Q-value baru.</li>
+</ol>
+<hr>
+

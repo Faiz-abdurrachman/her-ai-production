@@ -1,0 +1,121 @@
+<h1>Agent, Environment, dan Markov Decision Process</h1>
+<h2>2.1 Siklus Agent-Environment</h2>
+<p>RL dibangun dari interaksi berulang. Pada langkah waktu <code>t</code>:</p>
+<ol>
+<li>Agent mengamati state <code>S_t</code>.</li>
+<li>Agent memilih action <code>A_t</code>.</li>
+<li>Environment memproses action tersebut.</li>
+<li>Agent menerima reward <code>R_(t+1)</code>.</li>
+<li>Agent berpindah ke state <code>S_(t+1)</code>.</li>
+</ol>
+<div class="reasoning-code-block"><pre><code class="language-text">State S_t → Agent → Action A_t → Environment
+     ↑                              ↓
+     └──── Reward R_(t+1), State S_(t+1)
+</code></pre></div>
+<h3>Contoh: Robot Pengantar</h3>
+<ul>
+<li><strong>Agent:</strong> perangkat lunak pengendali robot.</li>
+<li><strong>Environment:</strong> peta gedung, lorong, orang, dan rintangan.</li>
+<li><strong>State:</strong> posisi robot, arah, jarak ke tujuan, status baterai.</li>
+<li><strong>Action:</strong> maju, mundur, belok kiri, belok kanan, berhenti.</li>
+<li><strong>Reward:</strong> positif saat mendekati atau mencapai tujuan; negatif saat menabrak atau boros energi.</li>
+</ul>
+<h2>2.2 State, Observation, dan Partial Observability</h2>
+<p><strong>State</strong> idealnya berisi informasi yang cukup untuk menentukan konsekuensi tindakan berikutnya. Namun, agent sering hanya menerima <strong>observation</strong>, yaitu sebagian informasi tentang keadaan sebenarnya.</p>
+<p>Contoh:</p>
+<ul>
+<li>Kamera robot hanya melihat area di depannya.</li>
+<li>Sistem rekomendasi tidak mengetahui seluruh niat pengguna.</li>
+<li>Sensor dapat memiliki noise atau keterlambatan.</li>
+</ul>
+<p>Ketika observation tidak cukup mewakili state, masalah menjadi partially observable. Solusi praktis dapat berupa:</p>
+<ul>
+<li>menyimpan beberapa observation terakhir,</li>
+<li>menambahkan fitur konteks,</li>
+<li>menggunakan model berurutan seperti RNN,</li>
+<li>menggunakan belief state, yaitu perkiraan tentang kondisi sebenarnya.</li>
+</ul>
+<h2>2.3 Episode dan Continuing Task</h2>
+<p><strong>Episodic task</strong> memiliki awal dan akhir yang jelas. Contoh: satu permainan, satu perjalanan robot, atau satu sesi simulasi.</p>
+<p><strong>Continuing task</strong> berjalan terus-menerus. Contoh: pengendalian suhu gedung atau pengaturan trafik jaringan.</p>
+<p>Pada episodic task, episode biasanya berhenti saat:</p>
+<ul>
+<li>tujuan tercapai,</li>
+<li>agent gagal,</li>
+<li>jumlah langkah maksimum tercapai,</li>
+<li>kondisi keselamatan dilanggar.</li>
+</ul>
+<p>Penting membedakan dua jenis akhir:</p>
+<ul>
+<li><strong>terminated:</strong> episode selesai karena keadaan terminal alami, misalnya tujuan tercapai.</li>
+<li><strong>truncated:</strong> episode dihentikan oleh batas eksternal, misalnya batas 500 langkah.</li>
+</ul>
+<p>Perbedaan ini penting karena target belajar pada kondisi terminal dapat berbeda dari kondisi yang hanya dipotong oleh batas waktu.</p>
+<h2>2.4 Markov Decision Process</h2>
+<p>Banyak masalah RL dimodelkan sebagai <strong>Markov Decision Process</strong> atau MDP. Secara ringkas, MDP terdiri dari:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">MDP = (S, A, P, R, gamma)
+</code></pre></div>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Simbol</th>
+<th>Makna</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S</td>
+<td>himpunan state</td>
+</tr>
+<tr>
+<td>A</td>
+<td>himpunan action</td>
+</tr>
+<tr>
+<td>P</td>
+<td>aturan transisi dari state dan action ke state berikutnya</td>
+</tr>
+<tr>
+<td>R</td>
+<td>aturan reward</td>
+</tr>
+<tr>
+<td>gamma</td>
+<td>discount factor untuk menimbang masa depan</td>
+</tr>
+</tbody></table></div>
+<h3>Markov Property</h3>
+<p>Sebuah state memenuhi sifat Markov jika informasi yang relevan untuk memprediksi masa depan telah tercakup dalam state saat ini.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Masa depan bergantung pada state sekarang,
+bukan pada seluruh riwayat secara langsung.
+</code></pre></div>
+<p>Ini tidak berarti masa lalu tidak penting. Artinya, pengaruh masa lalu telah diringkas ke dalam state sekarang.</p>
+<h3>Contoh Desain State yang Buruk</h3>
+<p>Agent harus mengendalikan kendaraan, tetapi state hanya berisi posisi tanpa kecepatan. Dua kendaraan pada posisi yang sama dapat memiliki risiko berbeda jika salah satunya bergerak cepat. Menambahkan kecepatan membuat state lebih informatif.</p>
+<h2>2.5 Action Space: Discrete dan Continuous</h2>
+<p><strong>Discrete action space</strong> memiliki pilihan terbatas:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">{atas, bawah, kiri, kanan}
+</code></pre></div>
+<p><strong>Continuous action space</strong> memiliki nilai tindakan pada rentang tertentu:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">sudut kemudi ∈ [-30°, 30°]
+tenaga motor ∈ [0, 1]
+</code></pre></div>
+<p>Algoritma yang cocok dapat berbeda. Q-learning tabular mudah digunakan pada action diskret kecil, sedangkan kontrol kontinu biasanya membutuhkan pendekatan seperti actor-critic.</p>
+<h2>Checkpoint Bab 2</h2>
+<ol>
+<li>Apa perbedaan state dan observation?</li>
+<li>Mengapa kecepatan perlu dimasukkan ke state kendaraan?</li>
+<li>Apa perbedaan terminated dan truncated?</li>
+<li>Berikan contoh action space diskret dan kontinu.</li>
+</ol>
+<h2>Latihan Bab 2 - Memodelkan MDP</h2>
+<p>Rancang MDP sederhana untuk sistem pengatur lampu lalu lintas. Tentukan:</p>
+<ul>
+<li>state,</li>
+<li>observation yang tersedia,</li>
+<li>action,</li>
+<li>reward,</li>
+<li>kondisi akhir atau horizon,</li>
+<li>risiko jika state terlalu sederhana.</li>
+</ul>
+<hr>
+

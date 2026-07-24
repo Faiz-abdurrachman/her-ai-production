@@ -1,0 +1,125 @@
+<h1>Function Approximation dan Deep Q-Network</h1>
+<h2>8.1 Mengapa Q-Table Tidak Cukup?</h2>
+<p>Q-table bekerja baik ketika jumlah state-action kecil. Namun, banyak masalah memiliki:</p>
+<ul>
+<li>state kontinu,</li>
+<li>gambar berukuran besar,</li>
+<li>kombinasi state yang sangat banyak,</li>
+<li>observation yang berubah terus-menerus.</li>
+</ul>
+<p>Misalnya, gambar 84 x 84 piksel memiliki ruang kemungkinan sangat besar. Menyimpan satu baris Q untuk setiap gambar tidak realistis.</p>
+<p>Solusinya adalah <strong>function approximation</strong>:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Q(s,a; theta)
+</code></pre></div>
+<p>Model berparameter <code>theta</code> menerima state dan menghasilkan perkiraan Q-value.</p>
+<h2>8.2 Linear Function Approximation</h2>
+<p>Model linear dapat menggunakan fitur state:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Q(s,a; theta) = theta_a^T phi(s)
+</code></pre></div>
+<p><code>phi(s)</code> adalah representasi fitur state. Model linear lebih efisien daripada tabel, tetapi kemampuannya terbatas untuk pola non-linear.</p>
+<h2>8.3 Deep Q-Network</h2>
+<p>Deep Q-Network atau DQN memakai neural network untuk memperkirakan Q-value.</p>
+<p>Input:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">state atau observation
+</code></pre></div>
+<p>Output untuk action diskret:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">[Q(s,a1), Q(s,a2), ..., Q(s,ak)]
+</code></pre></div>
+<p>Agent memilih action dengan Q-value terbesar, sambil tetap melakukan eksplorasi selama training.</p>
+<h2>8.4 Masalah Target yang Bergerak</h2>
+<p>Jika network yang sama digunakan untuk:</p>
+<ul>
+<li>menghasilkan prediksi saat ini,</li>
+<li>sekaligus menghasilkan target,</li>
+</ul>
+<p>maka target berubah setiap kali network diperbarui. Ini dapat membuat training tidak stabil.</p>
+<p>DQN menggunakan <strong>target network</strong>, yaitu salinan network yang diperbarui lebih jarang.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">online network: diperbarui setiap langkah optimisasi
+target network: disalin dari online network secara berkala
+</code></pre></div>
+<p>Target DQN:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">y = reward + gamma × max_a&#39; Q_target(next_state, a&#39;)
+</code></pre></div>
+<p>Loss:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">loss = (y - Q_online(state, action))^2
+</code></pre></div>
+<h2>8.5 Experience Replay</h2>
+<p>Pengalaman disimpan ke replay buffer:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">(state, action, reward, next_state, done)
+</code></pre></div>
+<p>Training mengambil mini-batch acak dari buffer.</p>
+<p>Manfaat:</p>
+<ul>
+<li>pengalaman dapat digunakan ulang,</li>
+<li>mengurangi korelasi antar-sampel berurutan,</li>
+<li>meningkatkan efisiensi data,</li>
+<li>membuat mini-batch lebih beragam.</li>
+</ul>
+<p>Namun, distribusi data replay tetap bergantung pada policy pengumpulan pengalaman.</p>
+<h2>8.6 Alur DQN</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">1. Agent mengamati state.
+2. Agent memilih action dengan epsilon-greedy.
+3. Transisi disimpan ke replay buffer.
+4. Sampel mini-batch diambil.
+5. Target dihitung memakai target network.
+6. Online network diperbarui dengan gradient descent.
+7. Target network diperbarui berkala.
+</code></pre></div>
+<h2>8.7 Pseudocode Training Step</h2>
+<div class="reasoning-code-block"><pre><code class="language-python"># batch berisi state, action, reward, next_state, terminated
+q_all = online_net(state)
+q_selected = q_all.gather(1, action)
+
+with no_grad():
+    next_q = target_net(next_state).max(dim=1)
+    target = reward + gamma * (1 - terminated) * next_q
+
+loss = mean_squared_error(q_selected, target)
+optimizer.zero_grad()
+loss.backward()
+clip_grad_norm_(online_net.parameters(), max_norm=10.0)
+optimizer.step()
+</code></pre></div>
+<p>Pseudocode ini menunjukkan logika umum, bukan program lengkap.</p>
+<h2>8.8 Tantangan DQN</h2>
+<ul>
+<li>Overestimation karena operator maksimum.</li>
+<li>Sensitif terhadap reward scale dan hyperparameter.</li>
+<li>Training dapat tidak stabil.</li>
+<li>Membutuhkan cukup pengalaman.</li>
+<li>Hanya langsung cocok untuk action diskret.</li>
+<li>Nilai loss kecil tidak selalu berarti policy bagus.</li>
+</ul>
+<p>Pengembangan yang umum:</p>
+<ul>
+<li>Double DQN untuk mengurangi overestimation.</li>
+<li>Dueling network untuk memisahkan estimasi state value dan advantage.</li>
+<li>Prioritized replay untuk memprioritaskan pengalaman dengan error besar.</li>
+</ul>
+<p>Modifikasi tidak otomatis memperbaiki semua kasus. Gunakan baseline dan eksperimen terkontrol.</p>
+<h2>8.9 Kapan Tidak Memakai DQN?</h2>
+<p>DQN kurang cocok ketika:</p>
+<ul>
+<li>action kontinu,</li>
+<li>observasi sederhana dan Q-table sudah cukup,</li>
+<li>data sangat mahal dan algoritma tidak efisien sampel,</li>
+<li>reward atau simulator belum tervalidasi,</li>
+<li>keselamatan memerlukan kendali eksplisit.</li>
+</ul>
+<h2>Checkpoint Bab 8</h2>
+<ol>
+<li>Mengapa Q-table tidak cocok untuk gambar?</li>
+<li>Apa fungsi target network?</li>
+<li>Apa manfaat replay buffer?</li>
+<li>Mengapa loss DQN tidak cukup untuk menilai policy?</li>
+</ol>
+<h2>Latihan Bab 8</h2>
+<p>Gambarkan arsitektur DQN untuk observation berukuran 8 fitur dan 4 action. Tentukan:</p>
+<ul>
+<li>ukuran input,</li>
+<li>dua hidden layer,</li>
+<li>ukuran output,</li>
+<li>informasi yang disimpan di replay buffer.</li>
+</ul>
+<hr>
+

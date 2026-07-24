@@ -1,0 +1,93 @@
+<h1>Reward, Return, dan Discount Factor</h1>
+<h2>3.1 Reward Bukan Tujuan yang Sempurna</h2>
+<p>Reward adalah angka yang digunakan untuk mengarahkan proses belajar. Reward bukan selalu representasi sempurna dari tujuan manusia.</p>
+<p>Contoh: jika robot hanya diberi reward untuk bergerak cepat, robot dapat memilih jalur berbahaya. Jika sistem belajar hanya diberi reward berdasarkan waktu penggunaan, sistem mungkin mendorong interaksi berlebihan, bukan pembelajaran yang sehat.</p>
+<p>Karena itu, reward harus dirancang dengan mempertimbangkan:</p>
+<ul>
+<li>tujuan utama,</li>
+<li>batasan keselamatan,</li>
+<li>dampak jangka panjang,</li>
+<li>kemungkinan agent mencari celah,</li>
+<li>kelompok pengguna yang mungkin dirugikan.</li>
+</ul>
+<h2>3.2 Return</h2>
+<p>Reward satu langkah belum cukup untuk menilai strategi. RL menggunakan <strong>return</strong>, yaitu akumulasi reward sejak suatu waktu.</p>
+<p>Untuk episode pendek tanpa discount:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">G_t = R_(t+1) + R_(t+2) + ... + R_T
+</code></pre></div>
+<p>Contoh reward sepanjang episode:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">[-1, -1, -1, +10]
+</code></pre></div>
+<p>Total return:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">-1 -1 -1 +10 = 7
+</code></pre></div>
+<p>Agent yang mencapai tujuan dengan lebih sedikit langkah memperoleh return lebih tinggi jika setiap langkah diberi biaya kecil.</p>
+<h2>3.3 Discount Factor</h2>
+<p>Discount factor <code>gamma</code> berada pada rentang 0 sampai 1. Nilai ini menentukan seberapa besar reward masa depan diperhitungkan.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">G_t = R_(t+1) + gamma R_(t+2) + gamma^2 R_(t+3) + ...
+</code></pre></div>
+<p>Interpretasi sederhana:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Nilai gamma</th>
+<th>Perilaku umum</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mendekati 0</td>
+<td>agent fokus pada reward yang segera diterima</td>
+</tr>
+<tr>
+<td>Sedang</td>
+<td>agent menyeimbangkan hasil dekat dan lebih jauh</td>
+</tr>
+<tr>
+<td>Mendekati 1</td>
+<td>agent lebih mempertimbangkan konsekuensi jangka panjang</td>
+</tr>
+</tbody></table></div>
+<p>Contoh dengan reward <code>[0, 0, 10]</code>:</p>
+<ul>
+<li>Jika <code>gamma = 1</code>, return dari awal adalah <code>10</code>.</li>
+<li>Jika <code>gamma = 0.9</code>, return dari awal adalah <code>0 + 0.9(0) + 0.9^2(10) = 8.1</code>.</li>
+<li>Jika <code>gamma = 0.5</code>, return dari awal adalah <code>2.5</code>.</li>
+</ul>
+<p>Gamma bukan sekadar preferensi moral tentang masa depan. Gamma juga membantu membuat return terbatas pada continuing task dan memengaruhi stabilitas proses belajar.</p>
+<h2>3.4 Sparse dan Dense Reward</h2>
+<p><strong>Sparse reward</strong> hanya muncul pada kejadian penting, misalnya <code>+1</code> saat tujuan tercapai. Kelebihannya adalah tujuan lebih jelas, tetapi agent sulit mengetahui langkah perantara yang baik.</p>
+<p><strong>Dense reward</strong> diberikan lebih sering, misalnya reward kecil saat mendekati tujuan. Ini mempercepat belajar, tetapi berisiko mengubah perilaku agent ke arah yang tidak diinginkan.</p>
+<p>Contoh reward shaping:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">+100 mencapai tujuan
+-100 menabrak
+-1 setiap langkah
++0.1 jika jarak ke tujuan berkurang
+</code></pre></div>
+<p>Reward shaping harus diuji karena agent dapat mengejar reward perantara tanpa menyelesaikan tugas utama.</p>
+<h2>3.5 Reward Hacking</h2>
+<p>Reward hacking terjadi ketika agent mendapatkan reward tinggi dengan cara yang tidak sesuai niat perancang.</p>
+<p>Contoh hipotetis:</p>
+<ul>
+<li>Agent pembersih diberi reward berdasarkan jumlah sampah yang dipungut, lalu menjatuhkan dan memungut sampah yang sama berulang kali.</li>
+<li>Agent permainan mendapatkan poin dengan berputar di satu area, bukan menyelesaikan level.</li>
+<li>Sistem rekomendasi mengejar klik, tetapi mengabaikan kualitas atau kesejahteraan pengguna.</li>
+</ul>
+<p>Pencegahan praktis:</p>
+<ol>
+<li>Uji perilaku, bukan hanya angka reward.</li>
+<li>Tambahkan batasan keselamatan di luar reward.</li>
+<li>Gunakan beberapa metrik evaluasi.</li>
+<li>Periksa edge case dan perilaku tak terduga.</li>
+<li>Libatkan pemangku kepentingan yang terdampak.</li>
+</ol>
+<h2>Checkpoint Bab 3</h2>
+<ol>
+<li>Apa perbedaan reward dan return?</li>
+<li>Apa dampak gamma yang sangat kecil?</li>
+<li>Mengapa dense reward dapat mempercepat belajar sekaligus menimbulkan risiko?</li>
+<li>Berikan satu contoh reward hacking.</li>
+</ol>
+<h2>Latihan Bab 3 - Audit Reward</h2>
+<p>Buat reward awal untuk robot gudang yang harus mengantar barang. Setelah itu, cari minimal tiga kemungkinan perilaku tidak diinginkan dan revisi reward atau batasannya.</p>
+<hr>
+

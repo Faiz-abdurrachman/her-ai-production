@@ -1,0 +1,114 @@
+<h1>Policy Gradient, Actor-Critic, dan PPO</h1>
+<h2>9.1 Dari Nilai ke Policy Langsung</h2>
+<p>Metode value-based seperti Q-learning belajar nilai action, lalu memilih action terbaik. <strong>Policy gradient</strong> mengoptimalkan policy secara langsung.</p>
+<p>Policy berparameter:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">pi_theta(a | s)
+</code></pre></div>
+<p>Neural network menghasilkan distribusi probabilitas action. Pada action kontinu, network dapat menghasilkan parameter distribusi seperti mean dan standard deviation.</p>
+<h2>9.2 Tujuan Policy Gradient</h2>
+<p>Tujuannya adalah meningkatkan expected return:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">J(theta) = expected total return dari policy pi_theta
+</code></pre></div>
+<p>Intuisi update:</p>
+<ul>
+<li>action yang menghasilkan return lebih baik dibuat lebih mungkin,</li>
+<li>action yang menghasilkan return buruk dibuat kurang mungkin.</li>
+</ul>
+<p>Bentuk intuitif gradient:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">gradient ≈ grad log pi_theta(action | state) × return
+</code></pre></div>
+<h2>9.3 REINFORCE</h2>
+<p>REINFORCE adalah algoritma policy gradient dasar:</p>
+<ol>
+<li>Jalankan satu episode dengan policy saat ini.</li>
+<li>Hitung return dari setiap langkah.</li>
+<li>Tingkatkan probabilitas action yang diikuti return tinggi.</li>
+<li>Turunkan probabilitas action yang diikuti return rendah.</li>
+</ol>
+<p>Kelemahannya adalah variance tinggi. Dua episode dari state mirip dapat memberi return sangat berbeda.</p>
+<h2>9.4 Baseline dan Advantage</h2>
+<p>Untuk mengurangi variance, return dibandingkan dengan baseline, biasanya value function.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">advantage = return - V(state)
+</code></pre></div>
+<p>Interpretasi:</p>
+<ul>
+<li>advantage positif: action lebih baik dari perkiraan rata-rata.</li>
+<li>advantage negatif: action lebih buruk dari perkiraan rata-rata.</li>
+</ul>
+<p>Daripada memperkuat semua action yang memiliki return positif, agent memperkuat action yang lebih baik dari ekspektasi pada state tersebut.</p>
+<h2>9.5 Actor-Critic</h2>
+<p>Actor-critic memiliki dua komponen:</p>
+<ul>
+<li><strong>Actor:</strong> policy yang memilih action.</li>
+<li><strong>Critic:</strong> memperkirakan value atau advantage untuk menilai action actor.</li>
+</ul>
+<div class="reasoning-code-block"><pre><code class="language-text">state → actor → action
+action + hasil → critic → sinyal perbaikan actor
+</code></pre></div>
+<p>Actor-critic dapat diterapkan pada action diskret maupun kontinu, bergantung pada desain policy.</p>
+<h2>9.6 PPO pada Tingkat Pengantar</h2>
+<p>Proximal Policy Optimization atau PPO dirancang agar update policy tidak berubah terlalu ekstrem dalam satu langkah.</p>
+<p>Masalahnya: jika policy diubah terlalu besar berdasarkan batch pengalaman terbatas, performa dapat runtuh.</p>
+<p>PPO membatasi perubahan menggunakan objective yang di-clip. Intuisi sederhananya:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">perbaiki policy,
+tetapi jangan menjauh terlalu cepat dari policy lama
+</code></pre></div>
+<p>Komponen umum PPO:</p>
+<ul>
+<li>policy lama dan policy baru,</li>
+<li>rasio probabilitas action,</li>
+<li>advantage estimate,</li>
+<li>clipping,</li>
+<li>value loss,</li>
+<li>entropy bonus untuk mendorong eksplorasi.</li>
+</ul>
+<p>PPO populer karena relatif stabil dan cukup fleksibel, tetapi tetap membutuhkan tuning, evaluasi, serta data simulasi yang cukup.</p>
+<h2>9.7 Entropy</h2>
+<p>Entropy mengukur keragaman distribusi action. Policy dengan entropy tinggi lebih acak. Entropy bonus dapat mencegah policy menjadi deterministik terlalu cepat.</p>
+<p>Terlalu banyak entropy membuat agent terus acak. Terlalu sedikit entropy dapat menyebabkan eksplorasi berhenti terlalu awal.</p>
+<h2>9.8 Value-Based vs Policy-Based</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aspek</th>
+<th>Value-Based</th>
+<th>Policy-Based</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Yang dipelajari</td>
+<td>Nilai action atau state</td>
+<td>Policy langsung</td>
+</tr>
+<tr>
+<td>Contoh</td>
+<td>Q-learning, DQN</td>
+<td>REINFORCE, PPO</td>
+</tr>
+<tr>
+<td>Action kontinu</td>
+<td>Tidak langsung cocok untuk DQN</td>
+<td>Dapat dimodelkan dengan distribusi kontinu</td>
+</tr>
+<tr>
+<td>Stabilitas</td>
+<td>Dapat sensitif terhadap bootstrapping</td>
+<td>Dapat sensitif terhadap variance dan besar update</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Q-value</td>
+<td>Probabilitas atau parameter action</td>
+</tr>
+</tbody></table></div>
+<h2>Checkpoint Bab 9</h2>
+<ol>
+<li>Apa yang dioptimalkan policy gradient?</li>
+<li>Apa fungsi baseline?</li>
+<li>Apa peran actor dan critic?</li>
+<li>Apa intuisi clipping pada PPO?</li>
+</ol>
+<h2>Latihan Bab 9</h2>
+<p>Untuk tiga langkah dengan return <code>[4, 1, -2]</code> dan baseline <code>[2, 2, 0]</code>, hitung advantage sederhana. Jelaskan action mana yang seharusnya diperkuat atau dilemahkan.</p>
+<hr>
+

@@ -1,0 +1,119 @@
+<h1>Monte Carlo dan Temporal-Difference Learning</h1>
+<h2>6.1 Model-Free Learning</h2>
+<p>Pada banyak kasus, agent tidak mengetahui aturan transisi environment. Agent hanya memiliki pengalaman:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">(state, action, reward, next_state)
+</code></pre></div>
+<p>Metode yang belajar langsung dari pengalaman tanpa model transisi lengkap disebut <strong>model-free</strong>.</p>
+<p>Dua keluarga dasar:</p>
+<ul>
+<li>Monte Carlo: belajar dari return setelah episode selesai.</li>
+<li>Temporal-Difference: memperbarui nilai sebelum episode selesai menggunakan perkiraan nilai berikutnya.</li>
+</ul>
+<h2>6.2 Monte Carlo</h2>
+<p>Monte Carlo menunggu episode selesai, lalu menghitung return yang benar-benar terjadi.</p>
+<p>Contoh episode:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">S0 --A0/-1--&gt; S1 --A1/-1--&gt; S2 --A2/+10--&gt; terminal
+</code></pre></div>
+<p>Return untuk S0 dengan gamma 1 adalah <code>8</code>. Return untuk S1 adalah <code>9</code>. Return untuk S2 adalah <code>10</code>.</p>
+<p>Pembaruan nilai:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">V(S_t) = V(S_t) + alpha × (G_t - V(S_t))
+</code></pre></div>
+<p>Kelebihan:</p>
+<ul>
+<li>konsep mudah,</li>
+<li>target berdasarkan hasil episode nyata,</li>
+<li>tidak membutuhkan model environment.</li>
+</ul>
+<p>Keterbatasan:</p>
+<ul>
+<li>harus menunggu episode selesai,</li>
+<li>return dapat memiliki variance tinggi,</li>
+<li>kurang cocok untuk continuing task tanpa penyesuaian.</li>
+</ul>
+<h2>6.3 Temporal-Difference</h2>
+<p>TD memperbarui nilai setelah satu langkah:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">V(S_t) = V(S_t) + alpha × TD_error
+</code></pre></div>
+<p>Dengan:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">TD_error = R_(t+1) + gamma V(S_(t+1)) - V(S_t)
+</code></pre></div>
+<p>Target TD:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">reward langsung + estimasi nilai state berikutnya
+</code></pre></div>
+<p>TD tidak menunggu episode selesai. Namun, targetnya menggunakan estimasi yang belum tentu akurat. Proses menggunakan estimasi untuk memperbaiki estimasi disebut <strong>bootstrapping</strong>.</p>
+<h2>6.4 Perbandingan Monte Carlo dan TD</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aspek</th>
+<th>Monte Carlo</th>
+<th>Temporal-Difference</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Waktu update</td>
+<td>Setelah episode selesai</td>
+<td>Setiap langkah</td>
+</tr>
+<tr>
+<td>Target</td>
+<td>Return episode</td>
+<td>Reward + estimasi nilai berikutnya</td>
+</tr>
+<tr>
+<td>Bootstrapping</td>
+<td>Tidak</td>
+<td>Ya</td>
+</tr>
+<tr>
+<td>Variance</td>
+<td>Cenderung lebih tinggi</td>
+<td>Cenderung lebih rendah</td>
+</tr>
+<tr>
+<td>Bias target</td>
+<td>Lebih rendah jika episode representatif</td>
+<td>Dapat memiliki bias dari estimasi</td>
+</tr>
+<tr>
+<td>Continuing task</td>
+<td>Kurang langsung</td>
+<td>Lebih mudah diterapkan</td>
+</tr>
+</tbody></table></div>
+<h2>6.5 Learning Rate</h2>
+<p>Learning rate <code>alpha</code> menentukan besar perubahan nilai.</p>
+<ul>
+<li>Alpha terlalu kecil: belajar lambat.</li>
+<li>Alpha terlalu besar: nilai dapat berosilasi atau tidak stabil.</li>
+<li>Pada environment non-stasioner, alpha tetap membantu agent beradaptasi.</li>
+</ul>
+<p>Pembaruan umum:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">estimasi baru = estimasi lama + alpha × error
+</code></pre></div>
+<h2>6.6 Bias-Variance Intuition</h2>
+<p>Monte Carlo memakai hasil episode lengkap. Targetnya lebih dekat pada outcome nyata, tetapi outcome dapat sangat bervariasi.</p>
+<p>TD memakai satu langkah dan estimasi. Targetnya lebih stabil, tetapi dapat salah karena nilai state berikutnya juga masih dipelajari.</p>
+<p>Tidak ada pilihan tunggal yang selalu terbaik. Pertimbangkan:</p>
+<ul>
+<li>panjang episode,</li>
+<li>noise reward,</li>
+<li>kebutuhan update online,</li>
+<li>stabilitas environment,</li>
+<li>biaya mengumpulkan pengalaman.</li>
+</ul>
+<h2>Checkpoint Bab 6</h2>
+<ol>
+<li>Mengapa Monte Carlo perlu menunggu episode selesai?</li>
+<li>Apa yang dimaksud bootstrapping pada TD?</li>
+<li>Tuliskan bentuk TD error.</li>
+<li>Apa dampak learning rate terlalu besar?</li>
+</ol>
+<h2>Latihan Bab 6</h2>
+<p>Gunakan episode reward <code>[-1, -1, 5]</code> dengan <code>gamma = 0.9</code>.</p>
+<ol>
+<li>Hitung return Monte Carlo dari setiap langkah.</li>
+<li>Misalkan <code>V(S_t)=1.0</code> dan <code>V(S_(t+1))=2.0</code>. Hitung TD target dan TD error untuk reward <code>-1</code>.</li>
+</ol>
+<hr>
+

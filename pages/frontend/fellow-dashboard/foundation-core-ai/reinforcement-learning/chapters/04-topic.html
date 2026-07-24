@@ -1,0 +1,91 @@
+<h1>Policy, Value Function, dan Bellman Intuition</h1>
+<h2>4.1 Policy</h2>
+<p><strong>Policy</strong> adalah strategi agent dalam memilih action berdasarkan state.</p>
+<p>Policy deterministik:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">A_t = pi(S_t)
+</code></pre></div>
+<p>Satu state menghasilkan satu action.</p>
+<p>Policy stokastik:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">pi(a | s) = probabilitas memilih action a pada state s
+</code></pre></div>
+<p>Contoh policy stokastik pada satu state:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Action</th>
+<th align="right">Probabilitas</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Atas</td>
+<td align="right">0.60</td>
+</tr>
+<tr>
+<td>Kanan</td>
+<td align="right">0.25</td>
+</tr>
+<tr>
+<td>Kiri</td>
+<td align="right">0.10</td>
+</tr>
+<tr>
+<td>Bawah</td>
+<td align="right">0.05</td>
+</tr>
+</tbody></table></div>
+<p>Policy stokastik berguna ketika agent perlu eksplorasi atau ketika beberapa tindakan sama-sama masuk akal.</p>
+<h2>4.2 State-Value Function</h2>
+<p><strong>State-value function</strong> <code>V(s)</code> mengukur perkiraan return jika agent mulai dari state <code>s</code> dan mengikuti policy tertentu.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">V_pi(s) = expected return dari state s mengikuti policy pi
+</code></pre></div>
+<p>Nilai state tinggi berarti state tersebut menjanjikan hasil jangka panjang yang baik menurut policy saat ini.</p>
+<h2>4.3 Action-Value Function</h2>
+<p><strong>Action-value function</strong> atau <strong>Q-value</strong> <code>Q(s, a)</code> mengukur perkiraan return jika agent:</p>
+<ol>
+<li>berada pada state <code>s</code>,</li>
+<li>memilih action <code>a</code>,</li>
+<li>lalu mengikuti policy setelahnya.</li>
+</ol>
+<div class="reasoning-code-block"><pre><code class="language-text">Q_pi(s, a) = expected return setelah memilih a pada s
+</code></pre></div>
+<p>Jika Q-value diketahui, agent dapat memilih action dengan nilai tertinggi:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">action terbaik = argmax_a Q(s, a)
+</code></pre></div>
+<h2>4.4 Intuisi Bellman</h2>
+<p>Inti Bellman adalah memecah nilai jangka panjang menjadi dua bagian:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">nilai sekarang = reward langsung + nilai masa depan yang didiskon
+</code></pre></div>
+<p>Untuk state-value secara intuitif:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">V(s) = expected [reward berikutnya + gamma × V(state berikutnya)]
+</code></pre></div>
+<p>Untuk Q-value optimal:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Q*(s,a) = expected [reward + gamma × max_a&#39; Q*(s&#39;,a&#39;)]
+</code></pre></div>
+<p>Bellman memungkinkan agent memperbarui perkiraan menggunakan satu langkah pengalaman, tanpa harus menunggu semua kemungkinan masa depan benar-benar terjadi.</p>
+<h2>4.5 Contoh Nilai pada Grid</h2>
+<p>Misalkan agent berada dua langkah dari tujuan. Reward tujuan adalah <code>+10</code>, sedangkan setiap langkah memiliki reward <code>-1</code>. Dengan <code>gamma = 1</code>:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">nilai jalur 2 langkah = -1 + 10 = 9
+nilai jalur 5 langkah = -1 -1 -1 -1 +10 = 6
+</code></pre></div>
+<p>Agent seharusnya memilih jalur lebih pendek jika tidak ada risiko lain. Jika jalur pendek dekat bahaya, nilai harus mencerminkan kemungkinan gagal.</p>
+<h2>4.6 Policy Evaluation dan Policy Improvement</h2>
+<p>Dua ide penting:</p>
+<ul>
+<li><strong>Policy evaluation:</strong> memperkirakan seberapa baik policy saat ini.</li>
+<li><strong>Policy improvement:</strong> mengubah policy agar lebih memilih action yang nilainya lebih tinggi.</li>
+</ul>
+<p>Keduanya dapat dilakukan berulang:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">policy → evaluasi nilai → perbaiki policy → evaluasi lagi → ...
+</code></pre></div>
+<p>Pola ini disebut generalized policy iteration dan muncul dalam banyak algoritma RL.</p>
+<h2>Checkpoint Bab 4</h2>
+<ol>
+<li>Apa perbedaan <code>V(s)</code> dan <code>Q(s,a)</code>?</li>
+<li>Mengapa Q-value berguna untuk memilih action?</li>
+<li>Jelaskan Bellman dengan bahasa sehari-hari.</li>
+<li>Apa hubungan policy evaluation dan policy improvement?</li>
+</ol>
+<h2>Latihan Bab 4</h2>
+<p>Buat tabel Q sederhana untuk tiga state dan dua action. Isi nilai perkiraan sendiri, lalu tulis policy greedy yang dihasilkan.</p>
+<hr>
+

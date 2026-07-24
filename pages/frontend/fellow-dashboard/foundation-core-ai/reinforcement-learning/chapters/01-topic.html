@@ -1,0 +1,160 @@
+<h1>Reinforcement Learning</h1>
+<blockquote>
+<p>Modul belajar praktis dan mudah dipahami untuk peserta HerAI Fellowship. Materi dimulai dari cara agent berinteraksi dengan environment, lalu berlanjut ke reward, policy, value function, eksplorasi, Q-learning, Deep Q-Network, policy gradient, evaluasi, dan mini project.</p>
+</blockquote>
+<h2>Informasi Course</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Komponen</th>
+<th>Keterangan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Level</td>
+<td>Intermediate</td>
+</tr>
+<tr>
+<td>Estimasi belajar</td>
+<td>18-22 jam</td>
+</tr>
+<tr>
+<td>Prasyarat</td>
+<td>Python dasar, probabilitas dasar, machine learning, dan pengantar neural network</td>
+</tr>
+<tr>
+<td>Bentuk pembelajaran</td>
+<td>Materi, contoh, latihan, checkpoint, kuis, diskusi, dan mini project</td>
+</tr>
+<tr>
+<td>Hasil akhir</td>
+<td>Peserta mampu merancang, melatih, dan mengevaluasi agent RL sederhana secara bertanggung jawab</td>
+</tr>
+</tbody></table></div>
+<h2>Capaian Pembelajaran</h2>
+<p>Setelah menyelesaikan modul ini, peserta diharapkan mampu:</p>
+<ol>
+<li>Menjelaskan perbedaan reinforcement learning, supervised learning, dan unsupervised learning.</li>
+<li>Memodelkan masalah sebagai agent, environment, state, action, reward, dan episode.</li>
+<li>Memahami return, discount factor, policy, value function, Q-value, dan intuisi persamaan Bellman.</li>
+<li>Menjelaskan trade-off exploration dan exploitation.</li>
+<li>Menerapkan multi-armed bandit, Monte Carlo, Temporal-Difference, SARSA, dan Q-learning pada kasus sederhana.</li>
+<li>Memahami alasan penggunaan function approximation dan Deep Q-Network.</li>
+<li>Mengenali konsep policy gradient, actor-critic, dan PPO pada tingkat pengantar.</li>
+<li>Mendesain reward dan evaluasi yang tidak mendorong perilaku agent yang merugikan.</li>
+<li>Membangun mini project Q-learning pada GridWorld dan menyampaikan hasil eksperimennya.</li>
+</ol>
+<h2>Peta Materi</h2>
+<ol>
+<li>Pengantar Reinforcement Learning</li>
+<li>Agent, Environment, dan Markov Decision Process</li>
+<li>Reward, Return, dan Discount Factor</li>
+<li>Policy, Value Function, dan Bellman Intuition</li>
+<li>Exploration vs Exploitation</li>
+<li>Monte Carlo dan Temporal-Difference Learning</li>
+<li>SARSA dan Q-Learning</li>
+<li>Function Approximation dan Deep Q-Network</li>
+<li>Policy Gradient, Actor-Critic, dan PPO</li>
+<li>Reward Design, Stabilitas, dan Responsible RL</li>
+<li>Evaluasi dan Eksperimen</li>
+<li>Mini Project GridWorld</li>
+<li>Kuis Akhir, Diskusi, Glosarium, dan Referensi</li>
+</ol>
+<hr>
+<h1>Pengantar Reinforcement Learning</h1>
+<h2>1.1 Apa itu Reinforcement Learning?</h2>
+<p>Reinforcement Learning atau RL adalah cara melatih sistem agar dapat mengambil keputusan melalui interaksi. Sistem yang belajar disebut <strong>agent</strong>. Dunia tempat agent bertindak disebut <strong>environment</strong>. Setiap kali agent melakukan suatu <strong>action</strong>, environment memberikan kondisi baru dan sinyal penilaian yang disebut <strong>reward</strong>.</p>
+<p>Tujuan agent bukan sekadar mendapatkan reward terbesar pada satu langkah. Tujuan utamanya adalah memilih rangkaian keputusan yang menghasilkan <strong>total reward jangka panjang</strong> sebaik mungkin.</p>
+<p>Bayangkan seseorang belajar bermain gim tanpa diberi kunci jawaban untuk setiap gerakan. Ia mencoba tindakan, melihat hasilnya, menerima skor, lalu memperbaiki strategi. Inilah pola dasar RL:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">agent memilih action
+        ↓
+environment berubah
+        ↓
+agent menerima state baru dan reward
+        ↓
+agent memperbaiki strategi
+</code></pre></div>
+<h2>1.2 Perbedaan RL dan Supervised Learning</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Aspek</th>
+<th>Supervised Learning</th>
+<th>Reinforcement Learning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sinyal belajar</td>
+<td>Label benar tersedia untuk setiap contoh</td>
+<td>Reward dapat tertunda dan tidak selalu menjelaskan tindakan mana yang salah</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>Dataset relatif tetap</td>
+<td>Data dihasilkan dari interaksi agent</td>
+</tr>
+<tr>
+<td>Tujuan</td>
+<td>Meminimalkan error prediksi</td>
+<td>Memaksimalkan total reward jangka panjang</td>
+</tr>
+<tr>
+<td>Tantangan utama</td>
+<td>Generalisasi ke data baru</td>
+<td>Eksplorasi, keputusan berurutan, dan konsekuensi jangka panjang</td>
+</tr>
+<tr>
+<td>Contoh</td>
+<td>Klasifikasi spam</td>
+<td>Agent navigasi, kontrol robot, penjadwalan adaptif</td>
+</tr>
+</tbody></table></div>
+<p>Dalam supervised learning, model diberi contoh input dan jawaban. Dalam RL, agent sering hanya mengetahui apakah hasil akhirnya baik atau buruk. Agent harus mencari tahu sendiri tindakan mana yang berkontribusi terhadap hasil tersebut.</p>
+<h2>1.3 Kapan RL Cocok Digunakan?</h2>
+<p>RL paling relevan ketika masalah memiliki beberapa karakteristik berikut:</p>
+<ul>
+<li>Keputusan dilakukan berulang atau berurutan.</li>
+<li>Tindakan saat ini memengaruhi kondisi berikutnya.</li>
+<li>Tidak tersedia label tindakan terbaik untuk setiap situasi.</li>
+<li>Sistem dapat memperoleh feedback berupa reward.</li>
+<li>Ada simulator atau lingkungan aman untuk mencoba banyak tindakan.</li>
+</ul>
+<p>Contoh penerapan:</p>
+<ul>
+<li>Pengendalian robot dalam simulasi.</li>
+<li>Optimisasi strategi permainan.</li>
+<li>Pengaturan sumber daya komputasi.</li>
+<li>Penjadwalan produksi atau armada.</li>
+<li>Pengendalian energi pada bangunan.</li>
+<li>Rekomendasi berurutan, dengan perhatian besar terhadap bias dan keselamatan pengguna.</li>
+</ul>
+<h2>1.4 Kapan RL Tidak Perlu Digunakan?</h2>
+<p>RL bukan jawaban untuk semua masalah. Jangan memakai RL hanya karena terdengar canggih. Pendekatan lain sering lebih sederhana dan dapat diaudit.</p>
+<p>Gunakan alternatif ketika:</p>
+<ul>
+<li>Masalah dapat diselesaikan dengan aturan yang jelas.</li>
+<li>Tersedia dataset berlabel yang kuat dan keputusan tidak berurutan.</li>
+<li>Biaya eksplorasi terlalu berbahaya atau mahal.</li>
+<li>Reward sulit didefinisikan secara bertanggung jawab.</li>
+<li>Simulator tidak mewakili kondisi nyata.</li>
+<li>Sistem harus memiliki jaminan keselamatan yang belum dapat dipenuhi agent.</li>
+</ul>
+<blockquote>
+<p><strong>Prinsip praktis:</strong> pilih RL ketika ada keputusan berurutan dan interaksi benar-benar menjadi bagian inti masalah, bukan hanya karena ingin memakai algoritma baru.</p>
+</blockquote>
+<h2>Checkpoint Bab 1</h2>
+<ol>
+<li>Mengapa reward berbeda dari label pada supervised learning?</li>
+<li>Sebutkan satu masalah yang cocok dan satu masalah yang tidak cocok untuk RL.</li>
+<li>Mengapa proses eksplorasi dapat berbahaya pada sistem dunia nyata?</li>
+</ol>
+<h2>Latihan Bab 1</h2>
+<p>Pilih satu skenario berikut: penghemat energi, robot gudang, rekomendasi materi belajar, atau penjadwalan mesin. Tuliskan:</p>
+<ul>
+<li>keputusan apa yang perlu dibuat,</li>
+<li>feedback apa yang mungkin tersedia,</li>
+<li>konsekuensi jangka panjangnya,</li>
+<li>risiko jika agent melakukan eksplorasi tanpa batas.</li>
+</ul>
+<hr>
+

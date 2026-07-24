@@ -1,0 +1,103 @@
+<h1>Reward Design, Stabilitas, dan Responsible RL</h1>
+<h2>10.1 Optimizing the Metric Is Not the Same as Solving the Problem</h2>
+<p>Agent mengoptimalkan sinyal yang diberikan. Jika sinyal tidak lengkap, agent dapat menghasilkan perilaku yang secara matematis benar tetapi secara manusia tidak dapat diterima.</p>
+<p>Sebelum training, tulis tiga lapisan tujuan:</p>
+<ol>
+<li><strong>Objective:</strong> hasil utama yang ingin dicapai.</li>
+<li><strong>Constraints:</strong> hal yang tidak boleh dilanggar.</li>
+<li><strong>Monitoring metrics:</strong> indikator yang tidak langsung dioptimalkan tetapi harus diawasi.</li>
+</ol>
+<p>Contoh pengatur energi:</p>
+<ul>
+<li>Objective: menurunkan konsumsi energi.</li>
+<li>Constraint: suhu ruangan harus tetap dalam rentang nyaman dan aman.</li>
+<li>Monitoring: keluhan pengguna, variasi suhu antar-ruang, frekuensi switching perangkat.</li>
+</ul>
+<h2>10.2 Reward Scale dan Clipping</h2>
+<p>Reward yang sangat besar atau memiliki skala tidak konsisten dapat membuat update tidak stabil. Beberapa strategi:</p>
+<ul>
+<li>normalisasi reward,</li>
+<li>reward clipping,</li>
+<li>rescaling,</li>
+<li>memisahkan komponen reward untuk audit.</li>
+</ul>
+<p>Namun, clipping dapat menghilangkan perbedaan penting. Misalnya reward 10 dan 100 sama-sama menjadi 1 setelah clipping. Keputusan harus disesuaikan dengan masalah.</p>
+<h2>10.3 Termination Design</h2>
+<p>Kondisi akhir memengaruhi apa yang dipelajari agent.</p>
+<p>Kesalahan umum:</p>
+<ul>
+<li>agent mendapat reward nol saat melanggar keselamatan, tetapi episode tidak segera dihentikan,</li>
+<li>timeout diperlakukan sama dengan terminal alami,</li>
+<li>agent menemukan cara mengakhiri episode untuk menghindari penalti lebih besar,</li>
+<li>reset environment menghasilkan kondisi yang tidak realistis.</li>
+</ul>
+<p>Uji skenario akhir satu per satu.</p>
+<h2>10.4 Sim-to-Real Gap</h2>
+<p>Agent yang berhasil di simulator belum tentu berhasil di dunia nyata. Perbedaannya dapat berasal dari:</p>
+<ul>
+<li>sensor lebih bising,</li>
+<li>dinamika fisik tidak akurat,</li>
+<li>perilaku manusia tidak terwakili,</li>
+<li>kondisi langka tidak muncul,</li>
+<li>latensi dan kegagalan perangkat.</li>
+</ul>
+<p>Mitigasi:</p>
+<ul>
+<li>domain randomization,</li>
+<li>validasi simulator,</li>
+<li>uji bertahap,</li>
+<li>human oversight,</li>
+<li>fallback policy,</li>
+<li>batas action yang keras,</li>
+<li>monitoring dan kill switch.</li>
+</ul>
+<h2>10.5 Offline RL dan Data Historis</h2>
+<p>Pada beberapa kasus, eksplorasi online terlalu berbahaya. Offline RL mencoba belajar dari dataset interaksi yang telah dikumpulkan.</p>
+<p>Tantangan utama: agent dapat memilih action yang jarang atau tidak pernah ada dalam data, sehingga estimasi nilainya tidak dapat dipercaya. Karena itu, offline RL bukan sekadar menjalankan Q-learning pada log historis.</p>
+<p>Pertanyaan audit:</p>
+<ul>
+<li>Siapa yang menghasilkan data?</li>
+<li>Policy apa yang digunakan saat data dikumpulkan?</li>
+<li>Kelompok mana yang kurang terwakili?</li>
+<li>Apakah reward dapat dihitung dengan benar dari log?</li>
+<li>Apakah ada perubahan kondisi setelah data dikumpulkan?</li>
+</ul>
+<h2>10.6 Human-in-the-Loop</h2>
+<p>Untuk sistem berdampak tinggi, manusia dapat dilibatkan pada:</p>
+<ul>
+<li>menyetujui action tertentu,</li>
+<li>meninjau episode gagal,</li>
+<li>memberi feedback,</li>
+<li>menentukan batas keselamatan,</li>
+<li>menghentikan deployment,</li>
+<li>menilai dampak yang tidak tertangkap reward.</li>
+</ul>
+<p>Human-in-the-loop bukan alasan untuk mengabaikan desain sistem. Beban manusia, konsistensi keputusan, dan mekanisme eskalasi juga perlu dirancang.</p>
+<h2>10.7 Checklist Responsible RL</h2>
+<p>Sebelum eksperimen:</p>
+<ul>
+<li>Apakah RL benar-benar diperlukan?</li>
+<li>Apakah simulator cukup representatif?</li>
+<li>Apakah reward memiliki celah yang jelas?</li>
+<li>Apakah eksplorasi dapat merugikan manusia atau sistem?</li>
+<li>Apakah ada batas action?</li>
+</ul>
+<p>Sebelum deployment:</p>
+<ul>
+<li>Apakah performa diuji pada banyak seed dan skenario?</li>
+<li>Apakah metrik keselamatan terpisah dari reward?</li>
+<li>Apakah ada fallback policy?</li>
+<li>Apakah monitoring dapat mendeteksi perubahan distribusi?</li>
+<li>Siapa yang berwenang menghentikan sistem?</li>
+</ul>
+<h2>Checkpoint Bab 10</h2>
+<ol>
+<li>Mengapa objective, constraints, dan monitoring perlu dipisahkan?</li>
+<li>Apa itu sim-to-real gap?</li>
+<li>Mengapa offline RL memiliki risiko out-of-distribution action?</li>
+<li>Sebutkan dua mekanisme keselamatan di luar reward.</li>
+</ol>
+<h2>Latihan Bab 10 - Red Team Reward</h2>
+<p>Ambil reward dari latihan sebelumnya. Bertindaklah sebagai agent yang mencari celah. Tuliskan lima cara memperoleh reward tanpa memenuhi tujuan sebenarnya. Setelah itu, tambahkan batasan dan metrik untuk mengurangi risiko tersebut.</p>
+<hr>
+

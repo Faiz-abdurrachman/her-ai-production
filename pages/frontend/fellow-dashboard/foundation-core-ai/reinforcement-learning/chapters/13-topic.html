@@ -1,0 +1,346 @@
+<h1>Kuis Akhir</h1>
+<p>Pilih jawaban yang paling tepat.</p>
+<h2>Soal</h2>
+<ol>
+<li><p>Komponen yang memilih action dalam RL adalah ...</p>
+<ul>
+<li>A. Reward</li>
+<li>B. Agent</li>
+<li>C. Dataset</li>
+<li>D. Label</li>
+</ul>
+</li>
+<li><p>Tujuan umum RL adalah ...</p>
+<ul>
+<li>A. Memaksimalkan satu reward langsung saja</li>
+<li>B. Meminimalkan ukuran state</li>
+<li>C. Memaksimalkan expected return jangka panjang</li>
+<li>D. Menghapus kebutuhan evaluasi</li>
+</ul>
+</li>
+<li><p>State yang baik seharusnya ...</p>
+<ul>
+<li>A. Selalu berupa gambar</li>
+<li>B. Merangkum informasi relevan untuk keputusan berikutnya</li>
+<li>C. Tidak berubah sepanjang episode</li>
+<li>D. Hanya berisi reward</li>
+</ul>
+</li>
+<li><p>Discount factor mendekati nol membuat agent ...</p>
+<ul>
+<li>A. Lebih fokus pada reward dekat</li>
+<li>B. Selalu memilih action acak</li>
+<li>C. Tidak dapat belajar</li>
+<li>D. Mengabaikan reward langsung</li>
+</ul>
+</li>
+<li><p><code>V(s)</code> memperkirakan ...</p>
+<ul>
+<li>A. Probabilitas state tidak pernah muncul</li>
+<li>B. Return dari state ketika mengikuti policy</li>
+<li>C. Jumlah action yang tersedia</li>
+<li>D. Learning rate optimal</li>
+</ul>
+</li>
+<li><p><code>Q(s,a)</code> memperkirakan ...</p>
+<ul>
+<li>A. Return setelah mengambil action a pada state s</li>
+<li>B. Ukuran replay buffer</li>
+<li>C. Jumlah episode</li>
+<li>D. Nilai reward terakhir saja</li>
+</ul>
+</li>
+<li><p>Intuisi Bellman adalah ...</p>
+<ul>
+<li>A. Nilai sekarang terdiri dari reward langsung dan nilai masa depan</li>
+<li>B. Semua state harus memiliki nilai sama</li>
+<li>C. Reward tidak diperlukan</li>
+<li>D. Policy tidak boleh berubah</li>
+</ul>
+</li>
+<li><p>Exploration diperlukan agar ...</p>
+<ul>
+<li>A. Agent tidak pernah menggunakan pengetahuan lama</li>
+<li>B. Agent dapat menemukan action yang belum cukup dicoba</li>
+<li>C. Episode selalu lebih panjang</li>
+<li>D. Reward menjadi nol</li>
+</ul>
+</li>
+<li><p>Pada epsilon-greedy, epsilon menyatakan ...</p>
+<ul>
+<li>A. Probabilitas eksplorasi</li>
+<li>B. Discount factor</li>
+<li>C. Learning rate</li>
+<li>D. Ukuran state</li>
+</ul>
+</li>
+<li><p>Monte Carlo memperbarui nilai ...</p>
+<ul>
+<li>A. Sebelum menerima reward</li>
+<li>B. Setelah memperoleh return episode</li>
+<li>C. Tanpa pengalaman</li>
+<li>D. Hanya pada supervised dataset</li>
+</ul>
+</li>
+<li><p>Temporal-Difference disebut bootstrapping karena ...</p>
+<ul>
+<li>A. Menggunakan estimasi nilai berikutnya untuk memperbarui nilai sekarang</li>
+<li>B. Selalu memakai neural network</li>
+<li>C. Tidak memiliki reward</li>
+<li>D. Menghapus state terminal</li>
+</ul>
+</li>
+<li><p>SARSA adalah on-policy karena targetnya memakai ...</p>
+<ul>
+<li>A. Action acak dari policy lain</li>
+<li>B. Action berikutnya yang benar-benar dipilih policy saat ini</li>
+<li>C. Hanya reward maksimum global</li>
+<li>D. Dataset tetap</li>
+</ul>
+</li>
+<li><p>Target Q-learning memakai ...</p>
+<ul>
+<li>A. Nilai minimum action berikutnya</li>
+<li>B. Rata-rata semua reward historis</li>
+<li>C. Maksimum Q pada state berikutnya</li>
+<li>D. Tidak ada nilai masa depan</li>
+</ul>
+</li>
+<li><p>Replay buffer pada DQN berguna untuk ...</p>
+<ul>
+<li>A. Menyimpan model final saja</li>
+<li>B. Menggunakan ulang dan mengacak pengalaman training</li>
+<li>C. Menghapus kebutuhan target network</li>
+<li>D. Menjamin keselamatan</li>
+</ul>
+</li>
+<li><p>Target network membantu ...</p>
+<ul>
+<li>A. Membuat target belajar lebih stabil</li>
+<li>B. Menambah jumlah action</li>
+<li>C. Mengubah state menjadi reward</li>
+<li>D. Menghapus exploration</li>
+</ul>
+</li>
+<li><p>Policy gradient mengoptimalkan ...</p>
+<ul>
+<li>A. Policy secara langsung</li>
+<li>B. Ukuran replay buffer saja</li>
+<li>C. Jumlah state</li>
+<li>D. Label klasifikasi</li>
+</ul>
+</li>
+<li><p>Critic pada actor-critic berfungsi untuk ...</p>
+<ul>
+<li>A. Memilih warna visualisasi</li>
+<li>B. Menilai state atau action dan memberi sinyal belajar</li>
+<li>C. Menghapus reward</li>
+<li>D. Menentukan hardware</li>
+</ul>
+</li>
+<li><p>PPO membatasi perubahan policy agar ...</p>
+<ul>
+<li>A. Update tidak terlalu ekstrem</li>
+<li>B. Semua action memiliki probabilitas nol</li>
+<li>C. Policy tidak pernah belajar</li>
+<li>D. Reward selalu positif</li>
+</ul>
+</li>
+<li><p>Evaluasi RL sebaiknya ...</p>
+<ul>
+<li>A. Hanya memakai satu seed terbaik</li>
+<li>B. Memisahkan evaluasi dari training dan memakai beberapa seed</li>
+<li>C. Hanya melihat loss network</li>
+<li>D. Mengabaikan safety violation</li>
+</ul>
+</li>
+<li><p>Reward hacking berarti ...</p>
+<ul>
+<li>A. Agent mendapat reward tinggi melalui perilaku yang tidak sesuai tujuan sebenarnya</li>
+<li>B. Programmer menghapus reward</li>
+<li>C. Reward selalu negatif</li>
+<li>D. Agent menggunakan epsilon-greedy</li>
+</ul>
+</li>
+</ol>
+<h2>Kunci Jawaban dan Pembahasan Ringkas</h2>
+<ol>
+<li><strong>B</strong> - Agent memilih action.</li>
+<li><strong>C</strong> - Fokusnya expected return jangka panjang.</li>
+<li><strong>B</strong> - State perlu memuat informasi relevan untuk konsekuensi berikutnya.</li>
+<li><strong>A</strong> - Reward jauh semakin kecil bobotnya.</li>
+<li><strong>B</strong> - V mengukur nilai state menurut policy.</li>
+<li><strong>A</strong> - Q mengukur nilai pasangan state-action.</li>
+<li><strong>A</strong> - Nilai dipecah menjadi reward langsung dan nilai masa depan.</li>
+<li><strong>B</strong> - Eksplorasi menghasilkan informasi baru.</li>
+<li><strong>A</strong> - Epsilon adalah peluang memilih action eksploratif.</li>
+<li><strong>B</strong> - Monte Carlo memakai return setelah episode.</li>
+<li><strong>A</strong> - TD menggunakan estimasi nilai berikutnya.</li>
+<li><strong>B</strong> - SARSA mengikuti action aktual dari policy saat ini.</li>
+<li><strong>C</strong> - Q-learning memakai action terbaik menurut estimasi berikutnya.</li>
+<li><strong>B</strong> - Replay meningkatkan reuse data dan mengurangi korelasi sampel.</li>
+<li><strong>A</strong> - Target network mengurangi perubahan target yang terlalu cepat.</li>
+<li><strong>A</strong> - Policy gradient memperbarui parameter policy langsung.</li>
+<li><strong>B</strong> - Critic menghasilkan estimasi value atau advantage.</li>
+<li><strong>A</strong> - Clipping mencegah policy berubah terlalu jauh dalam satu update.</li>
+<li><strong>B</strong> - Evaluasi harus terpisah dan mengukur variasi antar-seed.</li>
+<li><strong>A</strong> - Agent mengeksploitasi celah reward tanpa memenuhi maksud manusia.</li>
+</ol>
+<hr>
+<h1>Diskusi dan Refleksi</h1>
+<p>Gunakan pertanyaan berikut untuk diskusi kelompok:</p>
+<ol>
+<li>Dalam konteks pendidikan, apa bahaya jika reward hanya berdasarkan waktu penggunaan aplikasi?</li>
+<li>Apakah agent yang memperoleh reward tertinggi selalu menjadi agent terbaik? Jelaskan.</li>
+<li>Bagaimana cara membatasi eksplorasi pada sistem yang melibatkan manusia?</li>
+<li>Kapan heuristic sederhana lebih tepat daripada RL?</li>
+<li>Bagaimana memastikan kelompok pengguna yang jarang muncul tidak dirugikan oleh policy?</li>
+<li>Apa perbedaan antara simulator yang nyaman untuk training dan simulator yang valid untuk deployment?</li>
+<li>Jika dua algoritma memiliki return sama tetapi satu lebih stabil, mana yang dipilih dan mengapa?</li>
+<li>Bagaimana menjelaskan keputusan agent RL kepada pemangku kepentingan non-teknis?</li>
+</ol>
+<hr>
+<h1>Glosarium</h1>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Istilah</th>
+<th>Penjelasan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Action</td>
+<td>Keputusan yang dipilih agent</td>
+</tr>
+<tr>
+<td>Actor</td>
+<td>Komponen yang menghasilkan policy atau action</td>
+</tr>
+<tr>
+<td>Advantage</td>
+<td>Seberapa baik suatu action dibanding ekspektasi pada state</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>Sistem yang belajar dan mengambil keputusan</td>
+</tr>
+<tr>
+<td>Bellman equation</td>
+<td>Hubungan rekursif antara nilai sekarang, reward, dan nilai masa depan</td>
+</tr>
+<tr>
+<td>Bootstrapping</td>
+<td>Memperbarui estimasi menggunakan estimasi lain</td>
+</tr>
+<tr>
+<td>Critic</td>
+<td>Komponen yang memperkirakan value atau advantage</td>
+</tr>
+<tr>
+<td>Discount factor</td>
+<td>Bobot untuk reward masa depan</td>
+</tr>
+<tr>
+<td>DQN</td>
+<td>Neural network untuk memperkirakan Q-value pada action diskret</td>
+</tr>
+<tr>
+<td>Environment</td>
+<td>Dunia atau sistem tempat agent berinteraksi</td>
+</tr>
+<tr>
+<td>Episode</td>
+<td>Satu rangkaian interaksi dari awal hingga akhir</td>
+</tr>
+<tr>
+<td>Exploration</td>
+<td>Mencoba action untuk memperoleh informasi</td>
+</tr>
+<tr>
+<td>Exploitation</td>
+<td>Memilih action yang saat ini dianggap terbaik</td>
+</tr>
+<tr>
+<td>MDP</td>
+<td>Model matematis untuk keputusan berurutan dengan state, action, transisi, reward, dan discount</td>
+</tr>
+<tr>
+<td>Observation</td>
+<td>Informasi yang diterima agent tentang environment</td>
+</tr>
+<tr>
+<td>Off-policy</td>
+<td>Belajar tentang policy yang berbeda dari policy pengumpulan action</td>
+</tr>
+<tr>
+<td>On-policy</td>
+<td>Belajar tentang policy yang sedang digunakan</td>
+</tr>
+<tr>
+<td>Policy</td>
+<td>Strategi memilih action dari state</td>
+</tr>
+<tr>
+<td>Q-value</td>
+<td>Perkiraan return untuk pasangan state dan action</td>
+</tr>
+<tr>
+<td>Replay buffer</td>
+<td>Penyimpanan pengalaman untuk digunakan ulang dalam training</td>
+</tr>
+<tr>
+<td>Return</td>
+<td>Akumulasi reward yang telah didiskon</td>
+</tr>
+<tr>
+<td>Reward</td>
+<td>Sinyal numerik dari environment</td>
+</tr>
+<tr>
+<td>Reward hacking</td>
+<td>Perilaku mengejar reward dengan cara yang tidak sesuai tujuan sebenarnya</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Representasi keadaan yang relevan bagi keputusan</td>
+</tr>
+<tr>
+<td>TD error</td>
+<td>Selisih antara target TD dan estimasi saat ini</td>
+</tr>
+<tr>
+<td>Value function</td>
+<td>Perkiraan kualitas jangka panjang suatu state atau state-action</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h1>Ringkasan Cepat</h1>
+<ul>
+<li>RL mempelajari keputusan melalui interaksi agent dan environment.</li>
+<li>Agent mengoptimalkan return jangka panjang, bukan reward satu langkah.</li>
+<li>MDP membantu memodelkan state, action, transisi, reward, dan discount.</li>
+<li>Policy menentukan action; value function menilai masa depan.</li>
+<li>Bellman memecah nilai menjadi reward langsung dan nilai berikutnya.</li>
+<li>Exploration diperlukan untuk memperoleh informasi baru.</li>
+<li>Monte Carlo belajar dari episode lengkap; TD belajar setiap langkah.</li>
+<li>SARSA bersifat on-policy; Q-learning bersifat off-policy.</li>
+<li>DQN memakai neural network, replay buffer, dan target network.</li>
+<li>Policy gradient mengoptimalkan policy langsung; actor-critic memadukan actor dan critic.</li>
+<li>PPO membatasi perubahan policy agar tidak terlalu ekstrem.</li>
+<li>Reward tinggi tidak cukup: evaluasi harus mencakup keselamatan, stabilitas, dan dampak.</li>
+<li>Eksperimen perlu beberapa seed, baseline, metrik terpisah, dan dokumentasi lengkap.</li>
+</ul>
+<hr>
+<h1>Referensi Belajar</h1>
+<ol>
+<li>Richard S. Sutton dan Andrew G. Barto. <em>Reinforcement Learning: An Introduction</em>, edisi kedua.</li>
+<li>Christopher J. C. H. Watkins dan Peter Dayan. <em>Q-learning</em>.</li>
+<li>Volodymyr Mnih dkk. <em>Human-level control through deep reinforcement learning</em>.</li>
+<li>John Schulman dkk. <em>Proximal Policy Optimization Algorithms</em>.</li>
+<li>Gymnasium Documentation - API environment untuk reinforcement learning.</li>
+<li>OpenAI Spinning Up - pengantar algoritma deep reinforcement learning.</li>
+<li>David Silver - Reinforcement Learning lecture materials.</li>
+</ol>
+<h2>Catatan Penutup</h2>
+<p>Reinforcement learning memerlukan lebih dari memilih algoritma. Kualitas state, reward, simulator, batas keselamatan, dan evaluasi menentukan apakah agent benar-benar menyelesaikan masalah. Mulailah dari environment kecil, gunakan baseline sederhana, dokumentasikan eksperimen, dan selalu periksa perilaku agent di luar angka reward.</p>
+

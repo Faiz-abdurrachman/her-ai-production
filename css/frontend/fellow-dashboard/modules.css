@@ -11260,7 +11260,8 @@
 
 .ai-python-practice-page .python-practice-form,
 .ai-python-quiz-page #aiPythonQuizForm ,
-.ai-python-quiz-page #aiDeepLearningQuizForm {
+.ai-python-quiz-page #aiDeepLearningQuizForm ,
+.ai-python-quiz-page #aiReinforcementLearningQuizForm {
     border-top: 0;
     display: grid;
     gap: 22px;
@@ -11374,14 +11375,17 @@
 
 .ai-python-practice-page #aiPythonPracticeList,
 .ai-python-practice-page #aiDeepLearningPracticeList,
+.ai-python-practice-page #aiReinforcementLearningPracticeList,
 .ai-python-quiz-page #aiPythonQuizList ,
-.ai-python-quiz-page #aiDeepLearningQuizList {
+.ai-python-quiz-page #aiDeepLearningQuizList ,
+.ai-python-quiz-page #aiReinforcementLearningQuizList {
     min-width: 0;
 }
 
 .ai-python-practice-page .reasoning-practice-card,
 .ai-python-quiz-page #aiPythonQuizList > article ,
-.ai-python-quiz-page #aiDeepLearningQuizList > article {
+.ai-python-quiz-page #aiDeepLearningQuizList > article ,
+.ai-python-quiz-page #aiReinforcementLearningQuizList > article {
     background: #ffffff;
     border: 1px solid var(--python-line);
     border-radius: 18px;
@@ -11393,7 +11397,8 @@
 
 .ai-python-practice-page .reasoning-practice-card[hidden],
 .ai-python-quiz-page #aiPythonQuizList > article[hidden] ,
-.ai-python-quiz-page #aiDeepLearningQuizList > article[hidden] {
+.ai-python-quiz-page #aiDeepLearningQuizList > article[hidden] ,
+.ai-python-quiz-page #aiReinforcementLearningQuizList > article[hidden] {
     display: none !important;
 }
 
@@ -11634,13 +11639,15 @@
 }
 
 .ai-python-quiz-page #aiPythonQuizNavigator ,
-.ai-python-quiz-page #aiDeepLearningQuizNavigator {
+.ai-python-quiz-page #aiDeepLearningQuizNavigator ,
+.ai-python-quiz-page #aiReinforcementLearningQuizNavigator {
     display: flex;
     flex-wrap: wrap;
 }
 
 .ai-python-quiz-page #aiPythonQuizList > article > span ,
-.ai-python-quiz-page #aiDeepLearningQuizList > article > span {
+.ai-python-quiz-page #aiDeepLearningQuizList > article > span ,
+.ai-python-quiz-page #aiReinforcementLearningQuizList > article > span {
     background: var(--python-pink);
     border: 0;
     border-radius: 50%;
@@ -11650,7 +11657,8 @@
 }
 
 .ai-python-quiz-page #aiPythonQuizList > article > small ,
-.ai-python-quiz-page #aiDeepLearningQuizList > article > small {
+.ai-python-quiz-page #aiDeepLearningQuizList > article > small ,
+.ai-python-quiz-page #aiReinforcementLearningQuizList > article > small {
     color: var(--python-pink-deep);
     font-size: .75rem;
     font-weight: 850;
@@ -11659,7 +11667,8 @@
 }
 
 .ai-python-quiz-page #aiPythonQuizList > article > h3 ,
-.ai-python-quiz-page #aiDeepLearningQuizList > article > h3 {
+.ai-python-quiz-page #aiDeepLearningQuizList > article > h3 ,
+.ai-python-quiz-page #aiReinforcementLearningQuizList > article > h3 {
     color: var(--python-ink);
     line-height: 1.48;
     margin: 0;
@@ -11890,7 +11899,8 @@
 }
 
 .ai-python-quiz-page #aiPythonQuizForm.is-locked .reasoning-scaffold-options label ,
-.ai-python-quiz-page #aiDeepLearningQuizForm.is-locked .reasoning-scaffold-options label {
+.ai-python-quiz-page #aiDeepLearningQuizForm.is-locked .reasoning-scaffold-options label ,
+.ai-python-quiz-page #aiReinforcementLearningQuizForm.is-locked .reasoning-scaffold-options label {
     cursor: not-allowed;
 }
 
@@ -12550,7 +12560,8 @@
     .ai-python-page .python-beginner-glossary,
     .ai-python-practice-page .reasoning-practice-card,
     .ai-python-quiz-page #aiPythonQuizList > article ,
-    .ai-python-quiz-page #aiDeepLearningQuizList > article {
+    .ai-python-quiz-page #aiDeepLearningQuizList > article ,
+    .ai-python-quiz-page #aiReinforcementLearningQuizList > article {
         padding: 15px;
     }
 
@@ -12740,13 +12751,15 @@
 }
 
 /* FORCING QUIZ NAVIGATOR FIX FOR DEEP LEARNING */
-.ai-python-quiz-page #aiDeepLearningQuizNavigator {
+.ai-python-quiz-page #aiDeepLearningQuizNavigator ,
+.ai-python-quiz-page #aiReinforcementLearningQuizNavigator {
     display: flex !important;
     flex-wrap: wrap !important;
     gap: 8px !important;
     justify-content: flex-start !important;
 }
-.ai-python-quiz-page #aiDeepLearningQuizNavigator button {
+.ai-python-quiz-page #aiDeepLearningQuizNavigator button ,
+.ai-python-quiz-page #aiReinforcementLearningQuizNavigator button {
     flex: 0 0 44px !important;
     height: 44px !important;
     min-width: 44px !important;
