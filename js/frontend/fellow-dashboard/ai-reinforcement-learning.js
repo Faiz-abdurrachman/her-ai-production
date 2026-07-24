@@ -1600,7 +1600,7 @@ var SOURCE_VISUALS = {
         });
     }
 
-    window.loadPythonTopik = function (chapterNumber) {
+    window.loadAiReinforcementLearningChapter = function (chapterNumber) {
         var total = CHAPTERS.length;
         var chapter = Math.min(Math.max(Number(chapterNumber) || 1, 1), total);
         var module = CHAPTERS[chapter - 1];
@@ -1749,25 +1749,25 @@ var SOURCE_VISUALS = {
         if (list) {
             list.innerHTML = CHAPTERS.map(function (chapter, index) {
                 const chapterNumber = index + 1;
-                return `<li data-chapter="${chapterNumber}"><span>${chapterNumber}</span><a href="javascript:void(0)" onclick="window.loadPythonTopik(${chapterNumber})">${escapeHtml(chapter.shortTitle)}</a><i class="far fa-circle"></i></li>`;
+                return `<li data-chapter="${chapterNumber}"><span>${chapterNumber}</span><a href="javascript:void(0)" onclick="window.loadAiReinforcementLearningChapter(${chapterNumber})">${escapeHtml(chapter.shortTitle)}</a><i class="far fa-circle"></i></li>`;
             }).join("");
         }
 
         if (btnPrev) {
             btnPrev.addEventListener("click", function () {
                 const current = Number(localStorage.getItem(STORAGE.chapter)) || initial;
-                window.loadPythonTopik(Math.max(1, current - 1));
+                window.loadAiReinforcementLearningChapter(Math.max(1, current - 1));
             });
         }
 
         if (btnNext) {
             btnNext.addEventListener("click", function () {
                 const current = Number(localStorage.getItem(STORAGE.chapter)) || initial;
-                window.loadPythonTopik(Math.min(total, current + 1));
+                window.loadAiReinforcementLearningChapter(Math.min(total, current + 1));
             });
         }
 
-        window.loadPythonTopik(initial);
+        window.loadAiReinforcementLearningChapter(initial);
     };
 
     function getSavedPractice() {

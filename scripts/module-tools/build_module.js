@@ -124,6 +124,7 @@ function buildModule(mdPath, baseId, categoryFolder, moduleFolder) {
     newContent = newContent.replace(/python-task-controls/g, `${baseId.replace('ai-', '')}-task-controls`);
     newContent = newContent.replace(/ai-python-page/g, `${baseId}-page`);
     newContent = newContent.replace(/"heraiAiPythonCurrentChapter"/g, `"herai${camelBase}CurrentChapter"`);
+    newContent = newContent.replace(/loadPythonTopik/g, `load${camelBase}Chapter`);
     
     newContent = newContent.replace(/const CHAPTERS = \[[\s\S]*?\];\n/, `const CHAPTERS = ${JSON.stringify(chaptersMetadata, null, 4)};\n`);
     newContent = newContent.replace(/var PRACTICE_TOPICS = \[[\s\S]*?\];/m, `var PRACTICE_TOPICS = [ { start: 0, end: ${practices.length-1}, label: "Latihan Modul" } ];`);

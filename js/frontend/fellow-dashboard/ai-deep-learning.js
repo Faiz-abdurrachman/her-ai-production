@@ -387,102 +387,117 @@ const CHAPTERS = [
 
     const PRACTICES = [
     {
-        "id": "DL-P-1",
-        "title": "Definisi masalah",
-        "prompt": "Lakukan tahap: Definisi masalah\nTentukan pengguna, tujuan prediksi, kelas, dan dampak kesalahan",
+        "id": "PRACTICE-1",
+        "prompt": "**Tujuan:** melatih kemampuan memilih apakah suatu masalah memerlukan deep learning.\\n\\n**Tingkat kesulitan:** Dasar\\n\\nGunakan tiga kasus berikut:\\n\\n1. Prediksi kelulusan dari 500 baris data tabular.\n2. Klasifikasi 100.000 gambar produk.\n3. Deteksi spam dari 2.000 email.\\n\\nUntuk setiap kasus:\\n\\n- Tuliskan kandidat model awal yang paling sederhana.\n- Jelaskan alasan pemilihannya.\n- Jelaskan kapan deep learning baru layak dicoba.\n- Tuliskan risiko penggunaan deep learning.\\n\\n**Hasil yang dikumpulkan:** tabel berisi kasus, pendekatan awal, alasan, dan risiko penggunaan deep learning.",
         "fields": [
             [
                 "step",
-                "Langkah Pengerjaan / Hasil"
+                "Langkah Pengerjaan"
             ]
         ],
-        "guide": "Fokus pada definisi masalah terlebih dahulu."
+        "guide": "Tuliskan hasil analisis Anda."
     },
     {
-        "id": "DL-P-2",
-        "title": "Audit data",
-        "prompt": "Lakukan tahap: Audit data\nPeriksa jumlah data, duplikat, kualitas gambar, label, dan ketidakseimbangan kelas",
+        "id": "PRACTICE-2",
+        "prompt": "**Tujuan:** mengenali bentuk tensor dan jumlah parameter pada neural network sederhana.\\n\\n**Tingkat kesulitan:** Dasar\\n\\nGunakan arsitektur berikut:\\n\\n```text\nInput 20 fitur\n→ Hidden layer 16 neuron\n→ Hidden layer 8 neuron\n→ Output 3 kelas\n```\\n\\nKerjakan hal berikut:\\n\\n1. Hitung jumlah parameter pada setiap layer.\n2. Tentukan activation function yang masuk akal untuk hidden dan output layer.\n3. Jelaskan bentuk output untuk satu sampel.\\n\\n**Hasil yang dikumpulkan:** perhitungan parameter, pilihan activation function, dan penjelasan bentuk output.",
         "fields": [
             [
                 "step",
-                "Langkah Pengerjaan / Hasil"
+                "Langkah Pengerjaan"
             ]
         ],
-        "guide": "Fokus pada audit data terlebih dahulu."
+        "guide": "Tuliskan hasil analisis Anda."
     },
     {
-        "id": "DL-P-3",
-        "title": "Split data",
-        "prompt": "Lakukan tahap: Split data\nBuat training, validation, dan test tanpa kebocoran",
+        "id": "PRACTICE-3",
+        "prompt": "**Tujuan:** melihat hubungan antara prediksi, loss, dan pembaruan parameter.\\n\\n**Tingkat kesulitan:** Dasar\\n\\nGunakan nilai berikut:\\n\\n```text\nx = 2\nw = 0.5\nb = 0\ntarget y = 3\n```\\n\\nKerjakan:\\n\\n1. Hitung prediksi linear `y_hat = x × w + b`.\n2. Hitung squared error `(y_hat - y)²`.\n3. Ubah `w` menjadi `1.0`, kemudian hitung kembali prediksi dan loss.\n4. Jelaskan perubahan mana yang membuat prediksi lebih dekat dengan target.\\n\\n**Hasil yang dikumpulkan:** perhitungan dua percobaan dan kesimpulan singkat.",
         "fields": [
             [
                 "step",
-                "Langkah Pengerjaan / Hasil"
+                "Langkah Pengerjaan"
             ]
         ],
-        "guide": "Fokus pada split data terlebih dahulu."
+        "guide": "Tuliskan hasil analisis Anda."
     },
     {
-        "id": "DL-P-4",
-        "title": "Baseline",
-        "prompt": "Lakukan tahap: Baseline\nBangun CNN kecil atau transfer learning sederhana",
+        "id": "PRACTICE-4",
+        "prompt": "**Tujuan:** membaca pola loss dan accuracy untuk menentukan tindakan berikutnya.\\n\\n**Tingkat kesulitan:** Menengah\\n\\nAnalisis tiga skenario berikut:\\n\\n1. Training loss dan validation loss sama-sama turun.\n2. Training loss turun, tetapi validation loss naik.\n3. Training loss dan validation loss sama-sama datar.\\n\\nUntuk setiap skenario:\\n\\n- Jelaskan diagnosis yang paling mungkin.\n- Tuliskan dua tindakan yang dapat dicoba.\\n\\n**Hasil yang dikumpulkan:** tabel diagnosis dan tindakan untuk setiap skenario.",
         "fields": [
             [
                 "step",
-                "Langkah Pengerjaan / Hasil"
+                "Langkah Pengerjaan"
             ]
         ],
-        "guide": "Fokus pada baseline terlebih dahulu."
+        "guide": "Tuliskan hasil analisis Anda."
     },
     {
-        "id": "DL-P-5",
-        "title": "Eksperimen",
-        "prompt": "Lakukan tahap: Eksperimen\nUbah satu faktor setiap kali dan catat hasil",
+        "id": "PRACTICE-5",
+        "prompt": "**Tujuan:** menyusun intervensi bertahap untuk model yang menghafal data training.\\n\\n**Tingkat kesulitan:** Menengah\\n\\nGunakan skenario berikut:\\n\\n```text\nTraining accuracy: 99%\nValidation accuracy: 72%\n```\\n\\nKerjakan:\\n\\n1. Susun urutan tiga eksperimen dari yang paling murah.\n2. Tentukan metrik yang diamati dan kriteria keberhasilan.\n3. Jelaskan mengapa mengubah banyak hal sekaligus membuat eksperimen sulit dianalisis.\\n\\n**Hasil yang dikumpulkan:** rencana eksperimen berurutan lengkap dengan hipotesis dan metrik.",
         "fields": [
             [
                 "step",
-                "Langkah Pengerjaan / Hasil"
+                "Langkah Pengerjaan"
             ]
         ],
-        "guide": "Fokus pada eksperimen terlebih dahulu."
+        "guide": "Tuliskan hasil analisis Anda."
     },
     {
-        "id": "DL-P-6",
-        "title": "Evaluasi",
-        "prompt": "Lakukan tahap: Evaluasi\nGunakan metrik, confusion matrix, dan analisis error",
+        "id": "PRACTICE-6",
+        "prompt": "**Tujuan:** menyusun CNN kecil yang sesuai dengan ukuran data dan jumlah kelas.\\n\\n**Tingkat kesulitan:** Menengah\\n\\nGunakan kebutuhan berikut:\\n\\n```text\nInput: gambar RGB 128 × 128\nJumlah kelas: 5\n```\\n\\nKerjakan:\\n\\n1. Rancang dua blok convolution dan satu output layer.\n2. Tuliskan bentuk output setelah setiap tahap secara kasar.\n3. Tambahkan satu strategi regularisasi.\n4. Jelaskan alasan desain tersebut.\\n\\n**Hasil yang dikumpulkan:** diagram arsitektur, alasan desain, dan estimasi perubahan bentuk tensor.",
         "fields": [
             [
                 "step",
-                "Langkah Pengerjaan / Hasil"
+                "Langkah Pengerjaan"
             ]
         ],
-        "guide": "Fokus pada evaluasi terlebih dahulu."
+        "guide": "Tuliskan hasil analisis Anda."
     },
     {
-        "id": "DL-P-7",
-        "title": "Kesimpulan",
-        "prompt": "Lakukan tahap: Kesimpulan\nJelaskan keterbatasan dan langkah pengembangan",
+        "id": "PRACTICE-7",
+        "prompt": "**Tujuan:** mengenali input-output pada masalah berurutan.\\n\\n**Tingkat kesulitan:** Dasar\\n\\nGunakan tiga kasus berikut:\\n\\n1. Sentiment analysis.\n2. Prediksi suhu harian.\n3. Named entity recognition.\\n\\nUntuk setiap kasus:\\n\\n- Tentukan bentuk input dan output.\n- Tentukan apakah masalahnya many-to-one atau many-to-many.\n- Jelaskan satu risiko preprocessing yang dapat merusak urutan.\\n\\n**Hasil yang dikumpulkan:** tabel kasus, bentuk sequence, tipe mapping, dan risiko preprocessing.",
         "fields": [
             [
                 "step",
-                "Langkah Pengerjaan / Hasil"
+                "Langkah Pengerjaan"
             ]
         ],
-        "guide": "Fokus pada kesimpulan terlebih dahulu."
+        "guide": "Tuliskan hasil analisis Anda."
+    },
+    {
+        "id": "PRACTICE-8",
+        "prompt": "**Tujuan:** mengomunikasikan ide self-attention menggunakan bahasa nonteknis.\\n\\n**Tingkat kesulitan:** Menengah\\n\\nGunakan kalimat berikut atau buat contoh serupa:\\n\\n> “Rina memberi buku kepada Sari karena ia lulus.”\\n\\nKerjakan:\\n\\n1. Jelaskan token mana yang perlu saling memperhatikan untuk memahami kata “ia”.\n2. Tuliskan penjelasan self-attention dalam maksimal 150 kata.\\n\\n**Hasil yang dikumpulkan:** penjelasan maksimal 150 kata yang dapat dipahami pemula.",
+        "fields": [
+            [
+                "step",
+                "Langkah Pengerjaan"
+            ]
+        ],
+        "guide": "Tuliskan hasil analisis Anda."
+    },
+    {
+        "id": "PRACTICE-9",
+        "prompt": "**Tujuan:** memilih metrik berdasarkan dampak kesalahan.\\n\\n**Tingkat kesulitan:** Menengah\\n\\nBandingkan dua kasus berikut:\\n\\n1. Deteksi penyakit berisiko tinggi.\n2. Penyaringan komentar spam.\\n\\nUntuk masing-masing kasus:\\n\\n- Jelaskan dampak false positive.\n- Jelaskan dampak false negative.\n- Pilih metrik utama dan metrik pendamping.\n- Jelaskan mengapa accuracy saja mungkin menyesatkan.\\n\\n**Hasil yang dikumpulkan:** analisis dampak kesalahan dan rekomendasi metrik.",
+        "fields": [
+            [
+                "step",
+                "Langkah Pengerjaan"
+            ]
+        ],
+        "guide": "Tuliskan hasil analisis Anda."
     }
 ];
 
 const QUIZ = [
     [
-        "Istilah *deep* pada deep learning terutama mengacu pada ...",
+        "Istilah deep pada deep learning terutama mengacu pada ...",
         [
             "ukuran dataset",
             "jumlah lapisan pemrosesan",
             "panjang kode",
             "jenis komputer"
         ],
-        1,
-        "Pilihan B adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "Komponen yang dipelajari langsung selama training adalah ...",
@@ -492,8 +507,8 @@ const QUIZ = [
             "weight dan bias",
             "jumlah epoch"
         ],
-        2,
-        "Pilihan C adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "Activation function dibutuhkan terutama untuk ...",
@@ -503,8 +518,8 @@ const QUIZ = [
             "membagi dataset",
             "menyimpan checkpoint"
         ],
-        1,
-        "Pilihan B adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "Fungsi utama loss adalah ...",
@@ -515,7 +530,7 @@ const QUIZ = [
             "menghapus noise"
         ],
         0,
-        "Pilihan A adalah jawaban yang tepat untuk pertanyaan ini."
+        "Penjelasan belum tersedia."
     ],
     [
         "Backpropagation digunakan untuk ...",
@@ -525,8 +540,8 @@ const QUIZ = [
             "melakukan augmentation",
             "menambah kelas"
         ],
-        1,
-        "Pilihan B adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "Learning rate terlalu besar sering menyebabkan ...",
@@ -537,7 +552,7 @@ const QUIZ = [
             "output selalu satu kelas karena softmax"
         ],
         0,
-        "Pilihan A adalah jawaban yang tepat untuk pertanyaan ini."
+        "Penjelasan belum tersedia."
     ],
     [
         "Training accuracy sangat tinggi tetapi validation accuracy rendah adalah tanda ...",
@@ -547,8 +562,8 @@ const QUIZ = [
             "data augmentation",
             "normalisasi"
         ],
-        1,
-        "Pilihan B adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "Dropout bekerja dengan cara ...",
@@ -558,8 +573,8 @@ const QUIZ = [
             "memperbesar gambar",
             "mengganti optimizer"
         ],
-        1,
-        "Pilihan B adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "CNN efektif untuk gambar karena ...",
@@ -569,8 +584,8 @@ const QUIZ = [
             "selalu memiliki parameter paling banyak",
             "tidak memerlukan data"
         ],
-        1,
-        "Pilihan B adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "Pooling biasanya digunakan untuk ...",
@@ -580,8 +595,8 @@ const QUIZ = [
             "menambah kelas",
             "menghitung loss"
         ],
-        1,
-        "Pilihan B adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "Transfer learning berarti ...",
@@ -591,8 +606,8 @@ const QUIZ = [
             "mengganti bahasa pemrograman",
             "menghapus semua weight"
         ],
-        1,
-        "Pilihan B adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "Hidden state pada RNN berfungsi sebagai ...",
@@ -603,7 +618,7 @@ const QUIZ = [
             "jenis optimizer"
         ],
         0,
-        "Pilihan A adalah jawaban yang tepat untuk pertanyaan ini."
+        "Penjelasan belum tersedia."
     ],
     [
         "Self-attention membantu setiap token ...",
@@ -613,8 +628,8 @@ const QUIZ = [
             "selalu fokus pada token terdekat",
             "menjadi gambar"
         ],
-        1,
-        "Pilihan B adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "Positional encoding dibutuhkan karena ...",
@@ -625,7 +640,7 @@ const QUIZ = [
             "loss tidak memiliki gradient"
         ],
         0,
-        "Pilihan A adalah jawaban yang tepat untuk pertanyaan ini."
+        "Penjelasan belum tersedia."
     ],
     [
         "Test set sebaiknya digunakan ...",
@@ -635,8 +650,8 @@ const QUIZ = [
             "untuk evaluasi akhir",
             "sebagai augmentation"
         ],
-        2,
-        "Pilihan C adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "Recall penting ketika ...",
@@ -647,7 +662,7 @@ const QUIZ = [
             "tidak ada label"
         ],
         0,
-        "Pilihan A adalah jawaban yang tepat untuk pertanyaan ini."
+        "Penjelasan belum tersedia."
     ],
     [
         "Data leakage terjadi ketika ...",
@@ -657,8 +672,8 @@ const QUIZ = [
             "batch size kecil",
             "model disimpan"
         ],
-        1,
-        "Pilihan B adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "Tes overfit batch kecil berguna untuk ...",
@@ -669,7 +684,7 @@ const QUIZ = [
             "menghapus gradient"
         ],
         0,
-        "Pilihan A adalah jawaban yang tepat untuk pertanyaan ini."
+        "Penjelasan belum tersedia."
     ],
     [
         "Model terbaik untuk produk nyata selalu ...",
@@ -679,8 +694,8 @@ const QUIZ = [
             "model dengan kompromi kualitas, biaya, dan latency yang tepat",
             "model dengan epoch terbanyak"
         ],
-        2,
-        "Pilihan C adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ],
     [
         "Eksperimen yang baik sebaiknya ...",
@@ -690,8 +705,8 @@ const QUIZ = [
             "mengubah satu faktor utama setiap kali",
             "hanya melihat training accuracy"
         ],
-        2,
-        "Pilihan C adalah jawaban yang tepat untuk pertanyaan ini."
+        0,
+        "Penjelasan belum tersedia."
     ]
 ];
 
@@ -1587,7 +1602,7 @@ var SOURCE_VISUALS = {
         });
     }
 
-    window.loadPythonTopik = function (chapterNumber) {
+    window.loadAiDeepLearningChapter = function (chapterNumber) {
         var total = CHAPTERS.length;
         var chapter = Math.min(Math.max(Number(chapterNumber) || 1, 1), total);
         var module = CHAPTERS[chapter - 1];
@@ -1736,25 +1751,25 @@ var SOURCE_VISUALS = {
         if (list) {
             list.innerHTML = CHAPTERS.map(function (chapter, index) {
                 const chapterNumber = index + 1;
-                return `<li data-chapter="${chapterNumber}"><span>${chapterNumber}</span><a href="javascript:void(0)" onclick="window.loadPythonTopik(${chapterNumber})">${escapeHtml(chapter.shortTitle)}</a><i class="far fa-circle"></i></li>`;
+                return `<li data-chapter="${chapterNumber}"><span>${chapterNumber}</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(${chapterNumber})">${escapeHtml(chapter.shortTitle)}</a><i class="far fa-circle"></i></li>`;
             }).join("");
         }
 
         if (btnPrev) {
             btnPrev.addEventListener("click", function () {
                 const current = Number(localStorage.getItem(STORAGE.chapter)) || initial;
-                window.loadPythonTopik(Math.max(1, current - 1));
+                window.loadAiDeepLearningChapter(Math.max(1, current - 1));
             });
         }
 
         if (btnNext) {
             btnNext.addEventListener("click", function () {
                 const current = Number(localStorage.getItem(STORAGE.chapter)) || initial;
-                window.loadPythonTopik(Math.min(total, current + 1));
+                window.loadAiDeepLearningChapter(Math.min(total, current + 1));
             });
         }
 
-        window.loadPythonTopik(initial);
+        window.loadAiDeepLearningChapter(initial);
     };
 
     function getSavedPractice() {
@@ -1855,7 +1870,7 @@ var SOURCE_VISUALS = {
         return html;
     }
 
-    var PRACTICE_TOPICS = [ { start: 0, end: 15, label: "Klasifikasi Gambar" } ];
+    var PRACTICE_TOPICS = [ { start: 0, end: 8, label: "Latihan Modul" } ];
 
     function getPracticeTopic(index) {
         for (var pt = 0; pt < PRACTICE_TOPICS.length; pt++) {
@@ -2124,7 +2139,7 @@ var SOURCE_VISUALS = {
         list.innerHTML = QUIZ.map(function (question, index) {
             return `<article data-quiz-index="${index}" tabindex="-1">
                 <span>${index + 1}</span>
-                <small>Deep Learning</small>
+                <small>Python untuk AI</small>
                 <h3>${escapeHtml(question[0])}</h3>
                 <div class="reasoning-scaffold-options">
                     ${question[1].map(function (option, optionIndex) {
