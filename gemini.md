@@ -117,3 +117,31 @@ Logika *layouting* di `js/router.js` mengandalkan array `participantDashboardPag
 **Solusi:**
 - Memodifikasi `scripts/module-tools/register_module.js` agar secara otomatis menginjeksi rute baru (dan sub-rutenya seperti `-practice`, `-quiz`) ke dalam list `participantDashboardPages`.
 - Menambahkan secara manual rute yang sudah terlanjur di-*generate* sebelumnya ke dalam `participantDashboardPages` di `js/router.js`.
+
+## 11. Bug Visual Lanjutan: Navbar Publik Masih Bocor di Halaman Latihan & Kuis
+**Deskripsi:**
+Meskipun halaman materi modul sudah menggunakan layout *Dashboard* yang benar (tanpa *navbar* publik), *navbar* publik tersebut ternyata kembali muncul menumpuk ketika *user* masuk ke tab Latihan, Kuis, atau Diskusi di seluruh modul.
+**Penyebab:**
+Script `register_module.js` ternyata hanya menambahkan rute utama (misal: `/participant-ai-lab-ui-ux`) ke dalam array `participantDashboardPages` di `router.js`, namun luput untuk menyertakan sub-rute akhiran `-practice`, `-quiz`, dan `-discussion` jika rute utama tersebut sudah eksis sebelumnya dengan status "under-development".
+**Solusi:**
+- Membuat script `fix_router.js` yang secara otomatis memindai array `participantDashboardPages` di `router.js`.
+- Secara dinamis menyuntikkan (inject) rute turunan `-practice`, `-quiz`, dan `-discussion` untuk setiap modul yang ada agar router mengklasifikasikan halaman-halaman tersebut sebagai halaman dashboard yang sah.
+
+## 12. Bug Logika: "Bayang-Bayang Python" pada JS Semua Modul
+**Deskripsi:**
+Di konsol browser sering muncul error `Python source integrity mismatch` atau pencarian elemen `Python` gagal, bahkan ketika sedang berada di modul non-Python (seperti UI/UX atau Bioinformatics).
+**Penyebab:**
+Script generator `build_module.js` awalnya di-cloning langsung dari struktur modul Python. Namun, script gagal me-replace URL konstan `SOURCE_BASE` dan fungsi validasi `assertPythonSourceIntegrity`. Akibatnya, seluruh puluhan file JS modul yang digenerate ikut membawa logika Python dan mencoba me-*load* direktori bab (chapters) milik Python (`02-python-untuk-ai`).
+**Solusi:**
+- Menulis script perbaikan masal `fix_js_sources.js` yang menyapu (sweep) seluruh file `ai-*.js`.
+- Secara dinamis menarik lokasi folder `chapters` yang benar berdasarkan rute aslinya (`CHAPTERS[0].sourcePath`) lalu menggantikan nilai konstan `SOURCE_BASE`.
+- Menghapus fungsi `assertPythonSourceIntegrity` secara total dari semua script JS non-Python.
+
+## 13. Bug Konten: Teks "Kuis Python" Hardcoded di Seluruh Modul
+**Deskripsi:**
+Ketika peserta masuk ke tab Kuis pada modul Data Engineering, teks pengantarnya masih bertuliskan "Uji pemahaman Python..." dan alt-text gambar masih berbunyi "HerAI fellow mengerjakan kuis Python".
+**Penyebab:**
+Template HTML pembungkus (shell) untuk `latihan.html`, `kuis.html`, dan `diskusi.html` membawa teks deskripsi statis dari modul Python yang belum di-*replace* oleh `build_module.js`.
+**Solusi:**
+- Menulis script `fix_html_shells.js` yang mengeksekusi *Regular Expression (Regex)* ke ratusan file HTML Latihan, Kuis, dan Diskusi di dalam direktori `fellow-dashboard`.
+- Mengubah teks bernuansa "Python" tersebut menjadi copywriting yang netral, premium, dan relevan dengan kegiatan edukasi (contoh: "Uji pemahaman Anda melalui simulasi interaktif").
