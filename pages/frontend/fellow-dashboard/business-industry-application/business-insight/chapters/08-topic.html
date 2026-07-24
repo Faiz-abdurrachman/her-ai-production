@@ -1,0 +1,120 @@
+<h1>Forecast dan Scenario Planning</h1>
+<h2>Tujuan Bab</h2>
+<p>Setelah mempelajari bab ini, peserta mampu:</p>
+<ul>
+<li>menjelaskan peran forecast dan scenario planning dalam Business Insight;</li>
+<li>membedakan istilah yang sering tercampur;</li>
+<li>menyusun alur kerja sederhana yang dapat diuji;</li>
+<li>mengenali risiko, trade-off, dan kebutuhan dokumentasi.</li>
+</ul>
+<h2>Gambaran Sederhana</h2>
+<p>Forecast dan Scenario Planning tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimulai dari pertanyaan: <strong>keputusan apa yang ingin diperbaiki, bukti apa yang tersedia, dan siapa yang menanggung dampak ketika sistem salah?</strong></p>
+<blockquote>
+<p><strong>Analogi:</strong> Insight seperti lampu sorot di ruang gelap: bukan menerangi semua hal sekaligus, tetapi menyorot bagian yang paling penting untuk keputusan berikutnya.</p>
+</blockquote>
+<p>Pada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, keamanan, biaya, kemampuan dipelihara, dan kejelasan tindakan ketika terjadi kegagalan.</p>
+<h2>Konsep Inti</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Istilah</th>
+<th>Penjelasan mudah</th>
+<th>Cara memeriksa pemahaman</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>forecast</strong></td>
+<td>konsep penting dalam forecast dan scenario planning yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana forecast diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>assumption</strong></td>
+<td>konsep penting dalam forecast dan scenario planning yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana assumption diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>base</strong></td>
+<td>konsep penting dalam forecast dan scenario planning yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana base diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>upside</strong></td>
+<td>konsep penting dalam forecast dan scenario planning yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana upside diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>downside</strong></td>
+<td>konsep penting dalam forecast dan scenario planning yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana downside diukur, diuji, atau dikendalikan?</td>
+</tr>
+<tr>
+<td><strong>sensitivity</strong></td>
+<td>konsep penting dalam forecast dan scenario planning yang perlu diberi definisi operasional sebelum dipakai</td>
+<td>Pertanyaan yang perlu dijawab: bagaimana sensitivity diukur, diuji, atau dikendalikan?</td>
+</tr>
+</tbody></table></div>
+<h3>Hubungan antarkonsep</h3>
+<p>Bayangkan alur <strong>forecast -&gt; assumption -&gt; base -&gt; upside</strong>. Setiap panah menyatakan asumsi. Asumsi tersebut harus ditulis dan diuji. Ketika hasil akhir salah, tim dapat menelusuri pada tahap mana asumsi tidak lagi berlaku.</p>
+<p>Contohnya, perubahan pada <strong>forecast</strong> dapat memengaruhi <strong>assumption</strong>, lalu mengubah cara <strong>base</strong> dihitung. Tanpa pengamatan dan versioning, perubahan ini mudah dianggap sebagai perilaku pengguna atau performa model, padahal sumbernya berada di proses sebelumnya.</p>
+<h2>Langkah Kerja</h2>
+<ol>
+<li>Tentukan tujuan forecast dan scenario planning dan keputusan yang akan dipengaruhi.</li>
+<li>Petakan input, output, pemilik, pengguna, serta batas sistem.</li>
+<li>Tetapkan definisi dan kriteria penerimaan untuk forecast serta assumption.</li>
+<li>Bangun versi kecil menggunakan data atau skenario yang aman.</li>
+<li>Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem.</li>
+<li>Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut.</li>
+</ol>
+<h2>Contoh Kasus</h2>
+<p>Dalam mini project <strong>Executive Insight Pack</strong>, tim perlu menerapkan forecast dan scenario planning secara bertahap. Mulailah dengan satu alur yang kecil dan dapat diamati. Catat input, transformasi atau keputusan, output, waktu proses, serta alasan ketika suatu item ditolak.</p>
+<p>Misalnya, tim menemukan bahwa <strong>forecast</strong> tidak konsisten. Respons yang buruk adalah langsung menambah kompleksitas. Respons yang lebih baik adalah mengisolasi sumber masalah, membuat aturan validasi, mengukur frekuensi kejadian, dan menentukan siapa yang bertanggung jawab memperbaikinya.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Situasi</th>
+<th>Pilihan tindakan</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Data atau input belum lengkap</td>
+<td>Tolak, minta perbaikan, atau gunakan fallback</td>
+<td>Menjaga kualitas tetapi dapat menambah friksi</td>
+</tr>
+<tr>
+<td>Hasil belum pasti</td>
+<td>Tampilkan ketidakpastian dan minta review</td>
+<td>Lebih aman tetapi membutuhkan waktu manusia</td>
+</tr>
+<tr>
+<td>Beban meningkat</td>
+<td>Scale, antrekan, atau pembatasan</td>
+<td>Menjaga layanan tetapi menambah biaya atau waktu tunggu</td>
+</tr>
+<tr>
+<td>Perubahan berisiko</td>
+<td>Uji terbatas dan siapkan rollback</td>
+<td>Rilis lebih lambat tetapi dampak kegagalan lebih kecil</td>
+</tr>
+</tbody></table></div>
+<h2>Kesalahan Umum</h2>
+<ul>
+<li>Memulai dari alat sebelum memahami tujuan forecast dan scenario planning.</li>
+<li>Menganggap forecast sudah memiliki definisi yang sama bagi semua pihak.</li>
+<li>Hanya menguji jalur normal dan mengabaikan kegagalan atau data yang tidak lengkap.</li>
+<li>Tidak menetapkan pemilik, indikator, dan prosedur ketika kualitas menurun.</li>
+</ul>
+<h2>Checkpoint</h2>
+<ol>
+<li>Jelaskan forecast dengan kalimat sendiri dan berikan satu contoh.</li>
+<li>Apa hubungan antara assumption dan base dalam bab ini?</li>
+<li>Sebutkan satu risiko ketika forecast dan scenario planning diterapkan tanpa pengujian.</li>
+</ol>
+<h2>Latihan</h2>
+<ol>
+<li>Buat diagram sederhana yang menghubungkan forecast, assumption, base, upside. Tandai asumsi dan titik kegagalan.</li>
+<li>Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.</li>
+<li>Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.</li>
+</ol>
+<hr>
+

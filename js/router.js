@@ -10,6 +10,10 @@ const router = {
     // Wajib pakai '/' di depan path folder agar terbaca absolut dari root
     // ==========================================
     routes: {
+        "/participant-ai-lab-culture": "/pages/frontend/fellow-dashboard/business-industry-application/ai-culture/materi.html",
+        "/participant-ai-lab-culture-practice": "/pages/frontend/fellow-dashboard/business-industry-application/ai-culture/latihan.html",
+        "/participant-ai-lab-culture-quiz": "/pages/frontend/fellow-dashboard/business-industry-application/ai-culture/kuis.html",
+        "/participant-ai-lab-culture-discussion": "/pages/frontend/fellow-dashboard/business-industry-application/ai-culture/diskusi.html",
         "/participant-ai-lab-large-language-model": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/large-language-model/materi.html",
         "/participant-ai-lab-large-language-model-practice": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/large-language-model/latihan.html",
         "/participant-ai-lab-large-language-model-quiz": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/large-language-model/kuis.html",
@@ -155,13 +159,31 @@ const router = {
         "/participant-ai-lab-back-end-practice": "/pages/frontend/fellow-dashboard/data-engineering-domain/back-end/latihan.html",
         "/participant-ai-lab-back-end-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domain/back-end/kuis.html",
         "/participant-ai-lab-back-end-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domain/back-end/diskusi.html",
-        "/participant-ai-lab-business-insight": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-people-business-mgt": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-business-insight": "/pages/frontend/fellow-dashboard/business-industry-application/business-insight/materi.html",
+        "/participant-ai-lab-business-insight-practice": "/pages/frontend/fellow-dashboard/business-industry-application/business-insight/latihan.html",
+        "/participant-ai-lab-business-insight-quiz": "/pages/frontend/fellow-dashboard/business-industry-application/business-insight/kuis.html",
+        "/participant-ai-lab-business-insight-discussion": "/pages/frontend/fellow-dashboard/business-industry-application/business-insight/diskusi.html",
+        "/participant-ai-lab-people-business-mgt": "/pages/frontend/fellow-dashboard/business-industry-application/people-business-mgt/materi.html",
+        "/participant-ai-lab-people-business-mgt-practice": "/pages/frontend/fellow-dashboard/business-industry-application/people-business-mgt/latihan.html",
+        "/participant-ai-lab-people-business-mgt-quiz": "/pages/frontend/fellow-dashboard/business-industry-application/people-business-mgt/kuis.html",
+        "/participant-ai-lab-people-business-mgt-discussion": "/pages/frontend/fellow-dashboard/business-industry-application/people-business-mgt/diskusi.html",
         "/participant-ai-lab-ai-culture": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-healthcare": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-ui-ux": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-manufacturing": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-geospatial": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-healthcare": "/pages/frontend/fellow-dashboard/business-industry-application/healthcare/materi.html",
+        "/participant-ai-lab-healthcare-practice": "/pages/frontend/fellow-dashboard/business-industry-application/healthcare/latihan.html",
+        "/participant-ai-lab-healthcare-quiz": "/pages/frontend/fellow-dashboard/business-industry-application/healthcare/kuis.html",
+        "/participant-ai-lab-healthcare-discussion": "/pages/frontend/fellow-dashboard/business-industry-application/healthcare/diskusi.html",
+        "/participant-ai-lab-ui-ux": "/pages/frontend/fellow-dashboard/business-industry-application/ui-ux/materi.html",
+        "/participant-ai-lab-ui-ux-practice": "/pages/frontend/fellow-dashboard/business-industry-application/ui-ux/latihan.html",
+        "/participant-ai-lab-ui-ux-quiz": "/pages/frontend/fellow-dashboard/business-industry-application/ui-ux/kuis.html",
+        "/participant-ai-lab-ui-ux-discussion": "/pages/frontend/fellow-dashboard/business-industry-application/ui-ux/diskusi.html",
+        "/participant-ai-lab-manufacturing": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/materi.html",
+        "/participant-ai-lab-manufacturing-practice": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/latihan.html",
+        "/participant-ai-lab-manufacturing-quiz": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/kuis.html",
+        "/participant-ai-lab-manufacturing-discussion": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/diskusi.html",
+        "/participant-ai-lab-geospatial": "/pages/frontend/fellow-dashboard/business-industry-application/geospatial/materi.html",
+        "/participant-ai-lab-geospatial-practice": "/pages/frontend/fellow-dashboard/business-industry-application/geospatial/latihan.html",
+        "/participant-ai-lab-geospatial-quiz": "/pages/frontend/fellow-dashboard/business-industry-application/geospatial/kuis.html",
+        "/participant-ai-lab-geospatial-discussion": "/pages/frontend/fellow-dashboard/business-industry-application/geospatial/diskusi.html",
         "/participant-specialization-computer-vision": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-specialization-speech-recognition": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-specialization-nlp-llm": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -422,6 +444,10 @@ const router = {
         const isMessagingPage = path === "/messaging";
         const isParticipantLoginPage = path === "/profile" || path === "/participant-login";
         const participantDashboardPages = [
+            "/participant-ai-lab-culture",
+            "/participant-ai-lab-culture-practice",
+            "/participant-ai-lab-culture-quiz",
+            "/participant-ai-lab-culture-discussion",
             "/participant-ai-lab-large-language-model",
             "/participant-ai-lab-large-language-model-practice",
             "/participant-ai-lab-large-language-model-quiz",
@@ -801,6 +827,111 @@ const router = {
                     if (path === "/participant-ai-lab-deep-learning-discussion" && typeof window.initAiDeepLearningDiscussion === "function") {
                         window.initAiDeepLearningDiscussion();
                     }
+                } else if (path.startsWith("/participant-ai-lab-geospatial") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-geospatial" && typeof window.initAiGeospatialMateri === "function") {
+                        window.initAiGeospatialMateri();
+                    }
+                    if (path === "/participant-ai-lab-geospatial-practice" && typeof window.initAiGeospatialPractice === "function") {
+                        window.initAiGeospatialPractice();
+                    }
+                    if (path === "/participant-ai-lab-geospatial-quiz" && typeof window.initAiGeospatialQuiz === "function") {
+                        window.initAiGeospatialQuiz();
+                    }
+                    if (path === "/participant-ai-lab-geospatial-discussion" && typeof window.initAiGeospatialDiscussion === "function") {
+                        window.initAiGeospatialDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-manufacturing") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-manufacturing" && typeof window.initAiManufacturingMateri === "function") {
+                        window.initAiManufacturingMateri();
+                    }
+                    if (path === "/participant-ai-lab-manufacturing-practice" && typeof window.initAiManufacturingPractice === "function") {
+                        window.initAiManufacturingPractice();
+                    }
+                    if (path === "/participant-ai-lab-manufacturing-quiz" && typeof window.initAiManufacturingQuiz === "function") {
+                        window.initAiManufacturingQuiz();
+                    }
+                    if (path === "/participant-ai-lab-manufacturing-discussion" && typeof window.initAiManufacturingDiscussion === "function") {
+                        window.initAiManufacturingDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-ui-ux") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-ui-ux" && typeof window.initAiUiUxMateri === "function") {
+                        window.initAiUiUxMateri();
+                    }
+                    if (path === "/participant-ai-lab-ui-ux-practice" && typeof window.initAiUiUxPractice === "function") {
+                        window.initAiUiUxPractice();
+                    }
+                    if (path === "/participant-ai-lab-ui-ux-quiz" && typeof window.initAiUiUxQuiz === "function") {
+                        window.initAiUiUxQuiz();
+                    }
+                    if (path === "/participant-ai-lab-ui-ux-discussion" && typeof window.initAiUiUxDiscussion === "function") {
+                        window.initAiUiUxDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-healthcare") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-healthcare" && typeof window.initAiHealthcareMateri === "function") {
+                        window.initAiHealthcareMateri();
+                    }
+                    if (path === "/participant-ai-lab-healthcare-practice" && typeof window.initAiHealthcarePractice === "function") {
+                        window.initAiHealthcarePractice();
+                    }
+                    if (path === "/participant-ai-lab-healthcare-quiz" && typeof window.initAiHealthcareQuiz === "function") {
+                        window.initAiHealthcareQuiz();
+                    }
+                    if (path === "/participant-ai-lab-healthcare-discussion" && typeof window.initAiHealthcareDiscussion === "function") {
+                        window.initAiHealthcareDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-culture") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-culture" && typeof window.initAiCultureMateri === "function") {
+                        window.initAiCultureMateri();
+                    }
+                    if (path === "/participant-ai-lab-culture-practice" && typeof window.initAiCulturePractice === "function") {
+                        window.initAiCulturePractice();
+                    }
+                    if (path === "/participant-ai-lab-culture-quiz" && typeof window.initAiCultureQuiz === "function") {
+                        window.initAiCultureQuiz();
+                    }
+                    if (path === "/participant-ai-lab-culture-discussion" && typeof window.initAiCultureDiscussion === "function") {
+                        window.initAiCultureDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-people-business-mgt") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-people-business-mgt" && typeof window.initAiPeopleBusinessMgtMateri === "function") {
+                        window.initAiPeopleBusinessMgtMateri();
+                    }
+                    if (path === "/participant-ai-lab-people-business-mgt-practice" && typeof window.initAiPeopleBusinessMgtPractice === "function") {
+                        window.initAiPeopleBusinessMgtPractice();
+                    }
+                    if (path === "/participant-ai-lab-people-business-mgt-quiz" && typeof window.initAiPeopleBusinessMgtQuiz === "function") {
+                        window.initAiPeopleBusinessMgtQuiz();
+                    }
+                    if (path === "/participant-ai-lab-people-business-mgt-discussion" && typeof window.initAiPeopleBusinessMgtDiscussion === "function") {
+                        window.initAiPeopleBusinessMgtDiscussion();
+                    }
+
+                } else if (path.startsWith("/participant-ai-lab-business-insight") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-business-insight" && typeof window.initAiBusinessInsightMateri === "function") {
+                        window.initAiBusinessInsightMateri();
+                    }
+                    if (path === "/participant-ai-lab-business-insight-practice" && typeof window.initAiBusinessInsightPractice === "function") {
+                        window.initAiBusinessInsightPractice();
+                    }
+                    if (path === "/participant-ai-lab-business-insight-quiz" && typeof window.initAiBusinessInsightQuiz === "function") {
+                        window.initAiBusinessInsightQuiz();
+                    }
+                    if (path === "/participant-ai-lab-business-insight-discussion" && typeof window.initAiBusinessInsightDiscussion === "function") {
+                        window.initAiBusinessInsightDiscussion();
+                    }
+
                 } else if (path.startsWith("/participant-ai-lab-back-end") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
                     if (path === "/participant-ai-lab-back-end" && typeof window.initAiBackEndMateri === "function") {
