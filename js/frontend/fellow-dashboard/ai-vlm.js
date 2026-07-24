@@ -9,7 +9,7 @@
         readiness: "heraiAiVlmReadiness"
     };
 
-    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/generative-multimodal-ai/vlm/chapters/";
+    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/";
 
 
     var pyodideInstance = null;
@@ -388,6 +388,7 @@ const CHAPTERS = [
     const PRACTICES = [
     {
         "id": "PRACTICE-1",
+        "title": "Latihan Bab 1 - Memilih Pendekatan",
         "prompt": "Pilih satu kasus: pemeriksaan dokumen, katalog produk, pembelajaran dari diagram, atau inspeksi fasilitas. Tuliskan:\n\n1. input yang tersedia,\n2. output yang dibutuhkan,\n3. bagian yang cocok memakai VLM,\n4. bagian yang lebih tepat memakai model khusus atau aturan biasa,\n5. keputusan yang harus ditinjau manusia.",
         "fields": [
             [
@@ -399,6 +400,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-2",
+        "title": "Latihan Bab 2 - Audit Preprocessing",
         "prompt": "Ambil satu gambar foto dan satu gambar dokumen. Buat tiga versi: resize langsung, center crop, dan padding. Bandingkan:\n\n- bagian apa yang hilang,\n- apakah teks masih terbaca,\n- apakah bentuk objek berubah,\n- strategi mana yang paling sesuai untuk masing-masing jenis gambar.",
         "fields": [
             [
@@ -410,6 +412,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-3",
+        "title": "Latihan Bab 3 - Merancang Prompt",
         "prompt": "Buat dua prompt untuk gambar rak produk:\n\n- prompt pertama untuk inventaris objek,\n- prompt kedua untuk memeriksa kepatuhan tata letak.\n\nSertakan format keluaran dan aturan ketika objek tidak terlihat jelas.",
         "fields": [
             [
@@ -421,6 +424,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-4",
+        "title": "Latihan Bab 4 - Simulasi Similarity",
         "prompt": "Buat lima deskripsi untuk satu gambar. Beri skor manual 0 sampai 5 berdasarkan kecocokan. Jelaskan aspek apa yang membuat deskripsi cocok atau tidak cocok: objek, atribut, jumlah, posisi, atau konteks.",
         "fields": [
             [
@@ -432,6 +436,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-5",
+        "title": "Latihan Bab 5 - Desain Sistem",
         "prompt": "Rancang sistem pencarian produk dengan input kalimat pengguna dan katalog gambar. Tentukan:\n\n- model untuk indexing,\n- data yang disimpan,\n- cara menghitung ranking,\n- kapan model generatif digunakan,\n- metrik evaluasi dan risiko.",
         "fields": [
             [
@@ -443,6 +448,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-6",
+        "title": "Latihan Bab 6 - Data Audit",
         "prompt": "Buat checklist audit untuk 100 pasangan gambar-caption. Sertakan aspek teknis, kesesuaian isi, privasi, duplikasi, variasi domain, dan bahasa.",
         "fields": [
             [
@@ -454,6 +460,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-7",
+        "title": "Latihan Bab 7 - Task Decomposition",
         "prompt": "Pilih aplikasi pembacaan struk. Pecah menjadi tugas kecil: orientasi, OCR, deteksi field, normalisasi nilai, validasi total, dan review. Tentukan bagian yang memakai VLM dan bagian yang memakai kode deterministik.",
         "fields": [
             [
@@ -465,6 +472,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-8",
+        "title": "Latihan Bab 8 - Prompt Benchmark",
         "prompt": "Buat tiga versi prompt untuk tugas menghitung objek kecil. Uji pada set gambar yang sama. Catat akurasi, jawaban kosong, hallucination, latency, dan panjang output.",
         "fields": [
             [
@@ -476,6 +484,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-9",
+        "title": "Latihan Bab 9 - Rencana Adaptasi",
         "prompt": "Pilih satu domain visual. Buat tabel perbandingan prompting, linear probing, LoRA, dan full fine-tuning berdasarkan data, biaya, risiko, waktu, dan target kualitas.",
         "fields": [
             [
@@ -487,6 +496,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-10",
+        "title": "Latihan Bab 10 - Evaluation Plan",
         "prompt": "Buat evaluation plan untuk sistem pembaca dokumen. Sertakan golden set, metrik field-level, exact match, numeric tolerance, hallucination rate, latency, biaya, dan aturan human review.",
         "fields": [
             [
@@ -498,6 +508,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-11",
+        "title": "Latihan Bab 11 - Threat Modeling",
         "prompt": "Buat threat model untuk aplikasi analisis dokumen. Daftar aset, aktor, entry point, ancaman, dampak, kontrol pencegahan, dan respons insiden.",
         "fields": [
             [
@@ -509,6 +520,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-12",
+        "title": "Latihan Bab 12 - Production Readiness",
         "prompt": "Buat checklist production readiness dengan kategori security, privacy, reliability, quality, observability, cost, dan rollback.",
         "fields": [
             [
@@ -533,10 +545,10 @@ const QUIZ = [
 ];
 
     const DISCUSSION_PROMPTS = [
-        "Mengapa Python dominan dalam AI meskipun bukan selalu bahasa dengan runtime tercepat?",
-        "Kapan notebook membantu eksplorasi, dan kapan hidden state membuat hasil sulit dipercaya?",
-        "Apakah menghapus missing value selalu benar? Bukti apa yang diperlukan sebelum memilih aturan cleaning?",
-        "Dataset tanpa missing value apakah otomatis siap untuk Machine Learning?"
+        "Bagaimana penerapan konsep ini dapat memecahkan masalah di industri Anda?",
+        "Apa saja tantangan atau risiko terbesar saat mengimplementasikan teori ini di dunia nyata?",
+        "Menurut Anda, bagaimana etika dan bias dapat memengaruhi keputusan yang diambil berdasarkan model ini?",
+        "Bagikan pengalaman atau kesulitan Anda saat mempraktikkan materi ini."
     ];
 
 var SOURCE_VISUALS = {
@@ -1708,7 +1720,7 @@ var SOURCE_VISUALS = {
                 }).join("")}
             </div>
             <button type="button" class="reasoning-scaffold-reveal-button" data-reasoning-reveal="${escapeHtml(item.id)}" aria-expanded="false"><i class="fas fa-lightbulb" aria-hidden="true"></i> Lihat pembahasan</button>
-            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><p>${escapeHtml(item.guide)}</p></div>
+            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><div class="reasoning-guide-content" style="margin-top: 10px;">${renderFormattedText(item.guide)}</div></div>
         </article>`;
     }
 
@@ -1717,7 +1729,7 @@ var SOURCE_VISUALS = {
         const practiceList = document.getElementById("aiVlmPracticeList");
         if (!form || !practiceList) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiVlmPracticeSource", "Latihan Modul", "Quiz — 20 Soal");
+        const refNode = document.getElementById("aiVlmPracticeSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         practiceList.innerHTML = PRACTICES.map(renderPracticeCard).join("");
         const saved = getSavedPractice() || { answers: {}, revealed: [] };
         const savedAnswers = saved.answers || {};
@@ -1948,7 +1960,7 @@ var SOURCE_VISUALS = {
         const list = document.getElementById("aiVlmQuizList");
         if (!form || !list) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiVlmQuizSource", "Quiz — 20 Soal", "Discussion");
+        const refNode = document.getElementById("aiVlmQuizSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         list.innerHTML = QUIZ.map(function (question, index) {
             return `<article data-quiz-index="${index}" tabindex="-1">
                 <span>${index + 1}</span>
@@ -2174,14 +2186,14 @@ var SOURCE_VISUALS = {
         const form = document.getElementById("aiVlmDiscussionForm");
         const select = form ? form.querySelector("select") : null;
         const textarea = form ? form.querySelector("textarea") : null;
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiVlmDiscussionSource", "Discussion", "Checklist Kesiapan Peserta");
+        const refNode = document.getElementById("aiVlmDiscussionSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         renderDiscussion(getDiscussionPosts());
 
         const promptButtons = document.querySelector(".ml-discussion-prompts");
         if (promptButtons) {
             promptButtons.innerHTML = DISCUSSION_PROMPTS.map(function (prompt, index) {
-                const labels = ["Python dan AI", "Notebook vs Program", "Keputusan Cleaning", "Siap untuk ML"];
-                const icons = ["fab fa-python", "fas fa-book-open", "fas fa-broom", "fas fa-database"];
+                const labels = ["Ide & Penerapan", "Risiko & Tantangan", "Etika & Bias", "Berbagi Pengalaman"];
+                const icons = ["fas fa-lightbulb", "fas fa-triangle-exclamation", "fas fa-balance-scale", "fas fa-users"];
                 return `<button type="button" data-discussion-prompt="${escapeHtml(prompt)}"><i class="${icons[index]}" aria-hidden="true"></i><span>${labels[index]}</span></button>`;
             }).join("");
         }
@@ -2224,3 +2236,8 @@ var SOURCE_VISUALS = {
         });
     };
 })();
+
+// Mencegah elemen interaktif Python (Glossary, Kuis, dll) bocor ke modul lain
+PYTHON_GUIDES.length = 0;
+DISCUSSION_PROMPTS.length = 0;
+SOURCE_VISUALS = {};

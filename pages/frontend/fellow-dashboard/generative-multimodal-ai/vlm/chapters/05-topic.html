@@ -1,5 +1,8 @@
 <h1>Pola Arsitektur Vision Language Model</h1>
-<h2>5.1 Mengapa Ada Banyak Arsitektur?</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.1 Mengapa Ada Banyak Arsitektur?</h2>
 <p>Tugas image retrieval membutuhkan arsitektur berbeda dari sistem yang harus menghasilkan jawaban panjang. Beberapa pola mengutamakan efisiensi embedding, sementara pola lain mengutamakan interaksi detail dan kemampuan generatif.</p>
 <p>Tiga pola umum:</p>
 <ol>
@@ -7,7 +10,11 @@
 <li>fusion encoder atau cross-modal encoder,</li>
 <li>vision encoder yang dihubungkan ke language decoder.</li>
 </ol>
-<h2>5.2 Dual Encoder</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.2 Dual Encoder</h2>
 <p>Dual encoder menghasilkan embedding terpisah dan membandingkannya.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Image encoder ----- image vector --\
                                   similarity
@@ -20,7 +27,11 @@ Text encoder  ----- text vector  --/
 <li>zero-shot classification,</li>
 <li>deduplication atau clustering berbasis makna.</li>
 </ul>
-<h2>5.3 Fusion Encoder</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.3 Fusion Encoder</h2>
 <p>Fusion encoder menggabungkan token visual dan token teks lebih awal atau di tengah jaringan.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">visual tokens + text tokens
             |
@@ -40,7 +51,11 @@ classification / matching / answer head
 <li>pasangan gambar-teks harus diproses bersama,</li>
 <li>kurang efisien untuk retrieval pada jutaan gambar.</li>
 </ul>
-<h2>5.4 Vision Encoder ke Language Model</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.4 Vision Encoder ke Language Model</h2>
 <p>Pola generatif modern sering menghubungkan vision encoder dengan language model.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Gambar
   -&gt; vision encoder
@@ -51,7 +66,11 @@ classification / matching / answer head
   -&gt; jawaban teks
 </code></pre></div>
 <p>Beberapa komponen dapat dibekukan pada tahap awal agar training lebih stabil dan murah. Connector dilatih agar output vision encoder dapat dipahami oleh language model.</p>
-<h2>5.5 Query-Based Connector</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.5 Query-Based Connector</h2>
 <p>Jumlah patch dapat sangat besar. Query-based connector menggunakan sejumlah query yang dipelajari untuk mengambil informasi penting dari fitur gambar.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">ratusan patch features
         |
@@ -60,7 +79,11 @@ learned queries + cross-attention
 sejumlah kecil visual tokens
 </code></pre></div>
 <p>Pendekatan ini mengurangi panjang urutan, tetapi ringkasan yang terlalu agresif dapat kehilangan detail kecil.</p>
-<h2>5.6 Early Fusion dan Late Fusion</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.6 Early Fusion dan Late Fusion</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -89,7 +112,11 @@ sejumlah kecil visual tokens
 <td>Interaksi lintas modalitas terbatas</td>
 </tr>
 </tbody></table></div>
-<h2>5.7 Model Generatif dan Model Embedding</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.7 Model Generatif dan Model Embedding</h2>
 <p>Model embedding menghasilkan vektor. Model generatif menghasilkan urutan token.</p>
 <p>Gunakan model embedding ketika:</p>
 <ul>
@@ -104,7 +131,11 @@ sejumlah kecil visual tokens
 <li>pertanyaan berubah-ubah dan membutuhkan konteks.</li>
 </ul>
 <p>Sistem dapat menggabungkan keduanya: dual encoder memilih gambar atau region relevan, lalu model generatif membuat jawaban.</p>
-<h2>5.8 Memilih Arsitektur Berdasarkan Tugas</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.8 Memilih Arsitektur Berdasarkan Tugas</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -141,20 +172,16 @@ sejumlah kecil visual tokens
 <td>VLM dengan region/coordinate support</td>
 </tr>
 </tbody></table></div>
-<h2>Checkpoint Bab 5</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 5</h2>
 <ol>
 <li>Mengapa dual encoder efisien untuk retrieval?</li>
 <li>Apa perbedaan fusion encoder dan vision-encoder-to-LLM?</li>
 <li>Kapan query-based connector dapat merugikan kualitas?</li>
 </ol>
-<h2>Latihan Bab 5 - Desain Sistem</h2>
-<p>Rancang sistem pencarian produk dengan input kalimat pengguna dan katalog gambar. Tentukan:</p>
-<ul>
-<li>model untuk indexing,</li>
-<li>data yang disimpan,</li>
-<li>cara menghitung ranking,</li>
-<li>kapan model generatif digunakan,</li>
-<li>metrik evaluasi dan risiko.</li>
-</ul>
-<hr>
 
+
+</div>

@@ -1,6 +1,9 @@
 <h1>Forward Propagation, Loss, dan Backpropagation</h1>
 <p>Memahami bagaimana prediksi dibuat dan bagaimana kesalahan digunakan untuk belajar.</p>
-<h2>3.1 Forward Propagation</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.1 Forward Propagation</h2>
 <p>Forward propagation adalah aliran data dari input menuju output. Setiap layer menerima nilai dari layer sebelumnya, melakukan transformasi, kemudian meneruskan hasilnya.</p>
 <p>Pada tahap ini model belum memperbaiki apa pun. Model hanya menggunakan weight dan bias saat ini untuk menghasilkan prediksi.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Input
@@ -10,7 +13,11 @@
 → output
 → prediksi
 </code></pre></div>
-<h2>3.2 Loss Function</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.2 Loss Function</h2>
 <p>Loss function mengukur seberapa jauh prediksi model dari jawaban benar. Nilai loss kecil berarti prediksi lebih dekat dengan target. Training bertujuan menurunkan loss secara bertahap.</p>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
@@ -39,18 +46,30 @@
 <blockquote>
 <p><strong>Loss bukan accuracy:</strong> accuracy menghitung proporsi prediksi benar. Loss memperhatikan tingkat keyakinan model dan memberi sinyal yang lebih halus untuk proses belajar.</p>
 </blockquote>
-<h2>3.3 Gradient</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.3 Gradient</h2>
 <p>Gradient menunjukkan arah dan besar perubahan loss terhadap sebuah parameter. Jika gradient positif, menaikkan parameter cenderung menaikkan loss. Jika gradient negatif, menaikkan parameter dapat menurunkan loss.</p>
 <p>Optimizer menggunakan gradient untuk mengubah weight dan bias ke arah yang diharapkan menurunkan loss.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">parameter_baru = parameter_lama - learning_rate × gradient
 </code></pre></div>
-<h2>3.4 Backpropagation</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.4 Backpropagation</h2>
 <p>Backpropagation adalah proses menghitung kontribusi setiap parameter terhadap kesalahan. Proses dimulai dari output, kemudian bergerak mundur melalui jaringan menggunakan <em>chain rule</em>.</p>
 <p>Secara praktis, framework seperti TensorFlow dan PyTorch menghitung gradient secara otomatis. Namun, memahami alurnya membantu saat model tidak belajar atau gradient menjadi terlalu kecil maupun terlalu besar.</p>
 <blockquote>
 <p><strong>Analogi evaluasi proyek:</strong> tim melihat hasil akhir yang kurang baik, lalu menelusuri penyebabnya dari tahap terakhir ke tahap awal. Setiap tahap mendapat bagian tanggung jawab dan diperbaiki sesuai pengaruhnya.</p>
 </blockquote>
-<h2>3.5 Satu Langkah Belajar</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.5 Satu Langkah Belajar</h2>
 <p>Satu langkah pembelajaran neural network umumnya terdiri dari:</p>
 <ol>
 <li>Ambil satu batch data.</li>
@@ -60,28 +79,16 @@
 <li>Optimizer memperbarui parameter.</li>
 <li>Ulangi untuk batch berikutnya.</li>
 </ol>
-<h2>Checkpoint Bab 3</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 3</h2>
 <ol>
 <li>Apa fungsi loss function?</li>
 <li>Mengapa gradient diperlukan oleh optimizer?</li>
 <li>Apa yang terjadi lebih dahulu: forward propagation atau backpropagation?</li>
 </ol>
-<h2>Latihan Bab 3 - Simulasi Manual Satu Neuron</h2>
-<p><strong>Tujuan:</strong> melihat hubungan antara prediksi, loss, dan pembaruan parameter.</p>
-<p><strong>Tingkat kesulitan:</strong> Dasar</p>
-<p>Gunakan nilai berikut:</p>
-<div class="reasoning-code-block"><pre><code class="language-text">x = 2
-w = 0.5
-b = 0
-target y = 3
-</code></pre></div>
-<p>Kerjakan:</p>
-<ol>
-<li>Hitung prediksi linear <code>y_hat = x × w + b</code>.</li>
-<li>Hitung squared error <code>(y_hat - y)²</code>.</li>
-<li>Ubah <code>w</code> menjadi <code>1.0</code>, kemudian hitung kembali prediksi dan loss.</li>
-<li>Jelaskan perubahan mana yang membuat prediksi lebih dekat dengan target.</li>
-</ol>
-<p><strong>Hasil yang dikumpulkan:</strong> perhitungan dua percobaan dan kesimpulan singkat.</p>
-<hr>
 
+
+</div>

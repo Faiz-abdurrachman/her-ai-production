@@ -1,5 +1,8 @@
 <h1>Function Approximation dan Deep Q-Network</h1>
-<h2>8.1 Mengapa Q-Table Tidak Cukup?</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.1 Mengapa Q-Table Tidak Cukup?</h2>
 <p>Q-table bekerja baik ketika jumlah state-action kecil. Namun, banyak masalah memiliki:</p>
 <ul>
 <li>state kontinu,</li>
@@ -12,12 +15,20 @@
 <div class="reasoning-code-block"><pre><code class="language-text">Q(s,a; theta)
 </code></pre></div>
 <p>Model berparameter <code>theta</code> menerima state dan menghasilkan perkiraan Q-value.</p>
-<h2>8.2 Linear Function Approximation</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.2 Linear Function Approximation</h2>
 <p>Model linear dapat menggunakan fitur state:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Q(s,a; theta) = theta_a^T phi(s)
 </code></pre></div>
 <p><code>phi(s)</code> adalah representasi fitur state. Model linear lebih efisien daripada tabel, tetapi kemampuannya terbatas untuk pola non-linear.</p>
-<h2>8.3 Deep Q-Network</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.3 Deep Q-Network</h2>
 <p>Deep Q-Network atau DQN memakai neural network untuk memperkirakan Q-value.</p>
 <p>Input:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">state atau observation
@@ -26,7 +37,11 @@
 <div class="reasoning-code-block"><pre><code class="language-text">[Q(s,a1), Q(s,a2), ..., Q(s,ak)]
 </code></pre></div>
 <p>Agent memilih action dengan Q-value terbesar, sambil tetap melakukan eksplorasi selama training.</p>
-<h2>8.4 Masalah Target yang Bergerak</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.4 Masalah Target yang Bergerak</h2>
 <p>Jika network yang sama digunakan untuk:</p>
 <ul>
 <li>menghasilkan prediksi saat ini,</li>
@@ -43,7 +58,11 @@ target network: disalin dari online network secara berkala
 <p>Loss:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">loss = (y - Q_online(state, action))^2
 </code></pre></div>
-<h2>8.5 Experience Replay</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.5 Experience Replay</h2>
 <p>Pengalaman disimpan ke replay buffer:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">(state, action, reward, next_state, done)
 </code></pre></div>
@@ -56,7 +75,11 @@ target network: disalin dari online network secara berkala
 <li>membuat mini-batch lebih beragam.</li>
 </ul>
 <p>Namun, distribusi data replay tetap bergantung pada policy pengumpulan pengalaman.</p>
-<h2>8.6 Alur DQN</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.6 Alur DQN</h2>
 <div class="reasoning-code-block"><pre><code class="language-text">1. Agent mengamati state.
 2. Agent memilih action dengan epsilon-greedy.
 3. Transisi disimpan ke replay buffer.
@@ -65,7 +88,11 @@ target network: disalin dari online network secara berkala
 6. Online network diperbarui dengan gradient descent.
 7. Target network diperbarui berkala.
 </code></pre></div>
-<h2>8.7 Pseudocode Training Step</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.7 Pseudocode Training Step</h2>
 <div class="reasoning-code-block"><pre><code class="language-python"># batch berisi state, action, reward, next_state, terminated
 q_all = online_net(state)
 q_selected = q_all.gather(1, action)
@@ -81,7 +108,11 @@ clip_grad_norm_(online_net.parameters(), max_norm=10.0)
 optimizer.step()
 </code></pre></div>
 <p>Pseudocode ini menunjukkan logika umum, bukan program lengkap.</p>
-<h2>8.8 Tantangan DQN</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.8 Tantangan DQN</h2>
 <ul>
 <li>Overestimation karena operator maksimum.</li>
 <li>Sensitif terhadap reward scale dan hyperparameter.</li>
@@ -97,7 +128,11 @@ optimizer.step()
 <li>Prioritized replay untuk memprioritaskan pengalaman dengan error besar.</li>
 </ul>
 <p>Modifikasi tidak otomatis memperbaiki semua kasus. Gunakan baseline dan eksperimen terkontrol.</p>
-<h2>8.9 Kapan Tidak Memakai DQN?</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.9 Kapan Tidak Memakai DQN?</h2>
 <p>DQN kurang cocok ketika:</p>
 <ul>
 <li>action kontinu,</li>
@@ -106,20 +141,17 @@ optimizer.step()
 <li>reward atau simulator belum tervalidasi,</li>
 <li>keselamatan memerlukan kendali eksplisit.</li>
 </ul>
-<h2>Checkpoint Bab 8</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 8</h2>
 <ol>
 <li>Mengapa Q-table tidak cocok untuk gambar?</li>
 <li>Apa fungsi target network?</li>
 <li>Apa manfaat replay buffer?</li>
 <li>Mengapa loss DQN tidak cukup untuk menilai policy?</li>
 </ol>
-<h2>Latihan Bab 8</h2>
-<p>Gambarkan arsitektur DQN untuk observation berukuran 8 fitur dan 4 action. Tentukan:</p>
-<ul>
-<li>ukuran input,</li>
-<li>dua hidden layer,</li>
-<li>ukuran output,</li>
-<li>informasi yang disimpan di replay buffer.</li>
-</ul>
-<hr>
 
+
+</div>

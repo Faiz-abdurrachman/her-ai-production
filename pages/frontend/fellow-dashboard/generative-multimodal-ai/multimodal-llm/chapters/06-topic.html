@@ -1,5 +1,8 @@
 <h1>Multimodal Prompting dan Inference</h1>
-<h2>6.1 Prompt sebagai Kontrak</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.1 Prompt sebagai Kontrak</h2>
 <p>Prompt multimodal harus menjelaskan:</p>
 <ol>
 <li>tujuan,</li>
@@ -24,7 +27,11 @@ Aturan:
 3. Jangan menebak komponen yang tidak terlihat.
 4. Keluarkan JSON sesuai schema.
 </code></pre></div>
-<h2>6.2 Menamai dan Mengurutkan Input</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.2 Menamai dan Mengurutkan Input</h2>
 <p>Untuk banyak input, gunakan label stabil:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">[IMAGE_1: before]
 [IMAGE_2: after]
@@ -32,7 +39,11 @@ Aturan:
 [AUDIO_1: operator_note]
 </code></pre></div>
 <p>Tanpa label, model dapat tertukar saat membandingkan beberapa sumber.</p>
-<h2>6.3 Observasi, Interpretasi, dan Rekomendasi</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.3 Observasi, Interpretasi, dan Rekomendasi</h2>
 <p>Pisahkan tiga level:</p>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
@@ -55,7 +66,11 @@ Aturan:
 </tr>
 </tbody></table></div>
 <p>Model harus memberi tahu kapan berpindah dari bukti ke interpretasi.</p>
-<h2>6.4 Output Terstruktur</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.4 Output Terstruktur</h2>
 <p>Schema membantu integrasi sistem.</p>
 <div class="reasoning-code-block"><pre><code class="language-json">{
   &quot;observations&quot;: [],
@@ -72,7 +87,11 @@ Aturan:
 }
 </code></pre></div>
 <p>Output tetap harus divalidasi. Model dapat menghasilkan JSON tidak valid, field hilang, atau nilai di luar enum.</p>
-<h2>6.5 Few-Shot Multimodal Prompting</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.5 Few-Shot Multimodal Prompting</h2>
 <p>Few-shot example dapat menunjukkan:</p>
 <ul>
 <li>cara merujuk input,</li>
@@ -82,7 +101,11 @@ Aturan:
 <li>penanganan konflik.</li>
 </ul>
 <p>Contoh harus singkat dan mewakili pola, bukan sekadar kasus mudah.</p>
-<h2>6.6 Decomposition</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.6 Decomposition</h2>
 <p>Tugas kompleks sebaiknya dipecah:</p>
 <ol>
 <li>ekstraksi fakta per modalitas,</li>
@@ -93,7 +116,11 @@ Aturan:
 <li>pembuatan output.</li>
 </ol>
 <p>Decomposition dapat dilakukan dalam satu prompt atau beberapa tahap pipeline.</p>
-<h2>6.7 Multi-Pass Inference</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.7 Multi-Pass Inference</h2>
 <p>Contoh alur:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Pass 1: ekstrak fakta dari setiap sumber
 Pass 2: bandingkan dan cari konflik
@@ -101,7 +128,11 @@ Pass 3: susun kesimpulan dengan bukti
 Pass 4: validasi schema dan safety
 </code></pre></div>
 <p>Multi-pass meningkatkan kontrol tetapi menambah latency dan biaya.</p>
-<h2>6.8 Parameter Decoding</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.8 Parameter Decoding</h2>
 <p>Untuk ekstraksi dan analisis, decoding sebaiknya lebih stabil. Untuk ide kreatif, variasi dapat ditingkatkan.</p>
 <p>Parameter umum:</p>
 <ul>
@@ -112,7 +143,11 @@ Pass 4: validasi schema dan safety
 <li>repetition penalty.</li>
 </ul>
 <p>Kualitas tidak boleh hanya bergantung pada menurunkan temperature. Grounding dan validasi tetap diperlukan.</p>
-<h2>6.9 Abstention</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.9 Abstention</h2>
 <p>Model perlu dapat menjawab:</p>
 <ul>
 <li>tidak cukup informasi,</li>
@@ -122,7 +157,11 @@ Pass 4: validasi schema dan safety
 <li>keputusan memerlukan ahli.</li>
 </ul>
 <p>Abstention bukan kegagalan. Dalam banyak sistem, abstention adalah perilaku benar.</p>
-<h2>6.10 Contoh Validator Sederhana</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.10 Contoh Validator Sederhana</h2>
 <div class="reasoning-code-block"><pre><code class="language-python">ALLOWED_RISK = {&quot;low&quot;, &quot;medium&quot;, &quot;high&quot;, &quot;unknown&quot;}
 
 
@@ -141,13 +180,16 @@ def validate_result(result: dict) -&gt; list[str]:
 
     return errors
 </code></pre></div>
-<h2>Checkpoint Bab 6</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 11</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 6</h2>
 <ol>
 <li>Mengapa setiap input perlu diberi label?</li>
 <li>Apa manfaat memisahkan observasi dan interpretasi?</li>
 <li>Kapan multi-pass inference layak digunakan?</li>
 </ol>
-<h2>Latihan Bab 6 - Prompt Benchmark</h2>
-<p>Buat tiga versi prompt untuk tugas yang sama. Uji pada lima contoh. Catat kualitas grounding, kelengkapan output, konsistensi, dan jumlah token.</p>
-<hr>
 
+
+</div>

@@ -1,0 +1,161 @@
+<h1>Mengevaluasi Output AI</h1>
+<h2>Pertanyaan pembuka</h2>
+<p>Mana yang lebih baik: jawaban panjang yang meyakinkan tetapi salah, atau jawaban singkat yang sesuai sumber?</p>
+<h2>Tujuan pembelajaran</h2>
+<p>Peserta dapat:</p>
+<ol>
+<li>menyusun rubrik evaluasi output;</li>
+<li>membedakan human evaluation, metrik otomatis, dan LLM-as-a-judge;</li>
+<li>memilih metrik sesuai jenis tugas;</li>
+<li>menilai output RAG, ringkasan, tanya jawab, dan code generation;</li>
+<li>menghasilkan <strong>Rubrik Kualitas Output</strong>.</li>
+</ol>
+<h2>Hubungan dengan Bab 1</h2>
+<p>Bab 1 menghasilkan daftar tujuan dan kegagalan kritis. Sekarang setiap tujuan diterjemahkan menjadi pertanyaan penilaian. Contohnya, kegagalan &quot;mengarang aturan&quot; diterjemahkan menjadi dimensi <strong>factuality</strong> dan <strong>faithfulness</strong>.</p>
+<h2>2.1 Dimensi kualitas output</h2>
+<p>Untuk Asisten HerAI, rubrik inti dapat menggunakan dimensi berikut.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Dimensi</th>
+<th>Pertanyaan sederhana</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Relevansi</td>
+<td>Apakah jawaban benar-benar menjawab pertanyaan?</td>
+</tr>
+<tr>
+<td>Factuality</td>
+<td>Apakah klaim yang diberikan benar?</td>
+</tr>
+<tr>
+<td>Faithfulness</td>
+<td>Apakah jawaban sesuai dengan dokumen sumber?</td>
+</tr>
+<tr>
+<td>Kelengkapan</td>
+<td>Apakah informasi penting tidak tertinggal?</td>
+</tr>
+<tr>
+<td>Kejelasan</td>
+<td>Apakah peserta mudah memahami jawabannya?</td>
+</tr>
+<tr>
+<td>Instruction following</td>
+<td>Apakah sistem mengikuti permintaan dan batasan?</td>
+</tr>
+<tr>
+<td>Safety</td>
+<td>Apakah jawaban menghindari tindakan berbahaya atau kebocoran data?</td>
+</tr>
+<tr>
+<td>Abstention</td>
+<td>Apakah sistem berani berkata tidak tahu ketika bukti tidak cukup?</td>
+</tr>
+</tbody></table></div>
+<h2>2.2 Rubrik skor 1-4</h2>
+<p>Rubrik harus cukup jelas agar dua evaluator tidak menafsirkan dengan cara yang sangat berbeda.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th align="right">Skor</th>
+<th>Makna umum</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">1</td>
+<td>Salah, menyesatkan, atau berbahaya</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td>Sebagian benar, tetapi ada kekurangan penting</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td>Benar dan cukup membantu, dengan kekurangan kecil</td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td>Benar, lengkap, jelas, sesuai sumber, dan aman</td>
+</tr>
+</tbody></table></div>
+<h3>Contoh penilaian</h3>
+<p>Sumber menyebut: &quot;Pengajuan cuti dilakukan minimal tujuh hari sebelumnya dan harus disetujui mentor.&quot;</p>
+<p><strong>Jawaban A:</strong> &quot;Kamu boleh cuti kapan saja selama memberi kabar.&quot;</p>
+<ul>
+<li>relevansi: 3;</li>
+<li>factuality: 1;</li>
+<li>faithfulness: 1;</li>
+<li>safety: 1.</li>
+</ul>
+<p><strong>Jawaban B:</strong> &quot;Ajukan cuti minimal tujuh hari sebelum tanggal cuti. Persetujuan mentor tetap diperlukan.&quot;</p>
+<ul>
+<li>relevansi: 4;</li>
+<li>factuality: 4;</li>
+<li>faithfulness: 4;</li>
+<li>safety: 4.</li>
+</ul>
+<p>Jawaban A terdengar ramah, tetapi tidak layak digunakan karena mengubah aturan.</p>
+<h2>2.3 Metrik otomatis bukan pengganti penilaian manusia</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Tugas</th>
+<th>Metrik yang dapat membantu</th>
+<th>Batasan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Klasifikasi</td>
+<td>Accuracy, precision, recall, F1</td>
+<td>Rata-rata dapat menyembunyikan subgroup</td>
+</tr>
+<tr>
+<td>Ringkasan</td>
+<td>ROUGE, BERTScore</td>
+<td>Kemiripan teks tidak menjamin fakta benar</td>
+</tr>
+<tr>
+<td>Terjemahan</td>
+<td>BLEU, COMET</td>
+<td>Tidak selalu menangkap konteks lokal</td>
+</tr>
+<tr>
+<td>Code generation</td>
+<td>pass@k, unit test</td>
+<td>Kode lolos test belum tentu aman atau mudah dirawat</td>
+</tr>
+<tr>
+<td>RAG</td>
+<td>Faithfulness, answer relevancy, context recall</td>
+<td>Retrieval dan generasi harus diperiksa terpisah</td>
+</tr>
+</tbody></table></div>
+<h2>2.4 Tiga cara menilai</h2>
+<h3>Human evaluation</h3>
+<p>Manusia menilai dengan rubrik. Cara ini cocok untuk kualitas yang membutuhkan pemahaman konteks, tetapi membutuhkan waktu dan pelatihan evaluator.</p>
+<h3>Automatic evaluation</h3>
+<p>Program atau metrik menghitung skor. Cara ini cepat dan dapat diulang, tetapi hanya mengukur hal yang memang tertangkap oleh metrik.</p>
+<h3>LLM-as-a-judge</h3>
+<p>Model bahasa menilai output berdasarkan rubrik. Cara ini membantu mempercepat evaluasi skala besar, tetapi perlu dikalibrasi dengan manusia karena model dapat lebih menyukai jawaban panjang, formal, atau berada pada posisi tertentu.</p>
+<h2>2.5 Tugas Praktik: Rubrik Kualitas Output</h2>
+<div class="reasoning-code-block"><pre><code class="language-yaml">rubric_name: HerAI Assistant Output Rubric
+scale: 1-4
+dimensions:
+  - relevance
+  - factuality
+  - faithfulness
+  - completeness
+  - clarity
+  - safety
+  - abstention
+critical_rule:
+  - factuality_below_3_blocks_release
+  - safety_below_4_requires_review
+human_calibration_sample: 30
+</code></pre></div>
+<h2>Handoff ke Bab 3</h2>
+<p>Rubrik menentukan cara menilai. Namun tim masih membutuhkan kumpulan kasus yang mewakili pengguna nyata. Bab 3 membahas cara membuat evaluation dataset.</p>
+<hr>
+

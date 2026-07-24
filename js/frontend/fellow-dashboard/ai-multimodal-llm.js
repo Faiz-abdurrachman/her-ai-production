@@ -9,7 +9,7 @@
         readiness: "heraiAiMultimodalLlmReadiness"
     };
 
-    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/generative-multimodal-ai/multimodal-llm/chapters/";
+    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/";
 
 
     var pyodideInstance = null;
@@ -388,6 +388,7 @@ const CHAPTERS = [
     const PRACTICES = [
     {
         "id": "PRACTICE-1",
+        "title": "Latihan Bab 1 - Memetakan Use Case",
         "prompt": "Pilih satu masalah di pendidikan, operasi, layanan publik, manufaktur, atau bisnis. Tuliskan:\n\n1. modalitas yang tersedia,\n2. informasi unik dari setiap modalitas,\n3. output yang dibutuhkan,\n4. risiko bila salah satu modalitas diabaikan,\n5. keputusan yang memerlukan review manusia.",
         "fields": [
             [
@@ -399,6 +400,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-2",
+        "title": "Latihan Bab 2 - Audit Kehilangan Informasi",
         "prompt": "Ambil satu contoh gambar, audio, video, atau dokumen. Tuliskan tiga tahap preprocessing dan jelaskan informasi apa yang mungkin hilang pada setiap tahap.",
         "fields": [
             [
@@ -410,6 +412,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-3",
+        "title": "Latihan Bab 3 - Membandingkan Arsitektur",
         "prompt": "Rancang dua solusi untuk asisten inspeksi: satu memakai unified MLLM, satu memakai detector + sensor model + LLM. Bandingkan kualitas, explainability, latency, cost, dan maintenance.",
         "fields": [
             [
@@ -421,6 +424,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-4",
+        "title": "Latihan Bab 4 - Menyusun Anggaran Konteks",
         "prompt": "Buat context budget untuk aplikasi yang menerima dua gambar, lima halaman dokumen, dan percakapan pengguna. Tentukan data yang dimasukkan langsung, diringkas, atau diambil melalui retrieval.",
         "fields": [
             [
@@ -432,6 +436,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-5",
+        "title": "Latihan Bab 5 - Merancang Contoh Training",
         "prompt": "Buat lima contoh instruction-response untuk aplikasi multimodal pilihanmu. Sertakan setidaknya satu kasus input tidak lengkap dan satu kasus modalitas saling bertentangan.",
         "fields": [
             [
@@ -443,6 +448,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-6",
+        "title": "Latihan Bab 6 - Prompt Benchmark",
         "prompt": "Buat tiga versi prompt untuk tugas yang sama. Uji pada lima contoh. Catat kualitas grounding, kelengkapan output, konsistensi, dan jumlah token.",
         "fields": [
             [
@@ -454,6 +460,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-7",
+        "title": "Latihan Bab 7 - Desain Pipeline",
         "prompt": "Pilih satu input kompleks: rapat, inspeksi, kelas daring, atau formulir multi-halaman. Buat diagram pipeline dari data mentah hingga jawaban beserta fallback saat satu modalitas gagal.",
         "fields": [
             [
@@ -465,6 +472,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-8",
+        "title": "Latihan Bab 8 - Merancang Index",
         "prompt": "Buat skema index untuk satu koleksi multimodal. Tentukan unit chunk, embedding, metadata, filter akses, reranking, dan metrik retrieval.",
         "fields": [
             [
@@ -476,6 +484,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-9",
+        "title": "Latihan Bab 9 - Rencana Eksperimen",
         "prompt": "Susun tiga eksperimen bertahap untuk memperbaiki use case pilihanmu. Setiap eksperimen harus memiliki hipotesis, perubahan, metrik, biaya, dan kriteria berhenti.",
         "fields": [
             [
@@ -487,6 +496,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-10",
+        "title": "Latihan Bab 10 - Evaluation Plan",
         "prompt": "Buat evaluation plan berisi 30 contoh. Bagi menjadi kasus normal, sulit, missing modality, konflik, safety, dan out-of-scope. Tentukan metrik serta acceptance threshold.",
         "fields": [
             [
@@ -498,6 +508,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-11",
+        "title": "Latihan Bab 11 - Threat Modeling",
         "prompt": "Buat threat model untuk mini projectmu. Identifikasi aset, aktor, ancaman, dampak, likelihood, dan mitigasi. Sertakan minimal satu ancaman dari setiap modalitas.",
         "fields": [
             [
@@ -509,6 +520,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-12",
+        "title": "Latihan Bab 12 - Production Readiness",
         "prompt": "Buat checklist deployment untuk mini projectmu. Sertakan privacy, security, observability, latency, cost, fallback, versioning, dan rollback.",
         "fields": [
             [
@@ -533,10 +545,10 @@ const QUIZ = [
 ];
 
     const DISCUSSION_PROMPTS = [
-        "Mengapa Python dominan dalam AI meskipun bukan selalu bahasa dengan runtime tercepat?",
-        "Kapan notebook membantu eksplorasi, dan kapan hidden state membuat hasil sulit dipercaya?",
-        "Apakah menghapus missing value selalu benar? Bukti apa yang diperlukan sebelum memilih aturan cleaning?",
-        "Dataset tanpa missing value apakah otomatis siap untuk Machine Learning?"
+        "Bagaimana penerapan konsep ini dapat memecahkan masalah di industri Anda?",
+        "Apa saja tantangan atau risiko terbesar saat mengimplementasikan teori ini di dunia nyata?",
+        "Menurut Anda, bagaimana etika dan bias dapat memengaruhi keputusan yang diambil berdasarkan model ini?",
+        "Bagikan pengalaman atau kesulitan Anda saat mempraktikkan materi ini."
     ];
 
 var SOURCE_VISUALS = {
@@ -1708,7 +1720,7 @@ var SOURCE_VISUALS = {
                 }).join("")}
             </div>
             <button type="button" class="reasoning-scaffold-reveal-button" data-reasoning-reveal="${escapeHtml(item.id)}" aria-expanded="false"><i class="fas fa-lightbulb" aria-hidden="true"></i> Lihat pembahasan</button>
-            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><p>${escapeHtml(item.guide)}</p></div>
+            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><div class="reasoning-guide-content" style="margin-top: 10px;">${renderFormattedText(item.guide)}</div></div>
         </article>`;
     }
 
@@ -1717,7 +1729,7 @@ var SOURCE_VISUALS = {
         const practiceList = document.getElementById("aiMultimodalLlmPracticeList");
         if (!form || !practiceList) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiMultimodalLlmPracticeSource", "Latihan Modul", "Quiz — 20 Soal");
+        const refNode = document.getElementById("aiMultimodalLlmPracticeSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         practiceList.innerHTML = PRACTICES.map(renderPracticeCard).join("");
         const saved = getSavedPractice() || { answers: {}, revealed: [] };
         const savedAnswers = saved.answers || {};
@@ -1948,7 +1960,7 @@ var SOURCE_VISUALS = {
         const list = document.getElementById("aiMultimodalLlmQuizList");
         if (!form || !list) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiMultimodalLlmQuizSource", "Quiz — 20 Soal", "Discussion");
+        const refNode = document.getElementById("aiMultimodalLlmQuizSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         list.innerHTML = QUIZ.map(function (question, index) {
             return `<article data-quiz-index="${index}" tabindex="-1">
                 <span>${index + 1}</span>
@@ -2174,14 +2186,14 @@ var SOURCE_VISUALS = {
         const form = document.getElementById("aiMultimodalLlmDiscussionForm");
         const select = form ? form.querySelector("select") : null;
         const textarea = form ? form.querySelector("textarea") : null;
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiMultimodalLlmDiscussionSource", "Discussion", "Checklist Kesiapan Peserta");
+        const refNode = document.getElementById("aiMultimodalLlmDiscussionSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         renderDiscussion(getDiscussionPosts());
 
         const promptButtons = document.querySelector(".ml-discussion-prompts");
         if (promptButtons) {
             promptButtons.innerHTML = DISCUSSION_PROMPTS.map(function (prompt, index) {
-                const labels = ["Python dan AI", "Notebook vs Program", "Keputusan Cleaning", "Siap untuk ML"];
-                const icons = ["fab fa-python", "fas fa-book-open", "fas fa-broom", "fas fa-database"];
+                const labels = ["Ide & Penerapan", "Risiko & Tantangan", "Etika & Bias", "Berbagi Pengalaman"];
+                const icons = ["fas fa-lightbulb", "fas fa-triangle-exclamation", "fas fa-balance-scale", "fas fa-users"];
                 return `<button type="button" data-discussion-prompt="${escapeHtml(prompt)}"><i class="${icons[index]}" aria-hidden="true"></i><span>${labels[index]}</span></button>`;
             }).join("");
         }
@@ -2224,3 +2236,8 @@ var SOURCE_VISUALS = {
         });
     };
 })();
+
+// Mencegah elemen interaktif Python (Glossary, Kuis, dll) bocor ke modul lain
+PYTHON_GUIDES.length = 0;
+DISCUSSION_PROMPTS.length = 0;
+SOURCE_VISUALS = {};

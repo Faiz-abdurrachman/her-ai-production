@@ -1,5 +1,8 @@
 <h1>Multi-Image, Dokumen, Audio, dan Video</h1>
-<h2>7.1 Multi-Image Reasoning</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.1 Multi-Image Reasoning</h2>
 <p>Multi-image task dapat berupa:</p>
 <ul>
 <li>perbandingan before-after,</li>
@@ -17,7 +20,11 @@
 <li>perubahan yang tidak relevan.</li>
 </ul>
 <p>Gunakan label dan pertanyaan spesifik. Hindari pertanyaan terlalu umum seperti “Apa bedanya?” tanpa konteks.</p>
-<h2>7.2 Dokumen Multi-Halaman</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.2 Dokumen Multi-Halaman</h2>
 <p>Pipeline dokumen dapat meliputi:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">file -&gt; page render -&gt; OCR -&gt; layout extraction -&gt; chunking -&gt; retrieval -&gt; MLLM
 </code></pre></div>
@@ -31,7 +38,11 @@
 <li>sumber kutipan.</li>
 </ul>
 <p>Untuk dokumen panjang, gunakan retrieval dan berikan halaman sumber. Jangan mengandalkan satu ringkasan global untuk pertanyaan detail.</p>
-<h2>7.3 Tabel dan Grafik</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.3 Tabel dan Grafik</h2>
 <p>Model dapat membaca tabel atau grafik sebagai gambar, tetapi untuk akurasi angka sebaiknya:</p>
 <ol>
 <li>ekstrak data terstruktur,</li>
@@ -42,7 +53,11 @@
 numeric table -&gt; calculator -&gt; result
 MLLM -&gt; explanation with source
 </code></pre></div>
-<h2>7.4 Audio Understanding</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.4 Audio Understanding</h2>
 <p>Audio pipeline dapat menggunakan:</p>
 <ul>
 <li>voice activity detection,</li>
@@ -53,7 +68,11 @@ MLLM -&gt; explanation with source
 <li>language model summarization.</li>
 </ul>
 <p>Kesalahan transkripsi dapat mengubah arti. Simpan confidence dan timestamp untuk bagian penting.</p>
-<h2>7.5 Video Understanding</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.5 Video Understanding</h2>
 <p>Video memerlukan strategi sampling.</p>
 <h3>Uniform Sampling</h3>
 <p>Mengambil frame dengan interval tetap. Sederhana, tetapi dapat melewatkan kejadian singkat.</p>
@@ -69,7 +88,11 @@ MLLM -&gt; explanation with source
 -&gt; analisis detail frame
 -&gt; jawaban dengan timestamp
 </code></pre></div>
-<h2>7.6 Audio-Visual Synchronization</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.6 Audio-Visual Synchronization</h2>
 <p>Gerakan bibir, suara mesin, dan kejadian visual harus diselaraskan. Offset kecil dapat menyebabkan hubungan sebab-akibat yang salah.</p>
 <p>Contoh:</p>
 <ul>
@@ -77,7 +100,11 @@ MLLM -&gt; explanation with source
 <li>pembicara berganti tetapi diarization salah,</li>
 <li>subtitle tertinggal beberapa detik.</li>
 </ul>
-<h2>7.7 Temporal Reasoning</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.7 Temporal Reasoning</h2>
 <p>Pertanyaan temporal:</p>
 <ul>
 <li>apa yang terjadi sebelum alarm?</li>
@@ -86,7 +113,11 @@ MLLM -&gt; explanation with source
 <li>apakah tindakan terjadi setelah instruksi?</li>
 </ul>
 <p>Model perlu menerima timestamp atau urutan yang jelas. Jangan menganggap urutan file selalu sama dengan urutan waktu.</p>
-<h2>7.8 Missing Modality</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.8 Missing Modality</h2>
 <p>Sistem perlu menangani:</p>
 <ul>
 <li>audio kosong,</li>
@@ -96,7 +127,11 @@ MLLM -&gt; explanation with source
 <li>OCR confidence rendah.</li>
 </ul>
 <p>Output harus menyebutkan modalitas yang tidak tersedia dan dampaknya terhadap kesimpulan.</p>
-<h2>7.9 Contoh Manifest Input</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.9 Contoh Manifest Input</h2>
 <div class="reasoning-code-block"><pre><code class="language-json">{
   &quot;case_id&quot;: &quot;CASE-2026-014&quot;,
   &quot;sources&quot;: [
@@ -108,13 +143,16 @@ MLLM -&gt; explanation with source
   &quot;required_output&quot;: &quot;inspection_summary_v1&quot;
 }
 </code></pre></div>
-<h2>Checkpoint Bab 7</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 7</h2>
 <ol>
 <li>Mengapa dokumen panjang perlu retrieval?</li>
 <li>Apa perbedaan uniform sampling dan query-guided sampling?</li>
 <li>Mengapa timestamp penting untuk audio-video reasoning?</li>
 </ol>
-<h2>Latihan Bab 7 - Desain Pipeline</h2>
-<p>Pilih satu input kompleks: rapat, inspeksi, kelas daring, atau formulir multi-halaman. Buat diagram pipeline dari data mentah hingga jawaban beserta fallback saat satu modalitas gagal.</p>
-<hr>
 
+
+</div>

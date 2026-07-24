@@ -1,0 +1,63 @@
+<h1>Autoencoder, VAE, dan GAN</h1>
+<h2>Pertanyaan pembuka</h2>
+<p>Mengapa sampel yang terlihat bagus belum tentu mudah dikontrol?</p>
+<h2>Tujuan pembelajaran</h2>
+<p>Peserta dapat:</p>
+<ol>
+<li>memahami encoder, decoder, latent space, generator, dan discriminator;</li>
+<li>membedakan autoencoder, VAE, dan GAN;</li>
+<li>menghubungkan model generatif dengan representation learning;</li>
+<li>mengevaluasi rekonstruksi, diversity, dan mode collapse;</li>
+<li>menentukan kapan generasi benar-benar dibutuhkan.</li>
+</ol>
+<h2>Hubungan dengan Bab 4</h2>
+<p>RL belajar memilih tindakan. Model pada bab ini belajar struktur data dan menghasilkan sampel. Sinyal belajarnya berbeda, sehingga cara evaluasinya juga berbeda.</p>
+<h2>5.1 Autoencoder</h2>
+<p>Autoencoder terdiri dari:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Input -&gt; Encoder -&gt; Latent representation -&gt; Decoder -&gt; Rekonstruksi
+</code></pre></div>
+<p>Model belajar menyimpan informasi penting dalam representasi yang lebih ringkas. Autoencoder dapat digunakan untuk kompresi, representation learning, dan anomaly detection.</p>
+<h2>5.2 Variational Autoencoder</h2>
+<p>VAE menambahkan struktur probabilistik pada latent space. Hasilnya, titik-titik di latent space lebih mudah disampling dan diinterpolasi.</p>
+<p>VAE berguna ketika tim membutuhkan variasi yang terstruktur, tetapi hasilnya dapat lebih halus dibanding GAN.</p>
+<h2>5.3 Generative Adversarial Network</h2>
+<p>GAN memiliki dua model:</p>
+<ul>
+<li><strong>Generator:</strong> membuat sampel;</li>
+<li><strong>Discriminator:</strong> membedakan sampel asli dan buatan.</li>
+</ul>
+<p>Keduanya berkompetisi. Training dapat menghasilkan sampel tajam, tetapi bisa tidak stabil.</p>
+<h2>5.4 Risiko mode collapse</h2>
+<p>Mode collapse terjadi ketika generator hanya menghasilkan sedikit jenis sampel. Output mungkin terlihat bagus, tetapi diversity rendah.</p>
+<p>Ini menunjukkan mengapa evaluasi generatif tidak cukup memakai satu contoh terbaik.</p>
+<h2>5.5 Menggunakan lensa Evaluation AI</h2>
+<h3>Kualitas hasil</h3>
+<p>Periksa rekonstruksi, kemiripan, dan kegunaan untuk tugas.</p>
+<h3>Generalisasi</h3>
+<p>Periksa apakah model hanya meniru contoh training atau dapat membuat variasi yang masuk akal.</p>
+<h3>Reliability</h3>
+<p>Uji stabilitas training dan sensitivitas terhadap seed.</p>
+<h3>Fairness dan safety</h3>
+<p>Audit bias representasi dan kemungkinan menghasilkan konten sensitif.</p>
+<h3>System readiness</h3>
+<p>Simpan data lineage, model version, dan review hasil sebelum digunakan.</p>
+<h2>5.6 Melanjutkan studi kasus</h2>
+<p>Pada Asisten HerAI, autoencoder dapat dipakai secara terbatas untuk mendeteksi pola pertanyaan yang sangat berbeda dari data normal. Model generatif tidak digunakan untuk membuat aturan. Aturan resmi tetap berasal dari dokumen dan rule engine.</p>
+<h2>5.7 Tugas Praktik: Generative Quality Report</h2>
+<div class="reasoning-code-block"><pre><code class="language-yaml">model_family: vae
+purpose: eksplorasi representasi pola pertanyaan
+metrics:
+  - reconstruction_error
+  - latent_cluster_quality
+  - diversity
+qualitative_review:
+  - apakah variasi masuk akal?
+  - apakah ada pola sensitif yang muncul?
+known_risks:
+  - bias data
+  - output tidak memiliki makna faktual
+</code></pre></div>
+<h2>Handoff ke Bab 6</h2>
+<p>VAE dan GAN membuka generasi data, tetapi masing-masing memiliki trade-off. Bab 6 membahas diffusion yang menggunakan proses denoising bertahap.</p>
+<hr>
+

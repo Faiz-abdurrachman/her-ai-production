@@ -1,5 +1,8 @@
 <h1>Mini Project: Q-Learning pada GridWorld</h1>
-<h2>12.1 Tujuan Project</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.1 Tujuan Project</h2>
 <p>Peserta membangun agent yang belajar mencapai tujuan pada GridWorld sederhana sambil menghindari rintangan.</p>
 <p>Capaian project:</p>
 <ul>
@@ -10,7 +13,11 @@
 <li>mengevaluasi return, success rate, dan panjang episode,</li>
 <li>mengaudit reward dan kegagalan agent.</li>
 </ul>
-<h2>12.2 Desain GridWorld</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.2 Desain GridWorld</h2>
 <p>Gunakan grid 5 x 5.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">S . . X .
 . X . X .
@@ -37,7 +44,11 @@ X . . . G
 -0.1 setiap langkah
 </code></pre></div>
 <p>Episode selesai saat goal tercapai atau langkah maksimum 100.</p>
-<h2>12.3 Implementasi Environment</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.3 Implementasi Environment</h2>
 <div class="reasoning-code-block"><pre><code class="language-python">class GridWorld:
     def __init__(self, size=5, max_steps=100):
         self.size = size
@@ -75,7 +86,11 @@ X . . . G
         truncated = self.steps &gt;= self.max_steps and not terminated
         return self.position, reward, terminated, truncated
 </code></pre></div>
-<h2>12.4 Implementasi Q-Learning</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.4 Implementasi Q-Learning</h2>
 <div class="reasoning-code-block"><pre><code class="language-python">import random
 from collections import defaultdict
 
@@ -120,7 +135,11 @@ def train(seed=0, episodes=3000, alpha=0.1, gamma=0.95,
 
     return q, history
 </code></pre></div>
-<h2>12.5 Evaluasi Policy</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.5 Evaluasi Policy</h2>
 <div class="reasoning-code-block"><pre><code class="language-python">def evaluate(q, episodes=100):
     env = GridWorld()
     returns = []
@@ -148,7 +167,11 @@ def train(seed=0, episodes=3000, alpha=0.1, gamma=0.95,
         &quot;mean_length&quot;: sum(lengths) / len(lengths),
     }
 </code></pre></div>
-<h2>12.6 Eksperimen Wajib</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.6 Eksperimen Wajib</h2>
 <p>Jalankan minimal tiga konfigurasi:</p>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
@@ -187,7 +210,11 @@ def train(seed=0, episodes=3000, alpha=0.1, gamma=0.95,
 <li>tampilkan learning curve,</li>
 <li>jelaskan variasi antar-seed.</li>
 </ul>
-<h2>12.7 Audit Reward Project</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.7 Audit Reward Project</h2>
 <p>Jawab pertanyaan berikut:</p>
 <ol>
 <li>Apakah penalti <code>-5</code> membuat agent terlalu takut mengeksplorasi?</li>
@@ -196,7 +223,11 @@ def train(seed=0, episodes=3000, alpha=0.1, gamma=0.95,
 <li>Apakah agent dapat berputar tanpa akhir jika max steps dihapus?</li>
 <li>Apakah obstacle seharusnya langsung mengakhiri episode?</li>
 </ol>
-<h2>12.8 Deliverable</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.8 Deliverable</h2>
 <p>Kumpulkan:</p>
 <ol>
 <li>Notebook atau file Python.</li>
@@ -207,7 +238,11 @@ def train(seed=0, episodes=3000, alpha=0.1, gamma=0.95,
 <li>Analisis minimal tiga kegagalan agent.</li>
 <li>Audit reward dan rekomendasi perbaikan.</li>
 </ol>
-<h2>12.9 Rubrik Penilaian</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.9 Rubrik Penilaian</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -238,3 +273,5 @@ def train(seed=0, episodes=3000, alpha=0.1, gamma=0.95,
 </tbody></table></div>
 <hr>
 
+
+</div>

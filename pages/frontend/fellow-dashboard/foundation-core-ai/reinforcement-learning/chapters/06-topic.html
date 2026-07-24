@@ -1,5 +1,8 @@
 <h1>Monte Carlo dan Temporal-Difference Learning</h1>
-<h2>6.1 Model-Free Learning</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.1 Model-Free Learning</h2>
 <p>Pada banyak kasus, agent tidak mengetahui aturan transisi environment. Agent hanya memiliki pengalaman:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">(state, action, reward, next_state)
 </code></pre></div>
@@ -9,7 +12,11 @@
 <li>Monte Carlo: belajar dari return setelah episode selesai.</li>
 <li>Temporal-Difference: memperbarui nilai sebelum episode selesai menggunakan perkiraan nilai berikutnya.</li>
 </ul>
-<h2>6.2 Monte Carlo</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.2 Monte Carlo</h2>
 <p>Monte Carlo menunggu episode selesai, lalu menghitung return yang benar-benar terjadi.</p>
 <p>Contoh episode:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">S0 --A0/-1--&gt; S1 --A1/-1--&gt; S2 --A2/+10--&gt; terminal
@@ -30,7 +37,11 @@
 <li>return dapat memiliki variance tinggi,</li>
 <li>kurang cocok untuk continuing task tanpa penyesuaian.</li>
 </ul>
-<h2>6.3 Temporal-Difference</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.3 Temporal-Difference</h2>
 <p>TD memperbarui nilai setelah satu langkah:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">V(S_t) = V(S_t) + alpha × TD_error
 </code></pre></div>
@@ -41,7 +52,11 @@
 <div class="reasoning-code-block"><pre><code class="language-text">reward langsung + estimasi nilai state berikutnya
 </code></pre></div>
 <p>TD tidak menunggu episode selesai. Namun, targetnya menggunakan estimasi yang belum tentu akurat. Proses menggunakan estimasi untuk memperbaiki estimasi disebut <strong>bootstrapping</strong>.</p>
-<h2>6.4 Perbandingan Monte Carlo dan TD</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.4 Perbandingan Monte Carlo dan TD</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -81,7 +96,11 @@
 <td>Lebih mudah diterapkan</td>
 </tr>
 </tbody></table></div>
-<h2>6.5 Learning Rate</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.5 Learning Rate</h2>
 <p>Learning rate <code>alpha</code> menentukan besar perubahan nilai.</p>
 <ul>
 <li>Alpha terlalu kecil: belajar lambat.</li>
@@ -91,7 +110,11 @@
 <p>Pembaruan umum:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">estimasi baru = estimasi lama + alpha × error
 </code></pre></div>
-<h2>6.6 Bias-Variance Intuition</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.6 Bias-Variance Intuition</h2>
 <p>Monte Carlo memakai hasil episode lengkap. Targetnya lebih dekat pada outcome nyata, tetapi outcome dapat sangat bervariasi.</p>
 <p>TD memakai satu langkah dan estimasi. Targetnya lebih stabil, tetapi dapat salah karena nilai state berikutnya juga masih dipelajari.</p>
 <p>Tidak ada pilihan tunggal yang selalu terbaik. Pertimbangkan:</p>
@@ -102,18 +125,17 @@
 <li>stabilitas environment,</li>
 <li>biaya mengumpulkan pengalaman.</li>
 </ul>
-<h2>Checkpoint Bab 6</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 6</h2>
 <ol>
 <li>Mengapa Monte Carlo perlu menunggu episode selesai?</li>
 <li>Apa yang dimaksud bootstrapping pada TD?</li>
 <li>Tuliskan bentuk TD error.</li>
 <li>Apa dampak learning rate terlalu besar?</li>
 </ol>
-<h2>Latihan Bab 6</h2>
-<p>Gunakan episode reward <code>[-1, -1, 5]</code> dengan <code>gamma = 0.9</code>.</p>
-<ol>
-<li>Hitung return Monte Carlo dari setiap langkah.</li>
-<li>Misalkan <code>V(S_t)=1.0</code> dan <code>V(S_(t+1))=2.0</code>. Hitung TD target dan TD error untuk reward <code>-1</code>.</li>
-</ol>
-<hr>
 
+
+</div>

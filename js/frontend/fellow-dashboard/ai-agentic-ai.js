@@ -9,7 +9,7 @@
         readiness: "heraiAiAgenticAiReadiness"
     };
 
-    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/generative-multimodal-ai/agentic-ai/chapters/";
+    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/";
 
 
     var pyodideInstance = null;
@@ -388,6 +388,7 @@ const CHAPTERS = [
     const PRACTICES = [
     {
         "id": "PRACTICE-1",
+        "title": "Latihan Bab 1",
         "prompt": "Pilih satu aktivitas di organisasi, kampus, atau pekerjaan Anda. Tuliskan:\n\n- tujuan aktivitas;\n- langkah yang selalu tetap;\n- langkah yang membutuhkan keputusan;\n- tools yang mungkin diperlukan;\n- tindakan yang harus disetujui manusia;\n- kondisi selesai.",
         "fields": [
             [
@@ -399,6 +400,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-2",
+        "title": "Latihan Bab 2",
         "prompt": "Rancang komponen agent untuk kasus “asisten pengajuan izin kegiatan.” Tuliskan:\n\n- model yang dibutuhkan;\n- instructions ringkas;\n- minimal empat tools;\n- state yang perlu disimpan;\n- approval gate;\n- stopping condition.",
         "fields": [
             [
@@ -410,6 +412,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-3",
+        "title": "Latihan Bab 3",
         "prompt": "Klasifikasikan lima tugas berikut menjadi kode biasa, workflow, LLM application, agentic workflow, atau dynamic agent:\n\n1. Menghitung total nilai dari tabel.\n2. Menjawab FAQ berdasarkan dokumen.\n3. Memproses pengajuan dengan aturan tetap.\n4. Menangani tiket dukungan yang membutuhkan beberapa sistem.\n5. Melakukan riset terbuka dan menyusun laporan dengan bukti.\n\nJelaskan alasan setiap pilihan.",
         "fields": [
             [
@@ -421,6 +424,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-4",
+        "title": "Latihan Bab 4",
         "prompt": "Buat rencana terstruktur untuk tujuan: “Periksa kesiapan pelaksanaan seminar minggu depan.”\n\nSetiap langkah harus memiliki:\n\n- `step_id`;\n- objective;\n- tool atau sumber data;\n- dependensi;\n- acceptance criteria;\n- kebutuhan approval.",
         "fields": [
             [
@@ -432,6 +436,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-5",
+        "title": "Latihan Bab 5",
         "prompt": "Buat spesifikasi tiga tools untuk agent akademik:\n\n- membaca jadwal;\n- membuat draft pengingat;\n- mengubah status kehadiran.\n\nUntuk setiap tool, tentukan schema, output, error, risiko, approval, dan idempotency.",
         "fields": [
             [
@@ -443,6 +448,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-6",
+        "title": "Latihan Bab 6",
         "prompt": "Rancang schema memory untuk asisten pembelajaran. Pisahkan:\n\n- informasi sesi;\n- preferensi peserta;\n- progress belajar;\n- catatan yang tidak boleh disimpan;\n- retention policy;\n- prosedur penghapusan.",
         "fields": [
             [
@@ -454,6 +460,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-7",
+        "title": "Latihan Bab 7",
         "prompt": "Rancang orkestrasi untuk proses “membuat laporan evaluasi kegiatan” dengan minimal tiga pola. Gambarkan alur dan jelaskan mengapa setiap pola dipilih.",
         "fields": [
             [
@@ -465,6 +472,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-8",
+        "title": "Latihan Bab 8",
         "prompt": "Rancang multi-agent system untuk “asisten penyelenggaraan konferensi.” Gunakan maksimal empat agent. Definisikan peran, tools, input-output, shared state, dan termination condition.",
         "fields": [
             [
@@ -476,6 +484,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-9",
+        "title": "Latihan Bab 9",
         "prompt": "Rancang Agentic RAG untuk kebijakan akademik. Sertakan sumber, metadata, access control, retry, conflict resolution, citation, dan human escalation.",
         "fields": [
             [
@@ -487,6 +496,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-10",
+        "title": "Latihan Bab 10",
         "prompt": "Buat failure mode table untuk agent layanan pelanggan. Sertakan penyebab, dampak, deteksi, retry, fallback, approval, dan severity.",
         "fields": [
             [
@@ -498,6 +508,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-11",
+        "title": "Latihan Bab 11",
         "prompt": "Buat threat model untuk agent yang dapat membaca email dan kalender. Identifikasi aset, threat actor, attack surface, mitigasi, approval, dan incident response.",
         "fields": [
             [
@@ -509,6 +520,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-12",
+        "title": "Latihan Bab 12",
         "prompt": "Buat 10 kasus evaluasi untuk agent pengingat tugas. Sertakan happy path, ambiguity, error, security, approval, dan no-progress scenario.",
         "fields": [
             [
@@ -533,10 +545,10 @@ const QUIZ = [
 ];
 
     const DISCUSSION_PROMPTS = [
-        "Mengapa Python dominan dalam AI meskipun bukan selalu bahasa dengan runtime tercepat?",
-        "Kapan notebook membantu eksplorasi, dan kapan hidden state membuat hasil sulit dipercaya?",
-        "Apakah menghapus missing value selalu benar? Bukti apa yang diperlukan sebelum memilih aturan cleaning?",
-        "Dataset tanpa missing value apakah otomatis siap untuk Machine Learning?"
+        "Bagaimana penerapan konsep ini dapat memecahkan masalah di industri Anda?",
+        "Apa saja tantangan atau risiko terbesar saat mengimplementasikan teori ini di dunia nyata?",
+        "Menurut Anda, bagaimana etika dan bias dapat memengaruhi keputusan yang diambil berdasarkan model ini?",
+        "Bagikan pengalaman atau kesulitan Anda saat mempraktikkan materi ini."
     ];
 
 var SOURCE_VISUALS = {
@@ -1708,7 +1720,7 @@ var SOURCE_VISUALS = {
                 }).join("")}
             </div>
             <button type="button" class="reasoning-scaffold-reveal-button" data-reasoning-reveal="${escapeHtml(item.id)}" aria-expanded="false"><i class="fas fa-lightbulb" aria-hidden="true"></i> Lihat pembahasan</button>
-            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><p>${escapeHtml(item.guide)}</p></div>
+            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><div class="reasoning-guide-content" style="margin-top: 10px;">${renderFormattedText(item.guide)}</div></div>
         </article>`;
     }
 
@@ -1717,7 +1729,7 @@ var SOURCE_VISUALS = {
         const practiceList = document.getElementById("aiAgenticAiPracticeList");
         if (!form || !practiceList) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiAgenticAiPracticeSource", "Latihan Modul", "Quiz — 20 Soal");
+        const refNode = document.getElementById("aiAgenticAiPracticeSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         practiceList.innerHTML = PRACTICES.map(renderPracticeCard).join("");
         const saved = getSavedPractice() || { answers: {}, revealed: [] };
         const savedAnswers = saved.answers || {};
@@ -1948,7 +1960,7 @@ var SOURCE_VISUALS = {
         const list = document.getElementById("aiAgenticAiQuizList");
         if (!form || !list) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiAgenticAiQuizSource", "Quiz — 20 Soal", "Discussion");
+        const refNode = document.getElementById("aiAgenticAiQuizSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         list.innerHTML = QUIZ.map(function (question, index) {
             return `<article data-quiz-index="${index}" tabindex="-1">
                 <span>${index + 1}</span>
@@ -2174,14 +2186,14 @@ var SOURCE_VISUALS = {
         const form = document.getElementById("aiAgenticAiDiscussionForm");
         const select = form ? form.querySelector("select") : null;
         const textarea = form ? form.querySelector("textarea") : null;
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiAgenticAiDiscussionSource", "Discussion", "Checklist Kesiapan Peserta");
+        const refNode = document.getElementById("aiAgenticAiDiscussionSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         renderDiscussion(getDiscussionPosts());
 
         const promptButtons = document.querySelector(".ml-discussion-prompts");
         if (promptButtons) {
             promptButtons.innerHTML = DISCUSSION_PROMPTS.map(function (prompt, index) {
-                const labels = ["Python dan AI", "Notebook vs Program", "Keputusan Cleaning", "Siap untuk ML"];
-                const icons = ["fab fa-python", "fas fa-book-open", "fas fa-broom", "fas fa-database"];
+                const labels = ["Ide & Penerapan", "Risiko & Tantangan", "Etika & Bias", "Berbagi Pengalaman"];
+                const icons = ["fas fa-lightbulb", "fas fa-triangle-exclamation", "fas fa-balance-scale", "fas fa-users"];
                 return `<button type="button" data-discussion-prompt="${escapeHtml(prompt)}"><i class="${icons[index]}" aria-hidden="true"></i><span>${labels[index]}</span></button>`;
             }).join("");
         }
@@ -2224,3 +2236,8 @@ var SOURCE_VISUALS = {
         });
     };
 })();
+
+// Mencegah elemen interaktif Python (Glossary, Kuis, dll) bocor ke modul lain
+PYTHON_GUIDES.length = 0;
+DISCUSSION_PROMPTS.length = 0;
+SOURCE_VISUALS = {};

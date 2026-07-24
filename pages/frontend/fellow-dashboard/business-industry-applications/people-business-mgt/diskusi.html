@@ -1,0 +1,119 @@
+<section class="fellow-dashboard fellow-modules-page lesson-detail-page python-scaffold-page ai-people-business-mgt-page ai-python-page ai-python-discussion-page" data-fellow-page="modules">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
+            <a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
+        </nav>
+    </aside>
+    <main class="fellow-main">
+        <header class="lesson-topbar">
+            <nav class="lesson-breadcrumb" aria-label="Breadcrumb materi">
+                <a href="#/participant-ai-people-business-mgt-quiz"><i class="fas fa-arrow-left"></i><span>Kuis Python</span></a>
+                <span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
+                <span>Diskusi</span>
+            </nav>
+            <div class="fellow-actions">
+                <label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul, topik, atau materi..."></label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
+                <a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+            </div>
+        </header>
+        <div class="lesson-layout">
+            <div class="lesson-main-content">
+                <section class="lesson-hero compact">
+                    <div class="lesson-hero-copy">
+                        <h1>Diskusi Topik</h1>
+                        <p>Diskusikan mengapa Python dominan, kapan notebook membantu atau berisiko, serta bagaimana keputusan cleaning memengaruhi kesiapan data untuk AI.</p>
+                        <div class="lesson-meta-row"><span><i class="far fa-message"></i> Prompt sumber</span><span><i class="far fa-clock"></i> Tersimpan lokal</span><b>Kolaboratif</b></div>
+                    </div>
+                    <img src="/assets/messaging/herai-chat-persona.png" alt="HerAI fellow berdiskusi tentang Python">
+                </section>
+                <section class="lesson-material-panel">
+                    <div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
+                        <a href="#/participant-ai-people-business-mgt"><i class="fas fa-book-open"></i> Materi</a>
+                        <a href="#/participant-ai-people-business-mgt-practice"><i class="fas fa-pen-to-square"></i> Latihan</a>
+                        <a href="#/participant-ai-people-business-mgt-quiz"><i class="far fa-clipboard"></i> Kuis</a>
+                        <a href="#/participant-ai-people-business-mgt-discussion" class="active"><i class="far fa-message"></i> Diskusi</a>
+                    </div>
+                    <article class="lesson-article">
+
+                        <div class="ml-section-head">
+                            <span>Discussion Board</span>
+                            <h2>Forum Python AI</h2>
+                            <p>Pilih prompt atau tulis pertanyaan sendiri. Thread tersimpan di browser dengan key <code>heraiAiPeopleBusinessMgtDiscussion</code>.</p>
+                        </div>
+                        <div class="ml-discussion-prompts" aria-label="Prompt diskusi Python">
+                            <button type="button" data-discussion-prompt="Mengapa Python dominan dalam AI meskipun bukan selalu bahasa dengan runtime tercepat?"><i class="fab fa-python"></i><span>Python sebagai Bahasa AI</span></button>
+                            <button type="button" data-discussion-prompt="Kapan notebook membantu eksplorasi, dan kapan hidden state membuat hasil sulit dipercaya?"><i class="fas fa-book-open"></i><span>Notebook vs Program</span></button>
+                            <button type="button" data-discussion-prompt="Apakah menghapus missing value selalu benar? Bukti apa yang diperlukan sebelum memilih aturan cleaning?"><i class="fas fa-broom"></i><span>Cleaning adalah Keputusan</span></button>
+                            <button type="button" data-discussion-prompt="Dataset tanpa missing value apakah otomatis siap untuk Machine Learning?"><i class="fas fa-database"></i><span>Siap untuk ML?</span></button>
+                        </div>
+                        <form class="practice-response-form discussion-compose ml-discussion-form" id="aiPeopleBusinessMgtDiscussionForm">
+                            <label>
+                                <span>Prompt diskusi</span>
+                                <select name="discussionPrompt">
+                                    <option>Mengapa Python dominan dalam AI meskipun bukan selalu bahasa dengan runtime tercepat?</option>
+                                    <option>Kapan notebook membantu eksplorasi, dan kapan hidden state membuat hasil sulit dipercaya?</option>
+                                    <option>Apakah menghapus missing value selalu benar? Bukti apa yang diperlukan sebelum memilih aturan cleaning?</option>
+                                    <option>Dataset tanpa missing value apakah otomatis siap untuk Machine Learning?</option>
+                                </select>
+                            </label>
+                            <label>
+                                <span>Tulis posting diskusi</span>
+                                <textarea rows="6" placeholder="Tulis posisi, alasan, contoh workflow Python, risiko, dan trade-off yang kamu pertimbangkan..."></textarea>
+                            </label>
+                            <div class="ml-save-panel">
+                                <p id="aiPeopleBusinessMgtDiscussionStatus" class="practice-status">Posting akan tersimpan di browser ini.</p>
+                                <button type="submit"><i class="fas fa-paper-plane"></i> Posting Diskusi</button>
+                            </div>
+                        </form>
+                        <div class="discussion-thread" id="aiPeopleBusinessMgtDiscussionList"></div>
+                        <section class="python-source-panel">
+                            <div class="python-source-panel-head">
+                                <i class="fas fa-file-lines" aria-hidden="true"></i>
+                                <div>
+                                    <span>Sumber utuh</span>
+                                    <h2>Prompt Diskusi dari Materi Sumber</h2>
+                                    <p>Bagian ini memuat teks diskusi dari <code>materi/baru/Python-baru.md</code> tanpa dikurangi.</p>
+                                </div>
+                            </div>
+                            <div id="aiPeopleBusinessMgtDiscussionSource" class="python-source-container">
+                                <p class="python-source-loading"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Memuat prompt diskusi sumber...</p>
+                            </div>
+                        </section>
+                    </article>
+                    <footer class="lesson-nav-footer">
+                        <a href="#/participant-ai-people-business-mgt-quiz"><i class="fas fa-chevron-left"></i> Kembali ke Kuis</a>
+                        <a href="#/participant-ai-fundamentals">Kembali ke AI Fundamentals <i class="fas fa-arrow-right"></i></a>
+                    </footer>
+                </section>
+            </div>
+            <aside class="lesson-right-panel">
+                <section class="module-side-card lesson-progress-card">
+                    <h2>Progres Modul</h2>
+                    <div class="lesson-progress-mini"><b style="--value:100%"></b><strong>100%</strong></div>
+                    <p>Diskusi menguji kemampuan menjelaskan trade-off workflow Python dan keputusan data dengan bukti yang dapat diaudit.</p>
+                    <a href="#/participant-ai-people-business-mgt">Buka Materi</a>
+                </section>
+                <section class="module-side-card lesson-list-card">
+                    <h2>Flow Belajar</h2>
+                    <ol>
+                        <li class="completed"><span>1</span><a href="#/participant-ai-people-business-mgt">Materi</a><i class="fas fa-circle-check"></i></li>
+                        <li class="completed"><span>2</span><a href="#/participant-ai-people-business-mgt-practice">Latihan</a><i class="fas fa-circle-check"></i></li>
+                        <li class="completed"><span>3</span><a href="#/participant-ai-people-business-mgt-quiz">Kuis</a><i class="fas fa-circle-check"></i></li>
+                        <li class="active"><span>4</span><a href="#/participant-ai-people-business-mgt-discussion">Diskusi</a><i class="far fa-circle-play"></i></li>
+                    </ol>
+                </section>
+            </aside>
+        </div>
+    </main>
+</section>

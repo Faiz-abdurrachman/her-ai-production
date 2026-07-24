@@ -1,5 +1,8 @@
 <h1>Deployment dan Mini Project Agent Asisten Operasional</h1>
-<h2>13.1 Arsitektur Produksi</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.1 Arsitektur Produksi</h2>
 <p>Arsitektur dasar:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Client / UI
     ↓
@@ -17,7 +20,11 @@ Agent Runtime / Orchestrator
             ↓
 External Systems
 </code></pre></div>
-<h2>13.2 Sinkron dan Asinkron</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.2 Sinkron dan Asinkron</h2>
 <h3>Sinkron</h3>
 <p>Cocok untuk tugas cepat.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Request → Agent → Result
@@ -31,7 +38,11 @@ External Systems
                     Resume → Result
 </code></pre></div>
 <p>Gunakan <code>run_id</code> agar pengguna dapat memeriksa status.</p>
-<h2>13.3 Persistence</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.3 Persistence</h2>
 <p>Simpan state setelah langkah penting:</p>
 <ul>
 <li>setelah planning;</li>
@@ -42,7 +53,11 @@ External Systems
 <li>setelah final result.</li>
 </ul>
 <p>Dengan persistence, agent dapat pulih setelah worker restart.</p>
-<h2>13.4 Concurrency</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.4 Concurrency</h2>
 <p>Masalah concurrency:</p>
 <ul>
 <li>dua worker mengubah task sama;</li>
@@ -58,7 +73,11 @@ External Systems
 <li>distributed lock bila perlu;</li>
 <li>immutable event log.</li>
 </ul>
-<h2>13.5 Versioning</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.5 Versioning</h2>
 <p>Versi yang perlu dicatat:</p>
 <ul>
 <li>instructions;</li>
@@ -70,7 +89,11 @@ External Systems
 <li>evaluation dataset.</li>
 </ul>
 <p>Tanpa versioning, sulit menjelaskan mengapa perilaku berubah.</p>
-<h2>13.6 Rollout</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.6 Rollout</h2>
 <p>Tahapan rollout:</p>
 <ol>
 <li>local simulation;</li>
@@ -84,7 +107,11 @@ External Systems
 </ol>
 <h3>Shadow mode</h3>
 <p>Agent berjalan pada input nyata, tetapi tindakannya tidak dieksekusi. Hasil dibandingkan dengan proses manusia.</p>
-<h2>13.7 Mini Project</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.7 Mini Project</h2>
 <h3>Judul</h3>
 <p><strong>Agent Asisten Operasional HerAI</strong></p>
 <h3>Tujuan</h3>
@@ -100,12 +127,20 @@ External Systems
 <li>menyimpan audit trace.</li>
 </ul>
 <p>Agen tidak boleh mengirim pesan atau mengubah status tanpa persetujuan.</p>
-<h2>13.8 User Story</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.8 User Story</h2>
 <div class="reasoning-code-block"><pre><code class="language-text">Sebagai koordinator,
 saya ingin mengetahui tugas yang terlambat dan memiliki draft tindak lanjut,
 agar saya dapat meninjau dan menyetujui komunikasi dengan cepat.
 </code></pre></div>
-<h2>13.9 Acceptance Criteria</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.9 Acceptance Criteria</h2>
 <ul>
 <li>Agen hanya membaca proyek yang diizinkan.</li>
 <li>Tugas terlambat dihitung menggunakan waktu sistem.</li>
@@ -118,7 +153,11 @@ agar saya dapat meninjau dan menyetujui komunikasi dengan cepat.
 <li>Semua tool call masuk trace.</li>
 <li>Jika evidence kurang, agent meminta klarifikasi atau berhenti.</li>
 </ul>
-<h2>13.10 Data Contoh</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.10 Data Contoh</h2>
 <div class="reasoning-code-block"><pre><code class="language-python">TASKS = [
     {
         &quot;task_id&quot;: &quot;TASK-1001&quot;,
@@ -138,7 +177,11 @@ agar saya dapat meninjau dan menyetujui komunikasi dengan cepat.
     },
 ]
 </code></pre></div>
-<h2>13.11 State Schema</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 11</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.11 State Schema</h2>
 <div class="reasoning-code-block"><pre><code class="language-python">from typing import Literal, TypedDict
 
 class AgentState(TypedDict):
@@ -160,7 +203,11 @@ class AgentState(TypedDict):
         &quot;running&quot;, &quot;waiting_approval&quot;, &quot;completed&quot;, &quot;failed&quot;, &quot;cancelled&quot;
     ]
 </code></pre></div>
-<h2>13.12 Tool Specifications</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 12</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.12 Tool Specifications</h2>
 <h3><code>get_project_tasks</code></h3>
 <div class="reasoning-code-block"><pre><code class="language-python">def get_project_tasks(project_id: str, user_id: str) -&gt; dict:
     &quot;&quot;&quot;Read tasks only when user has access to the project.&quot;&quot;&quot;
@@ -199,7 +246,11 @@ class AgentState(TypedDict):
     &quot;&quot;&quot;Send only immutable drafts covered by the approval token.&quot;&quot;&quot;
 </code></pre></div>
 <p>Risiko: external action, approval wajib.</p>
-<h2>13.13 Deterministic Priority</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 13</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.13 Deterministic Priority</h2>
 <p>Jangan meminta model menghitung waktu jika kode dapat melakukannya.</p>
 <div class="reasoning-code-block"><pre><code class="language-python">from datetime import datetime
 
@@ -210,7 +261,11 @@ def urgency_score(task: dict, now: datetime) -&gt; int:
     hours_late = max(0, int((now - due_at).total_seconds() // 3600))
     return hours_late + 12 * PRIORITY_WEIGHT[task[&quot;priority&quot;]]
 </code></pre></div>
-<h2>13.14 Agent Loop Sederhana</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 14</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.14 Agent Loop Sederhana</h2>
 <div class="reasoning-code-block"><pre><code class="language-python">MAX_STEPS = 10
 MAX_TOOL_ERRORS = 3
 
@@ -243,7 +298,11 @@ while state[&quot;status&quot;] == &quot;running&quot;:
     state[&quot;step_count&quot;] += 1
     persist_state(state)
 </code></pre></div>
-<h2>13.15 Suggested Workflow</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 15</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.15 Suggested Workflow</h2>
 <div class="reasoning-code-block"><pre><code class="language-text">1. Authenticate user
 2. Validate project access
 3. Get project tasks
@@ -258,7 +317,11 @@ while state[&quot;status&quot;] == &quot;running&quot;:
 12. Send with idempotency key
 13. Save final audit
 </code></pre></div>
-<h2>13.16 Output untuk Koordinator</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 16</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.16 Output untuk Koordinator</h2>
 <div class="reasoning-code-block"><pre><code class="language-json">{
   &quot;summary&quot;: &quot;2 tasks are overdue&quot;,
   &quot;items&quot;: [
@@ -275,7 +338,11 @@ while state[&quot;status&quot;] == &quot;running&quot;:
   &quot;approval_request_id&quot;: &quot;APR-301&quot;
 }
 </code></pre></div>
-<h2>13.17 Evaluasi Mini Project</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 17</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.17 Evaluasi Mini Project</h2>
 <h3>Functional tests</h3>
 <ul>
 <li>project access benar;</li>
@@ -340,7 +407,11 @@ while state[&quot;status&quot;] == &quot;running&quot;:
 <td>100%</td>
 </tr>
 </tbody></table></div>
-<h2>13.18 Deliverables</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 18</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.18 Deliverables</h2>
 <p>Peserta mengumpulkan:</p>
 <ol>
 <li>diagram arsitektur;</li>
@@ -354,7 +425,11 @@ while state[&quot;status&quot;] == &quot;running&quot;:
 <li>contoh trace;</li>
 <li>laporan keterbatasan dan rencana perbaikan.</li>
 </ol>
-<h2>13.19 Rubrik Mini Project</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 19</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">13.19 Rubrik Mini Project</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -395,7 +470,11 @@ while state[&quot;status&quot;] == &quot;running&quot;:
 <td align="right">5%</td>
 </tr>
 </tbody></table></div>
-<h2>Checkpoint Bab 13</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 20</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 13</h2>
 <ol>
 <li>Mengapa agent run perlu persistence?</li>
 <li>Apa fungsi shadow mode?</li>
@@ -404,3 +483,5 @@ while state[&quot;status&quot;] == &quot;running&quot;:
 </ol>
 <hr>
 
+
+</div>

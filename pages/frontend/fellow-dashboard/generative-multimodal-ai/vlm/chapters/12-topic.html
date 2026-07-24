@@ -1,5 +1,8 @@
 <h1>Deployment dan Monitoring</h1>
-<h2>12.1 Pola Deployment</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.1 Pola Deployment</h2>
 <p>Pilihan umum:</p>
 <ul>
 <li>API model terkelola,</li>
@@ -19,7 +22,11 @@
 <li>kebutuhan audit,</li>
 <li>lokasi penyimpanan data.</li>
 </ul>
-<h2>12.2 Pipeline Produksi</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.2 Pipeline Produksi</h2>
 <div class="reasoning-code-block"><pre><code class="language-text">Upload gambar
   -&gt; autentikasi dan otorisasi
   -&gt; validasi file
@@ -32,7 +39,11 @@
   -&gt; result + uncertainty
   -&gt; logging aman
 </code></pre></div>
-<h2>12.3 Validasi Input</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.3 Validasi Input</h2>
 <p>Periksa:</p>
 <ul>
 <li>tipe file,</li>
@@ -46,7 +57,11 @@
 <li>batas resolusi.</li>
 </ul>
 <p>Hindari memercayai nama file atau ekstensi saja.</p>
-<h2>12.4 Batching dan Caching</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.4 Batching dan Caching</h2>
 <p>Batching meningkatkan throughput, tetapi dapat menambah waktu tunggu. Caching dapat mengurangi biaya jika gambar dan prompt sama, tetapi memerlukan kebijakan privasi dan invalidasi.</p>
 <p>Kunci cache dapat mencakup:</p>
 <ul>
@@ -57,7 +72,11 @@
 <li>schema output.</li>
 </ul>
 <p>Jangan memakai cache lintas pengguna bila output dapat memuat data privat.</p>
-<h2>12.5 Latency Budget</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.5 Latency Budget</h2>
 <p>Pecah latency:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">upload + decode + preprocessing + queue + inference + validation + response
 </code></pre></div>
@@ -95,7 +114,11 @@
 </tr>
 </tbody></table></div>
 <p>Angka hanya contoh. Target harus mengikuti kebutuhan produk.</p>
-<h2>12.6 Cost Drivers</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.6 Cost Drivers</h2>
 <p>Biaya dipengaruhi oleh:</p>
 <ul>
 <li>resolusi dan jumlah gambar,</li>
@@ -118,7 +141,11 @@
 <li>lakukan batch untuk workload offline,</li>
 <li>hentikan pipeline bila validasi awal gagal.</li>
 </ul>
-<h2>12.7 Monitoring</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.7 Monitoring</h2>
 <p>Pantau:</p>
 <ul>
 <li>volume request,</li>
@@ -134,7 +161,11 @@
 <li>perubahan performa per slice.</li>
 </ul>
 <p>Jangan menyimpan gambar mentah dalam log tanpa kebutuhan, izin, dan kontrol yang jelas.</p>
-<h2>12.8 Drift</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.8 Drift</h2>
 <p>Drift dapat terjadi ketika:</p>
 <ul>
 <li>kamera baru digunakan,</li>
@@ -145,7 +176,11 @@
 <li>model atau image processor diperbarui.</li>
 </ul>
 <p>Gunakan sampling berkala, golden set, canary deployment, dan rollback.</p>
-<h2>12.9 Versioning</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.9 Versioning</h2>
 <p>Satu hasil harus dapat ditelusuri ke:</p>
 <ul>
 <li>versi model,</li>
@@ -157,7 +192,11 @@
 <li>konfigurasi inference.</li>
 </ul>
 <p>Tanpa versioning, sulit menemukan penyebab perubahan kualitas.</p>
-<h2>12.10 Human-in-the-Loop</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">12.10 Human-in-the-Loop</h2>
 <p>Human review cocok untuk:</p>
 <ul>
 <li>confidence rendah,</li>
@@ -168,14 +207,17 @@
 <li>gambar di luar domain.</li>
 </ul>
 <p>Interface review sebaiknya menampilkan gambar, crop relevan, output model, alasan eskalasi, dan cara memperbaiki hasil.</p>
-<h2>Checkpoint Bab 12</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 11</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 12</h2>
 <ol>
 <li>Apa komponen utama pipeline produksi VLM?</li>
 <li>Mengapa hash gambar saja tidak selalu cukup sebagai cache key?</li>
 <li>Apa contoh drift pada aplikasi dokumen?</li>
 <li>Kapan human review diperlukan?</li>
 </ol>
-<h2>Latihan Bab 12 - Production Readiness</h2>
-<p>Buat checklist production readiness dengan kategori security, privacy, reliability, quality, observability, cost, dan rollback.</p>
-<hr>
 
+
+</div>

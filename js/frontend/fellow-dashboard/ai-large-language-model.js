@@ -9,7 +9,7 @@
         readiness: "heraiAiLargeLanguageModelReadiness"
     };
 
-    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/generative-multimodal-ai/large-language-model/chapters/";
+    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/";
 
 
     var pyodideInstance = null;
@@ -388,6 +388,7 @@ const CHAPTERS = [
     const PRACTICES = [
     {
         "id": "PRACTICE-1",
+        "title": "Latihan Bab 1 - Menentukan Peran LLM",
         "prompt": "Pilih salah satu skenario berikut: layanan pelanggan, tutor belajar, administrasi kampus, atau analisis dokumen. Buat tabel berisi:\n\n- tugas yang cocok ditangani LLM,\n- tugas yang harus ditangani program deterministik,\n- bagian yang harus ditinjau manusia,\n- risiko jika seluruh proses diserahkan kepada model.",
         "fields": [
             [
@@ -399,6 +400,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-2",
+        "title": "Latihan Bab 2 - Audit Tokenisasi Konseptual",
         "prompt": "Ambil lima contoh teks:\n\n- kalimat bahasa Indonesia formal,\n- kalimat dengan slang,\n- alamat web,\n- potongan kode,\n- kalimat dengan angka dan satuan.\n\nPerkirakan bagian mana yang mungkin dipecah menjadi banyak token. Jelaskan dampaknya terhadap context window dan chunking.",
         "fields": [
             [
@@ -410,6 +412,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-3",
+        "title": "Latihan Bab 3 - Membandingkan Makna",
         "prompt": "Buat enam pasangan kalimat. Tiga pasangan harus memiliki kata berbeda tetapi makna mirip. Tiga pasangan lainnya harus memiliki banyak kata sama tetapi makna berbeda. Jelaskan pendekatan retrieval mana yang mungkin berhasil atau gagal pada setiap pasangan.",
         "fields": [
             [
@@ -421,6 +424,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-4",
+        "title": "Latihan Bab 4 - Menelusuri Alur Data",
         "prompt": "Gambar ulang alur dari kalimat input sampai distribusi token berikutnya. Untuk setiap tahap, tuliskan bentuk informasi yang dihasilkan dan pertanyaan berikut:\n\n- Apa yang dipelajari pada tahap tersebut?\n- Apa yang terjadi jika tahap itu dihilangkan?\n- Apakah tahap itu bekerja per token atau lintas token?",
         "fields": [
             [
@@ -432,6 +436,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-5",
+        "title": "Latihan Bab 5 - Audit Dataset Instruksi",
         "prompt": "Buat lima contoh instruksi dan respons untuk tugas ekstraksi informasi. Audit setiap contoh berdasarkan:\n\n- kejelasan instruksi,\n- konsistensi format,\n- kebenaran respons,\n- keberadaan data sensitif,\n- kemungkinan bias,\n- apakah contoh tersebut benar-benar mewakili penggunaan nyata.",
         "fields": [
             [
@@ -443,6 +448,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-6",
+        "title": "Latihan Bab 6 - Eksperimen Decoding",
         "prompt": "Gunakan satu tugas ringkasan dan satu tugas brainstorming. Buat rancangan eksperimen yang membandingkan tiga konfigurasi decoding. Tentukan:\n\n- parameter yang diubah,\n- output yang diamati,\n- rubric kualitas,\n- jumlah pengulangan,\n- cara memilih konfigurasi akhir.",
         "fields": [
             [
@@ -454,6 +460,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-7",
+        "title": "Latihan Bab 7 - Memperbaiki Prompt",
         "prompt": "Perbaiki prompt berikut:\n\n```text\nBaca dokumen ini dan beri jawaban yang bagus.\n```\n\nBuat versi untuk:\n\n1. ekstraksi data terstruktur,\n2. ringkasan eksekutif,\n3. jawaban FAQ dengan citation,\n4. klasifikasi laporan insiden.\n\nUntuk setiap versi, tentukan kriteria keberhasilan dan cara memvalidasi output.",
         "fields": [
             [
@@ -465,6 +472,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-8",
+        "title": "Latihan Bab 8 - Mendesain RAG",
         "prompt": "Gunakan kumpulan dokumen pedoman organisasi. Buat rancangan berisi:\n\n- jenis dokumen,\n- aturan chunking,\n- metadata wajib,\n- filter hak akses,\n- retrieval baseline,\n- format citation,\n- minimal 15 pertanyaan evaluasi,\n- kebijakan ketika bukti tidak ditemukan.",
         "fields": [
             [
@@ -476,6 +484,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-9",
+        "title": "Latihan Bab 9 - Decision Memo",
         "prompt": "Pilih satu kebutuhan aplikasi. Tulis memo satu halaman yang menjawab:\n\n- baseline tanpa fine-tuning,\n- kegagalan baseline,\n- alasan fine-tuning diperlukan atau tidak,\n- jenis data yang dibutuhkan,\n- risiko privasi dan bias,\n- metrik keberhasilan,\n- rencana rollback.\n\n### Template Decision Memo\n\n| Bagian | Pertanyaan yang Harus Dijawab |\n|---|---|\n| Masalah | Perilaku baseline mana yang belum memenuhi kebutuhan? |\n| Alternatif | Apakah prompting atau RAG sudah diuji lebih dahulu? |\n| Data | Apakah tersedia contoh yang benar, legal, aman, dan mewakili penggunaan nyata? |\n| Evaluasi | Metrik domain dan kemampuan umum apa yang harus dipertahankan? |\n| Risiko | Apa risiko overfitting, bias, privacy, dan perubahan perilaku? |\n| Operasional | Bagaimana model disimpan, dirilis, dipantau, dan dikembalikan ke versi sebelumnya? |\n\n> **Kriteria keputusan:** fine-tuning dilakukan hanya ketika manfaat yang terukur melebihi biaya data, komputasi, evaluasi, dan risiko operasional.",
         "fields": [
             [
@@ -487,6 +496,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-10",
+        "title": "Latihan Bab 10 - Membuat Eval Set",
         "prompt": "Buat minimal 25 kasus evaluasi untuk asisten dokumen. Beri setiap kasus:\n\n- pertanyaan,\n- dokumen atau bukti yang benar,\n- jawaban ideal atau rubric,\n- kategori kesulitan,\n- tingkat risiko,\n- metrik yang digunakan,\n- hasil baseline.",
         "fields": [
             [
@@ -498,6 +508,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-11",
+        "title": "Latihan Bab 11 - Threat Modeling",
         "prompt": "Buat threat model untuk asisten dokumen internal. Identifikasi:\n\n- aset yang dilindungi,\n- aktor dan kemungkinan tujuan,\n- input tidak tepercaya,\n- tool yang tersedia,\n- jalur prompt injection,\n- risiko lintas pengguna,\n- kontrol pencegahan,\n- kontrol deteksi,\n- prosedur respons insiden.",
         "fields": [
             [
@@ -509,6 +520,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-12",
+        "title": "Latihan Bab 12 - Production Readiness Review",
         "prompt": "Buat checklist rilis untuk aplikasi LLM yang mencakup:\n\n- kualitas,\n- keamanan,\n- privasi,\n- observability,\n- latency,\n- cost,\n- kapasitas,\n- fallback,\n- incident response,\n- rollback.\n\nBeri status `lulus`, `perlu perbaikan`, atau `blocker` untuk setiap item.",
         "fields": [
             [
@@ -533,10 +545,10 @@ const QUIZ = [
 ];
 
     const DISCUSSION_PROMPTS = [
-        "Mengapa Python dominan dalam AI meskipun bukan selalu bahasa dengan runtime tercepat?",
-        "Kapan notebook membantu eksplorasi, dan kapan hidden state membuat hasil sulit dipercaya?",
-        "Apakah menghapus missing value selalu benar? Bukti apa yang diperlukan sebelum memilih aturan cleaning?",
-        "Dataset tanpa missing value apakah otomatis siap untuk Machine Learning?"
+        "Bagaimana penerapan konsep ini dapat memecahkan masalah di industri Anda?",
+        "Apa saja tantangan atau risiko terbesar saat mengimplementasikan teori ini di dunia nyata?",
+        "Menurut Anda, bagaimana etika dan bias dapat memengaruhi keputusan yang diambil berdasarkan model ini?",
+        "Bagikan pengalaman atau kesulitan Anda saat mempraktikkan materi ini."
     ];
 
 var SOURCE_VISUALS = {
@@ -1708,7 +1720,7 @@ var SOURCE_VISUALS = {
                 }).join("")}
             </div>
             <button type="button" class="reasoning-scaffold-reveal-button" data-reasoning-reveal="${escapeHtml(item.id)}" aria-expanded="false"><i class="fas fa-lightbulb" aria-hidden="true"></i> Lihat pembahasan</button>
-            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><p>${escapeHtml(item.guide)}</p></div>
+            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><div class="reasoning-guide-content" style="margin-top: 10px;">${renderFormattedText(item.guide)}</div></div>
         </article>`;
     }
 
@@ -1717,7 +1729,7 @@ var SOURCE_VISUALS = {
         const practiceList = document.getElementById("aiLargeLanguageModelPracticeList");
         if (!form || !practiceList) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiLargeLanguageModelPracticeSource", "Latihan Modul", "Quiz — 20 Soal");
+        const refNode = document.getElementById("aiLargeLanguageModelPracticeSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         practiceList.innerHTML = PRACTICES.map(renderPracticeCard).join("");
         const saved = getSavedPractice() || { answers: {}, revealed: [] };
         const savedAnswers = saved.answers || {};
@@ -1948,7 +1960,7 @@ var SOURCE_VISUALS = {
         const list = document.getElementById("aiLargeLanguageModelQuizList");
         if (!form || !list) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiLargeLanguageModelQuizSource", "Quiz — 20 Soal", "Discussion");
+        const refNode = document.getElementById("aiLargeLanguageModelQuizSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         list.innerHTML = QUIZ.map(function (question, index) {
             return `<article data-quiz-index="${index}" tabindex="-1">
                 <span>${index + 1}</span>
@@ -2174,14 +2186,14 @@ var SOURCE_VISUALS = {
         const form = document.getElementById("aiLargeLanguageModelDiscussionForm");
         const select = form ? form.querySelector("select") : null;
         const textarea = form ? form.querySelector("textarea") : null;
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiLargeLanguageModelDiscussionSource", "Discussion", "Checklist Kesiapan Peserta");
+        const refNode = document.getElementById("aiLargeLanguageModelDiscussionSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         renderDiscussion(getDiscussionPosts());
 
         const promptButtons = document.querySelector(".ml-discussion-prompts");
         if (promptButtons) {
             promptButtons.innerHTML = DISCUSSION_PROMPTS.map(function (prompt, index) {
-                const labels = ["Python dan AI", "Notebook vs Program", "Keputusan Cleaning", "Siap untuk ML"];
-                const icons = ["fab fa-python", "fas fa-book-open", "fas fa-broom", "fas fa-database"];
+                const labels = ["Ide & Penerapan", "Risiko & Tantangan", "Etika & Bias", "Berbagi Pengalaman"];
+                const icons = ["fas fa-lightbulb", "fas fa-triangle-exclamation", "fas fa-balance-scale", "fas fa-users"];
                 return `<button type="button" data-discussion-prompt="${escapeHtml(prompt)}"><i class="${icons[index]}" aria-hidden="true"></i><span>${labels[index]}</span></button>`;
             }).join("");
         }
@@ -2224,3 +2236,8 @@ var SOURCE_VISUALS = {
         });
     };
 })();
+
+// Mencegah elemen interaktif Python (Glossary, Kuis, dll) bocor ke modul lain
+PYTHON_GUIDES.length = 0;
+DISCUSSION_PROMPTS.length = 0;
+SOURCE_VISUALS = {};

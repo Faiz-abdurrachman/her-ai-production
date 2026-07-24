@@ -1,5 +1,8 @@
 <h1>Pola Orkestrasi Agentic</h1>
-<h2>7.1 Mengapa Menggunakan Pola?</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.1 Mengapa Menggunakan Pola?</h2>
 <p>Pola orkestrasi membantu tim membangun sistem yang dapat dipahami. Daripada membiarkan model memilih semua hal, kita menentukan struktur kolaborasi.</p>
 <p>Pola umum:</p>
 <ul>
@@ -11,7 +14,11 @@
 <li>human-in-the-loop;</li>
 <li>event-driven agent.</li>
 </ul>
-<h2>7.2 Prompt Chaining atau Sequential Workflow</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.2 Prompt Chaining atau Sequential Workflow</h2>
 <p>Output langkah sebelumnya menjadi input langkah berikutnya.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Extract facts
 → Validate facts
@@ -25,7 +32,11 @@
 <li>hasil perlu diubah bertahap.</li>
 </ul>
 <p>Kelemahan: error awal dapat merambat. Tambahkan validation gate.</p>
-<h2>7.3 Routing</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.3 Routing</h2>
 <p>Router memilih jalur.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Permintaan
   ├─ pertanyaan kebijakan → RAG agent
@@ -40,7 +51,11 @@
     reason_summary: str
 </code></pre></div>
 <p>Jika confidence rendah, gunakan fallback.</p>
-<h2>7.4 Parallelization</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.4 Parallelization</h2>
 <p>Beberapa pekerjaan independen dijalankan bersamaan.</p>
 <p>Contoh:</p>
 <ul>
@@ -56,7 +71,11 @@
 <li>tool write saling mengganggu.</li>
 </ul>
 <p>Gunakan parallel hanya untuk tugas read-only atau independen.</p>
-<h2>7.5 Evaluator-Optimizer</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.5 Evaluator-Optimizer</h2>
 <p>Satu komponen menghasilkan, komponen lain memeriksa.</p>
 <p>Rubric contoh:</p>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
@@ -94,7 +113,11 @@
 </tr>
 </tbody></table></div>
 <p>Berhenti jika skor minimum tercapai atau revisi maksimum habis.</p>
-<h2>7.6 Orchestrator-Worker</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.6 Orchestrator-Worker</h2>
 <p>Orchestrator membagi tugas dan menggabungkan hasil.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Orchestrator
   ├─ Worker A: data jadwal
@@ -114,7 +137,11 @@ Synthesis dan verification
 <li>cara menggabungkan hasil;</li>
 <li>penanganan konflik.</li>
 </ul>
-<h2>7.7 Human-in-the-Loop</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.7 Human-in-the-Loop</h2>
 <p>Human-in-the-loop tidak hanya berada di akhir. Manusia dapat terlibat untuk:</p>
 <ul>
 <li>memberi klarifikasi;</li>
@@ -134,7 +161,11 @@ Synthesis dan verification
   &quot;options&quot;: [&quot;approve&quot;, &quot;edit&quot;, &quot;reject&quot;]
 }
 </code></pre></div>
-<h2>7.8 Event-Driven Agent</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.8 Event-Driven Agent</h2>
 <p>Agen dapat dipicu oleh event:</p>
 <ul>
 <li>tiket baru;</li>
@@ -144,7 +175,11 @@ Synthesis dan verification
 <li>approval diberikan.</li>
 </ul>
 <p>Namun event tidak boleh langsung memicu tindakan berisiko tanpa policy check.</p>
-<h2>7.9 Memilih Pola</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.9 Memilih Pola</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -181,14 +216,17 @@ Synthesis dan verification
 <td>Event-driven</td>
 </tr>
 </tbody></table></div>
-<h2>Checkpoint Bab 7</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 7</h2>
 <ol>
 <li>Kapan parallelization aman digunakan?</li>
 <li>Apa peran orchestrator?</li>
 <li>Mengapa evaluator membutuhkan rubric?</li>
 <li>Apa informasi minimum pada approval request?</li>
 </ol>
-<h2>Latihan Bab 7</h2>
-<p>Rancang orkestrasi untuk proses “membuat laporan evaluasi kegiatan” dengan minimal tiga pola. Gambarkan alur dan jelaskan mengapa setiap pola dipilih.</p>
-<hr>
 
+
+</div>

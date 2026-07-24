@@ -1,5 +1,8 @@
 <h1>Evaluasi Vision Language Model</h1>
-<h2>10.1 Evaluasi Harus Mengikuti Tugas</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.1 Evaluasi Harus Mengikuti Tugas</h2>
 <p>Tidak ada satu skor yang mewakili seluruh kemampuan VLM. Sistem retrieval, captioning, VQA, dan ekstraksi dokumen memerlukan metrik berbeda.</p>
 <p>Evaluasi sebaiknya memiliki tiga lapisan:</p>
 <ol>
@@ -7,7 +10,11 @@
 <li>kualitas pipeline aplikasi,</li>
 <li>dampak pada workflow pengguna.</li>
 </ol>
-<h2>10.2 Retrieval Metrics</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.2 Retrieval Metrics</h2>
 <p>Metrik umum:</p>
 <ul>
 <li>Recall@1,</li>
@@ -17,7 +24,11 @@
 <li>normalized Discounted Cumulative Gain untuk relevance bertingkat.</li>
 </ul>
 <p>Contoh Recall@5: berapa banyak kueri yang memiliki setidaknya satu gambar relevan dalam lima hasil teratas.</p>
-<h2>10.3 Caption Metrics</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.3 Caption Metrics</h2>
 <p>Caption dapat dibandingkan dengan reference menggunakan metrik berbasis overlap atau similarity. Namun, satu gambar dapat memiliki banyak caption benar.</p>
 <p>Karena itu, evaluasi caption sebaiknya menggabungkan:</p>
 <ul>
@@ -27,7 +38,11 @@
 <li>hallucination rate,</li>
 <li>penilaian manusia sesuai tujuan.</li>
 </ul>
-<h2>10.4 VQA Accuracy</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.4 VQA Accuracy</h2>
 <p>Untuk jawaban pendek, normalisasi dapat diperlukan:</p>
 <ul>
 <li>huruf besar-kecil,</li>
@@ -36,14 +51,22 @@
 <li>sinonim yang diizinkan.</li>
 </ul>
 <p>Namun normalisasi jangan menyamarkan kesalahan penting. <code>dua</code> dan <code>tiga</code> tidak boleh dianggap sama walaupun format lain serupa.</p>
-<h2>10.5 Evaluasi Grounding</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.5 Evaluasi Grounding</h2>
 <p>Bounding box dapat dievaluasi dengan Intersection over Union.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">IoU = luas irisan prediksi dan ground truth
       --------------------------------------
       luas gabungan prediksi dan ground truth
 </code></pre></div>
 <p>Untuk jawaban berbasis region, periksa apakah region benar-benar mendukung klaim, bukan hanya berada dekat objek.</p>
-<h2>10.6 Hallucination Visual</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.6 Hallucination Visual</h2>
 <p>Hallucination visual terjadi ketika model menyebut objek, teks, atribut, atau hubungan yang tidak didukung gambar.</p>
 <p>Kategori evaluasi:</p>
 <ul>
@@ -56,7 +79,11 @@
 <li>causal claim tanpa bukti.</li>
 </ul>
 <p>Ukur tidak hanya jumlah kesalahan, tetapi juga tingkat dampaknya.</p>
-<h2>10.7 Robustness Testing</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.7 Robustness Testing</h2>
 <p>Uji variasi yang wajar:</p>
 <ul>
 <li>resolusi turun,</li>
@@ -69,7 +96,11 @@
 <li>variasi bahasa prompt.</li>
 </ul>
 <p>Robustness test tidak boleh mengubah label secara tidak sengaja.</p>
-<h2>10.8 Slice Evaluation</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.8 Slice Evaluation</h2>
 <p>Nilai performa per kelompok atau kondisi:</p>
 <ul>
 <li>jenis perangkat,</li>
@@ -82,7 +113,11 @@
 <li>lokasi atau domain.</li>
 </ul>
 <p>Rata-rata tinggi dapat menyembunyikan kegagalan pada kelompok tertentu.</p>
-<h2>10.9 Human Evaluation</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.9 Human Evaluation</h2>
 <p>Rubrik manusia dapat memakai skala 1 sampai 5 untuk:</p>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
@@ -117,7 +152,11 @@
 </tr>
 </tbody></table></div>
 <p>Gunakan panduan dan contoh agar penilai konsisten. Ukur agreement bila keputusan penting.</p>
-<h2>10.10 Evaluasi Sistem</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.10 Evaluasi Sistem</h2>
 <p>Selain kualitas model, ukur:</p>
 <ul>
 <li>latency p50, p95, p99,</li>
@@ -129,7 +168,11 @@
 <li>waktu penyelesaian workflow,</li>
 <li>keluhan atau koreksi pengguna.</li>
 </ul>
-<h2>10.11 Membuat Golden Set</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 11</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.11 Membuat Golden Set</h2>
 <p>Golden set adalah kumpulan contoh yang telah ditinjau dan mewakili penggunaan penting. Isi sebaiknya mencakup:</p>
 <ul>
 <li>kasus umum,</li>
@@ -141,14 +184,17 @@
 <li>kasus berisiko tinggi.</li>
 </ul>
 <p>Golden set harus berversi dan tidak dipakai sebagai data training tanpa dokumentasi.</p>
-<h2>Checkpoint Bab 10</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 12</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 10</h2>
 <ol>
 <li>Mengapa caption tidak cukup dinilai dengan word overlap?</li>
 <li>Apa yang diukur oleh Recall@K?</li>
 <li>Mengapa slice evaluation diperlukan?</li>
 <li>Sebutkan dua metrik sistem di luar akurasi model.</li>
 </ol>
-<h2>Latihan Bab 10 - Evaluation Plan</h2>
-<p>Buat evaluation plan untuk sistem pembaca dokumen. Sertakan golden set, metrik field-level, exact match, numeric tolerance, hallucination rate, latency, biaya, dan aturan human review.</p>
-<hr>
 
+
+</div>

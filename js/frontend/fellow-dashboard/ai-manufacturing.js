@@ -9,7 +9,7 @@
         readiness: "heraiAiManufacturingReadiness"
     };
 
-    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/";
+    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/";
 
 
     var pyodideInstance = null;
@@ -92,7 +92,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/01-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/01-topic.html"
     },
     {
         "title": "Sensor, IIoT, dan Integrasi OT-IT",
@@ -104,7 +104,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/02-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/02-topic.html"
     },
     {
         "title": "Time-series dan Kualitas Data Industri",
@@ -116,7 +116,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/03-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/03-topic.html"
     },
     {
         "title": "Predictive Maintenance",
@@ -128,7 +128,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/04-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/04-topic.html"
     },
     {
         "title": "Visual Inspection dan Quality Control",
@@ -140,7 +140,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/05-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/05-topic.html"
     },
     {
         "title": "Process Optimization dan Control",
@@ -152,7 +152,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/06-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/06-topic.html"
     },
     {
         "title": "Demand, Inventory, dan Scheduling",
@@ -164,7 +164,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/07-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/07-topic.html"
     },
     {
         "title": "Digital Twin dan Simulation",
@@ -176,7 +176,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/08-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/08-topic.html"
     },
     {
         "title": "Edge AI dan Real-time Operation",
@@ -188,7 +188,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/09-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/09-topic.html"
     },
     {
         "title": "Safety, Cybersecurity, MLOps, dan ROI",
@@ -200,7 +200,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/10-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/10-topic.html"
     },
     {
         "title": "Mini Project: Predictive Maintenance Motor Produksi",
@@ -212,7 +212,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/11-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/11-topic.html"
     },
     {
         "title": "Kuis Akhir",
@@ -224,7 +224,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/12-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/12-topic.html"
     },
     {
         "title": "Diskusi dan Refleksi",
@@ -236,7 +236,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/13-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/13-topic.html"
     },
     {
         "title": "Glosarium dan Checklist",
@@ -248,7 +248,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/14-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/14-topic.html"
     },
     {
         "title": "Ringkasan dan Referensi",
@@ -260,7 +260,7 @@ const CHAPTERS = [
             "Memahami konsep dasar",
             "Mampu mengidentifikasi penggunaan praktis"
         ],
-        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-application/manufacturing/chapters/15-topic.html"
+        "sourcePath": "/pages/frontend/fellow-dashboard/business-industry-applications/manufacturing/chapters/15-topic.html"
     }
 ];
 
@@ -388,6 +388,7 @@ const CHAPTERS = [
     const PRACTICES = [
     {
         "id": "PRACTICE-1",
+        "title": "Latihan",
         "prompt": "1. Buat diagram sederhana yang menghubungkan cycle time, yield, OEE, downtime. Tandai asumsi dan titik kegagalan.\n2. Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.\n3. Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.",
         "fields": [
             [
@@ -399,6 +400,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-2",
+        "title": "Latihan",
         "prompt": "1. Buat diagram sederhana yang menghubungkan sensor, PLC, SCADA, historian. Tandai asumsi dan titik kegagalan.\n2. Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.\n3. Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.",
         "fields": [
             [
@@ -410,6 +412,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-3",
+        "title": "Latihan",
         "prompt": "1. Buat diagram sederhana yang menghubungkan timestamp, sampling, missing, drift. Tandai asumsi dan titik kegagalan.\n2. Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.\n3. Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.",
         "fields": [
             [
@@ -421,6 +424,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-4",
+        "title": "Latihan",
         "prompt": "1. Buat diagram sederhana yang menghubungkan failure mode, condition monitoring, anomaly, remaining life. Tandai asumsi dan titik kegagalan.\n2. Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.\n3. Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.",
         "fields": [
             [
@@ -432,6 +436,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-5",
+        "title": "Latihan",
         "prompt": "1. Buat diagram sederhana yang menghubungkan camera, lighting, defect, detection. Tandai asumsi dan titik kegagalan.\n2. Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.\n3. Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.",
         "fields": [
             [
@@ -443,6 +448,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-6",
+        "title": "Latihan",
         "prompt": "1. Buat diagram sederhana yang menghubungkan setpoint, constraint, optimization, feedback. Tandai asumsi dan titik kegagalan.\n2. Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.\n3. Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.",
         "fields": [
             [
@@ -454,6 +460,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-7",
+        "title": "Latihan",
         "prompt": "1. Buat diagram sederhana yang menghubungkan forecast, inventory, lead time, capacity. Tandai asumsi dan titik kegagalan.\n2. Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.\n3. Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.",
         "fields": [
             [
@@ -465,6 +472,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-8",
+        "title": "Latihan",
         "prompt": "1. Buat diagram sederhana yang menghubungkan asset model, state, simulation, scenario. Tandai asumsi dan titik kegagalan.\n2. Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.\n3. Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.",
         "fields": [
             [
@@ -476,6 +484,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-9",
+        "title": "Latihan",
         "prompt": "1. Buat diagram sederhana yang menghubungkan edge, latency, offline, compression. Tandai asumsi dan titik kegagalan.\n2. Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.\n3. Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.",
         "fields": [
             [
@@ -487,6 +496,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-10",
+        "title": "Latihan",
         "prompt": "1. Buat diagram sederhana yang menghubungkan hazard, segmentation, access, monitoring. Tandai asumsi dan titik kegagalan.\n2. Tulis kriteria penerimaan untuk satu proses dalam bab ini. Sertakan kondisi normal, error, dan kasus batas.\n3. Pilih satu risiko dan buat kontrol preventif, kontrol detektif, serta prosedur respons.",
         "fields": [
             [
@@ -511,10 +521,10 @@ const QUIZ = [
 ];
 
     const DISCUSSION_PROMPTS = [
-        "Mengapa Python dominan dalam AI meskipun bukan selalu bahasa dengan runtime tercepat?",
-        "Kapan notebook membantu eksplorasi, dan kapan hidden state membuat hasil sulit dipercaya?",
-        "Apakah menghapus missing value selalu benar? Bukti apa yang diperlukan sebelum memilih aturan cleaning?",
-        "Dataset tanpa missing value apakah otomatis siap untuk Machine Learning?"
+        "Bagaimana penerapan konsep ini dapat memecahkan masalah di industri Anda?",
+        "Apa saja tantangan atau risiko terbesar saat mengimplementasikan teori ini di dunia nyata?",
+        "Menurut Anda, bagaimana etika dan bias dapat memengaruhi keputusan yang diambil berdasarkan model ini?",
+        "Bagikan pengalaman atau kesulitan Anda saat mempraktikkan materi ini."
     ];
 
 var SOURCE_VISUALS = {
@@ -1686,7 +1696,7 @@ var SOURCE_VISUALS = {
                 }).join("")}
             </div>
             <button type="button" class="reasoning-scaffold-reveal-button" data-reasoning-reveal="${escapeHtml(item.id)}" aria-expanded="false"><i class="fas fa-lightbulb" aria-hidden="true"></i> Lihat pembahasan</button>
-            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><p>${escapeHtml(item.guide)}</p></div>
+            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><div class="reasoning-guide-content" style="margin-top: 10px;">${renderFormattedText(item.guide)}</div></div>
         </article>`;
     }
 
@@ -1695,7 +1705,7 @@ var SOURCE_VISUALS = {
         const practiceList = document.getElementById("aiManufacturingPracticeList");
         if (!form || !practiceList) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiManufacturingPracticeSource", "Latihan Modul", "Quiz — 20 Soal");
+        const refNode = document.getElementById("aiManufacturingPracticeSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         practiceList.innerHTML = PRACTICES.map(renderPracticeCard).join("");
         const saved = getSavedPractice() || { answers: {}, revealed: [] };
         const savedAnswers = saved.answers || {};
@@ -1926,7 +1936,7 @@ var SOURCE_VISUALS = {
         const list = document.getElementById("aiManufacturingQuizList");
         if (!form || !list) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiManufacturingQuizSource", "Quiz — 20 Soal", "Discussion");
+        const refNode = document.getElementById("aiManufacturingQuizSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         list.innerHTML = QUIZ.map(function (question, index) {
             return `<article data-quiz-index="${index}" tabindex="-1">
                 <span>${index + 1}</span>
@@ -2152,14 +2162,14 @@ var SOURCE_VISUALS = {
         const form = document.getElementById("aiManufacturingDiscussionForm");
         const select = form ? form.querySelector("select") : null;
         const textarea = form ? form.querySelector("textarea") : null;
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiManufacturingDiscussionSource", "Discussion", "Checklist Kesiapan Peserta");
+        const refNode = document.getElementById("aiManufacturingDiscussionSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         renderDiscussion(getDiscussionPosts());
 
         const promptButtons = document.querySelector(".ml-discussion-prompts");
         if (promptButtons) {
             promptButtons.innerHTML = DISCUSSION_PROMPTS.map(function (prompt, index) {
-                const labels = ["Python dan AI", "Notebook vs Program", "Keputusan Cleaning", "Siap untuk ML"];
-                const icons = ["fab fa-python", "fas fa-book-open", "fas fa-broom", "fas fa-database"];
+                const labels = ["Ide & Penerapan", "Risiko & Tantangan", "Etika & Bias", "Berbagi Pengalaman"];
+                const icons = ["fas fa-lightbulb", "fas fa-triangle-exclamation", "fas fa-balance-scale", "fas fa-users"];
                 return `<button type="button" data-discussion-prompt="${escapeHtml(prompt)}"><i class="${icons[index]}" aria-hidden="true"></i><span>${labels[index]}</span></button>`;
             }).join("");
         }
@@ -2202,3 +2212,8 @@ var SOURCE_VISUALS = {
         });
     };
 })();
+
+// Mencegah elemen interaktif Python (Glossary, Kuis, dll) bocor ke modul lain
+PYTHON_GUIDES.length = 0;
+DISCUSSION_PROMPTS.length = 0;
+SOURCE_VISUALS = {};

@@ -1,5 +1,8 @@
 <h1>Modalitas dan Representasi</h1>
-<h2>2.1 Representasi sebagai Jembatan</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.1 Representasi sebagai Jembatan</h2>
 <p>Model tidak menerima makna secara langsung. Setiap input perlu diubah menjadi tensor atau embedding. Representasi yang baik mempertahankan informasi yang penting bagi tugas dan mengurangi bagian yang tidak relevan.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Data mentah -&gt; preprocessing -&gt; encoder -&gt; embedding / token
 </code></pre></div>
@@ -9,7 +12,11 @@
 <li>Informasi apa yang mungkin hilang?</li>
 </ol>
 <p>Resize gambar dapat menghilangkan teks kecil. Kompresi audio dapat menghilangkan detail suara. Sampling video dapat melewatkan peristiwa singkat. Flatten tabel dapat merusak struktur baris dan kolom.</p>
-<h2>2.2 Teks</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.2 Teks</h2>
 <p>Teks biasanya diubah menjadi token melalui tokenizer. Token kemudian dipetakan menjadi embedding.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">&quot;Mesin berhenti mendadak&quot;
 -&gt; [&quot;Mes&quot;, &quot;in&quot;, &quot; berhenti&quot;, &quot; mendadak&quot;]
@@ -17,7 +24,11 @@
 -&gt; embedding
 </code></pre></div>
 <p>Tantangan teks meliputi bahasa campuran, singkatan domain, karakter OCR yang salah, konteks panjang, dan instruksi berbahaya yang disisipkan ke dalam data.</p>
-<h2>2.3 Gambar</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.3 Gambar</h2>
 <p>Gambar dapat diproses oleh CNN atau Vision Transformer. Outputnya berupa feature map atau visual token.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Gambar 336 x 336
 -&gt; dibagi menjadi patch
@@ -26,7 +37,11 @@
 -&gt; urutan visual token
 </code></pre></div>
 <p>Informasi penting meliputi objek, warna, tekstur, posisi, ukuran relatif, dan teks di dalam gambar. Resolusi dan crop sangat memengaruhi informasi yang tersedia.</p>
-<h2>2.4 Audio</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.4 Audio</h2>
 <p>Audio adalah sinyal satu dimensi sepanjang waktu. Representasi umum:</p>
 <ul>
 <li>waveform mentah,</li>
@@ -38,7 +53,11 @@
 <div class="reasoning-code-block"><pre><code class="language-text">Waveform -&gt; framing -&gt; spectrogram -&gt; audio encoder -&gt; audio token
 </code></pre></div>
 <p>Audio dapat memuat ucapan, musik, bunyi lingkungan, jeda, intonasi, dan speaker identity. Tidak semua aplikasi perlu menyimpan seluruh informasi tersebut. Untuk transkripsi rapat, isi ucapan mungkin penting, sedangkan identitas biologis suara perlu diminimalkan.</p>
-<h2>2.5 Video</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.5 Video</h2>
 <p>Video menggabungkan ruang dan waktu. Jika video 30 frame per detik berdurasi satu menit, terdapat 1.800 frame. Mengirim semua frame ke model biasanya tidak efisien.</p>
 <p>Strategi representasi video:</p>
 <ul>
@@ -51,7 +70,11 @@
 <li>transkrip audio dan timestamp.</li>
 </ul>
 <p>Kualitas video understanding bergantung pada pemilihan frame. Peristiwa penting yang sangat singkat dapat hilang bila sampling terlalu jarang.</p>
-<h2>2.6 Dokumen</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.6 Dokumen</h2>
 <p>Dokumen multimodal dapat memiliki:</p>
 <ul>
 <li>teks hasil OCR,</li>
@@ -63,7 +86,11 @@
 <li>gambar atau lampiran.</li>
 </ul>
 <p>Dokumen sebaiknya tidak selalu diubah menjadi teks polos. Tata letak dapat menentukan arti, misalnya nilai yang berada di kolom tertentu atau catatan kaki yang mengubah interpretasi.</p>
-<h2>2.7 Data Terstruktur dan Sensor</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.7 Data Terstruktur dan Sensor</h2>
 <p>Tabel, JSON, log, dan data sensor memiliki struktur eksplisit. Ada beberapa cara memasukkannya:</p>
 <ul>
 <li>serialisasi menjadi teks,</li>
@@ -73,7 +100,11 @@
 <li>retrieval nilai yang relevan saja.</li>
 </ul>
 <p>Mengubah seluruh tabel besar menjadi teks sering tidak efisien. Untuk kalkulasi, lebih aman memakai alat komputasi daripada meminta model menebak hasil aritmetika.</p>
-<h2>2.8 Normalisasi dan Sinkronisasi</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.8 Normalisasi dan Sinkronisasi</h2>
 <p>Ketika beberapa modalitas berasal dari peristiwa yang sama, sinkronisasi menjadi penting.</p>
 <p>Contoh rapat:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">00:10:24 slide berubah ke &quot;Risiko&quot;
@@ -81,7 +112,11 @@
 00:10:48 peserta menanyakan tanggal mitigasi
 </code></pre></div>
 <p>Tanpa timestamp yang benar, model dapat menghubungkan pertanyaan dengan slide yang salah.</p>
-<h2>2.9 Contoh Representasi Data Multimodal</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.9 Contoh Representasi Data Multimodal</h2>
 <div class="reasoning-code-block"><pre><code class="language-python">sample = {
     &quot;text&quot;: &quot;Periksa kondisi panel pada foto.&quot;,
     &quot;images&quot;: [&quot;panel_front.jpg&quot;, &quot;panel_closeup.jpg&quot;],
@@ -95,13 +130,16 @@
 }
 </code></pre></div>
 <p>Struktur seperti ini membantu menjaga hubungan antara input, metadata, dan sumber bukti.</p>
-<h2>Checkpoint Bab 2</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 2</h2>
 <ol>
 <li>Apa dampak utama preprocessing terhadap kualitas multimodal?</li>
 <li>Mengapa video tidak cukup direpresentasikan dengan satu frame acak?</li>
 <li>Kapan tabel lebih baik diakses melalui tool daripada diserialisasi ke prompt?</li>
 </ol>
-<h2>Latihan Bab 2 - Audit Kehilangan Informasi</h2>
-<p>Ambil satu contoh gambar, audio, video, atau dokumen. Tuliskan tiga tahap preprocessing dan jelaskan informasi apa yang mungkin hilang pada setiap tahap.</p>
-<hr>
 
+
+</div>

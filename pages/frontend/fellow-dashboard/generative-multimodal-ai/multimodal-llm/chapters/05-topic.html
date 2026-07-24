@@ -1,5 +1,8 @@
 <h1>Pretraining dan Multimodal Instruction Tuning</h1>
-<h2>5.1 Tahapan Pembelajaran</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.1 Tahapan Pembelajaran</h2>
 <p>Pipeline pembelajaran MLLM dapat meliputi:</p>
 <ol>
 <li>melatih encoder per modalitas,</li>
@@ -11,7 +14,11 @@
 <li>domain adaptation.</li>
 </ol>
 <p>Tidak semua model mengikuti urutan yang sama.</p>
-<h2>5.2 Data Pasangan</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.2 Data Pasangan</h2>
 <p>Contoh pasangan data:</p>
 <ul>
 <li>gambar-caption,</li>
@@ -22,7 +29,11 @@
 <li>multi-image-comparison.</li>
 </ul>
 <p>Kualitas pasangan lebih penting daripada jumlah semata. Caption otomatis dapat memperbesar skala tetapi juga menambah bias dan kesalahan.</p>
-<h2>5.3 Contrastive Objective</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.3 Contrastive Objective</h2>
 <p>Contrastive objective mempelajari kesesuaian antarembedding. Dalam batch, pasangan yang benar diperlakukan sebagai positif dan pasangan lain sebagai negatif.</p>
 <p>Tujuannya:</p>
 <ul>
@@ -31,18 +42,30 @@
 <li>membantu zero-shot matching.</li>
 </ul>
 <p>Keterbatasannya: objective ini belum tentu cukup untuk menghasilkan jawaban panjang atau mengikuti instruksi.</p>
-<h2>5.4 Generative Objective</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.4 Generative Objective</h2>
 <p>Generative objective meminta model memprediksi token output berdasarkan input multimodal.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Input: gambar + &quot;Apa yang terjadi?&quot;
 Target: &quot;Seorang teknisi sedang memeriksa panel listrik.&quot;
 </code></pre></div>
 <p>Objective ini melatih model menghasilkan bahasa yang relevan, tetapi juga dapat mendorong model memberikan jawaban meskipun bukti tidak cukup. Karena itu, contoh abstention perlu dimasukkan.</p>
-<h2>5.5 Interleaved Multimodal Data</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.5 Interleaved Multimodal Data</h2>
 <p>Data interleaved menggabungkan teks dan modalitas lain dalam urutan yang bermakna.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Paragraf -&gt; gambar -&gt; penjelasan -&gt; tabel -&gt; kesimpulan
 </code></pre></div>
 <p>Format ini membantu model memahami hubungan dalam dokumen, artikel, atau percakapan. Namun, urutan dan marker sumber harus jelas.</p>
-<h2>5.6 Multimodal Instruction Tuning</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.6 Multimodal Instruction Tuning</h2>
 <p>Instruction tuning melatih model mengikuti perintah dengan input multimodal.</p>
 <p>Contoh format:</p>
 <div class="reasoning-code-block"><pre><code class="language-json">{
@@ -63,7 +86,11 @@ Target: &quot;Seorang teknisi sedang memeriksa panel listrik.&quot;
 <li>konflik modalitas,</li>
 <li>kasus modalitas hilang.</li>
 </ul>
-<h2>5.7 Negative Examples</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.7 Negative Examples</h2>
 <p>Negative examples mengajarkan model bahwa tidak semua pertanyaan dapat dijawab.</p>
 <p>Contoh:</p>
 <ul>
@@ -75,7 +102,11 @@ Target: &quot;Seorang teknisi sedang memeriksa panel listrik.&quot;
 <li>dua sumber saling bertentangan.</li>
 </ul>
 <p>Target jawaban harus menyatakan keterbatasan secara jelas.</p>
-<h2>5.8 Data Leakage dan Deduplication</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.8 Data Leakage dan Deduplication</h2>
 <p>Leakage dapat terjadi ketika:</p>
 <ul>
 <li>frame dari video yang sama masuk train dan test,</li>
@@ -85,7 +116,11 @@ Target: &quot;Seorang teknisi sedang memeriksa panel listrik.&quot;
 <li>transkrip dan ringkasannya tersebar antar split.</li>
 </ul>
 <p>Split sebaiknya dilakukan berdasarkan entitas, sumber, waktu, atau sesi, bukan hanya file acak.</p>
-<h2>5.9 Synthetic Data</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.9 Synthetic Data</h2>
 <p>Synthetic data dapat membantu membuat variasi instruksi dan kasus langka. Namun, perlu kontrol:</p>
 <ul>
 <li>verifikasi fakta,</li>
@@ -94,7 +129,11 @@ Target: &quot;Seorang teknisi sedang memeriksa panel listrik.&quot;
 <li>lakukan deduplication,</li>
 <li>audit kualitas per slice.</li>
 </ul>
-<h2>5.10 Dataset Card</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.10 Dataset Card</h2>
 <p>Dataset card minimal mencatat:</p>
 <ul>
 <li>tujuan,</li>
@@ -108,13 +147,16 @@ Target: &quot;Seorang teknisi sedang memeriksa panel listrik.&quot;
 <li>kebijakan retensi,</li>
 <li>metode split.</li>
 </ul>
-<h2>Checkpoint Bab 5</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 11</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 5</h2>
 <ol>
 <li>Mengapa contrastive objective tidak cukup untuk instruction following?</li>
 <li>Apa fungsi negative examples?</li>
 <li>Mengapa split berdasarkan entitas penting pada data multimodal?</li>
 </ol>
-<h2>Latihan Bab 5 - Merancang Contoh Training</h2>
-<p>Buat lima contoh instruction-response untuk aplikasi multimodal pilihanmu. Sertakan setidaknya satu kasus input tidak lengkap dan satu kasus modalitas saling bertentangan.</p>
-<hr>
 
+
+</div>

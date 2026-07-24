@@ -1,14 +1,25 @@
 <h1>Convolutional Neural Network</h1>
 <p>Memahami bagaimana model melihat pola lokal pada gambar.</p>
-<h2>6.1 Mengapa Dense Layer Tidak Ideal untuk Gambar Besar?</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.1 Mengapa Dense Layer Tidak Ideal untuk Gambar Besar?</h2>
 <p>Gambar memiliki struktur ruang. Piksel yang berdekatan biasanya saling berkaitan. Jika gambar langsung diratakan menjadi satu vektor, hubungan lokal ini tidak digunakan secara efisien.</p>
 <p>CNN menggunakan filter kecil yang digeser di seluruh gambar. Filter yang sama digunakan berulang kali sehingga jumlah parameter lebih hemat dan pola dapat dikenali di berbagai posisi.</p>
-<h2>6.2 Convolution dan Filter</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.2 Convolution dan Filter</h2>
 <p>Filter atau kernel adalah matriks kecil, misalnya 3 × 3. Filter bergerak di atas gambar, melakukan perkalian elemen, kemudian menjumlahkannya untuk menghasilkan feature map. Selama training, nilai filter dipelajari secara otomatis.</p>
 <blockquote>
 <p><strong>Lapisan awal dan lapisan dalam:</strong> lapisan awal sering belajar mendeteksi tepi dan tekstur. Lapisan lebih dalam menggabungkan fitur menjadi bagian objek, kemudian menjadi representasi objek yang lebih utuh.</p>
 </blockquote>
-<h2>6.3 Stride, Padding, dan Pooling</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.3 Stride, Padding, dan Pooling</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -34,7 +45,11 @@
 </tr>
 </tbody></table></div>
 <p>Max pooling mengambil nilai terbesar pada area tertentu. Global average pooling merata-ratakan setiap feature map dan sering digunakan sebelum output layer.</p>
-<h2>6.4 Arsitektur CNN Sederhana</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.4 Arsitektur CNN Sederhana</h2>
 <div class="reasoning-code-block"><pre><code class="language-text">Input image
 → Conv2D + ReLU
 → MaxPool
@@ -43,7 +58,11 @@
 → GlobalAveragePooling
 → Dense output
 </code></pre></div>
-<h2>6.5 Transfer Learning</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.5 Transfer Learning</h2>
 <p>Transfer learning menggunakan model yang telah dilatih pada dataset besar sebagai feature extractor. Pendekatan ini sangat berguna ketika dataset sendiri terbatas.</p>
 <p>Tahapan umumnya:</p>
 <ol>
@@ -56,7 +75,11 @@
 <blockquote>
 <p><strong>Baseline yang praktis:</strong> untuk dataset gambar kecil hingga menengah, transfer learning biasanya menjadi baseline yang lebih kuat daripada melatih CNN besar dari nol.</p>
 </blockquote>
-<h2>6.6 Contoh Kode Keras</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.6 Contoh Kode Keras</h2>
 <p>Contoh model klasifikasi gambar tiga kelas:</p>
 <div class="reasoning-code-block"><pre><code class="language-python">import tensorflow as tf
 
@@ -76,26 +99,16 @@ model.compile(
     metrics=[&quot;accuracy&quot;],
 )
 </code></pre></div>
-<h2>Checkpoint Bab 6</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 6</h2>
 <ol>
 <li>Mengapa CNN menggunakan filter yang sama pada banyak posisi?</li>
 <li>Apa fungsi pooling?</li>
 <li>Kapan transfer learning lebih masuk akal daripada training dari nol?</li>
 </ol>
-<h2>Latihan Bab 6 - Mendesain CNN Baseline</h2>
-<p><strong>Tujuan:</strong> menyusun CNN kecil yang sesuai dengan ukuran data dan jumlah kelas.</p>
-<p><strong>Tingkat kesulitan:</strong> Menengah</p>
-<p>Gunakan kebutuhan berikut:</p>
-<div class="reasoning-code-block"><pre><code class="language-text">Input: gambar RGB 128 × 128
-Jumlah kelas: 5
-</code></pre></div>
-<p>Kerjakan:</p>
-<ol>
-<li>Rancang dua blok convolution dan satu output layer.</li>
-<li>Tuliskan bentuk output setelah setiap tahap secara kasar.</li>
-<li>Tambahkan satu strategi regularisasi.</li>
-<li>Jelaskan alasan desain tersebut.</li>
-</ol>
-<p><strong>Hasil yang dikumpulkan:</strong> diagram arsitektur, alasan desain, dan estimasi perubahan bentuk tensor.</p>
-<hr>
 
+
+</div>

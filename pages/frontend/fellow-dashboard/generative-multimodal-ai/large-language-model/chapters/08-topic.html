@@ -1,5 +1,8 @@
 <h1>Retrieval-Augmented Generation</h1>
-<h2>8.1 Mengapa RAG Dibutuhkan?</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.1 Mengapa RAG Dibutuhkan?</h2>
 <p>Retrieval-Augmented Generation atau RAG menggabungkan pencarian informasi dengan generasi teks. Sebelum menjawab, sistem mengambil potongan dokumen yang relevan dan memasukkannya ke prompt.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Pertanyaan pengguna
         ↓
@@ -19,7 +22,11 @@ Jawaban + citation
 <li>terlalu besar untuk dimasukkan seluruhnya,</li>
 <li>harus dipisahkan berdasarkan hak akses.</li>
 </ul>
-<h2>8.2 Tahap Ingestion</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.2 Tahap Ingestion</h2>
 <p>Pipeline ingestion menyiapkan dokumen agar dapat dicari:</p>
 <ol>
 <li>Mengambil file atau data.</li>
@@ -41,7 +48,11 @@ Jawaban + citation
 <li>tingkat akses,</li>
 <li>versi.</li>
 </ul>
-<h2>8.3 Chunking</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.3 Chunking</h2>
 <p>Chunk terlalu kecil kehilangan konteks. Chunk terlalu besar membawa banyak informasi tidak relevan dan menghabiskan context window.</p>
 <p>Strategi chunking:</p>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
@@ -79,7 +90,11 @@ Jawaban + citation
 </tr>
 </tbody></table></div>
 <p>Tidak ada ukuran chunk universal. Ukuran harus diuji terhadap jenis pertanyaan nyata.</p>
-<h2>8.4 Retrieval</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.4 Retrieval</h2>
 <p>Retriever mengubah pertanyaan menjadi query dan mengambil kandidat chunk. Tantangan penting:</p>
 <ul>
 <li>pertanyaan pengguna mungkin ambigu,</li>
@@ -89,14 +104,22 @@ Jawaban + citation
 <li>hak akses membatasi dokumen yang boleh diambil.</li>
 </ul>
 <p>Sistem dapat memakai query rewriting, hybrid search, metadata filtering, dan reranking.</p>
-<h2>8.5 Reranking</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.5 Reranking</h2>
 <p>Retriever awal biasanya cepat dan mengambil banyak kandidat. Reranker menilai kembali pasangan query-chunk secara lebih teliti, lalu memilih beberapa chunk terbaik.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">1. Retriever mengambil 30 kandidat.
 2. Reranker mengurutkan ulang.
 3. Sistem memilih 5 chunk untuk prompt.
 </code></pre></div>
 <p>Reranking dapat meningkatkan relevansi, tetapi menambah latency dan biaya.</p>
-<h2>8.6 Generation dan Citation</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.6 Generation dan Citation</h2>
 <p>Prompt RAG harus meminta model:</p>
 <ul>
 <li>menggunakan hanya konteks yang diberikan,</li>
@@ -106,7 +129,11 @@ Jawaban + citation
 <li>menjaga format citation.</li>
 </ul>
 <p>Citation sebaiknya dibuat dari metadata yang dikendalikan program, bukan dipercayakan sepenuhnya pada teks bebas model.</p>
-<h2>8.7 RAG Tidak Menghapus Hallucination</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.7 RAG Tidak Menghapus Hallucination</h2>
 <p>RAG dapat gagal karena:</p>
 <ul>
 <li>dokumen yang benar tidak masuk indeks,</li>
@@ -124,7 +151,11 @@ Jawaban + citation
 <li>kualitas citation,</li>
 <li>end-to-end answer quality.</li>
 </ol>
-<h2>8.8 Contoh Retrieval Sederhana dengan Word Overlap</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.8 Contoh Retrieval Sederhana dengan Word Overlap</h2>
 <p>Contoh berikut bukan pengganti vector database, tetapi membantu memahami pipeline.</p>
 <div class="reasoning-code-block"><pre><code class="language-python">import re
 from collections import Counter
@@ -154,23 +185,16 @@ def retrieve(query, top_k=2):
 print(retrieve(&quot;kapan pendaftaran ditutup&quot;))
 </code></pre></div>
 <p>Keterbatasan metode ini adalah parafrasa seperti <code>batas registrasi</code> mungkin tidak cocok dengan <code>pendaftaran ditutup</code>. Dense atau hybrid retrieval dapat membantu.</p>
-<h2>Checkpoint Bab 8</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 8</h2>
 <ol>
 <li>Apa perbedaan tahap ingestion dan retrieval?</li>
 <li>Mengapa ukuran chunk perlu diuji?</li>
 <li>Mengapa evaluasi RAG harus memisahkan retrieval dan generation?</li>
 </ol>
-<h2>Latihan Bab 8 - Mendesain RAG</h2>
-<p>Gunakan kumpulan dokumen pedoman organisasi. Buat rancangan berisi:</p>
-<ul>
-<li>jenis dokumen,</li>
-<li>aturan chunking,</li>
-<li>metadata wajib,</li>
-<li>filter hak akses,</li>
-<li>retrieval baseline,</li>
-<li>format citation,</li>
-<li>minimal 15 pertanyaan evaluasi,</li>
-<li>kebijakan ketika bukti tidak ditemukan.</li>
-</ul>
-<hr>
 
+
+</div>

@@ -1,0 +1,163 @@
+<h1>Evaluation AI</h1>
+<h2>Tentang Modul Ini</h2>
+<p>Sistem AI dapat terlihat pintar karena jawabannya lancar. Namun jawaban yang lancar belum tentu benar, aman, adil, atau cocok digunakan. Karena itu, modul ini mengajarkan cara membuktikan apakah sebuah sistem AI layak dipakai.</p>
+<p>Modul ini sengaja ditempatkan sebelum <strong>Evolution of AI</strong>. Alasannya sederhana: sebelum membandingkan symbolic AI, machine learning, reinforcement learning, model generatif, dan LLM, peserta perlu memiliki alat ukur yang sama. Dengan begitu, peserta tidak menilai teknologi hanya dari kata &quot;baru&quot;, &quot;besar&quot;, atau &quot;canggih&quot;.</p>
+<h3>Studi kasus yang digunakan</h3>
+<p>Seluruh bab memakai satu studi kasus yang sama:</p>
+<blockquote>
+<p><strong>Asisten Pembelajaran HerAI</strong> adalah sistem yang membantu peserta mencari materi, memahami tugas, memeriksa jadwal, dan membaca aturan program.</p>
+</blockquote>
+<p>Sistem ini harus mampu menjawab dengan bahasa yang mudah dipahami, memakai sumber yang benar, mengakui ketika informasi tidak tersedia, dan mengalihkan kasus sensitif kepada manusia.</p>
+<h3>Hasil yang dibangun secara bertahap</h3>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Bab</th>
+<th>Hasil yang dibuat</th>
+<th>Dipakai pada bab berikutnya</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Evaluation Brief</td>
+<td>Menentukan apa yang harus dinilai</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Rubrik Kualitas Output</td>
+<td>Menjadi dasar pelabelan jawaban</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Evaluation Dataset</td>
+<td>Menjadi bahan uji reliability dan robustness</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Stress-Test Matrix</td>
+<td>Menemukan kegagalan sebelum rilis</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Fairness Audit Plan</td>
+<td>Memastikan dampak tidak berat sebelah</td>
+</tr>
+<tr>
+<td>6</td>
+<td>AI Evaluation Plan</td>
+<td>Menjadi alat pembanding pada modul Evolution of AI</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h1>Mengapa AI Perlu Dievaluasi?</h1>
+<h2>Pertanyaan pembuka</h2>
+<p>Sebuah chatbot dapat menjawab seratus pertanyaan. Apakah itu sudah cukup untuk menyebutnya baik?</p>
+<h2>Tujuan pembelajaran</h2>
+<p>Setelah mempelajari bab ini, peserta dapat:</p>
+<ol>
+<li>membedakan software testing dan AI evaluation;</li>
+<li>menjelaskan mengapa akurasi saja tidak cukup;</li>
+<li>menghubungkan tujuan, pengguna, risiko, metrik, dan keputusan rilis;</li>
+<li>membedakan output evaluation, model evaluation, dan system evaluation;</li>
+<li>membuat <strong>Evaluation Brief</strong> sederhana.</li>
+</ol>
+<h2>Hubungan dengan materi sebelumnya</h2>
+<p>Pada materi Reasoning AI, peserta belajar bahwa proses berpikir yang terlihat masuk akal belum tentu menghasilkan jawaban yang benar. Bab ini melanjutkan gagasan tersebut: kita membutuhkan bukti yang terukur untuk memeriksa hasil, pola kegagalan, dan dampak sistem.</p>
+<h2>1.1 Software testing dan AI evaluation</h2>
+<p>Software biasa sering diuji dengan pertanyaan seperti:</p>
+<ul>
+<li>apakah tombol dapat ditekan;</li>
+<li>apakah API memberikan respons;</li>
+<li>apakah form menolak data yang salah;</li>
+<li>apakah pesan error muncul.</li>
+</ul>
+<p>Pengujian tersebut tetap diperlukan pada produk AI. Namun AI membutuhkan pertanyaan tambahan:</p>
+<ul>
+<li>apakah jawaban sesuai kebutuhan pengguna;</li>
+<li>apakah klaimnya benar;</li>
+<li>apakah jawabannya tetap stabil saat pertanyaan ditulis dengan cara berbeda;</li>
+<li>apakah sistem aman ketika informasi tidak tersedia;</li>
+<li>apakah kelompok pengguna tertentu lebih sering dirugikan;</li>
+<li>apakah sistem dapat dipantau setelah digunakan.</li>
+</ul>
+<p>AI bersifat probabilistik. Artinya, input yang sama dapat menghasilkan jawaban yang sedikit berbeda. Karena itu, tim tidak cukup memeriksa apakah sistem &quot;berjalan&quot;. Tim juga perlu memeriksa bagaimana sistem berperilaku.</p>
+<h2>1.2 Tiga tingkat evaluasi</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Tingkat</th>
+<th>Pertanyaan utama</th>
+<th>Contoh pada Asisten HerAI</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Output evaluation</td>
+<td>Apakah satu jawaban ini baik?</td>
+<td>Apakah jawaban tentang deadline benar dan jelas?</td>
+</tr>
+<tr>
+<td>Model evaluation</td>
+<td>Apakah kemampuan model memadai?</td>
+<td>Apakah model memahami Bahasa Indonesia informal?</td>
+</tr>
+<tr>
+<td>System evaluation</td>
+<td>Apakah produk lengkap aman digunakan?</td>
+<td>Apakah retrieval, aturan, logging, eskalasi, dan monitoring bekerja bersama?</td>
+</tr>
+</tbody></table></div>
+<p>Ketiga tingkat tersebut saling melengkapi. Model yang baik dapat menghasilkan sistem yang buruk bila sumber datanya salah, alur eskalasinya tidak ada, atau antarmukanya membingungkan.</p>
+<h2>1.3 Evaluasi harus dimulai dari tujuan</h2>
+<p>Urutan yang sehat adalah:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Tujuan -&gt; Pengguna -&gt; Keputusan -&gt; Risiko -&gt; Bukti -&gt; Metrik -&gt; Release -&gt; Monitoring
+</code></pre></div>
+<p>Jangan memulai dari pertanyaan &quot;metrik apa yang sedang populer?&quot;. Mulailah dari pertanyaan &quot;kesalahan apa yang paling merugikan pengguna?&quot;.</p>
+<h3>Contoh</h3>
+<p>Asisten HerAI membantu peserta membaca aturan cuti.</p>
+<ul>
+<li><strong>Tujuan:</strong> membantu peserta memahami prosedur cuti.</li>
+<li><strong>Pengguna:</strong> peserta fellowship.</li>
+<li><strong>Keputusan yang dibantu:</strong> kapan dan bagaimana mengajukan cuti.</li>
+<li><strong>Kegagalan kritis:</strong> memberi aturan yang salah atau mengarang persetujuan.</li>
+<li><strong>Bukti yang diperlukan:</strong> jawaban sesuai dokumen, menyebut batasan, dan mengarahkan ke mentor bila kasus tidak jelas.</li>
+</ul>
+<h2>1.4 Verification, validation, dan evaluation</h2>
+<ul>
+<li><strong>Verification:</strong> apakah sistem dibangun sesuai spesifikasi?</li>
+<li><strong>Validation:</strong> apakah sistem cocok untuk kebutuhan pengguna?</li>
+<li><strong>Evaluation:</strong> seberapa baik perilaku sistem berdasarkan data, rubrik, dan skenario uji?</li>
+</ul>
+<p>Ketiganya sering dirangkum dalam TEVV: test, evaluation, validation, and verification. TEVV tidak hanya dilakukan sebelum peluncuran. Evaluasi perlu berlanjut ketika data, model, prompt, kebijakan, atau perilaku pengguna berubah.</p>
+<h2>1.5 Tugas Praktik: Evaluation Brief</h2>
+<p>Isi template berikut untuk Asisten HerAI atau proyek peserta.</p>
+<div class="reasoning-code-block"><pre><code class="language-yaml">system_name: Asisten Pembelajaran HerAI
+primary_users:
+  - peserta fellowship
+main_goal: membantu peserta memahami materi dan aturan program
+supported_decisions:
+  - memilih materi berikutnya
+  - memahami tugas dan deadline
+  - mengetahui kapan perlu menghubungi mentor
+critical_failures:
+  - mengarang aturan
+  - memberi deadline yang salah
+  - membocorkan data pribadi
+  - tidak mengakui ketika sumber tidak tersedia
+success_evidence:
+  - jawaban relevan
+  - klaim didukung sumber
+  - bahasa mudah dipahami
+  - eskalasi berjalan pada kasus sensitif
+release_owner: product owner dan program coordinator
+</code></pre></div>
+<h2>1.6 Kesalahan umum</h2>
+<ol>
+<li>Memilih metrik sebelum memahami penggunaan sistem.</li>
+<li>Menganggap rata-rata tinggi berarti semua kasus aman.</li>
+<li>Tidak menulis kegagalan yang sama sekali tidak boleh terjadi.</li>
+<li>Menganggap evaluasi selesai setelah sistem dirilis.</li>
+</ol>
+<h2>Handoff ke Bab 2</h2>
+<p>Evaluation Brief memberi tahu <strong>apa yang penting</strong>. Bab berikutnya mengubah kebutuhan tersebut menjadi rubrik yang dapat digunakan untuk menilai output secara konsisten.</p>
+<hr>
+

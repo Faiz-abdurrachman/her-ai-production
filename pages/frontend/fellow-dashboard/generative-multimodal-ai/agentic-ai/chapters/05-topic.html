@@ -1,5 +1,8 @@
 <h1>Tool Calling yang Aman dan Andal</h1>
-<h2>5.1 Tool sebagai Kontrak</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.1 Tool sebagai Kontrak</h2>
 <p>Tool bukan sekadar fungsi yang bisa dipanggil model. Tool adalah kontrak antara model dan sistem.</p>
 <p>Kontrak tersebut mencakup:</p>
 <ul>
@@ -13,7 +16,11 @@
 <li>efek samping;</li>
 <li>aturan izin.</li>
 </ul>
-<h2>5.2 Tool Read dan Write</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.2 Tool Read dan Write</h2>
 <p>Pisahkan tools berdasarkan efeknya.</p>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
@@ -55,7 +62,11 @@
 </tr>
 </tbody></table></div>
 <p>Tools write, destructive, dan komunikasi eksternal biasanya membutuhkan approval.</p>
-<h2>5.3 Deskripsi Tool</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.3 Deskripsi Tool</h2>
 <p>Deskripsi tool harus menjelaskan <strong>kapan digunakan</strong> dan <strong>kapan tidak digunakan</strong>.</p>
 <p>Contoh buruk:</p>
 <div class="reasoning-code-block"><pre><code class="language-python">def send_message(...):
@@ -69,7 +80,11 @@
     Use only after recipient_id has been resolved from trusted data.
     &quot;&quot;&quot;
 </code></pre></div>
-<h2>5.4 Input Schema</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.4 Input Schema</h2>
 <p>Gunakan schema ketat.</p>
 <div class="reasoning-code-block"><pre><code class="language-python">from pydantic import BaseModel, Field
 from typing import Literal
@@ -88,7 +103,11 @@ class UpdateTaskInput(BaseModel):
 <li>memudahkan pengujian;</li>
 <li>menolak input sebelum menyentuh sistem utama.</li>
 </ul>
-<h2>5.5 Output Schema</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.5 Output Schema</h2>
 <p>Tool sebaiknya mengembalikan hasil terstruktur.</p>
 <div class="reasoning-code-block"><pre><code class="language-json">{
   &quot;ok&quot;: true,
@@ -113,7 +132,11 @@ class UpdateTaskInput(BaseModel):
   &quot;audit_id&quot;: &quot;AUD-8F22&quot;
 }
 </code></pre></div>
-<h2>5.6 Idempotency</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.6 Idempotency</h2>
 <p>Tool idempotent dapat dipanggil ulang tanpa menggandakan efek.</p>
 <p>Masalah:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Agent memanggil create_payment
@@ -129,7 +152,11 @@ class UpdateTaskInput(BaseModel):
         return existing
     return persist_once(payload, idempotency_key)
 </code></pre></div>
-<h2>5.7 Timeout dan Retry</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.7 Timeout dan Retry</h2>
 <p>Retry hanya untuk error yang memang dapat dicoba kembali.</p>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
@@ -178,7 +205,11 @@ class UpdateTaskInput(BaseModel):
         sleep(2 ** attempt)
 raise ToolUnavailable(&quot;Service unavailable after 3 attempts&quot;)
 </code></pre></div>
-<h2>5.8 Tool Confirmation</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.8 Tool Confirmation</h2>
 <p>Sebelum tindakan berisiko, tampilkan ringkasan:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Tindakan: Mengirim 12 pengingat tugas
 Penerima: 12 anggota tim
@@ -187,7 +218,11 @@ Dampak: Pesan eksternal akan terkirim
 Tidak dapat dibatalkan: Ya
 </code></pre></div>
 <p>Pengguna kemudian memilih setujui, revisi, atau batalkan.</p>
-<h2>5.9 Tool Result Injection</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.9 Tool Result Injection</h2>
 <p>Hasil tool adalah data, bukan instruksi. Jika tool mengambil dokumen yang berisi “abaikan aturan sebelumnya,” kalimat tersebut tidak boleh dianggap sebagai system instruction.</p>
 <p>Praktik:</p>
 <ul>
@@ -197,7 +232,11 @@ Tidak dapat dibatalkan: Ya
 <li>validasi tindakan terhadap policy engine;</li>
 <li>gunakan allowlist domain dan sumber.</li>
 </ul>
-<h2>5.10 Tool Registry</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.10 Tool Registry</h2>
 <p>Dalam sistem besar, gunakan registry.</p>
 <div class="reasoning-code-block"><pre><code class="language-python">TOOL_REGISTRY = {
     &quot;get_tasks&quot;: {
@@ -217,20 +256,17 @@ Tidak dapat dibatalkan: Ya
     },
 }
 </code></pre></div>
-<h2>Checkpoint Bab 5</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 11</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 5</h2>
 <ol>
 <li>Apa arti tool sebagai kontrak?</li>
 <li>Mengapa tool write sebaiknya dipisahkan dari tool read?</li>
 <li>Apa fungsi idempotency key?</li>
 <li>Mengapa hasil retrieval harus dianggap sebagai data tidak tepercaya?</li>
 </ol>
-<h2>Latihan Bab 5</h2>
-<p>Buat spesifikasi tiga tools untuk agent akademik:</p>
-<ul>
-<li>membaca jadwal;</li>
-<li>membuat draft pengingat;</li>
-<li>mengubah status kehadiran.</li>
-</ul>
-<p>Untuk setiap tool, tentukan schema, output, error, risiko, approval, dan idempotency.</p>
-<hr>
 
+
+</div>

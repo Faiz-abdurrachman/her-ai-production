@@ -610,7 +610,8 @@
             var expectedText = sourceText(source);
             var visual = SOURCE_VISUALS[getSourceFile(path)];
             var beginnerGuide = BEGINNER_GUIDES[getSourceFile(path)];
-            container.innerHTML = source + renderEndOfChapter(chapter, chapterNumber, CHAPTERS.length);
+            var headerHtml = '<div class="ai-modern-chapter-hero" style="margin-bottom: 24px;"><span class="reasoning-topic-tag" style="display:inline-block; margin-bottom: 8px;">TOPIK ' + (chapterNumber + 1) + ' — ' + escapeHtml((chapter.shortTitle || chapter.topic).toUpperCase()) + '</span><h2 style="margin: 0; font-size: 1.8rem; color: var(--text-primary); line-height: 1.3;">' + escapeHtml(chapter.title) + '</h2><p style="color: var(--text-secondary); margin-top: 8px; font-size: 1.05rem;">' + escapeHtml(chapter.summary) + '</p></div>';
+            container.innerHTML = headerHtml + source + renderEndOfChapter(chapter, chapterNumber, CHAPTERS.length);
             var sourceHero = container.querySelector(".ai-modern-chapter-hero");
             if (sourceHero) sourceHero.insertAdjacentHTML("afterend", renderOrientationAndNav(chapter, chapterNumber, CHAPTERS.length) + finalRenderHookSection(chapter.hook) + renderBeginnerRoadmap(beginnerGuide));
             var sourceSections = container.querySelectorAll(".ai-modern-section");

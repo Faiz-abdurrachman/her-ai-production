@@ -1,5 +1,8 @@
 <h1>Evaluasi dan Eksperimen RL</h1>
-<h2>11.1 Mengapa Evaluasi RL Sulit?</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">11.1 Mengapa Evaluasi RL Sulit?</h2>
 <p>Hasil RL dipengaruhi oleh:</p>
 <ul>
 <li>random initialization,</li>
@@ -11,7 +14,11 @@
 <li>panjang training.</li>
 </ul>
 <p>Satu run yang berhasil belum cukup. Model dapat beruntung pada seed tertentu.</p>
-<h2>11.2 Training Return dan Evaluation Return</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">11.2 Training Return dan Evaluation Return</h2>
 <p>Saat training, policy masih melakukan eksplorasi. Saat evaluasi, policy biasanya dijalankan dengan eksplorasi dikurangi atau dimatikan.</p>
 <p>Pisahkan:</p>
 <ul>
@@ -19,7 +26,11 @@
 <li><strong>evaluation return:</strong> performa policy pada episode evaluasi terpisah.</li>
 </ul>
 <p>Jangan melatih model menggunakan episode evaluasi.</p>
-<h2>11.3 Metrik Dasar</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">11.3 Metrik Dasar</h2>
 <p>Metrik yang dapat digunakan:</p>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
@@ -62,7 +73,11 @@
 </tr>
 </tbody></table></div>
 <p>Reward tinggi tidak boleh menutupi safety violation.</p>
-<h2>11.4 Multiple Seeds</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">11.4 Multiple Seeds</h2>
 <p>Jalankan eksperimen pada beberapa random seed, misalnya 5 sampai 10 seed untuk tugas pembelajaran. Laporan sebaiknya memuat:</p>
 <ul>
 <li>mean,</li>
@@ -72,7 +87,11 @@
 <li>kriteria berhenti.</li>
 </ul>
 <p>Untuk keputusan produksi, jumlah seed dan desain statistik perlu disesuaikan dengan risiko serta biaya.</p>
-<h2>11.5 Learning Curve</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">11.5 Learning Curve</h2>
 <p>Kurva belajar biasanya menampilkan:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">x-axis: environment steps atau episode
 y-axis: evaluation return atau success rate
@@ -86,7 +105,11 @@ y-axis: evaluation return atau success rate
 <li>collapse setelah sempat baik,</li>
 <li>perbedaan antar-seed.</li>
 </ul>
-<h2>11.6 Baseline</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">11.6 Baseline</h2>
 <p>Bandingkan dengan baseline sederhana:</p>
 <ul>
 <li>random policy,</li>
@@ -96,7 +119,11 @@ y-axis: evaluation return atau success rate
 <li>versi tanpa komponen tertentu.</li>
 </ul>
 <p>Model kompleks yang hanya sedikit lebih baik dari heuristic mungkin tidak sebanding dengan biaya dan risikonya.</p>
-<h2>11.7 Ablation Study</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">11.7 Ablation Study</h2>
 <p>Ablation menghapus atau mengubah satu komponen untuk mengetahui kontribusinya.</p>
 <p>Contoh DQN:</p>
 <ul>
@@ -106,7 +133,11 @@ y-axis: evaluation return atau success rate
 <li>learning rate berbeda.</li>
 </ul>
 <p>Ubah satu variabel utama pada satu waktu agar kesimpulan lebih jelas.</p>
-<h2>11.8 Reproducibility Checklist</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">11.8 Reproducibility Checklist</h2>
 <p>Catat:</p>
 <ul>
 <li>versi Python dan library,</li>
@@ -120,21 +151,17 @@ y-axis: evaluation return atau success rate
 <li>frekuensi evaluasi,</li>
 <li>checkpoint terbaik dan terakhir.</li>
 </ul>
-<h2>Checkpoint Bab 11</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 11</h2>
 <ol>
 <li>Mengapa satu seed tidak cukup?</li>
 <li>Apa perbedaan training return dan evaluation return?</li>
 <li>Mengapa baseline sederhana penting?</li>
 <li>Apa tujuan ablation study?</li>
 </ol>
-<h2>Latihan Bab 11</h2>
-<p>Rancang tabel eksperimen untuk membandingkan tiga nilai epsilon decay. Sertakan:</p>
-<ul>
-<li>variabel yang dikontrol,</li>
-<li>jumlah seed,</li>
-<li>metrik utama,</li>
-<li>metrik keselamatan,</li>
-<li>aturan memilih konfigurasi terbaik.</li>
-</ul>
-<hr>
 
+
+</div>

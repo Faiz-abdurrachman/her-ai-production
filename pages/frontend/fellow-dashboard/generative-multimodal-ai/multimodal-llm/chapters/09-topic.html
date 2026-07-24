@@ -1,5 +1,8 @@
 <h1>Adaptasi dan Fine-Tuning</h1>
-<h2>9.1 Urutan Perbaikan</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.1 Urutan Perbaikan</h2>
 <p>Sebelum fine-tuning, periksa:</p>
 <ol>
 <li>preprocessing,</li>
@@ -11,7 +14,11 @@
 <li>baru kemudian fine-tuning.</li>
 </ol>
 <p>Fine-tuning tidak dapat memperbaiki input yang salah atau target yang tidak jelas.</p>
-<h2>9.2 Prompt dan Processor Adaptation</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.2 Prompt dan Processor Adaptation</h2>
 <p>Perbaikan paling ringan:</p>
 <ul>
 <li>template prompt,</li>
@@ -23,7 +30,11 @@
 <li>few-shot examples.</li>
 </ul>
 <p>Sering kali peningkatan terbesar berasal dari pipeline, bukan parameter model.</p>
-<h2>9.3 Linear Probe dan Task Head</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.3 Linear Probe dan Task Head</h2>
 <p>Encoder dibekukan, lalu head kecil dilatih untuk tugas tertentu. Cocok ketika output berupa kelas atau skor, bukan generasi bebas.</p>
 <p>Kelebihan:</p>
 <ul>
@@ -31,7 +42,11 @@
 <li>cepat,</li>
 <li>mudah dibandingkan dengan baseline.</li>
 </ul>
-<h2>9.4 Melatih Projector atau Connector</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.4 Melatih Projector atau Connector</h2>
 <p>LLM dan encoder dapat dibekukan, sementara connector dilatih agar representasi domain masuk ke ruang LLM.</p>
 <p>Cocok ketika:</p>
 <ul>
@@ -39,7 +54,11 @@
 <li>domain memiliki visual atau audio khusus,</li>
 <li>resource terbatas.</li>
 </ul>
-<h2>9.5 Adapter dan LoRA</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.5 Adapter dan LoRA</h2>
 <p>Adapter dan LoRA menambahkan parameter kecil. Dapat diterapkan pada:</p>
 <ul>
 <li>language model,</li>
@@ -49,7 +68,11 @@
 <li>connector.</li>
 </ul>
 <p>Pilih target module berdasarkan sumber error. Jangan otomatis memasang LoRA di semua lapisan.</p>
-<h2>9.6 Full Fine-Tuning</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.6 Full Fine-Tuning</h2>
 <p>Full fine-tuning mengubah banyak atau seluruh parameter. Biaya dan risiko lebih tinggi:</p>
 <ul>
 <li>kebutuhan GPU besar,</li>
@@ -59,7 +82,11 @@
 <li>sulit rollback.</li>
 </ul>
 <p>Gunakan hanya ketika ada data, komputasi, dan evaluasi yang memadai.</p>
-<h2>9.7 Curriculum Training</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.7 Curriculum Training</h2>
 <p>Training dapat dimulai dari tugas sederhana ke kompleks:</p>
 <ol>
 <li>alignment pasangan,</li>
@@ -70,7 +97,11 @@
 <li>tool use,</li>
 <li>domain-specific cases.</li>
 </ol>
-<h2>9.8 Menyusun Dataset Adaptasi</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.8 Menyusun Dataset Adaptasi</h2>
 <p>Dataset harus mencakup:</p>
 <ul>
 <li>penggunaan umum,</li>
@@ -82,7 +113,11 @@
 <li>abstention,</li>
 <li>safety cases.</li>
 </ul>
-<h2>9.9 Split dan Leakage</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.9 Split dan Leakage</h2>
 <p>Gunakan group split berdasarkan:</p>
 <ul>
 <li>pengguna,</li>
@@ -94,7 +129,11 @@
 <li>waktu.</li>
 </ul>
 <p>Contoh: semua frame dari video yang sama harus berada pada split yang sama.</p>
-<h2>9.10 Experiment Tracking</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.10 Experiment Tracking</h2>
 <p>Catat:</p>
 <ul>
 <li>model dan processor version,</li>
@@ -108,7 +147,11 @@
 <li>latency dan memory,</li>
 <li>failure examples.</li>
 </ul>
-<h2>9.11 Acceptance Criteria</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 11</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.11 Acceptance Criteria</h2>
 <p>Sebelum training, tetapkan target:</p>
 <ul>
 <li>grounding meningkat,</li>
@@ -117,13 +160,16 @@
 <li>latency tetap dalam batas,</li>
 <li>safety regression tidak terjadi.</li>
 </ul>
-<h2>Checkpoint Bab 9</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 12</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 9</h2>
 <ol>
 <li>Mengapa fine-tuning bukan langkah pertama?</li>
 <li>Kapan melatih connector menjadi pilihan yang masuk akal?</li>
 <li>Mengapa metric harus dilihat per modalitas setelah adaptasi?</li>
 </ol>
-<h2>Latihan Bab 9 - Rencana Eksperimen</h2>
-<p>Susun tiga eksperimen bertahap untuk memperbaiki use case pilihanmu. Setiap eksperimen harus memiliki hipotesis, perubahan, metrik, biaya, dan kriteria berhenti.</p>
-<hr>
 
+
+</div>

@@ -52,10 +52,10 @@
 
                 <section class="lesson-material-panel">
                     <div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
-                        <a href="#/participant-ai-lab-vlm" class="active"><i class="fas fa-book-open"></i> Materi</a>
-                        <a href="#/participant-ai-lab-vlm-practice"><i class="fas fa-pen-to-square"></i> Latihan</a>
-                        <a href="#/participant-ai-lab-vlm-quiz"><i class="far fa-clipboard"></i> Kuis</a>
-                        <a href="#/participant-ai-lab-vlm-discussion"><i class="far fa-message"></i> Diskusi</a>
+                        <a href="#/participant-ai-vlm" class="active"><i class="fas fa-book-open"></i> Materi</a>
+                        <a href="#/participant-ai-vlm-practice"><i class="fas fa-pen-to-square"></i> Latihan</a>
+                        <a href="#/participant-ai-vlm-quiz"><i class="far fa-clipboard"></i> Kuis</a>
+                        <a href="#/participant-ai-vlm-discussion"><i class="far fa-message"></i> Diskusi</a>
                     </div>
 
                     <article class="lesson-article reasoning-scaffold-rich" id="materi-reasoning">
@@ -74,7 +74,7 @@
                             <button id="btn-next-chapter" class="btn btn-primary" style="display: none; background: var(--fellow-pink); color: white; border: none; border-radius: 100px; padding: 10px 24px; font-weight: 600; box-shadow: 0 4px 12px rgba(246,51,146,.3); cursor: pointer;">
                                 Topik Selanjutnya <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
                             </button>
-                            <a href="#/participant-ai-lab-vlm-practice" id="btn-finish-materi" class="btn btn-primary" style="display: none; background: var(--fellow-pink); color: white; border: none; border-radius: 100px; padding: 10px 24px; font-weight: 600; box-shadow: 0 4px 12px rgba(246,51,146,.3); text-decoration: none;">
+                            <a href="#/participant-ai-vlm-practice" id="btn-finish-materi" class="btn btn-primary" style="display: none; background: var(--fellow-pink); color: white; border: none; border-radius: 100px; padding: 10px 24px; font-weight: 600; box-shadow: 0 4px 12px rgba(246,51,146,.3); text-decoration: none;">
                                 Lanjut Latihan <i class="fas fa-play" style="margin-left: 8px;"></i>
                             </a>
                         </div>
@@ -87,20 +87,27 @@
                     <h2>Progres Sub-Modul</h2>
                     <div class="lesson-progress-mini"><b style="--value:0%"></b><strong>0%</strong></div>
                     <p>0 dari 6 materi selesai</p>
-                    <a href="#/participant-ai-lab-vlm">Mulai Belajar</a>
+                    <a href="#/participant-ai-vlm">Mulai Belajar</a>
                 </section>
                 <section class="module-side-card lesson-list-card">
                     <h2>Daftar Materi</h2>
-                    <ol id="reasoning-sidebar-list">
-                        <li class="active" data-chapter="1"><span>1</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(1)">Python &amp; AI Mindset</a><i class="far fa-circle-play"></i></li>
-                        <li data-chapter="2"><span>2</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(2)">Data Dasar</a><i class="far fa-circle"></i></li>
-                        <li data-chapter="3"><span>3</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(3)">Control Flow</a><i class="far fa-circle"></i></li>
-                        <li data-chapter="4"><span>4</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(4)">Function &amp; Modularitas</a><i class="far fa-circle"></i></li>
-                        <li data-chapter="5"><span>5</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(5)">OOP untuk AI</a><i class="far fa-circle"></i></li>
-                        <li data-chapter="6"><span>6</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(6)">Error &amp; File</a><i class="far fa-circle"></i></li>
-                    <li data-chapter="7"><span>7</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(7)">Ekosistem &amp; NumPy</a><i class="far fa-circle"></i></li>
-<li data-chapter="8"><span>8</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(8)">Data &amp; Mini Workflow</a><i class="far fa-circle"></i></li>
-</ol>
+                    <ol id="aiVlmList">
+                        <li class="active" data-chapter="1"><span>1</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(1)">Pengantar Vision ...</a><i class="far fa-circle-play"></i></li>
+                        <li data-chapter="2"><span>2</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(2)">Dari Gambar Menja...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="3"><span>3</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(3)">Representasi Baha...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="4"><span>4</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(4)">Menyelaraskan Gam...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="5"><span>5</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(5)">Pola Arsitektur V...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="6"><span>6</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(6)">Data dan Proses P...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="7"><span>7</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(7)">Tugas Utama Visio...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="8"><span>8</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(8)">Visual Prompting ...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="9"><span>9</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(9)">Adaptasi dan Fine...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="10"><span>10</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(10)">Evaluasi Vision L...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="11"><span>11</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(11)">Hallucination, Bi...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="12"><span>12</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(12)">Deployment dan Mo...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="13"><span>13</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(13)">Mini Project: Asi...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="14"><span>14</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(14)">Kuis Akhir dan Pe...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="15"><span>15</span><a href="javascript:void(0)" onclick="window.loadAiVlmChapter(15)">Diskusi, Glosariu...</a><i class="far fa-circle"></i></li>
+                    </ol>
                 </section>
                 <section class="module-side-card lesson-note-card lesson-compact-note">
                     <div class="module-side-head"><h2>Catatan</h2><button type="button">+ Tambah</button></div>

@@ -305,7 +305,7 @@ const CHAPTERS = [
 
 
     const PRACTICES = [
-        { id: "py-1", title: "Latihan 1 — Input, Process, Output", focus: "Python Dasar", prompt: "Kasus:\n> Tim ingin menghitung completion rate peserta.\n\nRancang input, process, dan output. Sertakan aturan ketika total peserta nol dan jelaskan mengapa edge case tersebut harus diputuskan sebelum pembagian.", fields: [["jawaban", "Tulis rancangan IPO dan edge case..."]], guide: "Jawaban kuat menyebut completed, total, validasi nilai, rumus persentase, output yang jelas, dan response aman saat total nol." },
+        { id: "py-1", title: "Latihan 1 — Input, Process, Output", focus: "Python Dasar", prompt: "Kasus:\n> Tim ingin menghitung completion rate peserta.\n\nRancang input, process, dan output. Sertakan aturan ketika total peserta nol dan jelaskan mengapa edge case tersebut harus diputuskan sebelum pembagian.\n\n**Output yang diharapkan:**\nTuliskan rancangan Anda dalam bentuk teks terstruktur (bullet points) atau pseudocode sederhana. Tidak perlu menulis kode Python yang bisa di-*run*.", fields: [["jawaban", "Tulis rancangan IPO dan edge case (Teks/Pseudocode)..."]], guide: "### Contoh Pembahasan yang Kuat:\n\n**1. Input:**\n- `completed` (integer): Jumlah peserta yang selesai.\n- `total` (integer): Jumlah total peserta yang terdaftar.\n\n**2. Process:**\n- Validasi apakah `total == 0`. Jika ya, hentikan proses (return 0 atau error log).\n- Jika `total > 0`, hitung: `rate = (completed / total) * 100`.\n\n**3. Output:**\n- `rate` (float): Persentase completion.\n\n**Edge Case (Total = 0):**\nHarus dicegah di awal sebelum pembagian (division by zero) agar aplikasi tidak *crash*." },
         { id: "py-2", title: "Latihan 2 — Metadata Dataset", focus: "Python Dasar", prompt: "Buat variabel untuk nama dataset, versi, jumlah baris, persentase missing value, dan status review. Pilih tipe data yang tepat dan jelaskan makna setiap variabel.", fields: [["jawaban", "Tulis kode dan alasan tipe datanya..."]], guide: "Gunakan nama bermakna, string untuk identitas/versi, integer untuk jumlah, float untuk persentase, dan boolean atau status eksplisit untuk review." },
         { id: "py-3", title: "Latihan 3 — Record Peserta", focus: "Collection", prompt: "Buat list berisi minimal lima dictionary peserta dengan field name, track, dan score. Sertakan satu missing score lalu jelaskan cara memvalidasi schema tanpa mengubah raw record.", fields: [["jawaban", "Tulis struktur data dan langkah validasinya..."]], guide: "List menjaga kumpulan record; dictionary memberi nama field. Buat salinan sebelum cleaning dan bedakan None dari nol." },
         { id: "py-4", title: "Latihan 4 — Validasi dengan Control Flow", focus: "Control Flow", prompt: "Loop seluruh record. Tandai score kosong, tipe salah, di luar 0–100, lulus, atau perlu review. Uji boundary 0, 74.9, 75, dan 100.", fields: [["jawaban", "Tulis kode validasi dan hasil boundary test..."]], guide: "Urutan guard: missing, type, range, lalu threshold. Catat alasan setiap record ditolak agar jumlah dapat direkonsiliasi." },
@@ -1524,7 +1524,7 @@ var SOURCE_VISUALS = {
                 }).join("")}
             </div>
             <button type="button" class="reasoning-scaffold-reveal-button" data-reasoning-reveal="${escapeHtml(item.id)}" aria-expanded="false"><i class="fas fa-lightbulb" aria-hidden="true"></i> Lihat pembahasan</button>
-            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><p>${escapeHtml(item.guide)}</p></div>
+            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><div class="reasoning-guide-content" style="margin-top: 10px;">${renderFormattedText(item.guide)}</div></div>
         </article>`;
     }
 
@@ -1533,7 +1533,7 @@ var SOURCE_VISUALS = {
         const practiceList = document.getElementById("aiPythonPracticeList");
         if (!form || !practiceList) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiPythonPracticeSource", "Latihan Modul", "Quiz — 20 Soal");
+        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiPythonPracticeSource", "Practice — Python sebagai Workflow Data", "Quiz — 20 Soal");
         practiceList.innerHTML = PRACTICES.map(renderPracticeCard).join("");
         const saved = getSavedPractice() || { answers: {}, revealed: [] };
         const savedAnswers = saved.answers || {};

@@ -1,13 +1,24 @@
 <h1>RNN dan Data Berurutan</h1>
 <p>Memahami data yang urutannya membawa makna, seperti teks dan deret waktu.</p>
-<h2>7.1 Mengapa Urutan Penting?</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.1 Mengapa Urutan Penting?</h2>
 <p>Pada data berurutan, posisi dan konteks memengaruhi makna. Kalimat “anjing menggigit manusia” berbeda dari “manusia menggigit anjing”, walaupun kata yang digunakan sama.</p>
 <p>RNN memproses elemen satu per satu sambil membawa hidden state sebagai ringkasan konteks sebelumnya.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">hidden_t = f(input_t, hidden_(t-1))
 </code></pre></div>
-<h2>7.2 Kelemahan RNN Sederhana</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.2 Kelemahan RNN Sederhana</h2>
 <p>RNN sederhana sulit mempertahankan informasi yang sangat jauh karena <em>vanishing gradient</em> atau <em>exploding gradient</em>. LSTM dan GRU menambahkan mekanisme gerbang untuk mengatur informasi yang disimpan, dilupakan, dan diteruskan.</p>
-<h2>7.3 Bentuk Masalah Sequence</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.3 Bentuk Masalah Sequence</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -32,29 +43,22 @@
 <td>Terjemahan atau pelabelan setiap token</td>
 </tr>
 </tbody></table></div>
-<h2>7.4 RNN, LSTM, atau Transformer?</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.4 RNN, LSTM, atau Transformer?</h2>
 <p>RNN dan LSTM masih berguna untuk model kecil, data streaming, dan kebutuhan latensi tertentu. Namun, Transformer lebih dominan pada banyak tugas bahasa karena dapat memproses token secara paralel dan menangkap hubungan jarak jauh dengan attention.</p>
-<h2>Checkpoint Bab 7</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 7</h2>
 <ol>
 <li>Mengapa urutan kata memengaruhi makna?</li>
 <li>Apa fungsi hidden state?</li>
 <li>Masalah apa yang coba diatasi LSTM dan GRU?</li>
 </ol>
-<h2>Latihan Bab 7 - Memetakan Masalah Sequence</h2>
-<p><strong>Tujuan:</strong> mengenali input-output pada masalah berurutan.</p>
-<p><strong>Tingkat kesulitan:</strong> Dasar</p>
-<p>Gunakan tiga kasus berikut:</p>
-<ol>
-<li>Sentiment analysis.</li>
-<li>Prediksi suhu harian.</li>
-<li>Named entity recognition.</li>
-</ol>
-<p>Untuk setiap kasus:</p>
-<ul>
-<li>Tentukan bentuk input dan output.</li>
-<li>Tentukan apakah masalahnya many-to-one atau many-to-many.</li>
-<li>Jelaskan satu risiko preprocessing yang dapat merusak urutan.</li>
-</ul>
-<p><strong>Hasil yang dikumpulkan:</strong> tabel kasus, bentuk sequence, tipe mapping, dan risiko preprocessing.</p>
-<hr>
 
+
+</div>

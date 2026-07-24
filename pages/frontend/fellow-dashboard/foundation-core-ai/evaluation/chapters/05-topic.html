@@ -1,0 +1,131 @@
+<h1>Bias dan Fairness</h1>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Pertanyaan pembuka</h2>
+<p>Jika akurasi rata-rata tinggi, tetapi pengguna dengan bahasa informal lebih sering mendapat jawaban salah, apakah sistem sudah adil?</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Tujuan pembelajaran</h2>
+<p>Peserta dapat:</p>
+<ol>
+<li>mengenali sumber bias pada data, label, model, dan deployment;</li>
+<li>membedakan equality dan equity secara sederhana;</li>
+<li>membaca outcome rate, true positive rate, dan false positive rate;</li>
+<li>membuat <strong>Fairness Audit Plan</strong>;</li>
+<li>menentukan kapan human review wajib digunakan.</li>
+</ol>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Hubungan dengan Bab 4</h2>
+<p>Stress test menunjukkan pola kegagalan. Bab ini mengelompokkan hasil berdasarkan kondisi pengguna untuk melihat apakah kegagalan lebih berat pada kelompok tertentu.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.1 Bias adalah masalah sosio-teknis</h2>
+<p>Bias tidak hanya berasal dari dataset yang tidak seimbang. Bias dapat muncul dari:</p>
+<ul>
+<li>cara data dikumpulkan;</li>
+<li>siapa yang tidak tercatat;</li>
+<li>label historis;</li>
+<li>fitur proxy;</li>
+<li>tujuan yang salah;</li>
+<li>aturan deployment;</li>
+<li>cara pengguna mengakses sistem;</li>
+<li>keputusan manusia setelah menerima output AI.</li>
+</ul>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.2 Contoh pada Asisten HerAI</h2>
+<p>Asisten mungkin bekerja baik untuk Bahasa Indonesia formal, tetapi lebih sering salah pada:</p>
+<ul>
+<li>singkatan;</li>
+<li>gaya bahasa daerah;</li>
+<li>peserta dengan koneksi lambat yang mengirim pesan pendek;</li>
+<li>pengguna baru yang belum mengenal istilah program;</li>
+<li>pertanyaan campuran Bahasa Indonesia dan Inggris.</li>
+</ul>
+<p>Ini bukan sekadar masalah bahasa. Dampaknya dapat membuat sebagian peserta lebih sulit memperoleh informasi penting.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.3 Memilih fairness check</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Situasi</th>
+<th>Pemeriksaan yang berguna</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Klasifikasi peserta berisiko</td>
+<td>Recall dan false negative rate per kelompok</td>
+</tr>
+<tr>
+<td>Penyaringan otomatis</td>
+<td>True positive rate dan false positive rate</td>
+</tr>
+<tr>
+<td>Asisten informasi</td>
+<td>Factuality, abstention, dan escalation rate per kelompok</td>
+</tr>
+<tr>
+<td>Rekomendasi materi</td>
+<td>Exposure, completion, dan outcome per kelompok</td>
+</tr>
+</tbody></table></div>
+<p>Tidak ada satu angka fairness yang cocok untuk semua masalah. Pilih metrik berdasarkan dampak keputusan.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.4 Human review dan jalur koreksi</h2>
+<p>Sistem berisiko tinggi perlu:</p>
+<ul>
+<li>keputusan akhir manusia;</li>
+<li>alasan yang dapat ditinjau;</li>
+<li>cara pengguna mengajukan koreksi;</li>
+<li>pencatatan perubahan;</li>
+<li>pemilik tanggung jawab yang jelas.</li>
+</ul>
+<p>Human review bukan hiasan. Reviewer perlu waktu, informasi, dan wewenang untuk membatalkan keputusan AI.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.5 Artifact bab: Fairness Audit Plan</h2>
+<div class="reasoning-code-block"><pre><code class="language-yaml">protected_or_affected_groups:
+  - pengguna bahasa formal
+  - pengguna bahasa informal
+  - pengguna baru
+  - pengguna dengan akses perangkat terbatas
+metrics:
+  - factuality_by_group
+  - escalation_rate_by_group
+  - unresolved_rate_by_group
+review:
+  minimum_samples_per_group: 30
+  qualitative_error_review: true
+mitigation:
+  - tambah contoh bahasa informal
+  - perbaiki clarification flow
+  - sediakan jalur bantuan manusia
+</code></pre></div>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Handoff ke Bab 6</h2>
+<p>Bab 1 sampai 5 telah menghasilkan tujuan, rubrik, dataset, stress test, dan fairness audit. Bab 6 menggabungkan semuanya menjadi keputusan rilis dan monitoring.</p>
+<hr>
+
+
+</div>

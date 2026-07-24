@@ -1,0 +1,118 @@
+<h1>Reinforcement Learning</h1>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Pertanyaan pembuka</h2>
+<p>Apa risiko ketika reward tidak benar-benar mewakili tujuan manusia?</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Tujuan pembelajaran</h2>
+<p>Peserta dapat:</p>
+<ol>
+<li>memahami agent, environment, state, action, reward, policy, dan episode;</li>
+<li>membedakan RL dari supervised learning;</li>
+<li>memahami exploration dan exploitation;</li>
+<li>mengenali reward hacking dan risiko jangka panjang;</li>
+<li>menilai apakah RL memang diperlukan.</li>
+</ol>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Hubungan dengan Bab 3</h2>
+<p>Classifier pada Bab 3 membuat prediksi sekali. Reinforcement learning digunakan ketika tindakan hari ini memengaruhi keadaan dan hasil berikutnya. Namun RL tidak otomatis lebih baik. Banyak produk cukup memakai aturan atau supervised learning.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">4.1 Komponen RL</h2>
+<ul>
+<li><strong>Agent:</strong> pengambil tindakan.</li>
+<li><strong>Environment:</strong> tempat agent bertindak.</li>
+<li><strong>State:</strong> kondisi saat ini.</li>
+<li><strong>Action:</strong> pilihan tindakan.</li>
+<li><strong>Reward:</strong> sinyal hasil.</li>
+<li><strong>Policy:</strong> strategi memilih tindakan.</li>
+<li><strong>Episode:</strong> satu rangkaian interaksi.</li>
+</ul>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">4.2 Contoh pada rekomendasi belajar</h2>
+<ul>
+<li>state: materi yang telah diselesaikan dan skor kuis;</li>
+<li>action: memilih materi berikutnya;</li>
+<li>reward: peningkatan pemahaman dan penyelesaian tugas;</li>
+<li>risiko: agent mengejar klik atau waktu layar, bukan belajar nyata.</li>
+</ul>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">4.3 Exploration dan exploitation</h2>
+<ul>
+<li><strong>Exploration:</strong> mencoba opsi baru untuk belajar.</li>
+<li><strong>Exploitation:</strong> memilih opsi yang saat ini terlihat terbaik.</li>
+</ul>
+<p>Jika agent hanya mengejar opsi populer, peserta mungkin tidak menemukan materi yang sebenarnya lebih sesuai.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">4.4 Q-learning, DQN, dan self-play</h2>
+<p>Q-learning memperkirakan nilai sebuah tindakan pada state tertentu. DQN menggunakan neural network untuk memperkirakan Q-value. Self-play memungkinkan agent belajar melalui interaksi melawan versi dirinya atau lingkungan simulasi.</p>
+<p>Konsep ini penting secara historis, tetapi penggunaan nyata membutuhkan simulator, data interaksi, dan kontrol keselamatan.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">4.5 Menggunakan lensa Evaluation AI</h2>
+<h3>Kualitas hasil</h3>
+<p>Jangan hanya melihat reward per langkah. Periksa outcome belajar jangka panjang.</p>
+<h3>Generalisasi</h3>
+<p>Uji pada tipe peserta dan kondisi yang tidak ada di training.</p>
+<h3>Reliability</h3>
+<p>Uji policy saat data hilang, state salah, atau reward terlambat.</p>
+<h3>Fairness dan safety</h3>
+<p>Pastikan eksplorasi tidak membebankan risiko pada kelompok tertentu.</p>
+<h3>System readiness</h3>
+<p>Gunakan constraint, approval, logging, dan kemampuan menghentikan policy.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">4.6 Artifact bab: Reward and Safety Specification</h2>
+<div class="reasoning-code-block"><pre><code class="language-yaml">agent_goal: memilih materi berikutnya
+state:
+  - completed_modules
+  - quiz_scores
+  - stated_interest
+actions:
+  - recommend_foundation
+  - recommend_practice
+  - recommend_review
+reward:
+  positive:
+    - quiz_improvement
+    - completion_with_understanding
+  forbidden_proxy:
+    - click_only
+    - screen_time_only
+constraints:
+  - prerequisite_order_must_hold
+  - user_can_override
+  - no_sensitive_attribute_targeting
+</code></pre></div>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Handoff ke Bab 5</h2>
+<p>RL berfokus pada tindakan berurutan. Bab 5 beralih ke keluarga model yang mempelajari representasi dan menghasilkan data baru.</p>
+<hr>
+
+
+</div>

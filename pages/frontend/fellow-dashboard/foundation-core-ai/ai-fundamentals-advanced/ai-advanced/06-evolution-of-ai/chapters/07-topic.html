@@ -1,0 +1,282 @@
+<h1>Transformer, LLM, dan Hybrid AI</h1>
+<h2>Pertanyaan pembuka</h2>
+<p>Mengapa produk AI modern sering membutuhkan lebih dari satu model atau satu paradigma?</p>
+<h2>Tujuan pembelajaran</h2>
+<p>Peserta dapat:</p>
+<ol>
+<li>memahami attention, Transformer, token, context window, dan LLM;</li>
+<li>mengenali kekuatan dan keterbatasan LLM;</li>
+<li>memahami RAG, tools, guardrail, dan human oversight;</li>
+<li>merancang arsitektur hybrid;</li>
+<li>menggabungkan AI Evaluation Plan dari modul sebelumnya.</li>
+</ol>
+<h2>Hubungan dengan bab sebelumnya</h2>
+<p>Symbolic AI memberi kontrol. ML memberi pengenalan pola. RL memberi kerangka keputusan berurutan. Model generatif memberi kemampuan membuat data. Transformer dan LLM menggabungkan representation learning skala besar dengan antarmuka bahasa yang fleksibel.</p>
+<p>Namun LLM tidak menggantikan semua komponen tersebut.</p>
+<h2>7.1 Attention dan Transformer</h2>
+<p>Attention membantu model memberi bobot pada bagian konteks yang relevan. Transformer membuat mekanisme ini dapat diproses secara paralel dan diskalakan.</p>
+<p>LLM decoder-only biasanya menghasilkan token berikutnya berdasarkan token sebelumnya.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Prompt + Context -&gt; Transformer -&gt; Probabilitas token berikutnya -&gt; Output
+</code></pre></div>
+<h2>7.2 Kekuatan LLM</h2>
+<ul>
+<li>memahami dan menghasilkan bahasa;</li>
+<li>merangkum;</li>
+<li>membantu coding;</li>
+<li>mengikuti instruksi;</li>
+<li>menggunakan tools;</li>
+<li>berinteraksi dengan banyak jenis pengguna.</li>
+</ul>
+<h2>7.3 Keterbatasan LLM</h2>
+<ul>
+<li>dapat mengarang fakta;</li>
+<li>tidak otomatis memiliki data terbaru;</li>
+<li>prompt tidak menjamin kepatuhan deterministik;</li>
+<li>context window terbatas;</li>
+<li>dapat terpengaruh prompt injection;</li>
+<li>confidence bahasa tidak sama dengan confidence kebenaran.</li>
+</ul>
+<h2>7.4 RAG dan grounding</h2>
+<p>RAG mengambil dokumen yang relevan sebelum model membuat jawaban.</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Pertanyaan -&gt; Retrieval -&gt; Dokumen relevan -&gt; LLM -&gt; Jawaban bersumber
+</code></pre></div>
+<p>RAG membantu grounding, tetapi tidak menghilangkan hallucination sepenuhnya. Retrieval, prompt, generation, dan citation tetap harus dievaluasi.</p>
+<h2>7.5 Tools dan agent workflow</h2>
+<p>LLM dapat memilih tools seperti:</p>
+<ul>
+<li>pencarian dokumen;</li>
+<li>kalkulator;</li>
+<li>database;</li>
+<li>kalender;</li>
+<li>API internal.</li>
+</ul>
+<p>Tool schema, izin, validation, timeout, logging, dan approval diperlukan agar tindakan tetap aman.</p>
+<h2>7.6 Arsitektur hybrid Asisten HerAI</h2>
+<div class="reasoning-code-block"><pre><code class="language-text">User
+  -&gt; Input validation
+  -&gt; Intent classifier
+  -&gt; Policy rule check
+  -&gt; Document retrieval
+  -&gt; LLM response generation
+  -&gt; Faithfulness and safety validation
+  -&gt; Human escalation when needed
+  -&gt; Logging and monitoring
+</code></pre></div>
+<p>Pembagian tugas:</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Komponen</th>
+<th>Tanggung jawab</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Rules</td>
+<td>kebijakan wajib dan larangan</td>
+</tr>
+<tr>
+<td>Classifier</td>
+<td>menentukan jenis pertanyaan</td>
+</tr>
+<tr>
+<td>Embedding retrieval</td>
+<td>menemukan dokumen</td>
+</tr>
+<tr>
+<td>LLM</td>
+<td>menjelaskan dengan bahasa alami</td>
+</tr>
+<tr>
+<td>Validator</td>
+<td>memeriksa sumber dan format</td>
+</tr>
+<tr>
+<td>Human reviewer</td>
+<td>menangani kasus sensitif atau konflik</td>
+</tr>
+<tr>
+<td>Monitoring</td>
+<td>mendeteksi drift dan incident</td>
+</tr>
+</tbody></table></div>
+<h2>7.7 Menggunakan seluruh lensa Evaluation AI</h2>
+<h3>Kualitas hasil</h3>
+<p>Gunakan relevansi, factuality, faithfulness, clarity, dan safety.</p>
+<h3>Generalisasi</h3>
+<p>Uji bahasa informal, topik baru, dan dokumen baru.</p>
+<h3>Reliability</h3>
+<p>Uji repeated sampling, missing source, ambiguity, dan prompt injection.</p>
+<h3>Fairness dan safety</h3>
+<p>Bandingkan performa per kelompok dan audit penggunaan tools.</p>
+<h3>System readiness</h3>
+<p>Periksa logging, release gate, human review, incident response, monitoring, dan rollback.</p>
+<h2>7.8 Tugas Praktik: Integrated System Evaluation Plan</h2>
+<div class="reasoning-code-block"><pre><code class="language-yaml">system: Asisten Pembelajaran HerAI
+architecture:
+  - rules
+  - classifier
+  - retrieval
+  - llm
+  - validator
+  - human_review
+component_evaluation:
+  rules:
+    - coverage
+    - conflict
+    - trace
+  classifier:
+    - f1
+    - calibration
+    - subgroup_error
+  retrieval:
+    - context_recall
+    - source_quality
+  llm:
+    - factuality
+    - faithfulness
+    - clarity
+  tools:
+    - schema_validation
+    - permission_test
+system_evaluation:
+  - end_to_end_task_success
+  - critical_failure_rate
+  - escalation_quality
+  - latency
+  - cost
+  - monitoring_readiness
+</code></pre></div>
+<h2>Template keputusan</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Kebutuhan</th>
+<th>Paradigma</th>
+<th>Alasan</th>
+<th>Risiko</th>
+<th>Evaluasi</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Kebijakan wajib</td>
+<td>Symbolic AI</td>
+<td>deterministik</td>
+<td>aturan usang</td>
+<td>coverage dan trace</td>
+</tr>
+<tr>
+<td>Klasifikasi pertanyaan</td>
+<td>Supervised ML</td>
+<td>belajar dari contoh</td>
+<td>overfitting</td>
+<td>F1 dan subgroup</td>
+</tr>
+<tr>
+<td>Rekomendasi berurutan</td>
+<td>RL atau aturan adaptif</td>
+<td>outcome jangka panjang</td>
+<td>reward hacking</td>
+<td>long-term outcome</td>
+</tr>
+<tr>
+<td>Ilustrasi</td>
+<td>Diffusion</td>
+<td>generasi visual</td>
+<td>bias dan biaya</td>
+<td>quality-cost-safety</td>
+</tr>
+<tr>
+<td>Jawaban bahasa</td>
+<td>LLM + RAG</td>
+<td>fleksibel dan bersumber</td>
+<td>hallucination</td>
+<td>faithfulness dan robustness</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h1>Kuis Akhir</h1>
+<h2>Soal</h2>
+<ol>
+<li>Mengapa evolusi AI sebaiknya dibaca sebagai akumulasi paradigma?</li>
+<li>Apa hubungan perubahan representasi dengan perubahan cara evaluasi?</li>
+<li>Kapan symbolic AI lebih tepat daripada machine learning?</li>
+<li>Apa fungsi explanation trace?</li>
+<li>Mengapa rule coverage penting?</li>
+<li>Apa perbedaan supervised dan unsupervised learning?</li>
+<li>Mengapa generalization lebih penting daripada skor training?</li>
+<li>Bagaimana embedding membantu semantic search?</li>
+<li>Apa perbedaan keputusan satu langkah dan keputusan berurutan?</li>
+<li>Mengapa reward yang salah dapat menghasilkan perilaku buruk?</li>
+<li>Apa fungsi latent space pada autoencoder dan VAE?</li>
+<li>Apa yang dimaksud mode collapse?</li>
+<li>Bagaimana diffusion menghasilkan sampel baru?</li>
+<li>Mengapa inference steps perlu dievaluasi bersama biaya?</li>
+<li>Apa fungsi attention pada Transformer?</li>
+<li>Mengapa RAG tidak menghilangkan hallucination sepenuhnya?</li>
+<li>Mengapa prompt saja tidak cukup untuk kontrol kebijakan?</li>
+<li>Apa manfaat arsitektur hybrid?</li>
+<li>Mengapa setiap komponen hybrid perlu dievaluasi secara terpisah?</li>
+<li>Bagaimana Evaluation AI membantu memahami Evolution of AI?</li>
+</ol>
+<h2>Kunci jawaban ringkas</h2>
+<ol>
+<li>Paradigma lama tetap berguna untuk masalah dan kontrol tertentu.</li>
+<li>Setiap representasi menghasilkan jenis kegagalan dan bukti yang berbeda.</li>
+<li>Saat aturan harus deterministik, dapat diaudit, dan tidak boleh dinegosiasikan.</li>
+<li>Menunjukkan aturan yang menghasilkan keputusan.</li>
+<li>Agar kasus penting tidak jatuh ke area tanpa aturan.</li>
+<li>Supervised memakai label; unsupervised mencari struktur tanpa label eksplisit.</li>
+<li>Sistem harus bekerja pada data baru, bukan hanya data training.</li>
+<li>Embedding menyimpan kemiripan makna dalam bentuk vektor.</li>
+<li>Keputusan berurutan memengaruhi state dan hasil berikutnya.</li>
+<li>Agent dapat mengoptimalkan proxy yang tidak sama dengan tujuan manusia.</li>
+<li>Menyimpan representasi ringkas dari faktor penting data.</li>
+<li>Generator menghasilkan variasi yang sangat terbatas.</li>
+<li>Mulai dari noise dan melakukan denoising bertahap.</li>
+<li>Lebih banyak steps dapat meningkatkan kualitas tetapi menaikkan latency dan biaya.</li>
+<li>Memberi bobot pada bagian konteks yang relevan.</li>
+<li>Retrieval dapat gagal dan LLM masih dapat mengarang atau salah menafsirkan.</li>
+<li>Prompt bersifat probabilistik; kebijakan penting membutuhkan rules dan validation.</li>
+<li>Membagi tugas sesuai kekuatan setiap pendekatan.</li>
+<li>Kegagalan satu komponen dapat tersembunyi dalam skor end-to-end.</li>
+<li>Evaluation AI memberi lensa tujuan, generalisasi, reliability, fairness, dan system readiness.</li>
+</ol>
+<hr>
+<h1>Ringkasan Modul</h1>
+<ul>
+<li>AI berkembang melalui perubahan representasi, sinyal belajar, dan kemampuan.</li>
+<li>Paradigma baru tidak otomatis menghapus paradigma lama.</li>
+<li>Symbolic AI unggul pada aturan eksplisit dan audit.</li>
+<li>Machine learning unggul pada pola yang sulit ditulis sebagai aturan.</li>
+<li>Reinforcement learning digunakan untuk keputusan berurutan, tetapi reward harus dirancang hati-hati.</li>
+<li>Autoencoder, VAE, GAN, dan diffusion memiliki tujuan serta risiko generatif yang berbeda.</li>
+<li>Transformer dan LLM memberikan fleksibilitas bahasa, tetapi membutuhkan grounding dan kontrol.</li>
+<li>Hybrid AI membagi tugas kepada komponen yang paling sesuai.</li>
+<li>Kerangka Evaluation AI harus diterapkan pada setiap paradigma dan pada sistem secara keseluruhan.</li>
+</ul>
+<h1>Glosarium</h1>
+<p><strong>Attention</strong><br>Mekanisme yang membantu model memberi bobot pada bagian konteks yang relevan.</p>
+<p><strong>Embedding</strong><br>Representasi data dalam bentuk vektor yang menyimpan pola kemiripan.</p>
+<p><strong>Explanation trace</strong><br>Jejak aturan yang menjelaskan asal keputusan symbolic system.</p>
+<p><strong>Hybrid AI</strong><br>Sistem yang menggabungkan beberapa paradigma atau komponen.</p>
+<p><strong>Latent space</strong><br>Ruang representasi ringkas yang menyimpan faktor penting data.</p>
+<p><strong>Paradigma</strong><br>Cara utama dalam merepresentasikan dan menyelesaikan masalah.</p>
+<p><strong>Policy</strong><br>Strategi agent dalam memilih tindakan.</p>
+<p><strong>RAG</strong><br>Retrieval augmented generation, yaitu mengambil dokumen sebelum menghasilkan jawaban.</p>
+<p><strong>Reward hacking</strong><br>Perilaku agent yang memaksimalkan reward tanpa memenuhi tujuan sebenarnya.</p>
+<p><strong>Rule coverage</strong><br>Tingkat cakupan aturan terhadap kasus yang perlu ditangani.</p>
+<h1>Referensi</h1>
+<ol>
+<li>Newell, Shaw, and Simon, <em>Logic Theorist</em>, 1956.</li>
+<li>Rosenblatt, <em>The Perceptron</em>, 1958.</li>
+<li>McCarthy, <em>Programs with Common Sense</em>, 1959.</li>
+<li>Rumelhart, Hinton, and Williams, <em>Learning Representations by Back-Propagating Errors</em>, 1986.</li>
+<li>Watkins and Dayan, <em>Q-learning</em>, 1992.</li>
+<li>Sutton and Barto, <em>Reinforcement Learning: An Introduction</em>.</li>
+<li>Kingma and Welling, <em>Auto-Encoding Variational Bayes</em>, 2013.</li>
+<li>Goodfellow et al., <em>Generative Adversarial Nets</em>, 2014.</li>
+<li>Ho, Jain, and Abbeel, <em>Denoising Diffusion Probabilistic Models</em>, 2020.</li>
+<li>Vaswani et al., <em>Attention Is All You Need</em>, 2017.</li>
+<li>Brown et al., <em>Language Models are Few-Shot Learners</em>, 2020.</li>
+</ol>
+

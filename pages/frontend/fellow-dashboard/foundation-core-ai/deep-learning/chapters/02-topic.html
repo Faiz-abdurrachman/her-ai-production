@@ -1,6 +1,9 @@
 <h1>Neuron dan Arsitektur Dasar</h1>
 <p>Membongkar neural network menjadi komponen kecil yang mudah dipahami.</p>
-<h2>2.1 Neuron Buatan</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.1 Neuron Buatan</h2>
 <p>Neuron buatan menerima beberapa nilai input. Setiap input dikalikan dengan bobot. Hasilnya dijumlahkan bersama sebuah bias. Nilai tersebut kemudian dilewatkan melalui activation function untuk menghasilkan output.</p>
 <p>Bobot menunjukkan seberapa kuat pengaruh sebuah input. Bias memberi fleksibilitas agar neuron tidak selalu bergantung pada titik nol.</p>
 <p>Rumus sederhana neuron:</p>
@@ -10,7 +13,11 @@ y = activation(z)
 <blockquote>
 <p><strong>Analogi panel penilaian:</strong> bayangkan beberapa juri memberi nilai pada sebuah proposal. Setiap juri memiliki bobot berbeda. Bias adalah kecenderungan awal panel. Activation function menentukan apakah skor akhir cukup kuat untuk diteruskan.</p>
 </blockquote>
-<h2>2.2 Layer: Input, Hidden, dan Output</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.2 Layer: Input, Hidden, dan Output</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -36,7 +43,11 @@ y = activation(z)
 </tr>
 </tbody></table></div>
 <p>Sebuah jaringan disebut <em>fully connected</em> ketika setiap neuron pada satu layer terhubung ke seluruh neuron di layer berikutnya. Arsitektur ini sederhana, tetapi jumlah parameternya dapat membesar dengan cepat.</p>
-<h2>2.3 Activation Function</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.3 Activation Function</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -69,7 +80,11 @@ y = activation(z)
 <blockquote>
 <p><strong>Mengapa aktivasi penting?</strong> Tanpa activation function non-linear, tumpukan banyak layer tetap setara dengan satu transformasi linear. Model tidak akan mampu mempelajari hubungan yang kompleks.</p>
 </blockquote>
-<h2>2.4 Parameter dan Hyperparameter</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.4 Parameter dan Hyperparameter</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -89,32 +104,25 @@ y = activation(z)
 <td>Learning rate, batch size, jumlah layer, dropout rate</td>
 </tr>
 </tbody></table></div>
-<h2>2.5 Menghitung Jumlah Parameter</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.5 Menghitung Jumlah Parameter</h2>
 <p>Untuk dense layer dengan 8 input dan 4 neuron output, jumlah weight adalah <code>8 × 4</code>. Setiap neuron output juga memiliki satu bias, sehingga total parameter adalah:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">jumlah_parameter = (jumlah_input × jumlah_neuron) + jumlah_neuron
 jumlah_parameter = (8 × 4) + 4 = 36
 </code></pre></div>
-<h2>Checkpoint Bab 2</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 2</h2>
 <ol>
 <li>Apa perbedaan weight dan bias?</li>
 <li>Mengapa ReLU sering digunakan pada hidden layer?</li>
 <li>Berapa jumlah parameter pada dense layer dengan 10 input dan 3 output?</li>
 </ol>
-<h2>Latihan Bab 2 - Membaca Arsitektur</h2>
-<p><strong>Tujuan:</strong> mengenali bentuk tensor dan jumlah parameter pada neural network sederhana.</p>
-<p><strong>Tingkat kesulitan:</strong> Dasar</p>
-<p>Gunakan arsitektur berikut:</p>
-<div class="reasoning-code-block"><pre><code class="language-text">Input 20 fitur
-→ Hidden layer 16 neuron
-→ Hidden layer 8 neuron
-→ Output 3 kelas
-</code></pre></div>
-<p>Kerjakan hal berikut:</p>
-<ol>
-<li>Hitung jumlah parameter pada setiap layer.</li>
-<li>Tentukan activation function yang masuk akal untuk hidden dan output layer.</li>
-<li>Jelaskan bentuk output untuk satu sampel.</li>
-</ol>
-<p><strong>Hasil yang dikumpulkan:</strong> perhitungan parameter, pilihan activation function, dan penjelasan bentuk output.</p>
-<hr>
 
+
+</div>

@@ -1,0 +1,96 @@
+<h1>Diffusion Models</h1>
+<h2>Pertanyaan pembuka</h2>
+<p>Bagaimana menyeimbangkan kualitas generasi, kecepatan, biaya, dan keamanan?</p>
+<h2>Tujuan pembelajaran</h2>
+<p>Peserta dapat:</p>
+<ol>
+<li>memahami noising dan denoising secara konseptual;</li>
+<li>menjelaskan mengapa diffusion kuat untuk sintesis;</li>
+<li>membaca trade-off inference steps dan latency;</li>
+<li>mengevaluasi prompt alignment, diversity, safety, dan biaya;</li>
+<li>membedakan kualitas visual dan kebenaran informasi.</li>
+</ol>
+<h2>Hubungan dengan Bab 5</h2>
+<p>GAN melatih generator melawan discriminator. Diffusion memakai cara berbeda: model belajar membalik proses penambahan noise. Perbedaan training ini memengaruhi stabilitas, biaya inference, dan cara evaluasi.</p>
+<h2>6.1 Proses sederhana diffusion</h2>
+<p>Saat training:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Data bersih -&gt; Tambah noise -&gt; Model belajar memprediksi noise
+</code></pre></div>
+<p>Saat generasi:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Noise acak -&gt; Denoise bertahap -&gt; Sampel baru
+</code></pre></div>
+<h2>6.2 Kekuatan dan trade-off</h2>
+<p>Kelebihan:</p>
+<ul>
+<li>kualitas tinggi;</li>
+<li>training relatif stabil;</li>
+<li>mudah dikondisikan dengan prompt atau input tambahan.</li>
+</ul>
+<p>Kekurangan:</p>
+<ul>
+<li>membutuhkan beberapa langkah inference;</li>
+<li>latency dan biaya dapat tinggi;</li>
+<li>kualitas visual tidak menjamin fakta benar;</li>
+<li>sumber data dan hak penggunaan perlu diperhatikan.</li>
+</ul>
+<h2>6.3 Menggunakan lensa Evaluation AI</h2>
+<h3>Kualitas hasil</h3>
+<p>Periksa prompt alignment, kualitas visual, dan kegunaan.</p>
+<h3>Generalisasi</h3>
+<p>Uji prompt, gaya, dan objek yang tidak dominan di data.</p>
+<h3>Reliability</h3>
+<p>Bandingkan hasil dari beberapa seed dan sampler.</p>
+<h3>Fairness dan safety</h3>
+<p>Periksa stereotip, konten tidak pantas, data pribadi, dan hak penggunaan.</p>
+<h3>System readiness</h3>
+<p>Pantau latency, biaya, filter, logging, dan human review.</p>
+<h2>6.4 Melanjutkan studi kasus</h2>
+<p>Asisten HerAI dapat memakai diffusion untuk membuat ilustrasi belajar. Namun ilustrasi tidak boleh dianggap sebagai sumber fakta. Konten yang menjelaskan aturan tetap berasal dari dokumen resmi.</p>
+<p>Ini menunjukkan pembagian tugas dalam hybrid system:</p>
+<ul>
+<li>diffusion membuat visual;</li>
+<li>retrieval menyediakan fakta;</li>
+<li>rule engine menjaga kebijakan;</li>
+<li>manusia meninjau konten yang akan dipublikasikan.</li>
+</ul>
+<h2>6.5 Tugas Praktik: Quality-Cost-Safety Matrix</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Konfigurasi</th>
+<th align="right">Kualitas</th>
+<th align="right">Latency</th>
+<th align="right">Biaya</th>
+<th>Risiko</th>
+<th>Penggunaan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Steps rendah</td>
+<td align="right">sedang</td>
+<td align="right">rendah</td>
+<td align="right">rendah</td>
+<td>detail berkurang</td>
+<td>preview</td>
+</tr>
+<tr>
+<td>Steps menengah</td>
+<td align="right">baik</td>
+<td align="right">sedang</td>
+<td align="right">sedang</td>
+<td>perlu review</td>
+<td>konten internal</td>
+</tr>
+<tr>
+<td>Steps tinggi</td>
+<td align="right">tinggi</td>
+<td align="right">tinggi</td>
+<td align="right">tinggi</td>
+<td>tetap perlu audit</td>
+<td>final terpilih</td>
+</tr>
+</tbody></table></div>
+<h2>Handoff ke Bab 7</h2>
+<p>Bab 2 sampai 6 menunjukkan bahwa setiap paradigma menyelesaikan bagian berbeda. Bab 7 menggabungkan kemampuan bahasa, retrieval, aturan, tools, dan evaluasi menjadi hybrid AI.</p>
+<hr>
+

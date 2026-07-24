@@ -1,15 +1,26 @@
 <h1>Exploration vs Exploitation</h1>
-<h2>5.1 Dilema Utama</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.1 Dilema Utama</h2>
 <p>Agent harus memilih antara:</p>
 <ul>
 <li><strong>Exploitation:</strong> memilih action yang saat ini terlihat paling baik.</li>
 <li><strong>Exploration:</strong> mencoba action lain untuk memperoleh informasi baru.</li>
 </ul>
 <p>Terlalu banyak exploitation membuat agent cepat puas pada strategi yang mungkin belum optimal. Terlalu banyak exploration membuat hasil tidak stabil dan dapat membuang sumber daya.</p>
-<h2>5.2 Analogi Restoran</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.2 Analogi Restoran</h2>
 <p>Kamu memiliki satu restoran favorit. Exploitation berarti selalu makan di sana karena sudah tahu kualitasnya. Exploration berarti mencoba restoran baru yang mungkin lebih baik, tetapi juga mungkin mengecewakan.</p>
 <p>Tujuan bukan memilih salah satu selamanya. Strategi yang baik biasanya banyak mengeksplorasi di awal, kemudian lebih banyak mengeksploitasi ketika pengetahuan meningkat.</p>
-<h2>5.3 Multi-Armed Bandit</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.3 Multi-Armed Bandit</h2>
 <p>Bandit adalah versi sederhana RL tanpa transisi state yang kompleks. Agent memilih satu dari beberapa action dan menerima reward.</p>
 <p>Contoh: tiga variasi judul materi belajar. Setiap variasi memiliki peluang berbeda untuk membuat peserta membuka materi. Sistem perlu belajar variasi yang paling efektif sambil tetap mencoba pilihan lain.</p>
 <blockquote>
@@ -20,7 +31,11 @@
 <div class="reasoning-code-block"><pre><code class="language-text">Q_new(a) = Q_old(a) + alpha × (reward - Q_old(a))
 </code></pre></div>
 <p>Jika <code>alpha = 1/N(a)</code>, pembaruan setara dengan rata-rata sampel. Jika lingkungan berubah, alpha tetap seperti <code>0.1</code> dapat membuat estimasi lebih responsif terhadap data terbaru.</p>
-<h2>5.4 Epsilon-Greedy</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.4 Epsilon-Greedy</h2>
 <p>Epsilon-greedy adalah strategi sederhana:</p>
 <ul>
 <li>dengan probabilitas <code>1 - epsilon</code>, pilih action terbaik saat ini,</li>
@@ -39,7 +54,11 @@ else:
 <div class="reasoning-code-block"><pre><code class="language-text">epsilon = max(epsilon_min, epsilon × decay)
 </code></pre></div>
 <p>Jangan menurunkan epsilon terlalu cepat. Agent dapat berhenti mengeksplorasi sebelum menemukan strategi yang baik.</p>
-<h2>5.5 Optimistic Initialization dan UCB</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.5 Optimistic Initialization dan UCB</h2>
 <p><strong>Optimistic initialization</strong> memberi nilai awal tinggi pada semua action. Agent tertarik mencoba setiap action karena semuanya terlihat menjanjikan pada awalnya.</p>
 <p><strong>Upper Confidence Bound</strong> atau UCB memilih action berdasarkan kombinasi:</p>
 <ul>
@@ -50,7 +69,11 @@ else:
 <div class="reasoning-code-block"><pre><code class="language-text">skor action = estimasi hasil + bonus eksplorasi
 </code></pre></div>
 <p>UCB cocok untuk bandit stasioner, tetapi implementasinya berbeda dari epsilon-greedy.</p>
-<h2>5.6 Contoh Kode Bandit</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.6 Contoh Kode Bandit</h2>
 <div class="reasoning-code-block"><pre><code class="language-python">import random
 
 true_rates = [0.15, 0.30, 0.22]
@@ -72,19 +95,17 @@ print(&quot;Estimasi nilai:&quot;, q)
 print(&quot;Jumlah dipilih:&quot;, counts)
 </code></pre></div>
 <p>Kode tersebut mensimulasikan tiga action dengan probabilitas reward berbeda. Hasil setiap run dapat berbeda karena proses acak.</p>
-<h2>Checkpoint Bab 5</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 5</h2>
 <ol>
 <li>Apa risiko exploitation terlalu dini?</li>
 <li>Apa arti epsilon pada epsilon-greedy?</li>
 <li>Mengapa epsilon decay perlu dilakukan perlahan?</li>
 <li>Apa intuisi bonus eksplorasi pada UCB?</li>
 </ol>
-<h2>Latihan Bab 5</h2>
-<p>Jalankan simulasi bandit dengan <code>epsilon</code> 0, 0.01, 0.1, dan 0.3. Bandingkan:</p>
-<ul>
-<li>total reward,</li>
-<li>frekuensi action terbaik dipilih,</li>
-<li>kestabilan hasil antar-run.</li>
-</ul>
-<hr>
 
+
+</div>

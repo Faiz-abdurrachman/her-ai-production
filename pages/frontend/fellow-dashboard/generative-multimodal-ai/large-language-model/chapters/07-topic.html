@@ -1,5 +1,8 @@
 <h1>Prompting yang Terstruktur</h1>
-<h2>7.1 Prompt Adalah Spesifikasi Tugas</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.1 Prompt Adalah Spesifikasi Tugas</h2>
 <p>Prompt yang baik menjelaskan pekerjaan yang harus dilakukan, bukan sekadar topik. Struktur yang berguna:</p>
 <ol>
 <li>Peran atau konteks sistem.</li>
@@ -23,7 +26,11 @@ Keluaran:
 Jika informasi tidak tersedia, tulis &quot;tidak ditemukan&quot;.
 Maksimum 250 kata.
 </code></pre></div>
-<h2>7.2 Memisahkan Instruksi dan Data</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.2 Memisahkan Instruksi dan Data</h2>
 <p>Gunakan delimiter agar model dapat membedakan instruksi dengan data pengguna.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">&lt;instruksi&gt;
 Ekstrak nama kegiatan, tanggal, dan penanggung jawab.
@@ -34,7 +41,11 @@ Ekstrak nama kegiatan, tanggal, dan penanggung jawab.
 &lt;/dokumen&gt;
 </code></pre></div>
 <p>Delimiter tidak menjadi sistem keamanan yang sempurna, tetapi meningkatkan kejelasan. Data eksternal tetap harus dianggap tidak tepercaya.</p>
-<h2>7.3 Zero-Shot, One-Shot, dan Few-Shot</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.3 Zero-Shot, One-Shot, dan Few-Shot</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -60,7 +71,11 @@ Ekstrak nama kegiatan, tanggal, dan penanggung jawab.
 </tr>
 </tbody></table></div>
 <p>Contoh few-shot harus benar, konsisten, dan mewakili kasus sulit. Contoh yang buruk dapat menyesatkan model.</p>
-<h2>7.4 Decomposition</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.4 Decomposition</h2>
 <p>Tugas kompleks dapat dipecah menjadi beberapa tahap yang dapat diperiksa:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Dokumen
   ↓
@@ -73,7 +88,11 @@ Penyusunan ringkasan
 Pemeriksaan citation
 </code></pre></div>
 <p>Decomposition lebih mudah diuji dibanding satu prompt yang meminta terlalu banyak hal sekaligus.</p>
-<h2>7.5 Prompt untuk Keluaran Terstruktur</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.5 Prompt untuk Keluaran Terstruktur</h2>
 <p>Definisikan schema dengan jelas:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Kembalikan JSON dengan field:
 - issue: string
@@ -90,13 +109,21 @@ Pemeriksaan citation
 <li>menangani output tidak valid,</li>
 <li>mengulang atau meminta perbaikan bila perlu.</li>
 </ul>
-<h2>7.6 Instruksi Ketidakpastian</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.6 Instruksi Ketidakpastian</h2>
 <p>Model perlu diberi kebijakan ketika data tidak cukup:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Jika jawaban tidak didukung konteks, jangan menebak.
 Nyatakan bahwa informasi tidak ditemukan dan sebutkan data yang dibutuhkan.
 </code></pre></div>
 <p>Instruksi ini membantu, tetapi tidak menjamin faithfulness. Evaluasi tetap diperlukan.</p>
-<h2>7.7 Prompt Versioning</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">7.7 Prompt Versioning</h2>
 <p>Prompt adalah bagian dari kode aplikasi. Kelola seperti artefak versi:</p>
 <ul>
 <li>beri ID dan versi,</li>
@@ -134,23 +161,16 @@ Nyatakan bahwa informasi tidak ditemukan dan sebutkan data yang dibutuhkan.
 <td>Citation accuracy 0.88</td>
 </tr>
 </tbody></table></div>
-<h2>Checkpoint Bab 7</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 7</h2>
 <ol>
 <li>Mengapa prompt sebaiknya menyebut format keluaran?</li>
 <li>Apa manfaat memisahkan instruksi dan dokumen?</li>
 <li>Mengapa prompt perlu versioning dan regression test?</li>
 </ol>
-<h2>Latihan Bab 7 - Memperbaiki Prompt</h2>
-<p>Perbaiki prompt berikut:</p>
-<div class="reasoning-code-block"><pre><code class="language-text">Baca dokumen ini dan beri jawaban yang bagus.
-</code></pre></div>
-<p>Buat versi untuk:</p>
-<ol>
-<li>ekstraksi data terstruktur,</li>
-<li>ringkasan eksekutif,</li>
-<li>jawaban FAQ dengan citation,</li>
-<li>klasifikasi laporan insiden.</li>
-</ol>
-<p>Untuk setiap versi, tentukan kriteria keberhasilan dan cara memvalidasi output.</p>
-<hr>
 
+
+</div>

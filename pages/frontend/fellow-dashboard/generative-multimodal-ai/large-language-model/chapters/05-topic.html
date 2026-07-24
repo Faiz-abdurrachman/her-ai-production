@@ -1,19 +1,30 @@
 <h1>Pretraining, Instruction Tuning, dan Alignment</h1>
-<h2>5.1 Pretraining</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.1 Pretraining</h2>
 <p>Pada pretraining autoregresif, model berlatih memprediksi token berikutnya dari banyak urutan teks. Dataset dapat berisi berbagai jenis dokumen. Sebelum training, data perlu melalui filtering, deduplication, quality control, dan pengelolaan hak serta privasi.</p>
 <p>Contoh satu data training:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Input : &quot;Indonesia memiliki banyak&quot;
 Target: &quot;pulau&quot;
 </code></pre></div>
 <p>Dalam implementasi sebenarnya, banyak posisi pada urutan dapat berkontribusi pada loss secara bersamaan.</p>
-<h2>5.2 Cross-Entropy Loss</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.2 Cross-Entropy Loss</h2>
 <p>Model menghasilkan probabilitas untuk vocabulary. Cross-entropy memberi penalti ketika probabilitas token target rendah.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Target benar: &quot;pulau&quot;
 Probabilitas model untuk &quot;pulau&quot;: 0.70 -&gt; loss relatif kecil
 Probabilitas model untuk &quot;pulau&quot;: 0.01 -&gt; loss besar
 </code></pre></div>
 <p>Gradient descent memperbarui parameter agar prediksi pada data training membaik. Training skala besar membutuhkan data, komputasi, optimisasi, dan sistem terdistribusi yang matang.</p>
-<h2>5.3 Apa yang Dipelajari Saat Pretraining?</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.3 Apa yang Dipelajari Saat Pretraining?</h2>
 <p>Model dapat mempelajari:</p>
 <ul>
 <li>pola tata bahasa,</li>
@@ -24,13 +35,21 @@ Probabilitas model untuk &quot;pulau&quot;: 0.01 -&gt; loss besar
 <li>gaya dan bias dari data training.</li>
 </ul>
 <p>Model tidak menyimpan database fakta dalam bentuk tabel yang mudah diperiksa. Pengetahuan terdistribusi di parameter dan dapat muncul secara tidak konsisten.</p>
-<h2>5.4 Instruction Tuning</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.4 Instruction Tuning</h2>
 <p>Model pretrained mampu melanjutkan teks, tetapi belum tentu mengikuti permintaan pengguna dengan baik. Instruction tuning melatih model menggunakan pasangan instruksi dan respons yang diinginkan.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Instruksi: Ringkas paragraf berikut menjadi tiga poin.
 Respons : Tiga poin ringkasan yang sesuai format.
 </code></pre></div>
 <p>Instruction tuning membantu model mengenali pola tugas, mengikuti format, dan merespons percakapan.</p>
-<h2>5.5 Preference Alignment</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.5 Preference Alignment</h2>
 <p>Preference alignment memakai perbandingan respons atau feedback untuk mendorong perilaku yang lebih membantu dan aman. Beberapa keluarga metode menggunakan reward model dan reinforcement learning; metode lain mengoptimalkan preferensi secara lebih langsung.</p>
 <p>Tujuan alignment dapat meliputi:</p>
 <ul>
@@ -41,7 +60,11 @@ Respons : Tiga poin ringkasan yang sesuai format.
 <li>memprioritaskan respons yang dinilai lebih membantu.</li>
 </ul>
 <p>Alignment bukan jaminan model selalu aman atau benar. Evaluasi dan guardrail aplikasi tetap diperlukan.</p>
-<h2>5.6 Base Model dan Instruction Model</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.6 Base Model dan Instruction Model</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -66,7 +89,11 @@ Respons : Tiga poin ringkasan yang sesuai format.
 <td>Bahasa, hukum, kesehatan, kode, atau domain organisasi</td>
 </tr>
 </tbody></table></div>
-<h2>5.7 Data Berkualitas Lebih Penting daripada Sekadar Banyak</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">5.7 Data Berkualitas Lebih Penting daripada Sekadar Banyak</h2>
 <p>Data duplikat, salah, berbahaya, atau tidak relevan dapat memperburuk model. Kualitas data mencakup:</p>
 <ul>
 <li>kesesuaian dengan tujuan,</li>
@@ -77,21 +104,16 @@ Respons : Tiga poin ringkasan yang sesuai format.
 <li>keseimbangan kelompok dan bahasa,</li>
 <li>pemeriksaan kontaminasi evaluasi.</li>
 </ul>
-<h2>Checkpoint Bab 5</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 5</h2>
 <ol>
 <li>Apa tujuan pretraining autoregresif?</li>
 <li>Mengapa pretrained model belum tentu menjadi chatbot yang baik?</li>
 <li>Mengapa alignment tidak menggantikan evaluasi aplikasi?</li>
 </ol>
-<h2>Latihan Bab 5 - Audit Dataset Instruksi</h2>
-<p>Buat lima contoh instruksi dan respons untuk tugas ekstraksi informasi. Audit setiap contoh berdasarkan:</p>
-<ul>
-<li>kejelasan instruksi,</li>
-<li>konsistensi format,</li>
-<li>kebenaran respons,</li>
-<li>keberadaan data sensitif,</li>
-<li>kemungkinan bias,</li>
-<li>apakah contoh tersebut benar-benar mewakili penggunaan nyata.</li>
-</ul>
-<hr>
 
+
+</div>

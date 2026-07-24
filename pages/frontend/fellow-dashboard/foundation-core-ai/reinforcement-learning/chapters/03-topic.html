@@ -1,5 +1,8 @@
 <h1>Reward, Return, dan Discount Factor</h1>
-<h2>3.1 Reward Bukan Tujuan yang Sempurna</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.1 Reward Bukan Tujuan yang Sempurna</h2>
 <p>Reward adalah angka yang digunakan untuk mengarahkan proses belajar. Reward bukan selalu representasi sempurna dari tujuan manusia.</p>
 <p>Contoh: jika robot hanya diberi reward untuk bergerak cepat, robot dapat memilih jalur berbahaya. Jika sistem belajar hanya diberi reward berdasarkan waktu penggunaan, sistem mungkin mendorong interaksi berlebihan, bukan pembelajaran yang sehat.</p>
 <p>Karena itu, reward harus dirancang dengan mempertimbangkan:</p>
@@ -10,7 +13,11 @@
 <li>kemungkinan agent mencari celah,</li>
 <li>kelompok pengguna yang mungkin dirugikan.</li>
 </ul>
-<h2>3.2 Return</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.2 Return</h2>
 <p>Reward satu langkah belum cukup untuk menilai strategi. RL menggunakan <strong>return</strong>, yaitu akumulasi reward sejak suatu waktu.</p>
 <p>Untuk episode pendek tanpa discount:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">G_t = R_(t+1) + R_(t+2) + ... + R_T
@@ -22,7 +29,11 @@
 <div class="reasoning-code-block"><pre><code class="language-text">-1 -1 -1 +10 = 7
 </code></pre></div>
 <p>Agent yang mencapai tujuan dengan lebih sedikit langkah memperoleh return lebih tinggi jika setiap langkah diberi biaya kecil.</p>
-<h2>3.3 Discount Factor</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.3 Discount Factor</h2>
 <p>Discount factor <code>gamma</code> berada pada rentang 0 sampai 1. Nilai ini menentukan seberapa besar reward masa depan diperhitungkan.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">G_t = R_(t+1) + gamma R_(t+2) + gamma^2 R_(t+3) + ...
 </code></pre></div>
@@ -54,7 +65,11 @@
 <li>Jika <code>gamma = 0.5</code>, return dari awal adalah <code>2.5</code>.</li>
 </ul>
 <p>Gamma bukan sekadar preferensi moral tentang masa depan. Gamma juga membantu membuat return terbatas pada continuing task dan memengaruhi stabilitas proses belajar.</p>
-<h2>3.4 Sparse dan Dense Reward</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.4 Sparse dan Dense Reward</h2>
 <p><strong>Sparse reward</strong> hanya muncul pada kejadian penting, misalnya <code>+1</code> saat tujuan tercapai. Kelebihannya adalah tujuan lebih jelas, tetapi agent sulit mengetahui langkah perantara yang baik.</p>
 <p><strong>Dense reward</strong> diberikan lebih sering, misalnya reward kecil saat mendekati tujuan. Ini mempercepat belajar, tetapi berisiko mengubah perilaku agent ke arah yang tidak diinginkan.</p>
 <p>Contoh reward shaping:</p>
@@ -64,7 +79,11 @@
 +0.1 jika jarak ke tujuan berkurang
 </code></pre></div>
 <p>Reward shaping harus diuji karena agent dapat mengejar reward perantara tanpa menyelesaikan tugas utama.</p>
-<h2>3.5 Reward Hacking</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.5 Reward Hacking</h2>
 <p>Reward hacking terjadi ketika agent mendapatkan reward tinggi dengan cara yang tidak sesuai niat perancang.</p>
 <p>Contoh hipotetis:</p>
 <ul>
@@ -80,14 +99,17 @@
 <li>Periksa edge case dan perilaku tak terduga.</li>
 <li>Libatkan pemangku kepentingan yang terdampak.</li>
 </ol>
-<h2>Checkpoint Bab 3</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 3</h2>
 <ol>
 <li>Apa perbedaan reward dan return?</li>
 <li>Apa dampak gamma yang sangat kecil?</li>
 <li>Mengapa dense reward dapat mempercepat belajar sekaligus menimbulkan risiko?</li>
 <li>Berikan satu contoh reward hacking.</li>
 </ol>
-<h2>Latihan Bab 3 - Audit Reward</h2>
-<p>Buat reward awal untuk robot gudang yang harus mengantar barang. Setelah itu, cari minimal tiga kemungkinan perilaku tidak diinginkan dan revisi reward atau batasannya.</p>
-<hr>
 
+
+</div>

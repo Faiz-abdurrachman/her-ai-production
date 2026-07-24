@@ -1,5 +1,8 @@
 <h1>Arsitektur Inti dan Strategi Fusion</h1>
-<h2>3.1 Komponen Dasar</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.1 Komponen Dasar</h2>
 <p>MLLM dapat terdiri dari beberapa komponen berikut:</p>
 <ul>
 <li>encoder per modalitas,</li>
@@ -12,7 +15,11 @@
 <li>memory atau retrieval system.</li>
 </ul>
 <p>Tidak semua sistem memakai seluruh komponen. Arsitektur dipilih sesuai tugas, data, dan batas komputasi.</p>
-<h2>3.2 Encoder Per Modalitas</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.2 Encoder Per Modalitas</h2>
 <p>Encoder mengubah data mentah menjadi representasi.</p>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
@@ -43,7 +50,11 @@
 </tr>
 </tbody></table></div>
 <p>Encoder dapat dibekukan atau dilatih bersama. Membekukan encoder mengurangi kebutuhan komputasi tetapi dapat membatasi adaptasi ke domain baru.</p>
-<h2>3.3 Projector dan Connector</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.3 Projector dan Connector</h2>
 <p>Dimensi embedding dari encoder mungkin berbeda dengan dimensi hidden state LLM. Projector memetakan representasi tersebut ke ruang yang kompatibel.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">visual embedding 1024 dim
         |
@@ -63,7 +74,11 @@ LLM embedding 4096 dim
 <li>perceiver-style latent bottleneck.</li>
 </ul>
 <p>Connector sederhana mudah dilatih. Connector yang lebih kompleks dapat mengompres token dan memilih informasi yang relevan.</p>
-<h2>3.4 Early Fusion</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.4 Early Fusion</h2>
 <p>Pada early fusion, representasi beberapa modalitas digabung lebih awal menjadi satu urutan token.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">[text token] [image token] [audio token] -&gt; Transformer bersama
 </code></pre></div>
@@ -78,7 +93,11 @@ LLM embedding 4096 dim
 <li>biaya attention meningkat,</li>
 <li>sulit mengatur jumlah token setiap modalitas.</li>
 </ul>
-<h2>3.5 Intermediate Fusion</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.5 Intermediate Fusion</h2>
 <p>Pada intermediate fusion, setiap modalitas diproses lebih dahulu, lalu digabung pada lapisan tertentu melalui cross-attention atau fusion block.</p>
 <p>Kelebihan:</p>
 <ul>
@@ -90,7 +109,11 @@ LLM embedding 4096 dim
 <li>desain dan training lebih kompleks,</li>
 <li>alignment antarkomponen perlu dijaga.</li>
 </ul>
-<h2>3.6 Late Fusion</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.6 Late Fusion</h2>
 <p>Pada late fusion, setiap modalitas menghasilkan prediksi atau embedding secara terpisah. Hasil kemudian digabung.</p>
 <p>Contoh:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">model gambar -&gt; skor kondisi visual
@@ -101,7 +124,11 @@ model teks -&gt; klasifikasi laporan
             decision fusion
 </code></pre></div>
 <p>Late fusion mudah diuji per komponen dan cocok untuk sistem modular. Namun, interaksi mendalam antarinput dapat terbatas.</p>
-<h2>3.7 Tool-Mediated Fusion</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.7 Tool-Mediated Fusion</h2>
 <p>Tidak semua modalitas harus dimasukkan sebagai token. LLM dapat memanggil alat khusus:</p>
 <ul>
 <li>OCR engine,</li>
@@ -126,7 +153,11 @@ LLM memilih alat
               v
          LLM menyusun jawaban
 </code></pre></div>
-<h2>3.8 Unified Encoder vs Modular System</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.8 Unified Encoder vs Modular System</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -166,7 +197,11 @@ LLM memilih alat
 <td>Perlu governance setiap komponen</td>
 </tr>
 </tbody></table></div>
-<h2>3.9 Memilih Pola Arsitektur</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">3.9 Memilih Pola Arsitektur</h2>
 <p>Gunakan pertanyaan berikut:</p>
 <ol>
 <li>Apakah tugas membutuhkan interaksi detail lintas modalitas?</li>
@@ -176,13 +211,16 @@ LLM memilih alat
 <li>Seberapa sering satu modalitas tidak tersedia?</li>
 <li>Apakah output perlu real-time?</li>
 </ol>
-<h2>Checkpoint Bab 3</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 3</h2>
 <ol>
 <li>Apa perbedaan fungsi encoder dan projector?</li>
 <li>Mengapa early fusion cenderung mahal untuk video panjang?</li>
 <li>Apa keuntungan tool-mediated fusion untuk sistem produksi?</li>
 </ol>
-<h2>Latihan Bab 3 - Membandingkan Arsitektur</h2>
-<p>Rancang dua solusi untuk asisten inspeksi: satu memakai unified MLLM, satu memakai detector + sensor model + LLM. Bandingkan kualitas, explainability, latency, cost, dan maintenance.</p>
-<hr>
 
+
+</div>

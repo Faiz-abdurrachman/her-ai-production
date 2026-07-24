@@ -1,6 +1,9 @@
 <h1>Training dan Optimizer</h1>
 <p>Menjalankan proses belajar model secara terukur dan mengenali gejala kegagalan training.</p>
-<h2>4.1 Epoch, Batch, dan Iteration</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">4.1 Epoch, Batch, dan Iteration</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -26,7 +29,11 @@
 </tr>
 </tbody></table></div>
 <p>Jika terdapat 1.000 sampel dan batch size 100, maka satu epoch memiliki sekitar 10 iteration.</p>
-<h2>4.2 Learning Rate</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">4.2 Learning Rate</h2>
 <p>Learning rate menentukan seberapa besar langkah pembaruan parameter. Nilai terlalu besar dapat membuat loss berosilasi atau bahkan meningkat. Nilai terlalu kecil membuat training sangat lambat.</p>
 <p><strong>Tanda learning rate terlalu besar:</strong></p>
 <ul>
@@ -39,7 +46,11 @@
 <li>Loss turun sangat lambat.</li>
 <li>Model membutuhkan banyak epoch untuk mencapai hasil yang layak.</li>
 </ul>
-<h2>4.3 Optimizer Populer</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">4.3 Optimizer Populer</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -69,7 +80,11 @@
 <td>Transformer dan model modern</td>
 </tr>
 </tbody></table></div>
-<h2>4.4 Training Loop</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">4.4 Training Loop</h2>
 <p>Contoh pseudocode training loop dengan PyTorch:</p>
 <div class="reasoning-code-block"><pre><code class="language-python">for epoch in range(num_epochs):
     for x_batch, y_batch in train_loader:
@@ -83,7 +98,11 @@
     evaluate_on_validation_data()
 </code></pre></div>
 <p>Langkah <code>zero_grad()</code> penting pada framework seperti PyTorch karena gradient dapat terakumulasi. Evaluasi validation dilakukan tanpa memperbarui parameter.</p>
-<h2>4.5 Masalah Umum Saat Training</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">4.5 Masalah Umum Saat Training</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -118,7 +137,11 @@
 <td>Lakukan profiling dan sederhanakan baseline</td>
 </tr>
 </tbody></table></div>
-<h2>4.6 Teknik Debugging Penting</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">4.6 Teknik Debugging Penting</h2>
 <ul>
 <li>Coba overfit 10-50 sampel. Jika model tidak bisa menghafal data kecil, kemungkinan terdapat bug.</li>
 <li>Periksa bentuk tensor pada setiap tahap.</li>
@@ -126,26 +149,16 @@
 <li>Pastikan preprocessing training dan validation konsisten.</li>
 <li>Catat arsitektur, learning rate, batch size, seed, dan hasil setiap eksperimen.</li>
 </ul>
-<h2>Checkpoint Bab 4</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 4</h2>
 <ol>
 <li>Apa perbedaan epoch dan iteration?</li>
 <li>Mengapa validation data tidak boleh dipakai untuk memperbarui weight?</li>
 <li>Apa tes sederhana untuk mengecek apakah pipeline dan model dapat belajar?</li>
 </ol>
-<h2>Latihan Bab 4 - Diagnosis Kurva Training</h2>
-<p><strong>Tujuan:</strong> membaca pola loss dan accuracy untuk menentukan tindakan berikutnya.</p>
-<p><strong>Tingkat kesulitan:</strong> Menengah</p>
-<p>Analisis tiga skenario berikut:</p>
-<ol>
-<li>Training loss dan validation loss sama-sama turun.</li>
-<li>Training loss turun, tetapi validation loss naik.</li>
-<li>Training loss dan validation loss sama-sama datar.</li>
-</ol>
-<p>Untuk setiap skenario:</p>
-<ul>
-<li>Jelaskan diagnosis yang paling mungkin.</li>
-<li>Tuliskan dua tindakan yang dapat dicoba.</li>
-</ul>
-<p><strong>Hasil yang dikumpulkan:</strong> tabel diagnosis dan tindakan untuk setiap skenario.</p>
-<hr>
 
+
+</div>

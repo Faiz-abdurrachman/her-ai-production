@@ -1,5 +1,8 @@
 <h1>Visual Prompting dan Inference</h1>
-<h2>8.1 Struktur Prompt Visual</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.1 Struktur Prompt Visual</h2>
 <p>Prompt yang baik menjelaskan tujuan dan batas bukti.</p>
 <p>Template dasar:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Tujuan:
@@ -17,7 +20,11 @@ Aturan:
 Format keluaran:
 [schema atau contoh]
 </code></pre></div>
-<h2>8.2 Prompt untuk Ekstraksi Terstruktur</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.2 Prompt untuk Ekstraksi Terstruktur</h2>
 <div class="reasoning-code-block"><pre><code class="language-text">Ekstrak informasi dari gambar struk ini.
 Kembalikan JSON dengan field:
 - merchant_name: string | null
@@ -31,7 +38,11 @@ Kembalikan JSON dengan field:
 Jangan mengisi nilai yang tidak terbaca. Gunakan null.
 </code></pre></div>
 <p>JSON harus divalidasi setelah generation. Model dapat menghasilkan tipe data salah atau format tidak valid.</p>
-<h2>8.3 Few-Shot Multimodal Prompting</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.3 Few-Shot Multimodal Prompting</h2>
 <p>Beberapa sistem mendukung contoh gambar dan jawaban. Contoh membantu menjelaskan format dan label.</p>
 <p>Risiko:</p>
 <ul>
@@ -41,7 +52,11 @@ Jangan mengisi nilai yang tidak terbaca. Gunakan null.
 <li>contoh menggunakan data sensitif.</li>
 </ul>
 <p>Gunakan contoh yang telah dianonimkan dan mencakup kasus normal serta kasus ambigu.</p>
-<h2>8.4 Region-of-Interest</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.4 Region-of-Interest</h2>
 <p>Jika gambar besar memiliki banyak detail, crop region yang relevan dapat meningkatkan fokus.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Gambar penuh -&gt; deteksi/crop area -&gt; VLM pada region -&gt; gabungkan hasil
 </code></pre></div>
@@ -52,7 +67,11 @@ Jangan mengisi nilai yang tidak terbaca. Gunakan null.
 <li>analisis crop beresolusi tinggi,</li>
 <li>cocokkan hasil dengan gambar penuh.</li>
 </ol>
-<h2>8.5 Multi-Pass Inference</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.5 Multi-Pass Inference</h2>
 <p>Satu kali generation tidak selalu cukup. Pipeline dapat memakai beberapa tahap:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Pass 1: inventaris objek dan teks
 Pass 2: jawab pertanyaan menggunakan inventaris
@@ -60,7 +79,11 @@ Pass 3: verifikasi klaim terhadap gambar
 Pass 4: format hasil dan tandai ketidakpastian
 </code></pre></div>
 <p>Multi-pass menambah latency dan biaya. Gunakan ketika peningkatan reliability sepadan dengan kebutuhan aplikasi.</p>
-<h2>8.6 Parameter Decoding</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.6 Parameter Decoding</h2>
 <p>Untuk ekstraksi, gunakan decoding yang lebih stabil. Untuk caption kreatif, variasi dapat lebih tinggi.</p>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
@@ -87,7 +110,11 @@ Pass 4: format hasil dan tandai ketidakpastian
 </tr>
 </tbody></table></div>
 <p>Nama dan rentang parameter berbeda antar platform. Prinsipnya adalah mengontrol variasi sesuai risiko.</p>
-<h2>8.7 Validasi Output</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.7 Validasi Output</h2>
 <p>Validasi dapat meliputi:</p>
 <ul>
 <li>parsing JSON,</li>
@@ -116,7 +143,11 @@ def validate_count(result: VisualCountResult) -&gt; None:
     if not result.label.strip():
         raise ValueError(&quot;label wajib diisi&quot;)
 </code></pre></div>
-<h2>8.8 Menangani Ketidakpastian</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.8 Menangani Ketidakpastian</h2>
 <p>Jangan memaksa model selalu menjawab. Sediakan keluaran seperti:</p>
 <ul>
 <li>tidak terlihat,</li>
@@ -129,14 +160,17 @@ def validate_count(result: VisualCountResult) -&gt; None:
 <blockquote>
 <p><strong>Prinsip operasional:</strong> abstention yang benar lebih berguna daripada jawaban meyakinkan yang salah.</p>
 </blockquote>
-<h2>Checkpoint Bab 8</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 8</h2>
 <ol>
 <li>Apa unsur utama prompt visual yang baik?</li>
 <li>Mengapa crop dapat membantu sekaligus merugikan?</li>
 <li>Kapan multi-pass inference layak digunakan?</li>
 <li>Mengapa JSON dari model tetap perlu divalidasi?</li>
 </ol>
-<h2>Latihan Bab 8 - Prompt Benchmark</h2>
-<p>Buat tiga versi prompt untuk tugas menghitung objek kecil. Uji pada set gambar yang sama. Catat akurasi, jawaban kosong, hallucination, latency, dan panjang output.</p>
-<hr>
 
+
+</div>

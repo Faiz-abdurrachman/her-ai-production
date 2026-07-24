@@ -1,5 +1,8 @@
 <h1>Multimodal RAG dan Tool Use</h1>
-<h2>8.1 Mengapa Multimodal RAG?</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.1 Mengapa Multimodal RAG?</h2>
 <p>Retrieval-Augmented Generation menambahkan informasi eksternal yang relevan saat inference. Pada multimodal RAG, item yang diambil dapat berupa teks, gambar, halaman dokumen, audio clip, video segment, atau data terstruktur.</p>
 <p>Tujuan:</p>
 <ul>
@@ -9,7 +12,11 @@
 <li>membatasi data yang dikirim ke model,</li>
 <li>meningkatkan kemampuan domain.</li>
 </ul>
-<h2>8.2 Pipeline Dasar</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.2 Pipeline Dasar</h2>
 <div class="reasoning-code-block"><pre><code class="language-text">Data multimodal
 -&gt; parsing dan chunking
 -&gt; embedding per modalitas
@@ -20,7 +27,11 @@
 -&gt; context assembly
 -&gt; MLLM response
 </code></pre></div>
-<h2>8.3 Unimodal vs Cross-Modal Retrieval</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.3 Unimodal vs Cross-Modal Retrieval</h2>
 <h3>Unimodal Retrieval</h3>
 <ul>
 <li>teks mencari teks,</li>
@@ -35,7 +46,11 @@
 <li>gambar komponen mencari manual terkait.</li>
 </ul>
 <p>Cross-modal retrieval membutuhkan embedding space yang selaras atau query transformation.</p>
-<h2>8.4 Chunking Per Modalitas</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.4 Chunking Per Modalitas</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -69,7 +84,11 @@
 </tr>
 </tbody></table></div>
 <p>Chunk terlalu besar meningkatkan noise. Chunk terlalu kecil kehilangan konteks.</p>
-<h2>8.5 Metadata</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.5 Metadata</h2>
 <p>Metadata penting untuk filter dan audit:</p>
 <ul>
 <li>source ID,</li>
@@ -82,7 +101,11 @@
 <li>modality,</li>
 <li>confidence.</li>
 </ul>
-<h2>8.6 Hybrid Retrieval</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.6 Hybrid Retrieval</h2>
 <p>Hybrid retrieval menggabungkan:</p>
 <ul>
 <li>keyword search,</li>
@@ -93,7 +116,11 @@
 <li>reranker.</li>
 </ul>
 <p>Contoh: cari “indikator tekanan” dengan keyword, filter asset ID, lalu rerank berdasarkan gambar dan teks.</p>
-<h2>8.7 Context Assembly</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.7 Context Assembly</h2>
 <p>Context assembly harus menjaga sumber.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">[SOURCE DOC_3, page 8]
 ...
@@ -105,7 +132,11 @@
 ...
 </code></pre></div>
 <p>Tanpa source marker, model sulit menghasilkan evidence yang dapat diperiksa.</p>
-<h2>8.8 Tool Use</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.8 Tool Use</h2>
 <p>MLLM dapat memilih alat berdasarkan kebutuhan:</p>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
@@ -144,7 +175,11 @@
 </tr>
 </tbody></table></div>
 <p>Model tidak boleh memiliki akses alat tanpa batas. Terapkan allowlist, parameter validation, timeout, dan audit log.</p>
-<h2>8.9 Prompt Injection dari Retrieved Content</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.9 Prompt Injection dari Retrieved Content</h2>
 <p>Dokumen, gambar, atau transkrip dapat berisi instruksi berbahaya seperti “abaikan aturan sebelumnya”. Retrieved content harus diperlakukan sebagai data, bukan instruksi sistem.</p>
 <p>Mitigasi:</p>
 <ul>
@@ -154,7 +189,11 @@
 <li>jangan mengeksekusi perintah dari data secara otomatis,</li>
 <li>gunakan policy check sebelum tool call.</li>
 </ul>
-<h2>8.10 Contoh Pseudocode Multimodal RAG</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.10 Contoh Pseudocode Multimodal RAG</h2>
 <div class="reasoning-code-block"><pre><code class="language-python">def answer(query, case_id):
     candidates = retrieve(
         query=query,
@@ -176,7 +215,11 @@
     verify_citations(result, context)
     return result
 </code></pre></div>
-<h2>8.11 Evaluasi Retrieval</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 11</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.11 Evaluasi Retrieval</h2>
 <p>Metrik:</p>
 <ul>
 <li>Recall@K,</li>
@@ -188,13 +231,16 @@
 <li>region hit rate.</li>
 </ul>
 <p>Retrieval yang salah tidak dapat diperbaiki hanya dengan prompt yang lebih panjang.</p>
-<h2>Checkpoint Bab 8</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 12</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 8</h2>
 <ol>
 <li>Apa perbedaan unimodal dan cross-modal retrieval?</li>
 <li>Mengapa metadata penting pada multimodal RAG?</li>
 <li>Bagaimana retrieved content dapat menjadi sumber prompt injection?</li>
 </ol>
-<h2>Latihan Bab 8 - Merancang Index</h2>
-<p>Buat skema index untuk satu koleksi multimodal. Tentukan unit chunk, embedding, metadata, filter akses, reranking, dan metrik retrieval.</p>
-<hr>
 
+
+</div>

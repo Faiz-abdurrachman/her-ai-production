@@ -9,7 +9,7 @@
         readiness: "heraiAiDeepLearningReadiness"
     };
 
-    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/chapters/";
+    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/";
 
 
     var pyodideInstance = null;
@@ -388,6 +388,7 @@ const CHAPTERS = [
     const PRACTICES = [
     {
         "id": "PRACTICE-1",
+        "title": "Latihan Bab 1 - Memilih Pendekatan yang Tepat",
         "prompt": "**Tujuan:** melatih kemampuan memilih apakah suatu masalah memerlukan deep learning.\n\n**Tingkat kesulitan:** Dasar\n\nGunakan tiga kasus berikut:\n\n1. Prediksi kelulusan dari 500 baris data tabular.\n2. Klasifikasi 100.000 gambar produk.\n3. Deteksi spam dari 2.000 email.\n\nUntuk setiap kasus:\n\n- Tuliskan kandidat model awal yang paling sederhana.\n- Jelaskan alasan pemilihannya.\n- Jelaskan kapan deep learning baru layak dicoba.\n- Tuliskan risiko penggunaan deep learning.\n\n**Hasil yang dikumpulkan:** tabel berisi kasus, pendekatan awal, alasan, dan risiko penggunaan deep learning.",
         "fields": [
             [
@@ -399,6 +400,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-2",
+        "title": "Latihan Bab 2 - Membaca Arsitektur",
         "prompt": "**Tujuan:** mengenali bentuk tensor dan jumlah parameter pada neural network sederhana.\n\n**Tingkat kesulitan:** Dasar\n\nGunakan arsitektur berikut:\n\n```text\nInput 20 fitur\n→ Hidden layer 16 neuron\n→ Hidden layer 8 neuron\n→ Output 3 kelas\n```\n\nKerjakan hal berikut:\n\n1. Hitung jumlah parameter pada setiap layer.\n2. Tentukan activation function yang masuk akal untuk hidden dan output layer.\n3. Jelaskan bentuk output untuk satu sampel.\n\n**Hasil yang dikumpulkan:** perhitungan parameter, pilihan activation function, dan penjelasan bentuk output.",
         "fields": [
             [
@@ -410,6 +412,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-3",
+        "title": "Latihan Bab 3 - Simulasi Manual Satu Neuron",
         "prompt": "**Tujuan:** melihat hubungan antara prediksi, loss, dan pembaruan parameter.\n\n**Tingkat kesulitan:** Dasar\n\nGunakan nilai berikut:\n\n```text\nx = 2\nw = 0.5\nb = 0\ntarget y = 3\n```\n\nKerjakan:\n\n1. Hitung prediksi linear `y_hat = x × w + b`.\n2. Hitung squared error `(y_hat - y)²`.\n3. Ubah `w` menjadi `1.0`, kemudian hitung kembali prediksi dan loss.\n4. Jelaskan perubahan mana yang membuat prediksi lebih dekat dengan target.\n\n**Hasil yang dikumpulkan:** perhitungan dua percobaan dan kesimpulan singkat.",
         "fields": [
             [
@@ -421,6 +424,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-4",
+        "title": "Latihan Bab 4 - Diagnosis Kurva Training",
         "prompt": "**Tujuan:** membaca pola loss dan accuracy untuk menentukan tindakan berikutnya.\n\n**Tingkat kesulitan:** Menengah\n\nAnalisis tiga skenario berikut:\n\n1. Training loss dan validation loss sama-sama turun.\n2. Training loss turun, tetapi validation loss naik.\n3. Training loss dan validation loss sama-sama datar.\n\nUntuk setiap skenario:\n\n- Jelaskan diagnosis yang paling mungkin.\n- Tuliskan dua tindakan yang dapat dicoba.\n\n**Hasil yang dikumpulkan:** tabel diagnosis dan tindakan untuk setiap skenario.",
         "fields": [
             [
@@ -432,6 +436,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-5",
+        "title": "Latihan Bab 5 - Rencana Mengurangi Overfitting",
         "prompt": "**Tujuan:** menyusun intervensi bertahap untuk model yang menghafal data training.\n\n**Tingkat kesulitan:** Menengah\n\nGunakan skenario berikut:\n\n```text\nTraining accuracy: 99%\nValidation accuracy: 72%\n```\n\nKerjakan:\n\n1. Susun urutan tiga eksperimen dari yang paling murah.\n2. Tentukan metrik yang diamati dan kriteria keberhasilan.\n3. Jelaskan mengapa mengubah banyak hal sekaligus membuat eksperimen sulit dianalisis.\n\n**Hasil yang dikumpulkan:** rencana eksperimen berurutan lengkap dengan hipotesis dan metrik.",
         "fields": [
             [
@@ -443,6 +448,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-6",
+        "title": "Latihan Bab 6 - Mendesain CNN Baseline",
         "prompt": "**Tujuan:** menyusun CNN kecil yang sesuai dengan ukuran data dan jumlah kelas.\n\n**Tingkat kesulitan:** Menengah\n\nGunakan kebutuhan berikut:\n\n```text\nInput: gambar RGB 128 × 128\nJumlah kelas: 5\n```\n\nKerjakan:\n\n1. Rancang dua blok convolution dan satu output layer.\n2. Tuliskan bentuk output setelah setiap tahap secara kasar.\n3. Tambahkan satu strategi regularisasi.\n4. Jelaskan alasan desain tersebut.\n\n**Hasil yang dikumpulkan:** diagram arsitektur, alasan desain, dan estimasi perubahan bentuk tensor.",
         "fields": [
             [
@@ -454,6 +460,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-7",
+        "title": "Latihan Bab 7 - Memetakan Masalah Sequence",
         "prompt": "**Tujuan:** mengenali input-output pada masalah berurutan.\n\n**Tingkat kesulitan:** Dasar\n\nGunakan tiga kasus berikut:\n\n1. Sentiment analysis.\n2. Prediksi suhu harian.\n3. Named entity recognition.\n\nUntuk setiap kasus:\n\n- Tentukan bentuk input dan output.\n- Tentukan apakah masalahnya many-to-one atau many-to-many.\n- Jelaskan satu risiko preprocessing yang dapat merusak urutan.\n\n**Hasil yang dikumpulkan:** tabel kasus, bentuk sequence, tipe mapping, dan risiko preprocessing.",
         "fields": [
             [
@@ -465,6 +472,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-8",
+        "title": "Latihan Bab 8 - Menjelaskan Attention Tanpa Rumus",
         "prompt": "**Tujuan:** mengomunikasikan ide self-attention menggunakan bahasa nonteknis.\n\n**Tingkat kesulitan:** Menengah\n\nGunakan kalimat berikut atau buat contoh serupa:\n\n> “Rina memberi buku kepada Sari karena ia lulus.”\n\nKerjakan:\n\n1. Jelaskan token mana yang perlu saling memperhatikan untuk memahami kata “ia”.\n2. Tuliskan penjelasan self-attention dalam maksimal 150 kata.\n\n**Hasil yang dikumpulkan:** penjelasan maksimal 150 kata yang dapat dipahami pemula.",
         "fields": [
             [
@@ -476,6 +484,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-9",
+        "title": "Latihan Bab 9 - Menentukan Metrik",
         "prompt": "**Tujuan:** memilih metrik berdasarkan dampak kesalahan.\n\n**Tingkat kesulitan:** Menengah\n\nBandingkan dua kasus berikut:\n\n1. Deteksi penyakit berisiko tinggi.\n2. Penyaringan komentar spam.\n\nUntuk masing-masing kasus:\n\n- Jelaskan dampak false positive.\n- Jelaskan dampak false negative.\n- Pilih metrik utama dan metrik pendamping.\n- Jelaskan mengapa accuracy saja mungkin menyesatkan.\n\n**Hasil yang dikumpulkan:** analisis dampak kesalahan dan rekomendasi metrik.",
         "fields": [
             [
@@ -711,10 +720,10 @@ const QUIZ = [
 ];
 
     const DISCUSSION_PROMPTS = [
-        "Mengapa Python dominan dalam AI meskipun bukan selalu bahasa dengan runtime tercepat?",
-        "Kapan notebook membantu eksplorasi, dan kapan hidden state membuat hasil sulit dipercaya?",
-        "Apakah menghapus missing value selalu benar? Bukti apa yang diperlukan sebelum memilih aturan cleaning?",
-        "Dataset tanpa missing value apakah otomatis siap untuk Machine Learning?"
+        "Bagaimana penerapan konsep ini dapat memecahkan masalah di industri Anda?",
+        "Apa saja tantangan atau risiko terbesar saat mengimplementasikan teori ini di dunia nyata?",
+        "Menurut Anda, bagaimana etika dan bias dapat memengaruhi keputusan yang diambil berdasarkan model ini?",
+        "Bagikan pengalaman atau kesulitan Anda saat mempraktikkan materi ini."
     ];
 
 var SOURCE_VISUALS = {
@@ -1886,7 +1895,7 @@ var SOURCE_VISUALS = {
                 }).join("")}
             </div>
             <button type="button" class="reasoning-scaffold-reveal-button" data-reasoning-reveal="${escapeHtml(item.id)}" aria-expanded="false"><i class="fas fa-lightbulb" aria-hidden="true"></i> Lihat pembahasan</button>
-            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><p>${escapeHtml(item.guide)}</p></div>
+            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><div class="reasoning-guide-content" style="margin-top: 10px;">${renderFormattedText(item.guide)}</div></div>
         </article>`;
     }
 
@@ -1895,7 +1904,7 @@ var SOURCE_VISUALS = {
         const practiceList = document.getElementById("aiDeepLearningPracticeList");
         if (!form || !practiceList) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiDeepLearningPracticeSource", "Latihan Modul", "Quiz — 20 Soal");
+        const refNode = document.getElementById("aiDeepLearningPracticeSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         practiceList.innerHTML = PRACTICES.map(renderPracticeCard).join("");
         const saved = getSavedPractice() || { answers: {}, revealed: [] };
         const savedAnswers = saved.answers || {};
@@ -2126,7 +2135,7 @@ var SOURCE_VISUALS = {
         const list = document.getElementById("aiDeepLearningQuizList");
         if (!form || !list) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiDeepLearningQuizSource", "Quiz — 20 Soal", "Discussion");
+        const refNode = document.getElementById("aiDeepLearningQuizSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         list.innerHTML = QUIZ.map(function (question, index) {
             return `<article data-quiz-index="${index}" tabindex="-1">
                 <span>${index + 1}</span>
@@ -2352,14 +2361,14 @@ var SOURCE_VISUALS = {
         const form = document.getElementById("aiDeepLearningDiscussionForm");
         const select = form ? form.querySelector("select") : null;
         const textarea = form ? form.querySelector("textarea") : null;
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiDeepLearningDiscussionSource", "Discussion", "Checklist Kesiapan Peserta");
+        const refNode = document.getElementById("aiDeepLearningDiscussionSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         renderDiscussion(getDiscussionPosts());
 
         const promptButtons = document.querySelector(".ml-discussion-prompts");
         if (promptButtons) {
             promptButtons.innerHTML = DISCUSSION_PROMPTS.map(function (prompt, index) {
-                const labels = ["Python dan AI", "Notebook vs Program", "Keputusan Cleaning", "Siap untuk ML"];
-                const icons = ["fab fa-python", "fas fa-book-open", "fas fa-broom", "fas fa-database"];
+                const labels = ["Ide & Penerapan", "Risiko & Tantangan", "Etika & Bias", "Berbagi Pengalaman"];
+                const icons = ["fas fa-lightbulb", "fas fa-triangle-exclamation", "fas fa-balance-scale", "fas fa-users"];
                 return `<button type="button" data-discussion-prompt="${escapeHtml(prompt)}"><i class="${icons[index]}" aria-hidden="true"></i><span>${labels[index]}</span></button>`;
             }).join("");
         }
@@ -2402,3 +2411,8 @@ var SOURCE_VISUALS = {
         });
     };
 })();
+
+// Mencegah elemen interaktif Python (Glossary, Kuis, dll) bocor ke modul lain
+PYTHON_GUIDES.length = 0;
+DISCUSSION_PROMPTS.length = 0;
+SOURCE_VISUALS = {};

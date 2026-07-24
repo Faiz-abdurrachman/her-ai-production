@@ -1,0 +1,79 @@
+<h1>Machine Learning: Belajar dari Data</h1>
+<h2>Pertanyaan pembuka</h2>
+<p>Apa yang berubah ketika aturan tidak lagi ditulis satu per satu?</p>
+<h2>Tujuan pembelajaran</h2>
+<p>Peserta dapat:</p>
+<ol>
+<li>memahami feature, label, loss, training, validation, dan test;</li>
+<li>membedakan supervised dan unsupervised learning;</li>
+<li>memahami generalization, overfitting, dan embedding;</li>
+<li>menghubungkan evaluasi ML dengan dataset dan fairness;</li>
+<li>menambahkan klasifikasi dan semantic search pada Asisten HerAI.</li>
+</ol>
+<h2>Hubungan dengan Bab 2</h2>
+<p>Symbolic AI membutuhkan aturan untuk setiap kondisi. Machine learning menggeser sebagian pekerjaan: tim menyediakan contoh, label, tujuan optimisasi, dan data evaluasi. Rule engine tidak dibuang. Ia tetap dipakai untuk kebijakan yang tidak boleh berubah.</p>
+<h2>3.1 Supervised learning</h2>
+<p>Model belajar dari pasangan input dan label.</p>
+<p>Contoh:</p>
+<ul>
+<li>input: &quot;aku lupa password&quot;;</li>
+<li>label: <code>account_access</code>.</li>
+</ul>
+<p>Alurnya:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Data berlabel -&gt; Prediksi -&gt; Hitung error -&gt; Perbarui parameter -&gt; Uji pada data baru
+</code></pre></div>
+<h2>3.2 Unsupervised learning dan embedding</h2>
+<p>Ketika label belum tersedia, model dapat mencari struktur:</p>
+<ul>
+<li>clustering untuk mengelompokkan tema;</li>
+<li>dimensionality reduction untuk membaca pola;</li>
+<li>embedding untuk mengubah teks menjadi vektor.</li>
+</ul>
+<p>Embedding memungkinkan semantic search. Pertanyaan &quot;kapan tugas dikumpulkan?&quot; dapat dianggap mirip dengan dokumen berjudul &quot;batas waktu pengumpulan&quot; meskipun kata-katanya tidak sama.</p>
+<h2>3.3 Overfitting dan generalization</h2>
+<ul>
+<li><strong>Overfitting:</strong> model terlalu cocok pada data training.</li>
+<li><strong>Generalization:</strong> model tetap baik pada data baru.</li>
+</ul>
+<p>Akurasi training 99% tidak berarti model siap digunakan. Data validation dan test harus dipisahkan.</p>
+<h2>3.4 Menggunakan lensa Evaluation AI</h2>
+<h3>Kualitas hasil</h3>
+<p>Untuk klasifikasi, periksa precision, recall, F1, dan jenis error.</p>
+<h3>Generalisasi</h3>
+<p>Gunakan hidden test set dan data dari periode atau kelompok berbeda.</p>
+<h3>Reliability</h3>
+<p>Periksa typo, bahasa informal, data di luar domain, dan calibration.</p>
+<h3>Fairness dan safety</h3>
+<p>Bandingkan error rate pada kelompok bahasa atau akses berbeda.</p>
+<h3>System readiness</h3>
+<p>Pantau drift dan simpan versi data, model, serta threshold.</p>
+<h2>3.5 Melanjutkan studi kasus</h2>
+<p>Asisten HerAI sekarang memiliki:</p>
+<ol>
+<li>rule engine untuk kebijakan;</li>
+<li>classifier untuk menentukan jenis pertanyaan;</li>
+<li>embedding search untuk menemukan dokumen.</li>
+</ol>
+<div class="reasoning-code-block"><pre><code class="language-text">Pertanyaan -&gt; Classifier -&gt; Retrieval -&gt; Rule check -&gt; Jawaban atau eskalasi
+</code></pre></div>
+<h2>3.6 Tugas Praktik: Generalization Report</h2>
+<div class="reasoning-code-block"><pre><code class="language-yaml">model_task: intent_classification
+train_accuracy: 0.96
+validation_accuracy: 0.88
+test_accuracy: 0.86
+critical_class_recall:
+  policy_question: 0.94
+  personal_data_request: 0.98
+subgroup_results:
+  formal_language_f1: 0.90
+  informal_language_f1: 0.81
+known_gap:
+  - singkatan dan campuran bahasa
+next_action:
+  - tambah data informal
+  - lakukan error review
+</code></pre></div>
+<h2>Handoff ke Bab 4</h2>
+<p>Machine learning biasanya membuat satu prediksi untuk satu input. Beberapa masalah membutuhkan rangkaian keputusan yang saling memengaruhi. Bab 4 membahas reinforcement learning.</p>
+<hr>
+

@@ -1,5 +1,8 @@
 <h1>Reliability, Error Handling, dan Human Approval</h1>
-<h2>10.1 Agen Pasti Mengalami Kegagalan</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.1 Agen Pasti Mengalami Kegagalan</h2>
 <p>Sistem yang andal tidak mengasumsikan semua langkah berhasil. Ia merancang respons terhadap kegagalan.</p>
 <p>Jenis kegagalan:</p>
 <ul>
@@ -14,7 +17,11 @@
 <li>pengguna mengubah tujuan;</li>
 <li>approval tertunda.</li>
 </ul>
-<h2>10.2 Error Taxonomy</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.2 Error Taxonomy</h2>
 <div class="reasoning-code-block"><pre><code class="language-python">class AgentError(Exception):
     pass
 
@@ -31,7 +38,11 @@ class InsufficientEvidenceError(AgentError):
     retryable = False
 </code></pre></div>
 <p>Error terstruktur membantu runtime memilih tindakan yang benar.</p>
-<h2>10.3 Recovery Strategy</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.3 Recovery Strategy</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -72,7 +83,11 @@ class InsufficientEvidenceError(AgentError):
 <td>Revisi atau batalkan</td>
 </tr>
 </tbody></table></div>
-<h2>10.4 Circuit Breaker</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.4 Circuit Breaker</h2>
 <p>Circuit breaker menghentikan panggilan ke service yang terus gagal.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">CLOSED: panggilan normal
 → kegagalan melewati threshold
@@ -82,7 +97,11 @@ HALF-OPEN: uji satu panggilan
 → berhasil: CLOSED
 → gagal: OPEN
 </code></pre></div>
-<h2>10.5 Budget Control</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.5 Budget Control</h2>
 <p>Budget mencakup:</p>
 <ul>
 <li>model calls;</li>
@@ -107,7 +126,11 @@ HALF-OPEN: uji satu panggilan
 <li>berhenti dengan partial result;</li>
 <li>meminta pengguna mempersempit tujuan.</li>
 </ul>
-<h2>10.6 Human Approval Matrix</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.6 Human Approval Matrix</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -147,7 +170,11 @@ HALF-OPEN: uji satu panggilan
 <td>Approval dan recovery plan</td>
 </tr>
 </tbody></table></div>
-<h2>10.7 Pause and Resume</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.7 Pause and Resume</h2>
 <p>Agent harus dapat berhenti sambil menunggu approval, lalu melanjutkan dari state yang sama.</p>
 <p>State pause:</p>
 <div class="reasoning-code-block"><pre><code class="language-json">{
@@ -162,7 +189,11 @@ HALF-OPEN: uji satu panggilan
 }
 </code></pre></div>
 <p>Setelah approval, pastikan arguments belum berubah.</p>
-<h2>10.8 Compensating Action</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.8 Compensating Action</h2>
 <p>Beberapa tindakan tidak dapat di-rollback langsung. Siapkan compensating action.</p>
 <p>Contoh:</p>
 <ul>
@@ -171,7 +202,11 @@ HALF-OPEN: uji satu panggilan
 <li>file salah dipindahkan → kembalikan lokasi;</li>
 <li>pesan salah terkirim → kirim koreksi, karena pesan tidak dapat ditarik.</li>
 </ul>
-<h2>10.9 Graceful Degradation</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.9 Graceful Degradation</h2>
 <p>Jika komponen gagal, sistem tetap memberi hasil yang aman.</p>
 <p>Contoh:</p>
 <ul>
@@ -180,7 +215,11 @@ HALF-OPEN: uji satu panggilan
 <li>model utama gagal → gunakan fallback untuk ringkasan sederhana;</li>
 <li>evaluasi gagal → minta human review.</li>
 </ul>
-<h2>10.10 Acceptance Criteria</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">10.10 Acceptance Criteria</h2>
 <p>Setiap tugas harus memiliki kondisi yang dapat diperiksa.</p>
 <p>Contoh:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">Tugas selesai jika:
@@ -190,14 +229,17 @@ HALF-OPEN: uji satu panggilan
 - tidak ada pesan terkirim tanpa approval;
 - sumber data dan timestamp tercatat.
 </code></pre></div>
-<h2>Checkpoint Bab 10</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 11</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 10</h2>
 <ol>
 <li>Mengapa error harus diklasifikasikan?</li>
 <li>Apa fungsi circuit breaker?</li>
 <li>Bagaimana pause and resume mencegah tindakan tidak konsisten?</li>
 <li>Apa perbedaan rollback dan compensating action?</li>
 </ol>
-<h2>Latihan Bab 10</h2>
-<p>Buat failure mode table untuk agent layanan pelanggan. Sertakan penyebab, dampak, deteksi, retry, fallback, approval, dan severity.</p>
-<hr>
 
+
+</div>

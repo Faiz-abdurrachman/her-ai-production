@@ -52,10 +52,10 @@
 
                 <section class="lesson-material-panel">
                     <div class="lesson-tabs" role="tablist" aria-label="Jenis materi">
-                        <a href="#/participant-ai-lab-deep-learning" class="active"><i class="fas fa-book-open"></i> Materi</a>
-                        <a href="#/participant-ai-lab-deep-learning-practice"><i class="fas fa-pen-to-square"></i> Latihan</a>
-                        <a href="#/participant-ai-lab-deep-learning-quiz"><i class="far fa-clipboard"></i> Kuis</a>
-                        <a href="#/participant-ai-lab-deep-learning-discussion"><i class="far fa-message"></i> Diskusi</a>
+                        <a href="#/participant-ai-deep-learning" class="active"><i class="fas fa-book-open"></i> Materi</a>
+                        <a href="#/participant-ai-deep-learning-practice"><i class="fas fa-pen-to-square"></i> Latihan</a>
+                        <a href="#/participant-ai-deep-learning-quiz"><i class="far fa-clipboard"></i> Kuis</a>
+                        <a href="#/participant-ai-deep-learning-discussion"><i class="far fa-message"></i> Diskusi</a>
                     </div>
 
                     <article class="lesson-article reasoning-scaffold-rich" id="materi-reasoning">
@@ -74,7 +74,7 @@
                             <button id="btn-next-chapter" class="btn btn-primary" style="display: none; background: var(--fellow-pink); color: white; border: none; border-radius: 100px; padding: 10px 24px; font-weight: 600; box-shadow: 0 4px 12px rgba(246,51,146,.3); cursor: pointer;">
                                 Topik Selanjutnya <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
                             </button>
-                            <a href="#/participant-ai-lab-deep-learning-practice" id="btn-finish-materi" class="btn btn-primary" style="display: none; background: var(--fellow-pink); color: white; border: none; border-radius: 100px; padding: 10px 24px; font-weight: 600; box-shadow: 0 4px 12px rgba(246,51,146,.3); text-decoration: none;">
+                            <a href="#/participant-ai-deep-learning-practice" id="btn-finish-materi" class="btn btn-primary" style="display: none; background: var(--fellow-pink); color: white; border: none; border-radius: 100px; padding: 10px 24px; font-weight: 600; box-shadow: 0 4px 12px rgba(246,51,146,.3); text-decoration: none;">
                                 Lanjut Latihan <i class="fas fa-play" style="margin-left: 8px;"></i>
                             </a>
                         </div>
@@ -87,20 +87,27 @@
                     <h2>Progres Sub-Modul</h2>
                     <div class="lesson-progress-mini"><b style="--value:0%"></b><strong>0%</strong></div>
                     <p>0 dari 6 materi selesai</p>
-                    <a href="#/participant-ai-lab-deep-learning">Mulai Belajar</a>
+                    <a href="#/participant-ai-deep-learning">Mulai Belajar</a>
                 </section>
                 <section class="module-side-card lesson-list-card">
                     <h2>Daftar Materi</h2>
-                    <ol id="reasoning-sidebar-list">
-                        <li class="active" data-chapter="1"><span>1</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(1)">Python &amp; AI Mindset</a><i class="far fa-circle-play"></i></li>
-                        <li data-chapter="2"><span>2</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(2)">Data Dasar</a><i class="far fa-circle"></i></li>
-                        <li data-chapter="3"><span>3</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(3)">Control Flow</a><i class="far fa-circle"></i></li>
-                        <li data-chapter="4"><span>4</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(4)">Function &amp; Modularitas</a><i class="far fa-circle"></i></li>
-                        <li data-chapter="5"><span>5</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(5)">OOP untuk AI</a><i class="far fa-circle"></i></li>
-                        <li data-chapter="6"><span>6</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(6)">Error &amp; File</a><i class="far fa-circle"></i></li>
-                    <li data-chapter="7"><span>7</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(7)">Ekosistem &amp; NumPy</a><i class="far fa-circle"></i></li>
-<li data-chapter="8"><span>8</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(8)">Data &amp; Mini Workflow</a><i class="far fa-circle"></i></li>
-</ol>
+                    <ol id="aiDeepLearningList">
+                        <li class="active" data-chapter="1"><span>1</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(1)">Pengantar Deep Le...</a><i class="far fa-circle-play"></i></li>
+                        <li data-chapter="2"><span>2</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(2)">Neuron dan Arsite...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="3"><span>3</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(3)">Forward Propagati...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="4"><span>4</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(4)">Training dan Opti...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="5"><span>5</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(5)">Regularisasi dan ...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="6"><span>6</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(6)">Convolutional Neu...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="7"><span>7</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(7)">RNN dan Data Beru...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="8"><span>8</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(8)">Transformer Dasar</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="9"><span>9</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(9)">Evaluasi dan Impl...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="10"><span>10</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(10)">Mini Project: Kla...</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="11"><span>11</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(11)">Kuis Akhir</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="12"><span>12</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(12)">Diskusi dan Refleksi</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="13"><span>13</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(13)">Glosarium</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="14"><span>14</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(14)">Ringkasan Cepat</a><i class="far fa-circle"></i></li>
+                        <li data-chapter="15"><span>15</span><a href="javascript:void(0)" onclick="window.loadAiDeepLearningChapter(15)">Referensi Belajar</a><i class="far fa-circle"></i></li>
+                    </ol>
                 </section>
                 <section class="module-side-card lesson-note-card lesson-compact-note">
                     <div class="module-side-head"><h2>Catatan</h2><button type="button">+ Tambah</button></div>

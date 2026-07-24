@@ -9,7 +9,7 @@
         readiness: "heraiAiReinforcementLearningReadiness"
     };
 
-    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/reinforcement-learning/chapters/";
+    const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/";
 
 
     var pyodideInstance = null;
@@ -364,6 +364,7 @@ const CHAPTERS = [
     const PRACTICES = [
     {
         "id": "PRACTICE-1",
+        "title": "Latihan Bab 1",
         "prompt": "Pilih satu skenario berikut: penghemat energi, robot gudang, rekomendasi materi belajar, atau penjadwalan mesin. Tuliskan:\n\n- keputusan apa yang perlu dibuat,\n- feedback apa yang mungkin tersedia,\n- konsekuensi jangka panjangnya,\n- risiko jika agent melakukan eksplorasi tanpa batas.",
         "fields": [
             [
@@ -375,6 +376,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-2",
+        "title": "Latihan Bab 2 - Memodelkan MDP",
         "prompt": "Rancang MDP sederhana untuk sistem pengatur lampu lalu lintas. Tentukan:\n\n- state,\n- observation yang tersedia,\n- action,\n- reward,\n- kondisi akhir atau horizon,\n- risiko jika state terlalu sederhana.",
         "fields": [
             [
@@ -386,6 +388,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-3",
+        "title": "Latihan Bab 3 - Audit Reward",
         "prompt": "Buat reward awal untuk robot gudang yang harus mengantar barang. Setelah itu, cari minimal tiga kemungkinan perilaku tidak diinginkan dan revisi reward atau batasannya.",
         "fields": [
             [
@@ -397,6 +400,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-4",
+        "title": "Latihan Bab 4",
         "prompt": "Buat tabel Q sederhana untuk tiga state dan dua action. Isi nilai perkiraan sendiri, lalu tulis policy greedy yang dihasilkan.",
         "fields": [
             [
@@ -408,6 +412,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-5",
+        "title": "Latihan Bab 5",
         "prompt": "Jalankan simulasi bandit dengan `epsilon` 0, 0.01, 0.1, dan 0.3. Bandingkan:\n\n- total reward,\n- frekuensi action terbaik dipilih,\n- kestabilan hasil antar-run.",
         "fields": [
             [
@@ -419,6 +424,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-6",
+        "title": "Latihan Bab 6",
         "prompt": "Gunakan episode reward `[-1, -1, 5]` dengan `gamma = 0.9`.\n\n1. Hitung return Monte Carlo dari setiap langkah.\n2. Misalkan `V(S_t)=1.0` dan `V(S_(t+1))=2.0`. Hitung TD target dan TD error untuk reward `-1`.",
         "fields": [
             [
@@ -430,6 +436,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-7",
+        "title": "Latihan Bab 7",
         "prompt": "Buat satu contoh transisi:\n\n```text\nQ(s,a)=2.0, reward=1, gamma=0.9, max Q(s',.)=4.0, alpha=0.1\n```\n\nHitung:\n\n1. target Q-learning,\n2. TD error,\n3. Q-value baru.",
         "fields": [
             [
@@ -441,6 +448,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-8",
+        "title": "Latihan Bab 8",
         "prompt": "Gambarkan arsitektur DQN untuk observation berukuran 8 fitur dan 4 action. Tentukan:\n\n- ukuran input,\n- dua hidden layer,\n- ukuran output,\n- informasi yang disimpan di replay buffer.",
         "fields": [
             [
@@ -452,6 +460,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-9",
+        "title": "Latihan Bab 9",
         "prompt": "Untuk tiga langkah dengan return `[4, 1, -2]` dan baseline `[2, 2, 0]`, hitung advantage sederhana. Jelaskan action mana yang seharusnya diperkuat atau dilemahkan.",
         "fields": [
             [
@@ -463,6 +472,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-10",
+        "title": "Latihan Bab 10 - Red Team Reward",
         "prompt": "Ambil reward dari latihan sebelumnya. Bertindaklah sebagai agent yang mencari celah. Tuliskan lima cara memperoleh reward tanpa memenuhi tujuan sebenarnya. Setelah itu, tambahkan batasan dan metrik untuk mengurangi risiko tersebut.",
         "fields": [
             [
@@ -474,6 +484,7 @@ const CHAPTERS = [
     },
     {
         "id": "PRACTICE-11",
+        "title": "Latihan Bab 11",
         "prompt": "Rancang tabel eksperimen untuk membandingkan tiga nilai epsilon decay. Sertakan:\n\n- variabel yang dikontrol,\n- jumlah seed,\n- metrik utama,\n- metrik keselamatan,\n- aturan memilih konfigurasi terbaik.",
         "fields": [
             [
@@ -709,10 +720,10 @@ const QUIZ = [
 ];
 
     const DISCUSSION_PROMPTS = [
-        "Mengapa Python dominan dalam AI meskipun bukan selalu bahasa dengan runtime tercepat?",
-        "Kapan notebook membantu eksplorasi, dan kapan hidden state membuat hasil sulit dipercaya?",
-        "Apakah menghapus missing value selalu benar? Bukti apa yang diperlukan sebelum memilih aturan cleaning?",
-        "Dataset tanpa missing value apakah otomatis siap untuk Machine Learning?"
+        "Bagaimana penerapan konsep ini dapat memecahkan masalah di industri Anda?",
+        "Apa saja tantangan atau risiko terbesar saat mengimplementasikan teori ini di dunia nyata?",
+        "Menurut Anda, bagaimana etika dan bias dapat memengaruhi keputusan yang diambil berdasarkan model ini?",
+        "Bagikan pengalaman atau kesulitan Anda saat mempraktikkan materi ini."
     ];
 
 var SOURCE_VISUALS = {
@@ -1884,7 +1895,7 @@ var SOURCE_VISUALS = {
                 }).join("")}
             </div>
             <button type="button" class="reasoning-scaffold-reveal-button" data-reasoning-reveal="${escapeHtml(item.id)}" aria-expanded="false"><i class="fas fa-lightbulb" aria-hidden="true"></i> Lihat pembahasan</button>
-            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><p>${escapeHtml(item.guide)}</p></div>
+            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><div class="reasoning-guide-content" style="margin-top: 10px;">${renderFormattedText(item.guide)}</div></div>
         </article>`;
     }
 
@@ -1893,7 +1904,7 @@ var SOURCE_VISUALS = {
         const practiceList = document.getElementById("aiReinforcementLearningPracticeList");
         if (!form || !practiceList) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiReinforcementLearningPracticeSource", "Latihan Modul", "Quiz — 20 Soal");
+        const refNode = document.getElementById("aiReinforcementLearningPracticeSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         practiceList.innerHTML = PRACTICES.map(renderPracticeCard).join("");
         const saved = getSavedPractice() || { answers: {}, revealed: [] };
         const savedAnswers = saved.answers || {};
@@ -2124,7 +2135,7 @@ var SOURCE_VISUALS = {
         const list = document.getElementById("aiReinforcementLearningQuizList");
         if (!form || !list) return;
 
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiReinforcementLearningQuizSource", "Quiz — 20 Soal", "Discussion");
+        const refNode = document.getElementById("aiReinforcementLearningQuizSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         list.innerHTML = QUIZ.map(function (question, index) {
             return `<article data-quiz-index="${index}" tabindex="-1">
                 <span>${index + 1}</span>
@@ -2350,14 +2361,14 @@ var SOURCE_VISUALS = {
         const form = document.getElementById("aiReinforcementLearningDiscussionForm");
         const select = form ? form.querySelector("select") : null;
         const textarea = form ? form.querySelector("textarea") : null;
-        loadSourceSegment(SOURCE_BASE + "15-full.html", "aiReinforcementLearningDiscussionSource", "Discussion", "Checklist Kesiapan Peserta");
+        const refNode = document.getElementById("aiReinforcementLearningDiscussionSource"); if(refNode) refNode.innerHTML = "<div style='padding: 20px; text-align: center; color: var(--text-secondary);'>Baca ulang materi secara utuh di tab Materi utama.</div>";
         renderDiscussion(getDiscussionPosts());
 
         const promptButtons = document.querySelector(".ml-discussion-prompts");
         if (promptButtons) {
             promptButtons.innerHTML = DISCUSSION_PROMPTS.map(function (prompt, index) {
-                const labels = ["Python dan AI", "Notebook vs Program", "Keputusan Cleaning", "Siap untuk ML"];
-                const icons = ["fab fa-python", "fas fa-book-open", "fas fa-broom", "fas fa-database"];
+                const labels = ["Ide & Penerapan", "Risiko & Tantangan", "Etika & Bias", "Berbagi Pengalaman"];
+                const icons = ["fas fa-lightbulb", "fas fa-triangle-exclamation", "fas fa-balance-scale", "fas fa-users"];
                 return `<button type="button" data-discussion-prompt="${escapeHtml(prompt)}"><i class="${icons[index]}" aria-hidden="true"></i><span>${labels[index]}</span></button>`;
             }).join("");
         }
@@ -2400,3 +2411,8 @@ var SOURCE_VISUALS = {
         });
     };
 })();
+
+// Mencegah elemen interaktif Python (Glossary, Kuis, dll) bocor ke modul lain
+PYTHON_GUIDES.length = 0;
+DISCUSSION_PROMPTS.length = 0;
+SOURCE_VISUALS = {};

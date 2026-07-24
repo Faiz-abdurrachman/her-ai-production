@@ -1,0 +1,158 @@
+<h1>Symbolic AI dan Expert Systems</h1>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Pertanyaan pembuka</h2>
+<p>Kapan aturan eksplisit lebih aman daripada model statistik?</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Tujuan pembelajaran</h2>
+<p>Peserta dapat:</p>
+<ol>
+<li>memahami fakta, aturan, knowledge base, dan inference engine;</li>
+<li>membedakan forward chaining dan backward chaining;</li>
+<li>mengenali kekuatan dan keterbatasan expert system;</li>
+<li>mengevaluasi rule coverage, conflict, dan explanation trace;</li>
+<li>menambahkan rule engine pada Asisten HerAI.</li>
+</ol>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Hubungan dengan Bab 1</h2>
+<p>Bab 1 memperkenalkan symbolic AI sebagai pendekatan berbasis aturan. Sekarang kita melihat bagaimana pendekatan itu bekerja dan bagaimana kerangka Evaluation AI diterapkan padanya.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.1 Pengetahuan ditulis secara eksplisit</h2>
+<p>Contoh aturan:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">IF topik = deadline AND dokumen_resmi_tersedia
+THEN jawab_dari_dokumen
+
+IF topik = dispensasi AND bukti_tidak_lengkap
+THEN eskalasi_ke_mentor
+</code></pre></div>
+<p>Aturan seperti ini mudah diaudit karena tim dapat melihat kondisi dan hasilnya.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.2 Komponen expert system</h2>
+<ul>
+<li><strong>Facts:</strong> informasi yang diketahui.</li>
+<li><strong>Rules:</strong> hubungan IF/THEN.</li>
+<li><strong>Knowledge base:</strong> kumpulan facts dan rules.</li>
+<li><strong>Inference engine:</strong> komponen yang menjalankan aturan.</li>
+<li><strong>Explanation trace:</strong> jejak aturan yang aktif.</li>
+</ul>
+<h3>Forward chaining</h3>
+<p>Berangkat dari fakta menuju kesimpulan.</p>
+<h3>Backward chaining</h3>
+<p>Berangkat dari hipotesis, lalu mencari fakta yang diperlukan untuk membuktikannya.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.3 Kekuatan symbolic AI</h2>
+<ul>
+<li>cocok untuk kebijakan yang harus konsisten;</li>
+<li>mudah dijelaskan;</li>
+<li>mudah diuji dengan kasus deterministik;</li>
+<li>dapat membatasi perilaku model generatif;</li>
+<li>tidak selalu membutuhkan data besar.</li>
+</ul>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.4 Keterbatasan symbolic AI</h2>
+<ul>
+<li>aturan bertambah sangat banyak;</li>
+<li>pengecualian sulit dikelola;</li>
+<li>bahasa manusia sering ambigu;</li>
+<li>domain berubah sehingga knowledge base cepat usang;</li>
+<li>aturan lengkap membutuhkan waktu dari pakar.</li>
+</ul>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.5 Menggunakan lensa Evaluation AI</h2>
+<h3>Kualitas hasil</h3>
+<p>Apakah kesimpulan sesuai kebijakan?</p>
+<h3>Generalisasi</h3>
+<p>Symbolic AI tidak &quot;belajar&quot; generalisasi seperti ML. Yang diuji adalah apakah rule coverage mencakup variasi kasus penting.</p>
+<h3>Reliability</h3>
+<p>Apakah aturan selalu menghasilkan keputusan yang sama untuk fakta yang sama?</p>
+<h3>Fairness dan safety</h3>
+<p>Apakah aturan memperlakukan kelompok tertentu secara tidak adil? Apakah ada fitur proxy yang tidak seharusnya digunakan?</p>
+<h3>System readiness</h3>
+<p>Apakah perubahan aturan memiliki approval, versioning, dan audit log?</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.6 Rule Test Set</h2>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Kasus</th>
+<th>Fakta</th>
+<th>Expected rule</th>
+<th>Expected result</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Deadline tersedia</td>
+<td>topic=deadline, source=true</td>
+<td>answer_from_source</td>
+<td>jawaban bersumber</td>
+</tr>
+<tr>
+<td>Dispensasi ambigu</td>
+<td>topic=dispensasi, evidence=false</td>
+<td>escalate</td>
+<td>dialihkan ke mentor</td>
+</tr>
+<tr>
+<td>Data pribadi</td>
+<td>request=other_user_data</td>
+<td>deny</td>
+<td>permintaan ditolak</td>
+</tr>
+<tr>
+<td>Aturan konflik</td>
+<td>source_v1 != source_v2</td>
+<td>conflict_handler</td>
+<td>jelaskan konflik dan eskalasi</td>
+</tr>
+</tbody></table></div>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.7 Artifact bab: Rule Engine dan Explanation Trace</h2>
+<div class="reasoning-code-block"><pre><code class="language-python">facts = {&quot;topic:dispensasi&quot;, &quot;evidence:missing&quot;}
+
+rules = [
+    ({&quot;topic:dispensasi&quot;, &quot;evidence:missing&quot;}, &quot;escalate_to_mentor&quot;),
+    ({&quot;request:other_user_data&quot;}, &quot;deny_private_data&quot;),
+]
+
+for condition, decision in rules:
+    if condition.issubset(facts):
+        print({&quot;matched_rule&quot;: list(condition), &quot;decision&quot;: decision})
+</code></pre></div>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 11</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Handoff ke Bab 3</h2>
+<p>Rule engine bekerja baik untuk kebijakan yang jelas. Namun menulis aturan untuk semua variasi bahasa dan pola pengguna tidak praktis. Bab 3 memperkenalkan machine learning untuk mempelajari pola dari data.</p>
+<hr>
+
+
+</div>

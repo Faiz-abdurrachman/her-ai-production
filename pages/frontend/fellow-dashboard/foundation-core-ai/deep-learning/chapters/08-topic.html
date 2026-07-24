@@ -1,10 +1,21 @@
 <h1>Transformer Dasar</h1>
 <p>Memahami attention, embedding, dan informasi posisi sebagai fondasi model modern.</p>
-<h2>8.1 Keterbatasan Pemrosesan Berurutan</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.1 Keterbatasan Pemrosesan Berurutan</h2>
 <p>RNN memproses token secara bertahap. Hal ini menyulitkan paralelisasi dan membuat hubungan jarak jauh lebih sulit dipelajari. Transformer menggunakan attention agar setiap token dapat mempertimbangkan token lain secara langsung.</p>
-<h2>8.2 Embedding</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.2 Embedding</h2>
 <p>Embedding mengubah token menjadi vektor angka. Token dengan konteks atau fungsi yang mirip dapat memiliki representasi yang berdekatan. Embedding dipelajari selama training atau berasal dari model pralatih.</p>
-<h2>8.3 Self-Attention</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.3 Self-Attention</h2>
 <p>Self-attention menghitung seberapa relevan token lain terhadap token yang sedang diproses. Setiap token menghasilkan query, key, dan value.</p>
 <ul>
 <li><strong>Query</strong> menggambarkan informasi yang dicari.</li>
@@ -15,11 +26,23 @@
 <blockquote>
 <p><strong>Analogi rapat tim:</strong> seseorang mengajukan pertanyaan tertentu. Ia memberi perhatian lebih besar kepada anggota yang pengetahuannya paling relevan. Jawaban akhir merupakan gabungan informasi dengan bobot yang berbeda.</p>
 </blockquote>
-<h2>8.4 Positional Information</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.4 Positional Information</h2>
 <p>Self-attention sendiri tidak mengetahui urutan token. Karena itu, model menambahkan positional encoding atau positional embedding agar posisi pertama, kedua, dan seterusnya dapat dibedakan.</p>
-<h2>8.5 Multi-Head Attention</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.5 Multi-Head Attention</h2>
 <p>Multi-head attention menjalankan beberapa pola attention secara paralel. Satu head mungkin fokus pada hubungan subjek-predikat, head lain pada referensi kata, dan head lainnya pada konteks lokal. Hasil setiap head kemudian digabungkan.</p>
-<h2>8.6 Encoder dan Decoder</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">8.6 Encoder dan Decoder</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -44,24 +67,16 @@
 <td>Terjemahan dan summarization</td>
 </tr>
 </tbody></table></div>
-<h2>Checkpoint Bab 8</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 8</h2>
 <ol>
 <li>Apa tujuan embedding?</li>
 <li>Mengapa positional information dibutuhkan?</li>
 <li>Apa peran query, key, dan value dalam attention?</li>
 </ol>
-<h2>Latihan Bab 8 - Menjelaskan Attention Tanpa Rumus</h2>
-<p><strong>Tujuan:</strong> mengomunikasikan ide self-attention menggunakan bahasa nonteknis.</p>
-<p><strong>Tingkat kesulitan:</strong> Menengah</p>
-<p>Gunakan kalimat berikut atau buat contoh serupa:</p>
-<blockquote>
-<p>“Rina memberi buku kepada Sari karena ia lulus.”</p>
-</blockquote>
-<p>Kerjakan:</p>
-<ol>
-<li>Jelaskan token mana yang perlu saling memperhatikan untuk memahami kata “ia”.</li>
-<li>Tuliskan penjelasan self-attention dalam maksimal 150 kata.</li>
-</ol>
-<p><strong>Hasil yang dikumpulkan:</strong> penjelasan maksimal 150 kata yang dapat dipahami pemula.</p>
-<hr>
 
+
+</div>

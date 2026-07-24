@@ -1,11 +1,18 @@
 <h1>Policy Gradient, Actor-Critic, dan PPO</h1>
-<h2>9.1 Dari Nilai ke Policy Langsung</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.1 Dari Nilai ke Policy Langsung</h2>
 <p>Metode value-based seperti Q-learning belajar nilai action, lalu memilih action terbaik. <strong>Policy gradient</strong> mengoptimalkan policy secara langsung.</p>
 <p>Policy berparameter:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">pi_theta(a | s)
 </code></pre></div>
 <p>Neural network menghasilkan distribusi probabilitas action. Pada action kontinu, network dapat menghasilkan parameter distribusi seperti mean dan standard deviation.</p>
-<h2>9.2 Tujuan Policy Gradient</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.2 Tujuan Policy Gradient</h2>
 <p>Tujuannya adalah meningkatkan expected return:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">J(theta) = expected total return dari policy pi_theta
 </code></pre></div>
@@ -17,7 +24,11 @@
 <p>Bentuk intuitif gradient:</p>
 <div class="reasoning-code-block"><pre><code class="language-text">gradient ≈ grad log pi_theta(action | state) × return
 </code></pre></div>
-<h2>9.3 REINFORCE</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.3 REINFORCE</h2>
 <p>REINFORCE adalah algoritma policy gradient dasar:</p>
 <ol>
 <li>Jalankan satu episode dengan policy saat ini.</li>
@@ -26,7 +37,11 @@
 <li>Turunkan probabilitas action yang diikuti return rendah.</li>
 </ol>
 <p>Kelemahannya adalah variance tinggi. Dua episode dari state mirip dapat memberi return sangat berbeda.</p>
-<h2>9.4 Baseline dan Advantage</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.4 Baseline dan Advantage</h2>
 <p>Untuk mengurangi variance, return dibandingkan dengan baseline, biasanya value function.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">advantage = return - V(state)
 </code></pre></div>
@@ -36,7 +51,11 @@
 <li>advantage negatif: action lebih buruk dari perkiraan rata-rata.</li>
 </ul>
 <p>Daripada memperkuat semua action yang memiliki return positif, agent memperkuat action yang lebih baik dari ekspektasi pada state tersebut.</p>
-<h2>9.5 Actor-Critic</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.5 Actor-Critic</h2>
 <p>Actor-critic memiliki dua komponen:</p>
 <ul>
 <li><strong>Actor:</strong> policy yang memilih action.</li>
@@ -46,7 +65,11 @@
 action + hasil → critic → sinyal perbaikan actor
 </code></pre></div>
 <p>Actor-critic dapat diterapkan pada action diskret maupun kontinu, bergantung pada desain policy.</p>
-<h2>9.6 PPO pada Tingkat Pengantar</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.6 PPO pada Tingkat Pengantar</h2>
 <p>Proximal Policy Optimization atau PPO dirancang agar update policy tidak berubah terlalu ekstrem dalam satu langkah.</p>
 <p>Masalahnya: jika policy diubah terlalu besar berdasarkan batch pengalaman terbatas, performa dapat runtuh.</p>
 <p>PPO membatasi perubahan menggunakan objective yang di-clip. Intuisi sederhananya:</p>
@@ -63,10 +86,18 @@ tetapi jangan menjauh terlalu cepat dari policy lama
 <li>entropy bonus untuk mendorong eksplorasi.</li>
 </ul>
 <p>PPO populer karena relatif stabil dan cukup fleksibel, tetapi tetap membutuhkan tuning, evaluasi, serta data simulasi yang cukup.</p>
-<h2>9.7 Entropy</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.7 Entropy</h2>
 <p>Entropy mengukur keragaman distribusi action. Policy dengan entropy tinggi lebih acak. Entropy bonus dapat mencegah policy menjadi deterministik terlalu cepat.</p>
 <p>Terlalu banyak entropy membuat agent terus acak. Terlalu sedikit entropy dapat menyebabkan eksplorasi berhenti terlalu awal.</p>
-<h2>9.8 Value-Based vs Policy-Based</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">9.8 Value-Based vs Policy-Based</h2>
 <div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
 <thead>
 <tr>
@@ -101,14 +132,17 @@ tetapi jangan menjauh terlalu cepat dari policy lama
 <td>Probabilitas atau parameter action</td>
 </tr>
 </tbody></table></div>
-<h2>Checkpoint Bab 9</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 9</h2>
 <ol>
 <li>Apa yang dioptimalkan policy gradient?</li>
 <li>Apa fungsi baseline?</li>
 <li>Apa peran actor dan critic?</li>
 <li>Apa intuisi clipping pada PPO?</li>
 </ol>
-<h2>Latihan Bab 9</h2>
-<p>Untuk tiga langkah dengan return <code>[4, 1, -2]</code> dan baseline <code>[2, 2, 0]</code>, hitung advantage sederhana. Jelaskan action mana yang seharusnya diperkuat atau dilemahkan.</p>
-<hr>
 
+
+</div>

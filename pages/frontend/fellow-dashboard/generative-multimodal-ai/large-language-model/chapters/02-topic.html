@@ -1,5 +1,8 @@
 <h1>Tokenisasi dan Representasi Teks</h1>
-<h2>2.1 Komputer Tidak Membaca Kata Secara Langsung</h2>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.1 Komputer Tidak Membaca Kata Secara Langsung</h2>
 <p>Model menerima angka, bukan kata. Sebelum teks masuk ke neural network, tokenizer memecah teks menjadi unit yang disebut <strong>token</strong>, kemudian setiap token dipetakan ke sebuah ID integer.</p>
 <div class="reasoning-code-block"><pre><code class="language-text">&quot;belajar AI itu menarik&quot;
         ↓ tokenisasi
@@ -8,7 +11,11 @@
 [1842, 927, 311, 6021]
 </code></pre></div>
 <p>Contoh di atas hanya ilustrasi. Token sebenarnya bergantung pada tokenizer dan vocabulary model. Satu kata dapat menjadi satu token, beberapa token, atau bergabung dengan spasi dan tanda baca.</p>
-<h2>2.2 Mengapa Tidak Selalu Per Kata?</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.2 Mengapa Tidak Selalu Per Kata?</h2>
 <p>Tokenisasi per kata memiliki masalah:</p>
 <ul>
 <li>vocabulary menjadi sangat besar,</li>
@@ -51,7 +58,11 @@
 <td>Urutan dapat lebih panjang</td>
 </tr>
 </tbody></table></div>
-<h2>2.3 Vocabulary dan Token ID</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.3 Vocabulary dan Token ID</h2>
 <p><strong>Vocabulary</strong> adalah daftar token yang dikenali tokenizer. Setiap token memiliki ID. ID tidak menunjukkan makna atau urutan kualitas. Token ID hanyalah alamat yang dipakai untuk mengambil embedding.</p>
 <div class="reasoning-code-block"><pre><code class="language-python"># Ilustrasi sederhana, bukan tokenizer produksi.
 vocabulary = {
@@ -66,7 +77,11 @@ token_ids = [vocabulary.get(word, 0) for word in sentence]
 print(token_ids)  # [1, 2, 3]
 </code></pre></div>
 <p>Tokenizer produksi memiliki aturan normalisasi, pemisahan, penggabungan subword, token khusus, dan decoding kembali ke teks.</p>
-<h2>2.4 Token Khusus</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.4 Token Khusus</h2>
 <p>Model dapat memakai token khusus untuk menandai struktur, misalnya:</p>
 <ul>
 <li>awal atau akhir teks,</li>
@@ -76,7 +91,11 @@ print(token_ids)  # [1, 2, 3]
 <li>token untuk tool atau format tertentu.</li>
 </ul>
 <p>Prompt yang terlihat sama bagi pengguna dapat menghasilkan token yang berbeda jika template percakapannya berbeda.</p>
-<h2>2.5 Dampak Tokenisasi</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">2.5 Dampak Tokenisasi</h2>
 <p>Tokenisasi memengaruhi:</p>
 <ol>
 <li><strong>Panjang konteks.</strong> Batas model dihitung dalam token, bukan jumlah kata.</li>
@@ -88,21 +107,16 @@ print(token_ids)  # [1, 2, 3]
 <blockquote>
 <p><strong>Kesalahan umum:</strong> menganggap 1 token selalu sama dengan 1 kata. Hubungannya berubah menurut bahasa, tanda baca, dan tokenizer.</p>
 </blockquote>
-<h2>Checkpoint Bab 2</h2>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Checkpoint Bab 2</h2>
 <ol>
 <li>Mengapa model perlu mengubah teks menjadi token ID?</li>
 <li>Apa keuntungan tokenisasi subword?</li>
 <li>Bagaimana tokenisasi dapat memengaruhi biaya aplikasi?</li>
 </ol>
-<h2>Latihan Bab 2 - Audit Tokenisasi Konseptual</h2>
-<p>Ambil lima contoh teks:</p>
-<ul>
-<li>kalimat bahasa Indonesia formal,</li>
-<li>kalimat dengan slang,</li>
-<li>alamat web,</li>
-<li>potongan kode,</li>
-<li>kalimat dengan angka dan satuan.</li>
-</ul>
-<p>Perkirakan bagian mana yang mungkin dipecah menjadi banyak token. Jelaskan dampaknya terhadap context window dan chunking.</p>
-<hr>
 
+
+</div>

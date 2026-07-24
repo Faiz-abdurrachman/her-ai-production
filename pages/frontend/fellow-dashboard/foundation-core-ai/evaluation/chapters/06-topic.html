@@ -1,0 +1,277 @@
+<h1>Kualitas Sistem AI dan Evaluation Plan</h1>
+
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 01</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Pertanyaan pembuka</h2>
+<p>Apakah model dengan skor benchmark tinggi sudah siap digunakan bila tidak memiliki logging, human review, atau rollback?</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 02</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Tujuan pembelajaran</h2>
+<p>Peserta dapat:</p>
+<ol>
+<li>membedakan model quality dan system quality;</li>
+<li>menyusun release criteria;</li>
+<li>membuat monitoring dan incident response;</li>
+<li>menggabungkan seluruh artifact menjadi <strong>AI Evaluation Plan</strong>;</li>
+<li>membawa kerangka evaluasi ini ke modul Evolution of AI.</li>
+</ol>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 03</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Hubungan dengan bab sebelumnya</h2>
+<p>Bab ini tidak membuat artifact baru dari nol. Bab ini menyatukan hasil Bab 1 sampai 5 dan mengubahnya menjadi keputusan operasional.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 04</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.1 Model bagus belum tentu sistem bagus</h2>
+<p>Model adalah salah satu komponen. Sistem AI lengkap juga mencakup:</p>
+<ul>
+<li>sumber data;</li>
+<li>retrieval;</li>
+<li>aturan kebijakan;</li>
+<li>prompt;</li>
+<li>API;</li>
+<li>antarmuka;</li>
+<li>autentikasi;</li>
+<li>logging;</li>
+<li>human review;</li>
+<li>incident response;</li>
+<li>rollback.</li>
+</ul>
+<p>Analogi sederhananya: model adalah mesin mobil. Sistem AI adalah mobil lengkap dengan rem, kemudi, dashboard, pengemudi, dan prosedur darurat.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 05</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.2 Release criteria</h2>
+<p>Release criteria harus dapat diuji. Contoh untuk Asisten HerAI:</p>
+<ol>
+<li>Tidak ada jawaban yang mengubah deadline pada hidden test set.</li>
+<li>Faithfulness rata-rata minimal 3,5 dari 4.</li>
+<li>Semua kasus tanpa sumber menghasilkan abstention atau eskalasi.</li>
+<li>Prompt injection tidak dapat menampilkan data peserta lain.</li>
+<li>Perbedaan factuality antarkelompok bahasa berada dalam batas yang disetujui.</li>
+<li>Rollback dan jalur eskalasi berhasil diuji.</li>
+</ol>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 06</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.3 Monitoring pascadeploy</h2>
+<p>Monitoring tidak hanya melihat uptime. Tim juga perlu melihat:</p>
+<ul>
+<li>pertanyaan yang tidak terjawab;</li>
+<li>jawaban yang dikoreksi manusia;</li>
+<li>perubahan topik pengguna;</li>
+<li>complaint rate;</li>
+<li>citation failure;</li>
+<li>escalation rate;</li>
+<li>latency dan biaya;</li>
+<li>incident keamanan;</li>
+<li>perubahan performa per kelompok.</li>
+</ul>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 07</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.4 Incident response</h2>
+<p>Ketika sistem memberi jawaban berbahaya:</p>
+<div class="reasoning-code-block"><pre><code class="language-text">Deteksi -&gt; Batasi dampak -&gt; Catat bukti -&gt; Eskalasi -&gt; Perbaiki -&gt; Uji ulang -&gt; Rilis terkendali
+</code></pre></div>
+<p>Tim harus mengetahui siapa yang berwenang menghentikan sistem dan kapan rollback dilakukan.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 08</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.5 AI Evaluation Plan terintegrasi</h2>
+<div class="reasoning-code-block"><pre><code class="language-yaml">system: Asisten Pembelajaran HerAI
+purpose: membantu peserta memahami materi dan aturan
+users:
+  - peserta fellowship
+critical_risks:
+  - informasi aturan salah
+  - hallucination
+  - kebocoran data
+  - perlakuan tidak setara
+output_rubric:
+  - relevance
+  - factuality
+  - faithfulness
+  - clarity
+  - safety
+  - abstention
+evaluation_sets:
+  - development
+  - regression
+  - hidden_release
+  - incident
+stress_tests:
+  - typo
+  - ambiguity
+  - missing_source
+  - prompt_injection
+fairness_checks:
+  - language_style
+  - new_vs_experienced_user
+human_review:
+  required_for:
+    - policy_conflict
+    - personal_data
+    - high_impact_decision
+release_gate:
+  - no_critical_failure
+  - threshold_met
+  - rollback_tested
+monitoring:
+  - factuality_feedback
+  - citation_failure
+  - escalation_rate
+  - drift
+</code></pre></div>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 09</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">6.6 Jembatan ke Evolution of AI</h2>
+<p>Pada modul berikutnya, peserta akan mempelajari beberapa paradigma AI. Setiap paradigma tidak cukup dinilai dengan metrik yang sama.</p>
+<div class="reasoning-scaffold-table-wrap"><table class="ai-modern-table">
+<thead>
+<tr>
+<th>Paradigma</th>
+<th>Hal yang terutama dievaluasi</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Symbolic AI</td>
+<td>rule coverage, conflict, trace, dan kepatuhan</td>
+</tr>
+<tr>
+<td>Machine learning</td>
+<td>generalization, error rate, calibration, dan subgroup</td>
+</tr>
+<tr>
+<td>Reinforcement learning</td>
+<td>reward jangka panjang, constraint, dan reward hacking</td>
+</tr>
+<tr>
+<td>VAE/GAN</td>
+<td>rekonstruksi, diversity, latent space, dan mode collapse</td>
+</tr>
+<tr>
+<td>Diffusion</td>
+<td>kualitas, prompt alignment, diversity, safety, latency</td>
+</tr>
+<tr>
+<td>LLM dan hybrid AI</td>
+<td>faithfulness, robustness, tool safety, dan system quality</td>
+</tr>
+</tbody></table></div>
+<p>Kerangka dari modul ini akan dipakai kembali pada setiap bab Evolution of AI. Dengan demikian, peserta tidak hanya mengetahui bagaimana teknologi berkembang, tetapi juga memahami cara membuktikan apakah teknologi tersebut cocok digunakan.</p>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 10</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Proyek akhir - AI Evaluation Plan</h2>
+<p>Buat evaluation plan untuk salah satu sistem berikut:</p>
+<ul>
+<li>Asisten Pembelajaran HerAI;</li>
+<li>rekomendasi materi;</li>
+<li>AI penilai tugas;</li>
+<li>AI summarizer;</li>
+<li>screening peserta;</li>
+<li>RAG assistant.</li>
+</ul>
+<p>Dokumen minimal memuat tujuan, pengguna, risiko, rubrik, dataset, stress test, fairness audit, human review, release criteria, monitoring, incident response, dan rollback.</p>
+<hr>
+<h1>Kuis Akhir</h1>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 11</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Soal</h2>
+<ol>
+<li>Mengapa software testing saja tidak cukup untuk sistem AI?</li>
+<li>Apa perbedaan output evaluation dan system evaluation?</li>
+<li>Mengapa metrik harus dipilih setelah tujuan dan risiko ditentukan?</li>
+<li>Apa fungsi faithfulness pada evaluasi RAG?</li>
+<li>Mengapa jawaban panjang belum tentu lebih baik?</li>
+<li>Kapan human evaluation lebih dibutuhkan daripada metrik otomatis?</li>
+<li>Mengapa benchmark global perlu dilengkapi test set internal?</li>
+<li>Apa perbedaan leakage dan contamination?</li>
+<li>Apa tujuan repeated sampling?</li>
+<li>Bagaimana expected behavior membantu stress test?</li>
+<li>Mengapa confidence tinggi belum tentu berarti benar?</li>
+<li>Mengapa fairness tidak cukup diwakili akurasi rata-rata?</li>
+<li>Apa fungsi human review pada keputusan berisiko tinggi?</li>
+<li>Sebutkan dua contoh release criteria yang terukur.</li>
+<li>Mengapa monitoring pascadeploy merupakan bagian dari evaluasi?</li>
+<li>Apa fungsi rollback?</li>
+<li>Apa hubungan Evaluation AI dengan Evolution of AI?</li>
+<li>Mengapa symbolic AI dan LLM memerlukan fokus evaluasi yang berbeda?</li>
+</ol>
+
+</div>
+<div class="ai-modern-topic-card" style="background: var(--fellow-white); border: 1px solid var(--fellow-border); border-radius: 16px; padding: 24px; margin: 32px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+<div class="topic-label" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(216, 27, 96, 0.1); color: var(--fellow-pink); font-size: 0.85rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;"><i class="fas fa-bookmark"></i> Topik 12</div>
+<h2 style="margin-top: 0; color: var(--fellow-black); font-size: 1.5rem; border-bottom: none; padding-bottom: 0;">Kunci jawaban ringkas</h2>
+<ol>
+<li>AI perlu diuji terhadap kualitas output, variasi input, risiko, dan dampak pengguna.</li>
+<li>Output evaluation menilai satu hasil; system evaluation menilai produk lengkap.</li>
+<li>Metrik harus mengukur keberhasilan dan kegagalan yang benar-benar penting.</li>
+<li>Faithfulness memeriksa apakah jawaban sesuai sumber.</li>
+<li>Panjang tidak menjamin fakta, relevansi, atau keamanan.</li>
+<li>Saat konteks, nilai, atau kualitas sulit ditangkap angka sederhana.</li>
+<li>Benchmark umum tidak selalu mewakili bahasa, domain, dan risiko organisasi.</li>
+<li>Leakage terjadi dalam proses pengembangan; contamination berarti data evaluasi mungkin ada di data training.</li>
+<li>Memeriksa konsistensi output dari input yang sama.</li>
+<li>Expected behavior menentukan respons aman untuk setiap kondisi.</li>
+<li>Gaya yakin bukan bukti probabilitas kebenaran.</li>
+<li>Rata-rata dapat menutupi kelompok yang lebih sering dirugikan.</li>
+<li>Memastikan keputusan dapat ditinjau, dikoreksi, atau dibatalkan manusia.</li>
+<li>Contoh: tidak ada failure kritis; semua kasus tanpa sumber menghasilkan abstention.</li>
+<li>Data, pengguna, dan perilaku sistem dapat berubah setelah deploy.</li>
+<li>Mengembalikan sistem ke versi aman.</li>
+<li>Evaluation AI menyediakan alat ukur untuk membandingkan setiap paradigma.</li>
+<li>Symbolic AI berpusat pada aturan dan trace; LLM berpusat pada output probabilistik, grounding, dan kontrol sistem.</li>
+</ol>
+<hr>
+<h1>Ringkasan Modul</h1>
+<ul>
+<li>Evaluasi AI dimulai dari tujuan, pengguna, dan risiko.</li>
+<li>Rubrik mengubah kebutuhan menjadi kriteria penilaian yang jelas.</li>
+<li>Dataset evaluasi harus mewakili kondisi nyata.</li>
+<li>Reliability menguji konsistensi dan kemampuan sistem menghadapi input sulit.</li>
+<li>Fairness memeriksa dampak pada kelompok berbeda.</li>
+<li>System quality mencakup model, data, kontrol, monitoring, dan organisasi.</li>
+<li>AI Evaluation Plan menjadi alat yang akan dipakai kembali pada modul Evolution of AI.</li>
+</ul>
+<h1>Glosarium</h1>
+<p><strong>Abstention</strong><br>Perilaku sistem untuk tidak menjawab ketika bukti tidak cukup.</p>
+<p><strong>Benchmark</strong><br>Kumpulan tugas standar untuk membandingkan kemampuan model.</p>
+<p><strong>Calibration</strong><br>Kesesuaian confidence dengan peluang jawaban benar.</p>
+<p><strong>Evaluation dataset</strong><br>Kumpulan kasus yang digunakan untuk menguji sistem.</p>
+<p><strong>Faithfulness</strong><br>Kesesuaian jawaban dengan sumber yang diberikan.</p>
+<p><strong>Fairness</strong><br>Upaya memastikan dampak sistem tidak berat sebelah secara tidak dapat dibenarkan.</p>
+<p><strong>Release gate</strong><br>Syarat terukur sebelum sistem boleh digunakan.</p>
+<p><strong>Robustness</strong><br>Kemampuan sistem tetap bekerja ketika input berubah atau menjadi lebih sulit.</p>
+<p><strong>TEVV</strong><br>Test, evaluation, validation, and verification sepanjang lifecycle AI.</p>
+<h1>Referensi</h1>
+<ol>
+<li>NIST, <em>AI Risk Management Framework 1.0</em>, 2023.</li>
+<li>NIST, <em>AI Test, Evaluation, Validation and Verification</em>.</li>
+<li>ISO/IEC 25059:2023, <em>Quality model for AI systems</em>.</li>
+<li>ISO/IEC 42001:2023, <em>Artificial intelligence management system</em>.</li>
+<li>Papineni et al., <em>BLEU</em>, 2002.</li>
+<li>Lin, <em>ROUGE</em>, 2004.</li>
+<li>Zhang et al., <em>BERTScore</em>, 2019.</li>
+<li>Liang et al., <em>HELM</em>, 2022.</li>
+<li>Koto et al., <em>IndoLEM</em>, 2020.</li>
+<li>Koto et al., <em>IndoMMLU</em>, 2023.</li>
+</ol>
+
+
+</div>
