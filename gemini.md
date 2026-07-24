@@ -78,3 +78,16 @@ Pengguna melaporkan bahwa saat membuka materi Reinforcement Learning, Topik 1 ya
 - Memperbarui skrip `scripts/module-tools/build_module.js` agar secara otomatis mengganti nama fungsi internal (contoh: `loadPythonTopik` menjadi `loadAiReinforcementLearningChapter` dan `loadAiDeepLearningChapter`).
 - Melakukan *rebuild* pada modul Deep Learning dan Reinforcement Learning menggunakan script yang sudah diperbarui.
 - Hasilnya, data materi antar modul terisolasi dengan baik dan tidak lagi tumpang tindih.
+
+## 7. Bug Visual: Teks "Prompt" Menampilkan Karakter Baris Baru Literal (`\n\n`)
+**Deskripsi:**
+Pengguna melaporkan adanya tulisan berantakan seperti `\n\n- state,` pada area Prompt di halaman Latihan/Tugas.
+
+**Penyebab:**
+- Script `scripts/module-tools/build_module.js` menggabungkan beberapa paragraf soal latihan menggunakan delimiter string literal `\\n\\n` (double backslash).
+- Ketika object data tersebut dikonversi dengan `JSON.stringify` untuk dimasukkan ke file JavaScript, backslash ganda tersebut di-escape lagi menjadi literal string `\n\n` di browser (bukannya newline karakter sebenarnya). Akibatnya, fungsi `text.split("\n")` di frontend gagal memecah string tersebut.
+
+**Cara Perbaikan:**
+- Mengubah delimiter di `build_module.js` menjadi karakter newline sesungguhnya (`\n\n` dengan single backslash).
+- Melakukan *rebuild* ulang pada modul Deep Learning dan Reinforcement Learning.
+- Hasilnya, newline di-escape secara proporsional dan berhasil di-render sebagai format blok rapi di halaman browser tanpa membocorkan kode *escape sequence*.
