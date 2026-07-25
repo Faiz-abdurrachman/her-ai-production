@@ -838,8 +838,8 @@ const snippets={
   pipeline:`import numpy as np\n\ndef erode(img,ks=3):\n    pad=ks//2;p=np.pad(img.astype(float),pad,mode='constant')\n    return np.array([[p[y:y+ks,x:x+ks].min() for x in range(img.shape[1])] for y in range(img.shape[0])]).astype(np.uint8)\ndef dilate(img,ks=3):\n    pad=ks//2;p=np.pad(img.astype(float),pad,mode='constant')\n    return np.array([[p[y:y+ks,x:x+ks].max() for x in range(img.shape[1])] for y in range(img.shape[0])]).astype(np.uint8)\n\nnp.random.seed(7)\n# Binary inspection image\nimg=np.zeros((20,20),dtype=np.uint8)\nimg[3:9,3:9]=255;img[12:18,12:18]=255  # 2 real objects\nimg[0,0]=img[1,19]=img[19,0]=255       # noise\nimg[5,5]=img[14,14]=0                  # holes\n\nprint(f"1. Input:   {int((img==255).sum())} white pixels")\ncleaned=dilate(erode(img,3),3)          # opening\nprint(f"2. Opened:  {int((cleaned==255).sum())} (noise removed)")\nfilled=erode(dilate(cleaned,3),3)       # closing\nprint(f"3. Closed:  {int((filled==255).sum())} (holes filled)")\ngrad=np.clip(dilate(filled).astype(int)-erode(filled).astype(int),0,255).astype(np.uint8)\nprint(f"4. Gradient:{int((grad>0).sum())} edge pixels")\ntop=np.clip(img.astype(int)-dilate(erode(img,5),5).astype(int),0,255).astype(np.uint8)\nblk=np.clip(erode(dilate(img,5),5).astype(int)-img.astype(int),0,255).astype(np.uint8)\nprint(f"5. Top-Hat: {int((top>0).sum())} bright details (noise)")\nprint(f"6. Blk-Hat: {int((blk>0).sum())} dark details (holes)")`,
 };
 
-window.loadSnippet=function(name){const ed=document.getElementById('playground-editor');if(ed&&snippets[name])ed.value=snippets[name];};
-window.runPlayground=async function(){
+window.loadMorphSnippet=function(name){const ed=document.getElementById('playground-editor');if(ed&&snippets[name])ed.value=snippets[name];};
+window.runMorphPlayground=async function(){
   const ed=document.getElementById('playground-editor'),out=document.getElementById('pg-output-pre');
   if(!ed||!out)return;
   out.closest('.output-wrap').style.display='block';out.textContent='⏳ Running…';
@@ -847,11 +847,11 @@ window.runPlayground=async function(){
   try{let s='';MORPH_pyodideInstance.setStdout({batched:(x)=>{s+=x+'\n';}}); await MORPH_pyodideInstance.runPythonAsync(ed.value);out.textContent=s||'(no output)';}
   catch(err){out.textContent='❌ '+err.message;}
 };
-window.resetPlayground=function(){
+window.resetMorphPlayground=function(){
   const ed=document.getElementById('playground-editor');if(ed)ed.value=pgDefault;
   const out=document.getElementById('pg-output');if(out)out.style.display='none';
 };
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){if(document.activeElement?.classList.contains('playground-editor')){e.preventDefault();runPlayground();}}});
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){if(document.activeElement?.classList.contains('playground-editor')){e.preventDefault();window.runMorphPlayground();}}});
 
 /* ── Init ──────────────────────────────── */
 window.initAiLabMorph = function() {

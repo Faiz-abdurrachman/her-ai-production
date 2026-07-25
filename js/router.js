@@ -1020,8 +1020,12 @@ const router = {
                     }
                     if (path === "/participant-cv-digital-image" && typeof window.initCvDigitalImage === "function") {
                         window.initCvDigitalImage();
+                    } else if (path === "/participant-cv-digital-image-practice" && typeof window.initCvDigitalImagePractice === "function") {
+                        window.initCvDigitalImagePractice();
                     } else if (path === "/participant-cv-cnn" && typeof window.initCvCnn === "function") {
                         window.initCvCnn();
+                    } else if (path === "/participant-cv-cnn-practice" && typeof window.initCvCnnPractice === "function") {
+                        window.initCvCnnPractice();
                     } else if (path === "/participant-cv-advanced-cnn" && typeof window.initCvAdvancedCnn === "function") {
                         window.initCvAdvancedCnn();
                     }

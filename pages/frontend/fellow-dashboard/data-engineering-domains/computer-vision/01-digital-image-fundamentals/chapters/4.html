@@ -331,7 +331,7 @@
 </style>
 <style>
   /* Sembunyikan kuis secara default saat memuat halaman */
-  #sec-quiz { display: none; }
+
 </style>
 
 <article class="lesson-article ai-lab-content cv-chapter-wrapper" id="morph-content">
@@ -444,11 +444,11 @@ se_custom = np.array([[<span class="num">0</span>,<span class="num">1</span>,<sp
               </div>
               <div class="md-se-ctrl">
                 <label class="se-label">SE size: <span id="demoSeSize">3</span>×<span id="demoSeSizeB">3</span></label>
-                <input type="range" min="1" max="9" step="2" value="3" id="demoSeSizeSlider" oninput="updateDemoSESize(this.value)">
+                <input type="range" min="1" max="9" step="2" value="3" id="demoSeSizeSlider" oninput="updateDemoSESize(this.value)" style="position: relative; z-index: 10;">
               </div>
               <div class="md-se-ctrl">
                 <label class="se-label">Iterations: <span id="demoIter">1</span></label>
-                <input type="range" min="1" max="5" step="1" value="1" id="demoIterSlider" oninput="updateDemoIter(this.value)">
+                <input type="range" min="1" max="5" step="1" value="1" id="demoIterSlider" oninput="updateDemoIter(this.value)" style="position: relative; z-index: 10;">
               </div>
               <canvas id="demoSePreview" width="60" height="60" class="se-preview-mini"></canvas>
             </div>
@@ -566,7 +566,7 @@ print("Rectangle still present:", eroded[3, 3] == 255)</textarea></div>
             </div>
             <div class="ocd-se-ctrl">
               <label>SE size: <span id="ocSeSize">3</span>×<span id="ocSeSizeB">3</span></label>
-              <input type="range" min="1" max="9" step="2" value="3" id="ocSeSizeSlider" oninput="updateOCSize(this.value)">
+              <input type="range" min="1" max="9" step="2" value="3" id="ocSeSizeSlider" oninput="updateOCSize(this.value)" style="position: relative; z-index: 10;">
             </div>
           </div>
         </div>
@@ -705,7 +705,7 @@ print("After closing - main rect intact:", closed[3,3])</textarea></div>
             </div>
             <div class="adv-se-ctrl">
               <label>SE: <span id="advSeSize">5</span>×<span id="advSeSizeB">5</span></label>
-              <input type="range" min="3" max="11" step="2" value="5" id="advSeSizeSlider" oninput="updateAdvSE(this.value)">
+              <input type="range" min="3" max="11" step="2" value="5" id="advSeSizeSlider" oninput="updateAdvSE(this.value)" style="position: relative; z-index: 10;">
             </div>
           </div>
         </div>
@@ -903,7 +903,7 @@ result = <span class="num">255</span> - filled.astype(np.uint8)</code></pre></di
                 <option value="ellipse">Ellipse SE</option>
                 <option value="cross">Cross SE</option>
               </select>
-              <input type="range" min="1" max="9" step="2" value="3" id="sbSeSize" oninput="updateSandbox(); document.getElementById('sbSeSizeLbl').textContent=this.value+'×'+this.value">
+              <input type="range" min="1" max="9" step="2" value="3" id="sbSeSize" oninput="updateSandbox(); document.getElementById('sbSeSizeLbl').textContent=this.value+'×'+this.value" style="position: relative; z-index: 10;">
               <span id="sbSeSizeLbl" class="sb-size-lbl">3×3</span>
             </div>
           </div>
@@ -973,12 +973,12 @@ result = <span class="num">255</span> - filled.astype(np.uint8)</code></pre></di
               <span class="py-ready-dot" id="pgReadyDot"></span>
             </div>
             <div class="pg-toolbar-right">
-              <button class="pg-snippet-btn" onclick="loadSnippet('erode')">erode</button>
-              <button class="pg-snippet-btn" onclick="loadSnippet('dilate')">dilate</button>
-              <button class="pg-snippet-btn" onclick="loadSnippet('openclose')">open/close</button>
-              <button class="pg-snippet-btn" onclick="loadSnippet('gradient')">gradient</button>
-              <button class="pg-snippet-btn" onclick="loadSnippet('tophat')">top-hat</button>
-              <button class="pg-snippet-btn" onclick="loadSnippet('pipeline')">pipeline</button>
+              <button class="pg-snippet-btn" onclick="loadMorphSnippet('erode')">erode</button>
+              <button class="pg-snippet-btn" onclick="loadMorphSnippet('dilate')">dilate</button>
+              <button class="pg-snippet-btn" onclick="loadMorphSnippet('openclose')">open/close</button>
+              <button class="pg-snippet-btn" onclick="loadMorphSnippet('gradient')">gradient</button>
+              <button class="pg-snippet-btn" onclick="loadMorphSnippet('tophat')">top-hat</button>
+              <button class="pg-snippet-btn" onclick="loadMorphSnippet('pipeline')">pipeline</button>
             </div>
           </div>
           <div class="code-editor-wrap">
@@ -1043,8 +1043,8 @@ print(f"Black-Hat non-zero:    {int((black_hat>0).sum())}  (dark details = holes
 </textarea>
           </div>
           <div class="playground-actions">
-            <button class="run-btn large" onclick="runPlayground()">▶ Run Code</button>
-            <button class="reset-btn" onclick="resetPlayground()">↺ Reset</button>
+            <button class="run-btn large" onclick="runMorphPlayground()">▶ Run Code</button>
+            <button class="reset-btn" onclick="resetMorphPlayground()">↺ Reset</button>
             <span class="pg-note">Ctrl+Enter to run</span>
           </div>
           <div class="output-wrap" id="pg-output" style="display:none"><div class="output-label">Output</div><pre class="output-pre" id="pg-output-pre"></pre></div>
