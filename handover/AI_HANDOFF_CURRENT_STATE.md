@@ -61,7 +61,7 @@ Sesudah pekerjaan login, dilakukan audit materi/fitur dan dokumentasi:
 | Kode GAS yang benar | `gas/Code.gs` |
 | Login peserta frontend | `js/frontend/profile.js` |
 | Proxy lokal | `server.js` endpoint `/__gas` |
-| Last Git commit | `11c36106aa1807bd23e56400e20f43e95e6d7af9` |
+| Last Git commit | `8fe356bffb20763c26320b59539a97c7ed1b9d4d` |
 
 ID `120NQt...` dan deployment `AKfycbxQ...` adalah referensi lama. Jangan dipakai sebagai konfigurasi runtime.
 
@@ -349,42 +349,16 @@ Ringkasan audit:
 
 ## 11. Kondisi Git/worktree
 
-Worktree dirty dan belum ada commit untuk checkpoint ini. Perubahan user/AI bercampur; jangan revert massal.
-
-**Commit baru sejak handoff sebelumnya (5 commit dari `33bd090` ke `11c3610`):**
+**Worktree BERSIH** — semua perubahan sudah di-commit dalam 4 commit terpisah per fitur:
 
 ```text
-33bd090 feat(ai-fundamentals): Fix exercise formatting + rubrics for Evaluation & Evolution AI
-328179f refactor(cv-module): Migrate CV monolith → hierarchical sub-module
-9e6e9d8 fix(router): Whitelist new CV routes + bump cache busters
-94a3aaf chore(content): Minor formatting for legacy NLP and ML overview
-7081012 chore(scripts): Add utility scripts for module migrations and CSS scoping
-11c3610 fix(cv-module): Restore missing ai-lab-content CSS scope class
+8fe356b docs(gemini): Add bugs 26-28 — MLP diagram contrast, dark code blocks, layers-viz fixes + session checkpoint rules
+9eda464 docs(handoff): Update checkpoint to 26 July 2026 — CV sub-module architecture, visual fixes, worktree state, next AI prompt
+9493c59 fix(ui): Improve MLP/FC neuron diagram contrast — increase line opacity, stroke width, dot saturation, SVG size for readability
+ae99f32 fix(cv-module): Restore CSS scoping, whitelist CV routes, expand CNN chapter content, fix dark code blocks to light theme, improve layers-viz diagram contrast
 ```
 
-Modified tracked (uncommitted, current):
-
-```text
-css/frontend/fellow-dashboard/ai-lab-lesson.css
-js/frontend/fellow-dashboard/ai-cv.js
-js/frontend/fellow-dashboard/ai-lab/cnn-intro.js
-js/frontend/fellow-dashboard/ai-lab/morphological-transforms.js
-js/router.js
-pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision.html
-pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/chapters/3.html
-pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/chapters/4.html
-pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/diskusi.html
-pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/kuis.html  [DELETED]
-pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/latihan.html
-pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/materi.html
-pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/chapters/1-4.html  [heavily expanded]
-pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/diskusi.html
-pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/latihan.html
-pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/materi.html
-pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/cnn-intro.html
-```
-
-Untracked penting:
+Untracked (tidak perlu di-commit):
 
 ```text
 .omo/
@@ -398,13 +372,8 @@ reports/MATERIAL_AND_FEATURE_GAP_AUDIT_2026-07-19.md
 reports/MATERIAL_FEATURE_STATUS_WHATSAPP_2026-07-19.md
 reports/MATERIAL_FEATURE_STATUS_WHATSAPP_2026-07-19.txt
 scratch.js
-scratch/add_cnn_css.py
-scratch/add_more_cnn_css.py
-scratch/add_pipeline_css.py
-scratch/refactor_tabs.py
+scratch/
 ```
-
-Tidak ada commit baru yang dibuat oleh AI dalam rangkaian kerja ini.
 
 ## 12. Next actions
 
@@ -432,18 +401,56 @@ tanpa mengubah admin atau melakukan provisioning.
 ## 13. Prompt singkat untuk AI berikutnya
 
 ```text
-Baca handover/AI_HANDOFF_CURRENT_STATE.md sebagai sumber utama.
-Jangan provision/reset akun dan jangan mengubah admin.
-Kode canonical GAS adalah gas/Code.gs; spreadsheet canonical 1n4ZV...
-Status deploy terbaru belum dikonfirmasi. Lanjutkan dari verifikasi deploy dan
-end-to-end login peserta menggunakan kredensial dari satu baris ParticipantAccounts,
-tanpa mencetak atau menyimpan kredensial. Setelah login terverifikasi, gunakan
-reports/MATERIAL_AND_FEATURE_GAP_AUDIT_2026-07-19.md untuk backlog. Pengaturan
-peserta masih prototype dan ganti password mandiri belum tersedia.
+⚠️  BACA INI DULU SEBELUM KERJA APA PUN.
 
-Computer Vision sudah direstruktur menjadi hierarchical sub-module dengan route
-aktif. Worktree dirty pada CV files — commit setelah smoke test sebelum lanjut
-ke modul lain. Math, ML, dan NLP masih menuju under-development dan perlu
-diaktifkan route-nya. Generative AI (LLM, VLM, Multimodal, Agentic) sudah
-punya route aktif.
+📋 SUMBER UTAMA: handover/AI_HANDOFF_CURRENT_STATE.md
+🐛 BUG LOG: gemini.md (bugs 1-28, baca untuk hindari regresi)
+📊 CHECKPOINT: 26 Juli 2026, commit terakhir 8fe356b
+
+🚫 LARANGAN HARD:
+- JANGAN provision/reset akun peserta (187 akun existing)
+- JANGAN ubah admin credentials atau workflow
+- JANGAN forceReset:true
+- JANGAN jalankan setupDatabase(), setupParticipantBackend(), generateParticipantAccountsBatch1/2/3(), provisionParticipantAccounts(), migrateExistingParticipantAccountCredentials()
+- JANGAN pakai dark theme di code block — semua HARUS light pink theme
+- JANGAN tampilkan NIK/password di log, screenshot, issue, atau handover
+- JANGAN revert massal worktree tanpa audit
+
+📐 ATURAN VISUAL (dari sesi 26 Juli):
+- Diagram kontras minimum: connection lines ≥ 25% opacity, dots ≥ 75% opacity, stroke ≥ 0.8px
+- Code block: white bg (#fff), pink border, Notion/Vercel documentation style
+- CSS scope class `ai-lab-content` WAJIB di semua template CV — untuk mencegah styling regression
+- Layer cards: white bg dengan box-shadow pink, jangan blend dengan parent
+
+🔧 IDENTITAS SISTEM:
+- Spreadsheet ID: 1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w
+- GAS Web App URL: https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec
+- Kode GAS canonical: gas/Code.gs
+- Dev server: node server.js → http://127.0.0.1:3000
+
+📦 STATUS MODUL:
+- ✅ Computer Vision: hierarchical sub-module (3 sub-modul, 11 chapters), route aktif di /participant-cv-*
+- ✅ Generative AI: LLM, VLM, Multimodal LLM, Agentic AI — route aktif
+- ✅ Deep Learning, Reinforcement Learning: modul lengkap, route aktif
+- ✅ AI Fundamentals & Advanced: 6 modul substantif, route aktif
+- ✅ Domain apps: Bioinformatics, Data Eng/Science, Infrastructure, Deployment, Front End, Back End, Business, Management, Culture, Healthcare, UI/UX, Manufacturing, Geospatial — HTML shell generated
+- ❌ Math, ML, NLP: materi substantif ada tapi route masih under-development.html
+- ❌ 20 course placeholder, 6 specialization track scaffold
+- ❌ Pengaturan peserta: UI prototype, belum tersambung backend
+- ❌ Self-service ganti password: BELUM ADA
+
+🔜 NEXT ACTIONS (prioritas):
+1. Konfirmasi senior deploy gas/Code.gs sebagai New Version
+2. Smoke test login peserta dengan 1 akun nyata (jangan catat kredensial)
+3. Smoke test route CV sub-module di localhost
+4. Aktifkan route Math, ML, NLP
+5. Rancang progress/gradebook server-side
+6. Backlog konten dari reports/MATERIAL_AND_FEATURE_GAP_AUDIT_2026-07-19.md
+
+📝 WORKFLOW:
+- Commit per fitur, bukan satu commit besar
+- Update handover/AI_HANDOFF_CURRENT_STATE.md setiap checkpoint
+- Catat bug baru di gemini.md dengan nomor urut lanjutan
+- Setelah selesai kerja signifikan, jalankan review-work
+- Verifikasi visual: refresh browser, cek desktop/tablet/mobile
 ```
