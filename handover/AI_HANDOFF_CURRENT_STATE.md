@@ -1,6 +1,6 @@
 # AI Handoff — Current Checkpoint HerAI Fellowship SuperApp
 
-**Checkpoint:** 25 Juli 2026, Asia/Jakarta  
+**Checkpoint:** 26 Juli 2026, Asia/Jakarta  
 **Workspace:** `/home/faiz/her6/Her-AI`  
 **Branch:** `main`  
 **Tujuan:** Sumber kebenaran utama untuk AI/developer berikutnya.
@@ -38,6 +38,19 @@ Sesudah pekerjaan login, dilakukan audit materi/fitur dan dokumentasi:
 - **Batch Rebuild**: Telah menjalankan `rebuild_all_modules.sh` untuk 19 modul lanjutan agar materi kembali bersih dari anomali data Python.
 - **Root Server**: Mengembalikan `server.js` dari `scripts/module-tools/` ke folder *root* agar *development server* dapat dijalankan normal dengan `node server.js`.
 
+**Pembaruan Tambahan 25/26 Juli 2026:**
+- **AI Fundamentals — Latihan & Rubrik**: Memperbaiki format latihan di `05-evaluation-ai.md` dan `06-evolution-of-ai.md`. Menambahkan rubrik penilaian detail dan kunci jawaban untuk semua latihan di kedua modul. Minor fix di `08-machine-learning.md`.
+- **Computer Vision — Restrukturisasi Arsitektur**: Memigrasikan halaman *Computer Vision* dari monolith tunggal menjadi arsitektur *hierarchical sub-module* dengan tiga sub-modul:
+  - `01-digital-image-fundamentals` (4 chapters + materi/latihan/diskusi/kuis)
+  - `02-convolutional-neural-networks` (4 chapters + materi/latihan/diskusi/kuis)
+  - `03-advanced-cnn-architectures` (3 chapters + materi/latihan/diskusi/kuis)
+  - Sistem *dynamic DOM injection* untuk CSS dan legacy Pyodide scripts via `ai-cv.js`.
+  - Halaman *lesson* (cnn-intro, filtering-kernels, image-processing-opencv, morphological-transforms, dll) diperbarui untuk kompatibilitas.
+- **Router — Whitelist CV Routes**: Menambahkan semua *sub-route* Computer Vision baru ke *security guard* di `router.js`. *Cache buster* di `index.html` di-bump untuk memastikan klien mengambil file terbaru.
+- **Utility Scripts**: Menambahkan *utility scripts* untuk migrasi modul, *CSS scoping fixes*, dan *DOM injection debugging* (`append_css.js`, `fix_materi_html.js`, `fix_ui.js`). *Scratch scripts* untuk build CV (`build_cv_overview.js`, `build_cv_submodules.js`, `extract_cv_chapters.js`, dll) ditambahkan sebagai referensi.
+- **CSS Scope Fix**: Memperbaiki regresi styling dengan mengembalikan *CSS scope class* `ai-lab-content` pada halaman `materi.html` ketiga sub-modul CV.
+- **Konten Minor**: Penyesuaian formatting minor pada file legacy NLP dan Machine Learning overview.
+
 ## 2. Identitas sistem canonical
 
 | Item | Nilai |
@@ -48,7 +61,7 @@ Sesudah pekerjaan login, dilakukan audit materi/fitur dan dokumentasi:
 | Kode GAS yang benar | `gas/Code.gs` |
 | Login peserta frontend | `js/frontend/profile.js` |
 | Proxy lokal | `server.js` endpoint `/__gas` |
-| Last Git commit | `f6bd53cd4f5b82d567d255952f582e29bf3ec430` |
+| Last Git commit | `11c36106aa1807bd23e56400e20f43e95e6d7af9` |
 
 ID `120NQt...` dan deployment `AKfycbxQ...` adalah referensi lama. Jangan dipakai sebagai konfigurasi runtime.
 
@@ -288,6 +301,7 @@ Pada akhir checkpoint:
 - Server sementara di port `3107` juga sudah dihentikan.
 - AI berikutnya harus menjalankan `node server.js` sendiri jika perlu testing.
 - Status deployment GAS terbaru belum terkonfirmasi; minta user/senior memastikan **New version → Deploy** selesai.
+- Perubahan uncommitted pada CV module masih aktif di worktree; jangan revert tanpa audit.
 
 ## 10. Materi Markdown
 
@@ -321,13 +335,14 @@ Ringkasan audit:
 - Ekspor 200 Markdown lengkap terhadap sumber yang ada di workspace.
 - Katalog mempunyai 26 course dan 6 specialization track.
 - AI Fundamentals & Advanced aktif dengan 6 modul substantif.
-- Math, Machine Learning, NLP, dan Computer Vision mempunyai materi substantif,
-  tetapi route peserta masih menuju `under-development.html`.
-- Generative AI baru parsial.
+- Math, Machine Learning, dan NLP mempunyai materi substantif, tetapi route peserta masih menuju `under-development.html`.
+- **Computer Vision** sudah direstruktur menjadi arsitektur hierarchical sub-module (3 sub-modul, 11 chapters) dengan route aktif.
+- Generative AI sudah mencakup LLM, VLM, Multimodal LLM, dan Agentic AI dengan route aktif.
+- Deep Learning dan Reinforcement Learning sudah punya modul lengkap dengan route aktif.
+- Domain application modules (Bioinformatics, Data Engineering/Science, Infrastructure, Deployment, Front End, Back End, Business Insight, Management, Culture, Healthcare, UI/UX, Manufacturing, Geospatial) sudah digenerate dengan HTML shell.
 - 20 course masih placeholder dan 6 specialization track masih scaffold.
-- Sebanyak 72 route AI Lab/track diarahkan ke halaman Under Development.
-- Banyak halaman participant selain dashboard/modules/profile masih prototype visual
-  dengan data hard-coded.
+- Sebanyak 72 route AI Lab/track diarahkan ke halaman Under Development (berkurang dari sebelumnya karena CV dan Generative AI routes sudah aktif).
+- Banyak halaman participant selain dashboard/modules/profile masih prototype visual dengan data hard-coded.
 - `scripts/check-participant-routes.mjs` hanya mengecek keberadaan file sehingga
   route Under Development tetap dihitung lulus.
 - Pengaturan peserta baru berupa UI prototype; self-service ganti password belum ada.
@@ -336,26 +351,37 @@ Ringkasan audit:
 
 Worktree dirty dan belum ada commit untuk checkpoint ini. Perubahan user/AI bercampur; jangan revert massal.
 
-Modified tracked:
+**Commit baru sejak handoff sebelumnya (5 commit dari `33bd090` ke `11c3610`):**
 
 ```text
-.cursor/global-settings.json
-.cursor/participants.json
-.gitignore
-api/gas.js
-api/settings.js
-gas/Code.gs
-index.html
-js/frontend/announcement.js
-js/frontend/competency-test.js
-js/frontend/profile.js
-js/main.js
+33bd090 feat(ai-fundamentals): Fix exercise formatting + rubrics for Evaluation & Evolution AI
+328179f refactor(cv-module): Migrate CV monolith → hierarchical sub-module
+9e6e9d8 fix(router): Whitelist new CV routes + bump cache busters
+94a3aaf chore(content): Minor formatting for legacy NLP and ML overview
+7081012 chore(scripts): Add utility scripts for module migrations and CSS scoping
+11c3610 fix(cv-module): Restore missing ai-lab-content CSS scope class
+```
+
+Modified tracked (uncommitted, current):
+
+```text
+css/frontend/fellow-dashboard/ai-lab-lesson.css
+js/frontend/fellow-dashboard/ai-cv.js
+js/frontend/fellow-dashboard/ai-lab/cnn-intro.js
+js/frontend/fellow-dashboard/ai-lab/morphological-transforms.js
 js/router.js
-render.yaml
-reports/qa-report-latest.json
-reports/qa-report-latest.md
-server.js
-signaling/main.go
+pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision.html
+pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/chapters/3.html
+pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/chapters/4.html
+pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/diskusi.html
+pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/kuis.html  [DELETED]
+pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/latihan.html
+pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/materi.html
+pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/chapters/1-4.html  [heavily expanded]
+pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/diskusi.html
+pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/latihan.html
+pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/materi.html
+pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/lessons/cnn-intro.html
 ```
 
 Untracked penting:
@@ -371,6 +397,11 @@ scripts/test-gas-auth.mjs
 reports/MATERIAL_AND_FEATURE_GAP_AUDIT_2026-07-19.md
 reports/MATERIAL_FEATURE_STATUS_WHATSAPP_2026-07-19.md
 reports/MATERIAL_FEATURE_STATUS_WHATSAPP_2026-07-19.txt
+scratch.js
+scratch/add_cnn_css.py
+scratch/add_more_cnn_css.py
+scratch/add_pipeline_css.py
+scratch/refactor_tabs.py
 ```
 
 Tidak ada commit baru yang dibuat oleh AI dalam rangkaian kerja ini.
@@ -383,15 +414,17 @@ Prioritas berikutnya:
 2. Konfirmasi senior deploy sebagai **New version** pada deployment existing.
 3. Jalankan localhost dan tes satu akun nyata dari `ParticipantAccounts`.
 4. Catat hanya hasil sukses/gagal; jangan catat kredensial.
-5. Perbaiki semantic route check lalu aktifkan Math, ML, NLP, dan CV setelah smoke test.
-6. Rancang progress/gradebook server-side sebelum membuka seluruh katalog.
-7. Koordinasikan hardening action admin GAS dan sanitasi response account dengan senior.
-8. Gunakan laporan audit terbaru untuk backlog konten, admin, messaging, dan meeting.
-9. Jika diminta mengerjakan Pengaturan, sambungkan data peserta nyata dan pisahkan
-   scope edit profil, preferensi, aksesibilitas, dan keamanan akun.
-10. Jika diminta membuat ganti password, desain kontrak baru; jangan mengekspos
+5. Commit perubahan uncommitted CV module yang masih dirty di worktree (CSS scoping, chapter expansion).
+6. Smoke test route CV sub-module di localhost untuk memastikan tidak ada 404 atau CSS regression.
+7. Perbaiki semantic route check lalu aktifkan Math, ML, dan NLP setelah smoke test.
+8. Rancang progress/gradebook server-side sebelum membuka seluruh katalog.
+9. Koordinasikan hardening action admin GAS dan sanitasi response account dengan senior.
+10. Gunakan laporan audit terbaru untuk backlog konten, admin, messaging, dan meeting.
+11. Jika diminta mengerjakan Pengaturan, sambungkan data peserta nyata dan pisahkan
+    scope edit profil, preferensi, aksesibilitas, dan keamanan akun.
+12. Jika diminta membuat ganti password, desain kontrak baru; jangan mengekspos
     function legacy `setParticipantPassword` apa adanya.
-11. Setelah user menyetujui, review dirty worktree dan buat commit terpisah per area.
+13. Setelah user menyetujui, review dirty worktree dan buat commit terpisah per area.
 
 Login peserta tetap task deployment paling dekat. Backlog di luar login didokumentasikan
 tanpa mengubah admin atau melakukan provisioning.
@@ -407,4 +440,10 @@ end-to-end login peserta menggunakan kredensial dari satu baris ParticipantAccou
 tanpa mencetak atau menyimpan kredensial. Setelah login terverifikasi, gunakan
 reports/MATERIAL_AND_FEATURE_GAP_AUDIT_2026-07-19.md untuk backlog. Pengaturan
 peserta masih prototype dan ganti password mandiri belum tersedia.
+
+Computer Vision sudah direstruktur menjadi hierarchical sub-module dengan route
+aktif. Worktree dirty pada CV files — commit setelah smoke test sebelum lanjut
+ke modul lain. Math, ML, dan NLP masih menuju under-development dan perlu
+diaktifkan route-nya. Generative AI (LLM, VLM, Multimodal, Agentic) sudah
+punya route aktif.
 ```
