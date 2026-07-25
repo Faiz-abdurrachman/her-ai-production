@@ -51,27 +51,28 @@ function drawFeatureMaps() {
   // FC: 6x6 nodes all connected
   fcGrid.style.gridTemplateColumns='repeat(6,1fr)';
   const fcSvg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-  fcSvg.setAttribute('width','120'); fcSvg.setAttribute('height','90');
+  fcSvg.setAttribute('width','150'); fcSvg.setAttribute('height','110');
   fcSvg.style.display='block';
-  // draw messy connections
+  // draw messy connections — increased contrast
   for(let i=0;i<6;i++) for(let j=0;j<6;j++){
     const line=document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1',i*20+10); line.setAttribute('y1',5);
-    line.setAttribute('x2',j*20+10); line.setAttribute('y2',85);
-    line.setAttribute('stroke','rgba(255,55,95,.15)'); line.setAttribute('stroke-width','0.5');
+    line.setAttribute('x1',i*25+12); line.setAttribute('y1',8);
+    line.setAttribute('x2',j*25+12); line.setAttribute('y2',102);
+    line.setAttribute('stroke','rgba(246,51,146,.25)'); line.setAttribute('stroke-width','0.8');
+    line.setAttribute('stroke-linecap','round');
     fcSvg.appendChild(line);
   }
-  // input dots
+  // input dots — saturated accent
   for(let i=0;i<6;i++){
     const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    c.setAttribute('cx',i*20+10); c.setAttribute('cy',5); c.setAttribute('r',3);
-    c.setAttribute('fill','#ff375f'); fcSvg.appendChild(c);
+    c.setAttribute('cx',i*25+12); c.setAttribute('cy',8); c.setAttribute('r',3.5);
+    c.setAttribute('fill','#f63392'); fcSvg.appendChild(c);
   }
-  // output dots
+  // output dots — increased opacity for readability
   for(let i=0;i<6;i++){
     const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    c.setAttribute('cx',i*20+10); c.setAttribute('cy',85); c.setAttribute('r',3);
-    c.setAttribute('fill','rgba(255,55,95,.5)'); fcSvg.appendChild(c);
+    c.setAttribute('cx',i*25+12); c.setAttribute('cy',102); c.setAttribute('r',3.5);
+    c.setAttribute('fill','rgba(246,51,146,.75)'); fcSvg.appendChild(c);
   }
   fcGrid.appendChild(fcSvg);
 
@@ -869,7 +870,10 @@ window.initAiLabCnnIntro = function() {
   if (typeof drawFeatureMaps === 'function') drawFeatureMaps();
   if (typeof drawCnnGrid === 'function') drawCnnGrid();
   if (typeof drawFcGrid === 'function') drawFcGrid();
-  if (typeof initPipelineDemo === 'function') initPipelineDemo();
+  if (typeof buildPipeline === 'function') buildPipeline();
   if (typeof drawLandmarkCards === 'function') drawLandmarkCards();
   if (typeof initConv === 'function') initConv();
+  if (typeof initPooling === 'function') initPooling();
+  if (typeof buildSPCanvas === 'function') buildSPCanvas();
+  if (typeof buildLayerFmaps === 'function') buildLayerFmaps();
 };
