@@ -1544,6 +1544,11 @@
         }
     }
 
+    function getParticipantDisplayName() {
+        const session = readParticipantSession();
+        return session?.profile?.nama_lengkap || session?.name || window.__CURRENT_PARTICIPANT_PROFILE__?.nama_lengkap || 'Peserta HerAI';
+    }
+
     function participantSessionId() {
         const key = 'heraiParticipantSessionId';
         let id = sessionStorage.getItem(key);
@@ -1585,12 +1590,14 @@
         menu.dataset.ready = 'true';
         const toggle = menu.querySelector('[data-fellow-user-toggle]');
         const logout = menu.querySelector('[data-fellow-logout]');
-        const session = readParticipantSession();
-        const name = session?.name || window.__CURRENT_PARTICIPANT_PROFILE__?.nama_lengkap || 'Aisyah Putri';
+        const name = getParticipantDisplayName();
         const nameNode = menu.querySelector('.fellow-user-button strong');
         const greeting = document.querySelector('[data-fellow-greeting]');
         if (nameNode) nameNode.textContent = name;
         if (greeting) greeting.textContent = `Halo, ${name}!`;
+
+        const notifBadge = document.querySelector('.fellow-icon-button[aria-label="Notifikasi"] span');
+        if (notifBadge) notifBadge.style.display = 'none';
 
         toggle?.addEventListener('click', (event) => {
             event.stopPropagation();
@@ -1649,7 +1656,7 @@
             ],
             discussionTrails: [
                 { actor: 'Mentor Rani', action: 'membalas diskusi', topic: 'Pengantar AI', time: '2 jam yang lalu', tone: '' },
-                { actor: 'Aisyah Putri', action: 'menulis pertanyaan', topic: 'Reasoning', time: '3 jam yang lalu', tone: 'blue' },
+                { actor: 'Peserta HerAI', action: 'menulis pertanyaan', topic: 'Reasoning', time: '3 jam yang lalu', tone: 'blue' },
                 { actor: 'Panitia', action: 'menandai referensi baru', topic: 'Evaluation', time: '5 jam yang lalu', tone: 'green' }
             ],
             tracks: [
@@ -1673,7 +1680,7 @@
             ],
             leaderboard: [
                 { rank: 1, name: 'Dewi Lestari', points: 2450 },
-                { rank: 2, name: 'Aisyah Putri', points: 2120, current: true },
+                { rank: 2, name: 'Peserta HerAI', points: 2120, current: true },
                 { rank: 3, name: 'Siti Aulia', points: 1890 }
             ]
         };
@@ -1758,7 +1765,7 @@
         const leaderboard = document.getElementById('dashboardLeaderboard');
         if (leaderboard) {
             const session = readParticipantSession();
-            const currentName = session?.name || window.__CURRENT_PARTICIPANT_PROFILE__?.nama_lengkap || 'Aisyah Putri';
+            const currentName = getParticipantDisplayName();
             const leaderboardItems = nonEmpty(data.leaderboard, fallbackData.leaderboard);
             leaderboard.innerHTML = leaderboardItems.map((item, index) => {
                 const rank = item.rank || index + 1;
