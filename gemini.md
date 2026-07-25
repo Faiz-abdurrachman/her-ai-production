@@ -277,3 +277,94 @@ Pengguna melaporkan bahwa setelah arsitektur modul dipecah menjadi fragment, kom
 **Solusi:**
 - Menambahkan kelas `ai-lab-content` secara statis ke dalam tag `<article id="materi-...` pada ketiga file `materi.html` yang mewakili 3 sub-modul CV.
 - Seluruh *styling*, grid konvolusi CNN, dan layout kartu materi kembali utuh dan cantik (*pixel-perfect*).
+
+---
+
+## 26. Bug Visual: MLP/FC Neuron Diagram Kontras Sangat Rendah (Sesi 26 Juli 2026)
+**Deskripsi:**
+Ilustrasi *Fully Connected (MLP)* di dalam *compare-box* pada `#/participant-cv-cnn` (Chapter 1 — Introduction to CNN) hampir tidak terlihat. Node neuron dan garis koneksi menyatu dengan background kartu.
+
+**Penyebab:**
+- File: `js/frontend/fellow-dashboard/ai-lab/cnn-intro.js` — fungsi `drawFeatureMaps()`
+- Connection lines: `stroke="rgba(255,55,95,.15)"` — opacity 15%, hampir invisible
+- Stroke width: `0.5` — terlalu tipis
+- Output dots: `fill="rgba(255,55,95,.5)"` — opacity 50%, kurang kontras
+- SVG size: `120×90` — terlalu kecil, dot radius 3
+
+**Solusi:**
+- Connection lines: opacity `0.15 → 0.25`, stroke `0.5 → 0.8`, warna `#ff375f → #f63392` (brand pink)
+- Output dots: opacity `0.5 → 0.75`
+- Input dots: `#ff375f → #f63392`
+- SVG size: `120×90 → 150×110`, dot radius `3 → 3.5`
+- Semua koordinat disesuaikan untuk spacing yang proporsional
+
+---
+
+## 27. Bug Visual: Code Block CNN Chapters Menggunakan Dark Theme VSCode (Sesi 26 Juli 2026)
+**Deskripsi:**
+Code block PyTorch di chapter CNN (`02-convolutional-neural-networks/chapters/`) dirender dengan background `#1e1e1e` (VSCode dark theme). Ini merusak konsistensi visual karena seluruh UI menggunakan soft pink/light theme.
+
+**Penyebab:**
+- `chapters/1.html` lines 1212-1248: Override CSS `.cv-chapter-wrapper .code-block` dengan `background: #1e1e1e !important` dan syntax color VSCode dark (`#c586c0`, `#dcdcaa`, `#b5cea8`, `#ce9178`)
+- `chapters/2.html`, `chapters/3.html`, `chapters/4.html`: `.lesson-sec pre { background: #1e1e1e; color: #d4d4d4; }` di line 857
+
+**Solusi:**
+- `chapters/1.html`: Ganti `.code-block` override dengan light theme — background `#fff`, border pink, syntax colors brand (`#db2777`, `#7c3aed`, `#15803d`, `#b45309`, `#98a2b3`)
+- `chapters/2.html`, `chapters/3.html`, `chapters/4.html`: `.lesson-sec pre` background `#1e1e1e → #fff`, color `#d4d4d4 → var(--px-text)`, tambah border pink + shadow
+- Hasil: Notion/Vercel-documentation style, konsisten dengan pink design system
+
+---
+
+## 28. Bug Visual: FC+Softmax Architecture Diagram Kontras Rendah (Sesi 26 Juli 2026)
+**Deskripsi:**
+Diagram arsitektur `.layers-viz` di `chapters/1.html` memiliki beberapa masalah kontras: connector lines antar layer tidak terlihat, layer card menyatu dengan parent, dan layer-tag terlalu transparan.
+
+**Penyebab:**
+- Connector SVG: `stroke="rgba(255,255,255,.2)"` — WHITE 20% opacity pada background `#fff0f7` → invisible
+- `.lv-layer`: `background: var(--px-bg-2)` = `#fff0f7` — sama dengan parent `.layers-viz` `var(--px-card)` → tidak ada separation
+- Layer tags: 4 instances dengan `rgba(color,.15)` — opacity 15% terlalu rendah
+- `.cnn-pipeline`: `background: var(--px-bg-2)` — blend dengan page
+- `.lv-layer-name`: tidak ada explicit `color`, inherit dari parent
+
+**Solusi:**
+- Connector lines: `stroke="rgba(246,51,146,.35)"` stroke-width `1.5 → 2` dengan `stroke-linecap="round"` (3 instances)
+- `.lv-layer`: `background: #fff`, tambah `box-shadow: 0 2px 12px rgba(246,51,146,.06)`
+- `.lv-layer:hover`: shadow `rgba(0,0,0,.06) → rgba(246,51,146,.1)`
+- Layer tags: opacity `.15 → .22` untuk 4 warna (blue, purple, orange, green)
+- `.cnn-pipeline`: `background: #fff`, tambah shadow
+- `.lv-layer-name`: explicit `color: var(--px-text)` untuk jamin kontras
+
+---
+
+## ═══ SESSION CHECKPOINT — 26 Juli 2026 ═══
+
+### Konteks Sesi Ini
+- AI: Sisyphus (OhMyOpenCode)
+- User: Faiz
+- Fokus: Visual fixes pada CNN module + handover update
+- Branch: `main`
+- Last commits: `9eda464` (handoff), `9493c59` (diagram fix), `ae99f32` (CV module)
+
+### Aturan Kerja (Rules Established)
+1. **Commit per fitur**, bukan satu commit besar — `git add` per kelompok file terkait
+2. **Handover adalah single source of truth** — `handover/AI_HANDOFF_CURRENT_STATE.md` selalu di-update setiap checkpoint
+3. **gemini.md adalah bug log** — semua bug, penyebab, solusi dicatat dengan nomor urut
+4. **Prompt AI berikutnya** harus disertakan di handover agar next session langsung ngerti konteks
+5. **Jangan provision/reset akun, jangan ubah admin** — aturan hard block dari handover
+6. **CSS scope class `ai-lab-content` wajib** di semua template CV — untuk mencegah styling regression
+7. **Dark theme dilarang** di code block — semua harus light pink theme (Notion/Vercel style)
+8. **Diagram kontras minimum**: connection lines ≥ 25% opacity, dots ≥ 75% opacity, stroke ≥ 0.8px
+
+### File yang Dimodifikasi Sesi Ini
+- `js/frontend/fellow-dashboard/ai-lab/cnn-intro.js` — MLP/FC diagram contrast
+- `pages/.../02-convolutional-neural-networks/chapters/1.html` — code block light theme + layers-viz fixes
+- `pages/.../02-convolutional-neural-networks/chapters/2.html` — code block light theme
+- `pages/.../02-convolutional-neural-networks/chapters/3.html` — code block light theme
+- `pages/.../02-convolutional-neural-networks/chapters/4.html` — code block light theme
+- `handover/AI_HANDOFF_CURRENT_STATE.md` — checkpoint update
+- `gemini.md` — bug log update (this file)
+
+### Status Worktree
+- Bersih — semua perubahan sudah di-commit (3 commits)
+- Scratch files (`scratch.js`, `scratch/*.py`) tetap untracked
+- Tidak ada modified tracked files tersisa
