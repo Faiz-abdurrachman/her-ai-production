@@ -368,3 +368,56 @@ Diagram arsitektur `.layers-viz` di `chapters/1.html` memiliki beberapa masalah 
 - Bersih — semua perubahan sudah di-commit (3 commits)
 - Scratch files (`scratch.js`, `scratch/*.py`) tetap untracked
 - Tidak ada modified tracked files tersisa
+
+---
+
+## ═══ SESSION CHECKPOINT — 26 Juli 2026 (Update Sore) ═══
+
+### Audit Backend & Scope Narrowing (Sesi Sisyphus Lanjutan)
+
+**Yang dilakukan:**
+1. Comprehensive backend audit — GAS (49 routes, 22 sheets), Go services (3), API integration
+2. Scope narrowing — fokus HANYA ke dashboard peserta
+3. Plan creation — `.omo/plans/participant-dashboard-fixes.md`
+
+### Scope Boundary (ATURAN PENTING — JANGAN DILANGGAR)
+
+**❌ JANGAN DISENTUH:**
+- Signaling / WebRTC (Go) — prototype, belum terintegrasi
+- Messaging / Chat (Go) — prototype, in-memory store
+- Admin dashboard — production, jangan ubah auth/workflow
+- Security hardening — butuh koordinasi senior
+- Leaderboard, Certificates, Tasks, Projects, Events, Community, Mentor — placeholder
+
+**✅ HANYA INI YANG DIKERJAKAN:**
+- Dashboard peserta (dynamic name, progress, events)
+- Settings peserta (wire form ke GAS)
+- Ganti password mandiri (backend + frontend baru)
+- Sidebar dinamis (replace "Aisyah Putri")
+- Progress tracking (API baru + sheet)
+
+### Temuan Kritis
+
+1. **"Aisyah Putri" hardcoded di 231 file** — seluruh halaman peserta pake template statis
+2. **Dashboard 70% hardcoded** — progress 0%, events, leaderboard semua statis
+3. **Settings 100% dummy** — form ga connect ke GAS sama sekali
+4. **Progress tracking BELUM ADA** — quiz/exercise ga nyimpan ke backend
+5. **Ganti password BELUM ADA** — `setParticipantPassword` di GAS ga diekspos sebagai route publik
+
+### Plan File
+
+Plan detail: `.omo/plans/participant-dashboard-fixes.md`
+
+| Fase | Apa | Estimasi |
+|---|---|---|
+| 1 | Dynamic name & topbar | 30-60 menit |
+| 2 | Settings wire ke GAS | 1-2 jam |
+| 3 | Ganti password (GAS + UI) | 2-3 jam |
+| 4 | Dashboard dinamis (getParticipantDashboardData) | 2-3 jam |
+| 5 | Progress tracking (API + sheet + frontend) | 3-4 jam |
+
+### Aturan Tambahan (dari sesi ini)
+9. **Scope boundary WAJIB diikuti** — jangan sentuh signaling/chat/admin/keamanan
+10. **Kerjakan per fase** — tanya user sebelum lanjut ke fase berikutnya
+11. **JANGAN edit 231 file satu-satu** — pakai JS injection untuk sidebar dinamis
+12. **sessionStorage adalah source of truth** untuk data peserta di frontend

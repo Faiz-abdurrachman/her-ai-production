@@ -1,12 +1,40 @@
 # AI Handoff — Current Checkpoint HerAI Fellowship SuperApp
 
-**Checkpoint:** 26 Juli 2026, Asia/Jakarta  
+**Checkpoint:** 26 Juli 2026 (Update Sore), Asia/Jakarta  
 **Workspace:** `/home/faiz/her6/Her-AI`  
 **Branch:** `main`  
 **Tujuan:** Sumber kebenaran utama untuk AI/developer berikutnya.
 
 > Jika dokumen handover lain bertentangan dengan file ini, ikuti file ini.
 > Dokumen bertanggal 17 Juli adalah snapshot historis dan bukan instruksi operasi terbaru.
+
+---
+
+## ⚠️  SCOPE BOUNDARY — APA YANG BOLEH & TIDAK BOLEH DISENTUH
+
+### ❌ JANGAN DISENTUH (Hard Block)
+
+| Area | Alasan |
+|---|---|
+| **Signaling / WebRTC** | Go service, prototype, belum terintegrasi |
+| **Messaging / Chat** | Go service, in-memory store, belum terintegrasi |
+| **Admin dashboard** | Udah production, jangan ubah auth/workflow |
+| **Keamanan / Security hardening** | Butuh koordinasi terpisah dengan senior |
+| **Leaderboard** | Placeholder, belum prioritas |
+| **Certificates** | Placeholder, belum prioritas |
+| **Tasks / Projects / Events / Community / Mentor** | Semua placeholder |
+| **Provisioning akun** | `provisionParticipantAccounts`, `generateParticipantAccounts*` — JANGAN DIJALANKAN |
+| **forceReset:true** | Akan reset 187 akun existing |
+
+### ✅ FOKUS SAAT INI (Hanya ini yang dikerjakan)
+
+| Area | Status |
+|---|---|
+| **Dashboard Peserta** | Dynamic name, progress, events — dari GAS `getParticipantDashboardData` |
+| **Settings Peserta** | Wire form ke `updateParticipantProfile` GAS + ganti password |
+| **Sidebar Dinamis** | Replace "Aisyah Putri" hardcoded → dari sessionStorage |
+| **Ganti Password Mandiri** | Backend GAS + frontend UI di tab Keamanan Akun |
+| **Progress Tracking** | API baru + sheet `ParticipantProgress` — Fase 5 (setelah 4 fase di atas)
 
 ## 1. Ringkasan eksekutif
 
@@ -28,6 +56,30 @@ Sesudah pekerjaan login, dilakukan audit materi/fitur dan dokumentasi:
 - Versi ringkas `.md` dan `.txt` untuk WhatsApp sudah dibuat.
 - Status Pengaturan peserta dan ganti password sudah diaudit.
 - Folder handover sudah disinkronkan dengan checkpoint ini.
+
+### Audit Backend (26 Juli 2026, Sesi Sisyphus)
+
+Dilakukan comprehensive backend audit. Ringkasan:
+
+- **GAS Backend**: 49 route actions, 22 sheet Google Sheets, production data (187 akun, 431 peserta)
+- **Go Microservices**: 3 service (signaling, messaging, participant-portal) — SEMUA prototype, BELUM terintegrasi ke SPA. JANGAN DISENTUH.
+- **Database**: Google Sheets sebagai database — solid untuk CRUD admin/assessment
+- **API Completion**: 65% — admin & assessment solid, learning progress BELUM ADA
+- **Production Readiness**: 40% — admin dashboard siap, participant portal banyak placeholder
+
+Hasil lengkap: `reports/BACKEND_AUDIT_2026-07-26.md`
+
+### Fokus Baru: Dashboard Peserta (26 Juli 2026, Sesi Sisyphus)
+
+Scope dipersempit menjadi **HANYA dashboard peserta**:
+
+- **Masalah utama**: "Aisyah Putri" hardcoded di **231 file** — sidebar/topbar semua halaman statis
+- **Dashboard**: progress 0% statis, events hardcoded, leaderboard mini hardcoded
+- **Settings**: form 100% dummy, ga connect ke GAS, tombol ga fungsi
+- **Ganti password**: BELUM ADA — `setParticipantPassword` di GAS ga diekspos sebagai route publik
+- **Progress tracking**: BELUM ADA — quiz/exercise ga nyimpan ke backend
+
+Plan sudah dibuat: `.omo/plans/participant-dashboard-fixes.md` (4-5 fase)
 
 **Pembaruan Tambahan 24/25 Juli 2026:**
 - **Router & Navigasi**: Memperbaiki 404 pada modul *Evaluation AI* dan *Evolution of AI*. Menambahkan _subroutes_ `-practice`, `-quiz`, `-discussion` ke `router.js` beserta inisiasi layout *dashboard*. Memperbaiki *cache-busting* di `index.html`.
@@ -61,7 +113,7 @@ Sesudah pekerjaan login, dilakukan audit materi/fitur dan dokumentasi:
 | Kode GAS yang benar | `gas/Code.gs` |
 | Login peserta frontend | `js/frontend/profile.js` |
 | Proxy lokal | `server.js` endpoint `/__gas` |
-| Last Git commit | `8fe356bffb20763c26320b59539a97c7ed1b9d4d` |
+| Last Git commit | `1877bb5b73d3faa1e2ff0a353cf09662c0845b14` |
 
 ID `120NQt...` dan deployment `AKfycbxQ...` adalah referensi lama. Jangan dipakai sebagai konfigurasi runtime.
 
@@ -301,7 +353,7 @@ Pada akhir checkpoint:
 - Server sementara di port `3107` juga sudah dihentikan.
 - AI berikutnya harus menjalankan `node server.js` sendiri jika perlu testing.
 - Status deployment GAS terbaru belum terkonfirmasi; minta user/senior memastikan **New version → Deploy** selesai.
-- Perubahan uncommitted pada CV module masih aktif di worktree; jangan revert tanpa audit.
+- Plan file: `.omo/plans/participant-dashboard-fixes.md` — referensi utama untuk pekerjaan berikutnya
 
 ## 10. Materi Markdown
 
@@ -349,108 +401,197 @@ Ringkasan audit:
 
 ## 11. Kondisi Git/worktree
 
-**Worktree BERSIH** — semua perubahan sudah di-commit dalam 4 commit terpisah per fitur:
+**Worktree BERSIH** — semua perubahan sudah di-commit secara atomik per fitur:
 
 ```text
-8fe356b docs(gemini): Add bugs 26-28 — MLP diagram contrast, dark code blocks, layers-viz fixes + session checkpoint rules
-9eda464 docs(handoff): Update checkpoint to 26 July 2026 — CV sub-module architecture, visual fixes, worktree state, next AI prompt
-9493c59 fix(ui): Improve MLP/FC neuron diagram contrast — increase line opacity, stroke width, dot saturation, SVG size for readability
-ae99f32 fix(cv-module): Restore CSS scoping, whitelist CV routes, expand CNN chapter content, fix dark code blocks to light theme, improve layers-viz diagram contrast
+1877bb5 fix(router): Redirect CNN and Advanced CNN modules to under-development page
+d46775e docs(handoff): Final sync — clean worktree status, visual rules, comprehensive AI prompt
+8fe356b docs(gemini): Add bugs 26-28 + session checkpoint rules
+9eda464 docs(handoff): Update checkpoint to 26 July 2026
+9493c59 fix(ui): Improve MLP/FC neuron diagram contrast
+ae99f32 fix(cv-module): Restore CSS scoping, whitelist CV routes, expand CNN chapters
 ```
 
 Untracked (tidak perlu di-commit):
 
 ```text
-.omo/
+.omo/plans/              ← PLAN FILE untuk next session
+reports/BACKEND_AUDIT_2026-07-26.md  ← Laporan audit backend
 gas/Code_For_Senior.gs
 gas/Code_lama.gs
 handover/
 materi/
-scripts/export-learning-materials.mjs
-scripts/test-gas-auth.mjs
-reports/MATERIAL_AND_FEATURE_GAP_AUDIT_2026-07-19.md
-reports/MATERIAL_FEATURE_STATUS_WHATSAPP_2026-07-19.md
-reports/MATERIAL_FEATURE_STATUS_WHATSAPP_2026-07-19.txt
+scripts/
 scratch.js
 scratch/
 ```
 
 ## 12. Next actions
 
-Prioritas berikutnya:
+### Prioritas UTAMA (Fokus dashboard peserta SAJA)
 
-1. Konfirmasi senior menerima `gas/Code.gs`, bukan snapshot lama.
-2. Konfirmasi senior deploy sebagai **New version** pada deployment existing.
-3. Jalankan localhost dan tes satu akun nyata dari `ParticipantAccounts`.
-4. Catat hanya hasil sukses/gagal; jangan catat kredensial.
-5. Commit perubahan uncommitted CV module yang masih dirty di worktree (CSS scoping, chapter expansion).
-6. Smoke test route CV sub-module di localhost untuk memastikan tidak ada 404 atau CSS regression.
-7. Perbaiki semantic route check lalu aktifkan Math, ML, dan NLP setelah smoke test.
-8. Rancang progress/gradebook server-side sebelum membuka seluruh katalog.
-9. Koordinasikan hardening action admin GAS dan sanitasi response account dengan senior.
-10. Gunakan laporan audit terbaru untuk backlog konten, admin, messaging, dan meeting.
-11. Jika diminta mengerjakan Pengaturan, sambungkan data peserta nyata dan pisahkan
-    scope edit profil, preferensi, aksesibilitas, dan keamanan akun.
-12. Jika diminta membuat ganti password, desain kontrak baru; jangan mengekspos
-    function legacy `setParticipantPassword` apa adanya.
-13. Setelah user menyetujui, review dirty worktree dan buat commit terpisah per area.
+**Fase 1 — Dynamic Name & Topbar** (30-60 menit)
+1. Baca `sessionStorage.heraiParticipantSession` buat ambil nama asli
+2. Ganti "Aisyah Putri" hardcoded + notif "5" di `dashboard.html`
+3. Bikin helper function `getParticipantDisplayName()` reusable
 
-Login peserta tetap task deployment paling dekat. Backlog di luar login didokumentasikan
-tanpa mengubah admin atau melakukan provisioning.
+**Fase 2 — Settings Wire ke GAS** (1-2 jam)
+4. Pre-fill form dari session (nama, email, WA, alamat, CV)
+5. Tombol Simpan → POST `updateParticipantProfile` ke GAS
+6. Upload avatar → placeholder dulu
+7. Tab Keamanan/Preferensi/Aksesibilitas → placeholder
 
-## 13. Prompt singkat untuk AI berikutnya
+**Fase 3 — Ganti Password** (2-3 jam)
+8. Backend GAS: endpoint `changeParticipantPassword(old, new, confirm)`
+9. Frontend: form di tab Keamanan Akun → POST ke GAS
+10. Session refresh setelah sukses
+
+**Fase 4 — Dashboard Dinamis** (2-3 jam)
+11. Panggil `getParticipantDashboardData` dari GAS
+12. Render: module cards, journey progress, events, leaderboard, activity trail
+
+**Fase 5 — Progress Tracking** (future)
+13. Sheet baru `ParticipantProgress` + 3 GAS endpoint + wire frontend
+
+### Prioritas SEBELUM development:
+- Konfirmasi senior deploy `gas/Code.gs` sebagai New Version
+- Smoke test login peserta dengan 1 akun nyata (jangan catat kredensial)
+
+### BACKLOG (bukan prioritas saat ini):
+- Aktifkan route Math, ML, NLP
+- Hardening admin GAS
+- Backlog konten dari laporan audit
+
+## 13. Prompt lengkap untuk AI berikutnya
 
 ```text
-⚠️  BACA INI DULU SEBELUM KERJA APA PUN.
+⚠️  BACA INI DULU SEBELUM KERJA APA PUN. JANGAN SKIP.
 
-📋 SUMBER UTAMA: handover/AI_HANDOFF_CURRENT_STATE.md
-🐛 BUG LOG: gemini.md (bugs 1-28, baca untuk hindari regresi)
-📊 CHECKPOINT: 26 Juli 2026, commit terakhir 8fe356b
+═══════════════════════════════════════════
+📋 SUMBER KEBENARAN
+═══════════════════════════════════════════
+1. handover/AI_HANDOFF_CURRENT_STATE.md  ← FILE INI, baca semua section
+2. .omo/plans/participant-dashboard-fixes.md  ← PLAN KERJA detail
+3. gemini.md  ← Bug log (bugs 1-28 + session rules)
+4. reports/BACKEND_AUDIT_2026-07-26.md  ← Audit backend lengkap
 
-🚫 LARANGAN HARD:
-- JANGAN provision/reset akun peserta (187 akun existing)
-- JANGAN ubah admin credentials atau workflow
-- JANGAN forceReset:true
-- JANGAN jalankan setupDatabase(), setupParticipantBackend(), generateParticipantAccountsBatch1/2/3(), provisionParticipantAccounts(), migrateExistingParticipantAccountCredentials()
-- JANGAN pakai dark theme di code block — semua HARUS light pink theme
-- JANGAN tampilkan NIK/password di log, screenshot, issue, atau handover
-- JANGAN revert massal worktree tanpa audit
+═══════════════════════════════════════════
+🚫 HARD BLOCK — JANGAN DISENTUH
+═══════════════════════════════════════════
+- Signaling (Go WebRTC) — prototype, belum terintegrasi
+- Messaging/Chat (Go) — prototype, in-memory store
+- Admin dashboard — udah production, jangan ubah
+- Keamanan/Security hardening — butuh koordinasi senior
+- Leaderboard, Certificates, Tasks, Projects, Events, Community, Mentor — placeholder
+- provisionParticipantAccounts / generateParticipantAccounts* — JANGAN DIJALANKAN
+- forceReset:true — AKAN RESET 187 AKUN
 
-📐 ATURAN VISUAL (dari sesi 26 Juli):
-- Diagram kontras minimum: connection lines ≥ 25% opacity, dots ≥ 75% opacity, stroke ≥ 0.8px
-- Code block: white bg (#fff), pink border, Notion/Vercel documentation style
-- CSS scope class `ai-lab-content` WAJIB di semua template CV — untuk mencegah styling regression
-- Layer cards: white bg dengan box-shadow pink, jangan blend dengan parent
+═══════════════════════════════════════════
+✅ FOKUS SAAT INI (HANYA INI)
+═══════════════════════════════════════════
+Fokus: DASHBOARD PESERTA saja.
+- Dashboard: dynamic name, progress, events dari GAS
+- Settings: wire form ke updateParticipantProfile GAS
+- Ganti password: backend + frontend baru
+- Sidebar: replace "Aisyah Putri" (231 file) → dari sessionStorage
+- Progress tracking: API baru + sheet ParticipantProgress (Fase 5)
 
-🔧 IDENTITAS SISTEM:
+═══════════════════════════════════════════
+🔧 IDENTITAS SISTEM
+═══════════════════════════════════════════
 - Spreadsheet ID: 1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w
 - GAS Web App URL: https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec
-- Kode GAS canonical: gas/Code.gs
+- Kode GAS canonical: gas/Code.gs (2071 baris, 49 route actions, 22 sheet)
 - Dev server: node server.js → http://127.0.0.1:3000
+- Proxy: POST /__gas → GAS Web App
+- Last commit: 1877bb5
 
-📦 STATUS MODUL:
-- ✅ Computer Vision: hierarchical sub-module (3 sub-modul, 11 chapters), route aktif di /participant-cv-*
-- ✅ Generative AI: LLM, VLM, Multimodal LLM, Agentic AI — route aktif
-- ✅ Deep Learning, Reinforcement Learning: modul lengkap, route aktif
-- ✅ AI Fundamentals & Advanced: 6 modul substantif, route aktif
-- ✅ Domain apps: Bioinformatics, Data Eng/Science, Infrastructure, Deployment, Front End, Back End, Business, Management, Culture, Healthcare, UI/UX, Manufacturing, Geospatial — HTML shell generated
-- ❌ Math, ML, NLP: materi substantif ada tapi route masih under-development.html
-- ❌ 20 course placeholder, 6 specialization track scaffold
-- ❌ Pengaturan peserta: UI prototype, belum tersambung backend
-- ❌ Self-service ganti password: BELUM ADA
+═══════════════════════════════════════════
+📐 ATURAN KERJA (dari sesi 26 Juli)
+═══════════════════════════════════════════
+1. Commit PER FITUR, bukan satu commit besar
+2. Update handover & gemini.md setiap checkpoint
+3. Catat bug baru di gemini.md dengan nomor urut lanjutan (#29+)
+4. Dark theme DILARANG di code block — semua light pink theme
+5. CSS scope class `ai-lab-content` WAJIB di template CV
+6. Diagram kontras: lines ≥25% opacity, dots ≥75%, stroke ≥0.8px
+7. JANGAN tampilkan NIK/password di log/screenshot/handover
+8. TANYA DULU sebelum eksekusi kalau ada yang ambigu
+9. JANGAN ubah file di luar scope dashboard peserta
 
-🔜 NEXT ACTIONS (prioritas):
-1. Konfirmasi senior deploy gas/Code.gs sebagai New Version
-2. Smoke test login peserta dengan 1 akun nyata (jangan catat kredensial)
-3. Smoke test route CV sub-module di localhost
-4. Aktifkan route Math, ML, NLP
-5. Rancang progress/gradebook server-side
-6. Backlog konten dari reports/MATERIAL_AND_FEATURE_GAP_AUDIT_2026-07-19.md
+═══════════════════════════════════════════
+🐛 BUG YANG SUDAH DISOLVE (sesi ini)
+═══════════════════════════════════════════
+- #26: MLP/FC neuron diagram kontras rendah → cnn-intro.js
+- #27: Code block dark VSCode theme → light pink di semua CNN chapters
+- #28: Layers-viz architecture diagram kontras rendah → connector lines, layer cards, tags
+- Router: CNN & Advanced CNN → redirect ke under-development
 
-📝 WORKFLOW:
-- Commit per fitur, bukan satu commit besar
-- Update handover/AI_HANDOFF_CURRENT_STATE.md setiap checkpoint
-- Catat bug baru di gemini.md dengan nomor urut lanjutan
-- Setelah selesai kerja signifikan, jalankan review-work
-- Verifikasi visual: refresh browser, cek desktop/tablet/mobile
+═══
+📊 STATUS MODUL SAAT INI
+═══════════════════════════════════════════
+✅ Computer Vision: 3 sub-modul, 11 chapters, route aktif
+✅ Generative AI: LLM, VLM, Multimodal, Agentic — route aktif
+✅ Deep Learning, Reinforcement Learning: modul lengkap
+✅ AI Fundamentals: 6 modul substantif
+✅ Domain apps: 15 modul HTML shell generated
+❌ Math, ML, NLP: route → under-development.html
+❌ 20 course placeholder + 6 specialization track scaffold
+
+═══════════════════════════════════════════
+🔴 MASALAH "AISYAH PUTRI" — 231 FILE
+═══════════════════════════════════════════
+231 file HTML/JS mengandung string "Aisyah Putri" hardcoded.
+Ini karena SEMUA halaman lesson/modul di-generate dari template
+dengan sidebar statis. Semua file ini ada di:
+  pages/frontend/fellow-dashboard/
+  js/frontend/fellow-dashboard/
+
+PENDEKATAN: JANGAN edit 231 file satu-satu.
+Bikin JavaScript injection yang replace nama di sidebar/topbar
+secara dinamis dari sessionStorage.heraiParticipantSession.
+Jalankan di initFellowDashboardPage().
+
+═══════════════════════════════════════════
+📂 DATA FLOW SAAT INI
+═══════════════════════════════════════════
+Login:    participantLogin → GAS → token + profile → sessionStorage
+Session:  sessionStorage.heraiParticipantSession
+          { nik, token, expiresAt, name, profile: {...} }
+Update:   updateParticipantProfile → GAS → updated profile → sessionStorage
+API:      POST /__gas { action: "xxx", ...payload }
+
+═══════════════════════════════════════════
+📝 WORKFLOW
+═══════════════════════════════════════════
+1. Baca plan di .omo/plans/participant-dashboard-fixes.md
+2. Kerjakan Fase 1 → Fase 2 → Fase 3 → Fase 4 berurutan
+3. Commit per fase dengan conventional commits
+4. Update handover & gemini.md setiap selesai 1 fase
+5. TANYA user sebelum lanjut ke fase berikutnya
+6. Setelah semua selesai, jalankan review-work
 ```
+
+## 14. Plan File Reference
+
+Plan detail ada di: **`.omo/plans/participant-dashboard-fixes.md`**
+
+Ringkasan fase:
+| Fase | Apa | Estimasi |
+|---|---|---|
+| 1 | Dynamic name & topbar (dashboard.html) | 30-60 menit |
+| 2 | Settings wire ke GAS (settings.html + settings.js) | 1-2 jam |
+| 3 | Ganti password (GAS endpoint + UI) | 2-3 jam |
+| 4 | Dashboard dinamis (getParticipantDashboardData) | 2-3 jam |
+| 5 | Progress tracking (API baru + sheet + frontend) | 3-4 jam |
+
+## 15. Known Issues & Debt
+
+1. **"Aisyah Putri" di 231 file** — perlu dynamic sidebar injection
+2. **Progress tracking belum ada** — quiz/exercise ga nyimpan ke backend
+3. **Settings form 100% dummy** — belum connect ke GAS
+4. **Ganti password belum ada** — `setParticipantPassword` di GAS ga diekspos
+5. **Dashboard statis** — module cards, journey, events, leaderboard semua hardcoded
+6. **Notif badge "5" hardcoded** — belum ada API notifikasi
+7. **Admin auth legacy** — documented security debt, bukan prioritas saat ini
+8. **Go services tidak terintegrasi** — signaling, messaging, participant-portal semua prototype standalone
