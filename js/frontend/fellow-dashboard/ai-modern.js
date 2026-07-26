@@ -290,7 +290,7 @@
     }
 
     function renderOrientationAndNav(chapter, chapterNumber, total) {
-        return '<nav class="reasoning-source-jumps reasoning-visual-nav ai-modern-learning-nav" data-modern-injected aria-label="Tahapan ' + chapterNumber + ' dari ' + total + '"><span><i class="' + escapeHtml(chapter.icon) + '"></i> Jelajahi:</span><button type="button" data-jump="hook">Pembuka</button><button type="button" data-jump="konsep">Konsep</button><button type="button" data-jump="contoh">Contoh</button><button type="button" data-jump="check">Uji Pemahaman</button><button type="button" data-jump="ringkasan">Ringkasan</button></nav>';
+        return '<nav class="reasoning-source-jumps reasoning-visual-nav ai-modern-learning-nav" data-modern-injected aria-label="Tahapan Topik ' + chapterNumber + ' dari ' + total + '"><span><i class="' + escapeHtml(chapter.icon) + '"></i> Jelajahi:</span><button type="button" data-jump="hook">Pembuka</button><button type="button" data-jump="konsep">Konsep</button><button type="button" data-jump="contoh">Contoh</button><button type="button" data-jump="check">Uji Pemahaman</button><button type="button" data-jump="ringkasan">Ringkasan</button></nav>';
     }
 
     function finalRenderHookSection(hook) {
