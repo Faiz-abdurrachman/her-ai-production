@@ -115,18 +115,20 @@
     margin: 0 auto 22px;
 }
 .fellow-restricted-state a {
+    align-items: center;
     background: var(--fellow-pink);
     border-radius: 12px;
     color: #fff;
     display: inline-flex;
     font-weight: 800;
+    gap: 6px;
     min-height: 44px;
     padding: 12px 20px;
     text-decoration: none;
 }
 .fellow-restricted-state a i {
     font-size: 0.85rem;
-    margin-right: 6px;
+    line-height: 1;
 }
 
 .fellow-dashboard *,
