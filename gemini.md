@@ -275,4 +275,33 @@ Lainnya (2): python, modern
 16. GAS deployment: selalu redeploy web app setelah edit Code.gs
 17. Playwright: TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test
 18. Server lokal: node server.js → http://127.0.0.1:3000
+
+---
+
+## 58. Bug: Konten Python Template Nyasar di 24 Module JS — RESOLVED (#57)
+
+**Deskripsi:**
+24 dari 29 file `ai-*.js` menampilkan konten Python ("Jalur Pemula", "Python adalah penghubung") di array `PYTHON_GUIDES` yang di-inject ke chapter overview module. Ini adalah implementasi dari audit dan execution plan yang dibuat di sesi sebelumnya.
+
+**Cara Perbaikan:**
+- **Fase 0**: Build `scripts/extract-nazril-guides.js` — Node.js parser yang membaca 20 Nazril MD file (2 format: template `## Gambaran Sederhana` untuk business/data-eng modules, dan naratif `## N.N` untuk foundation/gen-ai modules), meng-extract konten per chapter, dan mapping ke 8 GUIDES entries. Output: `scripts/nazril-guides-output/guides-{module_id}.json` + `roadmap-headers.json`.
+- **Fase 0**: Build `scripts/inject-guides.js` — injector yang mengganti `const PYTHON_GUIDES = [...]` block dan roadmap header `<span>Jalur Pemula</span>...` di setiap ai-*.js dengan konten dari JSON + roadmap header module-specific.
+- **Fase 1**: Inject 7 Business modules (ui-ux, healthcare, geospatial, manufacturing, culture, business-insight, people-business-mgt) — GUIDES dari Nazril MD template format.
+- **Fase 2**: Inject 7 Data Eng modules (deployment, back-end, bioinformatics, data-engineering, data-science, front-end, infrastructure) — GUIDES dari Nazril MD template format.
+- **Fase 3**: Inject 6 Foundation & Gen AI modules (deep-learning, reinforcement-learning, agentic-ai, large-language-model, multimodal-llm, vlm) — GUIDES dari Nazril MD naratif format.
+- **Fase 4**: Inject 4 placeholder modules (evaluation, evolution, modern, python) — GUIDES generic "Materi sedang dikembangkan" dengan chapter titles module-specific. ai-modern.js fix manual: `eyebrow: "Jalur Pemula"` → `eyebrow: "AI Modern"`.
+- **Verifikasi**:
+  - `node --check` pada semua 24 file js — 24/24 PASS ✅
+  - grep "Jalur Pemula" — 0 match di semua file ✅
+  - grep "Python adalah penghubung" — 0 match di semua file ✅
+  - Roadmap header diganti: misal UI/UX → `<span>Design Thinking</span>`, Deep Learning → `<span>Deep Learning</span>` ✅
+- **Module bersih** (5): ai-cv.js, ai-math-for-ai.js, ai-ml-basic.js, ai-python-basic.js, ai-reasoning.js — tidak disentuh.
+- **Extraction tooling**: `scripts/extract-nazril-guides.js` (566 baris) + `scripts/inject-guides.js` — reusable untuk future content updates.
+
+## Session Summary — 27 Juli 2026 (Sisyphus — Bug #57 Resolution)
+
+**Total commits:** 43 (25 sebelumnya + 7 sesi lalu + 9 sesi sebelumnya + 2 sesi ini)
+**Grand total bugs/features:** #1-#58
+**Files changed:** 24 JS files injected + 2 scripts + 20 JSON outputs + docs
+**Key deliverable:** Bug #57 RESOLVED — 24/24 module JS files now have module-specific GUIDES content. Zero Python contamination.
 16. GAS deployment: selalu redeploy web app setelah edit Code.gs

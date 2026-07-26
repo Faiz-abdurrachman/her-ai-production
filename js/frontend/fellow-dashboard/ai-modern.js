@@ -150,7 +150,7 @@
 
     var BEGINNER_GUIDES = {
         "01-materi.html": {
-            eyebrow: "Jalur Pemula",
+            eyebrow: "AI Modern",
             title: "Dari kebutuhan pengguna ke pilihan foundation model",
             intro: "Jangan mulai dari nama model. Mulai dari masalah, petakan lapisan sistem, baru pilih strategi adaptasi dan deployment.",
             question: "Keputusan apa yang sebenarnya sedang kita buat saat memilih model?",
@@ -170,7 +170,7 @@
             glossary: [["Foundation model", "Model dasar berkemampuan umum yang dapat diadaptasi ke banyak tugas."], ["Pretraining", "Tahap belajar pola umum dari data luas sebelum adaptasi tugas tertentu."], ["Instruction tuning", "Pelatihan tambahan agar model lebih baik mengikuti instruksi."], ["RAG", "Mengambil sumber eksternal lalu memasukkannya ke konteks saat model menjawab."], ["Open-weight", "Bobot model tersedia, tetapi data dan proses pengembangannya belum tentu terbuka."], ["Model card", "Dokumen tentang intended use, batasan, evaluasi, lisensi, dan risiko model."]]
         },
         "02-materi.html": {
-            eyebrow: "Jalur Pemula",
+            eyebrow: "AI Modern",
             title: "Ikuti data: dari teks sampai token output",
             intro: "Transformer lebih mudah dipahami sebagai aliran data. Fokus pada fungsi setiap tahap sebelum masuk ke matematika detail.",
             question: "Apa yang terjadi pada satu kalimat sejak diketik sampai model menghasilkan jawaban?",
@@ -190,7 +190,7 @@
             glossary: [["Token", "Unit teks yang diproses model; dapat berupa kata, subword, atau tanda baca."], ["Embedding", "Vektor numerik yang merepresentasikan token atau teks."], ["Positional information", "Sinyal yang memberi tahu model tentang urutan token."], ["Self-attention", "Mekanisme token menimbang hubungan dengan token lain dalam konteks."], ["Context window", "Jumlah token maksimum yang dapat diproses pada satu request."], ["KV cache", "Penyimpanan Key dan Value sebelumnya untuk mempercepat generation bertahap."]]
         },
         "03-materi.html": {
-            eyebrow: "Jalur Pemula",
+            eyebrow: "AI Modern",
             title: "Bangun agent dari batas tugas, bukan dari autonomy",
             intro: "Agent yang baik bukan agent yang bebas melakukan apa saja. Agent yang baik punya goal, tools terbatas, state jelas, stopping condition, dan jalur eskalasi.",
             question: "Kapan model cukup menjawab, kapan workflow diperlukan, dan kapan agent masuk akal?",
@@ -210,7 +210,7 @@
             glossary: [["Agent", "Sistem yang memilih tindakan atau tool dalam loop untuk mencapai goal."], ["Tool schema", "Kontrak terstruktur tentang fungsi, parameter, dan hasil tool."], ["State", "Informasi kerja yang dipertahankan selama penyelesaian tugas."], ["Stopping condition", "Aturan kapan loop dinyatakan selesai atau harus berhenti."], ["Handoff", "Pemindahan tugas ke agent lain atau manusia."], ["Idempotency", "Sifat aksi yang aman diulang tanpa menggandakan dampak."]]
         },
         "04-materi.html": {
-            eyebrow: "Jalur Pemula",
+            eyebrow: "AI Modern",
             title: "Susun sistem AI dari pengalaman sampai assurance",
             intro: "Produk AI production adalah rantai keputusan. Setiap layer perlu kontrak, kontrol, metrik, dan pemilik yang jelas.",
             question: "Bagaimana model, data, tools, infrastructure, dan manusia bekerja sebagai satu sistem?",

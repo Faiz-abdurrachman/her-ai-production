@@ -267,118 +267,358 @@ const CHAPTERS = [
 
     const PYTHON_GUIDES = [
         {
-            hook: { question: "Python populer untuk AI karena paling cepat. Benarkah?", answerA: { label: "Benar", text: "Kecepatan runtime adalah alasan utamanya.", icon: "fas fa-gauge-high" }, answerB: { label: "Belum tepat", text: "Keterbacaan, ekosistem, eksperimen, dan integrasi jauh lebih menentukan.", icon: "fas fa-bridge" }, message: "Python sering menjadi lapisan orkestrasi. Operasi berat tetap dijalankan library teroptimasi, sementara Python membuat workflow mudah dibaca dan diuji." },
-            flow: [["Masalah", "Definisikan input, proses, output"], ["Environment", "Isolasi dependency dan versi"], ["Eksperimen", "Jalankan langkah kecil dan amati"], ["Workflow", "Susun proses yang dapat diulang"]],
-            deepDive: [
-                ["Python adalah penghubung, bukan AI itu sendiri", "Python memberi bahasa yang konsisten untuk membaca data, memanggil library numerik, menjalankan eksperimen, menyimpan artefak, dan menghubungkan model ke aplikasi. Ketika peserta memahami peran ini, mereka tidak lagi menganggap satu fungsi library sebagai sihir; mereka dapat menelusuri dari input sampai output serta menunjukkan bagian mana yang melakukan transformasi.", "Keunggulan Python bukan berarti setiap operasi dieksekusi paling cepat oleh interpreter. NumPy, Pandas, PyTorch, dan banyak library lain memindahkan komputasi berat ke implementasi teroptimasi. Python tetap berada di atasnya sebagai lapisan yang ekspresif, sehingga tim dapat mengubah ide menjadi eksperimen tanpa kehilangan keterbacaan."],
-                ["Environment adalah bagian dari reproducibility", "Kode yang benar di satu laptop dapat gagal di laptop lain karena versi Python, package, atau dependency berbeda. Virtual environment memisahkan kebutuhan setiap project sehingga upgrade satu eksperimen tidak merusak eksperimen lain. File dependency dan catatan versi membuat anggota tim dapat membangun ulang lingkungan yang sama.", "Notebook cocok untuk eksplorasi bertahap, tetapi urutan cell tersembunyi dapat menghasilkan state yang sulit dilacak. Untuk workflow berulang, pindahkan logika stabil ke function atau file Python, jalankan dari awal, lalu pastikan output tidak bergantung pada cell yang pernah dieksekusi diam-diam."],
-                ["Computational thinking sebelum sintaks", "Sebelum menulis kode, pecah masalah menjadi input, aturan, proses, output, dan failure case. Misalnya completion rate memerlukan jumlah peserta selesai dan jumlah peserta total; kondisi total nol harus diputuskan sebelum pembagian dilakukan. Keputusan kecil ini adalah bagian dari desain program, bukan detail sintaks.", "Decomposition membantu peserta menguji satu langkah pada satu waktu. Pattern recognition menemukan proses yang berulang, abstraction memilih detail yang penting, dan algorithmic thinking menyusun urutan yang deterministik. Empat kemampuan tersebut terus dipakai ketika workflow berkembang dari beberapa variabel menjadi pipeline data." ]
+hook: {
+                question: "Apa Itu Modalitas?",
+                answerA: {
+                    label: "Mitos",
+                    text: "Jawaban umum yang perlu diluruskan.",
+                    icon: "fas fa-times-circle"
+                },
+                answerB: {
+                    label: "Fakta",
+                    text: "Pemahaman benar berdasarkan bukti dan praktik.",
+                    icon: "fas fa-check-circle"
+                },
+                message: "Modalitas adalah bentuk atau saluran informasi. Teks, gambar, audio, video, tabel, data sensor, dan posisi geografis dapat dianggap sebagai modalitas karena masing-masing memiliki struktur data dan cara interpretasi yang berbeda.\n\nContoh:"
+            },
+flow: [
+                ["Persiapan", "Pelajari materi bab ini."],
+                ["Eksekusi", "Praktikkan konsep yang dipelajari."],
+                ["Verifikasi", "Kerjakan checkpoint dan latihan."]
             ],
-            workedExample: ["Completion rate peserta", ["Input", "Jumlah peserta selesai dan total peserta."], ["Validasi", "Total tidak boleh negatif; total nol ditangani eksplisit."], ["Proses", "completed / total × 100 hanya dijalankan setelah validasi."], ["Output", "Persentase beserta pesan yang menjelaskan kondisi data."]],
-            glossary: [["Interpreter", "Program yang menjalankan instruksi Python."], ["Environment", "Lingkungan terisolasi berisi Python dan dependency project."], ["Dependency", "Package lain yang dibutuhkan program."], ["Reproducibility", "Kemampuan mengulang proses dengan input dan environment yang sama."], ["Computational thinking", "Cara memecah masalah menjadi langkah yang dapat dieksekusi."]],
-            quickCheck: { question: "Mengapa virtual environment penting pada project AI?", options: ["Mengisolasi versi dependency", "Membuat model otomatis", "Menggantikan dataset"], answer: 0, explanationCorrect: "Tepat. Isolasi dependency membuat eksperimen lebih stabil dan dapat diulang.", explanationWrong: "Coba hubungkan environment dengan perbedaan versi package antarproject." },
-            challenge: { instruction: "Rancang IPO untuk completion rate, termasuk kondisi total peserta nol.", placeholder: "Input: ...\nProcess: ...\nOutput: ...\nEdge case: ...", example: "Input completed dan total; validasi total; hitung persentase bila total > 0; bila nol, kembalikan status belum ada data." },
-            mistakes: ["Menganggap Python adalah model AI", "Menginstal semua package secara global", "Menjalankan notebook tanpa restart-and-run-all"], bestPractices: ["Pisahkan environment per project", "Catat dependency dan versi", "Tulis IPO serta edge case sebelum kode"], learningOutcomes: ["Menjelaskan posisi Python dalam AI", "Membangun environment yang dapat diulang", "Memecah masalah menjadi pipeline kecil"], transition: "Berikutnya kita menerjemahkan input dan state ke tipe data serta collection yang tepat.", prompt: ["problem = input + process + output", "validate edge cases before calculation", "record environment and dependency versions"]
+deepDive: [
+                ["Apa Itu Modalitas?", "Apa Itu Modalitas?\n\nModalitas adalah bentuk atau saluran informasi. Teks, gambar, audio, video, tabel, data sensor, dan posisi geografis dapat dianggap sebagai modalitas karena masing-masing memiliki struktur data dan cara interpretasi yang berbeda.\n\nContoh:", "- kalimat memiliki urutan token,\n- gambar memiliki hubungan spasial antarpiksel,\n- audio memiliki gelombang dan urutan waktu,\n- video memiliki frame, gerakan, dan suara,\n- dokumen memiliki isi sekaligus tata letak,\n- tabel memiliki baris, kolom, tipe data, dan relasi.\n\nSistem multimodal mencoba menghubungkan informasi dari dua atau lebih modalitas untuk menyelesaikan tugas yang tidak dapat diselesaikan dengan baik oleh satu modalitas saja."]
+            ],
+workedExample: [
+                "Penerapan Konsep",
+                ["Deskripsi", "Apa Itu Modalitas?\n\nModalitas adalah bentuk atau saluran informasi. Teks, gambar, audio, video, tabel, data sensor, dan posisi geografis dapat dianggap sebagai modalitas karena masing-masing memiliki struktur data dan cara interpretasi yang berbeda.\n\nContoh:\n\n- kalimat memiliki urutan token,\n- gamba"]
+            ],
+glossary: [
+                ["Konsep", "Definisi."]
+            ],
+quickCheck: {
+                question: "Apa yang dimaksud dengan modalitas?",
+                options: ["Jawaban A", "Jawaban B", "Jawaban C"],
+                answer: 0,
+                explanationCorrect: "Tepat.",
+                explanationWrong: "Coba pikirkan ulang."
+            },
+challenge: {
+                instruction: "modalitas yang tersedia,",
+                placeholder: "Tulis jawaban Anda di sini...",
+                example: ""
+            },
+roadmapRef: "1"
         },
         {
-            hook: { question: "Semua data peserta paling mudah disimpan sebagai string. Setuju?", answerA: { label: "Setuju", text: "Satu tipe terasa lebih sederhana.", icon: "fas fa-font" }, answerB: { label: "Tidak", text: "Tipe data membawa makna dan menentukan operasi yang aman.", icon: "fas fa-shapes" }, message: "Nama, score, status, dan kumpulan record memiliki operasi berbeda. Pemilihan tipe yang tepat mengurangi konversi dan error tersembunyi." },
-            flow: [["Value", "Kenali makna data"], ["Type", "Pilih operasi yang valid"], ["Collection", "Susun beberapa nilai"], ["Validate", "Periksa bentuk dan isi"]],
-            deepDive: [
-                ["Variabel menyimpan state dengan nama bermakna", "Variabel bukan sekadar kotak. Nama variabel mendokumentasikan peran sebuah nilai dan membantu pembaca mengikuti perubahan state. Gunakan nama seperti participant_score atau dataset_version, bukan x atau data1, ketika maknanya penting bagi keputusan berikutnya.", "Tipe int dan float mendukung operasi numerik; str mendukung pengolahan teks; bool menyatakan kondisi; None menandai nilai yang belum tersedia. None tidak sama dengan nol atau string kosong. Menyamakan ketiganya dapat mengubah statistik dan keputusan bisnis."],
-                ["Collection dipilih berdasarkan perilaku", "List menjaga urutan dan dapat berubah, tuple cocok untuk susunan yang stabil, set menghapus keunikan ganda, sedangkan dictionary memetakan key ke value. Record peserta biasanya lebih mudah dibaca sebagai dictionary karena setiap nilai memiliki nama field yang eksplisit.", "Collection dapat bersarang, misalnya list berisi dictionary peserta. Struktur ini mirip data JSON yang sering berpindah antara frontend, backend, dan layanan AI. Sebelum mengakses key, periksa schema dan putuskan apa yang dilakukan jika field hilang atau memiliki tipe yang salah."],
-                ["Mutability memengaruhi efek samping", "List dan dictionary mutable: perubahan pada object yang sama terlihat dari semua referensi yang menunjuk kepadanya. Ini berguna tetapi dapat menimbulkan bug ketika raw data berubah tanpa sengaja. Salin data sebelum cleaning bila versi mentah perlu dipertahankan.", "Operasi collection sebaiknya mengikuti tujuan yang jelas: append untuk menambah record, set untuk deduplikasi nilai sederhana, dan dictionary lookup untuk akses berdasarkan key. Jangan memilih struktur hanya karena sintaksnya paling familiar; pilih berdasarkan urutan, keunikan, kebutuhan perubahan, dan pola akses." ]
+hook: {
+                question: "Representasi sebagai Jembatan",
+                answerA: {
+                    label: "Mitos",
+                    text: "Jawaban umum yang perlu diluruskan.",
+                    icon: "fas fa-times-circle"
+                },
+                answerB: {
+                    label: "Fakta",
+                    text: "Pemahaman benar berdasarkan bukti dan praktik.",
+                    icon: "fas fa-check-circle"
+                },
+                message: "Model tidak menerima makna secara langsung. Setiap input perlu diubah menjadi tensor atau embedding. Representasi yang baik mempertahankan informasi yang penting bagi tugas dan mengurangi bagian yang tidak relevan.\n\n``text\nData mentah -> preprocessing -> encoder -> embedding / token\n``"
+            },
+flow: [
+                ["Persiapan", "Pelajari materi bab ini."],
+                ["Eksekusi", "Praktikkan konsep yang dipelajari."],
+                ["Verifikasi", "Kerjakan checkpoint dan latihan."]
             ],
-            workedExample: ["Record eksperimen", ["Metadata", "Dictionary menyimpan nama dataset, versi, dan status review."], ["Records", "List menyimpan beberapa dictionary peserta."], ["Validation", "Periksa key name, track, dan score sebelum diproses."], ["Safety", "Salin record sebelum membuat perubahan cleaning."]],
-            glossary: [["State", "Nilai yang menggambarkan kondisi program saat ini."], ["Mutable", "Object yang isinya dapat diubah."], ["Immutable", "Object yang tidak berubah setelah dibuat."], ["Schema", "Kesepakatan field dan tipe sebuah record."], ["JSON", "Format pertukaran data berbasis object dan array."]],
-            quickCheck: { question: "Struktur apa yang paling tepat untuk satu record peserta dengan field name, track, dan score?", options: ["Dictionary", "Set", "Float"], answer: 0, explanationCorrect: "Benar. Dictionary memberi nama pada setiap field.", explanationWrong: "Pilih struktur yang memetakan nama field ke nilainya." },
-            challenge: { instruction: "Buat metadata dataset dan lima record peserta. Jelaskan alasan memilih setiap tipe data.", placeholder: "metadata = {...}\nparticipants = [...]\nAlasan: ...", example: "Dictionary untuk metadata dan record, list untuk urutan record, float untuk score, bool untuk status review." },
-            mistakes: ["Mengubah raw list tanpa salinan", "Menyamakan None dengan nol", "Mengakses dictionary key tanpa validasi"], bestPractices: ["Gunakan nama variabel bermakna", "Dokumentasikan schema", "Pilih collection berdasarkan perilaku"], learningOutcomes: ["Memilih tipe berdasarkan makna", "Menyusun nested collection", "Menjelaskan mutability dan efek samping"], transition: "Data sudah terstruktur; berikutnya program perlu mengambil keputusan dan mengulang proses secara aman.", prompt: ["meaning -> type", "records -> schema", "validate before transform"]
+deepDive: [
+                ["Representasi sebagai Jembatan", "Representasi sebagai Jembatan\n\nModel tidak menerima makna secara langsung. Setiap input perlu diubah menjadi tensor atau embedding. Representasi yang baik mempertahankan informasi yang penting bagi tugas dan mengurangi bagian yang tidak relevan.\n\n```text\nData mentah -> preprocessing -> encoder -> embedding / token\n```", "Dua pertanyaan penting:\n\n1. Informasi apa yang dipertahankan?\n2. Informasi apa yang mungkin hilang?\n\nResize gambar dapat menghilangkan teks kecil. Kompresi audio dapat menghilangkan detail suara. Sampling video dapat melewatkan peristiwa singkat. Flatten tabel dapat merusak struktur baris dan kolom."]
+            ],
+workedExample: [
+                "Penerapan Konsep",
+                ["Deskripsi", "Representasi sebagai Jembatan\n\nModel tidak menerima makna secara langsung. Setiap input perlu diubah menjadi tensor atau embedding. Representasi yang baik mempertahankan informasi yang penting bagi tugas dan mengurangi bagian yang tidak relevan.\n\n```text\nData mentah -> preprocessing -> encoder -> em"]
+            ],
+glossary: [
+                ["Konsep", "Definisi."]
+            ],
+quickCheck: {
+                question: "Apa dampak utama preprocessing terhadap kualitas multimodal?",
+                options: ["Jawaban A", "Jawaban B", "Jawaban C"],
+                answer: 0,
+                explanationCorrect: "Tepat.",
+                explanationWrong: "Coba pikirkan ulang."
+            },
+challenge: {
+                instruction: "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+                placeholder: "Tulis di sini...",
+                example: ""
+            },
+roadmapRef: "2"
         },
         {
-            hook: { question: "Jika score kosong, langsung bandingkan dengan threshold 75?", answerA: { label: "Langsung", text: "Semua record diperlakukan sama.", icon: "fas fa-forward" }, answerB: { label: "Validasi dulu", text: "None atau teks tidak dapat dibandingkan aman dengan angka.", icon: "fas fa-shield" }, message: "Urutan kondisi adalah bagian dari correctness. Validasi missing dan tipe harus terjadi sebelum range atau threshold." },
-            flow: [["Validate", "Cek missing dan tipe"], ["Branch", "Pilih aturan yang cocok"], ["Loop", "Terapkan ke setiap record"], ["Summarize", "Hitung hasil dan error"]],
-            deepDive: [
-                ["Branch mengubah aturan menjadi keputusan eksplisit", "if, elif, dan else dibaca dari atas ke bawah. Kondisi pertama yang benar akan dijalankan, sehingga urutan guard condition sangat penting. Missing value dan tipe invalid harus diperiksa sebelum perbandingan numerik agar program gagal dengan pesan yang jelas, bukan exception yang membingungkan.", "Boundary perlu ditulis sengaja. Jika lulus dimulai dari 75, nilai 74.9 dan 75 harus masuk cabang berbeda. Gunakan contoh di sekitar batas untuk memastikan operator >, >=, <, dan <= sesuai aturan yang sebenarnya."],
-                ["Loop memproses collection tanpa copy-paste", "for loop cocok ketika program membaca setiap record dalam collection. while loop digunakan ketika pengulangan bergantung pada kondisi yang dapat berubah. Setiap loop harus punya tujuan, kondisi berhenti, dan state yang diperbarui agar tidak menjadi infinite loop.", "continue dapat melewati record invalid setelah error dicatat, sedangkan break menghentikan seluruh loop. Pilihan tersebut memiliki konsekuensi: pipeline batch biasanya ingin mengumpulkan semua error, bukan berhenti pada record pertama, tetapi kasus keamanan tertentu memang harus fail fast."],
-                ["Output loop perlu dapat diaudit", "Jangan hanya menghasilkan daftar clean tanpa menjelaskan apa yang terjadi. Catat jumlah raw, valid, missing, invalid, dan out-of-range. Angka-angka ini harus dapat direkonsiliasi sehingga tim tahu apakah record hilang karena aturan yang disengaja.", "Control flow yang baik memisahkan klasifikasi dari side effect. Tentukan status record terlebih dahulu, lalu simpan atau laporkan hasil pada langkah berikutnya. Pemisahan ini membuat aturan lebih mudah diuji dengan input kecil." ]
+hook: {
+                question: "Komponen Dasar",
+                answerA: {
+                    label: "Mitos",
+                    text: "Jawaban umum yang perlu diluruskan.",
+                    icon: "fas fa-times-circle"
+                },
+                answerB: {
+                    label: "Fakta",
+                    text: "Pemahaman benar berdasarkan bukti dan praktik.",
+                    icon: "fas fa-check-circle"
+                },
+                message: "MLLM dapat terdiri dari beberapa komponen berikut:\n\n- encoder per modalitas,\n- tokenizer atau feature extractor,\n- projector atau connector,\n- fusion module,\n- language model,\n- decoder khusus modalitas,\n- tool router,\n- memory atau retrieval system."
+            },
+flow: [
+                ["Persiapan", "Pelajari materi bab ini."],
+                ["Eksekusi", "Praktikkan konsep yang dipelajari."],
+                ["Verifikasi", "Kerjakan checkpoint dan latihan."]
             ],
-            workedExample: ["Validasi score", ["Guard 1", "Jika score None, tandai missing."], ["Guard 2", "Jika bukan angka, tandai invalid type."], ["Guard 3", "Jika di luar 0–100, tandai out of range."], ["Decision", "Nilai valid diklasifikasikan lulus atau review."]],
-            glossary: [["Branch", "Cabang eksekusi berdasarkan kondisi."], ["Guard condition", "Pemeriksaan awal sebelum proses utama."], ["Boundary", "Nilai tepat di batas aturan."], ["Iteration", "Satu putaran loop."], ["Fail fast", "Menghentikan proses segera ketika kondisi kritis ditemukan."]],
-            quickCheck: { question: "Mengapa score is None diperiksa sebelum score >= 75?", options: ["None tidak dapat dibandingkan dengan angka", "Agar loop lebih cepat", "Agar score berubah menjadi nol"], answer: 0, explanationCorrect: "Tepat. Guard condition mencegah operasi yang tidak valid.", explanationWrong: "Pertimbangkan apa yang terjadi ketika operator >= menerima None." },
-            challenge: { instruction: "Klasifikasikan None, teks, -1, 0, 74.9, 75, 100, dan 101 serta jelaskan urutan guard.", placeholder: "Input -> status\n...\nUrutan guard: ...", example: "Missing dan tipe dicek lebih dulu, lalu range 0–100, baru threshold kelulusan." },
-            mistakes: ["Membandingkan None dengan angka", "Salah memilih > atau >=", "Loop tanpa kondisi berhenti"], bestPractices: ["Uji boundary", "Kumpulkan alasan record ditolak", "Pisahkan validasi dan klasifikasi"], learningOutcomes: ["Menyusun guard condition", "Memproses record dengan loop", "Merekonsiliasi hasil validasi"], transition: "Aturan sudah berjalan; function akan membuatnya reusable, teruji, dan mudah dirangkai.", prompt: ["validate missing -> type -> range", "classify valid values", "report every rejected record"]
+deepDive: [
+                ["Komponen Dasar", "Komponen Dasar\n\nMLLM dapat terdiri dari beberapa komponen berikut:", "- encoder per modalitas,\n- tokenizer atau feature extractor,\n- projector atau connector,\n- fusion module,\n- language model,\n- decoder khusus modalitas,\n- tool router,\n- memory atau retrieval system.\n\nTidak semua sistem memakai seluruh komponen. Arsitektur dipilih sesuai tugas, data, dan batas komputasi."]
+            ],
+workedExample: [
+                "Penerapan Konsep",
+                ["Deskripsi", "Komponen Dasar\n\nMLLM dapat terdiri dari beberapa komponen berikut:\n\n- encoder per modalitas,\n- tokenizer atau feature extractor,\n- projector atau connector,\n- fusion module,\n- language model,\n- decoder khusus modalitas,\n- tool router,\n- memory atau retrieval system.\n\nTidak semua sistem memakai selur"]
+            ],
+glossary: [
+                ["Konsep", "Definisi."]
+            ],
+quickCheck: {
+                question: "Apa perbedaan fungsi encoder dan projector?",
+                options: ["Jawaban A", "Jawaban B", "Jawaban C"],
+                answer: 0,
+                explanationCorrect: "Tepat.",
+                explanationWrong: "Coba pikirkan ulang."
+            },
+challenge: {
+                instruction: "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+                placeholder: "Tulis di sini...",
+                example: ""
+            },
+roadmapRef: "3"
         },
         {
-            hook: { question: "Satu function besar lebih mudah karena semua kode berada di satu tempat?", answerA: { label: "Lebih mudah", text: "Tidak perlu berpindah function.", icon: "fas fa-box" }, answerB: { label: "Sulit dirawat", text: "Tanggung jawab bercampur dan test menjadi rumit.", icon: "fas fa-diagram-project" }, message: "Function kecil memberi nama pada satu tanggung jawab. Pipeline kemudian merangkainya dalam urutan yang dapat diuji." },
-            flow: [["Contract", "Tentukan parameter dan return"], ["Responsibility", "Satu function satu tujuan"], ["Test", "Uji normal, boundary, invalid"], ["Compose", "Rangkai menjadi pipeline"]],
-            deepDive: [
-                ["Function adalah kontrak input dan output", "Parameter menjelaskan data yang dibutuhkan, sedangkan return mengirim nilai kepada pemanggil. print hanya menampilkan informasi dan biasanya tidak cukup untuk pipeline karena hasilnya tidak dapat dipakai langkah berikutnya. Function yang baik dapat dijelaskan tanpa membaca seluruh implementasi.", "Default parameter berguna ketika ada nilai standar, tetapi hindari default mutable seperti list kosong karena object yang sama dapat dipakai lintas pemanggilan. Gunakan None lalu buat object baru di dalam function ketika state harus independen."],
-                ["Pipeline kecil mengurangi ketidakkonsistenan", "Copy-paste validation ke beberapa tempat membuat satu perbaikan harus dilakukan berkali-kali. Dengan validate_score, classify_score, dan summarize_scores, setiap aturan memiliki owner yang jelas dan dapat diuji terpisah. run_pipeline hanya mengatur urutan, bukan mengerjakan semua detail.", "Error sebaiknya muncul pada layer yang memahami penyebabnya. Function validasi dapat mengembalikan status terstruktur atau melempar exception spesifik; layer atas memutuskan apakah record dilewati, proses dihentikan, atau pesan ditampilkan."],
-                ["Lambda dan generator dipakai pada kasus yang tepat", "lambda cocok untuk ekspresi sangat singkat seperti key sorting. Ketika logika membutuhkan nama, beberapa kondisi, dokumentasi, atau test, def lebih mudah dipahami. Kode pendek tidak selalu lebih sederhana.", "Generator menghasilkan item satu per satu dengan yield. Ia berguna untuk stream atau dataset besar karena tidak harus menyimpan seluruh hasil di memori. Namun generator hanya dapat dilalui sesuai alurnya; jika hasil perlu dibaca berulang, pertimbangkan materialisasi yang disengaja." ]
+hook: {
+                question: "Token Multimodal",
+                answerA: {
+                    label: "Mitos",
+                    text: "Jawaban umum yang perlu diluruskan.",
+                    icon: "fas fa-times-circle"
+                },
+                answerB: {
+                    label: "Fakta",
+                    text: "Pemahaman benar berdasarkan bukti dan praktik.",
+                    icon: "fas fa-check-circle"
+                },
+                message: "MLLM sering mengubah informasi non-teks menjadi urutan token laten. Token tersebut bukan kata, melainkan vektor yang mewakili bagian atau ringkasan data.\n\nContoh:"
+            },
+flow: [
+                ["Persiapan", "Pelajari materi bab ini."],
+                ["Eksekusi", "Praktikkan konsep yang dipelajari."],
+                ["Verifikasi", "Kerjakan checkpoint dan latihan."]
             ],
-            workedExample: ["Pipeline validasi score", ["validate_score", "Pastikan tipe dan range valid."], ["classify_score", "Ubah score valid menjadi status."], ["summarize_scores", "Hitung jumlah dan statistik."], ["run_pipeline", "Rangkai tahap dan tangani error."]],
-            glossary: [["Parameter", "Nama input pada definisi function."], ["Argument", "Nilai yang dikirim saat function dipanggil."], ["Return value", "Nilai yang dikirim kembali ke pemanggil."], ["Pure function", "Function yang tidak mengubah state di luar dirinya."], ["Generator", "Function yang menghasilkan nilai bertahap dengan yield."]],
-            quickCheck: { question: "Apa perbedaan utama return dan print?", options: ["return mengirim nilai; print hanya menampilkan", "Keduanya selalu sama", "print hanya untuk angka"], answer: 0, explanationCorrect: "Benar. Return memungkinkan output dipakai tahap pipeline berikutnya.", explanationWrong: "Pikirkan apakah hasil masih dapat disimpan ke variabel setelah function selesai." },
-            challenge: { instruction: "Buat validate_score, classify_score, dan summarize_scores. Uji None, teks, 74.9, 75, dan 100.", placeholder: "def validate_score(...):\n    ...", example: "Setiap function punya satu tanggung jawab; test mencakup normal, boundary, dan invalid input." },
-            mistakes: ["Function mengerjakan terlalu banyak hal", "Menggunakan print sebagai return", "Lambda berisi logika kompleks"], bestPractices: ["Tulis contract yang jelas", "Uji function secara terpisah", "Gunakan generator hanya saat aliran bertahap berguna"], learningOutcomes: ["Mendesain function kecil", "Membedakan return dan side effect", "Merangkai pipeline reusable"], transition: "Setelah function, kita mengelompokkan state dan behavior terkait melalui object.", prompt: ["validate_score(value)", "classify_score(valid_value)", "summarize_scores(values)", "run_pipeline = compose steps"]
+deepDive: [
+                ["Token Multimodal", "Token Multimodal\n\nMLLM sering mengubah informasi non-teks menjadi urutan token laten. Token tersebut bukan kata, melainkan vektor yang mewakili bagian atau ringkasan data.\n\nContoh:", "```text\nGambar -> 576 visual token\nAudio 10 detik -> 250 audio token\nTeks -> 120 language token\n```\n\nJumlah token memengaruhi biaya komputasi dan kapasitas konteks."]
+            ],
+workedExample: [
+                "Penerapan Konsep",
+                ["Deskripsi", "Token Multimodal\n\nMLLM sering mengubah informasi non-teks menjadi urutan token laten. Token tersebut bukan kata, melainkan vektor yang mewakili bagian atau ringkasan data.\n\nContoh:\n\n```text\nGambar -> 576 visual token\nAudio 10 detik -> 250 audio token\nTeks -> 120 language token\n```\n\nJumlah token meme"]
+            ],
+glossary: [
+                ["Konsep", "Definisi."]
+            ],
+quickCheck: {
+                question: "Mengapa positional encoding berbeda antar modalitas?",
+                options: ["Jawaban A", "Jawaban B", "Jawaban C"],
+                answer: 0,
+                explanationCorrect: "Tepat.",
+                explanationWrong: "Coba pikirkan ulang."
+            },
+challenge: {
+                instruction: "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+                placeholder: "Tulis di sini...",
+                example: ""
+            },
+roadmapRef: "4"
         },
         {
-            hook: { question: "Class perlu dipakai untuk setiap dictionary?", answerA: { label: "Selalu", text: "OOP membuat semua kode lebih profesional.", icon: "fas fa-cubes" }, answerB: { label: "Sesuai kebutuhan", text: "Class berguna ketika state dan behavior memiliki lifecycle bersama.", icon: "fas fa-scale-balanced" }, message: "Dictionary cukup untuk record sederhana. Class membantu ketika object perlu validasi, method, invariant, atau beberapa implementasi yang berbagi contract." },
-            flow: [["Model", "Tentukan state dan invariant"], ["Class", "Buat blueprint"], ["Object", "Bangun instance valid"], ["Method", "Jalankan behavior terkait"]],
-            deepDive: [
-                ["Class menyatukan state dan behavior", "Class adalah blueprint, sedangkan object adalah instance yang memiliki state sendiri. __init__ menerima data awal dan sebaiknya memastikan object tidak lahir dalam kondisi yang tidak valid. Method menggunakan state tersebut untuk melakukan behavior yang memang menjadi tanggung jawab object.", "Untuk DatasetReport, nama dataset, versi, dan summary dapat disimpan bersama method validasi atau export. Ini lebih jelas daripada kumpulan variabel global ketika lifecycle report tumbuh dan beberapa report harus diproses bersamaan."],
-                ["Encapsulation menjaga invariant", "Encapsulation bukan sekadar menyembunyikan atribut. Tujuannya menjaga aturan agar perubahan state melewati jalur yang dapat divalidasi. Jika score harus 0–100, object tidak seharusnya menerima nilai di luar range tanpa status error yang jelas.", "Property atau method setter dapat dipakai bila state perlu dikontrol. Namun jangan menambah abstraksi tanpa manfaat. Untuk data pasif yang hanya dipindahkan, dictionary atau dataclass mungkin lebih ringan dan mudah dibaca."],
-                ["Inheritance bukan pilihan default", "Inheritance berguna ketika subclass benar-benar merupakan jenis dari parent dan harus memenuhi contract yang sama. Composition sering lebih fleksibel: object menerima validator atau formatter sebagai komponen, bukan mewarisi banyak behavior yang tidak dibutuhkan.", "Pada sistem AI, wrapper model atau evaluator dapat berbagi interface predict atau evaluate, tetapi detail provider berbeda. Contract yang kecil memudahkan pertukaran implementasi dan test menggunakan fake object." ]
+hook: {
+                question: "Tahapan Pembelajaran",
+                answerA: {
+                    label: "Mitos",
+                    text: "Jawaban umum yang perlu diluruskan.",
+                    icon: "fas fa-times-circle"
+                },
+                answerB: {
+                    label: "Fakta",
+                    text: "Pemahaman benar berdasarkan bukti dan praktik.",
+                    icon: "fas fa-check-circle"
+                },
+                message: "Pipeline pembelajaran MLLM dapat meliputi:\n\n1. melatih encoder per modalitas,\n2. melakukan alignment dengan pasangan data,\n3. melatih connector atau fusion module,\n4. multimodal pretraining,\n5. instruction tuning,\n6. preference optimization atau safety tuning,\n7. domain adaptation."
+            },
+flow: [
+                ["Persiapan", "Pelajari materi bab ini."],
+                ["Eksekusi", "Praktikkan konsep yang dipelajari."],
+                ["Verifikasi", "Kerjakan checkpoint dan latihan."]
             ],
-            workedExample: ["DatasetReport", ["State", "name, version, dan summary."], ["Invariant", "Nama tidak kosong dan summary berbentuk dictionary."], ["Method", "validate, add_metric, dan export_text."], ["Test", "Buat dua instance untuk memastikan state tidak tercampur."]],
-            glossary: [["Class", "Blueprint untuk membuat object."], ["Object", "Instance dari class."], ["Method", "Function yang terkait dengan object."], ["Encapsulation", "Menjaga state melalui contract yang jelas."], ["Composition", "Membangun object dari beberapa komponen kecil."]],
-            quickCheck: { question: "Dalam OOP, object adalah...", options: ["Instance dari class", "Blueprint", "Package"], answer: 0, explanationCorrect: "Tepat. Class mendefinisikan blueprint; object adalah instance-nya.", explanationWrong: "Bedakan definisi umum dengan hasil yang dibuat dari definisi tersebut." },
-            challenge: { instruction: "Buat class DatasetReport dengan validasi nama dan method menambah metric.", placeholder: "class DatasetReport:\n    ...", example: "__init__ memvalidasi name; add_metric menyimpan nilai; summary mengembalikan salinan data." },
-            mistakes: ["Membuat class untuk setiap nilai", "State global dibagi semua instance", "Inheritance terlalu dalam"], bestPractices: ["Jaga invariant di constructor", "Utamakan composition", "Buat method sesuai tanggung jawab object"], learningOutcomes: ["Membedakan class dan object", "Menjaga invariant", "Memilih OOP hanya ketika bermanfaat"], transition: "Object yang baik tetap harus menghadapi input rusak, file hilang, dan kegagalan eksternal.", prompt: ["state + behavior -> class", "validate invariant on creation", "prefer composition for flexible parts"]
+deepDive: [
+                ["Tahapan Pembelajaran", "Tahapan Pembelajaran\n\nPipeline pembelajaran MLLM dapat meliputi:", "1. melatih encoder per modalitas,\n2. melakukan alignment dengan pasangan data,\n3. melatih connector atau fusion module,\n4. multimodal pretraining,\n5. instruction tuning,\n6. preference optimization atau safety tuning,\n7. domain adaptation.\n\nTidak semua model mengikuti urutan yang sama."]
+            ],
+workedExample: [
+                "Penerapan Konsep",
+                ["Deskripsi", "Tahapan Pembelajaran\n\nPipeline pembelajaran MLLM dapat meliputi:\n\n1. melatih encoder per modalitas,\n2. melakukan alignment dengan pasangan data,\n3. melatih connector atau fusion module,\n4. multimodal pretraining,\n5. instruction tuning,\n6. preference optimization atau safety tuning,\n7. domain adaptat"]
+            ],
+glossary: [
+                ["Konsep", "Definisi."]
+            ],
+quickCheck: {
+                question: "Mengapa contrastive objective tidak cukup untuk instruction following?",
+                options: ["Jawaban A", "Jawaban B", "Jawaban C"],
+                answer: 0,
+                explanationCorrect: "Tepat.",
+                explanationWrong: "Coba pikirkan ulang."
+            },
+challenge: {
+                instruction: "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+                placeholder: "Tulis di sini...",
+                example: ""
+            },
+roadmapRef: "5"
         },
         {
-            hook: { question: "except Exception: pass membuat program lebih tangguh?", answerA: { label: "Ya", text: "Semua error hilang dari layar.", icon: "fas fa-eye-slash" }, answerB: { label: "Tidak", text: "Kegagalan tersembunyi dan data dapat menjadi salah.", icon: "fas fa-triangle-exclamation" }, message: "Program tangguh bukan program yang diam. Ia menangkap error yang dipahami, memberi konteks, dan menentukan recovery yang aman." },
-            flow: [["Attempt", "Jalankan operasi berisiko"], ["Catch", "Tangkap exception spesifik"], ["Explain", "Berikan pesan yang dapat ditindaklanjuti"], ["Recover", "Retry, skip, fallback, atau stop"]],
-            deepDive: [
-                ["Exception adalah bagian dari contract", "File dapat hilang, schema dapat berubah, dan nilai dapat gagal dikonversi. try/except dipakai di sekitar operasi yang memang dapat gagal, bukan membungkus seluruh program. Tangkap FileNotFoundError, ValueError, atau exception spesifik lain agar response sesuai penyebab.", "Pesan error perlu menyebut apa yang gagal, input yang relevan, dan langkah perbaikan. Jangan menampilkan credential atau data sensitif. Logging teknis dapat lebih rinci, sedangkan pesan peserta harus jelas dan aman."],
-                ["File I/O membutuhkan lifecycle dan encoding", "with open(...) memastikan file ditutup meski proses gagal. Mode r membaca, w menimpa, dan a menambahkan. Karena w dapat merusak raw data, output cleaning harus menggunakan path baru dan ideally pemeriksaan apakah tujuan sudah ada.", "Encoding UTF-8 mencegah banyak masalah karakter Indonesia. Pathlib membantu membangun path lintas sistem operasi. Sebelum membaca, validasi keberadaan file; setelah menulis, periksa bahwa output dapat dibuka kembali dan jumlah record sesuai harapan."],
-                ["Recovery harus eksplisit", "Tidak semua error boleh dilewati. Record individual yang invalid dapat dicatat dan dilewati, tetapi schema utama yang hilang sebaiknya menghentikan pipeline. Retry cocok untuk kegagalan sementara, bukan input permanen yang salah.", "finally dipakai untuk cleanup yang harus selalu terjadi. Dalam banyak operasi file, context manager sudah menangani cleanup sehingga finally tambahan tidak diperlukan. Pilih mekanisme paling sederhana yang tetap menjaga resource dan data." ]
+hook: {
+                question: "Prompt sebagai Kontrak",
+                answerA: {
+                    label: "Mitos",
+                    text: "Jawaban umum yang perlu diluruskan.",
+                    icon: "fas fa-times-circle"
+                },
+                answerB: {
+                    label: "Fakta",
+                    text: "Pemahaman benar berdasarkan bukti dan praktik.",
+                    icon: "fas fa-check-circle"
+                },
+                message: "Prompt multimodal harus menjelaskan:\n\n1. tujuan,\n2. peran setiap input,\n3. sumber yang boleh digunakan,\n4. langkah analisis,\n5. format output,\n6. aturan ketidakpastian,\n7. larangan atau batasan."
+            },
+flow: [
+                ["Persiapan", "Pelajari materi bab ini."],
+                ["Eksekusi", "Praktikkan konsep yang dipelajari."],
+                ["Verifikasi", "Kerjakan checkpoint dan latihan."]
             ],
-            workedExample: ["Membaca participants.csv", ["Precheck", "Pastikan path ada dan extension sesuai."], ["Read", "Gunakan context manager atau Pandas dengan encoding jelas."], ["Validate", "Periksa header dan tipe dasar."], ["Recover", "File hilang memberi instruksi; schema buruk menghentikan cleaning."]],
-            glossary: [["Exception", "Object yang mewakili kegagalan runtime."], ["Traceback", "Jejak pemanggilan menuju lokasi error."], ["Context manager", "Pengelola resource melalui blok with."], ["Encoding", "Aturan mengubah karakter menjadi byte."], ["Recovery", "Tindakan aman setelah kegagalan."]],
-            quickCheck: { question: "Mengapa memakai with saat membuka file?", options: ["File ditutup otomatis", "Semua error hilang", "Path tidak diperlukan"], answer: 0, explanationCorrect: "Benar. Context manager menjaga lifecycle file.", explanationWrong: "Pikirkan resource apa yang harus selalu dibersihkan." },
-            challenge: { instruction: "Baca file score dan tangani file hilang, nilai invalid, serta output yang tidak boleh menimpa raw.", placeholder: "try:\n    ...\nexcept FileNotFoundError:\n    ...", example: "Input dibaca dari participants.csv; hasil ditulis ke participants_clean.csv; exception spesifik memberi pesan recovery." },
-            mistakes: ["except kosong", "Menimpa raw file", "Pesan error tanpa recovery"], bestPractices: ["Tangkap exception spesifik", "Gunakan with dan UTF-8", "Pisahkan raw dan derived output"], learningOutcomes: ["Mendesain error handling", "Membaca file dengan aman", "Memilih recovery sesuai dampak"], transition: "Data sudah dapat dibaca dengan aman; berikutnya library numerik mempercepat operasi array.", prompt: ["catch only understood exceptions", "message = cause + context + recovery", "never overwrite raw data"]
+deepDive: [
+                ["Prompt sebagai Kontrak", "Prompt sebagai Kontrak\n\nPrompt multimodal harus menjelaskan:\n\n1. tujuan,\n2. peran setiap input,\n3. sumber yang boleh digunakan,\n4. langkah analisis,\n5. format output,\n6. aturan ketidakpastian,\n7. larangan atau batasan.", "Contoh:\n\n```text\nTugas: buat ringkasan kondisi aset.\nInput:\n- Foto A: tampilan keseluruhan.\n- Foto B: close-up indikator.\n- Catatan teknisi: observasi lapangan.\n- Data sensor: nilai 10 menit terakhir.\n\nAturan:\n1. Pisahkan fakta yang terlihat, data terukur, dan interpretasi.\n2. Bila sumber bertentangan, laporkan konflik.\n3. Jangan menebak komponen yang tidak terlihat.\n4. Keluarkan JSON sesuai schema.\n```"]
+            ],
+workedExample: [
+                "Penerapan Konsep",
+                ["Deskripsi", "Prompt sebagai Kontrak\n\nPrompt multimodal harus menjelaskan:\n\n1. tujuan,\n2. peran setiap input,\n3. sumber yang boleh digunakan,\n4. langkah analisis,\n5. format output,\n6. aturan ketidakpastian,\n7. larangan atau batasan.\n\nContoh:\n\n```text\nTugas: buat ringkasan kondisi aset.\nInput:\n- Foto A: tampilan k"]
+            ],
+glossary: [
+                ["Konsep", "Definisi."]
+            ],
+quickCheck: {
+                question: "Mengapa setiap input perlu diberi label?",
+                options: ["Jawaban A", "Jawaban B", "Jawaban C"],
+                answer: 0,
+                explanationCorrect: "Tepat.",
+                explanationWrong: "Coba pikirkan ulang."
+            },
+challenge: {
+                instruction: "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+                placeholder: "Tulis di sini...",
+                example: ""
+            },
+roadmapRef: "6"
         },
         {
-            hook: { question: "NumPy hanya list Python dengan nama lain?", answerA: { label: "Sama", text: "Keduanya menyimpan banyak angka.", icon: "fas fa-list" }, answerB: { label: "Berbeda", text: "Array memiliki shape, dtype, dan operasi vectorized.", icon: "fas fa-border-all" }, message: "NumPy memberi struktur numerik homogen dan operasi teroptimasi. Shape dan dtype menjadi contract penting sebelum data masuk model." },
-            flow: [["Array", "Bangun data numerik"], ["Inspect", "Periksa shape dan dtype"], ["Vectorize", "Terapkan operasi tanpa loop manual"], ["Summarize", "Hitung statistik dan validasi"]],
-            deepDive: [
-                ["Ekosistem Python dibagi berdasarkan tanggung jawab", "Standard library menangani path, JSON, tanggal, dan utilitas dasar. NumPy fokus pada array numerik, Pandas pada data tabular, visualisasi pada chart, dan framework ML pada model. Memahami batas ini mencegah peserta memakai library besar untuk masalah kecil atau mencampur layer tanpa alasan.", "Import sebaiknya eksplisit dan dependency dicatat. Alias umum seperti np dan pd membantu komunikasi tim, tetapi pembaca tetap harus tahu object berasal dari library mana. Hindari wildcard import karena asal function menjadi tidak jelas."],
-                ["Array memiliki shape dan dtype", "Shape menjelaskan jumlah elemen pada setiap dimensi. Vector satu dimensi, matrix dua dimensi, dan tensor dapat memiliki lebih banyak dimensi. Banyak error AI berasal dari shape yang tidak sesuai, sehingga pemeriksaan shape harus dilakukan sebelum operasi atau pemanggilan model.", "Dtype menentukan representasi nilai dan kebutuhan memori. Campuran angka dan teks dapat membuat array bertipe object atau string, lalu operasi statistik gagal atau memberi hasil mengejutkan. Bersihkan dan konversi data secara eksplisit."],
-                ["Vectorization mengubah cara berpikir", "Operasi scores / 100 diterapkan ke seluruh array tanpa menulis loop per elemen. Selain ringkas, implementasi vectorized biasanya berjalan pada kode teroptimasi. Boolean mask seperti scores >= 75 menghasilkan array kondisi yang dapat dipakai untuk filtering.", "Missing numeric value sering direpresentasikan sebagai NaN. np.mean dapat menghasilkan NaN, sedangkan np.nanmean mengabaikannya. Mengabaikan bukan selalu keputusan yang benar; tim tetap harus menghitung berapa missing dan menjelaskan kebijakan yang dipakai." ]
+hook: {
+                question: "Multi-Image Reasoning",
+                answerA: {
+                    label: "Mitos",
+                    text: "Jawaban umum yang perlu diluruskan.",
+                    icon: "fas fa-times-circle"
+                },
+                answerB: {
+                    label: "Fakta",
+                    text: "Pemahaman benar berdasarkan bukti dan praktik.",
+                    icon: "fas fa-check-circle"
+                },
+                message: "Multi-image task dapat berupa:\n\n- perbandingan before-after,\n- pemilihan produk dari beberapa foto,\n- analisis beberapa sudut objek,\n- urutan proses,\n- pencarian perbedaan."
+            },
+flow: [
+                ["Persiapan", "Pelajari materi bab ini."],
+                ["Eksekusi", "Praktikkan konsep yang dipelajari."],
+                ["Verifikasi", "Kerjakan checkpoint dan latihan."]
             ],
-            workedExample: ["Audit array score", ["Create", "Konversi score valid menjadi array float."], ["Inspect", "Cetak shape, dtype, dan jumlah NaN."], ["Compute", "Mean, median, min, max, serta normalization."], ["Validate", "Bandingkan jumlah input dan output statistik."]],
-            glossary: [["Array", "Struktur numerik multidimensi."], ["Shape", "Ukuran pada setiap dimensi."], ["Dtype", "Tipe penyimpanan elemen array."], ["Vectorization", "Operasi pada banyak elemen sekaligus."], ["Boolean mask", "Array kondisi untuk memilih elemen."]],
-            quickCheck: { question: "Apa yang dijelaskan scores.shape?", options: ["Dimensi array", "Nama file", "Versi Python"], answer: 0, explanationCorrect: "Tepat. Shape menunjukkan ukuran setiap dimensi.", explanationWrong: "Cari metadata yang menjelaskan struktur array." },
-            challenge: { instruction: "Audit array score dengan NaN: tampilkan shape, dtype, valid count, mean, median, dan normalization.", placeholder: "scores = np.array([...])\n...", example: "Hitung missing secara terpisah, lalu gunakan operasi nan-aware hanya dengan alasan yang terdokumentasi." },
-            mistakes: ["Tidak memeriksa shape", "Mencampur string dan angka", "Mengabaikan NaN tanpa mencatatnya"], bestPractices: ["Inspect shape dan dtype", "Gunakan vectorization", "Dokumentasikan kebijakan missing"], learningOutcomes: ["Membaca contract array", "Menggunakan operasi vectorized", "Menghitung statistik secara sadar missing value"], transition: "Array kuat untuk numerik; Pandas menambahkan label kolom dan workflow cleaning tabular.", prompt: ["inspect shape + dtype", "validate missing", "vectorize transformations", "reconcile counts"]
+deepDive: [
+                ["Multi-Image Reasoning", "Multi-Image Reasoning\n\nMulti-image task dapat berupa:\n\n- perbandingan before-after,\n- pemilihan produk dari beberapa foto,\n- analisis beberapa sudut objek,\n- urutan proses,\n- pencarian perbedaan.", "Tantangan utama:\n\n- identitas objek antar foto,\n- urutan input,\n- sudut pandang,\n- pencahayaan,\n- perubahan yang tidak relevan.\n\nGunakan label dan pertanyaan spesifik. Hindari pertanyaan terlalu umum seperti “Apa bedanya?” tanpa konteks."]
+            ],
+workedExample: [
+                "Penerapan Konsep",
+                ["Deskripsi", "Multi-Image Reasoning\n\nMulti-image task dapat berupa:\n\n- perbandingan before-after,\n- pemilihan produk dari beberapa foto,\n- analisis beberapa sudut objek,\n- urutan proses,\n- pencarian perbedaan.\n\nTantangan utama:\n\n- identitas objek antar foto,\n- urutan input,\n- sudut pandang,\n- pencahayaan,\n- perub"]
+            ],
+glossary: [
+                ["Konsep", "Definisi."]
+            ],
+quickCheck: {
+                question: "Mengapa dokumen panjang perlu retrieval?",
+                options: ["Jawaban A", "Jawaban B", "Jawaban C"],
+                answer: 0,
+                explanationCorrect: "Tepat.",
+                explanationWrong: "Coba pikirkan ulang."
+            },
+challenge: {
+                instruction: "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+                placeholder: "Tulis di sini...",
+                example: ""
+            },
+roadmapRef: "7"
         },
         {
-            hook: { question: "Dataset tanpa missing otomatis siap untuk AI?", answerA: { label: "Siap", text: "Tidak ada sel kosong berarti bersih.", icon: "fas fa-circle-check" }, answerB: { label: "Belum", text: "Duplikat, range, label, leakage, dan representasi masih perlu diaudit.", icon: "fas fa-magnifying-glass-chart" }, message: "Cleaning adalah rangkaian keputusan. Dataset clean secara teknis belum otomatis valid, adil, atau relevan." },
-            flow: [["Load", "Baca raw tanpa menimpa"], ["Inspect", "Shape, schema, type, missing"], ["Clean", "Aturan eksplisit dan terukur"], ["Validate", "Rekonsiliasi perubahan"], ["Save", "Simpan output dan report"]],
-            deepDive: [
-                ["DataFrame memberi label pada data tabular", "DataFrame menyimpan baris dan kolom dengan nama, tipe, serta index. Setelah read_csv, jangan langsung membuat model. Periksa head untuk contoh baris, shape untuk ukuran, columns untuk schema, dtypes untuk tipe, dan missing count untuk kelengkapan.", "describe memberi statistik awal tetapi tidak menggantikan pemahaman domain. Nilai rata-rata yang terlihat wajar dapat menyembunyikan outlier, unit yang salah, atau kelompok kecil yang tidak terwakili."],
-                ["Cleaning harus memiliki alasan dan audit trail", "dropna, fillna, drop_duplicates, dan type conversion adalah keputusan yang dapat mengubah makna data. Missing score tidak selalu boleh diisi nol karena nol adalah nilai nyata. Median mungkin masuk akal pada latihan, tetapi pada keputusan penting tim harus memahami mekanisme missing dan dampaknya.", "Simpan jumlah raw, duplicate, invalid type, out-of-range, missing, dan clean. Angka akhir harus dapat direkonsiliasi. Simpan output ke file baru dan catat versi aturan agar proses dapat diulang pada dataset berikutnya."],
-                ["Pipeline memisahkan load, validate, clean, summarize, dan save", "Setiap tahap menerima input dan mengembalikan output yang jelas. load_data hanya membaca; validate_schema memastikan kolom; clean_data membuat salinan dan menerapkan aturan; build_report menghitung perubahan; save_outputs menulis derived files. Pemisahan ini membuat test dan diagnosis jauh lebih mudah.", "Sebelum output dipakai model, periksa leakage, label quality, representasi kelompok, relevansi fitur, dan perubahan distribusi. Data bersih berarti aturan cleaning berhasil dijalankan—bukan bukti bahwa dataset sudah adil atau cukup untuk menjawab use case." ]
+hook: {
+                question: "Mengapa Multimodal RAG?",
+                answerA: {
+                    label: "Mitos",
+                    text: "Jawaban umum yang perlu diluruskan.",
+                    icon: "fas fa-times-circle"
+                },
+                answerB: {
+                    label: "Fakta",
+                    text: "Pemahaman benar berdasarkan bukti dan praktik.",
+                    icon: "fas fa-check-circle"
+                },
+                message: "Retrieval-Augmented Generation menambahkan informasi eksternal yang relevan saat inference. Pada multimodal RAG, item yang diambil dapat berupa teks, gambar, halaman dokumen, audio clip, video segment, atau data terstruktur.\n\nTujuan:"
+            },
+flow: [
+                ["Persiapan", "Pelajari materi bab ini."],
+                ["Eksekusi", "Praktikkan konsep yang dipelajari."],
+                ["Verifikasi", "Kerjakan checkpoint dan latihan."]
             ],
-            workedExample: ["Dataset nilai workshop", ["Load", "Baca participants.csv sebagai raw input."], ["Validate", "Pastikan name, track, dan score tersedia."], ["Clean", "Salin, deduplicate, convert score, filter range."], ["Report", "Rekonsiliasi raw hingga clean dan agregasi per track."], ["Save", "Tulis participants_clean.csv, track_summary.csv, dan report.txt."]],
-            glossary: [["DataFrame", "Tabel berlabel baris dan kolom."], ["Missing value", "Nilai yang tidak tersedia."], ["Data leakage", "Informasi yang seharusnya tidak tersedia masuk ke proses model."], ["Audit trail", "Catatan perubahan data dan alasannya."], ["Derived data", "Data baru hasil transformasi raw data."]],
-            quickCheck: { question: "Mengapa raw dataset tidak boleh ditimpa?", options: ["Agar transformasi dapat diaudit dan diulang", "Karena Pandas tidak bisa menulis", "Agar folder lebih banyak"], answer: 0, explanationCorrect: "Benar. Raw data menjadi baseline untuk audit dan reproduksi.", explanationWrong: "Pikirkan bagaimana tim membuktikan perubahan bila input asli hilang." },
-            challenge: { instruction: "Rancang pipeline load, validate, clean, summarize, dan save beserta audit count setiap tahap.", placeholder: "def load_data(...):\n...\nAudit count: ...", example: "Raw 100 = clean 90 + duplicate 3 + missing 4 + invalid 3; seluruh output ditulis ke file baru." },
-            mistakes: ["Menimpa raw dataset", "Mengisi semua missing dengan nol", "Menganggap clean berarti representatif"], bestPractices: ["Inspect sebelum transform", "Rekonsiliasi jumlah baris", "Versikan rule dan output"], learningOutcomes: ["Mengaudit DataFrame", "Mendesain cleaning yang dapat dijelaskan", "Membangun mini workflow end-to-end"], transition: "Fondasi Python selesai. Practice, quiz, dan diskusi berikutnya menguji workflow yang sama secara progresif.", prompt: ["load -> inspect -> validate", "clean a copy", "report every change", "save derived outputs", "review leakage + representation"]
+deepDive: [
+                ["Mengapa Multimodal RAG?", "Mengapa Multimodal RAG?\n\nRetrieval-Augmented Generation menambahkan informasi eksternal yang relevan saat inference. Pada multimodal RAG, item yang diambil dapat berupa teks, gambar, halaman dokumen, audio clip, video segment, atau data terstruktur.", "Tujuan:\n\n- mengurangi context overload,\n- menjaga informasi tetap mutakhir,\n- menyediakan bukti,\n- membatasi data yang dikirim ke model,\n- meningkatkan kemampuan domain."]
+            ],
+workedExample: [
+                "Penerapan Konsep",
+                ["Deskripsi", "Mengapa Multimodal RAG?\n\nRetrieval-Augmented Generation menambahkan informasi eksternal yang relevan saat inference. Pada multimodal RAG, item yang diambil dapat berupa teks, gambar, halaman dokumen, audio clip, video segment, atau data terstruktur.\n\nTujuan:\n\n- mengurangi context overload,\n- menjaga"]
+            ],
+glossary: [
+                ["Konsep", "Definisi."]
+            ],
+quickCheck: {
+                question: "Apa perbedaan unimodal dan cross-modal retrieval?",
+                options: ["Jawaban A", "Jawaban B", "Jawaban C"],
+                answer: 0,
+                explanationCorrect: "Tepat.",
+                explanationWrong: "Coba pikirkan ulang."
+            },
+challenge: {
+                instruction: "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+                placeholder: "Tulis di sini...",
+                example: ""
+            },
+roadmapRef: "8"
         }
-    ];
+    ];;
 
     CHAPTERS.forEach(function (chapter, index) {
         Object.assign(chapter, PYTHON_GUIDES[index]);
@@ -611,7 +851,7 @@ var SOURCE_VISUALS = {
 
         if (module.deepDive && module.deepDive.length) {
             var roadmapHtml = '<section class="ai-modern-beginner-roadmap" data-python-injected data-section="konsep">' +
-                '<div class="ai-modern-roadmap-head"><i class="fas fa-compass" aria-hidden="true"></i><div><span>Jalur Pemula</span><h3>Memahami konsep, bukan menghafal sintaks</h3><p>Gunakan penjelasan berikut untuk menghubungkan kode, data, failure case, dan keputusan dalam workflow AI.</p></div></div>' +
+                '<div class="ai-modern-roadmap-head"><i class="fas fa-compass" aria-hidden="true"></i><div><span>Multimodal LLM</span><h3>AI yang memahami teks, gambar, dan suara</h3><p>Gunakan penjelasan berikut untuk menghubungkan kode, data, failure case, dan keputusan dalam workflow AI.</p></div></div>' +
                 '<div class="ai-modern-roadmap-strip" aria-hidden="true">' + module.deepDive.map(function (step, index) { return '<div><span>' + (index + 1) + '</span><i class="fas fa-book-open-reader"></i><strong>' + escapeHtml(step[0]) + '</strong></div>'; }).join("") + '</div>' +
                 '<div class="ai-modern-roadmap-progress"><span data-roadmap-progress>Langkah 1 dari ' + module.deepDive.length + '</span><b><i data-roadmap-bar></i></b></div>' +
                 '<div class="ai-modern-roadmap-steps">' + module.deepDive.map(function (step, index) {
