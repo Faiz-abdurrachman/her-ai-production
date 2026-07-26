@@ -1,5 +1,6 @@
 (function () {
     const CV_BASE_PATH = "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/";
+    const MODULE_ID = 'computer-vision';
     
     // Mapping base routes to their internal folder names
     const folderMap = {
@@ -32,6 +33,7 @@
             
             container.innerHTML = html;
             
+            if (mode === 'materi') window.saveChapterProgress(MODULE_ID, chapterId, 'completed');
             if (mode === 'practice') {
                 const article = container.querySelector('article.cv-chapter-wrapper') || container;
                 const secQuiz = article.querySelector('#sec-quiz');

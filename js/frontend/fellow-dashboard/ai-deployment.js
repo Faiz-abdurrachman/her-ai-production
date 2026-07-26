@@ -10,6 +10,7 @@
     };
 
     const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/";
+    const MODULE_ID = 'deployment';
 
 
     var pyodideInstance = null;
@@ -1539,6 +1540,7 @@ var SOURCE_VISUALS = {
         });
 
         updateProgress(chapter, total);
+        window.saveChapterProgress(MODULE_ID, chapter, 'completed');
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
