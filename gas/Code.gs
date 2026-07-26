@@ -180,7 +180,7 @@ const SCHEMA = {
   [SHEETS.projects]: ['project_id', 'team_id', 'team_name', 'title', 'members', 'institution', 'track', 'project_title', 'mentor', 'deck_url', 'repo_url', 'demo_url', 'overview', 'details', 'score', 'status', 'notes', 'submitted_at'],
   [SHEETS.certificates]: ['certificate_no', 'participant_rowId', 'nama_lengkap', 'final_score', 'status', 'issued_at', 'certificate_url'],
   [SHEETS.assets]: ['asset_id', 'title', 'type', 'url', 'visible_to', 'status', 'notes'],
-  [SHEETS.participantDashboardModules]: ['title', 'subtitle', 'progress', 'icon', 'tone', 'href', 'total_chapters', 'is_active', 'sort_order'],
+  [SHEETS.participantDashboardModules]: ['module_id', 'title', 'subtitle', 'progress', 'icon', 'tone', 'href', 'total_chapters', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardDiscussionTrails]: ['actor', 'action', 'topic', 'time_label', 'tone', 'is_active', 'created_at'],
   [SHEETS.participantDashboardTracks]: ['title', 'subtitle', 'icon', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardJourney]: ['title', 'subtitle', 'progress', 'icon', 'accent', 'is_active', 'sort_order'],
