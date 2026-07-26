@@ -1,6 +1,6 @@
 (function () {
     const ML_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning";
-    const MODULE_ID = 'ml-basic';
+    const MODULE_ID = 'machine-learning';
     const STORAGE = {
         chapter: "heraiAiMlCurrentChapter",
         practice: "heraiAiMlPractice",
