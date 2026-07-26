@@ -196,18 +196,32 @@ TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" np
 
 ---
 
-## Session Summary — 27 Juli 2026 (Sisyphus — Score Display + Restricted Access + Score Normalization)
+## 56. Feature: Add math-for-ai to Dashboard Module Routes (#P2)
 
-**Total commits:** 38 (25 sebelumnya + 7 sesi lalu + 6 sesi ini)
-**Grand total bugs/features:** #1-#55
-**Files changed sesi ini:** 8 files, +344/-64
-**Last commit:** `e1b0e7a` — feat: normalize quiz scores to percentage via quiz_total column (#55)
+**Deskripsi:**
+`ai-math-for-ai.js` sudah loaded di `index.html`, lesson files ada di `pages/.../math-for-ai/`, quiz+practice+chapter progress sudah wired. Seed module sudah ada di `seedDashboardModules()` (dari #55). Tapi tidak ada route di `router.js`, sehingga navigasi ke `#/participant-ai-lab-math-for-ai` gagal.
 
-**Key deliverables sesi ini (#52-#55):**
+**Cara Perbaikan:**
+- **Route mapping** (`router.js`): tambah 4 route — overview, practice, quiz, discussion → `pages/.../math-for-ai/*.html`
+- **Route list** (`fellowDashboardRoutes`): tambah 4 entry untuk navigation tracking
+- **Handler** (`router.js`): tambah `else if` block `path.startsWith("/participant-ai-lab-math-for-ai")` → `initFellowDashboardPage("modules")` + panggil `initAiLabMathOverview/Practice/Quiz/Discussion`
+- **Verifikasi:** Route cocok dengan seed href `#/participant-ai-lab-math-for-ai` di `seedDashboardModules()`
+
+---
+
+## Session Summary — 27 Juli 2026 (Sisyphus — Score Display + Restricted Access + Score Normalization + Math Route)
+
+**Total commits:** 39 (25 sebelumnya + 7 sesi lalu + 7 sesi ini)
+**Grand total bugs/features:** #1-#56
+**Files changed sesi ini:** 9 files, +366/-70
+**Last commit:** `d32775d` — feat: register math-for-ai routes in router.js (#56)
+
+**Key deliverables sesi ini (#52-#56):**
 - #52: Dashboard Score Display — quiz_score di GAS + badge UI + CSS ✅
 - #53: seedDashboardLeaderboard idempotent (upsertByKey) ✅
 - #54: Participant access restricted to Beranda/Modul/Pengaturan ✅
 - #55: Score normalization — quiz_total column, semua score → persentase seragam ✅
+- #56: math-for-ai route registration — 4 route di router.js + handler block ✅
 - E2e: 17 tests (15 stable), 3 new — quiz, practice, password, restricted access ✅
 - GAS deployed (by user) — `getParticipantDashboardData` now returns `quiz_score` ✅
 
