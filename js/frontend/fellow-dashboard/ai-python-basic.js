@@ -264,6 +264,7 @@
             }
             localStorage.setItem(quizDoneKey, 'true');
             localStorage.setItem(quizScoreKey, String(score));
+            window.saveChapterProgress(MODULE_ID, 'quiz', 'completed', score);
             showResult(score, groups.length);
             quizForm.querySelectorAll('label').forEach(function(lbl) {
                 var inp = lbl.querySelector('input');

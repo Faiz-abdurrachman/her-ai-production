@@ -822,7 +822,7 @@ function seedDashboardDiscussions() {
   var sheet = getSheet(SHEETS.participantDashboardDiscussionTrails);
   ensureSchemaHeaders(sheet, SCHEMA[SHEETS.participantDashboardDiscussionTrails]);
   discussions.forEach(function(d) {
-    addRowObject(SHEETS.participantDashboardDiscussionTrails, d);
+    upsertByKey(SHEETS.participantDashboardDiscussionTrails, 'topic', d.topic, d);
   });
 }
 

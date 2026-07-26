@@ -472,6 +472,7 @@
             const score = groups.reduce((total, name) => total + (answers[name] === "1" ? 1 : 0), 0);
             localStorage.setItem(STORAGE.quizDone, "true");
             localStorage.setItem(STORAGE.quizScore, String(score));
+            window.saveChapterProgress(MODULE_ID, 'quiz', 'completed', score);
             localStorage.setItem(STORAGE.quizAnswers, JSON.stringify(answers));
 
             renderQuizResult(form, score, groups.length, "Pembahasan sudah dibuka. Gunakan ini untuk membaca ulang materi yang belum kuat.");

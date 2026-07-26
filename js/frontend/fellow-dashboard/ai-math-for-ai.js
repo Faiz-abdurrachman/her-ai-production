@@ -654,6 +654,7 @@
             const score = Math.round((correct / mathForAiQuiz.length) * 100);
             localStorage.setItem(MATH_AI_STORAGE_KEYS.quizDone, 'true');
             localStorage.setItem(MATH_AI_STORAGE_KEYS.quizScore, String(score));
+            window.saveChapterProgress(mathForAiCourse.id, 'quiz', 'completed', score);
             if (result) result.innerHTML = renderResult(score);
             form.querySelectorAll('input').forEach(input => { input.disabled = true; });
             if (submit) {

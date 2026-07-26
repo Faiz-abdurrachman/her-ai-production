@@ -2081,6 +2081,7 @@ var SOURCE_VISUALS = {
 
             localStorage.setItem(STORAGE.quizDone, "true");
             localStorage.setItem(STORAGE.quizScore, String(score));
+            window.saveChapterProgress(MODULE_ID, 'quiz', 'completed', score);
             localStorage.setItem(STORAGE.quizAnswers, JSON.stringify(answers));
             renderQuizResult(score, QUIZ.length, "Pembahasan dibuka. Gunakan kartu merah/hijau untuk membaca ulang topik yang belum kuat.");
             lockQuiz(form, answers);

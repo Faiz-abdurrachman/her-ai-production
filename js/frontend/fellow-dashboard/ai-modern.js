@@ -1052,6 +1052,7 @@
             state.done = true;
             localStorage.setItem(STORAGE.quizDone, "true");
             localStorage.setItem(STORAGE.quizScore, String(state.score));
+            window.saveChapterProgress(MODULE_ID, 'quiz', 'completed', state.score);
             saveJson(STORAGE.quizAnswers, state.answers);
             renderQuestion();
             renderResult();
