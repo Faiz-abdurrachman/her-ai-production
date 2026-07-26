@@ -396,28 +396,70 @@ Diagram arsitektur `.layers-viz` di `chapters/1.html` memiliki beberapa masalah 
 - Sidebar dinamis (replace "Aisyah Putri")
 - Progress tracking (API baru + sheet)
 
-### Temuan Kritis
+---
 
-1. **"Aisyah Putri" hardcoded di 231 file** — seluruh halaman peserta pake template statis
-2. **Dashboard 70% hardcoded** — progress 0%, events, leaderboard semua statis
-3. **Settings 100% dummy** — form ga connect ke GAS sama sekali
-4. **Progress tracking BELUM ADA** — quiz/exercise ga nyimpan ke backend
-5. **Ganti password BELUM ADA** — `setParticipantPassword` di GAS ga diekspos sebagai route publik
+## Sesi 27 Juli 2026 — Dashboard Peserta Complete
 
-### Plan File
+### Status: Semua 5 Fase Selesai + 7 Bug Fixed
 
-Plan detail: `.omo/plans/participant-dashboard-fixes.md`
-
-| Fase | Apa | Estimasi |
+| Fase | Commit | Deskripsi |
 |---|---|---|
-| 1 | Dynamic name & topbar | 30-60 menit |
-| 2 | Settings wire ke GAS | 1-2 jam |
-| 3 | Ganti password (GAS + UI) | 2-3 jam |
-| 4 | Dashboard dinamis (getParticipantDashboardData) | 2-3 jam |
-| 5 | Progress tracking (API + sheet + frontend) | 3-4 jam |
+| 1 | `ef9f875` | Dynamic name, notif hide, `getParticipantDisplayName()` |
+| 2 | `67e4761` | Settings wire ke GAS, form save, tab navigation |
+| 3 | `ac16a3c` | Ganti password GAS + frontend UI |
+| 4 | — | Dashboard dinamis — infrastructure sudah ada |
+| 5 | `c840c2e` | Progress tracking system |
 
-### Aturan Tambahan (dari sesi ini)
-9. **Scope boundary WAJIB diikuti** — jangan sentuh signaling/chat/admin/keamanan
-10. **Kerjakan per fase** — tanya user sebelum lanjut ke fase berikutnya
-11. **JANGAN edit 231 file satu-satu** — pakai JS injection untuk sidebar dinamis
-12. **sessionStorage adalah source of truth** untuk data peserta di frontend
+### Bug yang Ditemukan dan Difix (#29-35)
+
+### #29 — Null pointer `btn-cancel` di `initSettingsPage()`
+**File:** `js/frontend/fellow-dashboard/settings.js`
+**Deskripsi:** `form.querySelector('.btn-cancel')` tidak ada null check. Kalau tombol Batal dihapus dari HTML, JS crash.
+**Cara Perbaikan:** Wrapped dengan `if (cancelBtn) { ... }`
+
+### #30 — Null pointer `session.nik` di `initSettingsPage()`
+**File:** `js/frontend/fellow-dashboard/settings.js`
+**Deskripsi:** `session.nik` di submit handler tidak ada guard. Kalau session null (edge case), TypeError.
+**Cara Perbaikan:** `if (!session?.nik) return;` di awal `initSettingsPage()`
+
+### #31 — Fragile selector `input[value*="linkedin.com"]`
+**File:** `js/frontend/fellow-dashboard/settings.js`
+**Deskripsi:** Matching LinkedIn/GitHub input pakai value attribute. Kalau HTML berubah format, selector gagal match → field tetap editable.
+**Cara Perbaikan:** Tambah `id="settingsLinkedin"` dan `id="settingsGithub"` di HTML, ganti ke `getElementById()`
+
+### #32 — Null guard submit buttons (2 lokasi)
+**File:** `js/frontend/fellow-dashboard/settings.js`
+**Deskripsi:** `form.querySelector('.btn-save')` dan `form.querySelector('button[type="submit"]')` tidak ada null check.
+**Cara Perbaikan:** Tambah `if (!btn) return;` di kedua lokasi.
+
+### #33 — CSS `.settings-message` tidak ada
+**File:** `css/frontend/fellow-dashboard/settings.css`
+**Deskripsi:** Kelas `.settings-message.success` dan `.settings-message.error` tidak didefinisikan di CSS manapun. Toast sukses/gagal tampil sebagai teks polos.
+**Cara Perbaikan:** Tambah styles: `.settings-message.success` (hijau) dan `.settings-message.error` (merah).
+
+### #34 — Default status inconsistency
+**File:** `gas/Code.gs`
+**Deskripsi:** Frontend `saveChapterProgress()` default ke `'completed'`, tapi GAS `saveParticipantProgress()` default ke `'in_progress'`. Inkonsisten.
+**Cara Perbaikan:** Align keduanya ke `'completed'`.
+
+### #35 — `module_id` missing dari `participantDashboardModules` schema (HIGH)
+**File:** `gas/Code.gs`
+**Deskripsi:** `getParticipantDashboardData()` menggunakan `row.module_id` untuk mencocokkan progress records, tapi kolom `module_id` tidak ada di schema `participantDashboardModules`. Akibatnya `row.module_id` selalu `undefined` → `completedByModule[undefined]` selalu `0` → progress computation NEVER matched data real. Dashboard selamanya 0%.
+**Cara Perbaikan:** Tambah `'module_id'` sebagai kolom pertama di schema `participantDashboardModules`.
+
+---
+
+### Aturan Sesi (Tetap berlaku)
+1. Commit PER FITUR, bukan satu commit besar
+2. Update handover & gemini.md setiap checkpoint
+3. Catat bug baru dengan nomor urut lanjutan (#36+)
+4. Dark theme DILARANG di code block — semua light pink theme
+5. CSS scope class `ai-lab-content` WAJIB di template CV
+6. Diagram kontras: lines ≥25% opacity, dots ≥75%, stroke ≥0.8px
+7. JANGAN tampilkan NIK/password di log/screenshot/handover
+8. TANYA DULU sebelum eksekusi kalau ada yang ambigu
+9. Scope boundary WAJIB diikuti — jangan sentuh signaling/chat/admin/keamanan
+10. JANGAN edit 231 file lesson satu-satu — pakai JS injection untuk sidebar dinamis
+11. sessionStorage adalah source of truth untuk data peserta di frontend
+12. JANGAN jalankan provisionParticipantAccounts / generateParticipantAccounts*
+13. Gas/Code.gs HARUS di-deploy ulang setelah perubahan (Manage deployments → New version)
