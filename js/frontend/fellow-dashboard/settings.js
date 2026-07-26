@@ -173,6 +173,16 @@
                 logo?.setAttribute('aria-expanded', 'false');
             }
         });
+
+        var allowedNavKeys = ['dashboard', 'modules', 'settings'];
+        sidebar.querySelectorAll('.fellow-menu a[data-fellow-nav]').forEach(function(link) {
+            if (allowedNavKeys.indexOf(link.dataset.fellowNav) === -1) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    renderParticipantRestricted();
+                });
+            }
+        });
     }
 
     function setActiveFellowNav(pageName) {
@@ -1811,6 +1821,24 @@
         }
     }
 
+    function renderParticipantRestricted() {
+        var restrictedHTML = '<section class="fellow-restricted-state"><div><i class="fas fa-shield-halved"></i><h1>Akses Peserta Dibatasi</h1><p>Sementara ini portal peserta hanya membuka <strong>Beranda</strong>, <strong>Modul</strong>, dan <strong>Pengaturan</strong>.</p><a href="#/participant-dashboard"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a></div></section>';
+
+        var root = document.querySelector('.fellow-dashboard');
+        if (root) {
+            root.innerHTML = restrictedHTML;
+            return;
+        }
+
+        var main = document.querySelector('main') || document.querySelector('#app') || document.querySelector('.page-content');
+        if (main) {
+            main.innerHTML = restrictedHTML;
+            return;
+        }
+
+        document.body.innerHTML = restrictedHTML;
+    }
+
     function renderDashboardSkeletons() {
         var moduleGrid = document.getElementById('dashboardModuleGrid');
         if (moduleGrid) {
@@ -2170,6 +2198,12 @@
     window.saveParticipantPortalSettings = saveSettings;
     window.applyParticipantPortalSettings = applySettings;
     window.initFellowDashboardPage = async function(pageName = 'dashboard') {
+        var allowedPages = ['dashboard', 'modules', 'settings'];
+        if (allowedPages.indexOf(pageName) === -1) {
+            renderParticipantRestricted();
+            return;
+        }
+
         attachSidebarRail();
         initFellowUserMenu();
         setActiveFellowNav(pageName);
@@ -2197,4 +2231,22 @@
             activity: `Membuka ${currentPath()}`
         });
     };
+
+    window.addEventListener('DOMContentLoaded', function() {
+        var _origInitMessaging = window.initMessagingPage;
+        if (typeof _origInitMessaging === 'function') {
+            window.initMessagingPage = async function() {
+                var session = readParticipantSession();
+                if (session && session.token) {
+                    await new Promise(function(r) { setTimeout(r, 0); });
+                    var main = document.querySelector('#app-content');
+                    if (main) {
+                        main.innerHTML = '<section class="fellow-restricted-state"><div><i class="fas fa-shield-halved"></i><h1>Akses Peserta Dibatasi</h1><p>Sementara ini portal peserta hanya membuka <strong>Beranda</strong>, <strong>Modul</strong>, dan <strong>Pengaturan</strong>.</p><a href="#/participant-dashboard"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a></div></section>';
+                    }
+                    return;
+                }
+                await _origInitMessaging();
+            };
+        }
+    });
 })();

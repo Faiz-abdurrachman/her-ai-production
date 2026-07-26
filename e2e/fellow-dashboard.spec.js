@@ -249,6 +249,19 @@ test.describe('Authenticated Flow', () => {
       expect(errorText.length).toBeGreaterThan(0);
     }
   });
+
+  // ─── Restricted Access ───────────────────────────────────
+
+  authTest('Restricted pages show access denied message', async ({ page }) => {
+    await login(page);
+    await page.evaluate(() => { window.location.hash = '#/participant-mentor'; });
+    await page.waitForFunction(() => document.body.innerText.includes('Akses Peserta Dibatasi'), { timeout: 10000 });
+
+    const bodyText = await page.evaluate(() => document.body.innerText);
+    expect(bodyText).toMatch(/Akses Peserta Dibatasi/i);
+    expect(bodyText).toMatch(/Beranda.*Modul.*Pengaturan/i);
+    expect(bodyText).toContain('Kembali ke Beranda');
+  });
 });
 
 // ─── Error State ──────────────────────────────────────────
