@@ -9,6 +9,7 @@
     };
 
     const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/04-reasoning/chapters/";
+    const MODULE_ID = 'reasoning';
 
         const CHAPTERS = [
     {
@@ -2000,6 +2001,7 @@
         });
 
         updateProgress(chapter, total);
+        window.saveChapterProgress(MODULE_ID, chapter, 'completed');
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 

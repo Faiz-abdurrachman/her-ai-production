@@ -1,5 +1,6 @@
 (function () {
     const ML_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning";
+    const MODULE_ID = 'ml-basic';
     const STORAGE = {
         chapter: "heraiAiMlCurrentChapter",
         practice: "heraiAiMlPractice",
@@ -159,6 +160,7 @@
         if (finishButton) {
             finishButton.hidden = chapterNumber !== CHAPTERS.length;
         }
+        window.saveChapterProgress(MODULE_ID, chapterNumber, 'completed');
     }
 
     function navigateToChapter(chapterNumber) {

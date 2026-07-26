@@ -1,6 +1,8 @@
 (function() {
     'use strict';
 
+    const MODULE_ID = 'python-untuk-ai';
+
     /* ── HerAI Modul 02 — Python untuk AI ─── */
 
     var pyodideInstance = null;
@@ -470,6 +472,7 @@
                     if (progressB) progressB.style.setProperty('--value', progressValue + '%');
                     if (progressStrong) progressStrong.textContent = progressValue + '%';
                     if (progressText) progressText.textContent = chapterNumber + ' dari ' + totalChapters + ' materi selesai';
+                    window.saveChapterProgress(MODULE_ID, chapterNumber, 'completed');
                 })
                 .catch(function(err) {
                     console.error("Modul load error:", err);

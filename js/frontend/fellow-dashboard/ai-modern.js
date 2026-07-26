@@ -2,6 +2,7 @@
     "use strict";
 
     var STORAGE_KEY_CHAPTER = "heraiAiModernCurrentChapter";
+    var MODULE_ID = 'konsep-ai-modern';
     var BASE_PATH = "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/03-konsep-ai-modern/chapters/";
     var activeChapterRequest = 0;
 
@@ -649,6 +650,7 @@
         if (next) next.hidden = number >= CHAPTERS.length;
         if (finish) finish.hidden = number !== CHAPTERS.length;
         updateProgress(number, CHAPTERS.length);
+        window.saveChapterProgress(MODULE_ID, chapter, 'completed');
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
