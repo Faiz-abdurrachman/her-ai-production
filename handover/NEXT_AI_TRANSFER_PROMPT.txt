@@ -1,7 +1,7 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║  AI TRANSFER PROMPT — HerAI Fellowship SuperApp              ║
-║  Sesi: 27 Juli 2026 (Sisyphus, 8 commit baru) → Next AI      ║
-║  Total sesi: 40 commit | Worktree: BERSIH                     ║
+║  Sesi: 27 Juli 2026 (Sisyphus, 9 commit baru) → Next AI      ║
+║  Total sesi: 41 commit | Worktree: BERSIH                     ║
 ╚══════════════════════════════════════════════════════════════╝
 
 ⚠️  BACA SELURUH FILE INI SEBELUM MULAI KERJA.
@@ -22,20 +22,24 @@
 - SPA: Vanilla JS hash-router, Node.js proxy (node server.js → http://127.0.0.1:3000)
 - Proxy: POST /__gas (token auto-injected oleh main.js)
 - WA env: GAS_WEB_APP_URL di .env
-- Last commit: c5b39d6
+- Last commit: e9656bc
 - Worktree: BERSIH (hanya untracked: scratch/, scripts/test-settings.js, nazril/)
+- Test participant: NIK 8204086711010003 / Password brenda123
+- Playwright: 17 tests, 15 stable, 2 flaky (practice + password timing)
 
 ═══════════════════════════════════════════════════════════════
 🚫 HARD BLOCK — JANGAN DISENTUH
 ═══════════════════════════════════════════════════════════════
 - Signaling (Go WebRTC), Messaging/Chat (Go), Participant Portal (Go)
 - Admin dashboard (production) — pages/dashboard/, js/dashboard/
-- Keamanan/Security hardening
+- Keamanan/Security hardening — jangan ubah auth flow tanpa approval
 - Leaderboard, Certificates, Tasks, Projects, Events, Community, Mentor
-- provisionParticipantAccounts / generateParticipantAccounts*
-- forceReset:true (AKAN RESET 187 AKUN EXISTING)
-- 231 file lesson pages (jangan edit satu-satu — pakai JS injection)
-- js/main.js, js/router.js (kecuali tambah route/handler baru)
+- provisionParticipantAccounts / generateParticipantAccounts* (AKAN RESET 187 AKUN)
+- forceReset:true (AKAN RESET DATA)
+- 231 file lesson HTML/JS — jangan edit satu-satu, pakai JS injection
+- js/main.js, js/router.js (kecuali tambah route/handler baru — TANYA DULU)
+- ai-python-basic.js — INTENTIONAL SKIP, conflict namespace dengan ai-python.js
+- ai-cv.js — tidak ada quiz/practice (SKIP dari wiring)
 
 ═══════════════════════════════════════════════════════════════
 ✅ APA YANG SUDAH SELESAI — JANGAN DIULANG
@@ -47,26 +51,32 @@ DARI SESI SEBELUMNYA (32 commit):
 - Task C: Skeleton loader, error state, fade-in transitions
 - Bug fixes #29-51
 
-DARI SESI INI (8 commit — #52-#57):
+DARI SESI INI (9 commit — #52-#57):
 
 1. SCORE NORMALIZATION (#55) — commit e1b0e7a:
    - GAS: Tambah kolom quiz_total di schema participantDashboardModules
    - GAS: seedDashboardModules() — semua 28 module dapat quiz_total (default 20, math-for-ai=100)
    - GAS: getParticipantDashboardData() — Math.round((raw/quiz_total)*100) → persentase seragam
-   - GAS: seed entry math-for-ai (belum ada route — tampil under development)
+   - GAS: seed entry math-for-ai (belum ada route → tampil under development)
    - FE: formatQuizBadge() — hapus heuristik >20, selalu tampil X%
    - Cache buster: settings.js?v=20260727-score-normalize
-   - GAS: SUDAH DEPLOYED (27 Juli 2026)
+   - GAS: SUDAH DEPLOYED (27 Juli 2026) ✅
 
-2. MATH-FOR-AI ROUTE REGISTRATION (#56) — commit d32775d → reverted 9825d0b:
+2. MATH-FOR-AI ROUTE (#56) — commit d32775d → reverted 9825d0b:
    - Awalnya ditambah 4 route + handler di router.js
    - Direvert karena module masih under development
    - Card tetap muncul di dashboard (dari seed), redirect ke under-dev template
+   - Commit: c5b39d6 (docs update)
 
-3. BUG #57 — KONTEN PYTHON NYASAR (AUDIT DONE, IMPLEMENTASI DEFERRED):
-   - 24 dari 29 file ai-*.js punya PYTHON_GUIDES template ("Jalur Pemula", "Python adalah penghubung")
+3. BUG #57 — KONTEN PYTHON NYASAR (AUDIT DONE, DEFERRED):
+   - 24 dari 29 file ai-*.js punya PYTHON_GUIDES template Python
    - Sumber konten asli dari Nazril: /nazril/modul-materi-herai/ (20 MD file)
-   - AUDIT SUDAH SELESAI — implementasi handoff ke next AI
+   - AUDIT + PLAN SUDAH SELESAI — implementasi handoff ke next AI
+
+4. HANDOVER UPDATES — commits 2d9a75f, e9656bc:
+   - NEXT_AI_TRANSFER_PROMPT.txt di-rewrite dengan full execution plan
+   - AI_HANDOFF_CURRENT_STATE.md di-update state terbaru
+   - gemini.md di-update dengan bug #57 + session summary
 
 ═══════════════════════════════════════════════════════════════
 ⚠️  TEMUAN KRITIS
@@ -236,3 +246,41 @@ SETTINGS: localStorage.heraiGlobalSettings → participantPortalOpen boolean
           gemini.md, handover/, nazril/
 ❌ JANGAN: main.js, router.js, messaging.js, 231 lesson files,
            Go services, admin dashboard
+
+═══════════════════════════════════════════════════════════════
+🎯 YANG HARUS DILAKUKAN NEXT AI — CHECKLIST
+═══════════════════════════════════════════════════════════════
+
+☐ 1. BACA handover/AI_HANDOFF_CURRENT_STATE.md (FULL)
+☐ 2. BACA gemini.md (FULL — 275 baris, bug #1-57)
+☐ 3. BACA NEXT_AI_TRANSFER_PROMPT.txt ini (FULL)
+☐ 4. KONFIRMASI ke user: "Saya sudah baca semua handover. Mulai dari
+      Bug #57 (konten Python nyasar) — Fase 0 build script dulu?"
+☐ 5. JANGAN mulai kerja sebelum user konfirmasi
+☐ 6. Fase 0: Build Node.js extraction script untuk Nazril MD → GUIDES
+☐ 7. Fase 1-4: Inject konten ke 24 ai-*.js sesuai plan
+☐ 8. Setiap fase: commit + update gemini.md (#58, #59, dst)
+☐ 9. node --check pada SETIAP file yang diubah
+☐ 10. TANYA user kalau ada yang ambigu atau tidak jelas
+
+═══════════════════════════════════════════════════════════════
+📞 DISKUSI YANG PERLU DIKONFIRMASI DENGAN USER
+═══════════════════════════════════════════════════════════════
+
+1. ai-python.js & ai-modern.js:
+   - ai-python.js punya konten Python template — untuk module Python
+     apakah ini acceptable atau perlu rewrite?
+   - ai-modern.js ("Konsep AI Modern") — tidak ada Nazril MD.
+     Konten placeholder atau biarkan template Python?
+
+2. Chapter HTML files:
+   - Semua 24 module SUDAH punya chapter HTML files (15 chapter,
+     konten module-specific). Apakah GUIDES replacement perlu
+     mengarah ke chapter HTML atau konten in-line di JS?
+
+3. E2E flaky tests:
+   - Kerjakan sekarang (bareng P3) atau setelah #57 selesai?
+
+4. Ai-python.js namespace:
+   - ai-python-basic.js TIDAK BOLEH disentuh (conflict namespace).
+     Apakah ai-python.js boleh di-rewrite kontennya?

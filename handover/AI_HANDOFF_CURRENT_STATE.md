@@ -3,8 +3,8 @@
 **Checkpoint:** 27 Juli 2026 (Sesi Sisyphus — Akhir Shift), Asia/Jakarta
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
-**Last Commit:** `c5b39d6` — docs: update gemini.md — math-for-ai stays under development (#56)
-**Total commits:** 40 (25 original + 7 sesi sebelumnya + 8 sesi ini)
+**Last Commit:** `e9656bc` — docs: update gemini session summary — 41 commits, bugs #1-57
+**Total commits:** 41 (25 original + 7 sesi sebelumnya + 9 sesi ini)
 **GAS Deployment:** ✅ Sudah redeploy — score normalization + quiz_total schema active
 **Worktree:** BERSIH (hanya untracked: `scratch/`, `scripts/test-settings.js`, `nazril/`)
 **Playwright:** 17 tests, 15 stable pass, 2 flaky (practice + password timing)
@@ -19,7 +19,7 @@
 |---|---|
 | Spreadsheet ID | `1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w` |
 | GAS Web App URL | `https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec` |
-| GAS Code | `gas/Code.gs` (2432 baris, 52 routes, 23 sheets) |
+| GAS Code | `gas/Code.gs` (2438 baris, 52 routes, 23 sheets) |
 | SPA | Vanilla JS hash-router, Node.js proxy (`node server.js` → `http://127.0.0.1:3000`) |
 | Proxy | POST `/__gas` (token auto-injected oleh `js/main.js`) |
 | Participant accounts | 187 akun di `ParticipantAccounts`, 431 di `peserta_tahap_1` |
@@ -46,7 +46,9 @@
 | Dashboard skeleton/error/fade-in | ✅ Shimmer loader + "Coba Lagi" retry button + cache |
 | Dashboard modules/journey/events/tracks | ✅ Dari GAS seed functions (idempotent) |
 | Leaderboard | ✅ Masked, auto-populate, idempotent (upsertByKey) |
-| **Dashboard score display** | ✅ **Quiz score muncul di module card — pill badge pink, auto-format /20 atau %** |
+| **Dashboard score display** | ✅ **Quiz score badge — persentase seragam, pill pink, auto-format X%** |
+| **Score normalization (#55)** | ✅ **quiz_total column, GAS compute persentase, FE always X%** |
+| **math-for-ai in seed** | ✅ **Module card muncul di dashboard, redirect ke under-dev template** |
 | **Restricted access** | ✅ **Hanya Beranda, Modul, Pengaturan yg bisa diakses — sisanya "Akses Dibatasi"** |
 | Participant Portal Open gate | ✅ Boolean `true` di sheet Settings |
 | Playwright e2e | ✅ 17 tests (15 stable, 2 flaky: practice+password timing) |
@@ -123,6 +125,17 @@
 | | | | Restricted test: navigasi ke `#/participant-mentor`, verify "Akses Dibatasi" |
 | - | **Restricted UI fix** | `dashboard.css` | Warna pink (bukan amber), icon button center vertikal |
 
+### Sesi Sisyphus — 27 Juli 2026 Shift 2 (4 commit: #55-#57)
+
+| # | Item | File | Detail |
+|---|------|------|--------|
+| #55 | **Score Normalization** | `gas/Code.gs` | Schema: tambah `quiz_total` column. `getParticipantDashboardData()`: `Math.round((raw/quiz_total)*100)` → semua score jadi persentase. `seedDashboardModules()`: 27 module `quiz_total:20`, math-for-ai `quiz_total:100` |
+| | | `settings.js` | `formatQuizBadge()`: hapus heuristik `>20`, selalu `X%` |
+| | | `index.html` | Cache buster `?v=20260727-score-normalize` |
+| #56 | **Math-for-ai Route** | `js/router.js` | Awalnya tambah 4 route + handler → DIREVERT (module under development). Card tetap di dashboard (dari seed), redirect ke under-dev template |
+| #57 | **Python Contamination Audit** | — | **AUDIT SELESAI**. 24/29 ai-*.js punya PYTHON_GUIDES template. Sumber konten asli: `/nazril/modul-materi-herai/` (20 MD). IMPLEMENTASI DEFERRED ke next AI |
+| — | **Handover Updates** | `handover/`, `gemini.md` | NEXT_AI_TRANSFER_PROMPT.txt di-rewrite (execution plan Fase 0-4). AI_HANDOFF_CURRENT_STATE.md di-update. gemini.md bug #57 + session summary |
+
 ---
 
 ## ⚠️ TEMUAN KRITIS — YANG HARUS DIKETAHUI AI BERIKUTNYA
@@ -149,10 +162,12 @@
 - Conflict: `ai-python.js` dan `ai-python-basic.js` sama-sama define `window.loadPythonTopik()`
 - Wiring quiz & practice di dalamnya aman (IIFE, tidak akan dieksekusi)
 
-### 5. Score semantics berbeda (#49) — DEFERRED
-- `ai-math-for-ai.js`: percentage (0-100), lainnya: raw count (0-20)
-- Frontend heuristik: score > 20 → tampil `%`, ≤20 → tampil `/20`
-- Belum ada normalisasi di backend — next AI perlu memutuskan standardisasi
+### 5. Score semantics (#49) — DONE ✅
+- Semua quiz_score sekarang persentase (0-100%) dari GAS
+- `quiz_total` column di sheet: default 20, math-for-ai=100
+- GAS compute: `Math.round((raw/quiz_total)*100)`
+- FE `formatQuizBadge()` selalu `X%` (tidak ada lagi heuristik >20)
+- Cache buster: `settings.js?v=20260727-score-normalize`
 
 ### 6. Module chapter "stuck" behavior
 - Tiap module nyimpen chapter terakhir di localStorage (key per-module)
@@ -163,6 +178,20 @@
 - Setiap kali `gas/Code.gs` diubah, HARUS redeploy web app dari Apps Script editor
 - Deploy → New deployment → Web app → Execute as Me → Anyone with link → Deploy
 - Tanpa redeploy, perubahan backend TIDAK AKAN aktif
+
+### 8. 🔴 Bug #57: 24 module JS punya konten Python template
+- Array `PYTHON_GUIDES` di 24 file ai-*.js berisi konten Python
+  ("Jalur Pemula", "Python adalah penghubung") yang di-inject ke chapter
+- 5 module BERSIH: cv, math-for-ai, ml-basic, python-basic, reasoning
+- Sumber konten asli dari Nazril: `/nazril/modul-materi-herai/` (20 MD file, 1200-3100 baris)
+- 4 module TANPA Nazril: evaluation, evolution, modern, python
+- AUDIT + PLAN SUDAH SELESAI — implementasi handoff ke next AI
+- Lihat NEXT_AI_TRANSFER_PROMPT.txt untuk execution plan Fase 0-4
+
+### 9. math-for-ai module status
+- Konten JS LENGKAP (762 baris, 7 lesson, 12 quiz) — tapi BELUM ada route
+- Card muncul di dashboard (dari seed P1) → redirect ke under-dev template
+- Jika ingin diaktifkan: tambah route di router.js + handler block
 
 ---
 
@@ -309,7 +338,7 @@ multimodal-llm, vlm
 
 1. **Commit PER FITUR**, bukan satu commit besar — commit message bahasa Inggris, deskriptif
 2. **Update handover & gemini.md** setiap checkpoint — jangan sampai stale
-3. **Catat bug baru** dengan nomor #54+ di `gemini.md`
+3. **Catat bug baru** dengan nomor #58+ di `gemini.md`
 4. **Dark theme DILARANG** — light pink theme untuk code blocks
 5. **CSS scope `ai-lab-content` WAJIB** di template CV
 6. **Diagram kontras**: lines ≥25% opacity, dots ≥75%, stroke ≥0.8px

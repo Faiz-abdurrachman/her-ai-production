@@ -259,7 +259,7 @@ Lainnya (2): python, modern
 **Session Rules (WAJIB — berlaku untuk semua AI session):**
 1. Commit PER FITUR, bukan satu commit besar
 2. Update handover & gemini.md setiap checkpoint
-3. Catat bug baru dengan nomor #55+
+3. Catat bug baru dengan nomor #58+
 4. Dark theme DILARANG — light pink theme untuk code blocks
 5. CSS scope ai-lab-content WAJIB di template CV
 6. Diagram kontras: lines ≥25% opacity, dots ≥75%, stroke ≥0.8px
@@ -272,4 +272,7 @@ Lainnya (2): python, modern
 13. Selalu bump cache buster (?v=...) di index.html setelah edit JS/CSS
 14. Jangan silent fail — tambah error feedback di UI
 15. JANGAN push ke GitHub kecuali diminta user
+16. GAS deployment: selalu redeploy web app setelah edit Code.gs
+17. Playwright: TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test
+18. Server lokal: node server.js → http://127.0.0.1:3000
 16. GAS deployment: selalu redeploy web app setelah edit Code.gs
