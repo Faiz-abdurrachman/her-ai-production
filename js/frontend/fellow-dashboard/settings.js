@@ -1704,21 +1704,16 @@
     }
 
     async function fetchParticipantDashboardData() {
-        const fallback = defaultParticipantDashboardData();
-        try {
-            const session = readParticipantSession();
-            const response = await fetch('/__gas', {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action: 'getParticipantDashboardData', nik: session?.nik || '' })
-            });
-            if (!response.ok) return fallback;
-            const result = await response.json();
-            if (result.status !== 'success') return fallback;
-            return { ...fallback, ...(result.data || {}) };
-        } catch {
-            return fallback;
-        }
+        var session = readParticipantSession();
+        var response = await fetch('/__gas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'getParticipantDashboardData', nik: session && session.nik ? session.nik : '' })
+        });
+        if (!response.ok) throw new Error('Gagal terhubung ke server.');
+        var result = await response.json();
+        if (result.status !== 'success') throw new Error(result.message || 'Gagal memuat data dashboard.');
+        return Object.assign({}, defaultParticipantDashboardData(), result.data || {});
     }
 
     function renderParticipantDashboard(data) {
@@ -1730,14 +1725,14 @@
             const isRealData = Array.isArray(data.modules) && data.modules.length > 3;
             const displayModules = isRealData ? modules.slice(0, 8) : modules;
             moduleGrid.innerHTML = displayModules.map((item) => `
-                <a class="module-card ${escapeHtml(item.tone || 'pink')}" href="${escapeHtml(item.href || '#/participant-modules')}">
+                <a class="module-card dash-real ${escapeHtml(item.tone || 'pink')}" href="${escapeHtml(item.href || '#/participant-modules')}">
                     <div class="module-icon"><i class="${escapeHtml(item.icon || 'fas fa-book-open')}"></i></div>
                     <span>${Number(item.progress || 0)}%</span>
                     <h3>${escapeHtml(item.title)}</h3>
                     <p>${escapeHtml(item.subtitle || 'Mulai belajar')}</p>
                 </a>
             `).join('') + `
-                <a class="module-card add" href="#/participant-modules">
+                <a class="module-card add dash-real" href="#/participant-modules">
                     <div class="module-icon"><i class="fas fa-grid-2"></i></div>
                     <h3>${isRealData ? 'Lihat Semua Modul (' + modules.length + ')' : 'Pilih Modul Lainnya'}</h3>
                     <p>Jelajahi semua modul pembelajaran</p>
@@ -1749,7 +1744,7 @@
         if (trail) {
             const discussionTrails = nonEmpty(data.discussionTrails, fallbackData.discussionTrails);
             trail.innerHTML = discussionTrails.map((item) => `
-                <li><span class="mini-avatar ${escapeHtml(item.tone || '')}"></span><p><strong>${escapeHtml(item.actor)}</strong> ${escapeHtml(item.action)} di diskusi <b>#${escapeHtml(item.topic)}</b><small>${escapeHtml(item.time)}</small></p><i></i></li>
+                <li class="dash-real"><span class="mini-avatar ${escapeHtml(item.tone || '')}"></span><p><strong>${escapeHtml(item.actor)}</strong> ${escapeHtml(item.action)} di diskusi <b>#${escapeHtml(item.topic)}</b><small>${escapeHtml(item.time)}</small></p><i></i></li>
             `).join('');
         }
 
@@ -1757,7 +1752,7 @@
         if (tracks) {
             const trackItems = nonEmpty(data.tracks, fallbackData.tracks);
             tracks.innerHTML = trackItems.map((item) => `
-                <article><i class="${escapeHtml(item.icon || 'fas fa-layer-group')}"></i><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.subtitle)}</span></article>
+                <article class="dash-real"><i class="${escapeHtml(item.icon || 'fas fa-layer-group')}"></i><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.subtitle)}</span></article>
             `).join('');
         }
 
@@ -1765,7 +1760,7 @@
         if (journey) {
             const journeyItems = nonEmpty(data.journey, fallbackData.journey);
             journey.innerHTML = journeyItems.map((item) => `
-                <article style="--accent:${escapeHtml(item.accent || '#f63392')};--value:${Number(item.progress || 0)}%">
+                <article class="dash-real" style="--accent:${escapeHtml(item.accent || '#f63392')};--value:${Number(item.progress || 0)}%">
                     <i class="${escapeHtml(item.icon || 'fas fa-book-open')}"></i>
                     <div><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.subtitle)}</span><b></b></div>
                     <em>${Number(item.progress || 0)}%</em>
@@ -1777,7 +1772,7 @@
         if (events) {
             const eventItems = nonEmpty(data.events, fallbackData.events);
             events.innerHTML = eventItems.map((item) => `
-                <article><time><strong>${escapeHtml(item.day)}</strong>${escapeHtml(item.month)}</time><div><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.time)}</p></div><a class="event-join-button" href="${escapeHtml(item.url || '#/participant-events')}">Gabung</a></article>
+                <article class="dash-real"><time><strong>${escapeHtml(item.day)}</strong>${escapeHtml(item.month)}</time><div><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.time)}</p></div><a class="event-join-button" href="${escapeHtml(item.url || '#/participant-events')}">Gabung</a></article>
             `).join('');
         }
 
@@ -1797,16 +1792,87 @@
                 const shouldPreferStoredName = (sameNik || sameName || !session?.name) && item.name && item.name !== '*********';
                 const cleanName = shouldPreferStoredName ? item.name : currentName;
                 const visibleName = isCurrent ? `${escapeHtml(cleanName || 'Kamu')} (Kamu)` : '*********';
-                return `<li class="${isCurrent ? 'current' : ''}"><span>${rank}</span><b class="avatar-small ${isCurrent ? 'pink' : 'masked'}">${isCurrent ? '' : '****'}</b><strong>${visibleName}</strong><em>${Number(item.points || 0).toLocaleString('id-ID')} Poin</em><i class="fas fa-medal ${medal}"></i></li>`;
+                return `<li class="dash-real${isCurrent ? ' current' : ''}"><span>${rank}</span><b class="avatar-small ${isCurrent ? 'pink' : 'masked'}">${isCurrent ? '' : '****'}</b><strong>${visibleName}</strong><em>${Number(item.points || 0).toLocaleString('id-ID')} Poin</em><i class="fas fa-medal ${medal}"></i></li>`;
             }).join('');
         }
     }
 
-    async function initParticipantDashboardData() {
-        renderParticipantDashboard(defaultParticipantDashboardData());
-        const data = await fetchParticipantDashboardData();
-        renderParticipantDashboard(data);
+    function renderDashboardSkeletons() {
+        var moduleGrid = document.getElementById('dashboardModuleGrid');
+        if (moduleGrid) {
+            moduleGrid.innerHTML = Array.from({ length: 9 }, function() {
+                return '<div class="skeleton-card"><div class="skeleton-icon"></div><div class="skeleton-title"></div><div class="skeleton-sub"></div><div class="skeleton-badge"></div></div>';
+            }).join('');
+        }
+
+        var trail = document.getElementById('dashboardDiscussionTrail');
+        if (trail) {
+            trail.innerHTML = Array.from({ length: 4 }, function() {
+                return '<li class="sk-item"><span class="skeleton-circle sm"></span><span class="skeleton-line med"></span></li>';
+            }).join('');
+        }
+
+        var tracks = document.getElementById('dashboardTrackGrid');
+        if (tracks) {
+            tracks.innerHTML = Array.from({ length: 6 }, function() {
+                return '<article class="sk-article"><span class="skeleton-circle md"></span><span class="skeleton-line"></span><span class="skeleton-line short"></span></article>';
+            }).join('');
+        }
+
+        var journey = document.getElementById('dashboardJourneyList');
+        if (journey) {
+            journey.innerHTML = Array.from({ length: 4 }, function() {
+                return '<article class="sk-article"><span class="skeleton-circle md"></span><div class="sk-lines"><span class="skeleton-line med"></span><span class="skeleton-line short"></span></div><span class="skeleton-circle sm"></span></article>';
+            }).join('');
+        }
+
+        var events = document.getElementById('dashboardUpcomingEvents');
+        if (events) {
+            events.innerHTML = Array.from({ length: 3 }, function() {
+                return '<article class="sk-article"><div class="sk-date"></div><div class="sk-lines"><span class="skeleton-line"></span><span class="skeleton-line short"></span></div></article>';
+            }).join('');
+        }
+
+        var leaderboard = document.getElementById('dashboardLeaderboard');
+        if (leaderboard) {
+            leaderboard.innerHTML = Array.from({ length: 3 }, function(_, i) {
+                return '<li class="sk-item"><span>' + (i + 1) + '</span><span class="skeleton-circle sm"></span><span class="skeleton-line med"></span></li>';
+            }).join('');
+        }
     }
+
+    function renderDashboardError(err) {
+        var message = (err && err.message) ? err.message : 'Gagal memuat data dashboard.';
+        var errorHTML = '<div class="dashboard-error"><i class="fas fa-cloud-exclamation"></i><p>' + escapeHtml(message) + '</p><button class="btn-retry" onclick="window.__retryDashboard()"><i class="fas fa-rotate-right"></i> Coba Lagi</button></div>';
+
+        ['dashboardModuleGrid', 'dashboardDiscussionTrail', 'dashboardTrackGrid',
+         'dashboardJourneyList', 'dashboardUpcomingEvents', 'dashboardLeaderboard']
+        .forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.innerHTML = errorHTML;
+        });
+    }
+
+    async function initParticipantDashboardData() {
+        renderDashboardSkeletons();
+
+        try {
+            var data = await fetchParticipantDashboardData();
+            var isRealData = Array.isArray(data.modules) && data.modules.length > 3;
+
+            if (isRealData) {
+                renderParticipantDashboard(data);
+            } else {
+                renderDashboardError(new Error('Data dashboard belum tersedia.'));
+            }
+        } catch (err) {
+            renderDashboardError(err);
+        }
+    }
+
+    window.__retryDashboard = function() {
+        initParticipantDashboardData();
+    };
 
     function initSettingsPage() {
         const form = document.getElementById('settingsProfileForm');
