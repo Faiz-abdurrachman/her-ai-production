@@ -1433,13 +1433,13 @@
         var analogyHtml = module.analogy ? '<div class="reasoning-scaffold-callout reasoning-analogy-callout" style="margin-top: 15px;"><i class="fas fa-lightbulb" aria-hidden="true"></i><p><strong>Analogi:</strong> ' + escapeHtml(module.analogy) + '</p></div>' : '';
 
         var heroHtml = '<header class="lesson-topic-banner">' +
-            '<h3><i class="' + escapeHtml(module.icon || 'fas fa-book-open') + '"></i> Topik ' + chapterNum + ': ' + escapeHtml(module.title) + '</h3>' +
+            '<h3><i class="' + escapeHtml(module.icon || 'fas fa-book-open') + '"></i>' + escapeHtml(module.title) + '</h3>' +
             '<p>' + (module.summary ? 'Goal: ' + escapeHtml(module.summary) : '') + '</p>' +
         '</header>' + 
         (module.objectives && module.objectives.length ? '<div class="ai-modern-objectives" style="margin-bottom: 24px;"><strong>Tujuan pembelajaran</strong><ul>' + objectivesHtml + '</ul></div>' : '') +
         (typeof analogyHtml !== 'undefined' ? analogyHtml : '');
 
-        var navHtml = '<nav class="reasoning-source-jumps reasoning-visual-nav ai-modern-learning-nav" data-reasoning-injected id="reasoning-visual-nav" aria-label="Tahapan Topik ' + chapterNum + ' dari ' + total + '">' +
+        var navHtml = '<nav class="reasoning-source-jumps reasoning-visual-nav ai-modern-learning-nav" data-reasoning-injected id="reasoning-visual-nav" aria-label="Tahapan ' + chapterNum + ' dari ' + total + '">' +
             '<span><i class="' + escapeHtml(module.icon) + '"></i> Jelajahi:</span>' +
             '<button type="button" data-jump="hook">Pembuka</button>' +
             '<button type="button" data-jump="konsep">Konsep</button>' +
