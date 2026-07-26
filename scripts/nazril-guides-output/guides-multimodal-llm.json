@@ -1,0 +1,543 @@
+{
+  "moduleId": "multimodal-llm",
+  "moduleTitle": "Multimodal Large Language Model",
+  "routePrefix": "multimodal-llm",
+  "guides": [
+    {
+      "hook": {
+        "question": "Apa Itu Modalitas?",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Modalitas adalah bentuk atau saluran informasi. Teks, gambar, audio, video, tabel, data sensor, dan posisi geografis dapat dianggap sebagai modalitas karena masing-masing memiliki struktur data dan cara interpretasi yang berbeda.\n\nContoh:"
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Apa Itu Modalitas?",
+          "Apa Itu Modalitas?\n\nModalitas adalah bentuk atau saluran informasi. Teks, gambar, audio, video, tabel, data sensor, dan posisi geografis dapat dianggap sebagai modalitas karena masing-masing memiliki struktur data dan cara interpretasi yang berbeda.\n\nContoh:",
+          "- kalimat memiliki urutan token,\n- gambar memiliki hubungan spasial antarpiksel,\n- audio memiliki gelombang dan urutan waktu,\n- video memiliki frame, gerakan, dan suara,\n- dokumen memiliki isi sekaligus tata letak,\n- tabel memiliki baris, kolom, tipe data, dan relasi.\n\nSistem multimodal mencoba menghubungkan informasi dari dua atau lebih modalitas untuk menyelesaikan tugas yang tidak dapat diselesaikan dengan baik oleh satu modalitas saja."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Apa Itu Modalitas?\n\nModalitas adalah bentuk atau saluran informasi. Teks, gambar, audio, video, tabel, data sensor, dan posisi geografis dapat dianggap sebagai modalitas karena masing-masing memiliki struktur data dan cara interpretasi yang berbeda.\n\nContoh:\n\n- kalimat memiliki urutan token,\n- gamba"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Apa yang dimaksud dengan modalitas?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "modalitas yang tersedia,",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "1"
+    },
+    {
+      "hook": {
+        "question": "Representasi sebagai Jembatan",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Model tidak menerima makna secara langsung. Setiap input perlu diubah menjadi tensor atau embedding. Representasi yang baik mempertahankan informasi yang penting bagi tugas dan mengurangi bagian yang tidak relevan.\n\n``text\nData mentah -> preprocessing -> encoder -> embedding / token\n``"
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Representasi sebagai Jembatan",
+          "Representasi sebagai Jembatan\n\nModel tidak menerima makna secara langsung. Setiap input perlu diubah menjadi tensor atau embedding. Representasi yang baik mempertahankan informasi yang penting bagi tugas dan mengurangi bagian yang tidak relevan.\n\n```text\nData mentah -> preprocessing -> encoder -> embedding / token\n```",
+          "Dua pertanyaan penting:\n\n1. Informasi apa yang dipertahankan?\n2. Informasi apa yang mungkin hilang?\n\nResize gambar dapat menghilangkan teks kecil. Kompresi audio dapat menghilangkan detail suara. Sampling video dapat melewatkan peristiwa singkat. Flatten tabel dapat merusak struktur baris dan kolom."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Representasi sebagai Jembatan\n\nModel tidak menerima makna secara langsung. Setiap input perlu diubah menjadi tensor atau embedding. Representasi yang baik mempertahankan informasi yang penting bagi tugas dan mengurangi bagian yang tidak relevan.\n\n```text\nData mentah -> preprocessing -> encoder -> em"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Apa dampak utama preprocessing terhadap kualitas multimodal?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "2"
+    },
+    {
+      "hook": {
+        "question": "Komponen Dasar",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "MLLM dapat terdiri dari beberapa komponen berikut:\n\n- encoder per modalitas,\n- tokenizer atau feature extractor,\n- projector atau connector,\n- fusion module,\n- language model,\n- decoder khusus modalitas,\n- tool router,\n- memory atau retrieval system."
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Komponen Dasar",
+          "Komponen Dasar\n\nMLLM dapat terdiri dari beberapa komponen berikut:",
+          "- encoder per modalitas,\n- tokenizer atau feature extractor,\n- projector atau connector,\n- fusion module,\n- language model,\n- decoder khusus modalitas,\n- tool router,\n- memory atau retrieval system.\n\nTidak semua sistem memakai seluruh komponen. Arsitektur dipilih sesuai tugas, data, dan batas komputasi."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Komponen Dasar\n\nMLLM dapat terdiri dari beberapa komponen berikut:\n\n- encoder per modalitas,\n- tokenizer atau feature extractor,\n- projector atau connector,\n- fusion module,\n- language model,\n- decoder khusus modalitas,\n- tool router,\n- memory atau retrieval system.\n\nTidak semua sistem memakai selur"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Apa perbedaan fungsi encoder dan projector?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "3"
+    },
+    {
+      "hook": {
+        "question": "Token Multimodal",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "MLLM sering mengubah informasi non-teks menjadi urutan token laten. Token tersebut bukan kata, melainkan vektor yang mewakili bagian atau ringkasan data.\n\nContoh:"
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Token Multimodal",
+          "Token Multimodal\n\nMLLM sering mengubah informasi non-teks menjadi urutan token laten. Token tersebut bukan kata, melainkan vektor yang mewakili bagian atau ringkasan data.\n\nContoh:",
+          "```text\nGambar -> 576 visual token\nAudio 10 detik -> 250 audio token\nTeks -> 120 language token\n```\n\nJumlah token memengaruhi biaya komputasi dan kapasitas konteks."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Token Multimodal\n\nMLLM sering mengubah informasi non-teks menjadi urutan token laten. Token tersebut bukan kata, melainkan vektor yang mewakili bagian atau ringkasan data.\n\nContoh:\n\n```text\nGambar -> 576 visual token\nAudio 10 detik -> 250 audio token\nTeks -> 120 language token\n```\n\nJumlah token meme"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Mengapa positional encoding berbeda antar modalitas?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "4"
+    },
+    {
+      "hook": {
+        "question": "Tahapan Pembelajaran",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Pipeline pembelajaran MLLM dapat meliputi:\n\n1. melatih encoder per modalitas,\n2. melakukan alignment dengan pasangan data,\n3. melatih connector atau fusion module,\n4. multimodal pretraining,\n5. instruction tuning,\n6. preference optimization atau safety tuning,\n7. domain adaptation."
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Tahapan Pembelajaran",
+          "Tahapan Pembelajaran\n\nPipeline pembelajaran MLLM dapat meliputi:",
+          "1. melatih encoder per modalitas,\n2. melakukan alignment dengan pasangan data,\n3. melatih connector atau fusion module,\n4. multimodal pretraining,\n5. instruction tuning,\n6. preference optimization atau safety tuning,\n7. domain adaptation.\n\nTidak semua model mengikuti urutan yang sama."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Tahapan Pembelajaran\n\nPipeline pembelajaran MLLM dapat meliputi:\n\n1. melatih encoder per modalitas,\n2. melakukan alignment dengan pasangan data,\n3. melatih connector atau fusion module,\n4. multimodal pretraining,\n5. instruction tuning,\n6. preference optimization atau safety tuning,\n7. domain adaptat"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Mengapa contrastive objective tidak cukup untuk instruction following?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "5"
+    },
+    {
+      "hook": {
+        "question": "Prompt sebagai Kontrak",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Prompt multimodal harus menjelaskan:\n\n1. tujuan,\n2. peran setiap input,\n3. sumber yang boleh digunakan,\n4. langkah analisis,\n5. format output,\n6. aturan ketidakpastian,\n7. larangan atau batasan."
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Prompt sebagai Kontrak",
+          "Prompt sebagai Kontrak\n\nPrompt multimodal harus menjelaskan:\n\n1. tujuan,\n2. peran setiap input,\n3. sumber yang boleh digunakan,\n4. langkah analisis,\n5. format output,\n6. aturan ketidakpastian,\n7. larangan atau batasan.",
+          "Contoh:\n\n```text\nTugas: buat ringkasan kondisi aset.\nInput:\n- Foto A: tampilan keseluruhan.\n- Foto B: close-up indikator.\n- Catatan teknisi: observasi lapangan.\n- Data sensor: nilai 10 menit terakhir.\n\nAturan:\n1. Pisahkan fakta yang terlihat, data terukur, dan interpretasi.\n2. Bila sumber bertentangan, laporkan konflik.\n3. Jangan menebak komponen yang tidak terlihat.\n4. Keluarkan JSON sesuai schema.\n```"
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Prompt sebagai Kontrak\n\nPrompt multimodal harus menjelaskan:\n\n1. tujuan,\n2. peran setiap input,\n3. sumber yang boleh digunakan,\n4. langkah analisis,\n5. format output,\n6. aturan ketidakpastian,\n7. larangan atau batasan.\n\nContoh:\n\n```text\nTugas: buat ringkasan kondisi aset.\nInput:\n- Foto A: tampilan k"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Mengapa setiap input perlu diberi label?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "6"
+    },
+    {
+      "hook": {
+        "question": "Multi-Image Reasoning",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Multi-image task dapat berupa:\n\n- perbandingan before-after,\n- pemilihan produk dari beberapa foto,\n- analisis beberapa sudut objek,\n- urutan proses,\n- pencarian perbedaan."
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Multi-Image Reasoning",
+          "Multi-Image Reasoning\n\nMulti-image task dapat berupa:\n\n- perbandingan before-after,\n- pemilihan produk dari beberapa foto,\n- analisis beberapa sudut objek,\n- urutan proses,\n- pencarian perbedaan.",
+          "Tantangan utama:\n\n- identitas objek antar foto,\n- urutan input,\n- sudut pandang,\n- pencahayaan,\n- perubahan yang tidak relevan.\n\nGunakan label dan pertanyaan spesifik. Hindari pertanyaan terlalu umum seperti “Apa bedanya?” tanpa konteks."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Multi-Image Reasoning\n\nMulti-image task dapat berupa:\n\n- perbandingan before-after,\n- pemilihan produk dari beberapa foto,\n- analisis beberapa sudut objek,\n- urutan proses,\n- pencarian perbedaan.\n\nTantangan utama:\n\n- identitas objek antar foto,\n- urutan input,\n- sudut pandang,\n- pencahayaan,\n- perub"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Mengapa dokumen panjang perlu retrieval?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "7"
+    },
+    {
+      "hook": {
+        "question": "Mengapa Multimodal RAG?",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Retrieval-Augmented Generation menambahkan informasi eksternal yang relevan saat inference. Pada multimodal RAG, item yang diambil dapat berupa teks, gambar, halaman dokumen, audio clip, video segment, atau data terstruktur.\n\nTujuan:"
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Mengapa Multimodal RAG?",
+          "Mengapa Multimodal RAG?\n\nRetrieval-Augmented Generation menambahkan informasi eksternal yang relevan saat inference. Pada multimodal RAG, item yang diambil dapat berupa teks, gambar, halaman dokumen, audio clip, video segment, atau data terstruktur.",
+          "Tujuan:\n\n- mengurangi context overload,\n- menjaga informasi tetap mutakhir,\n- menyediakan bukti,\n- membatasi data yang dikirim ke model,\n- meningkatkan kemampuan domain."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Mengapa Multimodal RAG?\n\nRetrieval-Augmented Generation menambahkan informasi eksternal yang relevan saat inference. Pada multimodal RAG, item yang diambil dapat berupa teks, gambar, halaman dokumen, audio clip, video segment, atau data terstruktur.\n\nTujuan:\n\n- mengurangi context overload,\n- menjaga"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Apa perbedaan unimodal dan cross-modal retrieval?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "8"
+    }
+  ]
+}

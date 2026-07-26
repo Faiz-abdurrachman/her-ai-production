@@ -1,0 +1,895 @@
+{
+  "moduleId": "front-end",
+  "moduleTitle": "Front-End Development untuk AI",
+  "routePrefix": "front-end",
+  "guides": [
+    {
+      "hook": {
+        "question": "Peran Front-end dan Karakteristik AI UX tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik ...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Front-end adalah ruang percakapan antara pengguna dan sistem. Desain yang baik bukan hanya terlihat rapi, tetapi membuat kemampuan, batasan, dan status AI dapat dipahami.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, kea"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan peran front-end dan karakterist...",
+          "Tentukan tujuan peran front-end dan karakteristik ai ux dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk interface serta feedback."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Dashboard Evaluasi Diri Berbasis Umpan Balik, tim perlu menerapkan peran front-en",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "interface",
+          "konsep penting dalam peran front-end dan karakteristik ai ux yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "feedback",
+          "konsep penting dalam peran front-end dan karakteristik ai ux yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "uncertainty",
+          "tingkat ketidakpastian yang perlu ditampilkan dan dikelola"
+        ],
+        [
+          "control",
+          "konsep penting dalam peran front-end dan karakteristik ai ux yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "trust",
+          "konsep penting dalam peran front-end dan karakteristik ai ux yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "failure",
+          "konsep penting dalam peran front-end dan karakteristik ai ux yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan interface dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan interface, feedback, uncertainty, control. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "1"
+    },
+    {
+      "hook": {
+        "question": "Fondasi HTML, CSS, dan JavaScript tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Front-end adalah ruang percakapan antara pengguna dan sistem. Desain yang baik bukan hanya terlihat rapi, tetapi membuat kemampuan, batasan, dan status AI dapat dipahami.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, kea"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan fondasi html, css, dan javascri...",
+          "Tentukan tujuan fondasi html, css, dan javascript dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk semantic HTML serta layout."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Dashboard Evaluasi Diri Berbasis Umpan Balik, tim perlu menerapkan fondasi html, ",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "semantic HTML",
+          "konsep penting dalam fondasi html, css, dan javascript yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "layout",
+          "konsep penting dalam fondasi html, css, dan javascript yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "responsive",
+          "konsep penting dalam fondasi html, css, dan javascript yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "DOM",
+          "konsep penting dalam fondasi html, css, dan javascript yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "event",
+          "konsep penting dalam fondasi html, css, dan javascript yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "module",
+          "konsep penting dalam fondasi html, css, dan javascript yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan semantic HTML dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan semantic HTML, layout, responsive, DOM. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "2"
+    },
+    {
+      "hook": {
+        "question": "Component, State, dan Data Flow tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu d...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Front-end adalah ruang percakapan antara pengguna dan sistem. Desain yang baik bukan hanya terlihat rapi, tetapi membuat kemampuan, batasan, dan status AI dapat dipahami.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, kea"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan component, state, dan data flow...",
+          "Tentukan tujuan component, state, dan data flow dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk component serta props."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Dashboard Evaluasi Diri Berbasis Umpan Balik, tim perlu menerapkan component, sta",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "component",
+          "konsep penting dalam component, state, dan data flow yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "props",
+          "konsep penting dalam component, state, dan data flow yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "state",
+          "konsep penting dalam component, state, dan data flow yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "derived state",
+          "konsep penting dalam component, state, dan data flow yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "lifecycle",
+          "konsep penting dalam component, state, dan data flow yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "architecture",
+          "konsep penting dalam component, state, dan data flow yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan component dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan component, props, state, derived state. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "3"
+    },
+    {
+      "hook": {
+        "question": "Integrasi API dan Async Interaction tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik sela...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Front-end adalah ruang percakapan antara pengguna dan sistem. Desain yang baik bukan hanya terlihat rapi, tetapi membuat kemampuan, batasan, dan status AI dapat dipahami.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, kea"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan integrasi api dan async interac...",
+          "Tentukan tujuan integrasi api dan async interaction dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk fetch serta promise."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Dashboard Evaluasi Diri Berbasis Umpan Balik, tim perlu menerapkan integrasi api ",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "fetch",
+          "konsep penting dalam integrasi api dan async interaction yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "promise",
+          "konsep penting dalam integrasi api dan async interaction yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "loading",
+          "konsep penting dalam integrasi api dan async interaction yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "timeout",
+          "konsep penting dalam integrasi api dan async interaction yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "retry",
+          "konsep penting dalam integrasi api dan async interaction yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "cancellation",
+          "konsep penting dalam integrasi api dan async interaction yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan fetch dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan fetch, promise, loading, timeout. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "4"
+    },
+    {
+      "hook": {
+        "question": "Chat, Streaming, dan Progressive Rendering tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang ba...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Front-end adalah ruang percakapan antara pengguna dan sistem. Desain yang baik bukan hanya terlihat rapi, tetapi membuat kemampuan, batasan, dan status AI dapat dipahami.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, kea"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan chat, streaming, dan progressiv...",
+          "Tentukan tujuan chat, streaming, dan progressive rendering dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk stream serta token."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Dashboard Evaluasi Diri Berbasis Umpan Balik, tim perlu menerapkan chat, streamin",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "stream",
+          "konsep penting dalam chat, streaming, dan progressive rendering yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "token",
+          "konsep penting dalam chat, streaming, dan progressive rendering yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "typing state",
+          "konsep penting dalam chat, streaming, dan progressive rendering yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "stop",
+          "konsep penting dalam chat, streaming, dan progressive rendering yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "regenerate",
+          "konsep penting dalam chat, streaming, dan progressive rendering yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "history",
+          "konsep penting dalam chat, streaming, dan progressive rendering yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan stream dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan stream, token, typing state, stop. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "5"
+    },
+    {
+      "hook": {
+        "question": "Upload Gambar, Audio, dan Dokumen tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Front-end adalah ruang percakapan antara pengguna dan sistem. Desain yang baik bukan hanya terlihat rapi, tetapi membuat kemampuan, batasan, dan status AI dapat dipahami.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, kea"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan upload gambar, audio, dan dokum...",
+          "Tentukan tujuan upload gambar, audio, dan dokumen dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk file input serta preview."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Dashboard Evaluasi Diri Berbasis Umpan Balik, tim perlu menerapkan upload gambar,",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "file input",
+          "konsep penting dalam upload gambar, audio, dan dokumen yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "preview",
+          "konsep penting dalam upload gambar, audio, dan dokumen yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "validation",
+          "konsep penting dalam upload gambar, audio, dan dokumen yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "progress",
+          "konsep penting dalam upload gambar, audio, dan dokumen yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "metadata",
+          "konsep penting dalam upload gambar, audio, dan dokumen yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "consent",
+          "konsep penting dalam upload gambar, audio, dan dokumen yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan file input dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan file input, preview, validation, progress. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "6"
+    },
+    {
+      "hook": {
+        "question": "Accessibility dan Internationalization tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik s...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Front-end adalah ruang percakapan antara pengguna dan sistem. Desain yang baik bukan hanya terlihat rapi, tetapi membuat kemampuan, batasan, dan status AI dapat dipahami.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, kea"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan accessibility dan international...",
+          "Tentukan tujuan accessibility dan internationalization dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk keyboard serta screen reader."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Dashboard Evaluasi Diri Berbasis Umpan Balik, tim perlu menerapkan accessibility ",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "keyboard",
+          "konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "screen reader",
+          "konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "contrast",
+          "konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "focus",
+          "konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "language",
+          "konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "locale",
+          "konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan keyboard dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan keyboard, screen reader, contrast, focus. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "7"
+    },
+    {
+      "hook": {
+        "question": "Keamanan dan Privasi di Browser tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu d...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Front-end adalah ruang percakapan antara pengguna dan sistem. Desain yang baik bukan hanya terlihat rapi, tetapi membuat kemampuan, batasan, dan status AI dapat dipahami.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, kea"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan keamanan dan privasi di browser...",
+          "Tentukan tujuan keamanan dan privasi di browser dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk XSS serta CSRF."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Dashboard Evaluasi Diri Berbasis Umpan Balik, tim perlu menerapkan keamanan dan p",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "XSS",
+          "konsep penting dalam keamanan dan privasi di browser yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "CSRF",
+          "konsep penting dalam keamanan dan privasi di browser yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "token",
+          "konsep penting dalam keamanan dan privasi di browser yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "CSP",
+          "konsep penting dalam keamanan dan privasi di browser yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "PII",
+          "konsep penting dalam keamanan dan privasi di browser yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "local storage",
+          "konsep penting dalam keamanan dan privasi di browser yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan XSS dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan XSS, CSRF, token, CSP. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "8"
+    }
+  ]
+}

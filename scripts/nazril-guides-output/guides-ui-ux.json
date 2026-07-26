@@ -1,0 +1,895 @@
+{
+  "moduleId": "ui-ux",
+  "moduleTitle": "UI/UX Design Thinking",
+  "routePrefix": "ui-ux",
+  "guides": [
+    {
+      "hook": {
+        "question": "Human-Centered Design dan Design Thinking tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang bai...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Desain seperti membuat jembatan: bentuk yang indah penting, tetapi jembatan baru berguna bila menghubungkan tempat yang benar, aman dilalui, dan dapat dipakai beragam orang.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan human-centered design dan desig...",
+          "Tentukan tujuan human-centered design dan design thinking dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk desirability serta feasibility."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Web Evaluasi Diri dan Potensi, tim perlu menerapkan human-centered design dan des",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "desirability",
+          "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "feasibility",
+          "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "viability",
+          "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "empathy",
+          "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "iteration",
+          "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "evidence",
+          "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan desirability dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan desirability, feasibility, viability, empathy. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "1"
+    },
+    {
+      "hook": {
+        "question": "Empathize dan User Research tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimul...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Desain seperti membuat jembatan: bentuk yang indah penting, tetapi jembatan baru berguna bila menghubungkan tempat yang benar, aman dilalui, dan dapat dipakai beragam orang.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan empathize dan user research dan...",
+          "Tentukan tujuan empathize dan user research dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk interview serta observation."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Web Evaluasi Diri dan Potensi, tim perlu menerapkan empathize dan user research s",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "interview",
+          "konsep penting dalam empathize dan user research yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "observation",
+          "konsep penting dalam empathize dan user research yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "survey",
+          "konsep penting dalam empathize dan user research yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "behavior",
+          "konsep penting dalam empathize dan user research yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "need",
+          "konsep penting dalam empathize dan user research yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "bias",
+          "konsep penting dalam empathize dan user research yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan interview dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan interview, observation, survey, behavior. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "2"
+    },
+    {
+      "hook": {
+        "question": "Define, Persona, dan Journey tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimu...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Desain seperti membuat jembatan: bentuk yang indah penting, tetapi jembatan baru berguna bila menghubungkan tempat yang benar, aman dilalui, dan dapat dipakai beragam orang.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan define, persona, dan journey da...",
+          "Tentukan tujuan define, persona, dan journey dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk problem statement serta persona."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Web Evaluasi Diri dan Potensi, tim perlu menerapkan define, persona, dan journey ",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "problem statement",
+          "konsep penting dalam define, persona, dan journey yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "persona",
+          "konsep penting dalam define, persona, dan journey yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "journey",
+          "konsep penting dalam define, persona, dan journey yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "pain point",
+          "konsep penting dalam define, persona, dan journey yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "opportunity",
+          "konsep penting dalam define, persona, dan journey yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "assumption",
+          "konsep penting dalam define, persona, dan journey yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan problem statement dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan problem statement, persona, journey, pain point. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "3"
+    },
+    {
+      "hook": {
+        "question": "Ideate dan Prioritization tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimulai...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Desain seperti membuat jembatan: bentuk yang indah penting, tetapi jembatan baru berguna bila menghubungkan tempat yang benar, aman dilalui, dan dapat dipakai beragam orang.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan ideate dan prioritization dan k...",
+          "Tentukan tujuan ideate dan prioritization dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk divergence serta convergence."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Web Evaluasi Diri dan Potensi, tim perlu menerapkan ideate dan prioritization sec",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "divergence",
+          "konsep penting dalam ideate dan prioritization yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "convergence",
+          "konsep penting dalam ideate dan prioritization yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "idea",
+          "konsep penting dalam ideate dan prioritization yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "impact",
+          "konsep penting dalam ideate dan prioritization yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "effort",
+          "konsep penting dalam ideate dan prioritization yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "hypothesis",
+          "konsep penting dalam ideate dan prioritization yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan divergence dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan divergence, convergence, idea, impact. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "4"
+    },
+    {
+      "hook": {
+        "question": "Information Architecture dan User Flow tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik s...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Desain seperti membuat jembatan: bentuk yang indah penting, tetapi jembatan baru berguna bila menghubungkan tempat yang benar, aman dilalui, dan dapat dipakai beragam orang.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan information architecture dan us...",
+          "Tentukan tujuan information architecture dan user flow dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk content serta hierarchy."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Web Evaluasi Diri dan Potensi, tim perlu menerapkan information architecture dan ",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "content",
+          "konsep penting dalam information architecture dan user flow yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "hierarchy",
+          "konsep penting dalam information architecture dan user flow yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "navigation",
+          "konsep penting dalam information architecture dan user flow yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "task flow",
+          "konsep penting dalam information architecture dan user flow yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "state",
+          "konsep penting dalam information architecture dan user flow yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "edge case",
+          "konsep penting dalam information architecture dan user flow yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan content dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan content, hierarchy, navigation, task flow. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "5"
+    },
+    {
+      "hook": {
+        "question": "Wireframe dan Prototyping tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimulai...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Desain seperti membuat jembatan: bentuk yang indah penting, tetapi jembatan baru berguna bila menghubungkan tempat yang benar, aman dilalui, dan dapat dipakai beragam orang.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan wireframe dan prototyping dan k...",
+          "Tentukan tujuan wireframe dan prototyping dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk fidelity serta wireframe."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Web Evaluasi Diri dan Potensi, tim perlu menerapkan wireframe dan prototyping sec",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "fidelity",
+          "konsep penting dalam wireframe dan prototyping yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "wireframe",
+          "konsep penting dalam wireframe dan prototyping yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "prototype",
+          "konsep penting dalam wireframe dan prototyping yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "interaction",
+          "konsep penting dalam wireframe dan prototyping yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "feedback",
+          "konsep penting dalam wireframe dan prototyping yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "scope",
+          "konsep penting dalam wireframe dan prototyping yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan fidelity dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan fidelity, wireframe, prototype, interaction. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "6"
+    },
+    {
+      "hook": {
+        "question": "Usability Testing dan Synthesis tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu d...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Desain seperti membuat jembatan: bentuk yang indah penting, tetapi jembatan baru berguna bila menghubungkan tempat yang benar, aman dilalui, dan dapat dipakai beragam orang.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan usability testing dan synthesis...",
+          "Tentukan tujuan usability testing dan synthesis dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk task serta participant."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Web Evaluasi Diri dan Potensi, tim perlu menerapkan usability testing dan synthes",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "task",
+          "konsep penting dalam usability testing dan synthesis yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "participant",
+          "konsep penting dalam usability testing dan synthesis yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "observation",
+          "konsep penting dalam usability testing dan synthesis yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "severity",
+          "konsep penting dalam usability testing dan synthesis yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "pattern",
+          "konsep penting dalam usability testing dan synthesis yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "iteration",
+          "konsep penting dalam usability testing dan synthesis yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan task dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan task, participant, observation, severity. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "7"
+    },
+    {
+      "hook": {
+        "question": "Visual Design dan Design System tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu d...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Desain seperti membuat jembatan: bentuk yang indah penting, tetapi jembatan baru berguna bila menghubungkan tempat yang benar, aman dilalui, dan dapat dipakai beragam orang.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan visual design dan design system...",
+          "Tentukan tujuan visual design dan design system dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk typography serta color."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Web Evaluasi Diri dan Potensi, tim perlu menerapkan visual design dan design syst",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "typography",
+          "konsep penting dalam visual design dan design system yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "color",
+          "konsep penting dalam visual design dan design system yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "spacing",
+          "konsep penting dalam visual design dan design system yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "component",
+          "konsep penting dalam visual design dan design system yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "token",
+          "konsep penting dalam visual design dan design system yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "consistency",
+          "konsep penting dalam visual design dan design system yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan typography dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan typography, color, spacing, component. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "8"
+    }
+  ]
+}

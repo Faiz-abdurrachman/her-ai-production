@@ -1,0 +1,895 @@
+{
+  "moduleId": "culture",
+  "moduleTitle": "AI untuk Budaya dan Warisan",
+  "routePrefix": "culture",
+  "guides": [
+    {
+      "hook": {
+        "question": "Konteks Budaya dan Intended Use tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu d...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: AI dalam budaya sebaiknya seperti pemandu museum yang rendah hati: membantu pengunjung menemukan hubungan, tetapi tidak menggantikan suara pemilik tradisi atau mengklaim satu interpretasi sebagai kebenaran tunggal.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan konteks budaya dan intended use...",
+          "Tentukan tujuan konteks budaya dan intended use dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk community serta context."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Digital Heritage Explorer, tim perlu menerapkan konteks budaya dan intended use s",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "community",
+          "konsep penting dalam konteks budaya dan intended use yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "context",
+          "konsep penting dalam konteks budaya dan intended use yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "intended use",
+          "tujuan, pengguna, konteks, dan batas penggunaan yang dinyatakan"
+        ],
+        [
+          "stakeholder",
+          "konsep penting dalam konteks budaya dan intended use yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "benefit",
+          "konsep penting dalam konteks budaya dan intended use yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "harm",
+          "konsep penting dalam konteks budaya dan intended use yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan community dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan community, context, intended use, stakeholder. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "1"
+    },
+    {
+      "hook": {
+        "question": "Digitization dan Preservasi Digital tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik sela...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: AI dalam budaya sebaiknya seperti pemandu museum yang rendah hati: membantu pengunjung menemukan hubungan, tetapi tidak menggantikan suara pemilik tradisi atau mengklaim satu interpretasi sebagai kebenaran tunggal.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan digitization dan preservasi dig...",
+          "Tentukan tujuan digitization dan preservasi digital dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk capture serta resolution."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Digital Heritage Explorer, tim perlu menerapkan digitization dan preservasi digit",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "capture",
+          "konsep penting dalam digitization dan preservasi digital yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "resolution",
+          "konsep penting dalam digitization dan preservasi digital yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "format",
+          "konsep penting dalam digitization dan preservasi digital yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "checksum",
+          "konsep penting dalam digitization dan preservasi digital yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "backup",
+          "konsep penting dalam digitization dan preservasi digital yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "preservation",
+          "konsep penting dalam digitization dan preservasi digital yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan capture dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan capture, resolution, format, checksum. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "2"
+    },
+    {
+      "hook": {
+        "question": "Metadata, Taksonomi, dan Ontologi tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: AI dalam budaya sebaiknya seperti pemandu museum yang rendah hati: membantu pengunjung menemukan hubungan, tetapi tidak menggantikan suara pemilik tradisi atau mengklaim satu interpretasi sebagai kebenaran tunggal.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan metadata, taksonomi, dan ontolo...",
+          "Tentukan tujuan metadata, taksonomi, dan ontologi dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk metadata serta vocabulary."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Digital Heritage Explorer, tim perlu menerapkan metadata, taksonomi, dan ontologi",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "metadata",
+          "konsep penting dalam metadata, taksonomi, dan ontologi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "vocabulary",
+          "konsep penting dalam metadata, taksonomi, dan ontologi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "ontology",
+          "model formal tentang konsep dan hubungan dalam suatu domain"
+        ],
+        [
+          "provenance",
+          "informasi asal, versi, pemilik, dan riwayat sebuah artefak"
+        ],
+        [
+          "multilingual",
+          "konsep penting dalam metadata, taksonomi, dan ontologi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "uncertainty",
+          "tingkat ketidakpastian yang perlu ditampilkan dan dikelola"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan metadata dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan metadata, vocabulary, ontology, provenance. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "3"
+    },
+    {
+      "hook": {
+        "question": "NLP untuk Bahasa dan Naskah Lokal tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: AI dalam budaya sebaiknya seperti pemandu museum yang rendah hati: membantu pengunjung menemukan hubungan, tetapi tidak menggantikan suara pemilik tradisi atau mengklaim satu interpretasi sebagai kebenaran tunggal.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan nlp untuk bahasa dan naskah lok...",
+          "Tentukan tujuan nlp untuk bahasa dan naskah lokal dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk OCR serta transcription."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Digital Heritage Explorer, tim perlu menerapkan nlp untuk bahasa dan naskah lokal",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "OCR",
+          "konsep penting dalam nlp untuk bahasa dan naskah lokal yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "transcription",
+          "konsep penting dalam nlp untuk bahasa dan naskah lokal yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "translation",
+          "konsep penting dalam nlp untuk bahasa dan naskah lokal yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "low-resource",
+          "konsep penting dalam nlp untuk bahasa dan naskah lokal yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "dialect",
+          "konsep penting dalam nlp untuk bahasa dan naskah lokal yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "annotation",
+          "konsep penting dalam nlp untuk bahasa dan naskah lokal yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan OCR dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan OCR, transcription, translation, low-resource. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "4"
+    },
+    {
+      "hook": {
+        "question": "Computer Vision untuk Artefak tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dim...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: AI dalam budaya sebaiknya seperti pemandu museum yang rendah hati: membantu pengunjung menemukan hubungan, tetapi tidak menggantikan suara pemilik tradisi atau mengklaim satu interpretasi sebagai kebenaran tunggal.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan computer vision untuk artefak d...",
+          "Tentukan tujuan computer vision untuk artefak dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk classification serta detection."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Digital Heritage Explorer, tim perlu menerapkan computer vision untuk artefak sec",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "classification",
+          "konsep penting dalam computer vision untuk artefak yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "detection",
+          "konsep penting dalam computer vision untuk artefak yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "similarity",
+          "konsep penting dalam computer vision untuk artefak yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "restoration",
+          "konsep penting dalam computer vision untuk artefak yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "condition",
+          "konsep penting dalam computer vision untuk artefak yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "provenance",
+          "informasi asal, versi, pemilik, dan riwayat sebuah artefak"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan classification dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan classification, detection, similarity, restoration. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "5"
+    },
+    {
+      "hook": {
+        "question": "Recommendation dan Cultural Discovery tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik se...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: AI dalam budaya sebaiknya seperti pemandu museum yang rendah hati: membantu pengunjung menemukan hubungan, tetapi tidak menggantikan suara pemilik tradisi atau mengklaim satu interpretasi sebagai kebenaran tunggal.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan recommendation dan cultural dis...",
+          "Tentukan tujuan recommendation dan cultural discovery dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk retrieval serta recommendation."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Digital Heritage Explorer, tim perlu menerapkan recommendation dan cultural disco",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "retrieval",
+          "proses menemukan informasi relevan dari sumber yang tersedia"
+        ],
+        [
+          "recommendation",
+          "konsep penting dalam recommendation dan cultural discovery yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "diversity",
+          "konsep penting dalam recommendation dan cultural discovery yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "serendipity",
+          "konsep penting dalam recommendation dan cultural discovery yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "filter bubble",
+          "konsep penting dalam recommendation dan cultural discovery yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "explanation",
+          "konsep penting dalam recommendation dan cultural discovery yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan retrieval dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan retrieval, recommendation, diversity, serendipity. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "6"
+    },
+    {
+      "hook": {
+        "question": "Generative AI dan Kreativitas tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dim...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: AI dalam budaya sebaiknya seperti pemandu museum yang rendah hati: membantu pengunjung menemukan hubungan, tetapi tidak menggantikan suara pemilik tradisi atau mengklaim satu interpretasi sebagai kebenaran tunggal.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan generative ai dan kreativitas d...",
+          "Tentukan tujuan generative ai dan kreativitas dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk generation serta co-creation."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Digital Heritage Explorer, tim perlu menerapkan generative ai dan kreativitas sec",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "generation",
+          "konsep penting dalam generative ai dan kreativitas yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "co-creation",
+          "konsep penting dalam generative ai dan kreativitas yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "style",
+          "konsep penting dalam generative ai dan kreativitas yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "attribution",
+          "konsep penting dalam generative ai dan kreativitas yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "consent",
+          "konsep penting dalam generative ai dan kreativitas yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "disclosure",
+          "konsep penting dalam generative ai dan kreativitas yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan generation dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan generation, co-creation, style, attribution. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "7"
+    },
+    {
+      "hook": {
+        "question": "Partisipasi Komunitas dan Citizen Curation tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang ba...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: AI dalam budaya sebaiknya seperti pemandu museum yang rendah hati: membantu pengunjung menemukan hubungan, tetapi tidak menggantikan suara pemilik tradisi atau mengklaim satu interpretasi sebagai kebenaran tunggal.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas "
+      },
+      "flow": [
+        [
+          "Tentukan tujuan partisipasi komunitas dan citiz...",
+          "Tentukan tujuan partisipasi komunitas dan citizen curation dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk participation serta validation."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Digital Heritage Explorer, tim perlu menerapkan partisipasi komunitas dan citizen",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "participation",
+          "konsep penting dalam partisipasi komunitas dan citizen curation yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "validation",
+          "konsep penting dalam partisipasi komunitas dan citizen curation yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "correction",
+          "konsep penting dalam partisipasi komunitas dan citizen curation yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "benefit sharing",
+          "konsep penting dalam partisipasi komunitas dan citizen curation yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "moderation",
+          "konsep penting dalam partisipasi komunitas dan citizen curation yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "governance",
+          "konsep penting dalam partisipasi komunitas dan citizen curation yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan participation dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan participation, validation, correction, benefit sharing. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "8"
+    }
+  ]
+}

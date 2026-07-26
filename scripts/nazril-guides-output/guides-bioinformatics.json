@@ -1,0 +1,895 @@
+{
+  "moduleId": "bioinformatics",
+  "moduleTitle": "Bioinformatics dan AI",
+  "routePrefix": "bioinformatics",
+  "guides": [
+    {
+      "hook": {
+        "question": "Fondasi Biologi Molekuler untuk Komputasi tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang bai...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Bioinformatika seperti membaca perpustakaan kehidupan: urutan huruf membawa informasi, tetapi maknanya baru muncul melalui konteks biologis, perbandingan, eksperimen, dan analisis ketidakpastian.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsi"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan fondasi biologi molekuler untuk...",
+          "Tentukan tujuan fondasi biologi molekuler untuk komputasi dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk DNA serta RNA."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Klasifikasi Sekuens dengan Biological Split, tim perlu menerapkan fondasi biologi",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "DNA",
+          "konsep penting dalam fondasi biologi molekuler untuk komputasi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "RNA",
+          "konsep penting dalam fondasi biologi molekuler untuk komputasi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "protein",
+          "konsep penting dalam fondasi biologi molekuler untuk komputasi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "gene",
+          "konsep penting dalam fondasi biologi molekuler untuk komputasi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "expression",
+          "konsep penting dalam fondasi biologi molekuler untuk komputasi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "central dogma",
+          "konsep penting dalam fondasi biologi molekuler untuk komputasi yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan DNA dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan DNA, RNA, protein, gene. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "1"
+    },
+    {
+      "hook": {
+        "question": "Sekuens, Format, dan Database Biologi tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik se...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Bioinformatika seperti membaca perpustakaan kehidupan: urutan huruf membawa informasi, tetapi maknanya baru muncul melalui konteks biologis, perbandingan, eksperimen, dan analisis ketidakpastian.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsi"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan sekuens, format, dan database b...",
+          "Tentukan tujuan sekuens, format, dan database biologi dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk FASTA serta FASTQ."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Klasifikasi Sekuens dengan Biological Split, tim perlu menerapkan sekuens, format",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "FASTA",
+          "konsep penting dalam sekuens, format, dan database biologi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "FASTQ",
+          "konsep penting dalam sekuens, format, dan database biologi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "quality score",
+          "konsep penting dalam sekuens, format, dan database biologi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "annotation",
+          "konsep penting dalam sekuens, format, dan database biologi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "accession",
+          "konsep penting dalam sekuens, format, dan database biologi yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "database",
+          "konsep penting dalam sekuens, format, dan database biologi yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan FASTA dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan FASTA, FASTQ, quality score, annotation. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "2"
+    },
+    {
+      "hook": {
+        "question": "Alignment dan Sequence Search tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dim...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Bioinformatika seperti membaca perpustakaan kehidupan: urutan huruf membawa informasi, tetapi maknanya baru muncul melalui konteks biologis, perbandingan, eksperimen, dan analisis ketidakpastian.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsi"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan alignment dan sequence search d...",
+          "Tentukan tujuan alignment dan sequence search dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk pairwise serta multiple alignment."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Klasifikasi Sekuens dengan Biological Split, tim perlu menerapkan alignment dan s",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "pairwise",
+          "konsep penting dalam alignment dan sequence search yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "multiple alignment",
+          "konsep penting dalam alignment dan sequence search yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "similarity",
+          "konsep penting dalam alignment dan sequence search yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "homology",
+          "konsep penting dalam alignment dan sequence search yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "score",
+          "konsep penting dalam alignment dan sequence search yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "gap",
+          "konsep penting dalam alignment dan sequence search yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan pairwise dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan pairwise, multiple alignment, similarity, homology. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "3"
+    },
+    {
+      "hook": {
+        "question": "Genomics dan Genome Assembly tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimu...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Bioinformatika seperti membaca perpustakaan kehidupan: urutan huruf membawa informasi, tetapi maknanya baru muncul melalui konteks biologis, perbandingan, eksperimen, dan analisis ketidakpastian.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsi"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan genomics dan genome assembly da...",
+          "Tentukan tujuan genomics dan genome assembly dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk read serta contig."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Klasifikasi Sekuens dengan Biological Split, tim perlu menerapkan genomics dan ge",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "read",
+          "konsep penting dalam genomics dan genome assembly yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "contig",
+          "konsep penting dalam genomics dan genome assembly yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "coverage",
+          "konsep penting dalam genomics dan genome assembly yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "assembly",
+          "konsep penting dalam genomics dan genome assembly yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "reference",
+          "konsep penting dalam genomics dan genome assembly yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "quality",
+          "konsep penting dalam genomics dan genome assembly yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan read dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan read, contig, coverage, assembly. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "4"
+    },
+    {
+      "hook": {
+        "question": "Transcriptomics dan Gene Expression tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik sela...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Bioinformatika seperti membaca perpustakaan kehidupan: urutan huruf membawa informasi, tetapi maknanya baru muncul melalui konteks biologis, perbandingan, eksperimen, dan analisis ketidakpastian.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsi"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan transcriptomics dan gene expres...",
+          "Tentukan tujuan transcriptomics dan gene expression dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk RNA-seq serta count."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Klasifikasi Sekuens dengan Biological Split, tim perlu menerapkan transcriptomics",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "RNA-seq",
+          "konsep penting dalam transcriptomics dan gene expression yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "count",
+          "konsep penting dalam transcriptomics dan gene expression yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "normalization",
+          "konsep penting dalam transcriptomics dan gene expression yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "differential expression",
+          "konsep penting dalam transcriptomics dan gene expression yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "batch effect",
+          "konsep penting dalam transcriptomics dan gene expression yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "pathway",
+          "konsep penting dalam transcriptomics dan gene expression yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan RNA-seq dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan RNA-seq, count, normalization, differential expression. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "5"
+    },
+    {
+      "hook": {
+        "question": "Variant Calling dan Annotation tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu di...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Bioinformatika seperti membaca perpustakaan kehidupan: urutan huruf membawa informasi, tetapi maknanya baru muncul melalui konteks biologis, perbandingan, eksperimen, dan analisis ketidakpastian.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsi"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan variant calling dan annotation ...",
+          "Tentukan tujuan variant calling dan annotation dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk variant serta SNP."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Klasifikasi Sekuens dengan Biological Split, tim perlu menerapkan variant calling",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "variant",
+          "konsep penting dalam variant calling dan annotation yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "SNP",
+          "konsep penting dalam variant calling dan annotation yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "indel",
+          "konsep penting dalam variant calling dan annotation yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "genotype",
+          "konsep penting dalam variant calling dan annotation yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "filter",
+          "konsep penting dalam variant calling dan annotation yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "annotation",
+          "konsep penting dalam variant calling dan annotation yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan variant dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan variant, SNP, indel, genotype. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "6"
+    },
+    {
+      "hook": {
+        "question": "Protein Structure dan Function tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu di...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Bioinformatika seperti membaca perpustakaan kehidupan: urutan huruf membawa informasi, tetapi maknanya baru muncul melalui konteks biologis, perbandingan, eksperimen, dan analisis ketidakpastian.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsi"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan protein structure dan function ...",
+          "Tentukan tujuan protein structure dan function dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk amino acid serta domain."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Klasifikasi Sekuens dengan Biological Split, tim perlu menerapkan protein structu",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "amino acid",
+          "konsep penting dalam protein structure dan function yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "domain",
+          "konsep penting dalam protein structure dan function yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "structure",
+          "konsep penting dalam protein structure dan function yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "binding",
+          "konsep penting dalam protein structure dan function yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "function",
+          "konsep penting dalam protein structure dan function yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "confidence",
+          "konsep penting dalam protein structure dan function yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan amino acid dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan amino acid, domain, structure, binding. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "7"
+    },
+    {
+      "hook": {
+        "question": "Machine Learning dan Biological Foundation Model tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan y...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Bioinformatika seperti membaca perpustakaan kehidupan: urutan huruf membawa informasi, tetapi maknanya baru muncul melalui konteks biologis, perbandingan, eksperimen, dan analisis ketidakpastian.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsi"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan machine learning dan biological...",
+          "Tentukan tujuan machine learning dan biological foundation model dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk embedding serta representation."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Klasifikasi Sekuens dengan Biological Split, tim perlu menerapkan machine learnin",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "embedding",
+          "konsep penting dalam machine learning dan biological foundation model yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "representation",
+          "konsep penting dalam machine learning dan biological foundation model yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "classification",
+          "konsep penting dalam machine learning dan biological foundation model yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "generative model",
+          "konsep penting dalam machine learning dan biological foundation model yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "transfer",
+          "konsep penting dalam machine learning dan biological foundation model yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "benchmark",
+          "konsep penting dalam machine learning dan biological foundation model yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan embedding dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan embedding, representation, classification, generative model. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "8"
+    }
+  ]
+}

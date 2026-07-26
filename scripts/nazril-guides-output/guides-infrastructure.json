@@ -1,0 +1,895 @@
+{
+  "moduleId": "infrastructure",
+  "moduleTitle": "Infrastruktur untuk AI",
+  "routePrefix": "infrastructure",
+  "guides": [
+    {
+      "hook": {
+        "question": "Arsitektur Infrastruktur AI tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimul...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Infrastruktur AI seperti fasilitas sebuah kota: model adalah aktivitas di dalamnya, sedangkan listrik, jalan, gudang, keamanan, dan pusat kendali menentukan apakah aktivitas dapat berlangsung stabil.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup k"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan arsitektur infrastruktur ai dan...",
+          "Tentukan tujuan arsitektur infrastruktur ai dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk workload serta training."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Platform Layanan AI Internal, tim perlu menerapkan arsitektur infrastruktur ai se",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "workload",
+          "konsep penting dalam arsitektur infrastruktur ai yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "training",
+          "konsep penting dalam arsitektur infrastruktur ai yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "inference",
+          "konsep penting dalam arsitektur infrastruktur ai yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "control plane",
+          "konsep penting dalam arsitektur infrastruktur ai yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "data plane",
+          "konsep penting dalam arsitektur infrastruktur ai yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "non-functional requirement",
+          "konsep penting dalam arsitektur infrastruktur ai yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan workload dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan workload, training, inference, control plane. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "1"
+    },
+    {
+      "hook": {
+        "question": "CPU, GPU, Accelerator, dan Memori tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Infrastruktur AI seperti fasilitas sebuah kota: model adalah aktivitas di dalamnya, sedangkan listrik, jalan, gudang, keamanan, dan pusat kendali menentukan apakah aktivitas dapat berlangsung stabil.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup k"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan cpu, gpu, accelerator, dan memo...",
+          "Tentukan tujuan cpu, gpu, accelerator, dan memori dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk CPU serta GPU."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Platform Layanan AI Internal, tim perlu menerapkan cpu, gpu, accelerator, dan mem",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "CPU",
+          "konsep penting dalam cpu, gpu, accelerator, dan memori yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "GPU",
+          "konsep penting dalam cpu, gpu, accelerator, dan memori yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "accelerator",
+          "konsep penting dalam cpu, gpu, accelerator, dan memori yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "VRAM",
+          "konsep penting dalam cpu, gpu, accelerator, dan memori yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "bandwidth",
+          "konsep penting dalam cpu, gpu, accelerator, dan memori yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "precision",
+          "konsep penting dalam cpu, gpu, accelerator, dan memori yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan CPU dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan CPU, GPU, accelerator, VRAM. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "2"
+    },
+    {
+      "hook": {
+        "question": "Storage dan Siklus Hidup Data tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dim...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Infrastruktur AI seperti fasilitas sebuah kota: model adalah aktivitas di dalamnya, sedangkan listrik, jalan, gudang, keamanan, dan pusat kendali menentukan apakah aktivitas dapat berlangsung stabil.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup k"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan storage dan siklus hidup data d...",
+          "Tentukan tujuan storage dan siklus hidup data dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk object storage serta block."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Platform Layanan AI Internal, tim perlu menerapkan storage dan siklus hidup data ",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "object storage",
+          "konsep penting dalam storage dan siklus hidup data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "block",
+          "konsep penting dalam storage dan siklus hidup data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "file",
+          "konsep penting dalam storage dan siklus hidup data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "IOPS",
+          "konsep penting dalam storage dan siklus hidup data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "throughput",
+          "jumlah pekerjaan yang dapat diselesaikan per satuan waktu"
+        ],
+        [
+          "tiering",
+          "konsep penting dalam storage dan siklus hidup data yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan object storage dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan object storage, block, file, IOPS. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "3"
+    },
+    {
+      "hook": {
+        "question": "Jaringan untuk Workload AI tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimula...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Infrastruktur AI seperti fasilitas sebuah kota: model adalah aktivitas di dalamnya, sedangkan listrik, jalan, gudang, keamanan, dan pusat kendali menentukan apakah aktivitas dapat berlangsung stabil.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup k"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan jaringan untuk workload ai dan ...",
+          "Tentukan tujuan jaringan untuk workload ai dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk latency serta bandwidth."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Platform Layanan AI Internal, tim perlu menerapkan jaringan untuk workload ai sec",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "latency",
+          "waktu yang dibutuhkan sistem untuk menghasilkan respons"
+        ],
+        [
+          "bandwidth",
+          "konsep penting dalam jaringan untuk workload ai yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "topology",
+          "konsep penting dalam jaringan untuk workload ai yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "load balancer",
+          "konsep penting dalam jaringan untuk workload ai yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "egress",
+          "konsep penting dalam jaringan untuk workload ai yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "private network",
+          "konsep penting dalam jaringan untuk workload ai yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan latency dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan latency, bandwidth, topology, load balancer. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "4"
+    },
+    {
+      "hook": {
+        "question": "Virtualization dan Container tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimu...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Infrastruktur AI seperti fasilitas sebuah kota: model adalah aktivitas di dalamnya, sedangkan listrik, jalan, gudang, keamanan, dan pusat kendali menentukan apakah aktivitas dapat berlangsung stabil.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup k"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan virtualization dan container da...",
+          "Tentukan tujuan virtualization dan container dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk virtual machine serta container."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Platform Layanan AI Internal, tim perlu menerapkan virtualization dan container s",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "virtual machine",
+          "konsep penting dalam virtualization dan container yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "container",
+          "konsep penting dalam virtualization dan container yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "image",
+          "konsep penting dalam virtualization dan container yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "runtime",
+          "konsep penting dalam virtualization dan container yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "isolation",
+          "konsep penting dalam virtualization dan container yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "registry",
+          "konsep penting dalam virtualization dan container yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan virtual machine dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan virtual machine, container, image, runtime. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "5"
+    },
+    {
+      "hook": {
+        "question": "Cloud, On-Premise, dan Hybrid tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dim...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Infrastruktur AI seperti fasilitas sebuah kota: model adalah aktivitas di dalamnya, sedangkan listrik, jalan, gudang, keamanan, dan pusat kendali menentukan apakah aktivitas dapat berlangsung stabil.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup k"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan cloud, on-premise, dan hybrid d...",
+          "Tentukan tujuan cloud, on-premise, dan hybrid dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk cloud serta on-premise."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Platform Layanan AI Internal, tim perlu menerapkan cloud, on-premise, dan hybrid ",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "cloud",
+          "konsep penting dalam cloud, on-premise, dan hybrid yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "on-premise",
+          "konsep penting dalam cloud, on-premise, dan hybrid yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "hybrid",
+          "konsep penting dalam cloud, on-premise, dan hybrid yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "elasticity",
+          "konsep penting dalam cloud, on-premise, dan hybrid yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "sovereignty",
+          "konsep penting dalam cloud, on-premise, dan hybrid yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "shared responsibility",
+          "konsep penting dalam cloud, on-premise, dan hybrid yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan cloud dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan cloud, on-premise, hybrid, elasticity. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "6"
+    },
+    {
+      "hook": {
+        "question": "Orkestrasi dengan Kubernetes tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimu...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Infrastruktur AI seperti fasilitas sebuah kota: model adalah aktivitas di dalamnya, sedangkan listrik, jalan, gudang, keamanan, dan pusat kendali menentukan apakah aktivitas dapat berlangsung stabil.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup k"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan orkestrasi dengan kubernetes da...",
+          "Tentukan tujuan orkestrasi dengan kubernetes dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk pod serta deployment."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Platform Layanan AI Internal, tim perlu menerapkan orkestrasi dengan kubernetes s",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "pod",
+          "konsep penting dalam orkestrasi dengan kubernetes yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "deployment",
+          "konsep penting dalam orkestrasi dengan kubernetes yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "service",
+          "konsep penting dalam orkestrasi dengan kubernetes yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "job",
+          "konsep penting dalam orkestrasi dengan kubernetes yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "autoscaling",
+          "konsep penting dalam orkestrasi dengan kubernetes yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "resource quota",
+          "konsep penting dalam orkestrasi dengan kubernetes yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan pod dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan pod, deployment, service, job. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "7"
+    },
+    {
+      "hook": {
+        "question": "Infrastructure as Code tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimulai da...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Infrastruktur AI seperti fasilitas sebuah kota: model adalah aktivitas di dalamnya, sedangkan listrik, jalan, gudang, keamanan, dan pusat kendali menentukan apakah aktivitas dapat berlangsung stabil.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup k"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan infrastructure as code dan kepu...",
+          "Tentukan tujuan infrastructure as code dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk declarative serta Terraform."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Platform Layanan AI Internal, tim perlu menerapkan infrastructure as code secara ",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "declarative",
+          "konsep penting dalam infrastructure as code yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "Terraform",
+          "konsep penting dalam infrastructure as code yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "module",
+          "konsep penting dalam infrastructure as code yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "state",
+          "konsep penting dalam infrastructure as code yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "review",
+          "konsep penting dalam infrastructure as code yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "drift",
+          "perubahan distribusi data atau hubungan yang dipelajari model"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan declarative dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan declarative, Terraform, module, state. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "8"
+    }
+  ]
+}

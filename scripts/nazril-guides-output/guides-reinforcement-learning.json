@@ -1,0 +1,559 @@
+{
+  "moduleId": "reinforcement-learning",
+  "moduleTitle": "Reinforcement Learning",
+  "routePrefix": "reinforcement-learning",
+  "guides": [
+    {
+      "hook": {
+        "question": "Apa itu Reinforcement Learning?",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Reinforcement Learning atau RL adalah cara melatih sistem agar dapat mengambil keputusan melalui interaksi. Sistem yang belajar disebut agent. Dunia tempat agent bertindak disebut environment. Setiap kali agent melakukan suatu action, environment memberikan kondisi baru dan sinyal penilaian yang disebut reward.\n\nTujuan agent bukan sekadar mendapatkan reward terbesar pada satu langkah. Tujuan utamanya adalah memilih rangkaian keputusan yang menghasilkan total reward jangka panjang sebaik mungkin."
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Apa itu Reinforcement Learning?",
+          "Apa itu Reinforcement Learning?\n\nReinforcement Learning atau RL adalah cara melatih sistem agar dapat mengambil keputusan melalui interaksi. Sistem yang belajar disebut **agent**. Dunia tempat agent bertindak disebut **environment**. Setiap kali agent melakukan suatu **action**, environment memberikan kondisi baru dan sinyal penilaian yang disebut **reward**.\n\nTujuan agent bukan sekadar mendapatkan reward terbesar pada satu langkah. Tujuan utamanya adalah memilih rangkaian keputusan yang menghasilkan **total reward jangka panjang** sebaik mungkin.",
+          "Bayangkan seseorang belajar bermain gim tanpa diberi kunci jawaban untuk setiap gerakan. Ia mencoba tindakan, melihat hasilnya, menerima skor, lalu memperbaiki strategi. Inilah pola dasar RL:\n\n```text\nagent memilih action\n        ↓\nenvironment berubah\n        ↓\nagent menerima state baru dan reward\n        ↓\nagent memperbaiki strategi\n```"
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Apa itu Reinforcement Learning?\n\nReinforcement Learning atau RL adalah cara melatih sistem agar dapat mengambil keputusan melalui interaksi. Sistem yang belajar disebut **agent**. Dunia tempat agent bertindak disebut **environment**. Setiap kali agent melakukan suatu **action**, environment memberik"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Mengapa reward berbeda dari label pada supervised learning?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "1"
+    },
+    {
+      "hook": {
+        "question": "Siklus Agent-Environment",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "RL dibangun dari interaksi berulang. Pada langkah waktu t:\n\n1. Agent mengamati state S_t.\n2. Agent memilih action A_t.\n3. Environment memproses action tersebut.\n4. Agent menerima reward R_(t+1).\n5. Agent berpindah ke state S_(t+1)."
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Siklus Agent-Environment",
+          "Siklus Agent-Environment\n\nRL dibangun dari interaksi berulang. Pada langkah waktu `t`:\n\n1. Agent mengamati state `S_t`.\n2. Agent memilih action `A_t`.\n3. Environment memproses action tersebut.\n4. Agent menerima reward `R_(t+1)`.\n5. Agent berpindah ke state `S_(t+1)`.",
+          "```text\nState S_t → Agent → Action A_t → Environment\n     ↑                              ↓\n     └──── Reward R_(t+1), State S_(t+1)\n```\n\n### Contoh: Robot Pengantar\n\n- **Agent:** perangkat lunak pengendali robot.\n- **Environment:** peta gedung, lorong, orang, dan rintangan.\n- **State:** posisi robot, arah, jarak ke tujuan, status baterai.\n- **Action:** maju, mundur, belok kiri, belok kanan, berhenti.\n- **Reward:** positif saat mendekati atau mencapai tujuan; negatif saat menabrak atau boros energi."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Siklus Agent-Environment\n\nRL dibangun dari interaksi berulang. Pada langkah waktu `t`:\n\n1. Agent mengamati state `S_t`.\n2. Agent memilih action `A_t`.\n3. Environment memproses action tersebut.\n4. Agent menerima reward `R_(t+1)`.\n5. Agent berpindah ke state `S_(t+1)`.\n\n```text\nState S_t → Agent → Act"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Apa perbedaan state dan observation?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "2"
+    },
+    {
+      "hook": {
+        "question": "Reward Bukan Tujuan yang Sempurna",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Reward adalah angka yang digunakan untuk mengarahkan proses belajar. Reward bukan selalu representasi sempurna dari tujuan manusia.\n\nContoh: jika robot hanya diberi reward untuk bergerak cepat, robot dapat memilih jalur berbahaya. Jika sistem belajar hanya diberi reward berdasarkan waktu penggunaan, sistem mungkin mendorong interaksi berlebihan, bukan pembelajaran yang sehat."
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Reward Bukan Tujuan yang Sempurna",
+          "Reward Bukan Tujuan yang Sempurna\n\nReward adalah angka yang digunakan untuk mengarahkan proses belajar. Reward bukan selalu representasi sempurna dari tujuan manusia.\n\nContoh: jika robot hanya diberi reward untuk bergerak cepat, robot dapat memilih jalur berbahaya. Jika sistem belajar hanya diberi reward berdasarkan waktu penggunaan, sistem mungkin mendorong interaksi berlebihan, bukan pembelajaran yang sehat.",
+          "Karena itu, reward harus dirancang dengan mempertimbangkan:\n\n- tujuan utama,\n- batasan keselamatan,\n- dampak jangka panjang,\n- kemungkinan agent mencari celah,\n- kelompok pengguna yang mungkin dirugikan."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Reward Bukan Tujuan yang Sempurna\n\nReward adalah angka yang digunakan untuk mengarahkan proses belajar. Reward bukan selalu representasi sempurna dari tujuan manusia.\n\nContoh: jika robot hanya diberi reward untuk bergerak cepat, robot dapat memilih jalur berbahaya. Jika sistem belajar hanya diberi r"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Apa perbedaan reward dan return?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "3"
+    },
+    {
+      "hook": {
+        "question": "Policy",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Policy adalah strategi agent dalam memilih action berdasarkan state.\n\nPolicy deterministik:"
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Policy",
+          "Policy\n\n**Policy** adalah strategi agent dalam memilih action berdasarkan state.\n\nPolicy deterministik:\n\n```text\nA_t = pi(S_t)\n```\n\nSatu state menghasilkan satu action.",
+          "Policy stokastik:\n\n```text\npi(a | s) = probabilitas memilih action a pada state s\n```\n\nContoh policy stokastik pada satu state:\n\nPolicy stokastik berguna ketika agent perlu eksplorasi atau ketika beberapa tindakan sama-sama masuk akal."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Policy\n\n**Policy** adalah strategi agent dalam memilih action berdasarkan state.\n\nPolicy deterministik:\n\n```text\nA_t = pi(S_t)\n```\n\nSatu state menghasilkan satu action.\n\nPolicy stokastik:\n\n```text\npi(a | s) = probabilitas memilih action a pada state s\n```\n\nContoh policy stokastik pada satu state:\n\n|"
+        ]
+      ],
+      "glossary": [
+        [
+          "Action",
+          "Probabilitas"
+        ],
+        [
+          "Atas",
+          "0.60"
+        ],
+        [
+          "Kanan",
+          "0.25"
+        ],
+        [
+          "Kiri",
+          "0.10"
+        ],
+        [
+          "Bawah",
+          "0.05"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Apa perbedaan V(s) dan Q(s,a)?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "4"
+    },
+    {
+      "hook": {
+        "question": "Dilema Utama",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Agent harus memilih antara:\n\n- Exploitation: memilih action yang saat ini terlihat paling baik.\n- Exploration: mencoba action lain untuk memperoleh informasi baru."
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Dilema Utama",
+          "Dilema Utama\n\nAgent harus memilih antara:",
+          "- **Exploitation:** memilih action yang saat ini terlihat paling baik.\n- **Exploration:** mencoba action lain untuk memperoleh informasi baru.\n\nTerlalu banyak exploitation membuat agent cepat puas pada strategi yang mungkin belum optimal. Terlalu banyak exploration membuat hasil tidak stabil dan dapat membuang sumber daya."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Dilema Utama\n\nAgent harus memilih antara:\n\n- **Exploitation:** memilih action yang saat ini terlihat paling baik.\n- **Exploration:** mencoba action lain untuk memperoleh informasi baru.\n\nTerlalu banyak exploitation membuat agent cepat puas pada strategi yang mungkin belum optimal. Terlalu banyak exp"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Apa risiko exploitation terlalu dini?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "5"
+    },
+    {
+      "hook": {
+        "question": "Model-Free Learning",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Pada banyak kasus, agent tidak mengetahui aturan transisi environment. Agent hanya memiliki pengalaman:\n\n``text\n(state, action, reward, next_state)\n``"
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Model-Free Learning",
+          "Model-Free Learning\n\nPada banyak kasus, agent tidak mengetahui aturan transisi environment. Agent hanya memiliki pengalaman:\n\n```text\n(state, action, reward, next_state)\n```",
+          "Metode yang belajar langsung dari pengalaman tanpa model transisi lengkap disebut **model-free**.\n\nDua keluarga dasar:\n\n- Monte Carlo: belajar dari return setelah episode selesai.\n- Temporal-Difference: memperbarui nilai sebelum episode selesai menggunakan perkiraan nilai berikutnya."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Model-Free Learning\n\nPada banyak kasus, agent tidak mengetahui aturan transisi environment. Agent hanya memiliki pengalaman:\n\n```text\n(state, action, reward, next_state)\n```\n\nMetode yang belajar langsung dari pengalaman tanpa model transisi lengkap disebut **model-free**.\n\nDua keluarga dasar:\n\n- Mon"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Mengapa Monte Carlo perlu menunggu episode selesai?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Hitung return Monte Carlo dari setiap langkah.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "6"
+    },
+    {
+      "hook": {
+        "question": "Control Problem",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Policy evaluation hanya menilai policy. Pada control problem, agent ingin menemukan policy yang semakin baik.\n\nSARSA dan Q-learning mempelajari action-value Q(s,a), lalu menggunakan nilai itu untuk memilih action."
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Control Problem",
+          "Control Problem\n\nPolicy evaluation hanya menilai policy. Pada control problem, agent ingin menemukan policy yang semakin baik.",
+          "SARSA dan Q-learning mempelajari action-value `Q(s,a)`, lalu menggunakan nilai itu untuk memilih action."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Control Problem\n\nPolicy evaluation hanya menilai policy. Pada control problem, agent ingin menemukan policy yang semakin baik.\n\nSARSA dan Q-learning mempelajari action-value `Q(s,a)`, lalu menggunakan nilai itu untuk memilih action."
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Apa arti on-policy dan off-policy?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "target Q-learning,",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "7"
+    },
+    {
+      "hook": {
+        "question": "Mengapa Q-Table Tidak Cukup?",
+        "answerA": {
+          "label": "Mitos",
+          "text": "Jawaban umum yang perlu diluruskan.",
+          "icon": "fas fa-times-circle"
+        },
+        "answerB": {
+          "label": "Fakta",
+          "text": "Pemahaman benar berdasarkan bukti dan praktik.",
+          "icon": "fas fa-check-circle"
+        },
+        "message": "Q-table bekerja baik ketika jumlah state-action kecil. Namun, banyak masalah memiliki:\n\n- state kontinu,\n- gambar berukuran besar,\n- kombinasi state yang sangat banyak,\n- observation yang berubah terus-menerus."
+      },
+      "flow": [
+        [
+          "Persiapan",
+          "Pelajari materi bab ini."
+        ],
+        [
+          "Eksekusi",
+          "Praktikkan konsep yang dipelajari."
+        ],
+        [
+          "Verifikasi",
+          "Kerjakan checkpoint dan latihan."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Mengapa Q-Table Tidak Cukup?",
+          "Mengapa Q-Table Tidak Cukup?\n\nQ-table bekerja baik ketika jumlah state-action kecil. Namun, banyak masalah memiliki:\n\n- state kontinu,\n- gambar berukuran besar,\n- kombinasi state yang sangat banyak,\n- observation yang berubah terus-menerus.\n\nMisalnya, gambar 84 x 84 piksel memiliki ruang kemungkinan sangat besar. Menyimpan satu baris Q untuk setiap gambar tidak realistis.",
+          "Solusinya adalah **function approximation**:\n\n```text\nQ(s,a; theta)\n```\n\nModel berparameter `theta` menerima state dan menghasilkan perkiraan Q-value."
+        ]
+      ],
+      "workedExample": [
+        "Penerapan Konsep",
+        [
+          "Deskripsi",
+          "Mengapa Q-Table Tidak Cukup?\n\nQ-table bekerja baik ketika jumlah state-action kecil. Namun, banyak masalah memiliki:\n\n- state kontinu,\n- gambar berukuran besar,\n- kombinasi state yang sangat banyak,\n- observation yang berubah terus-menerus.\n\nMisalnya, gambar 84 x 84 piksel memiliki ruang kemungkinan"
+        ]
+      ],
+      "glossary": [
+        [
+          "Konsep",
+          "Definisi."
+        ]
+      ],
+      "quickCheck": {
+        "question": "Mengapa Q-table tidak cocok untuk gambar?",
+        "options": [
+          "Jawaban A",
+          "Jawaban B",
+          "Jawaban C"
+        ],
+        "answer": 0,
+        "explanationCorrect": "Tepat.",
+        "explanationWrong": "Coba pikirkan ulang."
+      },
+      "challenge": {
+        "instruction": "Tulis ringkasan bab ini dengan kalimat Anda sendiri.",
+        "placeholder": "Tulis di sini...",
+        "example": ""
+      },
+      "roadmapRef": "8"
+    }
+  ]
+}

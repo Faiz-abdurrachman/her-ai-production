@@ -1,0 +1,895 @@
+{
+  "moduleId": "data-science",
+  "moduleTitle": "Data Science",
+  "routePrefix": "data-science",
+  "guides": [
+    {
+      "hook": {
+        "question": "Problem Framing dan Metrik Keberhasilan tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik ...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data scientist seperti detektif ilmiah: menyusun pertanyaan, memeriksa kualitas bukti, menguji dugaan, lalu menjelaskan tingkat keyakinan dan keterbatasannya.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, keamanan, biaya"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan problem framing dan metrik kebe...",
+          "Tentukan tujuan problem framing dan metrik keberhasilan dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk tujuan serta keputusan."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Prediksi Risiko Churn Pelanggan, tim perlu menerapkan problem framing dan metrik ",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "tujuan",
+          "konsep penting dalam problem framing dan metrik keberhasilan yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "keputusan",
+          "konsep penting dalam problem framing dan metrik keberhasilan yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "unit analisis",
+          "konsep penting dalam problem framing dan metrik keberhasilan yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "target",
+          "konsep penting dalam problem framing dan metrik keberhasilan yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "constraint",
+          "konsep penting dalam problem framing dan metrik keberhasilan yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "metric",
+          "ukuran terdefinisi yang digunakan untuk memantau kondisi atau hasil"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan tujuan dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan tujuan, keputusan, unit analisis, target. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "1"
+    },
+    {
+      "hook": {
+        "question": "Memahami Proses Pembentukan Data tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu ...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data scientist seperti detektif ilmiah: menyusun pertanyaan, memeriksa kualitas bukti, menguji dugaan, lalu menjelaskan tingkat keyakinan dan keterbatasannya.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, keamanan, biaya"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan memahami proses pembentukan dat...",
+          "Tentukan tujuan memahami proses pembentukan data dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk data generating process serta selection bias."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Prediksi Risiko Churn Pelanggan, tim perlu menerapkan memahami proses pembentukan",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "data generating process",
+          "konsep penting dalam memahami proses pembentukan data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "selection bias",
+          "konsep penting dalam memahami proses pembentukan data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "label",
+          "konsep penting dalam memahami proses pembentukan data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "leakage",
+          "konsep penting dalam memahami proses pembentukan data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "missingness",
+          "konsep penting dalam memahami proses pembentukan data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "sampling",
+          "konsep penting dalam memahami proses pembentukan data yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan data generating process dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan data generating process, selection bias, label, leakage. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "2"
+    },
+    {
+      "hook": {
+        "question": "Exploratory Data Analysis tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimulai...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data scientist seperti detektif ilmiah: menyusun pertanyaan, memeriksa kualitas bukti, menguji dugaan, lalu menjelaskan tingkat keyakinan dan keterbatasannya.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, keamanan, biaya"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan exploratory data analysis dan k...",
+          "Tentukan tujuan exploratory data analysis dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk distribusi serta outlier."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Prediksi Risiko Churn Pelanggan, tim perlu menerapkan exploratory data analysis s",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "distribusi",
+          "konsep penting dalam exploratory data analysis yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "outlier",
+          "konsep penting dalam exploratory data analysis yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "korelasi",
+          "konsep penting dalam exploratory data analysis yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "segmentasi",
+          "konsep penting dalam exploratory data analysis yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "visualisasi",
+          "konsep penting dalam exploratory data analysis yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "hipotesis",
+          "konsep penting dalam exploratory data analysis yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan distribusi dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan distribusi, outlier, korelasi, segmentasi. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "3"
+    },
+    {
+      "hook": {
+        "question": "Pembersihan dan Preprocessing tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dim...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data scientist seperti detektif ilmiah: menyusun pertanyaan, memeriksa kualitas bukti, menguji dugaan, lalu menjelaskan tingkat keyakinan dan keterbatasannya.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, keamanan, biaya"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan pembersihan dan preprocessing d...",
+          "Tentukan tujuan pembersihan dan preprocessing dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk imputation serta encoding."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Prediksi Risiko Churn Pelanggan, tim perlu menerapkan pembersihan dan preprocessi",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "imputation",
+          "konsep penting dalam pembersihan dan preprocessing yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "encoding",
+          "konsep penting dalam pembersihan dan preprocessing yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "scaling",
+          "konsep penting dalam pembersihan dan preprocessing yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "duplicate",
+          "konsep penting dalam pembersihan dan preprocessing yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "pipeline",
+          "konsep penting dalam pembersihan dan preprocessing yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "split",
+          "konsep penting dalam pembersihan dan preprocessing yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan imputation dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan imputation, encoding, scaling, duplicate. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "4"
+    },
+    {
+      "hook": {
+        "question": "Feature Engineering dan Baseline tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu ...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data scientist seperti detektif ilmiah: menyusun pertanyaan, memeriksa kualitas bukti, menguji dugaan, lalu menjelaskan tingkat keyakinan dan keterbatasannya.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, keamanan, biaya"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan feature engineering dan baselin...",
+          "Tentukan tujuan feature engineering dan baseline dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk feature serta domain knowledge."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Prediksi Risiko Churn Pelanggan, tim perlu menerapkan feature engineering dan bas",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "feature",
+          "representasi terukur yang digunakan analisis atau model"
+        ],
+        [
+          "domain knowledge",
+          "konsep penting dalam feature engineering dan baseline yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "baseline",
+          "pendekatan sederhana sebagai pembanding minimum"
+        ],
+        [
+          "benchmark",
+          "konsep penting dalam feature engineering dan baseline yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "leakage",
+          "konsep penting dalam feature engineering dan baseline yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "simplicity",
+          "konsep penting dalam feature engineering dan baseline yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan feature dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan feature, domain knowledge, baseline, benchmark. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "5"
+    },
+    {
+      "hook": {
+        "question": "Pemodelan dan Pemilihan Algoritma tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data scientist seperti detektif ilmiah: menyusun pertanyaan, memeriksa kualitas bukti, menguji dugaan, lalu menjelaskan tingkat keyakinan dan keterbatasannya.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, keamanan, biaya"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan pemodelan dan pemilihan algorit...",
+          "Tentukan tujuan pemodelan dan pemilihan algoritma dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk regression serta classification."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Prediksi Risiko Churn Pelanggan, tim perlu menerapkan pemodelan dan pemilihan alg",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "regression",
+          "konsep penting dalam pemodelan dan pemilihan algoritma yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "classification",
+          "konsep penting dalam pemodelan dan pemilihan algoritma yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "tree",
+          "konsep penting dalam pemodelan dan pemilihan algoritma yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "ensemble",
+          "konsep penting dalam pemodelan dan pemilihan algoritma yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "calibration",
+          "kesesuaian antara skor probabilitas dan frekuensi kejadian nyata"
+        ],
+        [
+          "trade-off",
+          "konsep penting dalam pemodelan dan pemilihan algoritma yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan regression dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan regression, classification, tree, ensemble. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "6"
+    },
+    {
+      "hook": {
+        "question": "Validasi, Eksperimen, dan Kausalitas tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik sel...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data scientist seperti detektif ilmiah: menyusun pertanyaan, memeriksa kualitas bukti, menguji dugaan, lalu menjelaskan tingkat keyakinan dan keterbatasannya.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, keamanan, biaya"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan validasi, eksperimen, dan kausa...",
+          "Tentukan tujuan validasi, eksperimen, dan kausalitas dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk cross-validation serta time split."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Prediksi Risiko Churn Pelanggan, tim perlu menerapkan validasi, eksperimen, dan k",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "cross-validation",
+          "konsep penting dalam validasi, eksperimen, dan kausalitas yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "time split",
+          "konsep penting dalam validasi, eksperimen, dan kausalitas yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "A/B test",
+          "konsep penting dalam validasi, eksperimen, dan kausalitas yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "confounder",
+          "konsep penting dalam validasi, eksperimen, dan kausalitas yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "causal effect",
+          "konsep penting dalam validasi, eksperimen, dan kausalitas yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "power",
+          "konsep penting dalam validasi, eksperimen, dan kausalitas yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan cross-validation dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan cross-validation, time split, A/B test, confounder. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "7"
+    },
+    {
+      "hook": {
+        "question": "Interpretasi dan Komunikasi Hasil tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data scientist seperti detektif ilmiah: menyusun pertanyaan, memeriksa kualitas bukti, menguji dugaan, lalu menjelaskan tingkat keyakinan dan keterbatasannya.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan, keamanan, biaya"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan interpretasi dan komunikasi has...",
+          "Tentukan tujuan interpretasi dan komunikasi hasil dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk feature importance serta SHAP."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Prediksi Risiko Churn Pelanggan, tim perlu menerapkan interpretasi dan komunikasi",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "feature importance",
+          "konsep penting dalam interpretasi dan komunikasi hasil yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "SHAP",
+          "konsep penting dalam interpretasi dan komunikasi hasil yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "uncertainty",
+          "tingkat ketidakpastian yang perlu ditampilkan dan dikelola"
+        ],
+        [
+          "narrative",
+          "konsep penting dalam interpretasi dan komunikasi hasil yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "visualization",
+          "konsep penting dalam interpretasi dan komunikasi hasil yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "recommendation",
+          "konsep penting dalam interpretasi dan komunikasi hasil yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan feature importance dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan feature importance, SHAP, uncertainty, narrative. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "8"
+    }
+  ]
+}

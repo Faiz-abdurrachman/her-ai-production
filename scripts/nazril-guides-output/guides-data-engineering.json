@@ -1,0 +1,895 @@
+{
+  "moduleId": "data-engineering",
+  "moduleTitle": "Data Engineering",
+  "routePrefix": "data-engineering",
+  "guides": [
+    {
+      "hook": {
+        "question": "Peran dan Arsitektur Data Engineering tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik se...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data engineer seperti perancang sistem air kota: bukan hanya memindahkan air, tetapi memastikan sumber, pipa, penyimpanan, tekanan, kebersihan, dan pemantauan bekerja bersama.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan peran dan arsitektur data engin...",
+          "Tentukan tujuan peran dan arsitektur data engineering dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk sumber data serta ingestion."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Pipeline Analitik Penjualan, tim perlu menerapkan peran dan arsitektur data engin",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "sumber data",
+          "konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "ingestion",
+          "konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "storage",
+          "konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "transformation",
+          "konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "serving",
+          "konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "konsumen data",
+          "konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan sumber data dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan sumber data, ingestion, storage, transformation. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "1"
+    },
+    {
+      "hook": {
+        "question": "Sumber Data, Format, dan Data Contract tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik s...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data engineer seperti perancang sistem air kota: bukan hanya memindahkan air, tetapi memastikan sumber, pipa, penyimpanan, tekanan, kebersihan, dan pemantauan bekerja bersama.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan sumber data, format, dan data c...",
+          "Tentukan tujuan sumber data, format, dan data contract dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk CSV serta JSON."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Pipeline Analitik Penjualan, tim perlu menerapkan sumber data, format, dan data c",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "CSV",
+          "konsep penting dalam sumber data, format, dan data contract yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "JSON",
+          "konsep penting dalam sumber data, format, dan data contract yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "Parquet",
+          "konsep penting dalam sumber data, format, dan data contract yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "database",
+          "konsep penting dalam sumber data, format, dan data contract yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "API",
+          "konsep penting dalam sumber data, format, dan data contract yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "schema",
+          "aturan bentuk, tipe, dan makna field data"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan CSV dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan CSV, JSON, Parquet, database. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "2"
+    },
+    {
+      "hook": {
+        "question": "Batch Processing dan Stream Processing tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik s...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data engineer seperti perancang sistem air kota: bukan hanya memindahkan air, tetapi memastikan sumber, pipa, penyimpanan, tekanan, kebersihan, dan pemantauan bekerja bersama.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan batch processing dan stream pro...",
+          "Tentukan tujuan batch processing dan stream processing dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk batch serta event."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Pipeline Analitik Penjualan, tim perlu menerapkan batch processing dan stream pro",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "batch",
+          "konsep penting dalam batch processing dan stream processing yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "event",
+          "konsep penting dalam batch processing dan stream processing yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "stream",
+          "konsep penting dalam batch processing dan stream processing yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "latency",
+          "waktu yang dibutuhkan sistem untuk menghasilkan respons"
+        ],
+        [
+          "throughput",
+          "jumlah pekerjaan yang dapat diselesaikan per satuan waktu"
+        ],
+        [
+          "watermark",
+          "konsep penting dalam batch processing dan stream processing yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan batch dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan batch, event, stream, latency. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "3"
+    },
+    {
+      "hook": {
+        "question": "ETL, ELT, dan Transformasi Data tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu d...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data engineer seperti perancang sistem air kota: bukan hanya memindahkan air, tetapi memastikan sumber, pipa, penyimpanan, tekanan, kebersihan, dan pemantauan bekerja bersama.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan etl, elt, dan transformasi data...",
+          "Tentukan tujuan etl, elt, dan transformasi data dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk extract serta load."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Pipeline Analitik Penjualan, tim perlu menerapkan etl, elt, dan transformasi data",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "extract",
+          "konsep penting dalam etl, elt, dan transformasi data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "load",
+          "konsep penting dalam etl, elt, dan transformasi data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "transform",
+          "konsep penting dalam etl, elt, dan transformasi data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "staging",
+          "konsep penting dalam etl, elt, dan transformasi data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "incremental load",
+          "konsep penting dalam etl, elt, dan transformasi data yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "idempotency",
+          "sifat proses yang aman diulang tanpa menggandakan efek"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan extract dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan extract, load, transform, staging. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "4"
+    },
+    {
+      "hook": {
+        "question": "Data Warehouse, Data Lake, dan Lakehouse tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data engineer seperti perancang sistem air kota: bukan hanya memindahkan air, tetapi memastikan sumber, pipa, penyimpanan, tekanan, kebersihan, dan pemantauan bekerja bersama.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan data warehouse, data lake, dan ...",
+          "Tentukan tujuan data warehouse, data lake, dan lakehouse dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk warehouse serta lake."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Pipeline Analitik Penjualan, tim perlu menerapkan data warehouse, data lake, dan ",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "warehouse",
+          "konsep penting dalam data warehouse, data lake, dan lakehouse yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "lake",
+          "konsep penting dalam data warehouse, data lake, dan lakehouse yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "lakehouse",
+          "konsep penting dalam data warehouse, data lake, dan lakehouse yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "partition",
+          "konsep penting dalam data warehouse, data lake, dan lakehouse yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "table format",
+          "konsep penting dalam data warehouse, data lake, dan lakehouse yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "medallion",
+          "konsep penting dalam data warehouse, data lake, dan lakehouse yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan warehouse dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan warehouse, lake, lakehouse, partition. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "5"
+    },
+    {
+      "hook": {
+        "question": "Orkestrasi dan Penjadwalan Pipeline tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik sela...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data engineer seperti perancang sistem air kota: bukan hanya memindahkan air, tetapi memastikan sumber, pipa, penyimpanan, tekanan, kebersihan, dan pemantauan bekerja bersama.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan orkestrasi dan penjadwalan pipe...",
+          "Tentukan tujuan orkestrasi dan penjadwalan pipeline dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk DAG serta dependency."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Pipeline Analitik Penjualan, tim perlu menerapkan orkestrasi dan penjadwalan pipe",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "DAG",
+          "konsep penting dalam orkestrasi dan penjadwalan pipeline yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "dependency",
+          "konsep penting dalam orkestrasi dan penjadwalan pipeline yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "scheduler",
+          "konsep penting dalam orkestrasi dan penjadwalan pipeline yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "retry",
+          "konsep penting dalam orkestrasi dan penjadwalan pipeline yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "backfill",
+          "konsep penting dalam orkestrasi dan penjadwalan pipeline yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "SLA",
+          "konsep penting dalam orkestrasi dan penjadwalan pipeline yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan DAG dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan DAG, dependency, scheduler, retry. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "6"
+    },
+    {
+      "hook": {
+        "question": "Kualitas Data dan Pengujian tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu dimul...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data engineer seperti perancang sistem air kota: bukan hanya memindahkan air, tetapi memastikan sumber, pipa, penyimpanan, tekanan, kebersihan, dan pemantauan bekerja bersama.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan kualitas data dan pengujian dan...",
+          "Tentukan tujuan kualitas data dan pengujian dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk validity serta completeness."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Pipeline Analitik Penjualan, tim perlu menerapkan kualitas data dan pengujian sec",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "validity",
+          "konsep penting dalam kualitas data dan pengujian yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "completeness",
+          "konsep penting dalam kualitas data dan pengujian yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "uniqueness",
+          "konsep penting dalam kualitas data dan pengujian yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "freshness",
+          "konsep penting dalam kualitas data dan pengujian yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "schema test",
+          "konsep penting dalam kualitas data dan pengujian yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "reconciliation",
+          "konsep penting dalam kualitas data dan pengujian yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan validity dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan validity, completeness, uniqueness, freshness. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "7"
+    },
+    {
+      "hook": {
+        "question": "Metadata, Lineage, dan Governance tidak berdiri sendiri. Bagian ini menghubungkan kebutuhan pengguna, proses kerja, data atau sumber daya, serta hasil yang akan dinilai. Pendekatan yang baik selalu...",
+        "answerA": {
+          "label": "Mitos umum",
+          "text": "Anggapan yang sering muncul tapi perlu diklarifikasi.",
+          "icon": "fas fa-question-circle"
+        },
+        "answerB": {
+          "label": "Faktanya",
+          "text": "Pemahaman yang lebih akurat berdasarkan praktik nyata.",
+          "icon": "fas fa-lightbulb"
+        },
+        "message": "Analogi: Data engineer seperti perancang sistem air kota: bukan hanya memindahkan air, tetapi memastikan sumber, pipa, penyimpanan, tekanan, kebersihan, dan pemantauan bekerja bersama.\n\nPada praktiknya, kualitas bukan hanya berarti hasil tampak benar. Kualitas juga mencakup konsistensi, keterlacakan"
+      },
+      "flow": [
+        [
+          "Tentukan tujuan metadata, lineage, dan governan...",
+          "Tentukan tujuan metadata, lineage, dan governance dan keputusan yang akan dipengaruhi."
+        ],
+        [
+          "Petakan input, output, pemilik, pengguna, serta...",
+          "Petakan input, output, pemilik, pengguna, serta batas sistem."
+        ],
+        [
+          "Tetapkan definisi dan kriteria penerimaan untuk...",
+          "Tetapkan definisi dan kriteria penerimaan untuk catalog serta lineage."
+        ],
+        [
+          "Bangun versi kecil menggunakan data atau skenar...",
+          "Bangun versi kecil menggunakan data atau skenario yang aman."
+        ],
+        [
+          "Uji hasil, kegagalan, kelompok khusus, dan kond...",
+          "Uji hasil, kegagalan, kelompok khusus, dan kondisi ekstrem."
+        ],
+        [
+          "Dokumentasikan keputusan, bukti, keterbatasan, ...",
+          "Dokumentasikan keputusan, bukti, keterbatasan, serta tindak lanjut."
+        ]
+      ],
+      "deepDive": [
+        [
+          "Pendalaman Materi",
+          "Konsep-konsep inti dari bab ini.",
+          "Hubungan dengan praktik di lapangan."
+        ]
+      ],
+      "workedExample": [
+        "Dalam mini project Pipeline Analitik Penjualan, tim perlu menerapkan metadata, lineage, dan governan",
+        [
+          "Data atau input belum lengkap",
+          "Tolak, minta perbaikan, atau gunakan fallback"
+        ],
+        [
+          "Hasil belum pasti",
+          "Tampilkan ketidakpastian dan minta review"
+        ],
+        [
+          "Beban meningkat",
+          "Scale, antrekan, atau pembatasan"
+        ],
+        [
+          "Perubahan berisiko",
+          "Uji terbatas dan siapkan rollback"
+        ]
+      ],
+      "glossary": [
+        [
+          "catalog",
+          "konsep penting dalam metadata, lineage, dan governance yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "lineage",
+          "jejak asal dan transformasi data atau artefak"
+        ],
+        [
+          "ownership",
+          "konsep penting dalam metadata, lineage, dan governance yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "classification",
+          "konsep penting dalam metadata, lineage, dan governance yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "retention",
+          "konsep penting dalam metadata, lineage, dan governance yang perlu diberi definisi operasional sebelum dipakai"
+        ],
+        [
+          "audit",
+          "konsep penting dalam metadata, lineage, dan governance yang perlu diberi definisi operasional sebelum dipakai"
+        ]
+      ],
+      "quickCheck": {
+        "question": "Jelaskan catalog dengan kalimat sendiri dan berikan satu contoh.",
+        "options": [
+          "Jawaban A (belum tentu tepat)",
+          "Jawaban B (belum tentu tepat)",
+          "Jawaban C (belum tentu tepat)"
+        ],
+        "answer": 1,
+        "explanationCorrect": "Tepat. Pemahaman ini penting untuk materi selanjutnya.",
+        "explanationWrong": "Coba pikirkan ulang — hubungkan dengan konsep yang sudah dipelajari."
+      },
+      "challenge": {
+        "instruction": "Buat diagram sederhana yang menghubungkan catalog, lineage, ownership, classification. Tandai asumsi dan titik kegagalan.",
+        "placeholder": "Tulis jawaban Anda di sini...",
+        "example": ""
+      },
+      "roadmapRef": "8"
+    }
+  ]
+}

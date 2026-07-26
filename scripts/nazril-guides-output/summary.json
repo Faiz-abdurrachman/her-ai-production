@@ -1,0 +1,107 @@
+{
+  "processed": 20,
+  "errors": 0,
+  "errorDetails": [],
+  "modules": [
+    {
+      "id": "culture",
+      "title": "AI untuk Budaya dan Warisan",
+      "guides": 8
+    },
+    {
+      "id": "geospatial",
+      "title": "AI untuk Geospasial",
+      "guides": 8
+    },
+    {
+      "id": "healthcare",
+      "title": "AI untuk Kesehatan",
+      "guides": 8
+    },
+    {
+      "id": "manufacturing",
+      "title": "AI untuk Manufaktur",
+      "guides": 8
+    },
+    {
+      "id": "business-insight",
+      "title": "Business Insight dengan AI",
+      "guides": 8
+    },
+    {
+      "id": "people-business-mgt",
+      "title": "People & Business Management dengan AI",
+      "guides": 8
+    },
+    {
+      "id": "ui-ux",
+      "title": "UI/UX Design Thinking",
+      "guides": 8
+    },
+    {
+      "id": "deployment",
+      "title": "AI Deployment",
+      "guides": 8
+    },
+    {
+      "id": "back-end",
+      "title": "Back-End Development untuk AI",
+      "guides": 8
+    },
+    {
+      "id": "bioinformatics",
+      "title": "Bioinformatics dan AI",
+      "guides": 8
+    },
+    {
+      "id": "data-engineering",
+      "title": "Data Engineering",
+      "guides": 8
+    },
+    {
+      "id": "data-science",
+      "title": "Data Science",
+      "guides": 8
+    },
+    {
+      "id": "front-end",
+      "title": "Front-End Development untuk AI",
+      "guides": 8
+    },
+    {
+      "id": "infrastructure",
+      "title": "Infrastruktur untuk AI",
+      "guides": 8
+    },
+    {
+      "id": "deep-learning",
+      "title": "Deep Learning",
+      "guides": 8
+    },
+    {
+      "id": "reinforcement-learning",
+      "title": "Reinforcement Learning",
+      "guides": 8
+    },
+    {
+      "id": "agentic-ai",
+      "title": "Agentic AI",
+      "guides": 8
+    },
+    {
+      "id": "large-language-model",
+      "title": "Large Language Model",
+      "guides": 8
+    },
+    {
+      "id": "multimodal-llm",
+      "title": "Multimodal Large Language Model",
+      "guides": 8
+    },
+    {
+      "id": "vlm",
+      "title": "Vision Language Model",
+      "guides": 8
+    }
+  ]
+}
