@@ -6,6 +6,8 @@
     const ADMIN_KEY = 'heraiParticipantPortalAdminKey';
     const SIDEBAR_STATE_KEY = 'heraiFellowSidebarExpanded';
     const PARTICIPANT_SESSION_KEY = 'heraiParticipantSession';
+
+    var _dashboardDataCache = null;
     const DEFAULT_SETTINGS = {
         enabled: true,
         pages: {
@@ -1854,6 +1856,17 @@
     }
 
     async function initParticipantDashboardData() {
+        if (_dashboardDataCache) {
+            renderParticipantDashboard(_dashboardDataCache);
+            try {
+                var fresh = await fetchParticipantDashboardData();
+                if (Array.isArray(fresh.modules) && fresh.modules.length > 3) {
+                    _dashboardDataCache = fresh;
+                }
+            } catch (_) { /* silent background refresh */ }
+            return;
+        }
+
         renderDashboardSkeletons();
 
         try {
@@ -1861,6 +1874,7 @@
             var isRealData = Array.isArray(data.modules) && data.modules.length > 3;
 
             if (isRealData) {
+                _dashboardDataCache = data;
                 renderParticipantDashboard(data);
             } else {
                 renderDashboardError(new Error('Data dashboard belum tersedia.'));
@@ -2064,6 +2078,20 @@
             }
             var originalHTML = btn.innerHTML;
 
+            if (!oldPassword) {
+                if (msg) { msg.style.display = 'block'; msg.className = 'settings-message error'; msg.textContent = 'Password lama wajib diisi.'; }
+                document.getElementById('oldPassword').focus();
+                return;
+            }
+            if (!newPassword) {
+                if (msg) { msg.style.display = 'block'; msg.className = 'settings-message error'; msg.textContent = 'Password baru wajib diisi.'; }
+                document.getElementById('newPassword').focus();
+                return;
+            }
+            if (oldPassword === newPassword) {
+                if (msg) { msg.style.display = 'block'; msg.className = 'settings-message error'; msg.textContent = 'Password baru tidak boleh sama dengan password lama.'; }
+                return;
+            }
             if (newPassword !== confirmPassword) {
                 if (msg) { msg.style.display = 'block'; msg.className = 'settings-message error'; msg.textContent = 'Konfirmasi password baru tidak cocok.'; }
                 return;
@@ -2094,7 +2122,7 @@
                 var result = await response.json();
                 if (result.status !== 'success') throw new Error(result.message || 'Gagal mengganti password.');
 
-                if (msg) { msg.style.display = 'block'; msg.className = 'settings-message success'; msg.textContent = result.message; }
+                if (msg) { msg.style.display = 'block'; msg.className = 'settings-message success'; msg.textContent = 'Password berhasil diganti. Gunakan password baru saat login berikutnya.'; }
 
                 form.reset();
             } catch (err) {
