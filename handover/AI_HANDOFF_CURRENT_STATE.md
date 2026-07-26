@@ -1,9 +1,11 @@
 # AI Handoff — Current Checkpoint HerAI Fellowship SuperApp
 
-**Checkpoint:** 27 Juli 2026 (Update Malam), Asia/Jakarta  
+**Checkpoint:** 27 Juli 2026 (Update Malam — Final), Asia/Jakarta  
 **Workspace:** `/home/faiz/her6/Her-AI`  
 **Branch:** `main`  
-**Last Commit:** `ecab132`  
+**Last Commit:** `5a75766`  
+**GAS Deployment Status:** ✅ **DONE — Versi 3, 26 Juli 2026 08:04 WIB**  
+**GAS Deployment ID:** `AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE` (URL tetap sama)  
 **Tujuan:** Sumber kebenaran utama untuk AI/developer berikutnya.
 
 > Jika dokumen handover lain bertentangan dengan file ini, ikuti file ini.
@@ -249,32 +251,22 @@ Login akun production nyata sengaja tidak dilakukan saat audit agar tidak menuli
 ### `index.html`
 - Cache buster: `settings.css?v=20260727-password`
 
-## 6. Deployment yang harus dilakukan senior (⚠️  PENTING)
+## 6. Deployment — ✅ SELESAI
 
-**File yang dikirim:** `/home/faiz/her6/Her-AI/gas/Code.gs` (2256 baris sekarang)
+**Versi 3 telah di-deploy** pada 26 Juli 2026 pukul 08.04 WIB.
+- **ID Penerapan:** `AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE`
+- **URL Web App:** `https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec`
+- **Library ID:** `1kVpmHT0RRg0Y1aA6r4wcLu47SJLD9tCQ8Q9_1cup24BAi44nQpROGWn4/3`
 
-**Jangan kirim:**
-- `gas/Code_For_Senior.gs` — snapshot lama.
-- `gas/Code_lama.gs` — snapshot lama/tidak canonical.
+**Deploy method:** Manage deployments → Edit existing → New version → Deploy (BUKAN New deployment)
 
-**Route baru yang wajib aktif via deploy:**
-- `changeParticipantPassword` — tanpa deploy, ganti password gagal
-- `saveParticipantProgress` — tanpa deploy, progress tracking gagal
-- `getParticipantProgress` — tanpa deploy, dashboard progress 0%
+**Semua route baru sudah aktif:**
+- ✅ `changeParticipantPassword` — ganti password mandiri
+- ✅ `saveParticipantProgress` — simpan progress chapter
+- ✅ `getParticipantProgress` — ambil progress peserta
+- ✅ `getParticipantDashboardData` — enhanced dengan progress computation
 
-**Sheet baru yang perlu dibuat oleh GAS runtime:**
-- `participant_progress` — schema udah di-define di `SCHEMA`, `addRowObject()` akan auto-create kolom saat pertama kali dipakai
-
-**Langkah deployment:**
-1. Buka Apps Script project yang memiliki akses ke Spreadsheet canonical.
-2. Timpa isi `Code.gs` dengan seluruh isi `gas/Code.gs`.
-3. Save.
-4. Pilih **Deploy → Manage deployments**.
-5. Edit deployment Web App **existing** (JANGAN New deployment).
-6. Pilih **New version**, lalu **Deploy**.
-7. URL tetap `AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE`.
-
-Tidak perlu menjalankan function apa pun sesudah deploy.
+**Tidak perlu menjalankan function apa pun sesudah deploy.**
 
 ## 7. Larangan operasi
 
@@ -454,6 +446,121 @@ scratch/
 
 ---
 
+## 13. Prompt lengkap untuk AI berikutnya — Frontend Testing
+
+```text
+⚠️  BACA INI DULU SEBELUM KERJA APA PUN. JANGAN SKIP.
+
+═══════════════════════════════════════════
+📋 SUMBER KEBENARAN
+═══════════════════════════════════════════
+1. handover/AI_HANDOFF_CURRENT_STATE.md  ← FILE INI, baca semua section
+2. gemini.md  ← Bug log (bugs 1-35 + session rules + deployment status)
+
+═══════════════════════════════════════════
+🚫 HARD BLOCK — JANGAN DISENTUH
+═══════════════════════════════════════════
+- Signaling (Go WebRTC) — prototype, belum terintegrasi
+- Messaging/Chat (Go) — prototype, in-memory store
+- Admin dashboard — udah production, jangan ubah auth/workflow
+- Keamanan/Security hardening — butuh koordinasi senior
+- Leaderboard, Certificates, Tasks, Projects, Events, Community, Mentor — placeholder
+- provisionParticipantAccounts / generateParticipantAccounts* — JANGAN DIJALANKAN
+- forceReset:true — AKAN RESET 187 AKUN
+- Jangan ubah dan jangan edit 231 file lesson satu-satu (sidebar/topbar "Aisyah Putri")
+- JANGAN ubah js/main.js, js/router.js — hanya settings.js, settings.html, settings.css, Code.gs
+
+═══════════════════════════════════════════
+🔧 IDENTITAS SISTEM
+═══════════════════════════════════════════
+- Spreadsheet ID: 1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w
+- GAS Web App URL: https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec
+- Kode GAS canonical: gas/Code.gs (2256 baris, 52 route actions, 23 sheets)
+- Dev server: node server.js → http://127.0.0.1:3000
+- Proxy: POST /__gas → GAS Web App (token auto-injected by main.js)
+- Last commit: 5a75766
+- GAS Deployment: ✅ Versi 3 — semua route aktif
+
+═══════════════════════════════════════════
+✅ APA YANG SUDAH SELESAI
+═══════════════════════════════════════════
+5 FASE COMPLETE:
+- Fase 1: Dynamic name & topbar — getParticipantDisplayName(), notif hide
+- Fase 2: Settings wire ke GAS — form save, tab navigation, avatar
+- Fase 3: Ganti password — GAS changeParticipantPassword + UI form
+- Fase 4: Dashboard dinamis — infrastructure sudah ada, data dari GAS
+- Fase 5: Progress tracking — participant_progress sheet + save/get endpoint + frontend helper
+
+7 BUG FIXED (#29-35):
+- #29-31: null guards + fragile selectors
+- #32-33: submit button null guard + missing CSS
+- #34: default status alignment
+- #35 (HIGH): module_id missing from schema
+
+DEPLOYMENT: ✅ GAS Versi 3 berhasil 26 Juli 2026 08:04
+
+═══════════════════════════════════════════
+📂 ARSITEKTUR KODE
+═══════════════════════════════════════════
+
+settings.js (2072 baris) — file utama yang boleh diubah:
+  getParticipantDisplayName()        — helper nama peserta
+  saveParticipantSession()            — wrapper sessionStorage
+  initFellowUserMenu()                — greeting + user button + notif hide
+  defaultParticipantDashboardData()   — fallback data (generic)
+  fetchParticipantDashboardData()     — POST /__gas ke getParticipantDashboardData
+  renderParticipantDashboard()        — render modules, journey, events, leaderboard
+  initParticipantDashboardData()      — flow: fallback → GAS → re-render
+  initSettingsPage()                  — pre-fill form, save handler, avatar
+  initSettingsTabNav()                — 5 tab navigation
+  initPasswordChangeForm()            — password form handler
+  window.saveChapterProgress()        — global progress helper
+  window.initFellowDashboardPage()    — page init wiring
+
+Code.gs (2256 baris) — fungsi baru:
+  changeParticipantPassword(payload)  — verifikasi old pw, hash new, sync 2 sheet
+  saveParticipantProgress(payload)    — UPSERT by (rowId, module_id, chapter_id)
+  getParticipantProgress(payload)     — return progress per peserta
+  getParticipantDashboardData()       — enhanced: compute real progress % dari participant_progress
+
+═══════════════════════════════════════════
+🔴 FILE YANG BOLEH DISENTUH
+═══════════════════════════════════════════
+- js/frontend/fellow-dashboard/settings.js
+- pages/frontend/fellow-dashboard/settings.html  
+- css/frontend/fellow-dashboard/settings.css
+- gas/Code.gs (hanya untuk bug fix)
+- index.html (hanya cache buster)
+- gemini.md (update bug log)
+- handover/AI_HANDOFF_CURRENT_STATE.md (update checkpoint)
+
+═══════════════════════════════════════════
+📝 PRIORITAS SAAT INI — Frontend Testing
+═══════════════════════════════════════════
+1. node server.js → http://127.0.0.1:3000
+2. Test login peserta (NIK + password dari ParticipantAccounts)
+3. Test dashboard: greeting, nama, notif, leaderboard
+4. Test settings: pre-fill form, save, cancel, tab navigasi
+5. Test ganti password: old/new/confirm, validasi, sukses
+6. Test progress: window.saveChapterProgress("test", "ch1") via console
+7. Catat bug di gemini.md dengan nomor #36+
+8. Setelah semua fitur verified, wiring auto-save progress ke lesson pages
+
+═══════════════════════════════════════════
+📐 ATURAN KERJA
+═══════════════════════════════════════════
+1. Commit PER FITUR, bukan satu commit besar
+2. Update handover & gemini.md setiap checkpoint
+3. Catat bug baru dengan nomor urut lanjutan (#36+)
+4. Dark theme DILARANG di code block — light pink theme
+5. JANGAN tampilkan NIK/password di log/screenshot/handover
+6. TANYA DULU sebelum eksekusi kalau ada yang ambigu
+7. Scope boundary WAJIB diikuti
+8. JANGAN jalankan provisionParticipantAccounts / generateParticipantAccounts*
+```
+
+---
+
 ## 15. Known Issues & Debt
 
 1. **"Aisyah Putri" di 231 file lesson** — nama di sidebar/topbar lesson pages masih hardcoded di HTML. Tapi `initFellowUserMenu()` sudah inject nama dinamis via JS. Jadi pas halaman load, nama akan ke-replace. Flash "Aisyah Putri" mungkin terlihat sekejap sebelum JS jalan
@@ -464,3 +571,31 @@ scratch/
 6. **Admin auth legacy** — documented security debt, bukan prioritas saat ini
 7. **Go services tidak terintegrasi** — signaling, messaging, participant-portal semua prototype standalone
 8. **Notif badge** — di-hide total. Belum ada API notifikasi
+
+---
+
+## 12. Next actions
+
+### ✅ SEMUA SUDAH SELESAI
+
+| Item | Status |
+|---|---|
+| Fase 1-5 Dashboard Peserta | ✅ Complete (10 commit, +527/-30) |
+| GAS Code.gs deploy Versi 3 | ✅ Done — 26 Juli 2026 08:04, URL tetap |
+
+### ⚠️  PRIORITAS UTAMA — Frontend Testing
+
+**Tujuan:** Verifikasi semua fitur berfungsi end-to-end dari sisi user.
+
+1. Jalankan `node server.js` → buka `http://127.0.0.1:3000`
+2. Test login → dashboard → settings → ganti password
+3. Test progress tracking via `window.saveChapterProgress()` di console
+4. Catat bug baru di gemini.md (#36+)
+5. Setelah stabil, wiring `saveChapterProgress` ke halaman lesson
+
+### BACKLOG (bukan prioritas saat ini)
+- Wiring `saveChapterProgress` ke setiap halaman lesson (auto-save)
+- Isi data ke Google Sheets (`participant_dashboard_modules`, dll)
+- Aktifkan route Math, ML, NLP
+- Hardening admin GAS
+- Go service integration

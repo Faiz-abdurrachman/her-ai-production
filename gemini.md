@@ -463,3 +463,24 @@ Diagram arsitektur `.layers-viz` di `chapters/1.html` memiliki beberapa masalah 
 11. sessionStorage adalah source of truth untuk data peserta di frontend
 12. JANGAN jalankan provisionParticipantAccounts / generateParticipantAccounts*
 13. Gas/Code.gs HARUS di-deploy ulang setelah perubahan (Manage deployments → New version)
+
+---
+
+### Deployment
+
+**GAS Versi 3** — Deploy sukses 26 Juli 2026 08:04 WIB
+- `changeParticipantPassword` ✅ aktif
+- `saveParticipantProgress` ✅ aktif
+- `getParticipantProgress` ✅ aktif
+- `getParticipantDashboardData` ✅ enhanced
+
+### Next Plan — Frontend Testing
+
+Prioritas berikutnya: **testing end-to-end** semua fitur dari sisi user.
+
+Langkah:
+1. `node server.js` → buka `http://127.0.0.1:3000`
+2. Test login → dashboard → settings → ganti password
+3. Test progress tracking via console `window.saveChapterProgress()`
+4. Catat bug di #36+
+5. Setelah stabil, wiring auto-save progress ke lesson pages
