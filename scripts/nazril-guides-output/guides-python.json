@@ -1,0 +1,319 @@
+{
+  "moduleId": "python",
+  "moduleTitle": "Python untuk AI",
+  "routePrefix": "python",
+  "guides": [
+    {
+      "hook": {
+        "question": "Python populer untuk AI karena paling cepat. Benarkah?",
+        "answerA": { "label": "Benar", "text": "Kecepatan runtime adalah alasan utamanya.", "icon": "fas fa-gauge-high" },
+        "answerB": { "label": "Belum tepat", "text": "Keterbacaan, ekosistem library, dan kemudahan eksperimen jauh lebih menentukan.", "icon": "fas fa-bridge" },
+        "message": "Python adalah lapisan orkestrasi. Operasi berat (matriks, training) tetap dijalankan oleh library C/C++/CUDA di bawahnya. Python menyatukan semuanya dengan sintaks yang bersih, sehingga workflow AI bisa dibaca, diuji, dan direproduksi."
+      },
+      "flow": [
+        ["Masalah", "Definisikan input, proses, output sebelum koding"],
+        ["Environment", "Isolasi dependency dengan venv/conda"],
+        ["Eksperimen", "Jalankan langkah kecil, amati hasil"],
+        ["Workflow", "Susun pipeline yang bisa diulang dari awal"]
+      ],
+      "deepDive": [
+        ["Python bukan AI, Python adalah penghubung", "Python memberi bahasa konsisten untuk membaca data, memanggil library numerik, menjalankan eksperimen, menyimpan model, dan menghubungkan semuanya ke aplikasi. Ketika peserta paham peran ini, mereka tidak lagi menganggap library sebagai sihir — mereka bisa menelusuri dari input sampai output.", "Keunggulan Python bukan berarti setiap operasi dieksekusi paling cepat oleh interpreter. NumPy, Pandas, PyTorch memindahkan komputasi ke implementasi C/C++/CUDA. Python tetap di atas sebagai lapisan ekspresif yang membuat tim bisa mengubah ide menjadi eksperimen tanpa kehilangan keterbacaan."],
+        ["Environment adalah fondasi reproducibility", "Kode yang benar di laptop A bisa gagal di laptop B karena perbedaan versi Python atau dependency. Virtual environment mengisolasi kebutuhan tiap project. File requirements.txt atau environment.yml membuat tim bisa membangun ulang environment yang identik.", "Notebook bagus untuk eksplorasi, tapi urutan cell yang tersembunyi bisa menghasilkan state sulit dilacak. Untuk workflow berulang, pindahkan logika stabil ke file .py, jalankan dari awal, pastikan output tidak bergantung pada cell tersembunyi."]
+      ],
+      "workedExample": ["Completion rate peserta", ["Input", "Jumlah peserta selesai dan total peserta"], ["Validasi", "Total tidak boleh negatif; total nol harus ditangani eksplisit"], ["Proses", "completed / total * 100 hanya dijalankan setelah validasi"], ["Output", "Persentase + pesan yang menjelaskan kondisi data"]],
+      "glossary": [
+        ["Interpreter", "Program yang menjalankan instruksi Python baris per baris"],
+        ["Virtual Environment", "Lingkungan terisolasi berisi Python dan dependency spesifik project"],
+        ["Dependency", "Package eksternal yang dibutuhkan program (numpy, pandas, dll)"],
+        ["Reproducibility", "Kemampuan mengulang eksperimen dengan input dan environment yang sama"],
+        ["Computational Thinking", "Cara memecah masalah menjadi langkah-langkah yang bisa dieksekusi komputer"]
+      ],
+      "quickCheck": {
+        "question": "Mengapa virtual environment penting dalam project AI?",
+        "options": ["Mengisolasi versi dependency tiap project", "Membuat model otomatis lebih akurat", "Menggantikan kebutuhan dataset"],
+        "answer": 0,
+        "explanationCorrect": "Tepat. Isolasi mencegah konflik dependency antar project.",
+        "explanationWrong": "Coba hubungkan dengan reproducibility — bayangkan dua project butuh versi NumPy berbeda."
+      },
+      "challenge": {
+        "instruction": "Siapkan virtual environment, install numpy dan pandas, lalu tulis script kecil yang membaca CSV dan menghitung rata-rata satu kolom numerik. Pastikan script bisa dijalankan ulang dari awal tanpa error.",
+        "placeholder": "# pip install numpy pandas\n# Baca CSV -> hitung rata-rata",
+        "example": "import pandas as pd\ndf = pd.read_csv('data.csv')\nprint(df['score'].mean())"
+      },
+      "roadmapRef": "1"
+    },
+    {
+      "hook": {
+        "question": "List, tuple, set, dictionary — empat struktur yang sering tertukar. Kapan pakai yang mana?",
+        "answerA": { "label": "Semua sama saja", "text": "Tinggal pilih yang paling sering dipakai.", "icon": "fas fa-random" },
+        "answerB": { "label": "Pilih berdasarkan perilaku", "text": "Urutan penting? Butuh unique? Key-value lookup? Setiap struktur punya kekuatan spesifik.", "icon": "fas fa-cubes" },
+        "message": "List untuk urutan yang bisa berubah. Tuple untuk data immutable (koordinat, config). Set untuk membership test cepat dan deduplikasi. Dictionary untuk lookup berbasis key — fondasi dari JSON dan konfigurasi model AI."
+      },
+      "flow": [
+        ["List", "Record berurutan, mutable — koleksi item yang bisa bertambah/berkurang"],
+        ["Tuple", "Record tetap, immutable — koordinat, hyperparameter, return multiple value"],
+        ["Set", "Unordered, unique — membership test O(1), deduplikasi, operasi himpunan"],
+        ["Dictionary", "Key-value — konfigurasi model, lookup table, representasi JSON"]
+      ],
+      "deepDive": [
+        ["List vs Tuple: kapan mutability penting?", "List bisa di-append, di-pop, di-modify. Ini berguna untuk koleksi yang tumbuh (hasil query, batch data). Tapi mutability juga sumber bug: function bisa mengubah list tanpa disadari.", "Tuple immutable — function yang menerima tuple tidak bisa mengubahnya. Ini menjamin data tidak berubah setelah dibuat. Cocok untuk koordinat, hyperparameter, return value multiple."],
+        ["Dictionary: fondasi konfigurasi AI", "Hampir semua konfigurasi model AI disimpan sebagai dictionary (atau JSON yang jadi dict di Python). Learning rate, batch size, layer config — semua key-value. Memahami dict = memahami bagaimana model dikonfigurasi.", "Dict comprehension, nested dict, defaultdict, dan operasi .get() dengan default value adalah pattern yang muncul di setiap codebase AI production."]
+      ],
+      "workedExample": ["Normalisasi nilai ujian", ["Input", "List nilai ujian [78, 92, 65, 88, 71]"], ["Dict konversi", "Nilai huruf: {90:'A', 80:'B', 70:'C', 60:'D', 0:'E'}"], ["Set", "Cek apakah ada nilai duplikat sebelum normalisasi"], ["Tuple", "Return (rata-rata, nilai_tertinggi, jumlah_lulus) sebagai immutable result"]],
+      "glossary": [
+        ["Mutable", "Nilai bisa diubah setelah dibuat (list, dict, set)"],
+        ["Immutable", "Nilai tidak bisa diubah setelah dibuat (int, str, tuple)"],
+        ["Hashable", "Objek yang bisa jadi key dictionary — harus immutable"],
+        ["Comprehension", "Cara ringkas membuat collection: [x*2 for x in data]"],
+        ["O(1)", "Waktu akses konstan — tidak bergantung ukuran data"]
+      ],
+      "quickCheck": {
+        "question": "Kapan sebaiknya pakai tuple daripada list?",
+        "options": ["Saat data tidak boleh berubah", "Saat data perlu diurutkan", "Saat perlu append item baru"],
+        "answer": 0,
+        "explanationCorrect": "Tepat. Tuple immutable — cocok untuk data tetap seperti koordinat atau konfigurasi.",
+        "explanationWrong": "Ingat: tuple tidak bisa di-modify. List lebih fleksibel untuk data yang berubah."
+      },
+      "challenge": {
+        "instruction": "Buat fungsi yang menerima list nilai ujian, mengubahnya menjadi huruf (A/B/C/D/E) menggunakan dictionary konversi, dan me-return tuple (rata-rata, jumlah_lulus). Pastikan nilai duplikat tetap dihitung.",
+        "placeholder": "def konversi_nilai(daftar_nilai):\n    # dict konversi\n    # return tuple",
+        "example": "def konversi_nilai(nilai):\n    konversi = {90:'A', 80:'B', 70:'C', 60:'D', 0:'E'}\n    hasil = [konversi[kunci] for n in nilai for kunci in sorted(konversi, reverse=True) if n >= kunci]\n    return (sum(nilai)/len(nilai), len([n for n in nilai if n >= 70]))"
+      },
+      "roadmapRef": "2"
+    },
+    {
+      "hook": {
+        "question": "If-else, for, while — Python baca dari atas ke bawah. Tapi urutan guard condition bisa bikin program behavior berbeda drastis.",
+        "answerA": { "label": "Urutan tidak penting", "text": "Yang penting semua kondisi tertulis.", "icon": "fas fa-list" },
+        "answerB": { "label": "Urutan sangat penting", "text": "Guard condition paling spesifik harus di atas, general di bawah.", "icon": "fas fa-sort-amount-down" },
+        "message": "Control flow adalah tulang punggung logika program. If-else untuk percabangan. For untuk iterasi data. While untuk kondisi dinamis. Guard clause pattern: validasi dulu, proses kemudian."
+      },
+      "flow": [
+        ["Guard 1: Missing", "Cek None/NaN sebelum operasi apapun"],
+        ["Guard 2: Type", "Pastikan tipe data sesuai sebelum diproses"],
+        ["Guard 3: Range", "Validasi domain nilai (0-100, positif, dll)"],
+        ["Process", "Baru jalankan logika bisnis setelah semua guard lolos"]
+      ],
+      "deepDive": [
+        ["Guard clause: defensive programming", "Pattern paling penting dalam AI workflow: validasi dulu, proses kemudian. Jangan pernah asumsikan data bersih. Cek missing values, tipe data, range, dan outlier sebelum feeding ke model.", "Early return menghindari nested if yang dalam. if data is None: return error lebih bersih daripada membungkus seluruh fungsi dalam if data is not None."],
+        ["List comprehension vs for loop", "List comprehension lebih cepat dan lebih Pythonic: [x*2 for x in data if x > 0]. Tapi jangan terlalu kompleks — kalau butuh lebih dari satu operasi, pakai for loop biasa agar readable.", "Generator expression pakai () bukan [] — hemat memori untuk data besar karena lazy evaluation. Tapi hanya bisa di-iterasi sekali."]
+      ],
+      "workedExample": ["Klasifikasi nilai peserta", ["Guard missing", "if score is None: return 'Data tidak tersedia'"], ["Guard type", "if not isinstance(score, (int, float)): return 'Format salah'"], ["Guard range", "if score < 0 or score > 100: return 'Di luar rentang'"], ["Classify", "Return 'Lulus' if score >= 75 else 'Remedial'"]],
+      "glossary": [
+        ["Control Flow", "Urutan eksekusi kode berdasarkan kondisi dan perulangan"],
+        ["Guard Clause", "Validasi di awal fungsi — menolak input invalid sebelum proses"],
+        ["List Comprehension", "Sintaks ringkas untuk transformasi list dalam satu baris"],
+        ["Generator", "Fungsi yang menghasilkan nilai secara lazy dengan yield"],
+        ["Early Return", "Pattern keluar fungsi lebih awal jika kondisi tidak terpenuhi"]
+      ],
+      "quickCheck": {
+        "question": "Kenapa guard clause diletakkan di awal fungsi?",
+        "options": ["Menolak input invalid sebelum proses utama", "Mempercepat runtime Python", "Menggantikan unit test"],
+        "answer": 0,
+        "explanationCorrect": "Tepat. Guard mencegah kode utama berjalan dengan input yang tidak valid.",
+        "explanationWrong": "Guard clause bukan untuk optimasi kecepatan — ini tentang correctness dan readability."
+      },
+      "challenge": {
+        "instruction": "Tulis fungsi classify_participant(score) yang: (1) reject None, (2) reject non-numeric, (3) reject di luar 0-100, (4) return 'Istimewa' (>=90), 'Baik' (>=75), 'Cukup' (>=60), 'Kurang' (<60).",
+        "placeholder": "def classify_participant(score):\n    # guard 1: None\n    # guard 2: type\n    # guard 3: range\n    # classify",
+        "example": "def classify_participant(score):\n    if score is None: return 'Data kosong'\n    if not isinstance(score, (int, float)): return 'Bukan angka'\n    if score < 0 or score > 100: return 'Di luar rentang'\n    if score >= 90: return 'Istimewa'\n    if score >= 75: return 'Baik'\n    if score >= 60: return 'Cukup'\n    return 'Kurang'"
+      },
+      "roadmapRef": "3"
+    },
+    {
+      "hook": {
+        "question": "Copy-paste kode yang sama di banyak tempat? Function menyelamatkanmu dari bug propagation.",
+        "answerA": { "label": "Function hanya untuk kode panjang", "text": "Kalau cuma 3 baris, tidak perlu function.", "icon": "fas fa-ruler" },
+        "answerB": { "label": "Function untuk setiap tanggung jawab", "text": "Satu function = satu tujuan. Pendek pun tetap di-function-kan agar命名 jelas dan testable.", "icon": "fas fa-cube" },
+        "message": "Function adalah unit test terkecil program. Nama function harus menjelaskan APA yang dilakukan, bukan BAGAIMANA. Parameter = input contract. Return value = output contract. Docstring = dokumentasi contract."
+      },
+      "flow": [
+        ["Kontrak input", "Tentukan parameter wajib dan opsional dengan type hint"],
+        ["Validasi", "Guard clause di awal function"],
+        ["Transformasi", "Pure logic — tidak ada side effect"],
+        ["Kontrak output", "Return value yang konsisten — jangan campur tipe"]
+      ],
+      "deepDive": [
+        ["Pure function vs side effect", "Pure function: return value hanya bergantung pada input, tidak mengubah state luar. Ini membuat function mudah di-test dan di-reuse. Side effect (menulis file, update database, print) harus eksplisit dan didokumentasikan.", "Dalam AI workflow, pisahkan function data processing (pure) dari function I/O (side effect). load_data() membaca file, clean_data() pure transformasi, save_model() menulis file."],
+        ["*args dan **kwargs dalam AI", "Banyak library AI menerima **kwargs untuk fleksibilitas konfigurasi. Memahami unpacking penting untuk membaca dokumentasi model.fit(**config) dan menulis wrapper yang meneruskan parameter."]
+      ],
+      "workedExample": ["Pipeline normalisasi data", ["load(path)", "Baca CSV, return DataFrame — side effect: file I/O"], ["clean(df)", "Hapus duplikat, isi missing — pure function"], ["normalize(df)", "Min-max scaling per kolom numerik — pure function"], ["save(df, path)", "Tulis hasil ke file baru — side effect: file I/O"]],
+      "glossary": [
+        ["Pure Function", "Output hanya bergantung pada input, tidak ada side effect"],
+        ["Side Effect", "Perubahan state di luar function (I/O, database, global var)"],
+        ["Type Hint", "Anotasi tipe parameter dan return: def foo(x: int) -> str"],
+        ["Docstring", "Dokumentasi di dalam function — diakses via help()"],
+        ["Default Parameter", "Nilai fallback jika argumen tidak diberikan"]
+      ],
+      "quickCheck": {
+        "question": "Kenapa pure function lebih mudah di-test?",
+        "options": ["Output bisa diprediksi dari input saja — tidak perlu setup database/file", "Pure function otomatis lebih cepat", "Pure function tidak pernah error"],
+        "answer": 0,
+        "explanationCorrect": "Tepat. Tanpa side effect, unit test hanya perlu siapkan input dan cek output.",
+        "explanationWrong": "Bukan soal kecepatan — ini soal predictability dan isolation."
+      },
+      "challenge": {
+        "instruction": "Tulis tiga function: load_scores(path) membaca CSV, clean_scores(df) menghapus baris dengan score < 0 atau > 100, summarize(df) return dict {mean, median, count_pass, count_fail}. Gabungkan dalam satu pipeline.",
+        "placeholder": "def load_scores(path): ...\ndef clean_scores(df): ...\ndef summarize(df): ...\n\ndef pipeline(path):\n    df = load_scores(path)\n    df = clean_scores(df)\n    return summarize(df)",
+        "example": "def clean_scores(df):\n    return df[(df['score'] >= 0) & (df['score'] <= 100)]"
+      },
+      "roadmapRef": "4"
+    },
+    {
+      "hook": {
+        "question": "OOP di AI? Bukannya cukup function aja?",
+        "answerA": { "label": "OOP tidak diperlukan", "text": "AI cukup dengan function dan script.", "icon": "fas fa-ban" },
+        "answerB": { "label": "OOP untuk organisasi", "text": "Class membantu mengelompokkan state + behavior yang punya lifecycle bersama. Dataset, Model, Trainer — semua class.", "icon": "fas fa-boxes-stacked" },
+        "message": "Di AI production, class muncul di mana-mana: Dataset class (PyTorch), Model class (nn.Module), Trainer class, Config class. OOP membantu menjaga invariant dan menyatukan data dengan operasi yang relevan."
+      },
+      "flow": [
+        ["State", "Data yang punya lifecycle bersama — disimpan sebagai attribute"],
+        ["Constructor", "__init__ memastikan object lahir dalam kondisi valid"],
+        ["Method", "Operasi yang benar-benar terkait dengan state object"],
+        ["Composition", "Gabungkan object kecil — hindari inheritance berlebihan"]
+      ],
+      "deepDive": [
+        ["Class vs dictionary: kapan butuh class?", "Kalau hanya menyimpan data tanpa behavior, dictionary atau dataclass cukup. Kalau ada invariant (aturan yang harus selalu benar) atau method yang mengubah state secara terkontrol, class lebih tepat.", "Contoh: DatasetConfig bisa jadi dictionary. Tapi Dataset dengan method __len__ dan __getitem__ perlu class karena behavior-nya spesifik."],
+        ["Inheritance vs Composition", "nn.Module pakai inheritance karena PyTorch butuh hook ke dalam framework. Tapi untuk kode sendiri, composition (class A punya instance class B) lebih fleksibel dan mudah di-test daripada inheritance bertingkat."]
+      ],
+      "workedExample": ["ModelRegistry sederhana", ["State", "Attribute: models (dict), name (str)"], ["Constructor", "__init__ memastikan name tidak kosong"], ["Method", "register(name, model) menambah model, get(name) mengambil"], ["Invariant", "models dict tidak boleh berisi key duplikat"]],
+      "glossary": [
+        ["Class", "Blueprint untuk membuat object dengan state dan behavior"],
+        ["Instance", "Object yang dibuat dari class"],
+        ["self", "Referensi ke instance itu sendiri — parameter pertama method"],
+        ["__init__", "Constructor — dipanggil saat object dibuat"],
+        ["Composition", "Menggabungkan object — \"has-a\" relationship"]
+      ],
+      "quickCheck": {
+        "question": "Kapan sebaiknya pakai class daripada dictionary?",
+        "options": ["Saat ada aturan yang harus selalu terjaga (invariant)", "Saat data lebih dari 5 key", "Saat kode lebih dari 50 baris"],
+        "answer": 0,
+        "explanationCorrect": "Tepat. Class menjaga invariant — dict tidak bisa enforce aturan.",
+        "explanationWrong": "Bukan soal ukuran — class dipakai saat ada behavior + invariant, bukan sekadar penyimpanan data."
+      },
+      "challenge": {
+        "instruction": "Buat class ScoreTracker dengan: (1) __init__ menerima nama tracker, (2) method add(score) menambah score ke list internal, (3) method summary() return dict dengan mean, max, min, count. Pastikan add() menolak score di luar 0-100.",
+        "placeholder": "class ScoreTracker:\n    def __init__(self, name): ...\n    def add(self, score): ...\n    def summary(self): ...",
+        "example": "class ScoreTracker:\n    def __init__(self, name):\n        self.name = name\n        self._scores = []\n    def add(self, score):\n        if not 0 <= score <= 100: raise ValueError\n        self._scores.append(score)"
+      },
+      "roadmapRef": "5"
+    },
+    {
+      "hook": {
+        "question": "Error handling di AI — diam lebih berbahaya daripada error yang jelas.",
+        "answerA": { "label": "try-except bungkus semuanya", "text": "Pokoknya jangan sampai crash.", "icon": "fas fa-shield" },
+        "answerB": { "label": "Tangkap spesifik, jelaskan actionable", "text": "Exception spesifik + pesan yang membantu debugging. Fallback hanya jika ada recovery plan.", "icon": "fas fa-bug" },
+        "message": "Dalam pipeline AI, error tidak terhindarkan: file missing, format berubah, API timeout, GPU OOM. Yang membedakan production code adalah bagaimana error ditangani: logged, di-eskalasi, atau di-recover dengan cara yang predictable."
+      },
+      "flow": [
+        ["Detect", "Tangkap exception spesifik — jangan except Exception buta"],
+        ["Log", "Catat timestamp, traceback, konteks input — jangan print()"],
+        ["Recover", "Retry, skip, fallback, atau stop — pilih berdasarkan dampak"],
+        ["Protect", "Gunakan context manager (with) — pastikan resource ditutup"]
+      ],
+      "deepDive": [
+        ["FileNotFoundError vs PermissionError", "AI pipeline sering membaca banyak file: dataset, config, model checkpoint. Masing-masing bisa gagal dengan alasan berbeda. Tangani secara spesifik: missing file bisa pakai fallback, permission error harus eskalasi.", "Pathlib lebih aman daripada string path. Path('data') / 'train.csv' menghindari bug separator OS."],
+        ["Context manager: with statement", "with open(...) as f: otomatis menutup file bahkan jika terjadi exception. Pattern yang sama untuk database connection, model loading, dan resource apapun yang perlu cleanup. Buat context manager sendiri dengan __enter__/__exit__ atau @contextmanager."]
+      ],
+      "workedExample": ["Robust CSV loader", ["Attempt", "Coba baca CSV dengan pandas.read_csv()"], ["FileNotFound", "Return empty DataFrame + log warning"], ["EmptyFile", "Return empty DataFrame + log warning"], ["ParseError", "Log error detail + raise ulang — tidak bisa recover"], ["Finally", "Pastikan tidak ada file handle yang bocor"]],
+      "glossary": [
+        ["Exception", "Event yang mengganggu alur normal program"],
+        ["try-except", "Blok untuk menangkap dan menangani exception"],
+        ["Context Manager", "Object yang mengelola setup/cleanup resource"],
+        ["Traceback", "Laporan urutan pemanggilan function saat exception terjadi"],
+        ["Logging", "Mencatat event ke file/console — lebih baik dari print()"]
+      ],
+      "quickCheck": {
+        "question": "Kenapa except Exception dianggap bad practice?",
+        "options": ["Menangkap semua termasuk KeyboardInterrupt dan SystemExit — menyembunyikan bug serius", "Exception adalah keyword yang deprecated", "Python tidak mendukung except Exception"],
+        "answer": 0,
+        "explanationCorrect": "Tepat. except Exception terlalu luas — tangkap exception yang kamu pahami dan bisa tangani.",
+        "explanationWrong": "except Exception teknisnya valid, tapi menyembunyikan bug yang seharusnya muncul."
+      },
+      "challenge": {
+        "instruction": "Tulis fungsi safe_read_csv(path) yang: (1) return DataFrame jika sukses, (2) return empty DataFrame + log warning jika file tidak ditemukan, (3) return empty DataFrame + log warning jika file kosong, (4) raise ulang exception untuk error lain.",
+        "placeholder": "import pandas as pd\nimport logging\n\ndef safe_read_csv(path):\n    try:\n        ...\n    except FileNotFoundError:\n        ...\n    except pd.errors.EmptyDataError:\n        ...",
+        "example": "def safe_read_csv(path):\n    try:\n        return pd.read_csv(path)\n    except FileNotFoundError:\n        logging.warning(f'{path} tidak ditemukan')\n        return pd.DataFrame()"
+      },
+      "roadmapRef": "6"
+    },
+    {
+      "hook": {
+        "question": "NumPy: kenapa array lebih cepat dari list Python biasa?",
+        "answerA": { "label": "Karena syntax lebih pendek", "text": "Lebih sedikit karakter = lebih cepat.", "icon": "fas fa-text-height" },
+        "answerB": { "label": "Fixed-type contiguous memory", "text": "Semua elemen tipe sama dalam blok memori kontinu — CPU bisa vectorize, cache-friendly, dan pakai SIMD.", "icon": "fas fa-microchip" },
+        "message": "NumPy adalah fondasi komputasi numerik di Python. Semua library AI (PyTorch, TensorFlow, JAX) memakai konsep yang sama: array dengan tipe seragam, operasi vectorized, broadcasting, dan indexing lanjutan."
+      },
+      "flow": [
+        ["Shape", "Dimensi array — pastikan sesuai operasi berikutnya"],
+        ["Dtype", "Tipe elemen — float32 untuk GPU, int64 untuk index"],
+        ["Vectorize", "Operasi massal tanpa loop — scores / 100 untuk seluruh array"],
+        ["Broadcast", "Operasi antar array dengan shape berbeda — otomatis"]
+      ],
+      "deepDive": [
+        ["Vectorization vs loop", "Loop Python punya overhead per iterasi. NumPy vectorization memindahkan loop ke C yang sudah teroptimasi. np.sum(arr) jauh lebih cepat daripada sum(arr) Python. Rules: hindari loop manual pada array NumPy.", "Tapi vectorization butuh memori untuk intermediate result. Untuk array sangat besar, pertimbangkan operasi in-place (arr += 1) atau chunked processing."],
+        ["Broadcasting rules", "Broadcasting adalah fitur paling powerful tapi juga paling membingungkan di NumPy. Rules: (1) align shape dari kanan, (2) dimensi 1 di-expand, (3) dimensi yang tidak cocok → error. shape (3,1) + (1,4) → hasil (3,4) — ini adalah dasar dari banyak operasi AI."]
+      ],
+      "workedExample": ["Normalisasi batch", ["Data", "Array scores shape (1000,) — 1000 nilai peserta"], ["Mean", "np.mean(scores) — satu nilai skalar"], ["Std", "np.std(scores) — satu nilai skalar"], ["Normalize", "(scores - mean) / std — broadcasting otomatis ke 1000 elemen"], ["Verify", "np.allclose(normalized.mean(), 0) — cek hasil"]],
+      "glossary": [
+        ["ndarray", "Array N-dimensi NumPy — tipe data inti"],
+        ["Vectorization", "Operasi pada seluruh array tanpa loop eksplisit"],
+        ["Broadcasting", "Operasi antar array dengan shape berbeda"],
+        ["dtype", "Tipe data elemen array (float32, int64, dll)"],
+        ["Stride", "Jarak dalam bytes antar elemen — fundamental untuk view/slice"]
+      ],
+      "quickCheck": {
+        "question": "Kenapa operasi NumPy lebih cepat dari loop Python?",
+        "options": ["Loop dipindahkan ke C yang teroptimasi + contiguous memory", "NumPy pakai bahasa assembly", "NumPy menjalankan kode di GPU"],
+        "answer": 0,
+        "explanationCorrect": "Tepat. Vectorization + contiguous memory = CPU cache-friendly + SIMD + no Python overhead.",
+        "explanationWrong": "NumPy tidak otomatis pakai GPU — itu domain CuPy/PyTorch. Tapi NumPy tetap cepat karena C + memory layout."
+      },
+      "challenge": {
+        "instruction": "Diberikan array nilai: np.array([78, 92, 65, np.nan, 88, 71]). (1) Hitung mean tanpa NaN (pakai np.nanmean). (2) Ganti NaN dengan mean tersebut. (3) Normalisasi min-max ke rentang 0-1. Verifikasi hasil.",
+        "placeholder": "import numpy as np\nscores = np.array([78, 92, 65, np.nan, 88, 71])\n# 1. mean tanpa NaN\n# 2. fill NaN\n# 3. min-max normalize",
+        "example": "mean_val = np.nanmean(scores)\nscores = np.nan_to_num(scores, nan=mean_val)\nnormalized = (scores - scores.min()) / (scores.max() - scores.min())"
+      },
+      "roadmapRef": "7"
+    },
+    {
+      "hook": {
+        "question": "Kode sudah jalan di notebook — sekarang gimana caranya bikin bisa dijalankan orang lain?",
+        "answerA": { "label": "Tinggal kasih notebooknya", "text": "Orang lain tinggal run cell satu per satu.", "icon": "fas fa-book" },
+        "answerB": { "label": "Convert ke script + environment", "text": "Pindahkan ke .py, bikin requirements.txt, tambah argparse, dan pastikan bisa dijalankan dari terminal tanpa notebook.", "icon": "fas fa-terminal" },
+        "message": "Production code = reproducibility. Notebook bagus untuk eksplorasi, tapi delivery butuh script yang deterministik. Satu command harus menjalankan seluruh pipeline dari awal sampai akhir."
+      },
+      "flow": [
+        ["Extract", "Pindahkan logika dari notebook ke function di .py"],
+        ["Parameterize", "Ganti hardcode dengan argparse atau config file"],
+        ["Environment", "Freeze dependency: pip freeze > requirements.txt"],
+        ["Test run", "Jalankan dari terminal: python main.py --input data.csv"]
+      ],
+      "deepDive": [
+        ["Notebook ke production script", "Notebook menyimpan state tersembunyi — cell yang dijalankan duluan bisa mengubah variabel tanpa disadari. Restart-and-run-all adalah minimum. Tapi untuk production, ekstrak logika ke .py file, test secara terpisah, dan jalankan via CI/CD.", "Jupyter notebook tetap berguna untuk eksplorasi dan presentasi. Tapi final deliverable harus berupa script yang bisa dijalankan dengan satu command tanpa intervensi manual."],
+        ["Config management", "Jangan hardcode path, hyperparameter, atau credential. Gunakan config file (YAML/JSON), environment variable, atau dataclass. Pisahkan config dari code — tim production bisa mengubah parameter tanpa menyentuh kode."]
+      ],
+      "workedExample": ["Dari notebook ke CLI", ["Notebook", "Cell 1: baca CSV, Cell 2: clean, Cell 3: analisis, Cell 4: plot"], ["Extract", "load_data(), clean_data(), analyze(), plot_results() di .py"], ["CLI", "argparse: --input, --output, --threshold sebagai parameter"], ["Run", "python analyze.py --input data.csv --output report/ --threshold 75"]],
+      "glossary": [
+        ["CLI", "Command Line Interface — menjalankan script dari terminal"],
+        ["argparse", "Library standar Python untuk parsing argument CLI"],
+        ["requirements.txt", "File daftar dependency dengan versi — untuk pip install"],
+        ["Config File", "File eksternal (YAML/JSON) untuk parameter — tidak hardcode"],
+        ["Reproducibility", "Kemampuan menjalankan ulang dan mendapat hasil yang sama"]
+      ],
+      "quickCheck": {
+        "question": "Kenapa notebook saja tidak cukup untuk production?",
+        "options": ["State tersembunyi antar cell + tidak otomatis + sulit di-version control", "Notebook lebih lambat dari script", "Notebook hanya mendukung Python 2"],
+        "answer": 0,
+        "explanationCorrect": "Tepat. Notebook punya hidden state dan tidak deterministic kalau cell dijalankan tidak berurutan.",
+        "explanationWrong": "Bukan soal performa — ini soal reproducibility dan automation."
+      },
+      "challenge": {
+        "instruction": "Ambil salah satu notebook eksplorasi kamu. Ekstrak logikanya ke script Python dengan: (1) argparse untuk --input dan --output, (2) logging untuk progress, (3) try-except untuk error handling, (4) requirements.txt. Pastikan script bisa dijalankan dari terminal tanpa membuka notebook.",
+        "placeholder": "python main.py --input data.csv --output results/\n\n# Struktur script:\n# 1. parse args\n# 2. setup logging\n# 3. load -> clean -> analyze -> save",
+        "example": "import argparse, logging\nparser = argparse.ArgumentParser()\nparser.add_argument('--input', required=True)\nargs = parser.parse_args()\nlogging.info(f'Processing {args.input}...')"
+      },
+      "roadmapRef": "8"
+    }
+  ]
+}
