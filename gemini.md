@@ -344,11 +344,51 @@ ai-python.js sebelumnya terisi placeholder generic ("Python Basics — konsep ku
 
 ---
 
-## Session Summary — 27 Juli 2026 (Sisyphus — Bug #57 Resolution + ai-python.js)
+## 60. Feature: P1 — E2E Backend API Test Suite
 
-**Total commits:** 45 (25 sebelumnya + 7 sesi lalu + 9 sesi sebelumnya + 4 sesi ini)
-**Grand total bugs/features:** #1-#58
-**Files changed sesi ini:** 24 JS files + 2 CSS rules + 2 extraction scripts + 21 JSON outputs + 3 handover docs
+**Deskripsi:**
+Dibutuhkan test suite komprehensif untuk memvalidasi GAS backend API secara langsung, tanpa browser. Backend wajib benar sebelum frontend di-test.
+
+**Cara Perbaikan:**
+- File: `e2e/participant-backend.spec.js` (524 lines, 20 tests, 5 groups)
+- Pure HTTP via `fetch(POST /__gas)` — tidak pakai browser/page
+- Token field: `participantToken` (BUKAN `token`) — sesuai `requireParticipantToken(payload)`
+- Origin header: `http://127.0.0.1:3000` — wajib karena `isAllowedAppRequest()` di server.js
+
+**Group 1 — Auth (7 tests):**
+- Valid login → token + profile, unregistered NIK, wrong password, empty NIK, empty password, protected without token, invalid token
+
+**Group 2 — Progress CRUD (5 tests):**
+- Save chapter/quiz/practice, get progress (data field, bukan progress), idempotent save
+
+**Group 3 — Dashboard (2 tests):**
+- Full data structure (res.data.modules), quiz_score percentage (0-100)
+
+**Group 4 — Password (3 tests):**
+- Change valid full cycle (ganti → login baru → ganti balik), wrong old, empty fields
+
+**Group 5 — Edge Cases (3 tests):**
+- Update profile, score persistence (Math.max di dashboard vs last-write di sheet), multi-module tracking
+
+**Temuan Kritis:**
+1. Token field: `payload.participantToken || payload.authToken` — BUKAN `token`
+2. `getParticipantProgress` response: `{data: [...]}` — BUKAN `{progress: [...]}`
+3. Dashboard response: `{data: {modules: [...]}}` — modules wrapped in data
+4. `chapter_id` returned as number from sheet — use `String(e.chapter_id)` comparison
+5. `quiz_score` may be `undefined` (not `null`) in dashboard response
+6. Score Math.max: only in `getParticipantDashboardData`, NOT in `saveParticipantProgress`
+7. `server.js` has `isAllowedAppRequest()` — requires Origin header matching allowed origins
+8. `nama_lengkap` can be empty string — don't assert `length > 0`
+
+**Verifikasi:** 20/20 tests PASS ✅
+
+---
+
+## Session Summary — 27 Juli 2026 (Sisyphus — Bug #57 Resolution + ai-python.js + P1 Tests)
+
+**Total commits:** 46 (25 sebelumnya + 7 sesi lalu + 9 sesi sebelumnya + 5 sesi ini)
+**Grand total bugs/features:** #1-#60
+**Files changed sesi ini:** 24 JS files + 2 CSS rules + 2 extraction scripts + 21 JSON outputs + 3 handover docs + 1 test file
 
 **Key deliverables sesi ini:**
 | # | Item | Detail |
@@ -359,6 +399,7 @@ ai-python.js sebelumnya terisi placeholder generic ("Python Basics — konsep ku
 | #58 | Topic-label badges | 1 CSS rule hide 313+ labels di seluruh halaman |
 | — | ai-python.js | 8 GUIDES konten Python proper (dari placeholder) |
 | — | ai-modern.js | `eyebrow: "Jalur Pemula"` → `"AI Modern"` |
+| #60 | P1 Backend E2E tests | 20 tests, pure HTTP fetch(POST /__gas) — no browser |
 
 **Tools created:**
 ```bash
@@ -368,10 +409,10 @@ node scripts/inject-guides.js --phase=all      # Inject all
 node scripts/inject-guides.js --phase=1 --dry-run  # Preview
 ```
 
-**Next priority:** E2E test suite (53 tests planned, belum implementasi)
-- P1: `e2e/participant-backend.spec.js` — Backend API tests (~20)
-- P2: `e2e/fellow-dashboard.spec.js` — Fix flaky + tambah coverage (~25)
-- P3: `e2e/participant-workflow.spec.js` — Full flow integration (~8)
+**Next priority:** E2E test suite (P1 DONE, P2/P3 remaining)
+- ✅ P1: `e2e/participant-backend.spec.js` — 20 backend API tests (20/20 PASS)
+- 🔜 P2: `e2e/fellow-dashboard.spec.js` — Fix 2 flaky + 8 new tests (~25)
+- 🔜 P3: `e2e/participant-workflow.spec.js` — Full flow integration (~8)
 
 ---
 
