@@ -1822,6 +1822,7 @@
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             var btn = form.querySelector('.btn-save');
+            if (!btn) return;
             var msg = document.getElementById('settingsProfileMessage');
             var originalText = btn.textContent;
             btn.disabled = true;
@@ -1972,6 +1973,7 @@
             var confirmPassword = document.getElementById('confirmPassword').value;
             var msg = document.getElementById('passwordChangeMessage');
             var btn = form.querySelector('button[type="submit"]');
+            if (!btn) return;
             var originalHTML = btn.innerHTML;
 
             if (newPassword !== confirmPassword) {

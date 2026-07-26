@@ -343,6 +343,26 @@
     background: #be185d;
 }
 
+.settings-message {
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 8px 0;
+}
+
+.settings-message.success {
+    background: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #86efac;
+}
+
+.settings-message.error {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+}
+
 
 /* --- RESPONSIVE --- */
 @media (max-width: 1024px) {
