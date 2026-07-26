@@ -602,13 +602,55 @@ Setelah Task A dan B selesai, ditemukan beberapa bug blocking saat manual testin
 
 ---
 
+## Bug #42-44 — Module 404 + Dashboard Cache + Password UX (27 Juli 2026)
+
+## 42. Bug: Module Cards 404 — GAS Seed HREF Route Mismatch
+**Deskripsi:**
+Klik module card dari dashboard mengarah ke halaman 404. Semua modul tidak bisa diakses.
+**Penyebab:**
+`seedDashboardModules()` di Code.gs menggunakan pola href `#/participant-ai-*` tetapi router menggunakan `#/participant-ai-lab-*`. Sebanyak 22 dari 27 href mismatch.
+**Solusi:**
+Memperbaiki 22 href di `seedDashboardModules()`:
+- 20 modul: `participant-ai-*` → `participant-ai-lab-*`
+- computer-vision: `participant-cv-digital-image` → `participant-ai-lab-cv`
+- machine-learning: `participant-ai-ml-basic` → `participant-ai-lab-machine-learning`
+5 modul sudah benar (python, reasoning, modern, evolution, evaluation — pakai direct route tanpa -lab-).
+**Catatan:** User harus re-run `seedAllDashboardData()` di Apps Script setelah deploy Code.gs.
+
+## 43. Bug: Skeleton Muncul Setiap Kali Navigasi Balik ke Dashboard
+**Deskripsi:**
+Setiap kali user navigasi ke halaman lain lalu kembali ke dashboard, skeleton shimmer muncul lagi dan fetch ulang dari GAS.
+**Penyebab:**
+`initParticipantDashboardData()` selalu memanggil `renderDashboardSkeletons()` tanpa cache.
+**Solusi:**
+Menambahkan `_dashboardDataCache` di module scope. First load: skeleton + fetch + simpan cache. Navigasi balik: render instant dari cache + optional background refresh silent.
+
+## 44. Bug: Password Change — Feedback Kurang & Validasi Client-Side Kosong
+**Deskripsi:**
+User melaporkan tidak bisa login setelah ganti password. Form password tidak memvalidasi field kosong di client-side.
+**Penyebab:**
+- Tidak ada validasi client-side untuk field password lama/baru kosong
+- Tidak ada pengecekan password baru ≠ password lama di client-side
+- Success message terlalu generik — tidak memberitahu user untuk pakai password baru saat login
+**Solusi:**
+- Tambah validasi: oldPassword kosong → error + focus field
+- Tambah validasi: newPassword kosong → error + focus field
+- Tambah validasi: oldPassword === newPassword → error
+- Perbaiki success message: "Gunakan password baru saat login berikutnya."
+**Catatan:** Logic GAS `changeParticipantPassword()` sudah benar — hash di-write ke `participantAccounts.password_hash` dan `participants.participant_password`. User disarankan verifikasi GAS deployment up-to-date.
+
+---
+
 ## Session Summary — 27 Juli 2026 (Sisyphus — Final)
 
-**Total commits:** 20
-**Bugs fixed:** #36-41
+**Total commits:** 22
+**Bugs fixed:** #36-44
 **Key deliverables:**
 - Task A: Progress tracking wired to 28 module JS files ✅
 - Task B: GAS seed functions for all 6 dashboard sheets ✅
 - Task C: Skeleton loader, error state, fade-in, retry button ✅
+- Fix #42: Module href 404 — 22 seed hrefs corrected to match router routes
+- Fix #43: Dashboard cache — no skeleton re-render on navigation back
+- Fix #44: Password UX — client-side validation + improved feedback
 - 9 bug fixes (#38a-i): sidebar, dropdown, settings route, profile redirect, password, flash name, dashboard layout, greeting
 - 3 CSS bugs found & fixed during audit (#39-41)
