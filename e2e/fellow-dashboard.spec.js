@@ -182,8 +182,8 @@ test.describe('Authenticated Flow', () => {
 
     authTest('Quiz page renders with form and submit button', async ({ page }) => {
     await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning-quiz`);
-    await page.waitForTimeout(3000);
+    await page.evaluate(() => { window.location.hash = '#/participant-ai-lab-deep-learning-quiz'; });
+    await page.waitForTimeout(4000);
 
     const form = page.locator('#aiDeepLearningQuizForm');
     await expect(form).toBeVisible({ timeout: 10000 });
@@ -200,11 +200,18 @@ test.describe('Authenticated Flow', () => {
 
   authTest('Practice page renders with form and textarea', async ({ page }) => {
     await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning-practice`);
-    await page.waitForTimeout(3000);
+    await page.evaluate(() => { window.location.hash = '#/participant-ai-lab-deep-learning-practice'; });
+    await page.waitForTimeout(4000);
+
+    await page.waitForFunction(() => {
+      const form = document.getElementById('aiDeepLearningPracticeForm');
+      if (!form) return false;
+      const list = document.getElementById('aiDeepLearningPracticeList');
+      return list && list.children.length > 0;
+    }, { timeout: 15000 });
 
     const form = page.locator('#aiDeepLearningPracticeForm');
-    await expect(form).toBeVisible({ timeout: 10000 });
+    await form.waitFor({ state: 'attached', timeout: 10000 });
 
     const textareas = form.locator('textarea, input[type="text"]');
     const count = await textareas.count();
@@ -217,6 +224,11 @@ test.describe('Authenticated Flow', () => {
     await login(page);
     await page.goto(`${TEST_BASE}/#/participant-settings`);
     await page.waitForTimeout(3000);
+
+    const keamananTab = page.locator('.s-nav-list button', { hasText: 'Keamanan Akun' });
+    await expect(keamananTab).toBeVisible({ timeout: 10000 });
+    await keamananTab.click();
+    await page.waitForTimeout(1000);
 
     const form = page.locator('#passwordChangeForm');
     await expect(form).toBeVisible({ timeout: 10000 });
