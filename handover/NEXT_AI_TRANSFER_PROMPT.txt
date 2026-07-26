@@ -1,17 +1,18 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║  AI TRANSFER PROMPT — HerAI Fellowship SuperApp              ║
-║  Sesi: 27 Juli 2026 (Sisyphus, 25 commit) → Next AI         ║
+║  Sesi: 27 Juli 2026 (Sisyphus, 7 commit) → Next AI          ║
+║  Total sesi: 32 commit | Worktree: BERSIH                    ║
 ╚══════════════════════════════════════════════════════════════╝
 
 ⚠️  BACA SELURUH FILE INI SEBELUM MULAI KERJA.
     JANGAN SKIP. JANGAN MENGANGGAP TAHU.
 
 ═══════════════════════════════════════════════════════════════
-📋 SUMBER KEBENARAN (WAJIB DIBACA)
+📋 SUMBER KEBENARAN (WAJIB DIBACA — URUTAN PENTING)
 ═══════════════════════════════════════════════════════════════
-1. handover/AI_HANDOFF_CURRENT_STATE.md  ← FILE UTAMA (single source of truth)
-2. gemini.md  ← Bug log #1-44 + session rules
-3. reports/BACKEND_FRONTEND_AUDIT_2026-07-27.md  ← Hasil tes
+1. handover/AI_HANDOFF_CURRENT_STATE.md  ← SINGLE SOURCE OF TRUTH
+2. gemini.md  ← Bug log #1-51 + session rules
+3. reports/BACKEND_FRONTEND_AUDIT_2026-07-27.md  ← Audit report
 
 ═══════════════════════════════════════════════════════════════
 🔧 IDENTITAS SISTEM
@@ -22,81 +23,125 @@
 - SPA: Vanilla JS hash-router, Node.js proxy (node server.js → http://127.0.0.1:3000)
 - Proxy: POST /__gas (token auto-injected oleh main.js)
 - WA env: GAS_WEB_APP_URL di .env
-- Last commit: b263612
-- Worktree: BERSIH
+- Last commit: 0d442bf
+- Worktree: BERSIH (hanya untracked: scratch/, scripts/test-settings.js)
 
 ═══════════════════════════════════════════════════════════════
 🚫 HARD BLOCK — JANGAN DISENTUH
 ═══════════════════════════════════════════════════════════════
 - Signaling (Go WebRTC), Messaging/Chat (Go), Participant Portal (Go)
-- Admin dashboard (production)
+- Admin dashboard (production) — pages/dashboard/, js/dashboard/
 - Keamanan/Security hardening
 - Leaderboard, Certificates, Tasks, Projects, Events, Community, Mentor
 - provisionParticipantAccounts / generateParticipantAccounts*
 - forceReset:true (AKAN RESET 187 AKUN EXISTING)
-- 231 file lesson pages (jangan edit satu-satu)
+- 231 file lesson pages (jangan edit satu-satu — pakai JS injection)
 - js/main.js, js/router.js (kecuali tambah route/handler baru)
 
 ═══════════════════════════════════════════════════════════════
 ✅ APA YANG SUDAH SELESAI — JANGAN DIULANG
 ═══════════════════════════════════════════════════════════════
 
-TASK A — Wiring saveChapterProgress ke 28 module JS:
-- 28/29 file termodifikasi, 29/29 syntax PASS
-- Tiap chapter load auto-save ke GAS saveParticipantProgress
+DARI SESI SEBELUMNYA (25 commit):
+- Task A: saveChapterProgress wiring ke 28 module JS — auto-save tiap buka chapter
+- Task B: 7 GAS seed functions, 27 modul, idempotent (upsertByKey)
+- Task C: Skeleton loader, error state, fade-in transitions
+- Bug fixes #29-44 (16 bug)
 
-TASK B — Seed dashboard data:
-- 7 GAS seed functions, 27 modul, idempotent (upsertByKey)
-- ⚠️ seedDashboardDiscussions pakai addRowObject (duplikasi tiap rerun)
+DARI SESI INI (7 commit — #45-#51):
 
-TASK C — Frontend Polish (Skeleton + Error + Fade-In):
-- 6 section shimmer skeleton placeholders (dash-shimmer keyframes)
-- Error state UI: icon + message + "Coba Lagi" retry button
-- Fade-in animation (dash-fade-in, staggered delays)
-- Dashboard cache (_dashboardDataCache): first load skeleton, nav back instant
-- fetchParticipantDashboardData() throws on error (no silent fallback)
+1. SEED FIX: seedDashboardDiscussions — addRowObject → upsertByKey (idempotent)
+   - gas/Code.gs line 825: upsertByKey(SHEETS.participantDashboardDiscussionTrails, 'topic', d.topic, d)
 
-BUG FIXES (16 bug — #29-44):
-- #29-35: Pre-session (null guards, CSS, schema)
-- #36-37: Task A/B wiring fixes
-- #38a-i: Sidebar ID, dropdown route, settings handler, profile redirect, password
-          silent fail, flash "Aisyah Putri", dashboard 8-module limit, greeting fallback
-- #39-41: CSS bugs found during audit (skeleton circle display, redundant border-radius, unused keyframe)
-- #42: Module href 404 — 22 href corrected in seedDashboardModules()
-        (participant-ai-* → participant-ai-lab-*)
-- #43: Dashboard skeleton re-render on navigation back — fixed with _dashboardDataCache
-- #44a: Password UX — client-side validation for empty fields + same-password guard
-- #44b: Generated password still works after change — password_status='changed_by_participant'
-        fixed to 'changed' (login guard checks exact 'changed')
+2. QUIZ WIRING (#45 + #50):
+   - 28 ai-*.js + 1 ai-intro handler di settings.js → inject saveChapterProgress(moduleId, 'quiz', 'completed', score)
+   - Score quizzes sekarang POST ke GAS participant_progress sheet
+   - GAS backend TIDAK DIUBAH — saveParticipantProgress sudah handle score param
+   - ai-cv.js SKIP (no quiz)
+   - ai-python-basic.js SKIP from index.html (#47 — namespace conflict with ai-python.js)
 
-═══════════════════════════════════════════════════════════════
-⚠️  CRITICAL — YANG HARUS DILAKUKAN MANUAL OLEH USER
-═══════════════════════════════════════════════════════════════
-1. Copy gas/Code.gs terbaru ke Apps Script editor
-2. REDEPLOY Web App: Deploy → Manage deployments → Edit → New version → Deploy
-   TANPA REDEPLOY: changeParticipantPassword akan pakai kode lama!
-3. Run seedAllDashboardData() dari Apps Script editor
-4. Untuk akun yang sudah pernah ganti password: ganti ulang supaya
-   password_status jadi 'changed' (bukan 'changed_by_participant')
-5. Test: login password baru → harus masuk. Login password lama → harus DITOLAK.
+3. PRACTICE WIRING (#51):
+   - 28 ai-*.js → inject saveChapterProgress(MODULE_ID, 'practice', 'completed')
+   - score=null (essay answers — not auto-graded)
+   - ai-cv.js SKIP (no practice)
+
+4. CACHE BUSTER FIX (#46): 19 ai-*.js files tanpa ?v= → tambah ?v=20260727-quiz-wire
+
+5. DUPLICATE SCRIPTS (#48): Hapus duplicate ai-evaluation.js & ai-evolution.js dari index.html
+
+6. PLAYWRIGHT E2E: 13/13 tests PASS
+   - Setup: npm install @playwright/test, playwright.config.js, e2e/fellow-dashboard.spec.js
+   - Tests: 4 public pages, 2 login validation, 5 authenticated flow, 2 error handling
+   - Run: TEST_PARTICIPANT_NIK=... TEST_PARTICIPANT_PASSWORD=... npx playwright test
 
 ═══════════════════════════════════════════════════════════════
-📝 NEXT PLAN
+⚠️  TEMUAN KRITIS — YANG HARUS DIKETAHUI
 ═══════════════════════════════════════════════════════════════
-1. Kuis backend wiring — jawaban kuis masih lokal, wire ke saveParticipantProgress
-2. Task D — Playwright e2e testing
-3. seedDashboardDiscussions — ganti addRowObject → upsertByKey (idempotent)
+
+1. participantPortalOpen di sheet Settings:
+   - Value HARUS lowercase "true" (JSON boolean)
+   - String "TRUE" gagal — router cek !== true, string tidak match
+   - Lokasi: sheet Settings, key participantPortalOpen
+
+2. Login form element IDs:
+   - NIK input: #profileNik (BUKAN #participantNik)
+   - Password input: #profilePassword (BUKAN #participantPassword)
+   - Form: #participantLoginForm
+   - Submit button: #btnParticipantLogin
+
+3. Fresh browser localStorage kosong:
+   - getGlobalSettings() sync return default {participantPortalOpen: false}
+   - getGlobalSettingsAsync() dipanggil setelah router selesai → race condition
+   - Portal gate selalu muncul di first load fresh browser
+   - Solusi di Playwright: primeSettings() inject localStorage sebelum navigasi
+
+4. ai-python-basic.js (#47):
+   - FILE INI TIDAK BOLEH DITAMBAHKAN ke index.html
+   - Conflict: ai-python.js dan ai-python-basic.js sama-sama define window.loadPythonTopik()
+   - Wiring quiz & practice di dalamnya aman (IIFE, tidak akan dieksekusi)
+
+5. Score semantics berbeda (#49 — DEFERRED):
+   - ai-math-for-ai.js: percentage (0-100), lainnya: raw count (0-20)
+   - Dashboard belum nampilin score → belum masalah
+   - Fix saat dashboard score display diimplementasikan
+
+═══════════════════════════════════════════════════════════════
+✅ VERIFIED — SUDAH DITES MANUAL
+═══════════════════════════════════════════════════════════════
+- Quiz submit → participant_progress muncul score ✅
+- Practice save → participant_progress muncul entry ✅
+- seedDashboardDiscussions → idempotent ✅
+- Playwright e2e → 13/13 PASS ✅
+
+═══════════════════════════════════════════════════════════════
+📝 NEXT PLAN — FOKUS SESI BERIKUTNYA
+═══════════════════════════════════════════════════════════════
+
+PRIORITAS 1 — Dashboard Score Display:
+- Dashboard belum nampilin score quiz/practice
+- GAS getParticipantDashboardData sudah return score per module
+- Perlu: UI element di module card (badge/progress bar) + query score dari participant_progress
+- File: settings.js (renderParticipantDashboard), dashboard.html, dashboard.css
+
+PRIORITAS 2 — seedDashboardLeaderboard idempotency:
+- Masih addRowObject + clearContent (fungsional aman, tapi inkonsisten)
+- Ganti ke upsertByKey dengan key='rank' atau 'nik'
+
+PRIORITAS 3 — Additional e2e tests:
+- Quiz submit flow test (requires portal open + credentials)
+- Practice save flow test
+- Password change end-to-end test
 
 ═══════════════════════════════════════════════════════════════
 📐 ATURAN KERJA — WAJIB DIIKUTI
 ═══════════════════════════════════════════════════════════════
 1. Commit PER FITUR, bukan satu commit besar
 2. Update handover & gemini.md setiap checkpoint
-3. Catat bug baru dengan nomor #45+
+3. Catat bug baru dengan nomor #52+
 4. Dark theme DILARANG — light pink theme untuk code blocks
 5. CSS scope ai-lab-content WAJIB di template CV
 6. Diagram kontras: lines ≥25% opacity, dots ≥75%, stroke ≥0.8px
-7. JANGAN tampilkan NIK/password di mana pun
+7. JANGAN tampilkan NIK/password di mana pun (log, screenshot, commit, handover)
 8. TANYA user sebelum eksekusi kalau ada yang ambigu
 9. Verifikasi sebelum commit: node --check, test data flow, cek null guards
 10. JANGAN jalankan provision/generate functions
@@ -108,23 +153,67 @@ BUG FIXES (16 bug — #29-44):
 16. GAS deployment: selalu redeploy web app setelah edit Code.gs
 
 ═══════════════════════════════════════════════════════════════
-🔑 DATA FLOW
+🔑 DATA FLOW — SEMUA WIRING
 ═══════════════════════════════════════════════════════════════
-Login:    POST /__gas { action: "participantLogin", nik, password }
-          → 3 jalur verifikasi (hash, participant_pw, generated_pw)
-          → generated_password DIBLOKIR jika password_status='changed'
-          → synchronizeParticipantCredentials() → sync 2 sheet
-          → token 12 jam → saveParticipantSession() → sessionStorage
 
-Password: POST /__gas { action: "changeParticipantPassword", oldPassword, newPassword }
-          → verify → hash → update BOTH ParticipantAccounts + peserta_tahap_1
-          → password_status='changed' (MEMBLOKIR generated_password)
-          → generated_password TETAP DISIMPAN untuk audit trail
+CHAPTER PROGRESS (auto-save):
+  window.saveChapterProgress(MODULE_ID, chapterNumber, 'completed')
+  → POST /__gas { action: "saveParticipantProgress", module_id, chapter_id, status, score: null }
+  → GAS: UPSERT ke participant_progress (chapter_id = '1', '2', '3'...)
 
-Dashboard: initParticipantDashboardData()
-           → First load: renderDashboardSkeletons() → fetch → render
-           → Nav back: render dari _dashboardDataCache (instant, no skeleton)
-           → Error: renderDashboardError() + retry button
+QUIZ SUBMIT:
+  window.saveChapterProgress(MODULE_ID, 'quiz', 'completed', score)
+  → POST /__gas { action: "saveParticipantProgress", module_id, chapter_id: 'quiz', score }
+  → GAS: UPSERT ke participant_progress (score terisi)
 
-Session:  sessionStorage.heraiParticipantSession
-          { nik, token, expiresAt, name, profile: { ... } }
+PRACTICE SAVE:
+  window.saveChapterProgress(MODULE_ID, 'practice', 'completed')
+  → POST /__gas { action: "saveParticipantProgress", module_id, chapter_id: 'practice', score: null }
+  → GAS: UPSERT ke participant_progress
+
+LOGIN:
+  POST /__gas { action: "participantLogin", nik, password }
+  → 3 jalur verifikasi (hash, participant_pw, generated_pw)
+  → generated_password DIBLOKIR jika password_status='changed'
+  → synchronizeParticipantCredentials() → sync 2 sheet
+  → token 12 jam → saveParticipantSession() → sessionStorage
+
+PASSWORD CHANGE:
+  POST /__gas { action: "changeParticipantPassword", oldPassword, newPassword }
+  → verify old → hash new → update BOTH ParticipantAccounts + peserta_tahap_1
+  → password_status='changed' (MEMBLOKIR generated_password)
+
+DASHBOARD:
+  initParticipantDashboardData()
+  → First load: renderDashboardSkeletons() → fetch → render
+  → Nav back: render dari _dashboardDataCache (instant, no skeleton)
+  → Error: renderDashboardError() + "Coba Lagi" retry button
+
+SESSION:
+  sessionStorage.heraiParticipantSession
+  { nik, token, expiresAt, name, profile: { ... } }
+
+SETTINGS GATE (localStorage-based):
+  getGlobalSettings() → localStorage.heraiGlobalSettings
+  → getGlobalSettingsAsync() → /__settings (local JSON file .cursor/global-settings.json)
+  → participantPortalOpen HARUS boolean true (bukan string "TRUE")
+
+═══════════════════════════════════════════════════════════════
+📊 KOMPOSISI FILE — BOLEH / TIDAK BOLEH DIEDIT
+═══════════════════════════════════════════════════════════════
+
+✅ BOLEH DIEDIT:
+  js/frontend/fellow-dashboard/settings.js  — logic dashboard, settings, password, cache (~2190 baris)
+  js/frontend/fellow-dashboard/ai-*.js       — 29 module files (quiz + practice wiring injected)
+  pages/frontend/fellow-dashboard/dashboard.html  — UI dashboard (205 baris)
+  css/frontend/fellow-dashboard/dashboard.css  — skeleton, shimmer, error, fade-in (2195 baris)
+  css/frontend/fellow-dashboard/settings.css  — styling settings
+  gas/Code.gs  — HANYA bug fix (2420 baris, 52 routes, 23 sheets)
+  index.html  — HANYA cache buster (?v=...)
+
+❌ JANGAN DIEDIT:
+  js/main.js — auth transport, global settings
+  js/router.js — hash routing (kecuali tambah route/handler baru)
+  Semua 231 file lesson HTML/JS — sidebar hardcoded
+  Semua file Go (signaling/, messaging/, participant-portal/)
+  Semua file admin dashboard (pages/dashboard/, js/dashboard/)
