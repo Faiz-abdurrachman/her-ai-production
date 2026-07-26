@@ -22,7 +22,7 @@
 - GAS Code: gas/Code.gs (2419 baris, 52 routes, 23 sheets)
 - SPA: Vanilla JS hash-router, Node.js proxy (node server.js → http://127.0.0.1:3000)
 - Proxy: POST /__gas (token auto-injected oleh main.js)
-- Last commit: 7ddfdde
+- Last commit: a8d85c0
 - Worktree: BERSIH
 
 ═══════════════════════════════════════════════════════════════
@@ -59,7 +59,7 @@ TASK B — Seed dashboard data:
 - 7 GAS seed functions di Code.gs: seedDashboardModules/Journey/Events/Tracks/Discussions/Leaderboard + seedAllDashboardData
 - 27 modul dengan module_id, total_chapters, icon, tone, href
 - Semua fungsi idempotent (upsertByKey) — aman dijalankan ulang
-- ⚠️ BELUM DIJALANKAN! User harus run seedAllDashboardData() dari Apps Script editor
+- ✅ SUDAH DIJALANKAN — sheet sudah terisi data
 
 BUG FIXES (9 commit):
 - Sidebar deep-learning: HTML ID mismatch (aiDeepLearningList vs reasoning-sidebar-list)
@@ -75,9 +75,9 @@ BUG FIXES (9 commit):
 📝 NEXT PLAN — Yang Perlu Dikerjakan
 ═══════════════════════════════════════════════════════════════
 
-CRITICAL (User harus lakukan manual):
-1. Jalankan seedAllDashboardData() di Apps Script editor
-2. Login ulang setelah ganti password
+CRITICAL (Sudah selesai):
+1. ✅ seedAllDashboardData() sudah dijalankan — sheet terisi
+2. User sudah ganti password & login ulang
 
 TASK C (Optional - Frontend Polish):
 - Loading spinner saat fetch GAS data
