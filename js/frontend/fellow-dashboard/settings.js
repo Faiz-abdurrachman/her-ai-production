@@ -1966,14 +1966,21 @@
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             var session = readParticipantSession();
-            if (!session?.nik) return;
+            if (!session?.nik) {
+                var errMsg = document.getElementById('passwordChangeMessage');
+                if (errMsg) { errMsg.style.display = 'block'; errMsg.className = 'settings-message error'; errMsg.textContent = 'Sesi tidak ditemukan. Silakan login ulang.'; }
+                return;
+            }
 
             var oldPassword = document.getElementById('oldPassword').value;
             var newPassword = document.getElementById('newPassword').value;
             var confirmPassword = document.getElementById('confirmPassword').value;
             var msg = document.getElementById('passwordChangeMessage');
             var btn = form.querySelector('button[type="submit"]');
-            if (!btn) return;
+            if (!btn) {
+                if (msg) { msg.style.display = 'block'; msg.className = 'settings-message error'; msg.textContent = 'Tombol submit tidak ditemukan.'; }
+                return;
+            }
             var originalHTML = btn.innerHTML;
 
             if (newPassword !== confirmPassword) {
