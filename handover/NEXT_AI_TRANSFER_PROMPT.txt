@@ -1,6 +1,6 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║  AI TRANSFER PROMPT — HerAI Fellowship SuperApp              ║
-║  Sesi: 27 Juli 2026 (Sisyphus) → Next AI                    ║
+║  Sesi: 27 Juli 2026 (Sisyphus, 25 commit) → Next AI         ║
 ╚══════════════════════════════════════════════════════════════╝
 
 ⚠️  BACA SELURUH FILE INI SEBELUM MULAI KERJA.
@@ -9,8 +9,8 @@
 ═══════════════════════════════════════════════════════════════
 📋 SUMBER KEBENARAN (WAJIB DIBACA)
 ═══════════════════════════════════════════════════════════════
-1. handover/AI_HANDOFF_CURRENT_STATE.md  ← FILE UTAMA
-2. gemini.md  ← Bug log #1-38 + session rules
+1. handover/AI_HANDOFF_CURRENT_STATE.md  ← FILE UTAMA (single source of truth)
+2. gemini.md  ← Bug log #1-44 + session rules
 3. reports/BACKEND_FRONTEND_AUDIT_2026-07-27.md  ← Hasil tes
 
 ═══════════════════════════════════════════════════════════════
@@ -18,15 +18,15 @@
 ═══════════════════════════════════════════════════════════════
 - Spreadsheet ID: 1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w
 - GAS Web App URL: https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec
-- GAS Deployment: Versi 3 (26 Juli 2026 08:04)
-- GAS Code: gas/Code.gs (2419 baris, 52 routes, 23 sheets)
+- GAS Code: gas/Code.gs (~2420 baris, 52 routes, 23 sheets)
 - SPA: Vanilla JS hash-router, Node.js proxy (node server.js → http://127.0.0.1:3000)
 - Proxy: POST /__gas (token auto-injected oleh main.js)
-- Last commit: a8d85c0
+- WA env: GAS_WEB_APP_URL di .env
+- Last commit: b263612
 - Worktree: BERSIH
 
 ═══════════════════════════════════════════════════════════════
-🚫 HARD BLOCK — AREA YANG TIDAK BOLEH DISENTUH
+🚫 HARD BLOCK — JANGAN DISENTUH
 ═══════════════════════════════════════════════════════════════
 - Signaling (Go WebRTC), Messaging/Chat (Go), Participant Portal (Go)
 - Admin dashboard (production)
@@ -41,59 +41,58 @@
 ✅ APA YANG SUDAH SELESAI — JANGAN DIULANG
 ═══════════════════════════════════════════════════════════════
 
-SESI SEBELUM (5 Fase + 7 Bug):
-- Fase 1-5: Dynamic name, settings wire GAS, ganti password, progress tracking
-- Bug #29-35: null guards, fragile selectors, CSS, schema fix
-- Backend: 47/47 verified, 12/12 endpoint tested
-
-SESI INI (Task A + B + 9 Bug Fix — 19 commit):
-
 TASK A — Wiring saveChapterProgress ke 28 module JS:
-- Setiap ai-*.js punya `const MODULE_ID = 'module-name'`
-- Setiap chapter load otomatis panggil `window.saveChapterProgress(MODULE_ID, chapter, 'completed')`
-- POST ke GAS saveParticipantProgress → UPSERT ke participant_progress
 - 28/29 file termodifikasi, 29/29 syntax PASS
-- Module ID diekstrak dari CHAPTERS[0].sourcePath folder name
+- Tiap chapter load auto-save ke GAS saveParticipantProgress
 
 TASK B — Seed dashboard data:
-- 7 GAS seed functions di Code.gs: seedDashboardModules/Journey/Events/Tracks/Discussions/Leaderboard + seedAllDashboardData
-- 27 modul dengan module_id, total_chapters, icon, tone, href
-- Semua fungsi idempotent (upsertByKey) — aman dijalankan ulang
-- ✅ SUDAH DIJALANKAN — sheet sudah terisi data
+- 7 GAS seed functions, 27 modul, idempotent (upsertByKey)
+- ⚠️ seedDashboardDiscussions pakai addRowObject (duplikasi tiap rerun)
 
-BUG FIXES (9 commit):
-- Sidebar deep-learning: HTML ID mismatch (aiDeepLearningList vs reasoning-sidebar-list)
-- Dropdown "Setting Akun": link salah (participant-profile → participant-settings)
-- Settings route handler: kena catchall under-development
-- Profile redirect: diblok guard isParticipantRouteAllowed
-- Password form: silent fail → error feedback
-- Flash "Aisyah Putri": hardcode di HTML → netral "Peserta"
-- Dashboard: 27 modul → limit 8 + "Lihat Semua"
-- Greeting: "Halo!" kosong → "Halo, Peserta HerAI!"
+TASK C — Frontend Polish (Skeleton + Error + Fade-In):
+- 6 section shimmer skeleton placeholders (dash-shimmer keyframes)
+- Error state UI: icon + message + "Coba Lagi" retry button
+- Fade-in animation (dash-fade-in, staggered delays)
+- Dashboard cache (_dashboardDataCache): first load skeleton, nav back instant
+- fetchParticipantDashboardData() throws on error (no silent fallback)
+
+BUG FIXES (16 bug — #29-44):
+- #29-35: Pre-session (null guards, CSS, schema)
+- #36-37: Task A/B wiring fixes
+- #38a-i: Sidebar ID, dropdown route, settings handler, profile redirect, password
+          silent fail, flash "Aisyah Putri", dashboard 8-module limit, greeting fallback
+- #39-41: CSS bugs found during audit (skeleton circle display, redundant border-radius, unused keyframe)
+- #42: Module href 404 — 22 href corrected in seedDashboardModules()
+        (participant-ai-* → participant-ai-lab-*)
+- #43: Dashboard skeleton re-render on navigation back — fixed with _dashboardDataCache
+- #44a: Password UX — client-side validation for empty fields + same-password guard
+- #44b: Generated password still works after change — password_status='changed_by_participant'
+        fixed to 'changed' (login guard checks exact 'changed')
 
 ═══════════════════════════════════════════════════════════════
-📝 NEXT PLAN — Yang Perlu Dikerjakan
+⚠️  CRITICAL — YANG HARUS DILAKUKAN MANUAL OLEH USER
 ═══════════════════════════════════════════════════════════════
+1. Copy gas/Code.gs terbaru ke Apps Script editor
+2. REDEPLOY Web App: Deploy → Manage deployments → Edit → New version → Deploy
+   TANPA REDEPLOY: changeParticipantPassword akan pakai kode lama!
+3. Run seedAllDashboardData() dari Apps Script editor
+4. Untuk akun yang sudah pernah ganti password: ganti ulang supaya
+   password_status jadi 'changed' (bukan 'changed_by_participant')
+5. Test: login password baru → harus masuk. Login password lama → harus DITOLAK.
 
-CRITICAL (Sudah selesai):
-1. ✅ seedAllDashboardData() sudah dijalankan — sheet terisi
-2. User sudah ganti password & login ulang
-
-TASK C (Optional - Frontend Polish):
-- Loading spinner saat fetch GAS data
-- Error state UI untuk GAS failures (retry button)
-- Skeleton loader yang proper
-
-TASK D (Optional - Testing):
-- Playwright e2e test dengan akun test
-- Manual test flow lengkap
+═══════════════════════════════════════════════════════════════
+📝 NEXT PLAN
+═══════════════════════════════════════════════════════════════
+1. Kuis backend wiring — jawaban kuis masih lokal, wire ke saveParticipantProgress
+2. Task D — Playwright e2e testing
+3. seedDashboardDiscussions — ganti addRowObject → upsertByKey (idempotent)
 
 ═══════════════════════════════════════════════════════════════
 📐 ATURAN KERJA — WAJIB DIIKUTI
 ═══════════════════════════════════════════════════════════════
 1. Commit PER FITUR, bukan satu commit besar
 2. Update handover & gemini.md setiap checkpoint
-3. Catat bug baru dengan nomor #39+
+3. Catat bug baru dengan nomor #45+
 4. Dark theme DILARANG — light pink theme untuk code blocks
 5. CSS scope ai-lab-content WAJIB di template CV
 6. Diagram kontras: lines ≥25% opacity, dots ≥75%, stroke ≥0.8px
@@ -105,27 +104,27 @@ TASK D (Optional - Testing):
 12. sessionStorage.heraiParticipantSession adalah source of truth
 13. Selalu bump cache buster (?v=...) di index.html setelah edit JS/CSS
 14. Jangan silent fail — tambah error feedback di UI
+15. JANGAN push ke GitHub kecuali diminta
+16. GAS deployment: selalu redeploy web app setelah edit Code.gs
 
 ═══════════════════════════════════════════════════════════════
-🔑 DATA FLOW REFERENSI
+🔑 DATA FLOW
 ═══════════════════════════════════════════════════════════════
 Login:    POST /__gas { action: "participantLogin", nik, password }
-          → GAS: participantLogin() → token + profile
-          → Frontend: saveParticipantSession() → sessionStorage
-
-Settings: POST /__gas { action: "updateParticipantProfile", ... }
-          → GAS: updateParticipantProfile() → updated profile
+          → 3 jalur verifikasi (hash, participant_pw, generated_pw)
+          → generated_password DIBLOKIR jika password_status='changed'
+          → synchronizeParticipantCredentials() → sync 2 sheet
+          → token 12 jam → saveParticipantSession() → sessionStorage
 
 Password: POST /__gas { action: "changeParticipantPassword", oldPassword, newPassword }
-          → GAS: changeParticipantPassword() → verify → hash → sync
+          → verify → hash → update BOTH ParticipantAccounts + peserta_tahap_1
+          → password_status='changed' (MEMBLOKIR generated_password)
+          → generated_password TETAP DISIMPAN untuk audit trail
 
-Progress: window.saveChapterProgress(moduleId, chapterId, "completed")
-          → POST /__gas { action: "saveParticipantProgress", module_id, chapter_id, status }
-          → GAS: saveParticipantProgress() → UPSERT ke participant_progress
-
-Dashboard: POST /__gas { action: "getParticipantDashboardData", nik }
-           → GAS: getParticipantDashboardData() → compute % dari participant_progress
-           → Frontend: renderParticipantDashboard() → 8 modul + view all
+Dashboard: initParticipantDashboardData()
+           → First load: renderDashboardSkeletons() → fetch → render
+           → Nav back: render dari _dashboardDataCache (instant, no skeleton)
+           → Error: renderDashboardError() + retry button
 
 Session:  sessionStorage.heraiParticipantSession
-          { nik, token, expiresAt, name, profile: { nama_lengkap, email, ... } }
+          { nik, token, expiresAt, name, profile: { ... } }
