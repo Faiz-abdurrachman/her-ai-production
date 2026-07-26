@@ -1595,10 +1595,11 @@
         const toggle = menu.querySelector('[data-fellow-user-toggle]');
         const logout = menu.querySelector('[data-fellow-logout]');
         const name = getParticipantDisplayName();
+        const isRealName = name && name !== 'Peserta HerAI';
         const nameNode = menu.querySelector('.fellow-user-button strong');
         const greeting = document.querySelector('[data-fellow-greeting]');
-        if (nameNode) nameNode.textContent = name;
-        if (greeting) greeting.textContent = `Halo, ${name}!`;
+        if (nameNode) nameNode.textContent = isRealName ? name : 'Peserta';
+        if (greeting) greeting.textContent = isRealName ? `Halo, ${name}!` : 'Halo!';
 
         const notifBadge = document.querySelector('.fellow-icon-button[aria-label="Notifikasi"] span');
         if (notifBadge) notifBadge.style.display = 'none';
