@@ -1731,11 +1731,11 @@
 
     // Format quiz score badge for module card.
     // Returns empty string if no score, HTML badge otherwise.
-    // Score ≤ 20: raw count format "7/20", Score > 20: percentage format "85%"
+    // All scores are already normalized to percentage (0-100) by GAS backend.
     function formatQuizBadge(quizScore) {
         if (quizScore === null || quizScore === undefined || isNaN(Number(quizScore))) return '';
         var score = Number(quizScore);
-        var label = score > 20 ? score + '%' : score + '/20';
+        var label = score + '%';
         return '<em class="quiz-badge" title="Nilai Kuis: ' + label + '"><i class="fas fa-trophy"></i> ' + label + '</em>';
     }
 

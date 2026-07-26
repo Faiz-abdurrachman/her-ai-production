@@ -180,7 +180,7 @@ const SCHEMA = {
   [SHEETS.projects]: ['project_id', 'team_id', 'team_name', 'title', 'members', 'institution', 'track', 'project_title', 'mentor', 'deck_url', 'repo_url', 'demo_url', 'overview', 'details', 'score', 'status', 'notes', 'submitted_at'],
   [SHEETS.certificates]: ['certificate_no', 'participant_rowId', 'nama_lengkap', 'final_score', 'status', 'issued_at', 'certificate_url'],
   [SHEETS.assets]: ['asset_id', 'title', 'type', 'url', 'visible_to', 'status', 'notes'],
-  [SHEETS.participantDashboardModules]: ['module_id', 'title', 'subtitle', 'progress', 'icon', 'tone', 'href', 'total_chapters', 'is_active', 'sort_order'],
+  [SHEETS.participantDashboardModules]: ['module_id', 'title', 'subtitle', 'progress', 'icon', 'tone', 'href', 'total_chapters', 'is_active', 'sort_order', 'quiz_total'],
   [SHEETS.participantDashboardDiscussionTrails]: ['actor', 'action', 'topic', 'time_label', 'tone', 'is_active', 'created_at'],
   [SHEETS.participantDashboardTracks]: ['title', 'subtitle', 'icon', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardJourney]: ['title', 'subtitle', 'progress', 'icon', 'accent', 'is_active', 'sort_order'],
@@ -398,11 +398,16 @@ function getParticipantDashboardData(payload) {
       computedProgress = Math.min(100, Math.round((completed / totalChapters) * 100));
     }
     var quizScore = quizScoreByModule[row.module_id];
+    var quizTotal = Number(row.quiz_total || 20);
+    var normalizedScore = null;
+    if (quizScore !== undefined && quizTotal > 0) {
+      normalizedScore = Math.round((quizScore / quizTotal) * 100);
+    }
     return {
       title: row.title || '',
       subtitle: row.subtitle || '',
       progress: computedProgress,
-      quiz_score: quizScore !== undefined ? quizScore : null,
+      quiz_score: normalizedScore,
       icon: row.icon || 'fas fa-book-open',
       tone: row.tone || 'pink',
       href: row.href || '#/participant-modules'
@@ -734,39 +739,40 @@ function seedAllDashboardData() {
 function seedDashboardModules() {
   var modules = [
     // Foundation Core AI (8 modules)
-    { module_id: 'deep-learning', title: 'Deep Learning', subtitle: 'Neural networks, backpropagation, PyTorch', progress: 0, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-lab-deep-learning', total_chapters: 15, is_active: 'true', sort_order: 1 },
-    { module_id: 'reinforcement-learning', title: 'Reinforcement Learning', subtitle: 'Agent, environment, reward, policy optimization', progress: 0, icon: 'fas fa-robot', tone: 'purple', href: '#/participant-ai-lab-reinforcement-learning', total_chapters: 13, is_active: 'true', sort_order: 2 },
-    { module_id: 'python-untuk-ai', title: 'Python untuk AI', subtitle: 'NumPy, Pandas, data pipeline, workflow AI', progress: 0, icon: 'fab fa-python', tone: 'blue', href: '#/participant-ai-python', total_chapters: 8, is_active: 'true', sort_order: 3 },
-    { module_id: 'reasoning', title: 'Reasoning AI', subtitle: 'Logika, inferensi, dan penalaran mesin', progress: 0, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-reasoning', total_chapters: 6, is_active: 'true', sort_order: 4 },
-    { module_id: 'konsep-ai-modern', title: 'Konsep AI Modern', subtitle: 'Foundation models, transfer learning, RLHF', progress: 0, icon: 'fas fa-microchip', tone: 'purple', href: '#/participant-ai-modern', total_chapters: 4, is_active: 'true', sort_order: 5 },
-    { module_id: 'evolution', title: 'Evolution of AI', subtitle: 'Sejarah, milestone, dan arah perkembangan AI', progress: 0, icon: 'fas fa-timeline', tone: 'orange', href: '#/participant-ai-evolution', total_chapters: 7, is_active: 'true', sort_order: 6 },
-    { module_id: 'evaluation', title: 'Evaluation AI', subtitle: 'Metrik, benchmark, dan validasi model', progress: 0, icon: 'fas fa-chart-simple', tone: 'green', href: '#/participant-ai-evaluation', total_chapters: 6, is_active: 'true', sort_order: 7 },
-    { module_id: 'machine-learning', title: 'Machine Learning', subtitle: 'Supervised, unsupervised, evaluation pipeline', progress: 0, icon: 'fas fa-diagram-project', tone: 'orange', href: '#/participant-ai-lab-machine-learning', total_chapters: 8, is_active: 'true', sort_order: 8 },
+    { module_id: 'deep-learning', title: 'Deep Learning', subtitle: 'Neural networks, backpropagation, PyTorch', progress: 0, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-lab-deep-learning', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 1 },
+    { module_id: 'reinforcement-learning', title: 'Reinforcement Learning', subtitle: 'Agent, environment, reward, policy optimization', progress: 0, icon: 'fas fa-robot', tone: 'purple', href: '#/participant-ai-lab-reinforcement-learning', total_chapters: 13, quiz_total: 20, is_active: 'true', sort_order: 2 },
+    { module_id: 'python-untuk-ai', title: 'Python untuk AI', subtitle: 'NumPy, Pandas, data pipeline, workflow AI', progress: 0, icon: 'fab fa-python', tone: 'blue', href: '#/participant-ai-python', total_chapters: 8, quiz_total: 20, is_active: 'true', sort_order: 3 },
+    { module_id: 'reasoning', title: 'Reasoning AI', subtitle: 'Logika, inferensi, dan penalaran mesin', progress: 0, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-reasoning', total_chapters: 6, quiz_total: 20, is_active: 'true', sort_order: 4 },
+    { module_id: 'konsep-ai-modern', title: 'Konsep AI Modern', subtitle: 'Foundation models, transfer learning, RLHF', progress: 0, icon: 'fas fa-microchip', tone: 'purple', href: '#/participant-ai-modern', total_chapters: 4, quiz_total: 20, is_active: 'true', sort_order: 5 },
+    { module_id: 'evolution', title: 'Evolution of AI', subtitle: 'Sejarah, milestone, dan arah perkembangan AI', progress: 0, icon: 'fas fa-timeline', tone: 'orange', href: '#/participant-ai-evolution', total_chapters: 7, quiz_total: 20, is_active: 'true', sort_order: 6 },
+    { module_id: 'evaluation', title: 'Evaluation AI', subtitle: 'Metrik, benchmark, dan validasi model', progress: 0, icon: 'fas fa-chart-simple', tone: 'green', href: '#/participant-ai-evaluation', total_chapters: 6, quiz_total: 20, is_active: 'true', sort_order: 7 },
+    { module_id: 'machine-learning', title: 'Machine Learning', subtitle: 'Supervised, unsupervised, evaluation pipeline', progress: 0, icon: 'fas fa-diagram-project', tone: 'orange', href: '#/participant-ai-lab-machine-learning', total_chapters: 8, quiz_total: 20, is_active: 'true', sort_order: 8 },
 
     // Data Engineering Domains (8 modules)
-    { module_id: 'computer-vision', title: 'Computer Vision', subtitle: 'Image processing, CNN, object detection', progress: 0, icon: 'fas fa-eye', tone: 'blue', href: '#/participant-ai-lab-cv', total_chapters: 11, is_active: 'true', sort_order: 9 },
-    { module_id: 'infrastructure', title: 'Infrastructure for AI', subtitle: 'Cloud, GPU, MLOps, scalable serving', progress: 0, icon: 'fas fa-server', tone: 'purple', href: '#/participant-ai-lab-infrastructure', total_chapters: 15, is_active: 'true', sort_order: 10 },
-    { module_id: 'data-engineering', title: 'Data Engineering', subtitle: 'ETL, pipeline, data warehouse, quality', progress: 0, icon: 'fas fa-database', tone: 'orange', href: '#/participant-ai-lab-data-engineering', total_chapters: 15, is_active: 'true', sort_order: 11 },
-    { module_id: 'data-science', title: 'Data Science', subtitle: 'EDA, hypothesis testing, experiment design', progress: 0, icon: 'fas fa-chart-pie', tone: 'green', href: '#/participant-ai-lab-data-science', total_chapters: 15, is_active: 'true', sort_order: 12 },
-    { module_id: 'bioinformatics', title: 'Bioinformatics & AI', subtitle: 'Genomics, protein analysis, drug discovery', progress: 0, icon: 'fas fa-dna', tone: 'pink', href: '#/participant-ai-lab-bioinformatics', total_chapters: 15, is_active: 'true', sort_order: 13 },
-    { module_id: 'deployment', title: 'AI Deployment', subtitle: 'Docker, API, CI/CD, model serving', progress: 0, icon: 'fas fa-rocket', tone: 'purple', href: '#/participant-ai-lab-deployment', total_chapters: 15, is_active: 'true', sort_order: 14 },
-    { module_id: 'front-end', title: 'Front-end Development', subtitle: 'AI UX, React, interactive visualization', progress: 0, icon: 'fas fa-laptop-code', tone: 'blue', href: '#/participant-ai-lab-front-end', total_chapters: 15, is_active: 'true', sort_order: 15 },
-    { module_id: 'back-end', title: 'Back-end Development', subtitle: 'API design, database, authentication', progress: 0, icon: 'fas fa-code', tone: 'orange', href: '#/participant-ai-lab-back-end', total_chapters: 15, is_active: 'true', sort_order: 16 },
+    { module_id: 'computer-vision', title: 'Computer Vision', subtitle: 'Image processing, CNN, object detection', progress: 0, icon: 'fas fa-eye', tone: 'blue', href: '#/participant-ai-lab-cv', total_chapters: 11, quiz_total: 20, is_active: 'true', sort_order: 9 },
+    { module_id: 'infrastructure', title: 'Infrastructure for AI', subtitle: 'Cloud, GPU, MLOps, scalable serving', progress: 0, icon: 'fas fa-server', tone: 'purple', href: '#/participant-ai-lab-infrastructure', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 10 },
+    { module_id: 'data-engineering', title: 'Data Engineering', subtitle: 'ETL, pipeline, data warehouse, quality', progress: 0, icon: 'fas fa-database', tone: 'orange', href: '#/participant-ai-lab-data-engineering', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 11 },
+    { module_id: 'data-science', title: 'Data Science', subtitle: 'EDA, hypothesis testing, experiment design', progress: 0, icon: 'fas fa-chart-pie', tone: 'green', href: '#/participant-ai-lab-data-science', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 12 },
+    { module_id: 'bioinformatics', title: 'Bioinformatics & AI', subtitle: 'Genomics, protein analysis, drug discovery', progress: 0, icon: 'fas fa-dna', tone: 'pink', href: '#/participant-ai-lab-bioinformatics', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 13 },
+    { module_id: 'deployment', title: 'AI Deployment', subtitle: 'Docker, API, CI/CD, model serving', progress: 0, icon: 'fas fa-rocket', tone: 'purple', href: '#/participant-ai-lab-deployment', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 14 },
+    { module_id: 'front-end', title: 'Front-end Development', subtitle: 'AI UX, React, interactive visualization', progress: 0, icon: 'fas fa-laptop-code', tone: 'blue', href: '#/participant-ai-lab-front-end', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 15 },
+    { module_id: 'back-end', title: 'Back-end Development', subtitle: 'API design, database, authentication', progress: 0, icon: 'fas fa-code', tone: 'orange', href: '#/participant-ai-lab-back-end', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 16 },
 
     // Generative & Multimodal AI (4 modules)
-    { module_id: 'large-language-model', title: 'Large Language Model', subtitle: 'Transformer, GPT, BERT, fine-tuning', progress: 0, icon: 'fas fa-language', tone: 'purple', href: '#/participant-ai-lab-large-language-model', total_chapters: 15, is_active: 'true', sort_order: 17 },
-    { module_id: 'agentic-ai', title: 'Agentic AI', subtitle: 'Tool use, planning, multi-agent systems', progress: 0, icon: 'fas fa-robot', tone: 'pink', href: '#/participant-ai-lab-agentic-ai', total_chapters: 15, is_active: 'true', sort_order: 18 },
-    { module_id: 'vlm', title: 'Vision Language Model', subtitle: 'CLIP, multimodal understanding, generation', progress: 0, icon: 'fas fa-eye', tone: 'blue', href: '#/participant-ai-lab-vlm', total_chapters: 15, is_active: 'true', sort_order: 19 },
-    { module_id: 'multimodal-llm', title: 'Multimodal LLM', subtitle: 'Cross-modal learning, audio-visual-text', progress: 0, icon: 'fas fa-layer-group', tone: 'purple', href: '#/participant-ai-lab-multimodal-llm', total_chapters: 15, is_active: 'true', sort_order: 20 },
+    { module_id: 'large-language-model', title: 'Large Language Model', subtitle: 'Transformer, GPT, BERT, fine-tuning', progress: 0, icon: 'fas fa-language', tone: 'purple', href: '#/participant-ai-lab-large-language-model', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 17 },
+    { module_id: 'agentic-ai', title: 'Agentic AI', subtitle: 'Tool use, planning, multi-agent systems', progress: 0, icon: 'fas fa-robot', tone: 'pink', href: '#/participant-ai-lab-agentic-ai', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 18 },
+    { module_id: 'vlm', title: 'Vision Language Model', subtitle: 'CLIP, multimodal understanding, generation', progress: 0, icon: 'fas fa-eye', tone: 'blue', href: '#/participant-ai-lab-vlm', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 19 },
+    { module_id: 'multimodal-llm', title: 'Multimodal LLM', subtitle: 'Cross-modal learning, audio-visual-text', progress: 0, icon: 'fas fa-layer-group', tone: 'purple', href: '#/participant-ai-lab-multimodal-llm', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 20 },
 
     // Business & Industry Applications (7 modules)
-    { module_id: 'healthcare', title: 'AI for Healthcare', subtitle: 'Medical imaging, diagnosis, clinical NLP', progress: 0, icon: 'fas fa-heart-pulse', tone: 'pink', href: '#/participant-ai-lab-healthcare', total_chapters: 15, is_active: 'true', sort_order: 21 },
-    { module_id: 'geospatial', title: 'AI for Geospatial', subtitle: 'Remote sensing, spatial analysis, GIS', progress: 0, icon: 'fas fa-globe-asia', tone: 'green', href: '#/participant-ai-lab-geospatial', total_chapters: 15, is_active: 'true', sort_order: 22 },
-    { module_id: 'manufacturing', title: 'AI for Manufacturing', subtitle: 'Predictive maintenance, quality control', progress: 0, icon: 'fas fa-industry', tone: 'orange', href: '#/participant-ai-lab-manufacturing', total_chapters: 15, is_active: 'true', sort_order: 23 },
-    { module_id: 'culture', title: 'AI for Culture', subtitle: 'Digital humanities, heritage preservation', progress: 0, icon: 'fas fa-landmark', tone: 'purple', href: '#/participant-ai-lab-culture', total_chapters: 15, is_active: 'true', sort_order: 24 },
-    { module_id: 'business-insight', title: 'Business Insight', subtitle: 'Data-driven decision, KPI, strategy', progress: 0, icon: 'fas fa-chart-line', tone: 'blue', href: '#/participant-ai-lab-business-insight', total_chapters: 15, is_active: 'true', sort_order: 25 },
-    { module_id: 'people-business-mgt', title: 'People & Business Mgmt', subtitle: 'AI product management, stakeholder alignment', progress: 0, icon: 'fas fa-users-gear', tone: 'pink', href: '#/participant-ai-lab-people-business-mgt', total_chapters: 15, is_active: 'true', sort_order: 26 },
-    { module_id: 'ui-ux', title: 'UI/UX Design Thinking', subtitle: 'Human-centered AI, prototyping, usability', progress: 0, icon: 'fas fa-palette', tone: 'purple', href: '#/participant-ai-lab-ui-ux', total_chapters: 15, is_active: 'true', sort_order: 27 }
+    { module_id: 'healthcare', title: 'AI for Healthcare', subtitle: 'Medical imaging, diagnosis, clinical NLP', progress: 0, icon: 'fas fa-heart-pulse', tone: 'pink', href: '#/participant-ai-lab-healthcare', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 21 },
+    { module_id: 'geospatial', title: 'AI for Geospatial', subtitle: 'Remote sensing, spatial analysis, GIS', progress: 0, icon: 'fas fa-globe-asia', tone: 'green', href: '#/participant-ai-lab-geospatial', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 22 },
+    { module_id: 'manufacturing', title: 'AI for Manufacturing', subtitle: 'Predictive maintenance, quality control', progress: 0, icon: 'fas fa-industry', tone: 'orange', href: '#/participant-ai-lab-manufacturing', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 23 },
+    { module_id: 'culture', title: 'AI for Culture', subtitle: 'Digital humanities, heritage preservation', progress: 0, icon: 'fas fa-landmark', tone: 'purple', href: '#/participant-ai-lab-culture', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 24 },
+    { module_id: 'business-insight', title: 'Business Insight', subtitle: 'Data-driven decision, KPI, strategy', progress: 0, icon: 'fas fa-chart-line', tone: 'blue', href: '#/participant-ai-lab-business-insight', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 25 },
+    { module_id: 'people-business-mgt', title: 'People & Business Mgmt', subtitle: 'AI product management, stakeholder alignment', progress: 0, icon: 'fas fa-users-gear', tone: 'pink', href: '#/participant-ai-lab-people-business-mgt', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 26 },
+    { module_id: 'ui-ux', title: 'UI/UX Design Thinking', subtitle: 'Human-centered AI, prototyping, usability', progress: 0, icon: 'fas fa-palette', tone: 'purple', href: '#/participant-ai-lab-ui-ux', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 27 },
+    { module_id: 'math-for-ai', title: 'Math for AI', subtitle: 'Vektor, matriks, statistik, dan kalkulus untuk AI', progress: 0, icon: 'fas fa-calculator', tone: 'pink', href: '#/participant-ai-lab-math-for-ai', total_chapters: 7, quiz_total: 100, is_active: 'true', sort_order: 28 }
   ];
 
   var sheet = getSheet(SHEETS.participantDashboardModules);
@@ -778,10 +784,10 @@ function seedDashboardModules() {
 
 function seedDashboardJourney() {
   var phases = [
-    { title: 'Foundation Phase', subtitle: 'Pemahaman dasar AI & Python', progress: 0, icon: 'fas fa-book-open', accent: '#f63392', is_active: 'true', sort_order: 1 },
-    { title: 'Specialization', subtitle: 'Pilih dan dalami track AI pilihan', progress: 0, icon: 'fas fa-code', accent: '#8b5cf6', is_active: 'true', sort_order: 2 },
-    { title: 'Project Building', subtitle: 'Bangun proyek portofolio nyata', progress: 0, icon: 'fas fa-briefcase', accent: '#f8b84e', is_active: 'true', sort_order: 3 },
-    { title: 'Graduation', subtitle: 'Persiapan karier dan sertifikasi', progress: 0, icon: 'fas fa-graduation-cap', accent: '#45c598', is_active: 'true', sort_order: 4 }
+    { title: 'Foundation Phase', subtitle: 'Pemahaman dasar AI & Python', progress: 0, icon: 'fas fa-book-open', accent: '#f63392', quiz_total: 20, is_active: 'true', sort_order: 1 },
+    { title: 'Specialization', subtitle: 'Pilih dan dalami track AI pilihan', progress: 0, icon: 'fas fa-code', accent: '#8b5cf6', quiz_total: 20, is_active: 'true', sort_order: 2 },
+    { title: 'Project Building', subtitle: 'Bangun proyek portofolio nyata', progress: 0, icon: 'fas fa-briefcase', accent: '#f8b84e', quiz_total: 20, is_active: 'true', sort_order: 3 },
+    { title: 'Graduation', subtitle: 'Persiapan karier dan sertifikasi', progress: 0, icon: 'fas fa-graduation-cap', accent: '#45c598', quiz_total: 20, is_active: 'true', sort_order: 4 }
   ];
 
   var sheet = getSheet(SHEETS.participantDashboardJourney);
@@ -794,11 +800,11 @@ function seedDashboardJourney() {
 function seedDashboardEvents() {
   var now = new Date();
   var events = [
-    { day: String(now.getDate() + 3), month: monthAbbr(now), title: 'Live Session: Build RAG Chatbot', time: '10.00 - 12.00 WIB', url: '#/participant-events', is_active: 'true', sort_order: 1 },
-    { day: String(now.getDate() + 7), month: monthAbbr(now), title: 'Mentor Clinic: Career in AI', time: '19.00 - 20.30 WIB', url: '#/participant-events', is_active: 'true', sort_order: 2 },
-    { day: String(now.getDate() + 10), month: monthAbbr(now), title: 'Workshop: Data Visualization', time: '13.00 - 15.00 WIB', url: '#/participant-events', is_active: 'true', sort_order: 3 },
-    { day: String(now.getDate() + 14), month: monthAbbr(nextMonth(now)), title: 'Guest Lecture: Ethics in AI', time: '14.00 - 16.00 WIB', url: '#/participant-events', is_active: 'true', sort_order: 4 },
-    { day: String(now.getDate() + 18), month: monthAbbr(nextMonth(now)), title: 'Hackathon Kick-off', time: '09.00 - 17.00 WIB', url: '#/participant-events', is_active: 'true', sort_order: 5 }
+    { day: String(now.getDate() + 3), month: monthAbbr(now), title: 'Live Session: Build RAG Chatbot', time: '10.00 - 12.00 WIB', url: '#/participant-events', quiz_total: 20, is_active: 'true', sort_order: 1 },
+    { day: String(now.getDate() + 7), month: monthAbbr(now), title: 'Mentor Clinic: Career in AI', time: '19.00 - 20.30 WIB', url: '#/participant-events', quiz_total: 20, is_active: 'true', sort_order: 2 },
+    { day: String(now.getDate() + 10), month: monthAbbr(now), title: 'Workshop: Data Visualization', time: '13.00 - 15.00 WIB', url: '#/participant-events', quiz_total: 20, is_active: 'true', sort_order: 3 },
+    { day: String(now.getDate() + 14), month: monthAbbr(nextMonth(now)), title: 'Guest Lecture: Ethics in AI', time: '14.00 - 16.00 WIB', url: '#/participant-events', quiz_total: 20, is_active: 'true', sort_order: 4 },
+    { day: String(now.getDate() + 18), month: monthAbbr(nextMonth(now)), title: 'Hackathon Kick-off', time: '09.00 - 17.00 WIB', url: '#/participant-events', quiz_total: 20, is_active: 'true', sort_order: 5 }
   ];
 
   var sheet = getSheet(SHEETS.participantDashboardEvents);
@@ -810,12 +816,12 @@ function seedDashboardEvents() {
 
 function seedDashboardTracks() {
   var tracks = [
-    { title: 'Computer Vision', subtitle: 'Image processing, object detection, CNN, GAN', icon: 'fas fa-eye', is_active: 'true', sort_order: 1 },
-    { title: 'Speech & Audio', subtitle: 'ASR, TTS, Whisper, audio classification', icon: 'fas fa-microphone-lines', is_active: 'true', sort_order: 2 },
-    { title: 'NLP & LLM', subtitle: 'Transformer, RAG, fine-tuning, agents', icon: 'fas fa-message', is_active: 'true', sort_order: 3 },
-    { title: 'MLOps & Infrastructure', subtitle: 'Cloud deployment, CI/CD, model monitoring', icon: 'fas fa-house-laptop', is_active: 'true', sort_order: 4 },
-    { title: 'Multimodal AI', subtitle: 'VLM, cross-modal learning, generation', icon: 'fas fa-layer-group', is_active: 'true', sort_order: 5 },
-    { title: 'Bioinformatics', subtitle: 'Genomics, protein folding, drug discovery', icon: 'fas fa-dna', is_active: 'true', sort_order: 6 }
+    { title: 'Computer Vision', subtitle: 'Image processing, object detection, CNN, GAN', icon: 'fas fa-eye', quiz_total: 20, is_active: 'true', sort_order: 1 },
+    { title: 'Speech & Audio', subtitle: 'ASR, TTS, Whisper, audio classification', icon: 'fas fa-microphone-lines', quiz_total: 20, is_active: 'true', sort_order: 2 },
+    { title: 'NLP & LLM', subtitle: 'Transformer, RAG, fine-tuning, agents', icon: 'fas fa-message', quiz_total: 20, is_active: 'true', sort_order: 3 },
+    { title: 'MLOps & Infrastructure', subtitle: 'Cloud deployment, CI/CD, model monitoring', icon: 'fas fa-house-laptop', quiz_total: 20, is_active: 'true', sort_order: 4 },
+    { title: 'Multimodal AI', subtitle: 'VLM, cross-modal learning, generation', icon: 'fas fa-layer-group', quiz_total: 20, is_active: 'true', sort_order: 5 },
+    { title: 'Bioinformatics', subtitle: 'Genomics, protein folding, drug discovery', icon: 'fas fa-dna', quiz_total: 20, is_active: 'true', sort_order: 6 }
   ];
 
   var sheet = getSheet(SHEETS.participantDashboardTracks);
