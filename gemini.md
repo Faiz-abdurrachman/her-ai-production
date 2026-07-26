@@ -513,3 +513,30 @@ Helper `window.saveChapterProgress(moduleId, chapterId, status)` sudah ada di `s
 
 D. **Testing lanjutan** — manual + Playwright e2e
 5. Setelah stabil, wiring auto-save progress ke lesson pages
+
+## 37. Task B Complete: Seed Dashboard Data Functions
+**Deskripsi:**
+6 sheet dashboard peserta (`participant_dashboard_modules`, `_journey`, `_events`, `_tracks`, `_discussion_trails`, `_leaderboard`) masih kosong di production. Dashboard selalu render fallback hardcoded.
+
+**Pendekatan:**
+- Menambahkan 7 GAS seed functions di `gas/Code.gs`
+- `seedAllDashboardData()` — master, memanggil 6 fungsi individual
+- Semua fungsi idempotent (`upsertByKey` / `addRowObject`) — aman dijalankan ulang
+
+**Data yang di-seed:**
+- `seedDashboardModules()`: 27 modul dengan `module_id` (match dengan Task A MODULE_ID), `total_chapters` (akurat dari file JS), `icon`, `tone`, `href`, `sort_order`
+- `seedDashboardJourney()`: 4 fase — Foundation, Specialization, Project, Graduation
+- `seedDashboardEvents()`: 5 upcoming events dengan relative date (hari ini +3 s/d +18)
+- `seedDashboardTracks()`: 6 specialization tracks — Computer Vision, Speech, NLP/LLM, MLOps, Multimodal, Bioinformatics
+- `seedDashboardDiscussions()`: 4 discussion activities
+- `seedDashboardLeaderboard()`: auto-populate dari `ParticipantAccounts` (10 teratas), fallback 10 placeholder
+
+**Cara pakai:**
+1. Buka Apps Script editor dari Google Spreadsheet
+2. Paste `gas/Code.gs`
+3. Jalankan `seedAllDashboardData()` dari editor
+
+**Fix:**
+- `ai-ml-basic.js` MODULE_ID diperbaiki: `ml-basic` → `machine-learning` (match dengan sheet)
+
+**Commits:** d974a21, 1e6801d
