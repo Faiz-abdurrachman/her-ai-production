@@ -304,4 +304,94 @@ Lainnya (2): python, modern
 **Grand total bugs/features:** #1-#58
 **Files changed:** 24 JS files injected + 2 scripts + 20 JSON outputs + docs
 **Key deliverable:** Bug #57 RESOLVED — 24/24 module JS files now have module-specific GUIDES content. Zero Python contamination.
+
+---
+
+## 58. Followup: Hide "Topik 01/02/03" Pill Badges + ai-python.js Rewrite
+
+### Topik Badge Labels (Bug #57 Followup)
+
+**Deskripsi:**
+313 chapter HTML files mengandung inline pill badge `<div class="topic-label">Topik 01</div>` yang tidak relevan — "Topik" adalah level modul, bukan sub-bab. Label ini muncul di konten chapter setiap modul.
+
+**Penyebab:**
+Template chapter HTML dari build_module.js menghasilkan badge ini untuk semua chapter.
+
+**Cara Perbaikan:**
+- **Tidak** edit 313 file satu-satu
+- CSS injection: `.topic-label { display: none !important; }` di `dashboard.css`
+- Cache buster: `dashboard.css?v=20260727-topic-label`
+- Satu rule menutup semua badge di seluruh halaman dashboard
+- **Verifikasi:** Badge tidak muncul di halaman chapter manapun ✅
+
+### ai-python.js Rewrite
+
+**Deskripsi:**
+ai-python.js sebelumnya terisi placeholder generic ("Python Basics — konsep kunci") dari Fase 4. User minta rewrite dengan konten Python yang proper.
+
+**Cara Perbaikan:**
+- 8 GUIDES entries ditulis manual (Bahasa Indonesia, konteks AI/ML):
+  1. Python & AI Mindset — venv, reproducibility, computational thinking
+  2. Data Dasar — list/tuple/set/dict use cases
+  3. Control Flow — guard clause pattern, defensive programming
+  4. Function & Modularitas — pure function, type hints, testing
+  5. OOP untuk AI — Dataset/Model classes, composition over inheritance
+  6. Program Tangguh & File — exception handling, CSV/JSON I/O
+  7. Ekosistem & NumPy — vectorization, broadcasting, array ops
+  8. Data & Mini Workflow — pipeline: load→clean→analyze→visualize
+- GUIDES JSON disimpan ke `scripts/nazril-guides-output/guides-python.json`
+- **Verifikasi:** node --check PASS, hook questions spesifik Python ✅
+
+---
+
+## Session Summary — 27 Juli 2026 (Sisyphus — Bug #57 Resolution + ai-python.js)
+
+**Total commits:** 45 (25 sebelumnya + 7 sesi lalu + 9 sesi sebelumnya + 4 sesi ini)
+**Grand total bugs/features:** #1-#58
+**Files changed sesi ini:** 24 JS files + 2 CSS rules + 2 extraction scripts + 21 JSON outputs + 3 handover docs
+
+**Key deliverables sesi ini:**
+| # | Item | Detail |
+|---|------|--------|
+| #57 | Python contamination | 24 module JS — GUIDES dari Nazril MD (20) + placeholder (4) |
+| — | Roadmap headers | `<span>Jalur Pemula</span>` → module-specific badge + subtitle |
+| — | Extraction scripts | `extract-nazril-guides.js` + `inject-guides.js` — reusable |
+| #58 | Topic-label badges | 1 CSS rule hide 313+ labels di seluruh halaman |
+| — | ai-python.js | 8 GUIDES konten Python proper (dari placeholder) |
+| — | ai-modern.js | `eyebrow: "Jalur Pemula"` → `"AI Modern"` |
+
+**Tools created:**
+```bash
+node scripts/extract-nazril-guides.js          # Parse Nazril MD → GUIDES JSON
+node scripts/inject-guides.js --phase=1        # Inject Business modules
+node scripts/inject-guides.js --phase=all      # Inject all
+node scripts/inject-guides.js --phase=1 --dry-run  # Preview
+```
+
+**Next priority:** E2E test suite (53 tests planned, belum implementasi)
+- P1: `e2e/participant-backend.spec.js` — Backend API tests (~20)
+- P2: `e2e/fellow-dashboard.spec.js` — Fix flaky + tambah coverage (~25)
+- P3: `e2e/participant-workflow.spec.js` — Full flow integration (~8)
+
+---
+
+## Aturan Kerja — 18 RULE WAJIB
+
+1. Commit PER FITUR — jangan gabung fitur beda
+2. Update handover & gemini.md setiap selesai fitur
+3. Bug baru: lanjut #59, #60, dst
+4. No dark theme — light pink
+5. CSS scope: ai-lab-content
+6. Diagram kontras: lines ≥25%, dots ≥75%, stroke ≥0.8px
+7. NO NIK/password exposed di code
+8. TANYA user sebelum mulai kerja — konfirmasi dulu
+9. Verify: node --check, test flow, null guards
+10. NO provision/generate participant accounts
+11. NO touch 231 lesson HTML files — pakai CSS/JS injection
+12. sessionStorage = source of truth untuk session
+13. Bump cache buster setiap edit CSS/JS
+14. No silent fail — error harus kelihatan
+15. NO push ke GitHub kecuali diminta user
 16. GAS deployment: selalu redeploy web app setelah edit Code.gs
+17. Playwright: TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test
+18. Server lokal: node server.js → http://127.0.0.1:3000
