@@ -1373,7 +1373,7 @@ function changeParticipantPassword(payload) {
   if (account && account.account_id) {
     updateByKey(SHEETS.participantAccounts, 'account_id', account.account_id, {
       password_hash: newHash,
-      password_status: 'changed_by_participant',
+      password_status: 'changed',
       updated_at: now
     });
   }
