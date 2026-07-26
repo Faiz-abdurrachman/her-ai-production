@@ -75,12 +75,12 @@ Menambahkan `?v=20260727-quiz-wire` ke 19 `<script>` tag di `index.html` lines 8
 **Cara Perbaikan:**
 Hapus duplikat yang lebih tua (line 107-108). Pertahankan versi dengan cache buster terbaru (line 82-83).
 
-## 49. Issue: Score Semantics Berbeda Antar Module (DEFERRED)
+## 49. Issue: Score Semantics Berbeda Antar Module (DEFERRED — Partial Fix)
 
 **Deskripsi:**
-`ai-math-for-ai.js` menghitung score sebagai persentase (0-100), sedangkan 27 module lainnya menghitung raw count (0-20). GAS menyimpan apa adanya — ini akan menjadi masalah saat dashboard menampilkan score.
+`ai-math-for-ai.js` menghitung score sebagai persentase (0-100), sedangkan 27 module lainnya menghitung raw count (0-20). Frontend sekarang menggunakan heuristik: score > 20 → tampil `X%`, score ≤ 20 → tampil `X/20`. Ini berfungsi tapi tidak proper.
 
-**Status:** Deferred. Fix saat dashboard score display diimplementasikan.
+**Status:** Partial fix. Solusi proper: tambah kolom `quiz_total` di `participant_dashboard_modules` sheet (default 20, math-for-ai = 100), lalu GAS compute persentase seragam.
 
 ## 50. Bug: ai-intro (Pengantar AI) Quiz Tidak Ter-wire
 
@@ -109,54 +109,6 @@ Setiap file `ai-*.js` memiliki practice save handler yang menyimpan jawaban essa
 - Cache buster di-bump ke `?v=20260727-practice`.
 - **Verifikasi:** Test manual save latihan → `participant_progress` muncul entry ✅
 
-## Playwright E2E Testing
-
-**Deskripsi:**
-Menambahkan Playwright e2e test suite (13 test) untuk memvalidasi fungsionalitas utama.
-
-**Setup:**
-- Install `@playwright/test` + Chromium browser
-- `playwright.config.js`: headless Chromium, baseURL `http://127.0.0.1:3000`
-- `e2e/fellow-dashboard.spec.js`: 13 tests
-
-**Test Results (13/13 PASS):**
-- Public Pages (4): Home page, login gate, register, modules catalog ✅
-- Login Validation (2): Empty NIK, invalid NIK format ✅
-- Authenticated Flow (5): Login session, dashboard greeting, settings, password page, module nav ✅
-- Error Handling (2): GAS down, 404 route ✅
-
-**Critical debug findings during testing:**
-1. Portal login form uses `#profileNik` / `#profilePassword` (NOT `#participantNik`)
-2. `participantPortalOpen` di sheet Settings harus lowercase `true` (string `TRUE` gagal — `JSON.parse("TRUE")` throws, value jadi string `"TRUE"` ≠ boolean `true`)
-3. Fresh browser localStorage kosong → `getGlobalSettings()` return default `participantPortalOpen: false` → portal gate muncul. Solusi: `primeSettings()` helper inject localStorage sebelum navigasi.
-
-**Run command:**
-```bash
-TEST_PARTICIPANT_NIK="..." TEST_PARTICIPANT_PASSWORD="..." npx playwright test
-```
-
----
-
-## Session Summary — 27 Juli 2026 (Sisyphus — Extended)
-
-**Total commits sesi sebelumnya:** 25 | **Total commits sesi ini:** 7 | **Grand total:** 32
-**Bugs fixed sesi ini:** #45-#51 (7 issues)
-**Files changed sesi ini:** 36 files, +485/-23
-
-**Key deliverables sesi ini:**
-- #1: seedDashboardDiscussions idempotent (addRowObject → upsertByKey) ✅
-- #45: Quiz wiring — 28 module JS + 1 settings.js handler ✅
-- #46: 19 cache busters added to index.html ✅
-- #48: 2 duplicate script entries removed ✅
-- #50: ai-intro quiz wiring (missed by ai-*.js scan) ✅
-- #51: Practice/latihan wiring — 28 module JS ✅
-- Playwright e2e: 13/13 tests PASS ✅
-
-**Key deliverables sesi ini (#52-#53 — Score Display + Leaderboard):**
-- #52: Dashboard Score Display — quiz_score di GAS response + badge UI di module card ✅
-- #53: seedDashboardLeaderboard idempotent (clearContent+addRowObject → upsertByKey) ✅
-- e2e: 3 new tests (quiz, practice, password change) — 8/8 pass, 8 skipped ✅
-
 ---
 
 ## 52. Feature: Dashboard Score Display — Quiz Score Tidak Ditampilkan di UI
@@ -165,26 +117,88 @@ TEST_PARTICIPANT_NIK="..." TEST_PARTICIPANT_PASSWORD="..." npx playwright test
 Dashboard module card hanya menampilkan progress chapter (%) — score quiz yang sudah tersimpan di `participant_progress` (chapter_id='quiz') tidak ditampilkan.
 
 **Cara Perbaikan:**
-- **GAS**: `getParticipantDashboardData()` — tambah query quiz score dari `participant_progress` (filter `chapter_id='quiz'`), ambil score tertinggi per module (Math.max), return `quiz_score` di tiap module object.
-- **Frontend**: `renderParticipantDashboard()` — inject `formatQuizBadge(item.quiz_score)` ke module card HTML. Score ≤20: format `/20`, Score >20: format `%`.
-- **CSS**: `.quiz-badge` — pill/badge pink translucent, icon trophy, positioned after progress span.
+- **GAS** (`gas/Code.gs`, `getParticipantDashboardData` line ~381): tambah query quiz score dari `participant_progress`. Filter `chapter_id === 'quiz'`, ambil `Math.max` score per module. Return `quiz_score` di tiap module object.
+- **Frontend** (`settings.js`, `renderParticipantDashboard`): inject `formatQuizBadge(item.quiz_score)` ke module card HTML. Heuristik: score > 20 → format `X%`, score ≤ 20 → format `X/20`.
+- **CSS** (`dashboard.css`): `.quiz-badge` — pill pink translucent (`rgba(246,51,146,0.08)`), icon trophy, positioned after progress span.
 - Cache buster: `settings.js?v=20260727-score-display`, `dashboard.css?v=20260727-score-display`.
 - **Verifikasi:** Submit quiz → refresh dashboard → badge muncul dengan format score ✅
 
 ## 53. Refactor: seedDashboardLeaderboard → upsertByKey
 
 **Deskripsi:**
-`seedDashboardLeaderboard()` di `gas/Code.gs` masih pakai `clearContent()` + `addRowObject()` — tidak idempotent, tidak konsisten dengan seed functions lain.
+`seedDashboardLeaderboard()` di `gas/Code.gs` masih pakai `clearContent()` + `addRowObject()` — tidak idempotent.
 
 **Cara Perbaikan:**
-- Ganti `clearContent()` + `addRowObject()` loop dengan `upsertByKey(SHEETS.participantDashboardLeaderboard, 'rank', String(l.rank), l)`.
+- Ganti dengan `upsertByKey(SHEETS.participantDashboardLeaderboard, 'rank', String(l.rank), l)`.
 - Key: `rank` (unique per leaderboard entry).
-- **Verifikasi:** Run seed 2x → no duplicate rows, row count tetap ✅
+- **Verifikasi:** Run seed 2x → no duplicate rows ✅
+
+---
+
+## 54. Feature: Participant Access Restriction — Hanya Beranda/Modul/Pengaturan
+
+**Deskripsi:**
+Semua halaman peserta (Chatroom, Mentor, Tugas, Proyek, Events, Komunitas, Sertifikat, Leaderboard, FAQ) dapat diakses. User meminta dibatasi hanya Beranda, Modul, dan Pengaturan.
+
+**Cara Perbaikan:**
+- **Route guard** (`settings.js`, `initFellowDashboardPage`): check `pageName` di allowed list `['dashboard', 'modules', 'settings']`. Jika tidak → `renderParticipantRestricted()`.
+- **Sidebar click interception** (`attachSidebarRail`): link dengan `data-fellow-nav` selain 3 allowed → prevent default + render restricted.
+- **Messaging override** (`DOMContentLoaded`): wrap `window.initMessagingPage` — jika logged in → render restricted, jika tidak → original flow.
+- **CSS** (`dashboard.css`): `.fellow-restricted-state` — pink theme (match `.fellow-locked-state`), icon `fa-lock`, button "Kembali ke Beranda".
+- Cache buster: `settings.js?v=20260727-restricted`, `dashboard.css?v=20260727-restricted-fix`.
+- **Verifikasi:** Playwright test via `#/participant-mentor` → "Akses Peserta Dibatasi" muncul ✅
+
+---
+
+## Playwright E2E Testing
+
+**Deskripsi:**
+Playwright e2e test suite untuk validasi fungsionalitas utama dan regression testing.
+
+**Setup:**
+- Install `@playwright/test` + Chromium
+- `playwright.config.js`: headless Chromium, baseURL `http://127.0.0.1:3000`
+- `e2e/fellow-dashboard.spec.js`: 17 tests (321 lines), 2 env vars: `TEST_PARTICIPANT_NIK`, `TEST_PARTICIPANT_PASSWORD`
+
+**Test Results (17 tests):**
+- Public Pages (4): Home, login gate, register, modules catalog ✅
+- Login Validation (2): Empty NIK, invalid NIK format ✅
+- Authenticated Flow (9): Login session, dashboard greeting, settings, password empty, module nav, quiz render, practice render, password validation, restricted access ✅
+- Error Handling (2): GAS down, 404 route ✅
+- **Stability**: 15/17 stable. Practice + password tests occasionally flaky in full suite (pass in isolation — race condition with sequential test runs).
+
+**Run command:**
+```bash
+TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test
+```
+
+**Critical debug findings:**
+1. Portal login form uses `#profileNik` / `#profilePassword` (NOT `#participantNik`)
+2. `participantPortalOpen` di sheet Settings harus lowercase `true` (boolean, bukan string `"TRUE"`)
+3. Fresh browser localStorage kosong → `getGlobalSettings()` sync return default `participantPortalOpen: false`. Solusi: `primeSettings()` inject localStorage sebelum navigasi
+4. Practice page form `#aiDeepLearningPracticeForm` exists in static HTML but content populated async by IIFE → use `waitForFunction` + `waitFor(state:'attached')`
+5. After login, hash navigation via `page.evaluate(() => window.location.hash = ...)` lebih reliable daripada `page.goto()` untuk SPA routing
+
+---
+
+## Session Summary — 27 Juli 2026 (Sisyphus — Score Display + Restricted Access)
+
+**Total commits:** 37 (25 sebelumnya + 7 sesi lalu + 5 sesi ini)
+**Grand total bugs/features:** #1-#54
+**Files changed sesi ini:** 7 files, +291/-17
+**Last commit:** `fbe2bb3` — fix: restricted page button icon vertical centering
+
+**Key deliverables sesi ini (#52-#54):**
+- #52: Dashboard Score Display — quiz_score di GAS + badge UI + CSS ✅
+- #53: seedDashboardLeaderboard idempotent (upsertByKey) ✅
+- #54: Participant access restricted to Beranda/Modul/Pengaturan ✅
+- E2e: 17 tests (15 stable), 3 new — quiz, practice, password, restricted access ✅
+- GAS deployed (by user) — `getParticipantDashboardData` now returns `quiz_score` ✅
 
 **Session Rules (WAJIB — berlaku untuk semua AI session):**
 1. Commit PER FITUR, bukan satu commit besar
 2. Update handover & gemini.md setiap checkpoint
-3. Catat bug baru dengan nomor #52+
+3. Catat bug baru dengan nomor #55+
 4. Dark theme DILARANG — light pink theme untuk code blocks
 5. CSS scope ai-lab-content WAJIB di template CV
 6. Diagram kontras: lines ≥25% opacity, dots ≥75%, stroke ≥0.8px
