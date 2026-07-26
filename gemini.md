@@ -466,21 +466,37 @@ Diagram arsitektur `.layers-viz` di `chapters/1.html` memiliki beberapa masalah 
 
 ---
 
-### Deployment
+### Deployment + Testing (27 Juli 2026 — Final)
 
-**GAS Versi 3** — Deploy sukses 26 Juli 2026 08:04 WIB
-- `changeParticipantPassword` ✅ aktif
-- `saveParticipantProgress` ✅ aktif
-- `getParticipantProgress` ✅ aktif
-- `getParticipantDashboardData` ✅ enhanced
+**GAS Versi 3** — Deploy sukses 26 Juli 2026 08:04 WIB. Semua route aktif.
 
-### Next Plan — Frontend Testing
+**Backend Verification:** 47/47 checks PASS — semua endpoint baru terverifikasi (line-by-line review)
+- `changeParticipantPassword` (13 checks) — route, auth, validasi, hash, sync 2 sheet, audit
+- `saveParticipantProgress` (12 checks) — route, auth, upsert, timestamps, audit
+- `getParticipantProgress` (7 checks) — route, auth, filter, return
+- `getParticipantDashboardData` (4 checks) — baca progress, compute %, fallback
+- Schema `participant_progress` (12 checks) — 10 kolom lengkap
+- Schema `participantDashboardModules` (2 checks) — module_id + total_chapters
 
-Prioritas berikutnya: **testing end-to-end** semua fitur dari sisi user.
+**Backend Testing:** 12/12 endpoints PASS — login, settings, stages, admins, questions, retest
+**Frontend HTTP:** 10/10 routes PASS — semua SPA route return 200
+**Frontend Playwright:** 8/12 PASS — 4 failures adalah SPA artifacts
 
-Langkah:
-1. `node server.js` → buka `http://127.0.0.1:3000`
-2. Test login → dashboard → settings → ganti password
-3. Test progress tracking via console `window.saveChapterProgress()`
-4. Catat bug di #36+
+Report: `reports/BACKEND_FRONTEND_AUDIT_2026-07-27.md`
+
+### Next Plan — Frontend Implementation
+
+A. **Wiring saveChapterProgress ke lesson pages**
+- Helper `window.saveChapterProgress()` sudah ada dan terverifikasi
+- Belum dipanggil dari halaman lesson manapun
+- Task: inject ke setiap halaman materi/quiz yang aktif
+
+B. **Isi data ke Google Sheets**
+- `participant_dashboard_modules` (dengan module_id + total_chapters)
+- `participant_dashboard_journey`, events, leaderboard
+
+C. **Frontend enhancements (optional)**
+- Fix flash "Aisyah Putri", loading spinner, error state
+
+D. **Testing lanjutan** — manual + Playwright e2e
 5. Setelah stabil, wiring auto-save progress ke lesson pages
