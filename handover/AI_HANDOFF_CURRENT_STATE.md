@@ -72,6 +72,36 @@ Dilakukan comprehensive backend audit. Ringkasan:
 
 Hasil lengkap: `reports/BACKEND_AUDIT_2026-07-26.md`
 
+### Sesi 27 Juli 2026 — Task B: Seed Dashboard Data (Complete)
+
+**Ringkasan:** Menambahkan 7 GAS seed functions di `gas/Code.gs` untuk populate 6 sheet dashboard peserta.
+
+| Commit | Apa |
+|---|---|
+| `d974a21` | 7 seed functions + fix ai-ml-basic.js MODULE_ID |
+
+**Fungsi baru di `gas/Code.gs`:**
+- `seedAllDashboardData()` — master, memanggil 6 fungsi di bawah
+- `seedDashboardModules()` — 27 modul dengan `module_id`, `total_chapters`, `icon`, `tone`, `href`, `sort_order`
+- `seedDashboardJourney()` — 4 fase fellowship (Foundation, Specialization, Project, Graduation)
+- `seedDashboardEvents()` — 5 upcoming events (relative date dinamis)
+- `seedDashboardTracks()` — 6 specialization tracks
+- `seedDashboardDiscussions()` — 4 discussion activities
+- `seedDashboardLeaderboard()` — auto-populate dari `ParticipantAccounts`, fallback 10 placeholder
+
+**Cara pakai:**
+1. Buka Apps Script editor dari Google Spreadsheet
+2. Paste `gas/Code.gs` (jika belum)
+3. Jalankan `seedAllDashboardData()` dari editor
+4. Cek sheet `participant_dashboard_modules` → harus ada 27 baris
+5. Dashboard peserta akan menampilkan data real, bukan fallback hardcoded
+
+**Catatan:**
+- Semua fungsi idempotent (`upsertByKey`) — aman dijalankan ulang
+- Leaderboard auto-populate dari akun existing (NIK disensor di frontend)
+- Events pakai relative date (hari ini +3, +7, +10, +14, +18)
+- Module_id di sheet harus match dengan MODULE_ID di JS file (Task A)
+
 ### Sesi 27 Juli 2026 — Task A: Wiring saveChapterProgress (Complete)
 
 **Ringkasan:** Wiring `saveChapterProgress` ke 28 module JS file. Setiap kali chapter berhasil dirender, progress otomatis tersimpan ke GAS.
@@ -619,11 +649,7 @@ FRONTEND TESTING: 10/10 HTTP routes + 8/12 Playwright PASS
 📝 NEXT PLAN — Fokus Frontend Implementation
 ═══════════════════════════════════════════════════════════════
 A. ✅ DONE — Wiring saveChapterProgress ke lesson pages (5 commit, 28 module)
-B. ISI DATA KE GOOGLE SHEETS:
-- Sheet participant_dashboard_modules → butuh module_id + total_chapters + data
-- Sheet participant_dashboard_journey → 4 phase dengan progress
-- Sheet participant_dashboard_events → 3-5 event upcoming
-- Sheet participant_dashboard_leaderboard → ranking dengan NIK + points
+B. ✅ DONE — Seed dashboard data ke Google Sheets (1 commit, 7 GAS functions)
 C. FRONTEND ENHANCEMENTS (optional):
 - Fix "Aisyah Putri" flash sebelum JS injection jalan
 - Tambah loading spinner saat fetch GAS data
@@ -712,21 +738,6 @@ Token injection: main.js auto-injects participantToken ke semua POST /__gas
 - Task: inject pemanggilan `saveChapterProgress(moduleId, chapterId, "completed")` ke setiap halaman materi/quiz
 - Module dengan route aktif: AI Fundamentals (6 modul), Computer Vision (11 chapters), Generative AI, Deep Learning, Reinforcement Learning
 - Pendekatan: bisa via script injection di `initFellowDashboardPage()` atau via `<script>` di setiap lesson page
-
-**B. Isi data ke Google Sheets**
-- `participant_dashboard_modules` — butuh `module_id` + `total_chapters` + metadata (title, subtitle, icon, href)
-- `participant_dashboard_journey` — 4 phase (Foundation, Specialization, Project Building, Graduation)
-- `participant_dashboard_events` — upcoming events
-- `participant_dashboard_leaderboard` — ranking dengan NIK + points
-
-**C. Frontend enhancements (optional)**
-- Fix flash "Aisyah Putri" sebelum JS injection jalan
-- Loading spinner saat fetch GAS data
-- Error state UI untuk GAS failures
-
-**D. Testing lanjutan**
-- Manual flow: login → dashboard → modules → settings → ganti password
-- Playwright e2e dengan akun test (kalau tersedia)
 
 ### BACKLOG
 - Aktifkan route Math, ML, NLP
