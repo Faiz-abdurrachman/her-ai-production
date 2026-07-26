@@ -2018,6 +2018,26 @@
         });
     }
 
+    window.saveChapterProgress = async function(moduleId, chapterId, status, score) {
+        var session = readParticipantSession();
+        if (!session?.nik) return;
+        try {
+            await fetch('/__gas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action: 'saveParticipantProgress',
+                    nik: session.nik,
+                    module_id: moduleId,
+                    chapter_id: chapterId,
+                    status: status || 'completed',
+                    score: score !== undefined ? score : null
+                })
+            });
+        } catch (e) {
+        }
+    };
+
     window.getParticipantPortalSettings = fetchSettings;
     window.saveParticipantPortalSettings = saveSettings;
     window.applyParticipantPortalSettings = applySettings;

@@ -148,7 +148,8 @@ const SHEETS = {
   participantDashboardEvents: 'participant_dashboard_events',
   participantDashboardLeaderboard: 'participant_dashboard_leaderboard',
   participantAccounts: 'ParticipantAccounts',
-  participantActivity: 'ParticipantActivity'
+  participantActivity: 'ParticipantActivity',
+  participantProgress: 'participant_progress'
 };
 
 const SCHEMA = {
@@ -179,14 +180,15 @@ const SCHEMA = {
   [SHEETS.projects]: ['project_id', 'team_id', 'team_name', 'title', 'members', 'institution', 'track', 'project_title', 'mentor', 'deck_url', 'repo_url', 'demo_url', 'overview', 'details', 'score', 'status', 'notes', 'submitted_at'],
   [SHEETS.certificates]: ['certificate_no', 'participant_rowId', 'nama_lengkap', 'final_score', 'status', 'issued_at', 'certificate_url'],
   [SHEETS.assets]: ['asset_id', 'title', 'type', 'url', 'visible_to', 'status', 'notes'],
-  [SHEETS.participantDashboardModules]: ['title', 'subtitle', 'progress', 'icon', 'tone', 'href', 'is_active', 'sort_order'],
+  [SHEETS.participantDashboardModules]: ['title', 'subtitle', 'progress', 'icon', 'tone', 'href', 'total_chapters', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardDiscussionTrails]: ['actor', 'action', 'topic', 'time_label', 'tone', 'is_active', 'created_at'],
   [SHEETS.participantDashboardTracks]: ['title', 'subtitle', 'icon', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardJourney]: ['title', 'subtitle', 'progress', 'icon', 'accent', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardEvents]: ['day', 'month', 'title', 'time', 'url', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardLeaderboard]: ['rank', 'nik', 'name', 'points', 'is_active'],
   [SHEETS.participantAccounts]: ['account_id', 'nik', 'username', 'generated_password', 'password_hash', 'password_status', 'access_status', 'nama_lengkap', 'email', 'whatsapp', 'participant_rowId', 'participant_stage', 'status_seleksi', 'created_at', 'updated_at', 'created_by', 'last_login_at', 'password_changed_at'],
-  [SHEETS.participantActivity]: ['activity_id', 'timestamp', 'nik', 'nama_lengkap', 'activity_type', 'page', 'module_id', 'lesson_id', 'activity', 'score', 'total', 'payload_json', 'user_agent', 'session_id']
+  [SHEETS.participantActivity]: ['activity_id', 'timestamp', 'nik', 'nama_lengkap', 'activity_type', 'page', 'module_id', 'lesson_id', 'activity', 'score', 'total', 'payload_json', 'user_agent', 'session_id'],
+  [SHEETS.participantProgress]: ['progress_id', 'participant_rowId', 'nik', 'module_id', 'chapter_id', 'status', 'score', 'started_at', 'completed_at', 'updated_at']
 };
 
 function doPost(e) {
@@ -198,6 +200,8 @@ function doPost(e) {
       register: () => registerParticipant(payload),
       participantLogin: () => participantLogin(payload),
       changeParticipantPassword: () => changeParticipantPassword(payload),
+      saveParticipantProgress: () => saveParticipantProgress(payload),
+      getParticipantProgress: () => getParticipantProgress(payload),
       updateParticipantProfile: () => updateParticipantProfile(payload),
       provisionParticipantAccounts: () => provisionParticipantAccounts(payload),
       getParticipantAccounts: () => ({ status: 'success', accounts: getRows(SHEETS.participantAccounts) }),
@@ -264,6 +268,8 @@ function authorizeGasAction(action, payload) {
   const participantActions = [
     'updateParticipantProfile',
     'changeParticipantPassword',
+    'saveParticipantProgress',
+    'getParticipantProgress',
     'recordParticipantActivity',
     'getParticipantDashboardData',
     'startCompetencySession',
@@ -278,7 +284,7 @@ function authorizeGasAction(action, payload) {
   if (participantActions.indexOf(action) >= 0) {
     const claims = requireParticipantToken(payload);
     const retestActions = ['startReTestSession', 'heartbeatReTestSession', 'saveReTestAnswer', 'submitReTest'];
-    const normalActions = ['updateParticipantProfile', 'changeParticipantPassword', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest'];
+    const normalActions = ['updateParticipantProfile', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest'];
     if (retestActions.indexOf(action) >= 0 && claims.scope !== 'retest') {
       throw new Error('Sesi Re-Test tidak valid. Silakan login ulang.');
     }
@@ -358,14 +364,36 @@ function getParticipantDashboardData(payload) {
     .filter(row => row.is_active === '' || isTruthy(row.is_active))
     .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
 
-  const modules = activeRows(SHEETS.participantDashboardModules).map(row => ({
-    title: row.title || '',
-    subtitle: row.subtitle || '',
-    progress: Number(row.progress || 0),
-    icon: row.icon || 'fas fa-book-open',
-    tone: row.tone || 'pink',
-    href: row.href || '#/participant-modules'
-  }));
+  const moduleRows = activeRows(SHEETS.participantDashboardModules);
+
+  const progressRows = requesterNik ? getRows(SHEETS.participantProgress).filter(function(row) {
+    return String(row.nik || '').replace(/\D/g, '') === requesterNik;
+  }) : [];
+
+  var completedByModule = {};
+  progressRows.forEach(function(row) {
+    var key = String(row.module_id || '');
+    if (row.status === 'completed') {
+      completedByModule[key] = (completedByModule[key] || 0) + 1;
+    }
+  });
+
+  const modules = moduleRows.map(function(row) {
+    var totalChapters = Number(row.total_chapters || 0);
+    var computedProgress = row.progress !== undefined ? Number(row.progress) : 0;
+    if (totalChapters > 0) {
+      var completed = completedByModule[row.module_id] || 0;
+      computedProgress = Math.min(100, Math.round((completed / totalChapters) * 100));
+    }
+    return {
+      title: row.title || '',
+      subtitle: row.subtitle || '',
+      progress: computedProgress,
+      icon: row.icon || 'fas fa-book-open',
+      tone: row.tone || 'pink',
+      href: row.href || '#/participant-modules'
+    };
+  });
 
   const discussionTrails = activeRows(SHEETS.participantDashboardDiscussionTrails).map(row => ({
     actor: row.actor || 'Panitia',
@@ -1199,6 +1227,110 @@ function changeParticipantPassword(payload) {
   });
 
   return { status: 'success', message: 'Password berhasil diganti.' };
+}
+
+function saveParticipantProgress(payload) {
+  var claims = payload.__auth || requireParticipantToken(payload);
+  if (!payload.module_id || !payload.chapter_id) {
+    return { status: 'error', message: 'module_id dan chapter_id wajib diisi.' };
+  }
+
+  var participants = getRows(SHEETS.participants);
+  var participant = participants.find(function(row) {
+    return claims.rowId && String(row.rowId || '') === String(claims.rowId);
+  }) || participants.find(function(row) {
+    return String(row.nik || '').replace(/\D/g, '') === String(claims.sub || '');
+  });
+  if (!participant) return { status: 'error', message: 'Peserta tidak ditemukan.' };
+
+  var now = new Date().toISOString();
+  var moduleId = String(payload.module_id);
+  var chapterId = String(payload.chapter_id);
+  var status = payload.status || 'in_progress';
+  var score = payload.score !== undefined ? Number(payload.score) : null;
+  var participantRowId = String(participant.rowId || '');
+
+  var progressRows = getRows(SHEETS.participantProgress);
+  var existing = progressRows.find(function(row) {
+    return String(row.participant_rowId || '') === participantRowId
+      && String(row.module_id || '') === moduleId
+      && String(row.chapter_id || '') === chapterId;
+  });
+
+  if (existing && existing.progress_id) {
+    var updateFields = { status: status, updated_at: now };
+    if (score !== null) updateFields.score = score;
+    if (status === 'completed' && !existing.completed_at) {
+      updateFields.completed_at = now;
+    }
+    if (!existing.started_at) {
+      updateFields.started_at = now;
+    }
+    updateByKey(SHEETS.participantProgress, 'progress_id', existing.progress_id, updateFields);
+  } else {
+    addRowObject(SHEETS.participantProgress, {
+      progress_id: 'prg_' + Utilities.getUuid(),
+      participant_rowId: participantRowId,
+      nik: String(participant.nik || '').replace(/\D/g, ''),
+      module_id: moduleId,
+      chapter_id: chapterId,
+      status: status,
+      score: score,
+      started_at: now,
+      completed_at: status === 'completed' ? now : '',
+      updated_at: now
+    });
+  }
+
+  recordParticipantActivity({
+    nik: participant.nik,
+    nama_lengkap: participant.nama_lengkap,
+    activity_type: 'progress_update',
+    module_id: moduleId,
+    lesson_id: chapterId,
+    activity: 'Progress: ' + status + ' - ' + moduleId + '/' + chapterId,
+    score: score
+  });
+
+  return { status: 'success' };
+}
+
+function getParticipantProgress(payload) {
+  var claims = payload.__auth || requireParticipantToken(payload);
+  var participants = getRows(SHEETS.participants);
+  var participant = participants.find(function(row) {
+    return claims.rowId && String(row.rowId || '') === String(claims.rowId);
+  }) || participants.find(function(row) {
+    return String(row.nik || '').replace(/\D/g, '') === String(claims.sub || '');
+  });
+  if (!participant) return { status: 'error', message: 'Peserta tidak ditemukan.' };
+
+  var participantRowId = String(participant.rowId || '');
+  var allProgress = getRows(SHEETS.participantProgress).filter(function(row) {
+    return String(row.participant_rowId || '') === participantRowId;
+  });
+
+  if (payload.module_id) {
+    allProgress = allProgress.filter(function(row) {
+      return String(row.module_id || '') === String(payload.module_id);
+    });
+  }
+
+  return {
+    status: 'success',
+    data: allProgress.map(function(row) {
+      return {
+        progress_id: row.progress_id,
+        module_id: row.module_id,
+        chapter_id: row.chapter_id,
+        status: row.status,
+        score: row.score !== undefined ? Number(row.score) : null,
+        started_at: row.started_at,
+        completed_at: row.completed_at,
+        updated_at: row.updated_at
+      };
+    })
+  };
 }
 
 function updateParticipantProfile(payload) {
