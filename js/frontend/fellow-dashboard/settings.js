@@ -1719,6 +1719,16 @@
         return Object.assign({}, defaultParticipantDashboardData(), result.data || {});
     }
 
+    // Format quiz score badge for module card.
+    // Returns empty string if no score, HTML badge otherwise.
+    // Score ≤ 20: raw count format "7/20", Score > 20: percentage format "85%"
+    function formatQuizBadge(quizScore) {
+        if (quizScore === null || quizScore === undefined || isNaN(Number(quizScore))) return '';
+        var score = Number(quizScore);
+        var label = score > 20 ? score + '%' : score + '/20';
+        return '<em class="quiz-badge" title="Nilai Kuis: ' + label + '"><i class="fas fa-trophy"></i> ' + label + '</em>';
+    }
+
     function renderParticipantDashboard(data) {
         const fallbackData = defaultParticipantDashboardData();
         const nonEmpty = (items, fallbackItems) => Array.isArray(items) && items.length ? items : fallbackItems;
@@ -1731,6 +1741,7 @@
                 <a class="module-card dash-real ${escapeHtml(item.tone || 'pink')}" href="${escapeHtml(item.href || '#/participant-modules')}">
                     <div class="module-icon"><i class="${escapeHtml(item.icon || 'fas fa-book-open')}"></i></div>
                     <span>${Number(item.progress || 0)}%</span>
+                    ${formatQuizBadge(item.quiz_score)}
                     <h3>${escapeHtml(item.title)}</h3>
                     <p>${escapeHtml(item.subtitle || 'Mulai belajar')}</p>
                 </a>

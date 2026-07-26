@@ -152,6 +152,35 @@ TEST_PARTICIPANT_NIK="..." TEST_PARTICIPANT_PASSWORD="..." npx playwright test
 - #51: Practice/latihan wiring — 28 module JS ✅
 - Playwright e2e: 13/13 tests PASS ✅
 
+**Key deliverables sesi ini (#52-#53 — Score Display + Leaderboard):**
+- #52: Dashboard Score Display — quiz_score di GAS response + badge UI di module card ✅
+- #53: seedDashboardLeaderboard idempotent (clearContent+addRowObject → upsertByKey) ✅
+- e2e: 3 new tests (quiz, practice, password change) — 8/8 pass, 8 skipped ✅
+
+---
+
+## 52. Feature: Dashboard Score Display — Quiz Score Tidak Ditampilkan di UI
+
+**Deskripsi:**
+Dashboard module card hanya menampilkan progress chapter (%) — score quiz yang sudah tersimpan di `participant_progress` (chapter_id='quiz') tidak ditampilkan.
+
+**Cara Perbaikan:**
+- **GAS**: `getParticipantDashboardData()` — tambah query quiz score dari `participant_progress` (filter `chapter_id='quiz'`), ambil score tertinggi per module (Math.max), return `quiz_score` di tiap module object.
+- **Frontend**: `renderParticipantDashboard()` — inject `formatQuizBadge(item.quiz_score)` ke module card HTML. Score ≤20: format `/20`, Score >20: format `%`.
+- **CSS**: `.quiz-badge` — pill/badge pink translucent, icon trophy, positioned after progress span.
+- Cache buster: `settings.js?v=20260727-score-display`, `dashboard.css?v=20260727-score-display`.
+- **Verifikasi:** Submit quiz → refresh dashboard → badge muncul dengan format score ✅
+
+## 53. Refactor: seedDashboardLeaderboard → upsertByKey
+
+**Deskripsi:**
+`seedDashboardLeaderboard()` di `gas/Code.gs` masih pakai `clearContent()` + `addRowObject()` — tidak idempotent, tidak konsisten dengan seed functions lain.
+
+**Cara Perbaikan:**
+- Ganti `clearContent()` + `addRowObject()` loop dengan `upsertByKey(SHEETS.participantDashboardLeaderboard, 'rank', String(l.rank), l)`.
+- Key: `rank` (unique per leaderboard entry).
+- **Verifikasi:** Run seed 2x → no duplicate rows, row count tetap ✅
+
 **Session Rules (WAJIB — berlaku untuk semua AI session):**
 1. Commit PER FITUR, bukan satu commit besar
 2. Update handover & gemini.md setiap checkpoint

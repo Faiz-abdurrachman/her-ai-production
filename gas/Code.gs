@@ -378,6 +378,18 @@ function getParticipantDashboardData(payload) {
     }
   });
 
+  // Quiz scores — take the highest score per module (chapter_id === 'quiz')
+  var quizScoreByModule = {};
+  progressRows.forEach(function(row) {
+    if (row.chapter_id === 'quiz' && row.score !== undefined && row.score !== null && row.score !== '') {
+      var key = String(row.module_id || '');
+      var score = Number(row.score);
+      if (!isNaN(score)) {
+        quizScoreByModule[key] = Math.max(quizScoreByModule[key] || 0, score);
+      }
+    }
+  });
+
   const modules = moduleRows.map(function(row) {
     var totalChapters = Number(row.total_chapters || 0);
     var computedProgress = row.progress !== undefined ? Number(row.progress) : 0;
@@ -385,10 +397,12 @@ function getParticipantDashboardData(payload) {
       var completed = completedByModule[row.module_id] || 0;
       computedProgress = Math.min(100, Math.round((completed / totalChapters) * 100));
     }
+    var quizScore = quizScoreByModule[row.module_id];
     return {
       title: row.title || '',
       subtitle: row.subtitle || '',
       progress: computedProgress,
+      quiz_score: quizScore !== undefined ? quizScore : null,
       icon: row.icon || 'fas fa-book-open',
       tone: row.tone || 'pink',
       href: row.href || '#/participant-modules'
@@ -850,9 +864,8 @@ function seedDashboardLeaderboard() {
 
   var sheet = getSheet(SHEETS.participantDashboardLeaderboard);
   ensureSchemaHeaders(sheet, SCHEMA[SHEETS.participantDashboardLeaderboard]);
-  if (sheet.getLastRow() > 1) sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clearContent();
   leaderboard.forEach(function(l) {
-    addRowObject(SHEETS.participantDashboardLeaderboard, l);
+    upsertByKey(SHEETS.participantDashboardLeaderboard, 'rank', String(l.rank), l);
   });
 }
 

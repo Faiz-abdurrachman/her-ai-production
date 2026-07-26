@@ -896,6 +896,26 @@
     width: 32px;
 }
 
+#dashboardModuleGrid .module-card .quiz-badge {
+    background: rgba(246, 51, 146, 0.08);
+    border: 1px solid rgba(246, 51, 146, 0.18);
+    border-radius: 20px;
+    color: #c0266a;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.62rem;
+    font-style: normal;
+    font-weight: 600;
+    margin: 2px 0 4px;
+    padding: 3px 10px;
+    width: fit-content;
+}
+#dashboardModuleGrid .module-card .quiz-badge i {
+    font-size: 0.55rem;
+    opacity: 0.75;
+}
+
 #dashboardModuleGrid .module-card h3 {
     font-size: 0.78rem;
     line-height: 1.35;

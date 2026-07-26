@@ -1,13 +1,13 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint:** 27 Juli 2026 (Final — Sesi Sisyphus Extended), Asia/Jakarta
+**Checkpoint:** 27 Juli 2026 (Sesi Sisyphus — Score Display + Leaderboard), Asia/Jakarta
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
-**Last Commit:** `0d442bf` — feat: wire practice (latihan) save to GAS backend (#51)
-**Total commits:** 32 (25 sebelumnya + 7 baru)
-**GAS Deployment:** ✅ Sudah redeploy (27 Juli 2026)
-**Worktree:** BERSIH
-**Backend:** 47/47 PASS | **Playwright:** 13/13 PASS
+**Last Commit:** (pending — commit after this checkpoint)
+**Total commits:** 32 + 1 (new)
+**GAS Deployment:** ⚠️ BELUM redeploy — Code.gs changed (getParticipantDashboardData + seedDashboardLeaderboard)
+**Worktree:** Modified: gas/Code.gs, settings.js, dashboard.css, index.html, e2e/fellow-dashboard.spec.js, gemini.md, handover/
+**Playwright:** 8/8 PASS (8 skipped — no credentials)
 
 > **Ini adalah sumber kebenaran tunggal.** Dokumen handover lain yang bertentangan diabaikan.
 
@@ -42,7 +42,7 @@
 | Dashboard skeleton/error/fade-in | ✅ Shimmer loader + retry button + cache |
 | Dashboard modules/journey/events/tracks | ✅ Dari GAS seed |
 | Leaderboard | ✅ Masked, auto-populate |
-| Dashboard score display | ❌ Score quiz belum ditampilkan di UI |
+| Dashboard score display | ✅ Quiz score muncul di module card (pill badge, auto-format /20 atau %) |
 
 ---
 
@@ -82,8 +82,7 @@
 - Task C: Skeleton loader, error state, fade-in, dashboard cache
 - Bug fixes #29-44 (16 bug)
 
-### Sesi Ini (7 commit: #45-#51)
-
+### Sesi Sebelumnya (7 commit: #45-#51)
 | # | Item | Detail |
 |---|------|--------|
 | 1 | seedDashboardDiscussions idempotent | `addRowObject` -> `upsertByKey('topic')` |
@@ -93,7 +92,14 @@
 | #46 | Cache busters | 19 file tanpa `?v=` ditambahkan |
 | #48 | Duplicate scripts | Hapus duplicate ai-evaluation/evolution |
 
-**Playwright e2e:** Installed + 13 tests, **13/13 PASS**
+**Playwright e2e:** Installed + 13 tests, 13/13 PASS
+
+### Sesi Ini (1 commit: #52-#53)
+| # | Item | Detail |
+|---|------|--------|
+| #52 | Dashboard Score Display | GAS: quiz_score di getParticipantDashboardData. FE: quiz badge pill di module card. CSS: .quiz-badge styling |
+| #53 | seedDashboardLeaderboard | clearContent+addRowObject → upsertByKey('rank') |
+| | e2e tests | 3 new tests (quiz render, practice render, password form validation) |
 
 ---
 
@@ -131,9 +137,10 @@ SETTINGS GATE: localStorage.heraiGlobalSettings -> .cursor/global-settings.json
 
 ## 📝 NEXT PLAN
 
-1. **Dashboard Score Display** — UI untuk nampilin score quiz di module card
-2. **seedDashboardLeaderboard** — ganti addRowObject -> upsertByKey
-3. **Additional e2e tests** — quiz submit, practice save, password change flow
+1. **Score semantics normalization (#49)** — ai-math-for-ai: percentage (0-100), lainnya: raw count (0-20). Either normalize all to percentage or add per-module quiz_total config.
+2. **Add math-for-ai to dashboard modules seed** — module ada (ai-math-for-ai.js) tapi tidak di seedDashboardModules.
+3. **GAS Redeploy** — Code.gs changed, perlu redeploy web app sebelum perubahan backend aktif.
+4. **Additional e2e tests with credentials** — quiz submit full flow, practice save full flow, password change end-to-end (butuh TEST_PARTICIPANT_NIK + TEST_PARTICIPANT_PASSWORD).
 
 ---
 

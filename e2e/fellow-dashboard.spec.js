@@ -177,6 +177,66 @@ test.describe('Authenticated Flow', () => {
       expect(url).toMatch(/participant-ai-lab-|participant-ai-/i);
     }
   });
+
+  // ─── Quiz Submit ─────────────────────────────────────────
+
+    authTest('Quiz page renders with form and submit button', async ({ page }) => {
+    await login(page);
+    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning-quiz`);
+    await page.waitForTimeout(3000);
+
+    const form = page.locator('#aiDeepLearningQuizForm');
+    await expect(form).toBeVisible({ timeout: 10000 });
+
+    const radios = form.locator('input[type="radio"]');
+    const radioCount = await radios.count();
+    expect(radioCount).toBeGreaterThan(0);
+
+    const submitBtn = form.locator('.quiz-submit-btn');
+    await expect(submitBtn).toBeVisible();
+  });
+
+  // ─── Practice Save ───────────────────────────────────────
+
+  authTest('Practice page renders with form and textarea', async ({ page }) => {
+    await login(page);
+    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning-practice`);
+    await page.waitForTimeout(3000);
+
+    const form = page.locator('#aiDeepLearningPracticeForm');
+    await expect(form).toBeVisible({ timeout: 10000 });
+
+    const textareas = form.locator('textarea, input[type="text"]');
+    const count = await textareas.count();
+    expect(count).toBeGreaterThan(0);
+  });
+
+  // ─── Password Change ─────────────────────────────────────
+
+  authTest('Password change — form renders with validation', async ({ page }) => {
+    await login(page);
+    await page.goto(`${TEST_BASE}/#/participant-settings`);
+    await page.waitForTimeout(3000);
+
+    const form = page.locator('#passwordChangeForm');
+    await expect(form).toBeVisible({ timeout: 10000 });
+
+    const oldInput = form.locator('#oldPassword');
+    const newInput = form.locator('#newPassword');
+    await expect(oldInput).toBeVisible();
+    await expect(newInput).toBeVisible();
+
+    const submitBtn = form.locator('button[type="submit"]');
+    await submitBtn.click();
+    await page.waitForTimeout(1000);
+
+    const errorEl = page.locator('#passwordChangeMessage');
+    const errorVisible = await errorEl.isVisible().catch(() => false);
+    if (errorVisible) {
+      const errorText = await errorEl.textContent();
+      expect(errorText.length).toBeGreaterThan(0);
+    }
+  });
 });
 
 // ─── Error State ──────────────────────────────────────────
