@@ -76,7 +76,7 @@
 
 .fellow-restricted-state {
     align-items: center;
-    background: #fef9f0;
+    background: #fff7fb;
     display: flex;
     font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
     justify-content: center;
@@ -87,16 +87,16 @@
     background: #fff;
     border: 1px solid var(--fellow-line);
     border-radius: 22px;
-    box-shadow: 0 22px 60px rgba(248, 184, 78, 0.12);
+    box-shadow: 0 22px 60px rgba(170, 52, 104, 0.1);
     max-width: 560px;
     padding: 42px 34px;
     text-align: center;
 }
-.fellow-restricted-state i {
+.fellow-restricted-state i.fa-shield-halved {
     align-items: center;
-    background: #fff3e0;
+    background: #ffe0f0;
     border-radius: 50%;
-    color: #f8b84e;
+    color: var(--fellow-pink);
     display: inline-flex;
     font-size: 1.8rem;
     height: 70px;
@@ -115,7 +115,7 @@
     margin: 0 auto 22px;
 }
 .fellow-restricted-state a {
-    background: #f8b84e;
+    background: var(--fellow-pink);
     border-radius: 12px;
     color: #fff;
     display: inline-flex;
@@ -123,6 +123,10 @@
     min-height: 44px;
     padding: 12px 20px;
     text-decoration: none;
+}
+.fellow-restricted-state a i {
+    font-size: 0.85rem;
+    margin-right: 6px;
 }
 
 .fellow-dashboard *,

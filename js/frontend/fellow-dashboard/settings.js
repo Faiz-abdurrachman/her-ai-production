@@ -1822,7 +1822,7 @@
     }
 
     function renderParticipantRestricted() {
-        var restrictedHTML = '<section class="fellow-restricted-state"><div><i class="fas fa-shield-halved"></i><h1>Akses Peserta Dibatasi</h1><p>Sementara ini portal peserta hanya membuka <strong>Beranda</strong>, <strong>Modul</strong>, dan <strong>Pengaturan</strong>.</p><a href="#/participant-dashboard"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a></div></section>';
+        var restrictedHTML = '<section class="fellow-restricted-state"><div><i class="fas fa-lock fa-shield-halved"></i><h1>Akses Peserta Dibatasi</h1><p>Sementara ini portal peserta hanya membuka <strong>Beranda</strong>, <strong>Modul</strong>, dan <strong>Pengaturan</strong>.</p><a href="#/participant-dashboard"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a></div></section>';
 
         var root = document.querySelector('.fellow-dashboard');
         if (root) {
