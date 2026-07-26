@@ -1368,6 +1368,7 @@
             localStorage.setItem(quizDoneKey, 'true');
             localStorage.setItem(quizScoreKey, String(score));
             localStorage.setItem(quizAnswersKey, JSON.stringify(answers));
+            window.saveChapterProgress('ai-fundamentals', 'quiz', 'completed', score);
             recordParticipantActivity({
                 activity_type: 'quiz_submitted',
                 module_id: 'ai-fundamentals',
