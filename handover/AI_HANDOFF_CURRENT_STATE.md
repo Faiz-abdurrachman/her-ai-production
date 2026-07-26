@@ -3,8 +3,8 @@
 **Checkpoint:** 27 Juli 2026 (Final — Sesi Sisyphus), Asia/Jakarta
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
-**Last Commit:** `7ddfdde`
-**GAS Deployment:** ✅ Versi 3, 26 Juli 2026 (Code.gs unchanged — seed functions belum dijalankan)
+**Last Commit:** `e2a9861`  
+**GAS Deployment:** ✅ Versi 3, 26 Juli 2026 (seed functions sudah dijalankan)
 **Backend Verification:** 47/47 checks PASS | Backend Testing: 12/12 PASS | Frontend: 10/10 HTTP + 8/12 Playwright
 
 > **Ini adalah sumber kebenaran tunggal.** Dokumen handover lain yang bertentangan diabaikan.
@@ -29,19 +29,17 @@
 
 ## 📊 STATUS SAAT INI — Apa yang SUDAH bisa & BELUM bisa
 
-| Fitur | Backend | Frontend | Bisa Dipake? |
-|---|---|---|---|
-| **Login peserta** | ✅ | ✅ | ✅ YA |
-| **Nama dinamis di dashboard** | ✅ | ✅ | ✅ YA — "Halo, {nama asli}" |
-| **Ganti password mandiri** | ✅ | ✅ | ✅ YA — old/new/confirm → sync 2 sheet |
-| **Settings save profil** | ✅ | ✅ | ✅ YA — form → GAS → session update |
-| **Progress simpan ke backend** | ✅ `saveParticipantProgress` | ✅ helper `window.saveChapterProgress()` ada | ⚠️ **BELUM di-wire** — helper siap tapi belum dipanggil dari lesson pages |
-| **Progress tampil di dashboard** | ✅ `getParticipantDashboardData` compute % | ✅ `renderParticipantDashboard()` | ⚠️ **Sheet kosong** — dashboard masih fallback 0% |
-| **Kuis modul simpan skor** | ❌ | ❌ | ❌ **Belum** — soal ada di HTML, jawaban ga nyimpen |
-
-**Progress Tracking:** Backend (sheet + 2 endpoint) = DAPUR SIAP. Frontend (helper) = PELAYAN SIAP. Tapi **belum ada yang manggil** — ga ada halaman lesson yang panggil `saveChapterProgress()`.
-
-**Kuis:** Competency test (115 soal rekrutmen) ada. Kuis dalam modul (AI Fundamentals, CV, dll) soalnya ada di HTML tapi **jawaban ga tersimpan ke sheet**.
+| Fitur | Status |
+|---|---|
+| **Login peserta** | ✅ Production |
+| **Nama dinamis dashboard** | ✅ "Halo, Peserta HerAI!" (ganti otomatis kalau session punya nama) |
+| **Ganti password mandiri** | ✅ old/new/confirm → sync 2 sheet |
+| **Settings save profil** | ✅ form → GAS → session update |
+| **Progress auto-save** | ✅ 28 module wired — tiap buka chapter auto-save ke GAS |
+| **Dashboard modules** | ✅ 8 modul + "Lihat Semua (27)" dari GAS |
+| **Dashboard journey/events/tracks** | ✅ dari sheet (seed functions sudah dijalankan) |
+| **Leaderboard** | ✅ masked (NIK disensor), auto-populate dari ParticipantAccounts |
+| **Kuis modul** | ❌ Soal ada di HTML, jawaban belum nyimpen ke backend |
 
 ## 🚫 HARD BLOCK — JANGAN DISENTUH
 
