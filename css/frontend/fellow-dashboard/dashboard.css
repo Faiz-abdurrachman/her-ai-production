@@ -18,6 +18,9 @@
     display: block;
 }
 
+/* Hide "Topik 01/02/03" labels injected in chapter HTML content */
+.topic-label { display: none !important; }
+
 .fellow-locked-state {
     align-items: center;
     background: #fff7fb;
