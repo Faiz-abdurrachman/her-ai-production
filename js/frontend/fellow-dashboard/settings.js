@@ -1546,7 +1546,19 @@
 
     function getParticipantDisplayName() {
         const session = readParticipantSession();
-        return session?.profile?.nama_lengkap || session?.name || window.__CURRENT_PARTICIPANT_PROFILE__?.nama_lengkap || 'Peserta HerAI';
+        var name = session?.profile?.nama_lengkap
+            || session?.name
+            || (window.__CURRENT_PARTICIPANT_PROFILE__ && window.__CURRENT_PARTICIPANT_PROFILE__.nama_lengkap)
+            || '';
+        if (name && name !== 'Peserta HerAI') return name;
+
+        // Last resort: try reading profile from settings form
+        var settingsName = document.getElementById('settingsName');
+        if (settingsName && settingsName.value && settingsName.value !== 'Peserta HerAI') {
+            return settingsName.value;
+        }
+
+        return name || 'Peserta HerAI';
     }
 
     function saveParticipantSession(session) {
