@@ -27,6 +27,22 @@
 
 ---
 
+## 📊 STATUS SAAT INI — Apa yang SUDAH bisa & BELUM bisa
+
+| Fitur | Backend | Frontend | Bisa Dipake? |
+|---|---|---|---|
+| **Login peserta** | ✅ | ✅ | ✅ YA |
+| **Nama dinamis di dashboard** | ✅ | ✅ | ✅ YA — "Halo, {nama asli}" |
+| **Ganti password mandiri** | ✅ | ✅ | ✅ YA — old/new/confirm → sync 2 sheet |
+| **Settings save profil** | ✅ | ✅ | ✅ YA — form → GAS → session update |
+| **Progress simpan ke backend** | ✅ `saveParticipantProgress` | ✅ helper `window.saveChapterProgress()` ada | ⚠️ **BELUM di-wire** — helper siap tapi belum dipanggil dari lesson pages |
+| **Progress tampil di dashboard** | ✅ `getParticipantDashboardData` compute % | ✅ `renderParticipantDashboard()` | ⚠️ **Sheet kosong** — dashboard masih fallback 0% |
+| **Kuis modul simpan skor** | ❌ | ❌ | ❌ **Belum** — soal ada di HTML, jawaban ga nyimpen |
+
+**Progress Tracking:** Backend (sheet + 2 endpoint) = DAPUR SIAP. Frontend (helper) = PELAYAN SIAP. Tapi **belum ada yang manggil** — ga ada halaman lesson yang panggil `saveChapterProgress()`.
+
+**Kuis:** Competency test (115 soal rekrutmen) ada. Kuis dalam modul (AI Fundamentals, CV, dll) soalnya ada di HTML tapi **jawaban ga tersimpan ke sheet**.
+
 ## 🚫 HARD BLOCK — JANGAN DISENTUH
 
 | Area | Alasan |
