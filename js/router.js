@@ -980,6 +980,8 @@ const router = {
                     window.initFellowDashboardPage("dashboard");
                 } else if (path === "/participant-modules" && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
+                } else if (path === "/participant-settings" && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("settings");
                 } else if (path === "/participant-ai-fundamentals" && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
                 } else if (path === "/participant-ai-intro" && typeof window.initFellowDashboardPage === "function") {
