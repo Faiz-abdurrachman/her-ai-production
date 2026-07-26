@@ -1643,7 +1643,7 @@
         dropdown.className = 'fellow-user-dropdown';
         dropdown.setAttribute('data-fellow-user-dropdown', '');
         dropdown.innerHTML = `
-            <a href="#/participant-profile"><i class="fas fa-user-gear"></i><span>Setting Akun</span></a>
+            <a href="#/participant-settings"><i class="fas fa-user-gear"></i><span>Setting Akun</span></a>
             <button type="button" data-fellow-logout><i class="fas fa-right-from-bracket"></i><span>Log Out</span></button>
         `;
 
