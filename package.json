@@ -1,0 +1,25 @@
+{
+  "name": "her-ai",
+  "version": "1.0.0",
+  "description": "Control panel, participant portal, learning dashboard, assessment tools, messaging prototype, and meeting infrastructure for HerAI Fellowship.",
+  "main": "append_css.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Faiz-abdurrachman/her-ai-production.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Faiz-abdurrachman/her-ai-production/issues"
+  },
+  "homepage": "https://github.com/Faiz-abdurrachman/her-ai-production#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.62.0"
+  }
+}

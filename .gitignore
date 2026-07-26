@@ -3,6 +3,7 @@
 .cursor/debug-*.log
 .cursor/*.json
 node_modules/
+test-results/
 .playwright-mcp/
 dist/
 build/
