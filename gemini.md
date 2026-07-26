@@ -572,15 +572,43 @@ Setelah Task A dan B selesai, ditemukan beberapa bug blocking saat manual testin
 
 ---
 
-## Session Summary — 27 Juli 2026 (Sisyphus)
+## Task C — Frontend Polish (27 Juli 2026)
 
-**Total commits:** 19 commit (10 Task A/B + 9 bug fixes/docs)
-**Files changed:** settings.js, Code.gs, router.js, dashboard.html, settings.html, settings.css, index.html, 28 ai-*.js
-**Bugs fixed:** #36 (Task A), #37 (Task B), #38a-i (9 bug fixes)
+**Commit:** `5ea3409`
+**Files:** `dashboard.css` (+269), `settings.js` (+116/-27), `index.html` (cache busters)
+
+### Fitur
+- **Skeleton Loader**: 6 animated shimmer placeholder sections (modules, trail, tracks, journey, events, leaderboard)
+- **Error State**: Dashboard error UI dengan icon, pesan, dan tombol "Coba Lagi"
+- **Fade-in**: Real data cards muncul dengan staggered animation (`dash-fade-in`)
+- **New Flow**: `renderDashboardSkeletons()` → `fetchParticipantDashboardData()` → `renderParticipantDashboard()` atau `renderDashboardError()`
+- **Retry**: `window.__retryDashboard()` → restart full init flow
+
+### Bug Ditemukan & Fixed Saat Audit
+
+## 39. Bug CSS: Skeleton Circle Span Tidak Muncul (Inline Element)
+**Deskripsi:** Skeleton circle placeholder tidak terlihat di dashboard.
+**Penyebab:** `.skeleton-circle` tidak memiliki `display: block/inline-block`. `<span>` default inline → width/height diabaikan.
+**Solusi:** Menambahkan `display: inline-block` ke `.skeleton-circle`.
+
+## 40. Bug CSS: Redundant `border-radius` di Tiga Selector
+**Deskripsi:** `.skeleton-icon`, `.skeleton-badge`, `.sk-date` mendefinisikan `border-radius` dua kali.
+**Penyebab:** Copy-paste base template `border-radius: 8px` lalu override final.
+**Solusi:** Menghapus deklarasi redundant.
+
+## 41. Bug CSS: Unused `@keyframes dash-spin`
+**Deskripsi:** Keyframe `dash-spin` tidak digunakan.
+**Solusi:** Dihapus.
+
+---
+
+## Session Summary — 27 Juli 2026 (Sisyphus — Final)
+
+**Total commits:** 20
+**Bugs fixed:** #36-41
 **Key deliverables:**
-- Progress tracking wired to 28 module JS files
-- GAS seed functions for all 6 dashboard sheets
-- Settings page fully functional (route handler, tabs, password change)
-- Profile → Settings redirect
-- Dashboard 8-module layout + view all
-- "Aisyah Putri" flash eliminated from dashboard + settings
+- Task A: Progress tracking wired to 28 module JS files ✅
+- Task B: GAS seed functions for all 6 dashboard sheets ✅
+- Task C: Skeleton loader, error state, fade-in, retry button ✅
+- 9 bug fixes (#38a-i): sidebar, dropdown, settings route, profile redirect, password, flash name, dashboard layout, greeting
+- 3 CSS bugs found & fixed during audit (#39-41)
