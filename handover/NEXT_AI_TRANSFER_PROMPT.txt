@@ -1,73 +1,131 @@
-Baca seluruh checkpoint utama berikut sebelum mengubah kode:
+╔══════════════════════════════════════════════════════════════╗
+║  AI TRANSFER PROMPT — HerAI Fellowship SuperApp              ║
+║  Sesi: 27 Juli 2026 (Sisyphus) → Next AI                    ║
+╚══════════════════════════════════════════════════════════════╝
 
-/home/faiz/her6/Her-AI/handover/AI_HANDOFF_CURRENT_STATE.md
+⚠️  BACA SELURUH FILE INI SEBELUM MULAI KERJA.
+    JANGAN SKIP. JANGAN MENGANGGAP TAHU.
 
-Repository:
-/home/faiz/her6/Her-AI
+═══════════════════════════════════════════════════════════════
+📋 SUMBER KEBENARAN (WAJIB DIBACA)
+═══════════════════════════════════════════════════════════════
+1. handover/AI_HANDOFF_CURRENT_STATE.md  ← FILE UTAMA
+2. gemini.md  ← Bug log #1-38 + session rules
+3. reports/BACKEND_FRONTEND_AUDIT_2026-07-27.md  ← Hasil tes
 
-Aturan penting:
+═══════════════════════════════════════════════════════════════
+🔧 IDENTITAS SISTEM
+═══════════════════════════════════════════════════════════════
+- Spreadsheet ID: 1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w
+- GAS Web App URL: https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec
+- GAS Deployment: Versi 3 (26 Juli 2026 08:04)
+- GAS Code: gas/Code.gs (2419 baris, 52 routes, 23 sheets)
+- SPA: Vanilla JS hash-router, Node.js proxy (node server.js → http://127.0.0.1:3000)
+- Proxy: POST /__gas (token auto-injected oleh main.js)
+- Last commit: 7ddfdde
+- Worktree: BERSIH
 
-1. Kode GAS canonical adalah gas/Code.gs.
-2. Spreadsheet canonical adalah 1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w.
-3. Deployment canonical adalah AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE.
-4. ParticipantAccounts adalah sumber kredensial login.
-5. peserta_tahap_1 adalah sumber profil peserta.
-6. Jangan provision/reset 187 akun existing dan jangan memakai forceReset:true.
-7. Jangan mengubah login, password, atau workflow admin tanpa scope baru.
-8. Status deploy GAS latest belum dikonfirmasi; Save saja tidak cukup, deployment
-   existing harus diedit ke New version lalu Deploy.
-9. Jangan mencetak, menyimpan, atau membagikan NIK/password peserta.
-10. Worktree dirty dan perubahan bercampur; jangan reset, checkout, atau cleanup
-    massal.
+═══════════════════════════════════════════════════════════════
+🚫 HARD BLOCK — AREA YANG TIDAK BOLEH DISENTUH
+═══════════════════════════════════════════════════════════════
+- Signaling (Go WebRTC), Messaging/Chat (Go), Participant Portal (Go)
+- Admin dashboard (production)
+- Keamanan/Security hardening
+- Leaderboard, Certificates, Tasks, Projects, Events, Community, Mentor
+- provisionParticipantAccounts / generateParticipantAccounts*
+- forceReset:true (AKAN RESET 187 AKUN EXISTING)
+- 231 file lesson pages (jangan edit satu-satu)
+- js/main.js, js/router.js (kecuali tambah route/handler baru)
 
-Checkpoint login:
+═══════════════════════════════════════════════════════════════
+✅ APA YANG SUDAH SELESAI — JANGAN DIULANG
+═══════════════════════════════════════════════════════════════
 
-- Regression test login peserta lulus lokal.
-- Login admin tetap memakai alur baseline.
-- Login peserta memakai NIK dan generated_password dari baris ParticipantAccounts
-  yang sama.
-- Profil dihubungkan melalui participant_rowId, dengan fallback NIK.
-- Token peserta berlaku 12 jam dan password tidak disimpan di sessionStorage.
-- Deployment production terbaru masih perlu dikonfirmasi dan diuji satu akun nyata.
+SESI SEBELUM (5 Fase + 7 Bug):
+- Fase 1-5: Dynamic name, settings wire GAS, ganti password, progress tracking
+- Bug #29-35: null guards, fragile selectors, CSS, schema fix
+- Backend: 47/47 verified, 12/12 endpoint tested
 
-Checkpoint materi:
+SESI INI (Task A + B + 9 Bug Fix — 19 commit):
 
-- Folder materi berisi 200 Markdown dan 111.574 baris.
-- Enam modul AI Fundamentals & Advanced aktif.
-- Math, Machine Learning, NLP, dan Computer Vision mempunyai materi substantif,
-  tetapi route masih menuju Under Development.
-- Generative AI baru parsial.
-- Dua puluh course masih placeholder.
-- Enam specialization track masih scaffold.
-- Terdapat 72 route AI Lab/track menuju Under Development.
-- Route checker 114/114 hanya membuktikan file target ada, bukan course aktif.
+TASK A — Wiring saveChapterProgress ke 28 module JS:
+- Setiap ai-*.js punya `const MODULE_ID = 'module-name'`
+- Setiap chapter load otomatis panggil `window.saveChapterProgress(MODULE_ID, chapter, 'completed')`
+- POST ke GAS saveParticipantProgress → UPSERT ke participant_progress
+- 28/29 file termodifikasi, 29/29 syntax PASS
+- Module ID diekstrak dari CHAPTERS[0].sourcePath folder name
 
-Laporan utama:
+TASK B — Seed dashboard data:
+- 7 GAS seed functions di Code.gs: seedDashboardModules/Journey/Events/Tracks/Discussions/Leaderboard + seedAllDashboardData
+- 27 modul dengan module_id, total_chapters, icon, tone, href
+- Semua fungsi idempotent (upsertByKey) — aman dijalankan ulang
+- ⚠️ BELUM DIJALANKAN! User harus run seedAllDashboardData() dari Apps Script editor
 
-- reports/MATERIAL_AND_FEATURE_GAP_AUDIT_2026-07-19.md
-- reports/MATERIAL_FEATURE_STATUS_WHATSAPP_2026-07-19.md
-- reports/MATERIAL_FEATURE_STATUS_WHATSAPP_2026-07-19.txt
+BUG FIXES (9 commit):
+- Sidebar deep-learning: HTML ID mismatch (aiDeepLearningList vs reasoning-sidebar-list)
+- Dropdown "Setting Akun": link salah (participant-profile → participant-settings)
+- Settings route handler: kena catchall under-development
+- Profile redirect: diblok guard isParticipantRouteAllowed
+- Password form: silent fail → error feedback
+- Flash "Aisyah Putri": hardcode di HTML → netral "Peserta"
+- Dashboard: 27 modul → limit 8 + "Lihat Semua"
+- Greeting: "Halo!" kosong → "Halo, Peserta HerAI!"
 
-Checkpoint fitur akun peserta:
+═══════════════════════════════════════════════════════════════
+📝 NEXT PLAN — Yang Perlu Dikerjakan
+═══════════════════════════════════════════════════════════════
 
-- Halaman Pengaturan peserta ada, tetapi masih prototype dengan data contoh.
-- Tombol Simpan/Unggah/Hapus dan tab Keamanan/Notifikasi/Aksesibilitas belum aktif.
-- Edit profil dasar tersedia melalui updateParticipantProfile di halaman profil.
-- Ganti password mandiri peserta belum tersedia.
-- setParticipantPassword adalah function legacy first-set, tidak diekspos sebagai
-  action, dan bukan implementasi ganti password.
+CRITICAL (User harus lakukan manual):
+1. Jalankan seedAllDashboardData() di Apps Script editor
+2. Login ulang setelah ganti password
 
-Prioritas terdekat:
+TASK C (Optional - Frontend Polish):
+- Loading spinner saat fetch GAS data
+- Error state UI untuk GAS failures (retry button)
+- Skeleton loader yang proper
 
-1. Konfirmasi senior deploy gas/Code.gs sebagai New version di deployment existing.
-2. Jalankan E2E satu akun nyata tanpa mencatat kredensial.
-3. Setelah login terverifikasi, perbaiki semantic route checker.
-4. Aktifkan Math, ML, NLP, dan CV hanya setelah smoke test.
-5. Bangun progress/gradebook server-side.
-6. Jadwalkan hardening action admin GAS dan sanitasi getParticipantAccounts bersama
-   senior.
-7. Kerjakan Pengaturan/ganti password hanya jika user memberi scope baru.
+TASK D (Optional - Testing):
+- Playwright e2e test dengan akun test
+- Manual test flow lengkap
 
-Mulai dengan audit read-only atas status terbaru. Jangan melakukan mutasi data
-Google Sheets, deployment, provisioning, reset password, pengiriman email, atau
-perubahan admin tanpa instruksi eksplisit dari user.
+═══════════════════════════════════════════════════════════════
+📐 ATURAN KERJA — WAJIB DIIKUTI
+═══════════════════════════════════════════════════════════════
+1. Commit PER FITUR, bukan satu commit besar
+2. Update handover & gemini.md setiap checkpoint
+3. Catat bug baru dengan nomor #39+
+4. Dark theme DILARANG — light pink theme untuk code blocks
+5. CSS scope ai-lab-content WAJIB di template CV
+6. Diagram kontras: lines ≥25% opacity, dots ≥75%, stroke ≥0.8px
+7. JANGAN tampilkan NIK/password di mana pun
+8. TANYA user sebelum eksekusi kalau ada yang ambigu
+9. Verifikasi sebelum commit: node --check, test data flow, cek null guards
+10. JANGAN jalankan provision/generate functions
+11. JANGAN sentuh 231 file lesson — pakai JS injection/code generation
+12. sessionStorage.heraiParticipantSession adalah source of truth
+13. Selalu bump cache buster (?v=...) di index.html setelah edit JS/CSS
+14. Jangan silent fail — tambah error feedback di UI
+
+═══════════════════════════════════════════════════════════════
+🔑 DATA FLOW REFERENSI
+═══════════════════════════════════════════════════════════════
+Login:    POST /__gas { action: "participantLogin", nik, password }
+          → GAS: participantLogin() → token + profile
+          → Frontend: saveParticipantSession() → sessionStorage
+
+Settings: POST /__gas { action: "updateParticipantProfile", ... }
+          → GAS: updateParticipantProfile() → updated profile
+
+Password: POST /__gas { action: "changeParticipantPassword", oldPassword, newPassword }
+          → GAS: changeParticipantPassword() → verify → hash → sync
+
+Progress: window.saveChapterProgress(moduleId, chapterId, "completed")
+          → POST /__gas { action: "saveParticipantProgress", module_id, chapter_id, status }
+          → GAS: saveParticipantProgress() → UPSERT ke participant_progress
+
+Dashboard: POST /__gas { action: "getParticipantDashboardData", nik }
+           → GAS: getParticipantDashboardData() → compute % dari participant_progress
+           → Frontend: renderParticipantDashboard() → 8 modul + view all
+
+Session:  sessionStorage.heraiParticipantSession
+          { nik, token, expiresAt, name, profile: { nama_lengkap, email, ... } }

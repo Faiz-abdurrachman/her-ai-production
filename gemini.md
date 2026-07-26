@@ -539,4 +539,48 @@ D. **Testing lanjutan** — manual + Playwright e2e
 **Fix:**
 - `ai-ml-basic.js` MODULE_ID diperbaiki: `ml-basic` → `machine-learning` (match dengan sheet)
 
-**Commits:** d974a21, 1e6801d
+**Commits:** d974a21, 1e6801d, c0d6a55
+
+## 38. Session Wrap: Bug Fixes & UI Polish (9 commit)
+**Deskripsi:**
+Setelah Task A dan B selesai, ditemukan beberapa bug blocking saat manual testing.
+
+**Bug yang difix:**
+
+| # | Severity | Deskripsi | Commit |
+|---|---|---|---|
+| #38a | HIGH | Sidebar deep-learning: HTML `id="aiDeepLearningList"` vs JS `#reasoning-sidebar-list` mismatch → sidebar gak update pas navigasi | 4c4b167 |
+| #38b | HIGH | Dropdown "Setting Akun" link ke `/participant-profile` bukan `/participant-settings` — browser cache bikin fix gak kepakai | 4c4b167 |
+| #38c | HIGH | Settings page kena catchall `startsWith('/participant-')` → `initFellowDashboardPage('under-development')`. Tab gak ada click handler | 62eaa0c |
+| #38d | HIGH | `/participant-profile` diblok `isParticipantRouteAllowed` guard sebelum redirect handler jalan → "Akses Dibatasi" | 0e51adb |
+| #38e | MED | Redirect set `currentPath` bikin router skip content load → halaman kosong | 6484039 |
+| #38f | MED | Password form: `session.nik` null + `btn` null → silent return tanpa error message. User klik "Ganti Password" gak terjadi apa-apa | 9040616 |
+| #38g | LOW | Dashboard + settings HTML hardcode "Aisyah Putri" → flash sebelum JS ganti nama | 9a5a127 |
+| #38h | LOW | Dashboard tampil 27 modul sekaligus → terlalu rame. Limit 8 + "Lihat Semua Modul (27)" | c3baae9 |
+| #38i | LOW | Greeting "Halo!" kosong pas nama gak ada → revert ke "Halo, Peserta HerAI!" | 7ddfdde |
+
+**Pelajaran:**
+1. Browser cache JS agresif — selalu bump cache buster (`?v=...`) di `index.html`
+2. Hardcode "Aisyah Putri" ada di banyak file HTML — ganti satu per satu (dashboard, settings), sisanya di-handle JS injection
+3. Guard `isParticipantRouteAllowed` jalan SEBELUM route handler — redirect harus di-guard level
+4. Silent fail (no error message) bikin debugging susah — selalu tambah feedback UI
+
+**Next steps:**
+1. User jalankan `seedAllDashboardData()` di Apps Script
+2. User login ulang untuk refresh session
+3. Test flow lengkap: login → dashboard → module → settings → password
+
+---
+
+## Session Summary — 27 Juli 2026 (Sisyphus)
+
+**Total commits:** 19 commit (10 Task A/B + 9 bug fixes/docs)
+**Files changed:** settings.js, Code.gs, router.js, dashboard.html, settings.html, settings.css, index.html, 28 ai-*.js
+**Bugs fixed:** #36 (Task A), #37 (Task B), #38a-i (9 bug fixes)
+**Key deliverables:**
+- Progress tracking wired to 28 module JS files
+- GAS seed functions for all 6 dashboard sheets
+- Settings page fully functional (route handler, tabs, password change)
+- Profile → Settings redirect
+- Dashboard 8-module layout + view all
+- "Aisyah Putri" flash eliminated from dashboard + settings
