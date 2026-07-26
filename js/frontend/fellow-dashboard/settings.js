@@ -1654,9 +1654,9 @@
     function defaultParticipantDashboardData() {
         return {
             modules: [
-                { title: 'AI Fundamentals & Advanced', subtitle: 'Pengantar AI dan konsep modern', progress: 0, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-fundamentals' },
-                { title: 'Math for AI', subtitle: 'Aljabar, kalkulus, probabilitas', progress: 0, icon: 'fas fa-square-root-variable', tone: 'purple', href: '#/participant-modules' },
-                { title: 'Machine Learning', subtitle: 'Model, evaluasi, dan pipeline', progress: 0, icon: 'fas fa-diagram-project', tone: 'orange', href: '#/participant-modules' }
+                { title: 'Memuat modul...', subtitle: 'Mengambil data pembelajaran', progress: 0, icon: 'fas fa-spinner fa-spin', tone: 'skeleton', href: '#/participant-modules' },
+                { title: 'Memuat modul...', subtitle: 'Mengambil data pembelajaran', progress: 0, icon: 'fas fa-spinner fa-spin', tone: 'skeleton', href: '#/participant-modules' },
+                { title: 'Memuat modul...', subtitle: 'Mengambil data pembelajaran', progress: 0, icon: 'fas fa-spinner fa-spin', tone: 'skeleton', href: '#/participant-modules' }
             ],
             discussionTrails: [
                 { actor: 'Mentor Rani', action: 'membalas diskusi', topic: 'Pengantar AI', time: '2 jam yang lalu', tone: '' },
@@ -1714,7 +1714,9 @@
         const moduleGrid = document.getElementById('dashboardModuleGrid');
         if (moduleGrid) {
             const modules = nonEmpty(data.modules, fallbackData.modules);
-            moduleGrid.innerHTML = modules.map((item) => `
+            const isRealData = Array.isArray(data.modules) && data.modules.length > 3;
+            const displayModules = isRealData ? modules.slice(0, 8) : modules;
+            moduleGrid.innerHTML = displayModules.map((item) => `
                 <a class="module-card ${escapeHtml(item.tone || 'pink')}" href="${escapeHtml(item.href || '#/participant-modules')}">
                     <div class="module-icon"><i class="${escapeHtml(item.icon || 'fas fa-book-open')}"></i></div>
                     <span>${Number(item.progress || 0)}%</span>
@@ -1723,9 +1725,9 @@
                 </a>
             `).join('') + `
                 <a class="module-card add" href="#/participant-modules">
-                    <div class="module-icon"><i class="fas fa-plus"></i></div>
-                    <h3>Pilih Modul Lainnya</h3>
-                    <p>Jelajahi semua modul</p>
+                    <div class="module-icon"><i class="fas fa-grid-2"></i></div>
+                    <h3>${isRealData ? 'Lihat Semua Modul (' + modules.length + ')' : 'Pilih Modul Lainnya'}</h3>
+                    <p>Jelajahi semua modul pembelajaran</p>
                 </a>
             `;
         }
