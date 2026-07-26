@@ -809,6 +809,14 @@ const router = {
             "/participant-ai-lab-ml-unsupervised-discussion"
         ];
         const isParticipantDashboardPage = participantDashboardPages.includes(path);
+
+        // Quick redirect: profile → settings (from deprecated profile page)
+        if (path === "/participant-profile") {
+            window.location.hash = "#/participant-settings";
+            this.currentPath = "/participant-settings";
+            return;
+        }
+
         const adminPages = [
             "/dashboard",
             "/dashboard/seleksi",
@@ -1476,8 +1484,8 @@ const router = {
                         window.initCoursePlaceholder();
                     }
                 } else if (path === "/participant-profile" && typeof window.initFellowDashboardPage === "function") {
-                    window.initFellowDashboardPage("profile");
-                    if (typeof window.initParticipantProfileDashboard === "function") window.initParticipantProfileDashboard();
+                    window.location.hash = "#/participant-settings";
+                    return;
                 } else if (path.startsWith("/participant-") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("under-development");
                 } else if (path === "/projects" && typeof window.initProjectsPage === "function") {
