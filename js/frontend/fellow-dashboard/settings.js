@@ -1799,6 +1799,7 @@
         form.dataset.settingsReady = 'true';
 
         const session = readParticipantSession();
+        if (!session?.nik) return;
         const profile = session?.profile || {};
 
         document.getElementById('settingsName').value = profile.nama_lengkap || '';
@@ -1875,14 +1876,17 @@
             }
         });
 
-        form.querySelector('.btn-cancel').addEventListener('click', function() {
-            document.getElementById('settingsName').value = profile.nama_lengkap || '';
-            document.getElementById('settingsEmail').value = profile.email || '';
-            document.getElementById('settingsWhatsapp').value = profile.whatsapp || '';
-            document.getElementById('settingsCvLink').value = profile.cv_link || '';
-            var msg = document.getElementById('settingsProfileMessage');
-            if (msg) msg.style.display = 'none';
-        });
+        var cancelBtn = form.querySelector('.btn-cancel');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function() {
+                document.getElementById('settingsName').value = profile.nama_lengkap || '';
+                document.getElementById('settingsEmail').value = profile.email || '';
+                document.getElementById('settingsWhatsapp').value = profile.whatsapp || '';
+                document.getElementById('settingsCvLink').value = profile.cv_link || '';
+                var msg = document.getElementById('settingsProfileMessage');
+                if (msg) msg.style.display = 'none';
+            });
+        }
 
         var bioField = form.querySelector('.form-group.full-width textarea');
         if (bioField && bioField.closest('.form-group')) {
@@ -1891,8 +1895,8 @@
         }
         var socialHeadings = form.querySelectorAll('.sub-heading');
         socialHeadings.forEach(function(h) { h.textContent += ' (Coming Soon)'; });
-        var linkedinInput = form.querySelector('input[value*="linkedin.com"]');
-        var githubInput = form.querySelector('input[value*="github.com"]');
+        var linkedinInput = document.getElementById('settingsLinkedin');
+        var githubInput = document.getElementById('settingsGithub');
         if (linkedinInput) linkedinInput.disabled = true;
         if (githubInput) githubInput.disabled = true;
     }
