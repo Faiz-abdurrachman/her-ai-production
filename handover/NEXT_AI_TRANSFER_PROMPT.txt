@@ -1,7 +1,7 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║  AI TRANSFER PROMPT — HerAI Fellowship SuperApp              ║
-║  Sesi: 27 Juli 2026 (Sisyphus, 5 commit baru) → Next AI      ║
-║  Total sesi: 37 commit | Worktree: BERSIH                     ║
+║  Sesi: 27 Juli 2026 (Sisyphus, 8 commit baru) → Next AI      ║
+║  Total sesi: 40 commit | Worktree: BERSIH                     ║
 ╚══════════════════════════════════════════════════════════════╝
 
 ⚠️  BACA SELURUH FILE INI SEBELUM MULAI KERJA.
@@ -11,19 +11,19 @@
 📋 SUMBER KEBENARAN (WAJIB DIBACA — URUTAN PENTING)
 ═══════════════════════════════════════════════════════════════
 1. handover/AI_HANDOFF_CURRENT_STATE.md  ← SINGLE SOURCE OF TRUTH
-2. gemini.md  ← Bug log #1-54 + session rules
+2. gemini.md  ← Bug log #1-57 + session rules
 
 ═══════════════════════════════════════════════════════════════
 🔧 IDENTITAS SISTEM
 ═══════════════════════════════════════════════════════════════
 - Spreadsheet ID: 1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w
 - GAS Web App URL: https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec
-- GAS Code: gas/Code.gs (2432 baris, 52 routes, 23 sheets)
+- GAS Code: gas/Code.gs (2438 baris, 52 routes, 23 sheets)
 - SPA: Vanilla JS hash-router, Node.js proxy (node server.js → http://127.0.0.1:3000)
 - Proxy: POST /__gas (token auto-injected oleh main.js)
 - WA env: GAS_WEB_APP_URL di .env
-- Last commit: fbe2bb3
-- Worktree: BERSIH (hanya untracked: scratch/, scripts/test-settings.js)
+- Last commit: c5b39d6
+- Worktree: BERSIH (hanya untracked: scratch/, scripts/test-settings.js, nazril/)
 
 ═══════════════════════════════════════════════════════════════
 🚫 HARD BLOCK — JANGAN DISENTUH
@@ -45,47 +45,31 @@ DARI SESI SEBELUMNYA (32 commit):
 - Task A: saveChapterProgress wiring ke 28 module JS — auto-save tiap buka chapter
 - Task B: 7 GAS seed functions, 27 modul, idempotent (upsertByKey)
 - Task C: Skeleton loader, error state, fade-in transitions
-- Bug fixes #29-44 (16 bug)
-- Bug fixes #45-51 (quiz wiring, practice wiring, cache busters, duplicate scripts)
+- Bug fixes #29-51
 
-DARI SESI INI (5 commit — #52-#54):
+DARI SESI INI (8 commit — #52-#57):
 
-1. DASHBOARD SCORE DISPLAY (#52):
-   - GAS: getParticipantDashboardData() sekarang return quiz_score per module
-     (query participant_progress untuk chapter_id='quiz', Math.max per module)
-   - FE: formatQuizBadge() → pill badge "🏆 X/20" atau "🏆 X%" di module card
-   - CSS: .quiz-badge pink translucent pill
-   - Cache buster: settings.js?v=20260727-score-display
+1. SCORE NORMALIZATION (#55) — commit e1b0e7a:
+   - GAS: Tambah kolom quiz_total di schema participantDashboardModules
+   - GAS: seedDashboardModules() — semua 28 module dapat quiz_total (default 20, math-for-ai=100)
+   - GAS: getParticipantDashboardData() — Math.round((raw/quiz_total)*100) → persentase seragam
+   - GAS: seed entry math-for-ai (belum ada route — tampil under development)
+   - FE: formatQuizBadge() — hapus heuristik >20, selalu tampil X%
+   - Cache buster: settings.js?v=20260727-score-normalize
+   - GAS: SUDAH DEPLOYED (27 Juli 2026)
 
-2. seedDashboardLeaderboard IDEMPOTENT (#53):
-   - clearContent() + addRowObject() → upsertByKey('rank')
-   - Run seed 2x → no duplicate rows
+2. MATH-FOR-AI ROUTE REGISTRATION (#56) — commit d32775d → reverted 9825d0b:
+   - Awalnya ditambah 4 route + handler di router.js
+   - Direvert karena module masih under development
+   - Card tetap muncul di dashboard (dari seed), redirect ke under-dev template
 
-3. PARTICIPANT ACCESS RESTRICTION (#54):
-   - Hanya Beranda, Modul, Pengaturan yang bisa diakses
-   - Route guard di initFellowDashboardPage: block non-allowed pageNames
-   - Sidebar click interception: link restricted → renderParticipantRestricted()
-   - Messaging override: wrap initMessagingPage via DOMContentLoaded
-   - CSS: .fellow-restricted-state (pink theme, match locked state)
-   - Cache buster: settings.js?v=20260727-restricted
-
-4. E2E TESTS:
-   - Dari 13 → 17 tests (321 lines)
-   - 15/17 stable (practice + password occasional flaky in full suite)
-   - Run: TEST_PARTICIPANT_NIK=8204086711010003
-           TEST_PARTICIPANT_PASSWORD=brenda123
-           npx playwright test
-
-5. TEST FIXES:
-   - Password: click "Keamanan Akun" tab before check #passwordChangeForm
-   - Quiz/Practice: page.evaluate(hash) instead of page.goto() for SPA routing
-   - Practice: waitForFunction + waitFor(state:'attached')
-   - Restricted button: align-items center + gap + line-height fix
-
-6. GAS deployed (by user, 27 Juli 2026)
+3. BUG #57 — KONTEN PYTHON NYASAR (AUDIT DONE, IMPLEMENTASI DEFERRED):
+   - 24 dari 29 file ai-*.js punya PYTHON_GUIDES template ("Jalur Pemula", "Python adalah penghubung")
+   - Sumber konten asli dari Nazril: /nazril/modul-materi-herai/ (20 MD file)
+   - AUDIT SUDAH SELESAI — implementasi handoff ke next AI
 
 ═══════════════════════════════════════════════════════════════
-⚠️  TEMUAN KRITIS — YANG HARUS DIKETAHUI
+⚠️  TEMUAN KRITIS
 ═══════════════════════════════════════════════════════════════
 
 1. participantPortalOpen di sheet Settings:
@@ -104,9 +88,9 @@ DARI SESI INI (5 commit — #52-#54):
 4. ai-python-basic.js (#47):
    - INTENTIONAL skip — namespace collision dengan ai-python.js
 
-5. Score semantics (#49 — DEFERRED, partial fix):
-   - ai-math-for-ai: percentage (0-100), lainnya: raw count (0-20)
-   - Frontend heuristik: score > 20 → "X%", score ≤ 20 → "X/20"
+5. Score normalization SUDAH DONE (#55):
+   - Semua quiz_score sekarang persentase (0-100%) dari GAS
+   - FE formatQuizBadge selalu X% (tidak ada lagi heuristik >20)
 
 6. Playwright navigation:
    - Setelah login, pakai page.evaluate(() => window.location.hash = '...')
@@ -114,25 +98,115 @@ DARI SESI INI (5 commit — #52-#54):
 
 7. Module chapter auto-resume: by design, bukan bug
 
+8. GAS Perlu Redeploy SETIAP edit Code.gs:
+   - Apps Script → Deploy → New deployment → Web app → Deploy
+
 ═══════════════════════════════════════════════════════════════
-📝 NEXT PLAN — FOKUS SESI BERIKUTNYA
+🔴 PRIORITAS #1 — Bug #57: Konten Python Nyasar
 ═══════════════════════════════════════════════════════════════
 
-P1 — Score Semantics Normalization (#49):
-  - Tambah kolom quiz_total di participant_dashboard_modules sheet
-  - Default 20, math-for-ai = 100
-  - GAS compute persentase seragam, FE tampil semua "X%"
+MASALAH: 24 module JS menampilkan konten Python template
+("Jalur Pemula", "Python adalah penghubung, bukan AI itu sendiri")
+di halaman overview/modul. Contoh: module UI/UX Design menampilkan
+"Python adalah penghubung" — tidak relevan dengan UI/UX.
 
-P2 — Add math-for-ai to Dashboard Modules Seed:
-  - Module math-for-ai sudah wired tapi tidak di seedDashboardModules()
+PENYEBAB: Array PYTHON_GUIDES di setiap file (L268 area) adalah
+template Python yang identik, di-inject ke chapter via:
+  CHAPTERS.forEach(function(chapter, index) {
+    Object.assign(chapter, PYTHON_GUIDES[index]);
+  });
 
-P3 — E2E Test Stability:
-  - Practice + password tests occasionally flaky in full suite
+SUMBER KONTEN ASLI: /nazril/modul-materi-herai/
+- 20 module MD file (1200-3100 baris, 13-15 chapter per module)
+- Struktur per chapter: Tujuan Bab, Gambaran Sederhana+Analogi,
+  Konsep Inti (table), Hubungan antarkonsep, Langkah Kerja,
+  Contoh Kasus, Kesalahan Umum, Checkpoint, Latihan
+- Nazril file → module_id mapping:
+  business-industry-application/: culture, geospatial, healthcare,
+    manufacturing, business-insight, people-business-mgt, ui-ux
+  data-engineering-domain/: deployment, back-end, bioinformatics,
+    data-engineering, data-science, front-end, infrastructure
+  foundation-core-ai/: deep-learning, reinforcement-learning
+  generative-multimodal-ai/: agentic-ai, large-language-model,
+    multimodal-llm, vlm
+
+TARGET FILE (24 yang perlu fix):
+  Business (7): ai-ui-ux.js, ai-healthcare.js, ai-geospatial.js,
+    ai-manufacturing.js, ai-culture.js, ai-business-insight.js,
+    ai-people-business-mgt.js
+  Data Eng (7): ai-deployment.js, ai-back-end.js,
+    ai-bioinformatics.js, ai-data-engineering.js,
+    ai-data-science.js, ai-front-end.js, ai-infrastructure.js
+  Foundation (4): ai-deep-learning.js, ai-reinforcement-learning.js,
+    ai-evaluation.js, ai-evolution.js
+  Gen AI (4): ai-agentic-ai.js, ai-large-language-model.js,
+    ai-multimodal-llm.js, ai-vlm.js
+  Lainnya (2): ai-python.js, ai-modern.js
+
+MODULE BERSIH (5 — tidak perlu disentuh):
+  ai-cv.js, ai-math-for-ai.js, ai-ml-basic.js,
+  ai-python-basic.js, ai-reasoning.js
+
+TANPA NAZRIL MD (4 — pakai placeholder):
+  ai-evaluation.js, ai-evolution.js, ai-modern.js, ai-python.js
+
+═══════════════════════════════════════════════════════════════
+📐 RENCANA EKSEKUSI — Bug #57
+═══════════════════════════════════════════════════════════════
+
+FASE 0 — Build extraction script (1 commit):
+  - Node.js script yang baca Nazril MD → parse per chapter →
+    generate pengganti PYTHON_GUIDES
+  - MAPPING (Nazril MD → GUIDES fields):
+    Tujuan Bab          → learningOutcomes (string[])
+    Gambaran + Analogi  → hook.question, hook.message
+    Konsep Inti table   → glossary ([[term, def], ...])
+    Hubungan antarkonsep→ deepDive ([[title, p1, p2], ...])
+    Langkah Kerja       → flow ([[step, desc], ...])
+    Contoh Kasus        → workedExample ([title, [label,desc], ...])
+    Kesalahan Umum      → mistakes (string[])
+    Checkpoint          → quickCheck ({question, options[], answer})
+    Latihan             → challenge ({instruction, placeholder, example})
+  - Handling: 15 chapter per module, GUIDES butuh 8 entries
+    (bab 1-8 jadi GUIDES[0-7], bab 9-15 reuse GUIDES[0-6])
+  - Section yang juga perlu diganti: roadmap header
+    '<span>Jalur Pemula</span><h3>Memahami konsep...</h3>'
+    → module-specific title + subtitle
+  - FYI: Setiap file juga punya PRACTICES (latihan) di bawah GUIDES
+    — jika Nazril punya extracted JSON (*_extracted.json), pakai itu
+
+FASE 1 — Business (1 commit):
+  7 module: ui-ux, healthcare, geospatial, manufacturing,
+  culture, business-insight, people-business-mgt
+  → inject GUIDES dari Nazril MD
+
+FASE 2 — Data Engineering (1 commit):
+  7 module: deployment, back-end, bioinformatics,
+  data-engineering, data-science, front-end, infrastructure
+  → inject GUIDES dari Nazril MD
+
+FASE 3 — Foundation & Gen AI (1 commit):
+  6 module: deep-learning, reinforcement-learning, agentic-ai,
+  large-language-model, multimodal-llm, vlm
+  → inject GUIDES dari Nazril MD
+
+FASE 4 — Placeholder (1 commit):
+  4 module tanpa Nazril: evaluation, evolution, modern, python
+  → GUIDES diganti generic "Konten sedang dikembangkan"
+  → Hook: "Materi lengkap sedang disiapkan"
+  → deepDive: link ke chapter HTML yang sudah ada
+
+VERIFIKASI:
+  - node --check pada setiap ai-*.js
+  - Login sebagai Brenda → buka module → pastikan konten sesuai
+  - Tidak ada "Python" / "Jalur Pemula" muncul di module non-Python
+
+TOTAL: 5 commit, 24 file JS, 20 MD file diproses
 
 ═══════════════════════════════════════════════════════════════
 📐 ATURAN KERJA — 16 RULE WAJIB
 ═══════════════════════════════════════════════════════════════
-1. Commit PER FITUR | 2. Update handover & gemini.md | 3. Bug baru #55+
+1. Commit PER FITUR | 2. Update handover & gemini.md | 3. Bug baru #58+
 4. No dark theme — light pink | 5. CSS scope ai-lab-content
 6. Diagram kontras: lines ≥25%, dots ≥75%, stroke ≥0.8px
 7. NO NIK/password exposed | 8. TANYA user kalo ambigu
@@ -157,8 +231,8 @@ SETTINGS: localStorage.heraiGlobalSettings → participantPortalOpen boolean
 📊 FILE — BOLEH / TIDAK BOLEH DIEDIT
 ═══════════════════════════════════════════════════════════════
 ✅ BOLEH: settings.js (2252L), ai-*.js (29 files), dashboard.html,
-          dashboard.css (2271L), settings.css, gas/Code.gs (2432L),
+          dashboard.css (2271L), settings.css, gas/Code.gs (2438L),
           index.html (cache buster only), e2e/fellow-dashboard.spec.js (321L),
-          gemini.md, handover/
+          gemini.md, handover/, nazril/
 ❌ JANGAN: main.js, router.js, messaging.js, 231 lesson files,
            Go services, admin dashboard

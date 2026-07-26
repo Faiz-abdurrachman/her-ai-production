@@ -1,13 +1,13 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint:** 27 Juli 2026 (Sesi Sisyphus — Final), Asia/Jakarta
+**Checkpoint:** 27 Juli 2026 (Sesi Sisyphus — Akhir Shift), Asia/Jakarta
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
-**Last Commit:** `fbe2bb3` — fix: restricted page button icon vertical centering
-**Total commits:** 37 (25 original + 7 sesi sebelumnya + 5 sesi ini)
-**GAS Deployment:** ✅ Sudah redeploy (user melakukan deploy manual 27 Juli 2026)
-**Worktree:** BERSIH (hanya untracked: `scratch/`, `scripts/test-settings.js`)
-**Playwright:** 17 tests, 15 stable pass, 2 flaky (pre-existing timing issue)
+**Last Commit:** `c5b39d6` — docs: update gemini.md — math-for-ai stays under development (#56)
+**Total commits:** 40 (25 original + 7 sesi sebelumnya + 8 sesi ini)
+**GAS Deployment:** ✅ Sudah redeploy — score normalization + quiz_total schema active
+**Worktree:** BERSIH (hanya untracked: `scratch/`, `scripts/test-settings.js`, `nazril/`)
+**Playwright:** 17 tests, 15 stable pass, 2 flaky (practice + password timing)
 
 > **Ini adalah sumber kebenaran tunggal.** Dokumen handover lain yang bertentangan diabaikan.
 
@@ -240,22 +240,59 @@ initFellowDashboardPage(pageName)
 
 ## 📝 NEXT PLAN — FOKUS SESI BERIKUTNYA
 
-### PRIORITAS 1 — Score Semantics Normalization (#49)
-- `ai-math-for-ai.js`: percentage (0-100), 27 module lain: raw count (0-20)
-- Opsi A: Tambah kolom `quiz_total` di `participantDashboardModules` sheet (default 20, math-for-ai=100), GAS compute persentase seragam
-- Opsi B: Normalisasi di frontend dengan hardcoded map module_id → max score
-- **Belum urgent** — frontend heuristik sudah functional (score>20→%, ≤20→/20)
+### ⚠️ PRIORITAS KRITIS — Bug #57: Konten Python Nyasar di 24 Module
 
-### PRIORITAS 2 — Add math-for-ai to dashboard modules seed
-- Module `math-for-ai` ada (`ai-math-for-ai.js`, quiz + practice wired)
-- Tapi TIDAK muncul di module cards dashboard karena tidak di-list di `seedDashboardModules()`
-- Fix: tambah 1 entry di array `modules` di function `seedDashboardModules()` di `gas/Code.gs`
-- Setelah tambah, redeploy GAS + run `seedDashboardModules()`
+**Temuan**: 24 dari 29 file `ai-*.js` memiliki konten Python template
+("Jalur Pemula", "Python adalah penghubung") di array `PYTHON_GUIDES`
+yang di-inject ke chapter via `Object.assign(chapter, PYTHON_GUIDES[index])`.
 
-### PRIORITAS 3 — Additional e2e tests (full flow dengan credentials)
-- Quiz submit full flow test (isi radio button, submit, cek score di localStorage)
-- Practice save full flow test (isi textarea, save, cek tersimpan)
-- Password change end-to-end test (ganti password → logout → login dengan password baru)
+**Sumber konten asli**: `/nazril/modul-materi-herai/` — 20 module dalam MD
+(1200-3100 baris, 13-15 chapter per module) dari Nazril.
+
+**Module yang TERKONTAMINASI (24)**:
+- Business (7): ui-ux, healthcare, geospatial, manufacturing, culture, business-insight, people-business-mgt
+- Data Eng (7): deployment, back-end, bioinformatics, data-engineering, data-science, front-end, infrastructure
+- Foundation (4): deep-learning, reinforcement-learning, evaluation, evolution
+- Gen AI (4): agentic-ai, large-language-model, multimodal-llm, vlm
+- Lainnya (2): python, modern
+
+**Module BERSIH (5)**: cv, math-for-ai, ml-basic, python-basic, reasoning
+
+**Module dengan Nazril MD (20)**: culture, geospatial, healthcare, manufacturing, business-insight,
+people-business-mgt, ui-ux, deployment, back-end, bioinformatics, data-engineering, data-science,
+front-end, infrastructure, deep-learning, reinforcement-learning, agentic-ai, large-language-model,
+multimodal-llm, vlm
+
+**Module TANPA Nazril (4)**: evaluation, evolution, modern, python
+
+### RENCANA EKSEKUSI:
+
+**Fase 0 — Build extraction script** (1 commit):
+- Node.js script: baca Nazril MD → parse chapter → generate `PYTHON_GUIDES` replacement
+- Mapping: MD sections → GUIDES fields (Tujuan→learningOutcomes, Gambaran→hook, KonsepInti→glossary, LangkahKerja→flow, ContohKasus→workedExample, Checkpoint→quickCheck, Latihan→challenge, dll)
+- Struktur GUIDES: 8 entries (bab 1-8), di-assign ke 15 chapter via modulo
+
+**Fase 1 — Business** (1 commit):
+- 7 module: ui-ux, healthcare, geospatial, manufacturing, culture, business-insight, people-business-mgt
+
+**Fase 2 — Data Engineering** (1 commit):
+- 7 module: deployment, back-end, bioinformatics, data-engineering, data-science, front-end, infrastructure
+
+**Fase 3 — Foundation & Gen AI** (1 commit):
+- 6 module: deep-learning, reinforcement-learning, agentic-ai, large-language-model, multimodal-llm, vlm
+
+**Fase 4 — Placeholder** (1 commit):
+- 4 module tanpa Nazril: evaluation, evolution, modern, python
+- Ganti template → "Konten sedang dikembangkan" + link ke chapter HTML
+
+**Total**: 5-6 commit, 24 file JS diubah, 20 MD file diproses
+
+### PRIORITAS 0 — GAS Redeploy
+- Setiap edit `gas/Code.gs` → HARUS redeploy dari Apps Script editor
+
+### PRIORITAS 3 — E2E Test Stability
+- Practice + password tests occasionally flaky dalam full suite
+- Fix: ganti `waitForTimeout(3000)` di `login()` → `waitForFunction` cek sessionStorage
 
 ### PRIORITAS 4 — UX improvements (kalau diminta user)
 - Module resume behavior: opsi untuk mulai dari chapter 1 vs resume

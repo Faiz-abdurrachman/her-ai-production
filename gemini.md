@@ -225,6 +225,37 @@ TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" np
 - E2e: 17 tests (15 stable), 3 new — quiz, practice, password, restricted access ✅
 - GAS deployed (by user) — `getParticipantDashboardData` now returns `quiz_score` ✅
 
+---
+
+## 57. Bug: Konten Python Template Nyasar di 24 Module JS (#57 — DEFERRED ke Next AI)
+
+**Deskripsi:**
+24 dari 29 file `ai-*.js` menampilkan konten Python ("Jalur Pemula", "Python adalah penghubung, bukan AI itu sendiri") di halaman materi/overview module yang seharusnya menampilkan konten module-specific. Contoh: module UI/UX Design menampilkan "Python adalah penghubung" dan "Jalur Pemula — Memahami konsep, bukan menghafal sintaks".
+
+**Penyebab:**
+Array `PYTHON_GUIDES` (L268-281) di setiap file adalah template Python yang di-copy antar module. Konten di-inject ke setiap chapter via `Object.assign(chapter, PYTHON_GUIDES[index])`. Semua 24 file memiliki GUIDES yang identik.
+
+**Sumber konten asli:**
+Nazril menyediakan 20 module dalam format MD di `/nazril/modul-materi-herai/` (1200-3100 baris, 13-15 chapter per module) dengan struktur: Tujuan Bab, Gambaran Sederhana+Analogi, Konsep Inti (table), Hubungan antarkonsep, Langkah Kerja, Contoh Kasus, Kesalahan Umum, Checkpoint, Latihan.
+
+**Module terkontaminasi (24):**
+Business (7): ui-ux, healthcare, geospatial, manufacturing, culture, business-insight, people-business-mgt
+Data Eng (7): deployment, back-end, bioinformatics, data-engineering, data-science, front-end, infrastructure
+Foundation (4): deep-learning, reinforcement-learning, evaluation, evolution
+Gen AI (4): agentic-ai, large-language-model, multimodal-llm, vlm
+Lainnya (2): python, modern
+
+**Module bersih (5):** cv, math-for-ai, ml-basic, python-basic, reasoning
+
+**Rencana perbaikan (handover ke next AI):**
+- **Fase 0**: Build Node.js extraction script — parse Nazril MD → generate PYTHON_GUIDES replacement
+- **Fase 1-3**: Inject konten module-specific ke 20 module dengan Nazril MD
+- **Fase 4**: Placeholder untuk 4 module tanpa Nazril (evaluation, evolution, modern, python)
+- Mapping: MD sections → GUIDES fields (lihat handover/AI_HANDOFF_CURRENT_STATE.md)
+- **Status:** DEFERRED — next AI session
+
+---
+
 **Session Rules (WAJIB — berlaku untuk semua AI session):**
 1. Commit PER FITUR, bukan satu commit besar
 2. Update handover & gemini.md setiap checkpoint
