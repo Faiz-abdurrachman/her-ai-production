@@ -181,17 +181,33 @@ TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" np
 
 ---
 
-## Session Summary — 27 Juli 2026 (Sisyphus — Score Display + Restricted Access)
+## 55. Feature: Score Semantics Normalization — quiz_total Column (#49 resolved)
 
-**Total commits:** 37 (25 sebelumnya + 7 sesi lalu + 5 sesi ini)
-**Grand total bugs/features:** #1-#54
-**Files changed sesi ini:** 7 files, +291/-17
-**Last commit:** `fbe2bb3` — fix: restricted page button icon vertical centering
+**Deskripsi:**
+`ai-math-for-ai` mengirim score sebagai persentase (0-100), sedangkan 27 module lain mengirim raw count (0-20). Frontend menggunakan heuristik `score > 20 → X%` / `score ≤ 20 → X/20` — berfungsi tapi fragile.
 
-**Key deliverables sesi ini (#52-#54):**
+**Cara Perbaikan:**
+- **GAS Schema** (`gas/Code.gs` L183): tambah kolom `quiz_total` ke `SCHEMA[SHEETS.participantDashboardModules]`
+- **GAS Seed** (`seedDashboardModules`): tambah `quiz_total: 20` ke 27 module, `quiz_total: 100` ke `math-for-ai` (baru), total 28 module
+- **GAS Query** (`getParticipantDashboardData`): baca `quiz_total` dari module row (default 20), compute `Math.round((quizScore / quizTotal) * 100)`, return sebagai `quiz_score` (persentase seragam)
+- **FE** (`settings.js`, `formatQuizBadge`): hapus heuristik `>20`, selalu format `X%` karena semua score sudah persentase
+- Cache buster: `settings.js?v=20260727-score-normalize`
+- **Verifikasi:** Submit quiz 15/20 → dashboard badge "🏆 75%". Submit math-for-ai 85/100 → badge "🏆 85%"
+
+---
+
+## Session Summary — 27 Juli 2026 (Sisyphus — Score Display + Restricted Access + Score Normalization)
+
+**Total commits:** 38 (25 sebelumnya + 7 sesi lalu + 6 sesi ini)
+**Grand total bugs/features:** #1-#55
+**Files changed sesi ini:** 8 files, +344/-64
+**Last commit:** `e1b0e7a` — feat: normalize quiz scores to percentage via quiz_total column (#55)
+
+**Key deliverables sesi ini (#52-#55):**
 - #52: Dashboard Score Display — quiz_score di GAS + badge UI + CSS ✅
 - #53: seedDashboardLeaderboard idempotent (upsertByKey) ✅
 - #54: Participant access restricted to Beranda/Modul/Pengaturan ✅
+- #55: Score normalization — quiz_total column, semua score → persentase seragam ✅
 - E2e: 17 tests (15 stable), 3 new — quiz, practice, password, restricted access ✅
 - GAS deployed (by user) — `getParticipantDashboardData` now returns `quiz_score` ✅
 

@@ -81,6 +81,10 @@ const router = {
         "/participant-ai-reasoning-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/04-reasoning/latihan.html",
         "/participant-ai-reasoning-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/04-reasoning/kuis.html",
         "/participant-ai-reasoning-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/04-reasoning/diskusi.html",
+        "/participant-ai-lab-math-for-ai": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/overview.html",
+        "/participant-ai-lab-math-for-ai-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/practice.html",
+        "/participant-ai-lab-math-for-ai-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/quiz.html",
+        "/participant-ai-lab-math-for-ai-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/discussion.html",
         "/participant-ai-evaluation": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/05-evaluation/materi.html",
         "/participant-ai-evaluation-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/05-evaluation/latihan.html",
         "/participant-ai-evaluation-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/05-evaluation/kuis.html",
@@ -533,6 +537,10 @@ const router = {
             "/participant-ai-reasoning-practice",
             "/participant-ai-reasoning-quiz",
             "/participant-ai-reasoning-discussion",
+            "/participant-ai-lab-math-for-ai",
+            "/participant-ai-lab-math-for-ai-practice",
+            "/participant-ai-lab-math-for-ai-quiz",
+            "/participant-ai-lab-math-for-ai-discussion",
             "/participant-ai-evaluation",
             "/participant-ai-evaluation-practice",
             "/participant-ai-evaluation-quiz",
@@ -1051,6 +1059,20 @@ const router = {
                     }
                     if (path === "/participant-ai-reasoning-discussion" && typeof window.initAiReasoningDiscussion === "function") {
                         window.initAiReasoningDiscussion();
+                    }
+                } else if (path.startsWith("/participant-ai-lab-math-for-ai") && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("modules");
+                    if (path === "/participant-ai-lab-math-for-ai" && typeof window.initAiLabMathOverview === "function") {
+                        window.initAiLabMathOverview();
+                    }
+                    if (path === "/participant-ai-lab-math-for-ai-practice" && typeof window.initAiLabMathPractice === "function") {
+                        window.initAiLabMathPractice();
+                    }
+                    if (path === "/participant-ai-lab-math-for-ai-quiz" && typeof window.initAiLabMathQuiz === "function") {
+                        window.initAiLabMathQuiz();
+                    }
+                    if (path === "/participant-ai-lab-math-for-ai-discussion" && typeof window.initAiLabMathDiscussion === "function") {
+                        window.initAiLabMathDiscussion();
                     }
                 } else if ((path === "/participant-ai-lab-machine-learning" || path.startsWith("/participant-ai-lab-ml")) && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
