@@ -3,8 +3,8 @@
 **Checkpoint:** 27 Juli 2026 (Final — 23:30 WIB), Asia/Jakarta  
 **Workspace:** `/home/faiz/her6/Her-AI`  
 **Branch:** `main`  
-**Last Commit:** `c8be27a`  
-**GAS Deployment:** ✅ **Versi 3, 26 Juli 2026 08:04 WIB — Semua route aktif**  
+**Last Commit:** `f8a03c9`  
+**GAS Deployment:** ✅ **Versi 3, 26 Juli 2026 08:04 WIB — Semua route aktif (Code.gs unchanged this session)**  
 **Backend Verification:** ✅ **47/47 checks PASS** (27 Juli 2026)  
 **Tujuan:** Sumber kebenaran tunggal untuk AI/developer berikutnya.
 
@@ -72,7 +72,59 @@ Dilakukan comprehensive backend audit. Ringkasan:
 
 Hasil lengkap: `reports/BACKEND_AUDIT_2026-07-26.md`
 
-### Sesi 27 Juli 2026 — Semua 5 Fase Complete + 7 Bug Fixed
+### Sesi 27 Juli 2026 — Task A: Wiring saveChapterProgress (Complete)
+
+**Ringkasan:** Wiring `saveChapterProgress` ke 28 module JS file. Setiap kali chapter berhasil dirender, progress otomatis tersimpan ke GAS.
+
+| Commit | Apa | File |
+|---|---|---|
+| `d2d40d2` | Foundation core AI (9 module) | deep-learning, reinforcement-learning, python, reasoning, modern, evolution, evaluation, python-basic, ml-basic |
+| `c24dcbb` | Data engineering domains (8 module) | infrastructure, data-engineering, data-science, bioinformatics, deployment, front-end, back-end, cv |
+| `704c752` | Generative AI (4 module) | large-language-model, agentic-ai, vlm, multimodal-llm |
+| `c708ace` | Business applications (7 module) | healthcare, geospatial, manufacturing, culture, business-insight, people-business-mgt, ui-ux |
+| `f8a03c9` | Injection script | scripts/inject-progress-tracking.js |
+
+**Total:** 5 commit, 29 file, +329/-0.
+
+**Cara kerja:**
+- Setiap `ai-*.js` sekarang punya `const MODULE_ID = 'nama-modul'` (diekstrak dari sourcePath)
+- `window.saveChapterProgress(MODULE_ID, chapter, 'completed')` dipanggil setiap kali chapter berhasil dirender
+- `saveChapterProgress` → POST ke GAS `saveParticipantProgress` → UPSERT ke `participant_progress` sheet
+- Silent fail (catch kosong) — tidak mengganggu UX
+
+**Module ID mapping (28 modul):**
+| Module ID | File JS | Category |
+|---|---|---|
+| deep-learning | ai-deep-learning.js | Foundation |
+| reinforcement-learning | ai-reinforcement-learning.js | Foundation |
+| python-untuk-ai | ai-python.js | Foundation |
+| reasoning | ai-reasoning.js | Foundation |
+| konsep-ai-modern | ai-modern.js | Foundation |
+| evolution | ai-evolution.js | Foundation |
+| evaluation | ai-evaluation.js | Foundation |
+| python-untuk-ai | ai-python-basic.js | Foundation |
+| machine-learning | ai-ml-basic.js | Foundation |
+| computer-vision | ai-cv.js | Data Engineering |
+| infrastructure | ai-infrastructure.js | Data Engineering |
+| data-engineering | ai-data-engineering.js | Data Engineering |
+| data-science | ai-data-science.js | Data Engineering |
+| bioinformatics | ai-bioinformatics.js | Data Engineering |
+| deployment | ai-deployment.js | Data Engineering |
+| front-end | ai-front-end.js | Data Engineering |
+| back-end | ai-back-end.js | Data Engineering |
+| large-language-model | ai-large-language-model.js | Generative AI |
+| agentic-ai | ai-agentic-ai.js | Generative AI |
+| vlm | ai-vlm.js | Generative AI |
+| multimodal-llm | ai-multimodal-llm.js | Generative AI |
+| healthcare | ai-healthcare.js | Business |
+| geospatial | ai-geospatial.js | Business |
+| manufacturing | ai-manufacturing.js | Business |
+| culture | ai-culture.js | Business |
+| business-insight | ai-business-insight.js | Business |
+| people-business-mgt | ai-people-business-mgt.js | Business |
+| ui-ux | ai-ui-ux.js | Business |
+
+### Sesi 27 Juli 2026 — Semua 5 Fase Complete + 7 Bug Fixed (Sebelum Task A)
 
 **Ringkasan:** Dalam 1 sesi, seluruh 5 fase dashboard peserta diselesaikan:
 
@@ -566,25 +618,16 @@ FRONTEND TESTING: 10/10 HTTP routes + 8/12 Playwright PASS
 ═══════════════════════════════════════════════════════════════
 📝 NEXT PLAN — Fokus Frontend Implementation
 ═══════════════════════════════════════════════════════════════
-
-A. WIRING saveChapterProgress ke lesson pages:
-- Helper window.saveChapterProgress(moduleId, chapterId, status, score) sudah ada
-- Belum dipanggil dari halaman lesson manapun
-- Task: inject ke setiap halaman materi/quiz yang aktif
-- Module IDs yang sudah aktif: ai-fundamentals, computer-vision, generative-ai, deep-learning, reinforcement-learning
-- Bisa dilakukan via script injection atau per halaman
-
+A. ✅ DONE — Wiring saveChapterProgress ke lesson pages (5 commit, 28 module)
 B. ISI DATA KE GOOGLE SHEETS:
 - Sheet participant_dashboard_modules → butuh module_id + total_chapters + data
 - Sheet participant_dashboard_journey → 4 phase dengan progress
 - Sheet participant_dashboard_events → 3-5 event upcoming
 - Sheet participant_dashboard_leaderboard → ranking dengan NIK + points
-
 C. FRONTEND ENHANCEMENTS (optional):
 - Fix "Aisyah Putri" flash sebelum JS injection jalan
 - Tambah loading spinner saat fetch GAS data
 - Tambah error state UI untuk GAS failures
-
 D. TESTING LANJUTAN:
 - Playwright e2e test dengan akun test (kalau tersedia)
 - Manual test flow lengkap: login → dashboard → modules → settings → ganti password

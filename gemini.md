@@ -484,19 +484,32 @@ Diagram arsitektur `.layers-viz` di `chapters/1.html` memiliki beberapa masalah 
 
 Report: `reports/BACKEND_FRONTEND_AUDIT_2026-07-27.md`
 
-### Next Plan — Frontend Implementation
+## 36. Task A Complete: Wiring saveChapterProgress ke 28 Lesson Module JS Files
+**Deskripsi:**
+Helper `window.saveChapterProgress(moduleId, chapterId, status)` sudah ada di `settings.js` tapi belum pernah dipanggil dari halaman lesson manapun. Semua 28 module JS file perlu di-inject dengan `MODULE_ID` constant dan pemanggilan `saveChapterProgress`.
 
-A. **Wiring saveChapterProgress ke lesson pages**
-- Helper `window.saveChapterProgress()` sudah ada dan terverifikasi
-- Belum dipanggil dari halaman lesson manapun
-- Task: inject ke setiap halaman materi/quiz yang aktif
+**Pendekatan:**
+- Dibuat script `scripts/inject-progress-tracking.js` untuk inject otomatis
+- Setiap file `ai-*.js` mendapat: `const MODULE_ID = 'nama-modul'` + `window.saveChapterProgress(MODULE_ID, chapter, 'completed')`
+- Module ID diekstrak dari `CHAPTERS[0].sourcePath` (folder sebelum `/chapters/`)
+- Script otomatis strip prefix angka (e.g. `02-python-untuk-ai` → `python-untuk-ai`)
 
-B. **Isi data ke Google Sheets**
-- `participant_dashboard_modules` (dengan module_id + total_chapters)
-- `participant_dashboard_journey`, events, leaderboard
+**Hasil:**
+- 28/29 file termodifikasi (1 skipped: ai-math-for-ai — bukan lesson module)
+- 2 file perlu manual fix: ai-modern.js (BASE_PATH, bukan SOURCE_BASE), ai-python-basic.js (STORAGE_KEY_CHAPTER di dalam fungsi)
+- 29/29 syntax check PASS (`node --check`)
+- 5 commit atomic berdasarkan kategori modul
+- Module ID mapping: 28 modul dengan ID dari folder name (deep-learning, reinforcement-learning, computer-vision, large-language-model, dll)
+- `saveChapterProgress` dipanggil setiap kali chapter berhasil dirender (setelah fetch + render + updateProgress)
 
-C. **Frontend enhancements (optional)**
-- Fix flash "Aisyah Putri", loading spinner, error state
+**Injection points per pattern:**
+- Standard (24 modul): setelah `updateProgress(chapter, total)` → `window.saveChapterProgress(MODULE_ID, chapter, 'completed')`
+- ai-cv.js: setelah `container.innerHTML = html` → untuk mode='materi' saja, 3 sub-modul (digital-image, cnn, advanced-cnn) semua pakai `computer-vision`
+- ai-python-basic.js: setelah progressText update di `.then()` callback
+- ai-ml-basic.js: setelah `updateChapterUi()` selesai
+- ai-modern.js: setelah `updateProgress(number, CHAPTERS.length)`
+
+**Commits:** d2d40d2, c24dcbb, 704c752, c708ace, f8a03c9 (5 commit, +329/-0)
 
 D. **Testing lanjutan** — manual + Playwright e2e
 5. Setelah stabil, wiring auto-save progress ke lesson pages
