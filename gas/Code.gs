@@ -1246,7 +1246,7 @@ function saveParticipantProgress(payload) {
   var now = new Date().toISOString();
   var moduleId = String(payload.module_id);
   var chapterId = String(payload.chapter_id);
-  var status = payload.status || 'in_progress';
+  var status = payload.status || 'completed';
   var score = payload.score !== undefined ? Number(payload.score) : null;
   var participantRowId = String(participant.rowId || '');
 
