@@ -1,0 +1,16 @@
+Halo! Update progres dashboard peserta HerAI hari ini (27 Juli):
+
+✅ Progress tracking — tiap buka chapter otomatis tercatat, dashboard hitung progress real-time
+✅ Seed data dashboard — 27 modul, journey, events, tracks, leaderboard siap di Google Sheets
+✅ Settings page fix — tab Keamanan Akun + ganti password udah bisa
+✅ Profil dropdown — Setting Akun langsung ke halaman Settings
+✅ UI fixes — gak ada flash "Aisyah Putri", dashboard tampil 8 modul + lihat semua
+
+Total: 19 commit, gak ada deploy baru (Versi 3 masih valid).
+
+Yang perlu dicek:
+1. Buka dashboard — harusnya muncul 8 modul real
+2. Klik modul → navigasi chapter → balik dashboard → progress naik
+3. Settings → Keamanan Akun → ganti password
+
+Detail lengkap di handover/MENTOR_UPDATE.md 🙏
