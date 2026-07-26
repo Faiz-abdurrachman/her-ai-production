@@ -1549,6 +1549,10 @@
         return session?.profile?.nama_lengkap || session?.name || window.__CURRENT_PARTICIPANT_PROFILE__?.nama_lengkap || 'Peserta HerAI';
     }
 
+    function saveParticipantSession(session) {
+        sessionStorage.setItem(PARTICIPANT_SESSION_KEY, JSON.stringify(session));
+    }
+
     function participantSessionId() {
         const key = 'heraiParticipantSessionId';
         let id = sessionStorage.getItem(key);
@@ -1789,6 +1793,155 @@
         renderParticipantDashboard(data);
     }
 
+    function initSettingsPage() {
+        const form = document.getElementById('settingsProfileForm');
+        if (!form || form.dataset.settingsReady) return;
+        form.dataset.settingsReady = 'true';
+
+        const session = readParticipantSession();
+        const profile = session?.profile || {};
+
+        document.getElementById('settingsName').value = profile.nama_lengkap || '';
+        document.getElementById('settingsEmail').value = profile.email || '';
+        document.getElementById('settingsWhatsapp').value = profile.whatsapp || '';
+        document.getElementById('settingsCvLink').value = profile.cv_link || '';
+
+        var name = getParticipantDisplayName();
+        var avatar = document.querySelector('.settings-page .large-avatar');
+        if (avatar) {
+            avatar.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=ffd0e6&color=b01865&size=120';
+            avatar.alt = name;
+        }
+
+        var uploadBtn = document.querySelector('.btn-upload');
+        var removeBtn = document.querySelector('.btn-remove');
+        if (uploadBtn) { uploadBtn.disabled = true; uploadBtn.title = 'Upload foto belum tersedia.'; }
+        if (removeBtn) { removeBtn.style.display = 'none'; }
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var btn = form.querySelector('.btn-save');
+            var msg = document.getElementById('settingsProfileMessage');
+            var originalText = btn.textContent;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            if (msg) { msg.style.display = 'none'; }
+
+            try {
+                var response = await fetch('/__gas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'updateParticipantProfile',
+                        nik: session.nik,
+                        nama_lengkap: document.getElementById('settingsName').value,
+                        email: document.getElementById('settingsEmail').value,
+                        whatsapp: document.getElementById('settingsWhatsapp').value,
+                        cv_link: document.getElementById('settingsCvLink').value
+                    })
+                });
+
+                if (!response.ok) throw new Error('Gagal terhubung ke server.');
+
+                var result = await response.json();
+                if (result.status !== 'success') throw new Error(result.message || 'Gagal menyimpan.');
+
+                var updatedProfile = result.profile || profile;
+                updatedProfile.nama_lengkap = document.getElementById('settingsName').value;
+                updatedProfile.email = document.getElementById('settingsEmail').value;
+                updatedProfile.whatsapp = document.getElementById('settingsWhatsapp').value;
+                updatedProfile.cv_link = document.getElementById('settingsCvLink').value;
+
+                saveParticipantSession({
+                    ...session,
+                    name: updatedProfile.nama_lengkap || session.name,
+                    profile: updatedProfile
+                });
+
+                if (msg) {
+                    msg.style.display = 'block';
+                    msg.className = 'settings-message success';
+                    msg.textContent = 'Profil berhasil disimpan.';
+                }
+            } catch (err) {
+                if (msg) {
+                    msg.style.display = 'block';
+                    msg.className = 'settings-message error';
+                    msg.textContent = err.message || 'Gagal menyimpan profil.';
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        });
+
+        form.querySelector('.btn-cancel').addEventListener('click', function() {
+            document.getElementById('settingsName').value = profile.nama_lengkap || '';
+            document.getElementById('settingsEmail').value = profile.email || '';
+            document.getElementById('settingsWhatsapp').value = profile.whatsapp || '';
+            document.getElementById('settingsCvLink').value = profile.cv_link || '';
+            var msg = document.getElementById('settingsProfileMessage');
+            if (msg) msg.style.display = 'none';
+        });
+
+        var bioField = form.querySelector('.form-group.full-width textarea');
+        if (bioField && bioField.closest('.form-group')) {
+            bioField.closest('.form-group').querySelector('small').textContent = 'Bio akan tersedia di update berikutnya.';
+            bioField.disabled = true;
+        }
+        var socialHeadings = form.querySelectorAll('.sub-heading');
+        socialHeadings.forEach(function(h) { h.textContent += ' (Coming Soon)'; });
+        var linkedinInput = form.querySelector('input[value*="linkedin.com"]');
+        var githubInput = form.querySelector('input[value*="github.com"]');
+        if (linkedinInput) linkedinInput.disabled = true;
+        if (githubInput) githubInput.disabled = true;
+    }
+
+    function initSettingsTabNav() {
+        var nav = document.querySelector('.s-nav-list');
+        if (!nav || nav.dataset.tabReady) return;
+        nav.dataset.tabReady = 'true';
+
+        var buttons = nav.querySelectorAll('button');
+        var contentArea = document.querySelector('.settings-content-area');
+        var profileCard = contentArea?.querySelector('.settings-card');
+
+        var placeholderHTML = '<div class="settings-card"><div class="card-header"><h2>{title}</h2></div><div class="card-body"><p style="padding:32px;text-align:center;color:var(--text-muted);">{message}</p></div></div>';
+
+        var placeholders = {
+            'Keamanan Akun': 'Fitur ganti password akan hadir di update berikutnya.',
+            'Preferensi Notifikasi': 'Preferensi notifikasi akan hadir di update berikutnya.',
+            'Tampilan & Aksesibilitas': 'Pengaturan tampilan akan hadir di update berikutnya.',
+            'Keluar Akun': null
+        };
+
+        buttons.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                buttons.forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+
+                var tabName = btn.textContent.trim();
+                if (tabName === 'Profil Publik') {
+                    if (profileCard) profileCard.style.display = '';
+                    var others = contentArea.querySelectorAll('.settings-card:not(:first-child)');
+                    others.forEach(function(c) { c.remove(); });
+                } else if (tabName === 'Keluar Akun') {
+                    sessionStorage.removeItem(PARTICIPANT_SESSION_KEY);
+                    window.location.hash = '#/profile';
+                } else {
+                    if (profileCard) profileCard.style.display = 'none';
+                    var others = contentArea.querySelectorAll('.settings-card:not(:first-child)');
+                    others.forEach(function(c) { c.remove(); });
+
+                    var msg = placeholders[tabName] || 'Fitur ini belum tersedia.';
+                    var temp = document.createElement('div');
+                    temp.innerHTML = placeholderHTML.replace('{title}', tabName).replace('{message}', msg);
+                    contentArea.appendChild(temp.firstElementChild);
+                }
+            });
+        });
+    }
+
     window.getParticipantPortalSettings = fetchSettings;
     window.saveParticipantPortalSettings = saveSettings;
     window.applyParticipantPortalSettings = applySettings;
@@ -1808,6 +1961,10 @@
             initLessonDiscussion();
             initLessonControls();
             initAiIntroInteractive();
+        }
+        if (pageName === 'settings') {
+            initSettingsPage();
+            initSettingsTabNav();
         }
         recordParticipantActivity({
             activity_type: 'page_view',
