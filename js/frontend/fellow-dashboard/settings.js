@@ -1913,7 +1913,7 @@
         var placeholderHTML = '<div class="settings-card"><div class="card-header"><h2>{title}</h2></div><div class="card-body"><p style="padding:32px;text-align:center;color:var(--text-muted);">{message}</p></div></div>';
 
         var placeholders = {
-            'Keamanan Akun': 'Fitur ganti password akan hadir di update berikutnya.',
+            'Keamanan Akun': null,
             'Preferensi Notifikasi': 'Preferensi notifikasi akan hadir di update berikutnya.',
             'Tampilan & Aksesibilitas': 'Pengaturan tampilan akan hadir di update berikutnya.',
             'Keluar Akun': null
@@ -1932,6 +1932,17 @@
                 } else if (tabName === 'Keluar Akun') {
                     sessionStorage.removeItem(PARTICIPANT_SESSION_KEY);
                     window.location.hash = '#/profile';
+                } else if (tabName === 'Keamanan Akun') {
+                    if (profileCard) profileCard.style.display = 'none';
+                    var others = contentArea.querySelectorAll('.settings-card:not(:first-child)');
+                    others.forEach(function(c) { c.remove(); });
+
+                    var tmpl = document.getElementById('passwordChangeTemplate');
+                    if (tmpl) {
+                        var clone = tmpl.content.cloneNode(true);
+                        contentArea.appendChild(clone);
+                        initPasswordChangeForm();
+                    }
                 } else {
                     if (profileCard) profileCard.style.display = 'none';
                     var others = contentArea.querySelectorAll('.settings-card:not(:first-child)');
@@ -1943,6 +1954,65 @@
                     contentArea.appendChild(temp.firstElementChild);
                 }
             });
+        });
+    }
+
+    function initPasswordChangeForm() {
+        var form = document.getElementById('passwordChangeForm');
+        if (!form || form.dataset.ready) return;
+        form.dataset.ready = 'true';
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var session = readParticipantSession();
+            if (!session?.nik) return;
+
+            var oldPassword = document.getElementById('oldPassword').value;
+            var newPassword = document.getElementById('newPassword').value;
+            var confirmPassword = document.getElementById('confirmPassword').value;
+            var msg = document.getElementById('passwordChangeMessage');
+            var btn = form.querySelector('button[type="submit"]');
+            var originalHTML = btn.innerHTML;
+
+            if (newPassword !== confirmPassword) {
+                if (msg) { msg.style.display = 'block'; msg.className = 'settings-message error'; msg.textContent = 'Konfirmasi password baru tidak cocok.'; }
+                return;
+            }
+            if (newPassword.length < 6) {
+                if (msg) { msg.style.display = 'block'; msg.className = 'settings-message error'; msg.textContent = 'Password baru minimal 6 karakter.'; }
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengganti...';
+            if (msg) msg.style.display = 'none';
+
+            try {
+                var response = await fetch('/__gas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'changeParticipantPassword',
+                        nik: session.nik,
+                        oldPassword: oldPassword,
+                        newPassword: newPassword
+                    })
+                });
+
+                if (!response.ok) throw new Error('Gagal terhubung ke server.');
+
+                var result = await response.json();
+                if (result.status !== 'success') throw new Error(result.message || 'Gagal mengganti password.');
+
+                if (msg) { msg.style.display = 'block'; msg.className = 'settings-message success'; msg.textContent = result.message; }
+
+                form.reset();
+            } catch (err) {
+                if (msg) { msg.style.display = 'block'; msg.className = 'settings-message error'; msg.textContent = err.message || 'Gagal mengganti password.'; }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
         });
     }
 

@@ -197,6 +197,7 @@ function doPost(e) {
     const routes = {
       register: () => registerParticipant(payload),
       participantLogin: () => participantLogin(payload),
+      changeParticipantPassword: () => changeParticipantPassword(payload),
       updateParticipantProfile: () => updateParticipantProfile(payload),
       provisionParticipantAccounts: () => provisionParticipantAccounts(payload),
       getParticipantAccounts: () => ({ status: 'success', accounts: getRows(SHEETS.participantAccounts) }),
@@ -262,6 +263,7 @@ function doGet() {
 function authorizeGasAction(action, payload) {
   const participantActions = [
     'updateParticipantProfile',
+    'changeParticipantPassword',
     'recordParticipantActivity',
     'getParticipantDashboardData',
     'startCompetencySession',
@@ -276,7 +278,7 @@ function authorizeGasAction(action, payload) {
   if (participantActions.indexOf(action) >= 0) {
     const claims = requireParticipantToken(payload);
     const retestActions = ['startReTestSession', 'heartbeatReTestSession', 'saveReTestAnswer', 'submitReTest'];
-    const normalActions = ['updateParticipantProfile', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest'];
+    const normalActions = ['updateParticipantProfile', 'changeParticipantPassword', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest'];
     if (retestActions.indexOf(action) >= 0 && claims.scope !== 'retest') {
       throw new Error('Sesi Re-Test tidak valid. Silakan login ulang.');
     }
@@ -1146,6 +1148,57 @@ function setParticipantPassword(payload) {
   });
   const updated = findParticipantByNik(payload.nik);
   return { status: 'success', profile: stripSensitiveParticipant(updated) };
+}
+
+function changeParticipantPassword(payload) {
+  var claims = payload.__auth || requireParticipantToken(payload);
+  if (!payload.oldPassword || !payload.newPassword) {
+    return { status: 'error', message: 'Password lama dan baru wajib diisi.' };
+  }
+  if (String(payload.newPassword).length < 6) {
+    return { status: 'error', message: 'Password baru minimal 6 karakter.' };
+  }
+  if (payload.oldPassword === payload.newPassword) {
+    return { status: 'error', message: 'Password baru tidak boleh sama dengan password lama.' };
+  }
+
+  var participants = getRows(SHEETS.participants);
+  var participant = participants.find(function(row) {
+    return claims.rowId && String(row.rowId || '') === String(claims.rowId);
+  }) || participants.find(function(row) {
+    return String(row.nik || '').replace(/\D/g, '') === String(claims.sub || '');
+  });
+  if (!participant) return { status: 'error', message: 'Peserta tidak ditemukan.' };
+
+  var account = findParticipantAccount(participant.nik);
+  var storedHash = (account && account.password_hash) || participant.participant_password || '';
+  if (!verifyPasswordValue(storedHash, payload.oldPassword)) {
+    return { status: 'error', message: 'Password lama tidak sesuai.' };
+  }
+
+  var newHash = hashPasswordValue(payload.newPassword);
+  var now = new Date().toISOString();
+
+  if (account && account.account_id) {
+    updateByKey(SHEETS.participantAccounts, 'account_id', account.account_id, {
+      password_hash: newHash,
+      password_status: 'changed_by_participant',
+      updated_at: now
+    });
+  }
+  updateByKey(SHEETS.participants, 'rowId', participant.rowId, {
+    participant_password: newHash,
+    profile_updated_at: now
+  });
+
+  recordParticipantActivity({
+    nik: participant.nik,
+    nama_lengkap: participant.nama_lengkap,
+    activity_type: 'password_change',
+    activity: 'Mengganti password mandiri'
+  });
+
+  return { status: 'success', message: 'Password berhasil diganti.' };
 }
 
 function updateParticipantProfile(payload) {
