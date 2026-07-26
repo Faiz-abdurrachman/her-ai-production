@@ -813,7 +813,6 @@ const router = {
         // Quick redirect: profile → settings (from deprecated profile page)
         if (path === "/participant-profile") {
             window.location.hash = "#/participant-settings";
-            this.currentPath = "/participant-settings";
             return;
         }
 
