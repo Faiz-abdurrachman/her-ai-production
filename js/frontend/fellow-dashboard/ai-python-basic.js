@@ -141,6 +141,7 @@
             }
 
             localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+            window.saveChapterProgress(MODULE_ID, 'practice', 'completed');
             if (status) {
                 status.style.color = 'var(--fellow-muted)';
                 status.textContent = 'Jawaban berhasil disimpan. Kamu bisa edit atau hapus kapan saja.';

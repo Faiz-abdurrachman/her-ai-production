@@ -910,6 +910,7 @@
                     return;
                 }
                 saveJson(STORAGE.practice, { version: 3, updatedAt: new Date().toISOString(), answers: saved.answers, revealed: saved.revealed, current: saved.current });
+                window.saveChapterProgress(MODULE_ID, 'practice', 'completed');
                 readonly = true;
                 render();
                 setStatus("#aiModernPracticeStatus", "Latihan AI Modern tersimpan. Kamu bisa lanjut kuis atau edit lagi.", "success");

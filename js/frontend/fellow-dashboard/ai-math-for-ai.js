@@ -579,6 +579,7 @@
                 payload[field.name] = field.value.trim();
             });
             writeJson(MATH_AI_STORAGE_KEYS.practice, payload);
+            window.saveChapterProgress(mathForAiCourse.id, 'practice', 'completed');
             if (status) status.textContent = 'Jawaban berhasil disimpan.';
         });
         form?.querySelector('[data-practice-reset]')?.addEventListener('click', () => {

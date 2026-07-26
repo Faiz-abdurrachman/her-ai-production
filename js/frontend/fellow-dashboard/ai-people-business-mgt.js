@@ -1839,6 +1839,9 @@ var SOURCE_VISUALS = {
         if (saveButton) {
             saveButton.addEventListener("click", function () {
                 savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed });
+savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed });
+                window.saveChapterProgress(MODULE_ID, 'practice', 'completed');
+savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed });
                 form.classList.add("is-saved");
                 form.querySelectorAll("textarea").forEach(field => { field.disabled = true; });
                 setStatus("#aiPeopleBusinessMgtPracticeStatus", "Latihan Python tersimpan. Kamu bisa lanjut ke kuis atau edit lagi bila perlu.", "success");

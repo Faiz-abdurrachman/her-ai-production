@@ -319,6 +319,7 @@
         if (saveButton) {
             saveButton.addEventListener("click", () => {
                 localStorage.setItem(STORAGE.practice, JSON.stringify(getPracticePayload(form)));
+                window.saveChapterProgress(MODULE_ID, 'practice', 'completed');
                 updatePracticeFeedback(form);
                 setPracticeReadonly(form, true);
                 setStatus("#aiMlPracticeStatus", "Latihan ML tersimpan. Kamu bisa lanjut ke kuis atau edit lagi bila perlu.", "success");
