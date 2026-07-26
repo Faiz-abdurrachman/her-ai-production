@@ -1654,9 +1654,9 @@
     function defaultParticipantDashboardData() {
         return {
             modules: [
-                { title: 'Memuat modul...', subtitle: 'Mengambil data pembelajaran', progress: 0, icon: 'fas fa-spinner fa-spin', tone: 'skeleton', href: '#/participant-modules' },
-                { title: 'Memuat modul...', subtitle: 'Mengambil data pembelajaran', progress: 0, icon: 'fas fa-spinner fa-spin', tone: 'skeleton', href: '#/participant-modules' },
-                { title: 'Memuat modul...', subtitle: 'Mengambil data pembelajaran', progress: 0, icon: 'fas fa-spinner fa-spin', tone: 'skeleton', href: '#/participant-modules' }
+                { title: 'AI Fundamentals & Advanced', subtitle: 'Pengantar AI dan konsep modern', progress: 0, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-fundamentals' },
+                { title: 'Math for AI', subtitle: 'Aljabar, kalkulus, probabilitas', progress: 0, icon: 'fas fa-square-root-variable', tone: 'purple', href: '#/participant-modules' },
+                { title: 'Machine Learning', subtitle: 'Model, evaluasi, dan pipeline', progress: 0, icon: 'fas fa-diagram-project', tone: 'orange', href: '#/participant-modules' }
             ],
             discussionTrails: [
                 { actor: 'Mentor Rani', action: 'membalas diskusi', topic: 'Pengantar AI', time: '2 jam yang lalu', tone: '' },
