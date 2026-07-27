@@ -548,11 +548,11 @@ Semua 29 ai-*.js + 20+ ai-lab/*.js files di-load via `<script>` tag di index.htm
 
 ---
 
-## Session Summary — 28 Juli 2026 (Sisyphus sesi ke-3 — P5 UX Polish + P3 Module Routes)
+## Session Summary — 28 Juli 2026 (Sisyphus sesi ke-3 — P5 UX + P3 Routes + Avatar)
 
-**Total commits sesi ini:** 3 (5af6c54 → cd18146)
-**Grand total commits (main):** 222
-**Last commit:** `cd18146` — feat: P3 — Activate module bersih routes (#66)
+**Total commits sesi ini:** 4 (5af6c54 → 6f1169a)
+**Grand total commits (main):** 223
+**Last commit:** `6f1169a` — feat: Avatar/foto profil (#67)
 **Worktree:** BERSIH
 **Test participant:** NIK 8204086711010003 / Brenda Rahmandea Arsy / Password brenda123
 **E2E (latest):** 40/40 PASS, 0 regression
@@ -563,10 +563,11 @@ Semua 29 ai-*.js + 20+ ai-lab/*.js files di-load via `<script>` tag di index.htm
 |---|------|--------|--------|
 | #65 | P5 UX Polish — roadmap accordion, quiz feedback, page animations, toast | ✅ | 5af6c54 |
 | #66 | P3 Module routes — activate math-for-ai, ml-basic, CV cnn/advanced-cnn | ✅ | cd18146 |
+| #67 | Avatar/foto profil — upload, resize, Drive storage, topbar display | ✅ | 6f1169a |
 
 ### Issues Terbuka
-- **Avatar/Foto Profil:** User nanya, belum diimplementasi
 - **Password Brenda:** Perlu diisi ulang `brenda123` di sheet `peserta_tahap_1` setelah E2E password test jalan
+- **GAS redeploy:** Perlu deploy ulang web app setelah edit Code.gs untuk P3 + avatar
 - **ai-reasoning.js:** VERIFIED — 170KB, full content, routes already working → removed from module bersih list
 
 ---
@@ -701,3 +702,36 @@ MODULE LOADING: __aiLabLoader.load('ai-xxx') → dynamic script injection (on-de
 - router.js cache buster: `v=20260728-p3-modules`
 
 **Verifikasi:** 40/40 E2E PASS, 0 regression
+
+---
+
+## 67. Feature: Avatar/Foto Profil — Upload, Resize, Drive Storage (#67)
+
+**Deskripsi:**
+Settings page sudah punya UI avatar upload (tombol Unggah + Hapus, img.large-avatar) tapi tombol disabled dan belum ada backend. Dashboard topbar punya span.avatar-img tapi kosong.
+
+**Cara Perbaikan:**
+
+**GAS Backend (`gas/Code.gs`):**
+- Tambah kolom `photo_url` di `SCHEMA[SHEETS.participants]`
+- `uploadParticipantPhoto`: decode base64 → upload ke Google Drive folder `HerAI_Photos` → set sharing anyone-with-link → simpan URL ke sheet → return `photo_url`
+- `removeParticipantPhoto`: trash file Drive berdasarkan ID dari URL → kosongin `photo_url` di sheet
+- Old photo auto-replaced: file lama di-trash sebelum upload baru
+- Actions ditambah ke dispatch + authorized participant actions
+
+**Frontend (`settings.js`):**
+- `resizeImageToBase64(file, maxSize)`: canvas crop square + resize → JPEG quality 0.8 → return base64 data URL
+- File input (hidden, type=file accept=image/*) dibuat dinamis, triggered oleh klik tombol Unggah
+- Validasi: format (JPG/PNG/GIF/WebP), ukuran max 2MB
+- Upload flow: resize → POST `/__gas` action `uploadParticipantPhoto` → update avatar img src → update session → toast
+- Remove flow: confirm → POST `removeParticipantPhoto` → reset ke ui-avatars.com → update session → toast
+- Tombol Hapus muncul/hilang berdasarkan `photo_url`
+- `updateTopbarAvatar(photoUrl)`: set `.avatar-img` background-image (cover, center)
+- Dipanggil saat: login (attachUserMenuDropdown), setelah upload, setelah remove, setelah save profil
+- Session storage: `photo_url` disimpan di `profile` object
+
+**CSS:** Tidak ada perubahan — styling `.avatar-img`, `.large-avatar`, `.btn-upload`, `.btn-remove` sudah ada
+
+**index.html:** Cache buster settings.js `v=20260728-avatar`
+
+**Verifikasi:** 40/40 E2E PASS, 0 regression. Perlu GAS redeploy untuk test upload.

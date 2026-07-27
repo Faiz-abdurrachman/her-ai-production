@@ -3,8 +3,8 @@
 **Checkpoint: 27 Juli 2026 (Sisyphus - Sesi ke-2, Full Session), Asia/Jakarta
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
-**Last Commit: `cd18146` - feat: P3 — Activate module bersih routes (#66)
-**Total commits (main): 222 | Commits sesi ini: 2
+**Last Commit: `6f1169a` - feat: Avatar/foto profil (#67)
+**Total commits (main): 223 | Commits sesi ini: 4
 **GAS Deployment:** ✅ Sudah redeploy — score normalization + quiz_total schema active
 **Worktree: BERSIH
 **E2E Test Suite (latest): **37/37 PASS** (remaining 16 GAS timeout - pre-existing, bukan regresi)
@@ -58,6 +58,7 @@
 | Lazy loading (#64) | ✅ 4.5MB→500KB, 90% reduction |
 | P5: AI Lab UX polish (#65) | ✅ Roadmap accordion, quiz feedback, page animations, toast |
 | P3: Module bersih routes (#66) | ✅ math-for-ai, ml-basic, CV cnn/advanced-cnn activated |
+| Avatar/foto profil (#67) | ✅ Upload resize Drive storage, topbar display |
 
 ---
 
