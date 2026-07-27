@@ -106,11 +106,11 @@ const router = {
         "/participant-ai-lab-bow": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-tfidf": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-nlp": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-machine-learning": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-ml": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-ml-practice": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-ml-quiz": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-ml-discussion": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-machine-learning": "/pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning/materi.html",
+        "/participant-ai-lab-ml": "/pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning/materi.html",
+        "/participant-ai-lab-ml-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning/latihan.html",
+        "/participant-ai-lab-ml-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning/kuis.html",
+        "/participant-ai-lab-ml-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/machine-learning/diskusi.html",
         "/participant-ai-lab-ml-intro": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-ml-hypothesis": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-ml-vc-dim": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -122,17 +122,17 @@ const router = {
         "/participant-ai-lab-ml-svm": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-ml-neural-networks": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-ml-unsupervised": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math-intro": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math-linear-algebra": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math-statistics": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math-probability": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math-calculus": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math-optimization": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math-case-study": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math-practice": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math-quiz": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math-discussion": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/overview.html",
+        "/participant-ai-lab-math-intro": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
+        "/participant-ai-lab-math-linear-algebra": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
+        "/participant-ai-lab-math-statistics": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
+        "/participant-ai-lab-math-probability": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
+        "/participant-ai-lab-math-calculus": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
+        "/participant-ai-lab-math-optimization": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
+        "/participant-ai-lab-math-case-study": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
+        "/participant-ai-lab-math-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/practice.html",
+        "/participant-ai-lab-math-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/quiz.html",
+        "/participant-ai-lab-math-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/discussion.html",
         "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/materi.html",
@@ -215,14 +215,14 @@ const router = {
         "/participant-cv-digital-image-practice": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/latihan.html",
         "/participant-cv-digital-image-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/kuis.html",
         "/participant-cv-digital-image-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/diskusi.html",
-"/participant-cv-cnn": "/pages/frontend/fellow-dashboard/under-development.html",
-"/participant-cv-cnn-practice": "/pages/frontend/fellow-dashboard/under-development.html",
-"/participant-cv-cnn-quiz": "/pages/frontend/fellow-dashboard/under-development.html",
-"/participant-cv-cnn-discussion": "/pages/frontend/fellow-dashboard/under-development.html",
-"/participant-cv-advanced-cnn": "/pages/frontend/fellow-dashboard/under-development.html",
-"/participant-cv-advanced-cnn-practice": "/pages/frontend/fellow-dashboard/under-development.html",
-"/participant-cv-advanced-cnn-quiz": "/pages/frontend/fellow-dashboard/under-development.html",
-"/participant-cv-advanced-cnn-discussion": "/pages/frontend/fellow-dashboard/under-development.html",
+ "/participant-cv-cnn": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/materi.html",
+ "/participant-cv-cnn-practice": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/latihan.html",
+ "/participant-cv-cnn-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/kuis.html",
+ "/participant-cv-cnn-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/02-convolutional-neural-networks/diskusi.html",
+ "/participant-cv-advanced-cnn": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/03-advanced-cnn-architectures/materi.html",
+ "/participant-cv-advanced-cnn-practice": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/03-advanced-cnn-architectures/latihan.html",
+ "/participant-cv-advanced-cnn-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/03-advanced-cnn-architectures/kuis.html",
+ "/participant-cv-advanced-cnn-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/03-advanced-cnn-architectures/diskusi.html",
 
         "/participant-specialization-computer-vision-practice": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/latihan.html",
         "/participant-specialization-computer-vision-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/kuis.html",
@@ -1419,6 +1419,7 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
 
                 } else if (path.startsWith("/participant-ai-lab-math") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
+                    window.__aiLabLoader.load('ai-math-for-ai').then(function() {
                     if (path === "/participant-ai-lab-math" && typeof window.initAiLabMathOverview === "function") {
                         window.initAiLabMathOverview();
                     }
@@ -1434,6 +1435,7 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
                     if (path === "/participant-ai-lab-math-discussion" && typeof window.initAiLabMathDiscussion === "function") {
                         window.initAiLabMathDiscussion();
                     }
+                    });
                 } else if (path.startsWith("/participant-ai-lab-") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("ai-lab");
                     if (typeof window.initCoursePlaceholder === "function") {
