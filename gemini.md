@@ -548,25 +548,26 @@ Semua 29 ai-*.js + 20+ ai-lab/*.js files di-load via `<script>` tag di index.htm
 
 ---
 
-## Session Summary — 27 Juli 2026 (Sisyphus sesi ke-3 — P5 UX Polish)
+## Session Summary — 28 Juli 2026 (Sisyphus sesi ke-3 — P5 UX Polish + P3 Module Routes)
 
-**Total commits sesi ini:** 1 (5af6c54)
-**Grand total commits (main):** 221
-**Last commit:** `5af6c54` — feat: P5 — AI Lab UX polish (#65)
+**Total commits sesi ini:** 3 (5af6c54 → cd18146)
+**Grand total commits (main):** 222
+**Last commit:** `cd18146` — feat: P3 — Activate module bersih routes (#66)
 **Worktree:** BERSIH
 **Test participant:** NIK 8204086711010003 / Brenda Rahmandea Arsy / Password brenda123
-**E2E (latest):** 37/37 completed PASS, remaining 16 timeout (pre-existing GAS latency)
+**E2E (latest):** 40/40 PASS, 0 regression
 
 ### Deliverables Sesi Ini
 
 | # | Task | Status | Commit |
 |---|------|--------|--------|
-| #65 | P5 UX Polish — roadmap accordion, quiz feedback, page animations, toast helper | ✅ | 5af6c54 |
+| #65 | P5 UX Polish — roadmap accordion, quiz feedback, page animations, toast | ✅ | 5af6c54 |
+| #66 | P3 Module routes — activate math-for-ai, ml-basic, CV cnn/advanced-cnn | ✅ | cd18146 |
 
 ### Issues Terbuka
-- **P3 (Module Bersih):** ai-math-for-ai, ai-ml-basic, ai-cv, ai-reasoning — konten masih template
 - **Avatar/Foto Profil:** User nanya, belum diimplementasi
-- **Password Brenda:** Perlu diisi ulang `brenda123` di sheet `peserta_tahap_1` kolom `participant_password` setelah E2E password test jalan
+- **Password Brenda:** Perlu diisi ulang `brenda123` di sheet `peserta_tahap_1` setelah E2E password test jalan
+- **ai-reasoning.js:** VERIFIED — 170KB, full content, routes already working → removed from module bersih list
 
 ---
 
@@ -670,3 +671,33 @@ SESSION: sessionStorage.heraiParticipantSession
 SETTINGS: localStorage.heraiGlobalSettings → participantPortalOpen boolean
 MODULE LOADING: __aiLabLoader.load('ai-xxx') → dynamic script injection (on-demand)
 ```
+
+---
+
+## 66. Feature: P3 — Activate Module Bersih Routes (#66)
+
+**Deskripsi:**
+4 module yang dianggap "bersih" ternyata punya konten JS dan HTML lengkap, cuma route-nya masih ke `under-development.html`. Tidak ada konten yang perlu ditulis dari nol.
+
+**Investigasi:**
+- `ai-reasoning.js` (170KB): full content, routes already working → **SKIP, already done**
+- `ai-math-for-ai.js` (53KB): 5 lessons + practice + quiz, HTML pages exist, routes under-dev
+- `ai-ml-basic.js` (24KB): 13 CHAPTERS + loadMlTopik(), HTML pages exist, routes under-dev
+- `ai-cv.js` (11KB): 01-digital-image routes work, 02-cnn + 03-advanced-cnn routes under-dev
+
+**Cara Perbaikan:**
+
+**router.js — Route Map (25 entries changed):**
+- math: 11 routes under-dev → `math-for-ai/overview.html`, `lesson.html`, `practice.html`, `quiz.html`, `discussion.html`
+- ml-basic: 5 routes under-dev → `machine-learning/materi.html`, `latihan.html`, `kuis.html`, `diskusi.html`
+- cv: 8 routes under-dev → `02-convolutional-neural-networks/*.html`, `03-advanced-cnn-architectures/*.html`
+
+**router.js — Handler fix:**
+- math handler: added `__aiLabLoader.load('ai-math-for-ai')` wrapper (was missing — init functions called without lazy load)
+- ml-basic handler: already correct with loader ✅
+- cv handler: already correct with loader ✅
+
+**index.html:**
+- router.js cache buster: `v=20260728-p3-modules`
+
+**Verifikasi:** 40/40 E2E PASS, 0 regression

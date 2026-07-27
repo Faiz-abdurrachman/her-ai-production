@@ -268,13 +268,13 @@ Sudah di-rewrite sesi kemarin — 8 GUIDES konten Python proper.
 |---|----------|------|--------|--------|
 | 1 | ✅ P1 | Business module glossary fix (7 modules) | 2-3h | **DONE (#63)** |
 | 2 | ✅ P2 | Data Engineering module glossary fix (7 modules) | 2-3h | **DONE (#63)** |
-| 3 | 🔴 P3 | Module bersih content (3-4 modules) | 8-12h | **SKIP** — menunggu keputusan user |
+| 3 | ✅ P3 | Module bersih content (3-4 modules) | 8-12h | **DONE (#66)** — routes activated, konten JS sudah ada |
 | 4 | ✅ P4 | Lazy loading + code splitting | 3-5h | **DONE (#64)** |
 | 5 | ✅ P5 | AI lab UX polish | 5-8h | **DONE (#65)** |
 | 6 | ✅ P6 | ai-python.js review | 1-2h | **DONE — PASS** |
 
-**Completed:** 5/6 priorities | **Remaining:** P3 (skip — menunggu user)
-**Total estimated effort remaining:** 0 jam (semua prioritas done, P3 optional)
+**Completed:** 6/6 priorities | **Remaining:** 0
+**Total estimated effort remaining:** 0 jam — semua prioritas done
 
 ---
 
