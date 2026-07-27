@@ -2431,7 +2431,7 @@
     window.saveParticipantPortalSettings = saveSettings;
     window.applyParticipantPortalSettings = applySettings;
     window.initFellowDashboardPage = async function(pageName = 'dashboard') {
-        var allowedPages = ['dashboard', 'modules', 'settings'];
+        var allowedPages = ['dashboard', 'modules', 'settings', 'under-development'];
         if (allowedPages.indexOf(pageName) === -1) {
             renderParticipantRestricted();
             return;

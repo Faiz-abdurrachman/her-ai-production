@@ -757,3 +757,30 @@ Settings page sudah punya UI avatar upload (tombol Unggah + Hapus, img.large-ava
 **Cache buster final:** `v=20260728-avatar-v3`
 
 **Verifikasi:** 40/40 E2E PASS, 0 regression. GAS SUDAH redeploy.
+
+---
+
+## 68. Fix: Under-Development Template Blocked + Math/ML/CV → Under Development
+
+**Deskripsi:**
+Semua halaman under-development (nlp, tfidf, bow, dll) menampilkan "Akses Peserta Dibatasi" alih-alih template "Under Development". Ini pre-existing bug dari fitur restricted access (#54) — `initFellowDashboardPage` hanya allow `['dashboard', 'modules', 'settings']`, sehingga `pageName='under-development'` ditolak.
+
+User minta Math for AI, ML, dan CV overview di-redirect ke under-development karena kontennya belum siap (struktur JS berbeda, spinner ML, CV template custom).
+
+**Cara Perbaikan:**
+- **router.js**: 4 route overview diubah → `/pages/frontend/fellow-dashboard/under-development.html`
+  - `/participant-ai-lab-math`
+  - `/participant-ai-lab-machine-learning`
+  - `/participant-ai-lab-ml`
+  - `/participant-ai-lab-cv`
+- **settings.js**: tambah `'under-development'` ke `allowedPages` array di `initFellowDashboardPage`
+- **index.html**: bump cache buster `v=20260728-ud-fix`
+- Sub-routes (quiz, practice, lesson) tetap jalan, tapi unreachable dari UI
+
+**Verifikasi:**
+- 33/33 E2E PASS — no regression
+- 4 route now show "Under Development" ✅
+- Existing UD routes (nlp, tfidf, etc.) now show template correctly ✅
+- 24 active modules: content clean, no Python contamination
+- Progress tracking: chapter + quiz + practice all write to GAS
+- Password Brenda: intact after test cycle
