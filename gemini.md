@@ -784,3 +784,27 @@ User minta Math for AI, ML, dan CV overview di-redirect ke under-development kar
 - 24 active modules: content clean, no Python contamination
 - Progress tracking: chapter + quiz + practice all write to GAS
 - Password Brenda: intact after test cycle
+
+---
+
+## 69. Feature: Live Leaderboard — Compute Points from Participant Progress
+
+**Deskripsi:**
+Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard()` — poin di-generate random `2500 - index × 180`). Tidak mencerminkan pencapaian peserta sebenarnya.
+
+**Cara Perbaikan:**
+- **GAS** (`gas/Code.gs`): replace leaderboard query dengan `computeLiveLeaderboard(requesterNik)`
+  - Aggregate `participant_progress` sheet by NIK
+  - Formula: `points = sum(quiz_score) + (chapters_completed × 15) + (practices_completed × 5)`
+  - Sort descending by points, take top 10
+  - Lookup nama dari `participant_accounts`
+  - Mask nama peserta lain (`*********`), unmask current user
+  - Fallback `getSeedLeaderboard()` jika belum ada progress data
+- `seedDashboardLeaderboard()` tetap ada untuk initial seeding, tidak dihapus
+
+**Impact:**
+- Brenda: 844 pts real (34 chapters + 24 quiz + 26 practice) — sebelumnya 2,406 seed
+- Leaderboard sekarang dinamis — update otomatis setiap peserta submit quiz/chapter/practice
+
+**Catatan:**
+- GAS perlu redeploy setelah edit Code.gs

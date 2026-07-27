@@ -448,22 +448,105 @@ function getParticipantDashboardData(payload) {
     url: row.url || '#/participant-events'
   }));
 
-  const leaderboard = activeRows(SHEETS.participantDashboardLeaderboard).map(row => {
-    const nik = String(row.nik || '').replace(/\D/g, '');
-    const current = requesterNik && nik === requesterNik;
-    return {
-      rank: Number(row.rank || 0),
-      nik: current ? nik : '',
-      name: current ? (row.name || 'Peserta HerAI') : '*********',
-      points: Number(row.points || 0),
-      current
-    };
-  });
+  // Live-computed leaderboard from participant progress
+  const leaderboard = computeLiveLeaderboard(requesterNik);
 
   return {
     status: 'success',
     data: { modules, discussionTrails, tracks, journey, events, leaderboard }
   };
+}
+
+/**
+ * Compute live leaderboard from participant_progress data.
+ * Formula: points = sum(quiz_scores) + (chapters_completed × 15) + (practices_completed × 5)
+ * Falls back to seed data if no progress exists yet.
+ */
+function computeLiveLeaderboard(requesterNik) {
+  const progressRows = activeRows(SHEETS.participantProgress);
+  
+  if (!progressRows || progressRows.length === 0) {
+    return getSeedLeaderboard(requesterNik);
+  }
+  
+  // Aggregate by NIK: { chapters, totalQuizScore, practices }
+  const agg = {};
+  progressRows.forEach(function(row) {
+    const nik = String(row.nik || '').replace(/\D/g, '');
+    if (!nik) return;
+    
+    if (!agg[nik]) {
+      agg[nik] = { chapters: 0, totalQuizScore: 0, practices: 0 };
+    }
+    
+    const chId = String(row.chapter_id || '');
+    if (chId === 'quiz') {
+      agg[nik].totalQuizScore += parseInt(row.score) || 0;
+    } else if (chId === 'practice') {
+      agg[nik].practices += 1;
+    } else if (!isNaN(parseInt(chId))) {
+      agg[nik].chapters += 1;
+    }
+  });
+  
+  // Compute points + build ranking array
+  const rankings = Object.keys(agg).map(function(nik) {
+    const a = agg[nik];
+    return {
+      nik: nik,
+      points: a.totalQuizScore + (a.chapters * 15) + (a.practices * 5),
+      chapters: a.chapters,
+      quizScore: a.totalQuizScore,
+      practices: a.practices
+    };
+  });
+  
+  // Sort by points descending
+  rankings.sort(function(a, b) { return b.points - a.points; });
+  
+  // Take top 10
+  const top10 = rankings.slice(0, 10);
+  
+  // Look up names from participant_accounts
+  const accounts = getRows(SHEETS.participantAccounts);
+  const nameMap = {};
+  accounts.forEach(function(acc) {
+    const nik = String(acc.nik || '').replace(/\D/g, '');
+    if (nik) nameMap[nik] = acc.nama_lengkap || 'Peserta HerAI';
+  });
+  
+  // Build final leaderboard with masking
+  return top10.map(function(entry, index) {
+    const current = Boolean(requesterNik && entry.nik === requesterNik);
+    return {
+      rank: index + 1,
+      nik: current ? entry.nik : '',
+      name: current ? (nameMap[entry.nik] || 'Peserta HerAI') : '*********',
+      points: entry.points,
+      current: current
+    };
+  });
+}
+
+/**
+ * Fallback: seed leaderboard when no progress data exists.
+ */
+function getSeedLeaderboard(requesterNik) {
+  const rows = activeRows(SHEETS.participantDashboardLeaderboard);
+  if (rows && rows.length > 0) {
+    return rows.map(function(row) {
+      const nik = String(row.nik || '').replace(/\D/g, '');
+      const current = Boolean(requesterNik && nik === requesterNik);
+      return {
+        rank: Number(row.rank || 0),
+        nik: current ? nik : '',
+        name: current ? (row.name || 'Peserta HerAI') : '*********',
+        points: Number(row.points || 0),
+        current: current
+      };
+    });
+  }
+  return [];
 }
 
 function formatRelativeTime(value) {
