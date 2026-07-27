@@ -133,7 +133,7 @@ const router = {
         "/participant-ai-lab-math-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/practice.html",
         "/participant-ai-lab-math-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/quiz.html",
         "/participant-ai-lab-math-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/discussion.html",
-        "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/materi.html",
         "/participant-ai-lab-deep-learning-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/latihan.html",
@@ -1437,7 +1437,7 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
                     }
                     });
                 } else if (path.startsWith("/participant-ai-lab-") && typeof window.initFellowDashboardPage === "function") {
-                    window.initFellowDashboardPage("ai-lab");
+                    window.initFellowDashboardPage("modules");
                     if (typeof window.initCoursePlaceholder === "function") {
                         window.initCoursePlaceholder();
                     }
