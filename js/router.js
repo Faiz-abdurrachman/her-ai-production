@@ -997,7 +997,8 @@ const router = {
                     window.initFellowDashboardPage("modules");
                 } else if (path.startsWith("/participant-ai-python") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-python" && typeof window.initAiPythonMateri === "function") {
+                    window.__aiLabLoader.load('ai-python').then(function() {
+if (path === "/participant-ai-python" && typeof window.initAiPythonMateri === "function") {
                         window.initAiPythonMateri();
                     }
                     if (path === "/participant-ai-python-practice" && typeof window.initAiPythonPractice === "function") {
@@ -1009,9 +1010,11 @@ const router = {
                     if (path === "/participant-ai-python-discussion" && typeof window.initAiPythonDiscussion === "function") {
                         window.initAiPythonDiscussion();
                     }
+        });
                 } else if (path.startsWith("/participant-ai-modern") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-modern" && typeof window.initAiModernMateri === "function") {
+                    window.__aiLabLoader.load('ai-modern').then(function() {
+if (path === "/participant-ai-modern" && typeof window.initAiModernMateri === "function") {
                         window.initAiModernMateri();
                     }
                     if (path === "/participant-ai-modern-practice" && typeof window.initAiModernPractice === "function") {
@@ -1023,10 +1026,12 @@ const router = {
                     if (path === "/participant-ai-modern-discussion" && typeof window.initAiModernDiscussion === "function") {
                         window.initAiModernDiscussion();
                     }
+        });
                 } else if (path.startsWith("/participant-cv-")) {
                     if (typeof window.initFellowDashboardPage === "function") {
                         window.initFellowDashboardPage("modules");
                     }
+                    window.__aiLabLoader.load('ai-cv').then(function() {
                     if (path === "/participant-cv-digital-image" && typeof window.initCvDigitalImage === "function") {
                         window.initCvDigitalImage();
                     } else if (path === "/participant-cv-digital-image-practice" && typeof window.initCvDigitalImagePractice === "function") {
@@ -1038,9 +1043,11 @@ const router = {
                     } else if (path === "/participant-cv-advanced-cnn" && typeof window.initCvAdvancedCnn === "function") {
                         window.initCvAdvancedCnn();
                     }
+                    });
                 } else if (path.startsWith("/participant-ai-reasoning") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-reasoning" && typeof window.initAiReasoningMateri === "function") {
+                    window.__aiLabLoader.load('ai-reasoning').then(function() {
+if (path === "/participant-ai-reasoning" && typeof window.initAiReasoningMateri === "function") {
                         window.initAiReasoningMateri();
                     }
                     if (path === "/participant-ai-reasoning-practice" && typeof window.initAiReasoningPractice === "function") {
@@ -1052,8 +1059,10 @@ const router = {
                     if (path === "/participant-ai-reasoning-discussion" && typeof window.initAiReasoningDiscussion === "function") {
                         window.initAiReasoningDiscussion();
                     }
+        });
                 } else if ((path === "/participant-ai-lab-machine-learning" || path.startsWith("/participant-ai-lab-ml")) && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
+                    window.__aiLabLoader.load('ai-ml-basic').then(function() {
                     if ((path === "/participant-ai-lab-machine-learning" || (path.startsWith("/participant-ai-lab-ml") && path !== "/participant-ai-lab-ml-practice" && path !== "/participant-ai-lab-ml-quiz" && path !== "/participant-ai-lab-ml-discussion")) && typeof window.initAiMlMateri === "function") {
                         window.initAiMlMateri();
                     }
@@ -1066,9 +1075,11 @@ const router = {
                     if (path === "/participant-ai-lab-ml-discussion" && typeof window.initAiMlDiscussion === "function") {
                         window.initAiMlDiscussion();
                     }
+                    });
                 } else if (path.startsWith("/participant-ai-lab-deep-learning") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-deep-learning" && typeof window.initAiDeepLearningMateri === "function") {
+                    window.__aiLabLoader.load('ai-deep-learning').then(function() {
+if (path === "/participant-ai-lab-deep-learning" && typeof window.initAiDeepLearningMateri === "function") {
                         window.initAiDeepLearningMateri();
                     }
                     if (path === "/participant-ai-lab-deep-learning-practice" && typeof window.initAiDeepLearningPractice === "function") {
@@ -1080,9 +1091,11 @@ const router = {
                     if (path === "/participant-ai-lab-deep-learning-discussion" && typeof window.initAiDeepLearningDiscussion === "function") {
                         window.initAiDeepLearningDiscussion();
                     }
+        });
                 } else if (path.startsWith("/participant-ai-lab-geospatial") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-geospatial" && typeof window.initAiGeospatialMateri === "function") {
+                    window.__aiLabLoader.load('ai-geospatial').then(function() {
+if (path === "/participant-ai-lab-geospatial" && typeof window.initAiGeospatialMateri === "function") {
                         window.initAiGeospatialMateri();
                     }
                     if (path === "/participant-ai-lab-geospatial-practice" && typeof window.initAiGeospatialPractice === "function") {
@@ -1094,10 +1107,12 @@ const router = {
                     if (path === "/participant-ai-lab-geospatial-discussion" && typeof window.initAiGeospatialDiscussion === "function") {
                         window.initAiGeospatialDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-manufacturing") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-manufacturing" && typeof window.initAiManufacturingMateri === "function") {
+                    window.__aiLabLoader.load('ai-manufacturing').then(function() {
+if (path === "/participant-ai-lab-manufacturing" && typeof window.initAiManufacturingMateri === "function") {
                         window.initAiManufacturingMateri();
                     }
                     if (path === "/participant-ai-lab-manufacturing-practice" && typeof window.initAiManufacturingPractice === "function") {
@@ -1109,10 +1124,12 @@ const router = {
                     if (path === "/participant-ai-lab-manufacturing-discussion" && typeof window.initAiManufacturingDiscussion === "function") {
                         window.initAiManufacturingDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-ui-ux") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-ui-ux" && typeof window.initAiUiUxMateri === "function") {
+                    window.__aiLabLoader.load('ai-ui-ux').then(function() {
+if (path === "/participant-ai-lab-ui-ux" && typeof window.initAiUiUxMateri === "function") {
                         window.initAiUiUxMateri();
                     }
                     if (path === "/participant-ai-lab-ui-ux-practice" && typeof window.initAiUiUxPractice === "function") {
@@ -1124,10 +1141,12 @@ const router = {
                     if (path === "/participant-ai-lab-ui-ux-discussion" && typeof window.initAiUiUxDiscussion === "function") {
                         window.initAiUiUxDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-healthcare") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-healthcare" && typeof window.initAiHealthcareMateri === "function") {
+                    window.__aiLabLoader.load('ai-healthcare').then(function() {
+if (path === "/participant-ai-lab-healthcare" && typeof window.initAiHealthcareMateri === "function") {
                         window.initAiHealthcareMateri();
                     }
                     if (path === "/participant-ai-lab-healthcare-practice" && typeof window.initAiHealthcarePractice === "function") {
@@ -1139,10 +1158,12 @@ const router = {
                     if (path === "/participant-ai-lab-healthcare-discussion" && typeof window.initAiHealthcareDiscussion === "function") {
                         window.initAiHealthcareDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-culture") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-culture" && typeof window.initAiCultureMateri === "function") {
+                    window.__aiLabLoader.load('ai-culture').then(function() {
+if (path === "/participant-ai-lab-culture" && typeof window.initAiCultureMateri === "function") {
                         window.initAiCultureMateri();
                     }
                     if (path === "/participant-ai-lab-culture-practice" && typeof window.initAiCulturePractice === "function") {
@@ -1154,10 +1175,12 @@ const router = {
                     if (path === "/participant-ai-lab-culture-discussion" && typeof window.initAiCultureDiscussion === "function") {
                         window.initAiCultureDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-people-business-mgt") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-people-business-mgt" && typeof window.initAiPeopleBusinessMgtMateri === "function") {
+                    window.__aiLabLoader.load('ai-people-business-mgt').then(function() {
+if (path === "/participant-ai-lab-people-business-mgt" && typeof window.initAiPeopleBusinessMgtMateri === "function") {
                         window.initAiPeopleBusinessMgtMateri();
                     }
                     if (path === "/participant-ai-lab-people-business-mgt-practice" && typeof window.initAiPeopleBusinessMgtPractice === "function") {
@@ -1169,10 +1192,12 @@ const router = {
                     if (path === "/participant-ai-lab-people-business-mgt-discussion" && typeof window.initAiPeopleBusinessMgtDiscussion === "function") {
                         window.initAiPeopleBusinessMgtDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-business-insight") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-business-insight" && typeof window.initAiBusinessInsightMateri === "function") {
+                    window.__aiLabLoader.load('ai-business-insight').then(function() {
+if (path === "/participant-ai-lab-business-insight" && typeof window.initAiBusinessInsightMateri === "function") {
                         window.initAiBusinessInsightMateri();
                     }
                     if (path === "/participant-ai-lab-business-insight-practice" && typeof window.initAiBusinessInsightPractice === "function") {
@@ -1184,10 +1209,12 @@ const router = {
                     if (path === "/participant-ai-lab-business-insight-discussion" && typeof window.initAiBusinessInsightDiscussion === "function") {
                         window.initAiBusinessInsightDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-back-end") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-back-end" && typeof window.initAiBackEndMateri === "function") {
+                    window.__aiLabLoader.load('ai-back-end').then(function() {
+if (path === "/participant-ai-lab-back-end" && typeof window.initAiBackEndMateri === "function") {
                         window.initAiBackEndMateri();
                     }
                     if (path === "/participant-ai-lab-back-end-practice" && typeof window.initAiBackEndPractice === "function") {
@@ -1199,10 +1226,12 @@ const router = {
                     if (path === "/participant-ai-lab-back-end-discussion" && typeof window.initAiBackEndDiscussion === "function") {
                         window.initAiBackEndDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-front-end") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-front-end" && typeof window.initAiFrontEndMateri === "function") {
+                    window.__aiLabLoader.load('ai-front-end').then(function() {
+if (path === "/participant-ai-lab-front-end" && typeof window.initAiFrontEndMateri === "function") {
                         window.initAiFrontEndMateri();
                     }
                     if (path === "/participant-ai-lab-front-end-practice" && typeof window.initAiFrontEndPractice === "function") {
@@ -1214,10 +1243,12 @@ const router = {
                     if (path === "/participant-ai-lab-front-end-discussion" && typeof window.initAiFrontEndDiscussion === "function") {
                         window.initAiFrontEndDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-deployment") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-deployment" && typeof window.initAiDeploymentMateri === "function") {
+                    window.__aiLabLoader.load('ai-deployment').then(function() {
+if (path === "/participant-ai-lab-deployment" && typeof window.initAiDeploymentMateri === "function") {
                         window.initAiDeploymentMateri();
                     }
                     if (path === "/participant-ai-lab-deployment-practice" && typeof window.initAiDeploymentPractice === "function") {
@@ -1229,10 +1260,12 @@ const router = {
                     if (path === "/participant-ai-lab-deployment-discussion" && typeof window.initAiDeploymentDiscussion === "function") {
                         window.initAiDeploymentDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-infrastructure") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-infrastructure" && typeof window.initAiInfrastructureMateri === "function") {
+                    window.__aiLabLoader.load('ai-infrastructure').then(function() {
+if (path === "/participant-ai-lab-infrastructure" && typeof window.initAiInfrastructureMateri === "function") {
                         window.initAiInfrastructureMateri();
                     }
                     if (path === "/participant-ai-lab-infrastructure-practice" && typeof window.initAiInfrastructurePractice === "function") {
@@ -1244,10 +1277,12 @@ const router = {
                     if (path === "/participant-ai-lab-infrastructure-discussion" && typeof window.initAiInfrastructureDiscussion === "function") {
                         window.initAiInfrastructureDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-data-science") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-data-science" && typeof window.initAiDataScienceMateri === "function") {
+                    window.__aiLabLoader.load('ai-data-science').then(function() {
+if (path === "/participant-ai-lab-data-science" && typeof window.initAiDataScienceMateri === "function") {
                         window.initAiDataScienceMateri();
                     }
                     if (path === "/participant-ai-lab-data-science-practice" && typeof window.initAiDataSciencePractice === "function") {
@@ -1259,10 +1294,12 @@ const router = {
                     if (path === "/participant-ai-lab-data-science-discussion" && typeof window.initAiDataScienceDiscussion === "function") {
                         window.initAiDataScienceDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-data-engineering") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-data-engineering" && typeof window.initAiDataEngineeringMateri === "function") {
+                    window.__aiLabLoader.load('ai-data-engineering').then(function() {
+if (path === "/participant-ai-lab-data-engineering" && typeof window.initAiDataEngineeringMateri === "function") {
                         window.initAiDataEngineeringMateri();
                     }
                     if (path === "/participant-ai-lab-data-engineering-practice" && typeof window.initAiDataEngineeringPractice === "function") {
@@ -1274,10 +1311,12 @@ const router = {
                     if (path === "/participant-ai-lab-data-engineering-discussion" && typeof window.initAiDataEngineeringDiscussion === "function") {
                         window.initAiDataEngineeringDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-bioinformatics") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-bioinformatics" && typeof window.initAiBioinformaticsMateri === "function") {
+                    window.__aiLabLoader.load('ai-bioinformatics').then(function() {
+if (path === "/participant-ai-lab-bioinformatics" && typeof window.initAiBioinformaticsMateri === "function") {
                         window.initAiBioinformaticsMateri();
                     }
                     if (path === "/participant-ai-lab-bioinformatics-practice" && typeof window.initAiBioinformaticsPractice === "function") {
@@ -1289,10 +1328,12 @@ const router = {
                     if (path === "/participant-ai-lab-bioinformatics-discussion" && typeof window.initAiBioinformaticsDiscussion === "function") {
                         window.initAiBioinformaticsDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-agentic-ai") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-agentic-ai" && typeof window.initAiAgenticAiMateri === "function") {
+                    window.__aiLabLoader.load('ai-agentic-ai').then(function() {
+if (path === "/participant-ai-lab-agentic-ai" && typeof window.initAiAgenticAiMateri === "function") {
                         window.initAiAgenticAiMateri();
                     }
                     if (path === "/participant-ai-lab-agentic-ai-practice" && typeof window.initAiAgenticAiPractice === "function") {
@@ -1304,10 +1345,13 @@ const router = {
                     if (path === "/participant-ai-lab-agentic-ai-discussion" && typeof window.initAiAgenticAiDiscussion === "function") {
                         window.initAiAgenticAiDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-multimodal-llm") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-multimodal-llm" && typeof window.initAiMultimodalLlmMateri === "function") {
+                    window.__aiLabLoader.load('ai-multimodal-llm').then(function() {
+window.__aiLabLoader.load('ai-multimodal-llm').then(function() {
+if (path === "/participant-ai-lab-multimodal-llm" && typeof window.initAiMultimodalLlmMateri === "function") {
                         window.initAiMultimodalLlmMateri();
                     }
                     if (path === "/participant-ai-lab-multimodal-llm-practice" && typeof window.initAiMultimodalLlmPractice === "function") {
@@ -1319,10 +1363,13 @@ const router = {
                     if (path === "/participant-ai-lab-multimodal-llm-discussion" && typeof window.initAiMultimodalLlmDiscussion === "function") {
                         window.initAiMultimodalLlmDiscussion();
                     }
+        });
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-vlm") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-vlm" && typeof window.initAiVlmMateri === "function") {
+                    window.__aiLabLoader.load('ai-vlm').then(function() {
+if (path === "/participant-ai-lab-vlm" && typeof window.initAiVlmMateri === "function") {
                         window.initAiVlmMateri();
                     }
                     if (path === "/participant-ai-lab-vlm-practice" && typeof window.initAiVlmPractice === "function") {
@@ -1334,10 +1381,12 @@ const router = {
                     if (path === "/participant-ai-lab-vlm-discussion" && typeof window.initAiVlmDiscussion === "function") {
                         window.initAiVlmDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-large-language-model") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-large-language-model" && typeof window.initAiLargeLanguageModelMateri === "function") {
+                    window.__aiLabLoader.load('ai-large-language-model').then(function() {
+if (path === "/participant-ai-lab-large-language-model" && typeof window.initAiLargeLanguageModelMateri === "function") {
                         window.initAiLargeLanguageModelMateri();
                     }
                     if (path === "/participant-ai-lab-large-language-model-practice" && typeof window.initAiLargeLanguageModelPractice === "function") {
@@ -1349,10 +1398,12 @@ const router = {
                     if (path === "/participant-ai-lab-large-language-model-discussion" && typeof window.initAiLargeLanguageModelDiscussion === "function") {
                         window.initAiLargeLanguageModelDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-reinforcement-learning") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initAiReinforcementLearningMateri === "function") {
+                    window.__aiLabLoader.load('ai-reinforcement-learning').then(function() {
+if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initAiReinforcementLearningMateri === "function") {
                         window.initAiReinforcementLearningMateri();
                     }
                     if (path === "/participant-ai-lab-reinforcement-learning-practice" && typeof window.initAiReinforcementLearningPractice === "function") {
@@ -1364,6 +1415,7 @@ const router = {
                     if (path === "/participant-ai-lab-reinforcement-learning-discussion" && typeof window.initAiReinforcementLearningDiscussion === "function") {
                         window.initAiReinforcementLearningDiscussion();
                     }
+        });
 
                 } else if (path.startsWith("/participant-ai-lab-math") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
@@ -1446,7 +1498,8 @@ const router = {
 
                 } else if (path.startsWith("/participant-ai-evaluation") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-evaluation" && typeof window.initAiEvaluationMateri === "function") {
+                    window.__aiLabLoader.load('ai-evaluation').then(function() {
+if (path === "/participant-ai-evaluation" && typeof window.initAiEvaluationMateri === "function") {
                         window.initAiEvaluationMateri();
                     }
                     if (path === "/participant-ai-evaluation-practice" && typeof window.initAiEvaluationPractice === "function") {
@@ -1458,9 +1511,11 @@ const router = {
                     if (path === "/participant-ai-evaluation-discussion" && typeof window.initAiEvaluationDiscussion === "function") {
                         window.initAiEvaluationDiscussion();
                     }
+        });
                 } else if (path.startsWith("/participant-ai-evolution") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-evolution" && typeof window.initAiEvolutionMateri === "function") {
+                    window.__aiLabLoader.load('ai-evolution').then(function() {
+if (path === "/participant-ai-evolution" && typeof window.initAiEvolutionMateri === "function") {
                         window.initAiEvolutionMateri();
                     }
                     if (path === "/participant-ai-evolution-practice" && typeof window.initAiEvolutionPractice === "function") {
@@ -1472,6 +1527,7 @@ const router = {
                     if (path === "/participant-ai-evolution-discussion" && typeof window.initAiEvolutionDiscussion === "function") {
                         window.initAiEvolutionDiscussion();
                     }
+        });
                 } else if (path.startsWith("/participant-ai-") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
                 } else if (path.startsWith("/participant-specialization-") && typeof window.initFellowDashboardPage === "function") {

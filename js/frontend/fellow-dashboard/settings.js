@@ -8,6 +8,28 @@
     const PARTICIPANT_SESSION_KEY = 'heraiParticipantSession';
 
     var _dashboardDataCache = null;
+
+    // ---------------------------------------------------------------
+    // AI Lab Module Loader — Lazy loading for 29 ai-*.js modules
+    // Loaded on-demand when user navigates to a module page.
+    // ---------------------------------------------------------------
+    window.__aiLabLoader = {
+        cache: new Set(),
+        _pending: {},
+        load: function(name) {
+            if (this.cache.has(name)) return Promise.resolve();
+            if (this._pending[name]) return this._pending[name];
+            this._pending[name] = new Promise(function(resolve, reject) {
+                var s = document.createElement('script');
+                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260727-lazy';
+                s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
+                s.onerror = function() { delete window.__aiLabLoader._pending[name]; reject(new Error('Failed to load: ' + name)); };
+                document.head.appendChild(s);
+            });
+            return this._pending[name];
+        }
+    };
+
     const DEFAULT_SETTINGS = {
         enabled: true,
         pages: {
