@@ -2037,12 +2037,16 @@
         var uploadBtn = document.querySelector('.btn-upload');
         var removeBtn = document.querySelector('.btn-remove');
 
-        // Hidden file input for photo upload
-        var fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/*';
-        fileInput.style.display = 'none';
-        document.body.appendChild(fileInput);
+        // Single hidden file input, reused across re-entries
+        var fileInput = document.getElementById('__avatarFileInput');
+        if (!fileInput) {
+            fileInput = document.createElement('input');
+            fileInput.id = '__avatarFileInput';
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.style.display = 'none';
+            document.body.appendChild(fileInput);
+        }
 
         // Update remove button visibility based on photo_url
         function updateRemoveVisibility() {
@@ -2060,7 +2064,9 @@
             });
         }
 
-        fileInput.addEventListener('change', async function() {
+        if (!fileInput.dataset.listenerAttached) {
+            fileInput.dataset.listenerAttached = 'true';
+            fileInput.addEventListener('change', async function() {
             var file = fileInput.files && fileInput.files[0];
             if (!file) return;
             if (!file.type.match(/image\/(jpeg|png|gif|webp)/)) {
@@ -2111,6 +2117,7 @@
                 }
             }
         });
+        }
 
         if (removeBtn) {
             removeBtn.addEventListener('click', async function() {
