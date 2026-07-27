@@ -458,20 +458,22 @@ End-to-end user journey tests — mensimulasikan real participant behavior dari 
 
 ## Session Summary — 27 Juli 2026 (Sisyphus — E2E Test Suite Complete)
 
-**Total commits:** 50 (25 original + 7 sesi lalu + 9 sesi sebelumnya + 9 sesi ini)
+**Total commits:** 51 (25 original + 7 sesi lalu + 9 sesi sebelumnya + 10 sesi ini)
 **Grand total bugs/features:** #1-#62
 **E2E Test Suite:** 53 tests (20 backend + 25 frontend + 8 workflow) — 53/53 PASS serial
 
-**Files changed sesi ini:** 24 JS files + 2 CSS rules + 2 extraction scripts + 21 JSON outputs + 3 handover docs + 3 test files
+**Files changed sesi ini:** 24 JS files + 2 CSS rules + 2 extraction scripts + 21 JSON outputs + 5 handover docs + 3 test files
 
 **Key deliverables:**
 | # | Item | Detail |
 |---|------|--------|
 | #57 | Python contamination | 24 module JS — GUIDES dari Nazril MD (20) + placeholder (4) |
 | #58 | Topic-label badges | 1 CSS rule hide 313+ labels di seluruh halaman |
-| — | ai-python.js | 8 GUIDES konten Python proper |
-| #60 | P1 Backend tests | 20 tests, pure HTTP, 20/20 PASS |
-| #61 | P2 Frontend tests | 25 tests, fix 3 flaky + 8 new, 25/25 PASS |
+| #59 | ai-python.js | 8 GUIDES konten Python proper (dari placeholder) |
+| #60 | P1 Backend tests | 20 tests, pure HTTP fetch(POST /__gas) |
+| #61 | P2 Frontend tests | 25 tests, fix 3 flaky + 8 new UI coverage |
+| #62 | P3 Workflow tests | 8 tests, full user journey simulation |
+| — | NEXT_PLAN.md | 6 priorities: content quality + UX + performance |
 
 **Tools created:**
 ```bash
@@ -481,19 +483,15 @@ node scripts/inject-guides.js --phase=all      # Inject all
 node scripts/inject-guides.js --phase=1 --dry-run  # Preview
 ```
 
-**Next priority:** E2E test suite (ALL DONE ✅)
-- ✅ P1: `e2e/participant-backend.spec.js` — 20 backend API tests (20/20 PASS)
-- ✅ P2: `e2e/fellow-dashboard.spec.js` — 25 frontend UI tests (25/25 PASS)
-- ✅ P3: `e2e/participant-workflow.spec.js` — 8 full flow integration (8/8 PASS)
-- 🎯 **Total: 53/53 PASS (serial), 50/53 PASS (parallel)**
+**Next priority:** NEXT_PLAN.md — 6 priorities (content quality + UX + performance)
+- 🔴 P1: Business module glossary fix (7 modules — boilerplate → spesifik)
+- 🔴 P2: Foundation module glossary fix (6 modules — placeholder → proper)
+- 🔴 P3: Module bersih content (cv, math-for-ai, ml-basic, reasoning)
+- 🟡 P4: Lazy loading (75 script tags → on-demand, 90% size reduction)
+- 🟡 P5: AI lab UX polish (animations, transitions, micro-interactions)
+- 🟢 P6: ai-python.js content review
 
----
-
-## 62. Feature: P3 — Full Flow Integration E2E Test Suite
-
----
-
-## 61. Feature: P2 — Enhanced Frontend E2E Test Suite (#61)
+**Quick wins:** P6 → P1 → P2 (bisa langsung dikerjain)
 
 ---
 
@@ -501,7 +499,7 @@ node scripts/inject-guides.js --phase=1 --dry-run  # Preview
 
 1. Commit PER FITUR — jangan gabung fitur beda
 2. Update handover & gemini.md setiap selesai fitur
-3. Bug baru: lanjut #59, #60, dst
+3. Bug baru: lanjut #63, #64, dst
 4. No dark theme — light pink
 5. CSS scope: ai-lab-content
 6. Diagram kontras: lines ≥25%, dots ≥75%, stroke ≥0.8px

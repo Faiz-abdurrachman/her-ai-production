@@ -1,7 +1,7 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║  AI TRANSFER PROMPT — HerAI Fellowship SuperApp              ║
 ║  Sesi: 27 Juli 2026 (Sisyphus sesi ke-2) → Next AI           ║
-║  Total sesi: 45 commit | Worktree: BERSIH                     ║
+║  Total: 51 commit | Worktree: BERSIH | E2E: 53/53 PASS        ║
 ╚══════════════════════════════════════════════════════════════╝
 
 ⚠️  BACA SELURUH FILE INI SEBELUM MULAI KERJA.
@@ -11,8 +11,9 @@
 📋 SUMBER KEBENARAN (WAJIB DIBACA — URUTAN PENTING)
 ═══════════════════════════════════════════════════════════════
 1. handover/AI_HANDOFF_CURRENT_STATE.md  ← SINGLE SOURCE OF TRUTH
-2. gemini.md  ← Bug log #1-59 + session rules
-3. NEXT_AI_TRANSFER_PROMPT.txt ini  ← Execution plan + discussion points
+2. gemini.md  ← Bug log #1-62 + session rules
+3. handover/NEXT_PLAN.md  ← 6 priorities for next session
+4. NEXT_AI_TRANSFER_PROMPT.txt ini  ← System identity + rules
 
 ═══════════════════════════════════════════════════════════════
 🔧 IDENTITAS SISTEM
@@ -23,10 +24,10 @@
 - SPA: Vanilla JS hash-router, Node.js proxy (node server.js → http://127.0.0.1:3000)
 - Proxy: POST /__gas (token auto-injected oleh main.js)
 - WA env: GAS_WEB_APP_URL di .env
-- Last commit: d82ebc7
-- Worktree: BERSIH (hanya untracked: scratch/, scripts/test-settings.js, nazril/)
+- Last commit: bc309dd
+- Worktree: BERSIH
 - Test participant: NIK 8204086711010003 / Password brenda123
-- Playwright: 17 tests, 15 stable, 2 flaky (practice + password timing)
+- E2E: 53/53 PASS (serial), 50/53 PASS (parallel — 3 password race conditions)
 
 ═══════════════════════════════════════════════════════════════
 🚫 HARD BLOCK — JANGAN DISENTUH
@@ -41,13 +42,14 @@
 - js/main.js, js/router.js (kecuali tambah route/handler baru — TANYA DULU)
 - ai-python-basic.js — INTENTIONAL SKIP, conflict namespace dengan ai-python.js
 - ai-cv.js — tidak ada quiz/practice (SKIP dari wiring)
+- Module bersih (5): cv, math-for-ai, ml-basic, python-basic, reasoning (TANYA DULU sebelum update)
 
 ═══════════════════════════════════════════════════════════════
 ✅ APA YANG SUDAH SELESAI — JANGAN DIULANG
 ═══════════════════════════════════════════════════════════════
 
 DARI SESI SEBELUMNYA (41 commit — bugs #1-#57):
-- Task A: saveChapterProgress wiring ke 28 module JS — auto-save tiap buka chapter
+- Task A: saveChapterProgress wiring ke 28 module JS
 - Task B: 7 GAS seed functions, 27 modul, idempotent (upsertByKey)
 - Task C: Skeleton loader, error state, fade-in transitions
 - #52: Dashboard Score Display — quiz_score di GAS + badge UI + CSS
@@ -56,39 +58,22 @@ DARI SESI SEBELUMNYA (41 commit — bugs #1-#57):
 - #55: Score normalization — quiz_total column, semua score → persentase seragam
 - #56: math-for-ai seed added + routes reverted
 
-DARI SESI INI (4 commit — #57-#59):
+DARI SESI INI (10 commit — #57-#62):
 
-1. BUG #57 — KONTEN PYTHON NYASAR (RESOLVED) — commit b0ae9bb, 9a9c428:
-   - 24 dari 29 file ai-*.js punya PYTHON_GUIDES template Python
-     ("Jalur Pemula", "Python adalah penghubung") — diganti konten module-specific
-   - Sumber konten: /nazril/modul-materi-herai/ (20 MD file dari Nazril)
-   - Fase 0: scripts/extract-nazril-guides.js — dual-format MD parser
-     (template: ## Gambaran Sederhana untuk business/data-eng,
-      naratif: ## N.N untuk foundation/gen-ai)
-   - Fase 0: scripts/inject-guides.js — GUIDES + roadmap header injector
-   - Fase 1: 7 Business modules injected (ui-ux, healthcare, dll)
-   - Fase 2: 7 Data Eng modules injected (deployment, back-end, dll)
-   - Fase 3: 6 Foundation/Gen AI modules injected (deep-learning, agentic-ai, dll)
-   - Fase 4: 4 modules placeholder (evaluation, evolution, modern, python — saat itu)
-   - Roadmap header: "Jalur Pemula" → module-specific badge + subtitle
-   - Verifikasi: node --check 24/24 PASS, 0 "Jalur Pemula", 0 "Python adalah penghubung"
-   - Module bersih (5 TIDAK DISENTUH): cv, math-for-ai, ml-basic, python-basic, reasoning
+BUG FIXES (3 commit):
+1. #57 — KONTEN PYTHON NYASAR: 24 module JS diganti konten module-specific dari Nazril MD
+2. #58 — TOPIK 01/02 BADGES: Hide via 1 baris CSS (.topic-label { display: none !important })
+3. #59 — AI-PYTHON.JS REWRITE: 8 GUIDES konten Python proper
 
-2. BUG #58 — "TOPIK 01/02" BADGES (RESOLVED) — commit 448f46e:
-   - 313 chapter HTML files punya inline <div class="topic-label">Topik 01</div>
-   - Fix: 1 baris CSS di dashboard.css — .topic-label { display: none !important; }
-   - Tidak edit 313 file satu-satu
-   - Cache buster: dashboard.css?v=20260727-topic-label
-   - PERHATIAN: commit a26286a (remove "Topik N:" dari h3) sudah DIREVERT
-     karena judul "Topik 2: Data Kesehatan..." itu SUDAH BENAR.
-     Yang dihapus cuma badge pill "Topik 01/02" di dalam konten chapter.
+E2E TEST SUITE (5 commit):
+4. #60 — P1 Backend API: 20 tests, pure HTTP fetch(POST /__gas)
+5. #61 — P2 Frontend UI: Fix 3 flaky + 8 new = 25 tests
+6. #62 — P3 Full Flow: 8 workflow integration tests
+   TOTAL: 53/53 PASS (serial), 50/53 PASS (parallel)
 
-3. BUG #59 — AI-PYTHON.JS REWRITE (RESOLVED) — commit d82ebc7:
-   - ai-python.js sebelumnya placeholder generic — sekarang konten Python proper
-   - 8 GUIDES entries: Python Mindset, Data Dasar, Control Flow, Function,
-     OOP, Error & File, NumPy, Mini Workflow
-   - Bahasa Indonesia, contoh kasus AI/ML workflow, glossary + quickCheck + challenge
-   - JSON juga disimpan ke scripts/nazril-guides-output/guides-python.json
+DOCUMENTATION (2 commit):
+7. handover/NEXT_PLAN.md — 6 priorities for next session
+8. Complete handover rewrite (AI_HANDOFF_CURRENT_STATE.md + NEXT_AI_TRANSFER_PROMPT.txt)
 
 ═══════════════════════════════════════════════════════════════
 ⚠️  TEMUAN KRITIS — YANG HARUS DIKETAHUI NEXT AI
@@ -107,46 +92,57 @@ DARI SESI INI (4 commit — #57-#59):
    - getGlobalSettings() sync return default {participantPortalOpen: false}
    - Playwright: primeSettings() inject localStorage sebelum navigasi
 
-4. ai-python-basic.js (#47):
-   - INTENTIONAL skip — namespace collision dengan ai-python.js
+4. GAS API Payload Shapes (VERIFIED from gas/Code.gs):
+   - Token field: participantToken (BUKAN token) — requireParticipantToken(payload)
+   - Login response: {status, profile, token, expires_at}
+   - Dashboard response: {status, data: {modules, tracks, journey, events, leaderboard}}
+   - Progress response: {status, data: [...]} — field name is 'data', NOT 'progress'
+   - chapter_id returned as NUMBER from sheet — use String() comparison
+
+5. Playwright navigation — CRITICAL:
+   - GUNAKAN page.goto() untuk SPA hash navigation (page.evaluate hash nav UNRELIABLE)
+   - Setelah login, page.goto() ke URL hash langsung
+   - Quiz/Practice forms di-render oleh IIFE — tunggu dengan waitForFunction()
+
+6. Server.js has isAllowedAppRequest() — fetch() tests NEED Origin header:
+   - headers: { 'Content-Type': 'application/json', 'Origin': 'http://127.0.0.1:3000' }
+
+7. ai-python-basic.js:
+   - INTENTIONAL SKIP — namespace collision dengan ai-python.js
    - KEDUANYA define window.loadPythonTopik()
 
-5. Score normalization SUDAH DONE (#55):
-   - Semua quiz_score sekarang persentase (0-100%) dari GAS
-   - FE formatQuizBadge selalu X% (tidak ada lagi heuristik >20)
+8. Score normalization SUDAH DONE (#55):
+   - Semua quiz_score persentase (0-100%) dari GAS
+   - FE formatQuizBadge selalu X%
 
-6. Playwright navigation:
-   - Setelah login, pakai page.evaluate(() => window.location.hash = '...')
-   - JANGAN page.goto() — SPA hash routing tidak triggered dengan benar
+9. Module chapter auto-resume: BY DESIGN — localStorage per module
 
-7. Module chapter auto-resume: by design, bukan bug
+10. GAS Perlu Redeploy SETIAP edit Code.gs (session ini TIDAK edit Code.gs)
 
-8. GAS Perlu Redeploy SETIAP edit Code.gs:
-   - Apps Script → Deploy → New deployment → Web app → Deploy
+11. ai-modern.js: STRUKTUR BERBEDA
+    - Tidak punya PYTHON_GUIDES — punya BEGINNER_GUIDES
+    - eyebrow: "Jalur Pemula" → "AI Modern"
 
-9. ai-modern.js: STRUKTUR BERBEDA dari file lain
-   - Tidak punya PYTHON_GUIDES — punya BEGINNER_GUIDES dengan key "01-materi.html"
-   - eyebrow: "Jalur Pemula" sudah diganti ke "AI Modern"
+12. Nazril MD content quality:
+    - Business modules (7): Konsep Inti boilerplate — PRIORITY #1 fix
+    - Foundation/Gen AI modules (6): Glossary juga placeholder — PRIORITY #2 fix
+    - Extraction scripts: bisa re-run kapan saja
 
-10. 231 chapter HTML file: punya inline topic-label — sudah di-handle via CSS global
-
-11. Nazril MD content quality:
-    - Business modules (7): konten agak generik di Konsep Inti
-      (deskripsi boilerplate "konsep penting dalam...")
-    - Foundation/Gen AI modules (6): konten JAUH lebih kaya dan teknis
-    - Extraction scripts bisa re-run kapan saja untuk update konten
+13. Performance: 75 script tags di index.html — ~4.5MB JS eager-loaded
+    - PRIORITY #4: Lazy loading
 
 ═══════════════════════════════════════════════════════════════
-📐 ATURAN KERJA — 16 RULE WAJIB
+📐 ATURAN KERJA — 18 RULE WAJIB
 ═══════════════════════════════════════════════════════════════
-1. Commit PER FITUR | 2. Update handover & gemini.md | 3. Bug baru #60+
+1. Commit PER FITUR | 2. Update handover & gemini.md | 3. Bug baru #63+
 4. No dark theme — light pink | 5. CSS scope ai-lab-content
 6. Diagram kontras: lines ≥25%, dots ≥75%, stroke ≥0.8px
 7. NO NIK/password exposed | 8. TANYA user kalo ambigu
 9. Verify: node --check, test flow, null guards | 10. NO provision/generate
 11. NO touch 231 lesson files — pakai CSS/JS injection | 12. sessionStorage = source of truth
 13. Bump cache buster | 14. No silent fail | 15. NO push GitHub
-16. Redeploy GAS after Code.gs edit | 17. Jangan edit module bersih (5 file)
+16. Redeploy GAS after Code.gs edit | 17. Jangan edit module bersih tanpa approval
+18. page.goto() > page.evaluate() untuk SPA nav
 
 ═══════════════════════════════════════════════════════════════
 🔑 DATA FLOW
@@ -165,120 +161,58 @@ SETTINGS: localStorage.heraiGlobalSettings → participantPortalOpen boolean
 ═══════════════════════════════════════════════════════════════
 ✅ BOLEH: settings.js, ai-*.js (24 injected + ai-python.js rewritten),
           dashboard.html, dashboard.css, settings.css, gas/Code.gs (bug fix only),
-          index.html (cache buster only), e2e/*.spec.js, gemini.md, handover/,
-          scripts/extract-nazril-guides.js, scripts/inject-guides.js, nazril/
-❌ JANGAN: main.js, router.js, messaging.js, 231 lesson files,
-           Go services, admin dashboard, 5 module bersih
+          index.html (cache buster + lazy loading), e2e/*.spec.js, gemini.md,
+          handover/, scripts/extract-nazril-guides.js, scripts/inject-guides.js
+
+❌ JANGAN: main.js, router.js (kecuali lazy loading — TANYA DULU),
+           messaging.js, 231 lesson files, Go services, admin dashboard,
+           5 module bersih (TANYA DULU), ai-python-basic.js (HARD BLOCK)
 
 ═══════════════════════════════════════════════════════════════
-🔴 PRIORITAS #1 — E2E Test Suite (PLAN READY, NOT IMPLEMENTED)
+🔴 FOKUS NEXT SESSION — NEXT_PLAN.md
 ═══════════════════════════════════════════════════════════════
 
-User minta test end-to-end komprehensif (frontend + backend),
-terutama backend untuk pantau progress peserta.
+BACA: handover/NEXT_PLAN.md (FULL)
 
-3 FILE TEST, ~53 TOTAL TESTS:
+6 Priorities:
+| # | Task | Effort |
+|---|------|--------|
+| P1 | Business module glossary fix (7 modul) | 2-3h |
+| P2 | Foundation module glossary (6 modul) | 2-3h |
+| P3 | Module bersih content (3-4 modul) | 8-12h |
+| P4 | Lazy loading + code splitting | 3-5h |
+| P5 | AI lab UX polish | 5-8h |
+| P6 | ai-python.js review | 1-2h |
 
-📁 A. e2e/participant-backend.spec.js — Backend API Tests (NEW, P1, ~20 tests)
-
-Test via fetch(POST /__gas) langsung, tanpa browser.
-KRITIS: backend harus benar sebelum frontend di-test.
-
-Test actions:
-  1. participantLogin — valid credentials → token + nama_lengkap
-  2. participantLogin — NIK tidak terdaftar → error
-  3. participantLogin — password salah → error
-  4. participantLogin — field kosong → error
-  5. Token TTL — pastikan 12 jam
-  6. Token expired → error "token expired"
-  7. No token → error
-  8. saveParticipantProgress — chapter 1 completed → success + cek sheet
-  9. saveParticipantProgress — quiz score=15 → success
-  10. saveParticipantProgress — practice completed → success
-  11. getParticipantProgress — verify all saved data
-  12. Progress idempotent — save chapter 1 dua kali, tidak duplikat
-  13. getParticipantDashboardData — modules, quiz_score persentase, events, tracks
-  14. Dashboard no auth → error
-  15. changeParticipantPassword — old+new valid → success
-  16. changeParticipantPassword — wrong old → error
-  17. changeParticipantPassword — empty fields → error
-  18. Change password → login dengan password baru → ganti balik
-  19. updateParticipantProfile — whatsapp → session terupdate
-  20. Quiz score persistent — submit 3x (10,15,12) → highest (15) kept
-
-Run: TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test e2e/participant-backend.spec.js
-
-📁 B. e2e/fellow-dashboard.spec.js — Frontend UI (Enhanced, P2, 17→25 tests)
-
-Fix 2 flaky tests + tambah 8 new test:
-  Fix: Practice render (flaky — waitFor state:attached + waitForFunction)
-  Fix: Password validation (flaky — retry logic, waitForSelector spesifik)
-
-  NEW test:
-  8. Dashboard module cards render — min 5 cards muncul
-  9. Dashboard quiz badge format — cek X% (bukan /20)
-  10. Dashboard skeleton loader — shimmer sebelum data
-  11. Module overview — konten module-specific (grep "Python" di healthcare → 0)
-  12. Module overview — 8 roadmap cards, judul dari CHAPTERS
-  13. Module overview — GUIDES hook question relevan dengan modul
-  14. Topik label hidden — .topic-label tidak muncul di DOM
-  15. Logout → sessionStorage cleared
-
-📁 C. e2e/participant-workflow.spec.js — Full Flow (NEW, P3, ~8 tests)
-
-End-to-end user journey — mensimulasikan real participant behavior:
-  1. Login → Dashboard → Module → Quiz submit → Verify score di dashboard
-  2. Chapter auto-save — navigasi 1,2,3 → reload → resume chapter 3
-  3. Practice save — isi textarea → save → cek localStorage + GAS
-  4. Password change full cycle — ganti → logout → login baru → ganti balik
-  5. Dashboard cache — dashboard→module→back→instant (no skeleton)
-  6. Multi-module progress — buka 2 module, progress masing-masing
-  7. Quiz badge update — no badge → quiz submit → badge muncul
+QUICK WINS (kerjain duluan):
+- P6: ai-python.js review (paling ringan)
+- P1: Business glossary fix (high impact, low risk)
+- P2: Foundation glossary fix (high impact, low risk)
 
 ═══════════════════════════════════════════════════════════════
-🎯 YANG HARUS DILAKUKAN NEXT AI — CHECKLIST
+📞 YANG HARUS DIKONFIRMASI KE USER SEBELUM MULAI
 ═══════════════════════════════════════════════════════════════
 
-☐ 1. BACA handover/AI_HANDOFF_CURRENT_STATE.md (FULL — single source of truth)
-☐ 2. BACA gemini.md (FULL — bug #1-59 + session rules)
-☐ 3. BACA NEXT_AI_TRANSFER_PROMPT.txt ini (FULL)
-☐ 4. KONFIRMASI ke user: "Saya sudah baca semua handover. Mulai dari
-      E2E test P1 (participant-backend.spec.js — backend API tests)?"
-☐ 5. JANGAN mulai kerja sebelum user konfirmasi
-☐ 6. P1: Buat e2e/participant-backend.spec.js (~20 backend API tests)
-☐ 7. P2: Enhance e2e/fellow-dashboard.spec.js (fix 2 flaky + 8 new)
-☐ 8. P3: Buat e2e/participant-workflow.spec.js (~8 full flow tests)
-☐ 9. Setiap selesai satu file test: run + fix + commit
-☐ 10. Update gemini.md (#60+) setiap commit
-☐ 11. TANYA user kalau ada yang ambigu
-
-═══════════════════════════════════════════════════════════════
-📞 DISKUSI YANG PERLU DIKONFIRMASI DENGAN USER
-═══════════════════════════════════════════════════════════════
-
-1. Mulai P1 (backend API) dulu baru P2/P3, atau semua sekaligus?
-2. Flaky tests (practice + password) — fix bareng P2?
-3. ai-python.js — konten sudah rewrite, perlu direview?
-4. Business module Nazril MD — Konsep Inti deskripsi agak generik.
-   Revisit konten atau sudah cukup?
-5. Module bersih (cv, math-for-ai, ml-basic, python-basic, reasoning) —
-   ada rencana update?
+1. "Saya sudah baca semua handover + gemini.md + NEXT_PLAN.md."
+2. "Mulai dari P6 (ai-python.js review) dulu, lalu P1 (business glossary)?"
+3. "Perlu update module bersih (cv, math-for-ai, ml-basic, reasoning)?"
+4. "Ada sesuatu yang perlu didiskusikan sebelum mulai kerja?"
+5. JANGAN mulai kerja sebelum user konfirmasi.
 
 ═══════════════════════════════════════════════════════════════
 🔧 TOOLS & SCRIPTS
 ═══════════════════════════════════════════════════════════════
 
-# Extraction script (parse Nazril MD → GUIDES JSON)
+# Extract Nazril MD → GUIDES JSON
 node scripts/extract-nazril-guides.js
 
-# Injection script (apply GUIDES ke ai-*.js)
+# Inject GUIDES ke ai-*.js
 node scripts/inject-guides.js --phase=1    # Business
 node scripts/inject-guides.js --phase=2    # Data Eng
 node scripts/inject-guides.js --phase=3    # Foundation/Gen AI
-node scripts/inject-guides.js --phase=4    # Placeholder
 node scripts/inject-guides.js --dry-run    # Preview
 
-# Run Playwright tests
+# Playwright tests
 TEST_PARTICIPANT_NIK="8204086711010003" \
 TEST_PARTICIPANT_PASSWORD="brenda123" \
 npx playwright test
@@ -286,10 +220,14 @@ npx playwright test
 # Server lokal
 node server.js  # → http://127.0.0.1:3000
 
-# Syntax check all modules
+# Syntax check semua module
 for f in js/frontend/fellow-dashboard/ai-*.js; do
   node --check "$f" && echo "✅" || echo "❌ $f"
 done
 
 # Check Python contamination
-grep -c "Jalur Pemula\|Python adalah penghubung" js/frontend/fellow-dashboard/ai-*.js | grep -v ":0$"
+grep -c "Jalur Pemula\|Python adalah penghubung" \
+  js/frontend/fellow-dashboard/ai-*.js | grep -v ":0$"
+
+# Check glossary quality (boilerplate detection)
+grep -c "konsep penting dalam" js/frontend/fellow-dashboard/ai-*.js | grep -v ":0$"
