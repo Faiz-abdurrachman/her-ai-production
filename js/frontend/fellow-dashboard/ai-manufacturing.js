@@ -300,12 +300,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["cycle time", "konsep penting dalam proses produksi dan kpi operasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["yield", "konsep penting dalam proses produksi dan kpi operasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["OEE", "konsep penting dalam proses produksi dan kpi operasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["downtime", "konsep penting dalam proses produksi dan kpi operasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["scrap", "konsep penting dalam proses produksi dan kpi operasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["safety", "konsep penting dalam proses produksi dan kpi operasi yang perlu diberi definisi operasional sebelum dipakai"]
+                ["cycle time", "Waktu total dari mulai sampai selesainya satu unit produksi. Target: turunkan tanpa mengorbankan kualitas. Bottleneck di satu stasiun bisa memperlambat seluruh lini."],
+                ["yield", "Rasio unit yang memenuhi standar kualitas terhadap total unit diproduksi. First-pass yield: lolos inspeksi pertama. Overall yield: setelah rework."],
+                ["OEE", "Overall Equipment Effectiveness — metrik gabungan: Availability × Performance × Quality. Nilai 85%+ dianggap world-class. Mengidentifikasi di mana kerugian terbesar terjadi."],
+                ["downtime", "Waktu mesin/lini tidak berproduksi: planned (maintenance, changeover) atau unplanned (breakdown, material shortage). Unplanned downtime adalah target utama predictive maintenance."],
+                ["scrap", "Material/produk yang tidak bisa diperbaiki dan harus dibuang. Scrap rate = persentase material yang jadi sampah. Target: minimalkan — setiap scrap adalah uang yang terbuang."],
+                ["safety", "Keselamatan pekerja dan lingkungan. Leading indicator: near-miss report, safety audit score. Lagging indicator: incident rate. Safety > Production — tidak ada target produksi yang mengorbankan keselamatan."]
             ],
 quickCheck: {
                 question: "Jelaskan cycle time dengan kalimat sendiri dan berikan satu contoh.",
@@ -355,12 +355,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["sensor", "konsep penting dalam sensor, iiot, dan integrasi ot-it yang perlu diberi definisi operasional sebelum dipakai"],
-                ["PLC", "konsep penting dalam sensor, iiot, dan integrasi ot-it yang perlu diberi definisi operasional sebelum dipakai"],
-                ["SCADA", "konsep penting dalam sensor, iiot, dan integrasi ot-it yang perlu diberi definisi operasional sebelum dipakai"],
-                ["historian", "konsep penting dalam sensor, iiot, dan integrasi ot-it yang perlu diberi definisi operasional sebelum dipakai"],
-                ["gateway", "konsep penting dalam sensor, iiot, dan integrasi ot-it yang perlu diberi definisi operasional sebelum dipakai"],
-                ["protocol", "konsep penting dalam sensor, iiot, dan integrasi ot-it yang perlu diberi definisi operasional sebelum dipakai"]
+                ["sensor", "Alat yang mengukur variabel fisik: suhu, getaran, tekanan, arus listrik, kelembaban. Sensor modern menghasilkan data real-time — fondasi dari Industry 4.0."],
+                ["PLC", "Programmable Logic Controller — komputer industri yang mengontrol mesin dan proses. Menerima input sensor, menjalankan logika kontrol, mengirim output ke actuator."],
+                ["SCADA", "Supervisory Control and Data Acquisition — sistem yang mengumpulkan data dari PLC/sensor di seluruh pabrik. Menyediakan dashboard real-time dan histori untuk operator."],
+                ["historian", "Database time-series khusus untuk data industri: menyimpan bertahun-tahun data sensor dengan kompresi efisien. Sumber data utama untuk model machine learning di manufaktur."],
+                ["gateway", "Jembatan antara perangkat lapangan (sensor/PLC) dan sistem IT (cloud/database). Menerjemahkan protokol industri (Modbus, OPC-UA) ke protokol internet (MQTT, HTTP)."],
+                ["protocol", "Bahasa komunikasi antar perangkat industri: Modbus (sederhana, legacy), OPC-UA (modern, secure), MQTT (lightweight, IoT). Protokol berbeda tidak bisa langsung berkomunikasi."]
             ],
 quickCheck: {
                 question: "Jelaskan sensor dengan kalimat sendiri dan berikan satu contoh.",
@@ -410,12 +410,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["timestamp", "konsep penting dalam time-series dan kualitas data industri yang perlu diberi definisi operasional sebelum dipakai"],
-                ["sampling", "konsep penting dalam time-series dan kualitas data industri yang perlu diberi definisi operasional sebelum dipakai"],
-                ["missing", "konsep penting dalam time-series dan kualitas data industri yang perlu diberi definisi operasional sebelum dipakai"],
-                ["drift", "perubahan distribusi data atau hubungan yang dipelajari model"],
-                ["synchronization", "konsep penting dalam time-series dan kualitas data industri yang perlu diberi definisi operasional sebelum dipakai"],
-                ["context", "konsep penting dalam time-series dan kualitas data industri yang perlu diberi definisi operasional sebelum dipakai"]
+                ["timestamp", "Waktu pasti setiap data point dikumpulkan. Kritis untuk analisis time-series dan korelasi antar sensor. Jam tidak sinkron = data tidak bisa dikorelasikan."],
+                ["sampling", "Frekuensi pengambilan data: 1 detik, 1 menit, 1 jam. Sampling terlalu cepat = storage besar + noise. Terlalu lambat = kehilangan transient event penting."],
+                ["missing", "Data sensor yang hilang: koneksi putus, sensor rusak, maintenance. Missing tidak random — sering terjadi saat mesin bermasalah. Jangan asal isi — pahami penyebabnya."],
+                ["drift", "Perubahan gradual pada sensor: kalibrasi melenceng, aus, kontaminasi. Nilai yang terbaca bergeser dari nilai sebenarnya. Deteksi drift = predictive maintenance untuk sensor itu sendiri."],
+                ["synchronization", "Menyelaraskan timestamp dari berbagai sensor ke referensi waktu yang sama. Tanpa sinkronisasi, event yang terjadi bersamaan tampak seperti terjadi di waktu berbeda."],
+                ["context", "Informasi tambahan yang memberi makna pada data: shift kerja, batch material, setup mesin, operator. Data sensor tanpa konteks sulit diinterpretasi — 'suhu 85°C' normal atau abnormal?"]
             ],
 quickCheck: {
                 question: "Jelaskan timestamp dengan kalimat sendiri dan berikan satu contoh.",
@@ -465,12 +465,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["failure mode", "konsep penting dalam predictive maintenance yang perlu diberi definisi operasional sebelum dipakai"],
-                ["condition monitoring", "konsep penting dalam predictive maintenance yang perlu diberi definisi operasional sebelum dipakai"],
-                ["anomaly", "konsep penting dalam predictive maintenance yang perlu diberi definisi operasional sebelum dipakai"],
-                ["remaining life", "konsep penting dalam predictive maintenance yang perlu diberi definisi operasional sebelum dipakai"],
-                ["maintenance", "konsep penting dalam predictive maintenance yang perlu diberi definisi operasional sebelum dipakai"],
-                ["false alarm", "konsep penting dalam predictive maintenance yang perlu diberi definisi operasional sebelum dipakai"]
+                ["failure mode", "Cara spesifik komponen atau sistem gagal: bearing aus, seal bocor, motor overheat. Setiap failure mode punya signature berbeda di data sensor."],
+                ["condition monitoring", "Pemantauan kondisi mesin secara kontinu via sensor. Deteksi dini: getaran meningkat → bearing mulai aus → jadwalkan maintenance sebelum breakdown."],
+                ["anomaly", "Pola data yang menyimpang dari normal: spike suhu mendadak, vibrasi di frekuensi tidak biasa. Anomaly bisa berarti kerusakan atau sekadar perubahan mode operasi normal."],
+                ["remaining life", "Estimasi sisa waktu sampai komponen perlu diganti (Remaining Useful Life/RUL). 'Bearing ini punya RUL 45 hari' → tim maintenance bisa menjadwalkan penggantian."],
+                ["maintenance", "Tindakan menjaga/memperbaiki aset: reactive (setelah rusak), preventive (jadwal rutin), predictive (berdasarkan kondisi aktual). Predictive = paling efisien."],
+                ["false alarm", "Model memprediksi kerusakan padahal tidak terjadi. Konsekuensi: tim maintenance buang waktu investigasi, kepercayaan ke model menurun. Precision > Recall untuk alarm maintenance."]
             ],
 quickCheck: {
                 question: "Jelaskan failure mode dengan kalimat sendiri dan berikan satu contoh.",
@@ -520,12 +520,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["camera", "konsep penting dalam visual inspection dan quality control yang perlu diberi definisi operasional sebelum dipakai"],
-                ["lighting", "konsep penting dalam visual inspection dan quality control yang perlu diberi definisi operasional sebelum dipakai"],
-                ["defect", "konsep penting dalam visual inspection dan quality control yang perlu diberi definisi operasional sebelum dipakai"],
-                ["detection", "konsep penting dalam visual inspection dan quality control yang perlu diberi definisi operasional sebelum dipakai"],
-                ["segmentation", "konsep penting dalam visual inspection dan quality control yang perlu diberi definisi operasional sebelum dipakai"],
-                ["traceability", "konsep penting dalam visual inspection dan quality control yang perlu diberi definisi operasional sebelum dipakai"]
+                ["camera", "Sensor visual untuk inspeksi kualitas: mendeteksi cacat permukaan, warna tidak sesuai, dimensi tidak akurat. Resolusi, lighting, dan angle sangat mempengaruhi hasil."],
+                ["lighting", "Pencahayaan untuk machine vision: backlight (profil), ring light (permukaan), dark field (cacat halus). Lighting yang tepat = 80% kesuksesan sistem vision."],
+                ["defect", "Produk yang tidak memenuhi spesifikasi: goresan, retak, warna salah, assembly tidak tepat. Klasifikasi defect: critical (tidak bisa dijual), major (perlu rework), minor (bisa lolos)."],
+                ["detection", "Mengidentifikasi keberadaan defect: 'Apakah ada cacat?' Object detection menjawab 'di mana cacatnya?' dengan bounding box. Speed penting — harus real-time di lini produksi."],
+                ["segmentation", "Memisahkan area defect dari background: pixel mana yang cacat. Instance segmentation: membedakan defect satu dengan lainnya. Digunakan untuk mengukur luas dan bentuk defect."],
+                ["traceability", "Kemampuan melacak produk dari bahan baku sampai ke pelanggan. Setiap defect bisa ditelusuri ke batch, mesin, shift, dan operator yang memproduksinya."]
             ],
 quickCheck: {
                 question: "Jelaskan camera dengan kalimat sendiri dan berikan satu contoh.",
@@ -575,12 +575,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["setpoint", "konsep penting dalam process optimization dan control yang perlu diberi definisi operasional sebelum dipakai"],
-                ["constraint", "konsep penting dalam process optimization dan control yang perlu diberi definisi operasional sebelum dipakai"],
-                ["optimization", "konsep penting dalam process optimization dan control yang perlu diberi definisi operasional sebelum dipakai"],
-                ["feedback", "konsep penting dalam process optimization dan control yang perlu diberi definisi operasional sebelum dipakai"],
-                ["simulation", "konsep penting dalam process optimization dan control yang perlu diberi definisi operasional sebelum dipakai"],
-                ["human approval", "konsep penting dalam process optimization dan control yang perlu diberi definisi operasional sebelum dipakai"]
+                ["setpoint", "Nilai target yang ingin dipertahankan sistem kontrol: suhu oven 180°C, kecepatan conveyor 2 m/s. Kontroler menyesuaikan aktuator untuk mempertahankan setpoint."],
+                ["constraint", "Batasan yang tidak boleh dilanggar: suhu maksimal, tekanan maksimal, kapasitas mesin, ketersediaan material. Optimasi harus menghormati semua constraint."],
+                ["optimization", "Mencari parameter terbaik: minimalkan biaya dengan constraint kualitas, maksimalkan throughput dengan constraint safety. Multi-objective: sering ada trade-off."],
+                ["feedback", "Sinyal dari output kembali ke input untuk koreksi. Closed-loop control: sensor mengukur output aktual → dibandingkan dengan setpoint → error dikoreksi."],
+                ["simulation", "Model digital dari proses fisik untuk menguji skenario tanpa mengganggu produksi nyata. 'Apa yang terjadi jika kita naikkan suhu 5°C?' — dijawab oleh simulator, bukan eksperimen di pabrik."],
+                ["human approval", "Operator manusia yang memvalidasi keputusan AI sebelum dieksekusi. Untuk keputusan high-risk (shutdown mesin, ganti parameter kritis), human-in-the-loop adalah keharusan."]
             ],
 quickCheck: {
                 question: "Jelaskan setpoint dengan kalimat sendiri dan berikan satu contoh.",
@@ -630,12 +630,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["forecast", "konsep penting dalam demand, inventory, dan scheduling yang perlu diberi definisi operasional sebelum dipakai"],
-                ["inventory", "konsep penting dalam demand, inventory, dan scheduling yang perlu diberi definisi operasional sebelum dipakai"],
-                ["lead time", "konsep penting dalam demand, inventory, dan scheduling yang perlu diberi definisi operasional sebelum dipakai"],
-                ["capacity", "konsep penting dalam demand, inventory, dan scheduling yang perlu diberi definisi operasional sebelum dipakai"],
-                ["scheduling", "konsep penting dalam demand, inventory, dan scheduling yang perlu diberi definisi operasional sebelum dipakai"],
-                ["service level", "konsep penting dalam demand, inventory, dan scheduling yang perlu diberi definisi operasional sebelum dipakai"]
+                ["forecast", "Prediksi kuantitatif: permintaan produk bulan depan, kebutuhan bahan baku, beban mesin. Horizon: short-term (mingguan), medium-term (bulanan), long-term (tahunan)."],
+                ["inventory", "Stok material dan produk: raw material, work-in-progress, finished goods. Inventory cost = uang yang 'tertidur'. Target: cukup untuk memenuhi permintaan, tidak lebih."],
+                ["lead time", "Waktu dari order sampai material tiba. Supplier A: 7 hari, Supplier B: 21 hari. Lead time panjang = safety stock besar. Forecast akurat bisa mengurangi safety stock."],
+                ["capacity", "Kemampuan maksimal produksi: mesin, tenaga kerja, ruang. Bottleneck capacity menentukan throughput maksimal. Forecast harus mempertimbangkan kapasitas yang tersedia."],
+                ["scheduling", "Menentukan urutan dan waktu produksi: Job A mesin 1 pukul 08:00-10:00, Job B mesin 2 pukul 09:00-10:30. Optimasi: minimalkan setup time, maksimalkan on-time delivery."],
+                ["service level", "Probabilitas tidak kehabisan stok: 95% service level = 95% permintaan bisa dipenuhi langsung. Trade-off: service level tinggi = inventory cost tinggi."]
             ],
 quickCheck: {
                 question: "Jelaskan forecast dengan kalimat sendiri dan berikan satu contoh.",
@@ -685,12 +685,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["asset model", "konsep penting dalam digital twin dan simulation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["state", "konsep penting dalam digital twin dan simulation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["simulation", "konsep penting dalam digital twin dan simulation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["scenario", "konsep penting dalam digital twin dan simulation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["calibration", "kesesuaian antara skor probabilitas dan frekuensi kejadian nyata"],
-                ["fidelity", "konsep penting dalam digital twin dan simulation yang perlu diberi definisi operasional sebelum dipakai"]
+                ["asset model", "Representasi digital dari aset fisik: pompa, conveyor, robot. Mencakup spesifikasi, riwayat maintenance, parameter operasi, dan hubungan dengan aset lain."],
+                ["state", "Kondisi aset saat ini: normal, degraded, warning, critical, failed. State machine: aset berpindah state berdasarkan data sensor dan model prediksi."],
+                ["simulation", "Menjalankan model aset untuk memprediksi perilaku masa depan: 'Jika beban naik 20%, kapan bearing akan aus?' Memungkinkan what-if analysis tanpa risiko."],
+                ["scenario", "Kondisi hipotetis untuk diuji: permintaan naik 30%, supplier A terlambat, mesin kritis breakdown. Skenario membantu perencanaan kontingensi dan stress testing."],
+                ["calibration", "Menyelaraskan model dengan data aktual. Model awal = perkiraan. Setiap data baru memperbaiki model. Model yang tidak dikalibrasi ulang = semakin tidak akurat seiring waktu."],
+                ["fidelity", "Tingkat detail dan akurasi model. High-fidelity: simulasi fisika detail, lambat. Low-fidelity: model statistik cepat, aproksimasi. Pilih berdasarkan kebutuhan keputusan."]
             ],
 quickCheck: {
                 question: "Jelaskan asset model dengan kalimat sendiri dan berikan satu contoh.",
@@ -706,7 +706,7 @@ challenge: {
             },
 roadmapRef: "8"
         }
-    ];;
+    ];;;
 
     CHAPTERS.forEach(function (chapter, index) {
         Object.assign(chapter, PYTHON_GUIDES[index]);

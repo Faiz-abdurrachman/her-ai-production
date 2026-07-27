@@ -300,12 +300,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["decision", "konsep penting dalam dari pertanyaan bisnis ke keputusan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["stakeholder", "konsep penting dalam dari pertanyaan bisnis ke keputusan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["scope", "konsep penting dalam dari pertanyaan bisnis ke keputusan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["hypothesis", "konsep penting dalam dari pertanyaan bisnis ke keputusan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["action", "konsep penting dalam dari pertanyaan bisnis ke keputusan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["constraint", "konsep penting dalam dari pertanyaan bisnis ke keputusan yang perlu diberi definisi operasional sebelum dipakai"]
+                ["decision", "Keputusan bisnis yang didukung oleh data dan insight AI: produk mana yang akan dirilis, harga berapa, channel mana yang dioptimasi. Quality keputusan = quality data + quality analysis."],
+                ["stakeholder", "Pihak yang terpengaruh atau bisa mempengaruhi keputusan: C-level, tim produk, tim sales, pelanggan. Setiap stakeholder punya perspektif dan prioritas berbeda."],
+                ["scope", "Batasan analisis: unit bisnis, periode waktu, geografi. Scope terlalu luas = analisis dangkal. Scope terlalu sempit = insight tidak relevan untuk keputusan."],
+                ["hypothesis", "Pernyataan awal yang akan diuji: 'Penurunan traffic disebabkan oleh perubahan algoritma Google.' Hypothesis harus falsifiable — bisa dibuktikan salah."],
+                ["action", "Rekomendasi konkret yang dihasilkan dari analisis: 'Tingkatkan budget iklan di channel X 20%', 'Rilis fitur Y bulan depan'. Action tanpa data = tebakan. Data tanpa action = sia-sia."],
+                ["constraint", "Keterbatasan yang harus dihormati: budget maksimal, resource tim, regulasi, timeline. Insight terbaik sekalipun tidak berguna jika tidak feasible dalam constraint."]
             ],
 quickCheck: {
                 question: "Jelaskan decision dengan kalimat sendiri dan berikan satu contoh.",
@@ -355,12 +355,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["metric", "ukuran terdefinisi yang digunakan untuk memantau kondisi atau hasil"],
-                ["numerator", "konsep penting dalam definisi metrik yang konsisten yang perlu diberi definisi operasional sebelum dipakai"],
-                ["denominator", "konsep penting dalam definisi metrik yang konsisten yang perlu diberi definisi operasional sebelum dipakai"],
-                ["grain", "konsep penting dalam definisi metrik yang konsisten yang perlu diberi definisi operasional sebelum dipakai"],
-                ["source", "konsep penting dalam definisi metrik yang konsisten yang perlu diberi definisi operasional sebelum dipakai"],
-                ["owner", "konsep penting dalam definisi metrik yang konsisten yang perlu diberi definisi operasional sebelum dipakai"]
+                ["metric", "Ukuran kuantitatif untuk mengukur performa: revenue, user growth, churn rate, conversion rate. Setiap metrik harus jelas definisi, sumber data, dan cara hitungnya."],
+                ["numerator", "Pembilang dalam formula metrik: jumlah kejadian yang dihitung. Contoh churn rate numerator = jumlah customer yang berhenti bulan ini. Pastikan numerator konsisten setiap period."],
+                ["denominator", "Penyebut dalam formula metrik: total populasi yang berisiko mengalami kejadian. Contoh churn rate denominator = total customer awal bulan. Denominator salah = metrik meaningless."],
+                ["grain", "Tingkat detail data: per transaksi, per hari, per pelanggan, per produk. Grain menentukan insight apa yang bisa dan tidak bisa diambil."],
+                ["source", "Tempat data berasal: database transaksional, CRM, Google Analytics, survey. Setiap sumber punya bias dan keterbatasan — cross-reference antar sumber dianjurkan."],
+                ["owner", "Orang/tim yang bertanggung jawab atas akurasi dan ketersediaan data. Data tanpa owner = data yang tidak terawat = tidak bisa dipercaya."]
             ],
 quickCheck: {
                 question: "Jelaskan metric dengan kalimat sendiri dan berikan satu contoh.",
@@ -410,12 +410,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["outcome", "konsep penting dalam metric tree dan kpi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["driver", "konsep penting dalam metric tree dan kpi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["leading", "konsep penting dalam metric tree dan kpi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["lagging", "konsep penting dalam metric tree dan kpi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["target", "konsep penting dalam metric tree dan kpi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["guardrail", "batas pengaman yang mencegah optimasi merusak tujuan lain"]
+                ["outcome", "Hasil bisnis yang ingin dicapai: meningkatkan revenue 20%, mengurangi churn 15%. Outcome = North Star — semua aktivitas harus berkontribusi ke outcome."],
+                ["driver", "Faktor yang mempengaruhi outcome: traffic, conversion rate, average order value adalah driver revenue. Analisis driver: mana yang paling berpengaruh → fokuskan resource ke sana."],
+                ["leading", "Metrik yang memprediksi outcome masa depan: site traffic (leading) → revenue (lagging), demo requests (leading) → sales (lagging). Leading indicator = sinyal awal."],
+                ["lagging", "Metrik yang mengkonfirmasi hasil masa lalu: revenue Q3, churn rate bulan lalu. Mudah diukur tapi tidak bisa diubah — sudah terjadi. Gunakan untuk validasi, bukan steering."],
+                ["target", "Nilai spesifik yang ingin dicapai: 'Revenue Q3 = 50M', 'Churn rate < 5%'. Target harus SMART: Specific, Measurable, Achievable, Relevant, Time-bound."],
+                ["guardrail", "Batas yang tidak boleh dilampaui saat mengejar target: margin minimal 20%, customer satisfaction minimal 4.0. Guardrail mencegah optimasi jangka pendek yang merusak jangka panjang."]
             ],
 quickCheck: {
                 question: "Jelaskan outcome dengan kalimat sendiri dan berikan satu contoh.",
@@ -465,12 +465,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["trend", "konsep penting dalam analisis deskriptif dan diagnostik yang perlu diberi definisi operasional sebelum dipakai"],
-                ["variance", "konsep penting dalam analisis deskriptif dan diagnostik yang perlu diberi definisi operasional sebelum dipakai"],
-                ["benchmark", "konsep penting dalam analisis deskriptif dan diagnostik yang perlu diberi definisi operasional sebelum dipakai"],
-                ["decomposition", "konsep penting dalam analisis deskriptif dan diagnostik yang perlu diberi definisi operasional sebelum dipakai"],
-                ["root cause", "konsep penting dalam analisis deskriptif dan diagnostik yang perlu diberi definisi operasional sebelum dipakai"],
-                ["contribution", "konsep penting dalam analisis deskriptif dan diagnostik yang perlu diberi definisi operasional sebelum dipakai"]
+                ["trend", "Pola jangka panjang dalam data: revenue naik 5% per bulan, churn turun 0.1% per bulan. Bedakan trend dari seasonal dan noise — satu bulan turun belum berarti trend berubah."],
+                ["variance", "Penyimpangan dari yang diharapkan: actual vs target, bulan ini vs bulan lalu, segmen A vs segmen B. Variance analysis adalah inti dari business diagnostic."],
+                ["benchmark", "Pembanding eksternal: competitor performance, industry average. 'Revenue growth kita 10% — bagus? Tergantung. Competitor rata-rata 15%' — berarti kita below benchmark."],
+                ["decomposition", "Memecah metrik agregat ke komponennya. Revenue = Volume × Price. Penurunan revenue: karena volume turun atau harga turun? Atau kombinasi? Decomposition menjawabnya."],
+                ["root cause", "Penyebab fundamental dari masalah. 'Revenue turun karena conversion rate turun' — itu sebab langsung. Root cause: 'Harga kompetitor turun 20%' atau 'Landing page error 2 minggu'. Bedakan symptom dari cause."],
+                ["contribution", "Seberapa besar setiap faktor berkontribusi ke perubahan total. 'Revenue turun 10%: -7% dari volume, -3% dari harga.' Contribution analysis membantu prioritas perbaikan."]
             ],
 quickCheck: {
                 question: "Jelaskan trend dengan kalimat sendiri dan berikan satu contoh.",
@@ -520,12 +520,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["segment", "konsep penting dalam segmentasi, cohort, dan funnel yang perlu diberi definisi operasional sebelum dipakai"],
-                ["cohort", "kelompok yang berbagi titik awal atau karakteristik tertentu"],
-                ["retention", "konsep penting dalam segmentasi, cohort, dan funnel yang perlu diberi definisi operasional sebelum dipakai"],
-                ["conversion", "konsep penting dalam segmentasi, cohort, dan funnel yang perlu diberi definisi operasional sebelum dipakai"],
-                ["funnel", "konsep penting dalam segmentasi, cohort, dan funnel yang perlu diberi definisi operasional sebelum dipakai"],
-                ["lifecycle", "konsep penting dalam segmentasi, cohort, dan funnel yang perlu diberi definisi operasional sebelum dipakai"]
+                ["segment", "Kelompok pelanggan berdasarkan karakteristik bersama: demografi (usia, lokasi), behavior (frekuensi beli, kategori produk), value (spending tinggi/sedang/rendah). Segmentasi = dasar personalization."],
+                ["cohort", "Sekelompok pelanggan yang mengalami event yang sama dalam periode yang sama: user join Jan 2024, pelanggan first purchase Q3. Analisis cohort membandingkan perilaku antar grup sepanjang waktu."],
+                ["retention", "Persentase pelanggan yang tetap aktif setelah periode tertentu. Retention rate = jumlah tetap aktif / jumlah awal. Biaya akuisisi 5x retention — retensi lebih penting dari akuisisi."],
+                ["conversion", "Persentase user yang menyelesaikan aksi yang diinginkan: visitor → signup (5%), signup → first purchase (20%). Conversion funnel menunjukkan di mana user 'bocor'."],
+                ["funnel", "Visualisasi perjalanan user dari awal sampai akhir, dengan persentase yang lanjut di setiap langkah. Top-of-funnel (exposure) → middle (consideration) → bottom (conversion)."],
+                ["lifecycle", "Tahapan hubungan pelanggan: acquisition → activation → retention → revenue → referral. Setiap tahap perlu metrik dan strategi berbeda. AI bisa memprediksi tahap mana pelanggan akan churn."]
             ],
 quickCheck: {
                 question: "Jelaskan segment dengan kalimat sendiri dan berikan satu contoh.",
@@ -575,12 +575,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["hierarchy", "konsep penting dalam dashboard yang mendukung tindakan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["context", "konsep penting dalam dashboard yang mendukung tindakan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["alert", "konsep penting dalam dashboard yang mendukung tindakan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["drill-down", "konsep penting dalam dashboard yang mendukung tindakan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["annotation", "konsep penting dalam dashboard yang mendukung tindakan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["cadence", "konsep penting dalam dashboard yang mendukung tindakan yang perlu diberi definisi operasional sebelum dipakai"]
+                ["hierarchy", "Struktur organisasi data: perusahaan → divisi → tim → individu, atau kategori produk → subkategori → SKU. Analisis di level berbeda bisa menghasilkan insight berbeda."],
+                ["context", "Informasi tambahan yang membuat angka bermakna: 'Revenue 10M' — sendirian tidak berarti. Tambah konteks: 'vs target 9.5M (105%), vs last year 8M (125%).'"],
+                ["alert", "Notifikasi ketika metrik melampaui batas yang ditentukan: 'Conversion rate turun 20% dalam 1 jam'. Alert harus actionable — bukan sekadar 'ada masalah' tapi 'cek landing page'."],
+                ["drill-down", "Navigasi dari data agregat ke detail. Revenue turun → drill-down: divisi mana → produk mana → channel mana. Setiap level memberikan informasi tambahan tentang penyebab."],
+                ["annotation", "Catatan kontekstual pada data: 'Revenue spike 3 Maret karena campaign Hari Raya'. Annotation mencegah misinterpretasi dan menjadi memori organisasi untuk analisis masa depan."],
+                ["cadence", "Frekuensi review metrik: daily (operational), weekly (tactical), monthly (strategic). Metrik harian: traffic, conversion. Metrik bulanan: revenue, churn, NPS."]
             ],
 quickCheck: {
                 question: "Jelaskan hierarchy dengan kalimat sendiri dan berikan satu contoh.",
@@ -630,12 +630,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["hypothesis", "konsep penting dalam eksperimen dan pengukuran dampak yang perlu diberi definisi operasional sebelum dipakai"],
-                ["treatment", "konsep penting dalam eksperimen dan pengukuran dampak yang perlu diberi definisi operasional sebelum dipakai"],
-                ["control", "konsep penting dalam eksperimen dan pengukuran dampak yang perlu diberi definisi operasional sebelum dipakai"],
-                ["lift", "konsep penting dalam eksperimen dan pengukuran dampak yang perlu diberi definisi operasional sebelum dipakai"],
-                ["significance", "konsep penting dalam eksperimen dan pengukuran dampak yang perlu diberi definisi operasional sebelum dipakai"],
-                ["guardrail", "batas pengaman yang mencegah optimasi merusak tujuan lain"]
+                ["hypothesis", "Pernyataan yang akan diuji: 'Halaman checkout baru akan meningkatkan conversion 15%.' Eksperimen dimulai dari hypothesis — tanpa hypothesis, eksperimen tidak punya arah."],
+                ["treatment", "Versi yang diuji: halaman checkout baru, harga diskon 20%, CTA berbeda. Treatment dibandingkan dengan control untuk mengukur efek."],
+                ["control", "Versi baseline/tanpa perubahan: halaman checkout lama, harga normal. Randomisasi: subjek dialokasikan secara acak ke control atau treatment untuk menghindari bias."],
+                ["lift", "Peningkatan treatment vs control: conversion control 5%, treatment 6% → lift = 20%. Relative lift: (6-5)/5 = 20%. Absolute lift: 6-5 = 1%. Dua cara laporan sama-sama valid — jangan tertukar."],
+                ["significance", "Probabilitas bahwa hasil bukan karena kebetulan. p-value < 0.05 = significant (hanya 5% kemungkinan hasil karena random). Tapi signifikan ≠ besar — sample besar bisa membuat perbedaan kecil jadi signifikan."],
+                ["guardrail", "Metrik yang harus tidak memburuk selama eksperimen: revenue, customer satisfaction, error rate. Treatment meningkatkan conversion tapi menurunkan CSAT — mungkin tidak worth it."]
             ],
 quickCheck: {
                 question: "Jelaskan hypothesis dengan kalimat sendiri dan berikan satu contoh.",
@@ -685,12 +685,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["forecast", "konsep penting dalam forecast dan scenario planning yang perlu diberi definisi operasional sebelum dipakai"],
-                ["assumption", "konsep penting dalam forecast dan scenario planning yang perlu diberi definisi operasional sebelum dipakai"],
-                ["base", "konsep penting dalam forecast dan scenario planning yang perlu diberi definisi operasional sebelum dipakai"],
-                ["upside", "konsep penting dalam forecast dan scenario planning yang perlu diberi definisi operasional sebelum dipakai"],
-                ["downside", "konsep penting dalam forecast dan scenario planning yang perlu diberi definisi operasional sebelum dipakai"],
-                ["sensitivity", "konsep penting dalam forecast dan scenario planning yang perlu diberi definisi operasional sebelum dipakai"]
+                ["forecast", "Prediksi kuantitatif masa depan: revenue Q4, permintaan produk, cash flow. Metode: time series (ARIMA, Prophet), causal (regresi dengan driver), judgmental (expert opinion)."],
+                ["assumption", "Keyakinan yang mendasari forecast: ekonomi stabil, tidak ada kompetitor baru, tren konsumen tidak berubah. Semua asumsi harus dicatat — forecast perlu diupdate saat asumsi berubah."],
+                ["base", "Skenario paling likely: berdasarkan tren saat ini + asumsi moderate. Ini adalah 'best estimate' — bukan optimis atau pesimis."],
+                ["upside", "Skenario optimis: jika kondisi lebih baik dari asumsi: kompetitor melemah, campaign viral, permintata melonjak. Menunjukkan potensi maksimal."],
+                ["downside", "Skenario pesimis: jika kondisi lebih buruk: resesi, supply chain disruption, regulasi baru. Persiapan kontingensi untuk skenario downside."],
+                ["sensitivity", "Faktor mana yang paling mempengaruhi forecast: kenaikan harga 5% berdampak 0% ke volume? Atau -10%? Sensitivity analysis: identifikasi faktor risiko tertinggi."]
             ],
 quickCheck: {
                 question: "Jelaskan forecast dengan kalimat sendiri dan berikan satu contoh.",
@@ -706,7 +706,7 @@ challenge: {
             },
 roadmapRef: "8"
         }
-    ];;
+    ];;;
 
     CHAPTERS.forEach(function (chapter, index) {
         Object.assign(chapter, PYTHON_GUIDES[index]);

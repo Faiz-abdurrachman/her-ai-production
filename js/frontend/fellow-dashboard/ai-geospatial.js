@@ -300,12 +300,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["location", "konsep penting dalam spatial thinking dan pertanyaan lokasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["distance", "konsep penting dalam spatial thinking dan pertanyaan lokasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["neighborhood", "konsep penting dalam spatial thinking dan pertanyaan lokasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["scale", "konsep penting dalam spatial thinking dan pertanyaan lokasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["pattern", "konsep penting dalam spatial thinking dan pertanyaan lokasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["spatial dependence", "konsep penting dalam spatial thinking dan pertanyaan lokasi yang perlu diberi definisi operasional sebelum dipakai"]
+                ["location", "Titik koordinat geografis yang mendefinisikan posisi di permukaan bumi. Bisa berupa latitude/longitude, alamat, atau kode wilayah. Fondasi dari semua analisis spasial."],
+                ["distance", "Ukuran keterpisahan antar lokasi. Bisa Euclidean (garis lurus), Manhattan (grid jalan), atau network distance (sepanjang jalan). Pemilihan metrik jarak sangat mempengaruhi hasil analisis."],
+                ["neighborhood", "Area di sekitar suatu lokasi — bisa didefinisikan dengan radius, K-nearest, atau batas administratif. Konsep kunci dalam analisis pola spasial dan clustering."],
+                ["scale", "Tingkat resolusi analisis: global, regional, lokal, titik. Fenomena yang terlihat di satu skala bisa hilang di skala lain. Modifiable Areal Unit Problem (MAUP) adalah jebakan klasik."],
+                ["pattern", "Struktur spasial dalam data: clustered (mengelompok), dispersed (menyebar), random. Dideteksi dengan statistik spasial seperti Moran's I atau Ripley's K."],
+                ["spatial dependence", "Prinsip Tobler: segala sesuatu berhubungan, tapi yang dekat lebih berhubungan daripada yang jauh. Fondasi dari hampir semua model spasial — mengabaikannya = model bias."]
             ],
 quickCheck: {
                 question: "Jelaskan location dengan kalimat sendiri dan berikan satu contoh.",
@@ -355,12 +355,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["point", "konsep penting dalam vector, raster, dan coordinate reference system yang perlu diberi definisi operasional sebelum dipakai"],
-                ["line", "konsep penting dalam vector, raster, dan coordinate reference system yang perlu diberi definisi operasional sebelum dipakai"],
-                ["polygon", "konsep penting dalam vector, raster, dan coordinate reference system yang perlu diberi definisi operasional sebelum dipakai"],
-                ["raster", "konsep penting dalam vector, raster, dan coordinate reference system yang perlu diberi definisi operasional sebelum dipakai"],
-                ["CRS", "sistem referensi yang menjelaskan bagaimana koordinat dipetakan ke bumi"],
-                ["projection", "konsep penting dalam vector, raster, dan coordinate reference system yang perlu diberi definisi operasional sebelum dipakai"]
+                ["point", "Representasi lokasi tunggal: koordinat rumah sakit, titik kecelakaan, lokasi sensor. Simplifikasi — semua objek fisik bisa direpresentasikan sebagai titik pada skala tertentu."],
+                ["line", "Representasi fitur linear: jalan, sungai, jalur pipa, rute transportasi. Terdiri dari serangkaian titik terhubung."],
+                ["polygon", "Representasi area: batas administrasi, zona banjir, area tanam. Tertutup — titik awal = titik akhir. Bisa sederhana (satu ring) atau kompleks (multiple rings, holes)."],
+                ["raster", "Representasi grid: citra satelit, elevation, suhu permukaan. Setiap cell/pixel menyimpan satu nilai. Kontinu — cocok untuk fenomena yang berubah gradual."],
+                ["CRS", "Coordinate Reference System — sistem yang mendefinisikan bagaimana koordinat 2D dipetakan ke lokasi 3D di bumi. WGS 84 (EPSG:4326) adalah standar global. CRS salah = lokasi meleset."],
+                ["projection", "Transformasi dari permukaan bumi 3D ke peta 2D. Setiap proyeksi mendistorsi sesuatu: Mercator memperbesar kutub, Equal-Area mempertahankan luas tapi mendistorsi bentuk."]
             ],
 quickCheck: {
                 question: "Jelaskan point dengan kalimat sendiri dan berikan satu contoh.",
@@ -410,12 +410,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["survey", "konsep penting dalam sumber data dan remote sensing yang perlu diberi definisi operasional sebelum dipakai"],
-                ["GPS", "konsep penting dalam sumber data dan remote sensing yang perlu diberi definisi operasional sebelum dipakai"],
-                ["satellite", "konsep penting dalam sumber data dan remote sensing yang perlu diberi definisi operasional sebelum dipakai"],
-                ["drone", "konsep penting dalam sumber data dan remote sensing yang perlu diberi definisi operasional sebelum dipakai"],
-                ["open data", "konsep penting dalam sumber data dan remote sensing yang perlu diberi definisi operasional sebelum dipakai"],
-                ["metadata", "konsep penting dalam sumber data dan remote sensing yang perlu diberi definisi operasional sebelum dipakai"]
+                ["survey", "Pengumpulan data lapangan dengan alat ukur: GPS, total station, drone survey. Akurat tapi mahal dan lambat — cocok untuk area kecil atau validasi."],
+                ["GPS", "Global Positioning System — satelit yang menyediakan koordinat lokasi. Akurasi bervariasi: 5-10m (smartphone), <1m (RTK/differential GPS)."],
+                ["satellite", "Platform penginderaan jauh: Landsat (30m resolusi, gratis), Sentinel (10m, gratis), Planet (3m, komersial). Menghasilkan data raster multi-spektral."],
+                ["drone", "Pesawat tanpa awak untuk pemetaan resolusi tinggi (<5cm per pixel). Fleksibel — bisa terbang kapan saja, tapi terbatas cakupan area."],
+                ["open data", "Data spasial gratis: OpenStreetMap (jalan/bangunan), Natural Earth (batas negara), SRTM (elevation global). Kualitas bervariasi — selalu validasi sebelum pakai."],
+                ["metadata", "Informasi tentang data: sumber, tanggal akuisisi, akurasi, CRS, metode pengumpulan. Tanpa metadata, data spasial tidak bisa digunakan dengan benar."]
             ],
 quickCheck: {
                 question: "Jelaskan survey dengan kalimat sendiri dan berikan satu contoh.",
@@ -465,12 +465,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["reprojection", "konsep penting dalam preprocessing data geospasial yang perlu diberi definisi operasional sebelum dipakai"],
-                ["clipping", "konsep penting dalam preprocessing data geospasial yang perlu diberi definisi operasional sebelum dipakai"],
-                ["resampling", "konsep penting dalam preprocessing data geospasial yang perlu diberi definisi operasional sebelum dipakai"],
-                ["geocoding", "konsep penting dalam preprocessing data geospasial yang perlu diberi definisi operasional sebelum dipakai"],
-                ["topology", "konsep penting dalam preprocessing data geospasial yang perlu diberi definisi operasional sebelum dipakai"],
-                ["missing", "konsep penting dalam preprocessing data geospasial yang perlu diberi definisi operasional sebelum dipakai"]
+                ["reprojection", "Mengubah CRS data dari satu sistem ke sistem lain. Diperlukan saat menggabungkan data dari sumber berbeda. Selalu cek CRS sebelum analisis."],
+                ["clipping", "Memotong data spasial sesuai batas area studi. Mengurangi ukuran data dan fokus analisis. Contoh: potong data satelit seluruh Indonesia menjadi hanya Pulau Jawa."],
+                ["resampling", "Mengubah resolusi raster: downsampling (mengurangi detail) atau upsampling (menambah — biasanya interpolasi). Perlu strategi agregasi: mean, median, nearest neighbor."],
+                ["geocoding", "Mengubah alamat teks menjadi koordinat. 'Jl. Sudirman 123, Jakarta' → (-6.2088, 106.8456). Tidak selalu akurat — hasil harus divalidasi."],
+                ["topology", "Aturan hubungan spasial: connected (terhubung), adjacent (bersebelahan), contains (mengandung). Topologi bersih = tidak ada gap atau overlap yang tidak diinginkan."],
+                ["missing", "Data spasial yang hilang: koordinat null, area tanpa data satelit (awan), sensor rusak. Pola missing di ruang sering TIDAK random — harus dianalisis sebelum diisi."]
             ],
 quickCheck: {
                 question: "Jelaskan reprojection dengan kalimat sendiri dan berikan satu contoh.",
@@ -520,12 +520,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["buffer", "konsep penting dalam spatial feature engineering yang perlu diberi definisi operasional sebelum dipakai"],
-                ["distance", "konsep penting dalam spatial feature engineering yang perlu diberi definisi operasional sebelum dipakai"],
-                ["density", "konsep penting dalam spatial feature engineering yang perlu diberi definisi operasional sebelum dipakai"],
-                ["zonal statistic", "konsep penting dalam spatial feature engineering yang perlu diberi definisi operasional sebelum dipakai"],
-                ["network", "konsep penting dalam spatial feature engineering yang perlu diberi definisi operasional sebelum dipakai"],
-                ["neighborhood", "konsep penting dalam spatial feature engineering yang perlu diberi definisi operasional sebelum dipakai"]
+                ["buffer", "Zona di sekitar fitur dalam radius tertentu. Buffer 500m di sekitar sungai = area rawan banjir. Buffer bisa berupa jarak Euclidean atau network distance."],
+                ["distance", "Analisis berbasis jarak: nearest neighbor, cost distance (mempertimbangkan hambatan), path distance (jalan vs lintas alam). Fondasi dari analisis aksesibilitas."],
+                ["density", "Konsentrasi fitur per unit area: kernel density estimation (KDE) menghasilkan heatmap kontinu. Parameter bandwidth sangat berpengaruh — terlalu kecil = noise, terlalu besar = oversmooth."],
+                ["zonal statistic", "Statistik per zona: rata-rata elevasi per kecamatan, total populasi per provinsi. Input: raster + polygon zona → output: tabel statistik."],
+                ["network", "Analisis berbasis jaringan jalan: shortest path, service area, routing. Mempertimbangkan topology jalan (satu arah, belokan dilarang, hierarki jalan)."],
+                ["neighborhood", "Analisis berbasis ketetanggaan: focal statistics (moving window), local Moran's I (hotspot), Getis-Ord Gi* (cold spot). Mengidentifikasi cluster dan outlier spasial."]
             ],
 quickCheck: {
                 question: "Jelaskan buffer dengan kalimat sendiri dan berikan satu contoh.",
@@ -575,12 +575,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["spatial split", "pemisahan data berdasarkan wilayah untuk menguji generalisasi spasial"],
-                ["autocorrelation", "konsep penting dalam spatial machine learning dan validation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["leakage", "konsep penting dalam spatial machine learning dan validation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["imbalance", "konsep penting dalam spatial machine learning dan validation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["baseline", "pendekatan sederhana sebagai pembanding minimum"],
-                ["generalization", "konsep penting dalam spatial machine learning dan validation yang perlu diberi definisi operasional sebelum dipakai"]
+                ["spatial split", "Membagi data training/test dengan mempertimbangkan lokasi. Random split = data leakage spasial (train dan test bisa bertetangga). Spatial split: blok wilayah terpisah."],
+                ["autocorrelation", "Korelasi nilai dengan lokasi: nilai tinggi cenderung dekat nilai tinggi, rendah dekat rendah. Melanggar asumsi independensi — memerlukan model spasial khusus."],
+                ["leakage", "Data dari lokasi test 'bocor' ke training karena kedekatan spasial. Model seolah akurat padahal overfit ke pola lokal. Spatial cross-validation mencegah ini."],
+                ["imbalance", "Distribusi kelas yang tidak merata di ruang: area urban memiliki lebih banyak data daripada rural. Model bias ke area dengan data banyak — underperform di area lain."],
+                ["baseline", "Model sederhana sebagai pembanding: rata-rata global, model non-spasial. Jika model spasial tidak lebih baik dari baseline, kompleksitas tambahan tidak justified."],
+                ["generalization", "Kemampuan model bekerja di lokasi yang tidak ada di data training. Model yang hanya bagus di lokasi training = tidak berguna untuk prediksi di tempat baru."]
             ],
 quickCheck: {
                 question: "Jelaskan spatial split dengan kalimat sendiri dan berikan satu contoh.",
@@ -630,12 +630,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["classification", "konsep penting dalam computer vision untuk earth observation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["detection", "konsep penting dalam computer vision untuk earth observation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["segmentation", "konsep penting dalam computer vision untuk earth observation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["change detection", "konsep penting dalam computer vision untuk earth observation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["label", "konsep penting dalam computer vision untuk earth observation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["resolution", "konsep penting dalam computer vision untuk earth observation yang perlu diberi definisi operasional sebelum dipakai"]
+                ["classification", "Prediksi kategori per pixel/area: tutupan lahan (hutan, urban, air), jenis tanaman, zona iklim. Multi-class — setiap lokasi hanya satu kelas."],
+                ["detection", "Identifikasi keberadaan objek: bangunan, kendaraan, kolam. Berbeda dengan classification — detection mencari 'di mana' objek berada dalam citra."],
+                ["segmentation", "Pemisahan citra menjadi region bermakna: batas sawah, jaringan jalan, bangunan individu. Setiap pixel mendapat label — lebih detail dari classification."],
+                ["change detection", "Identifikasi perubahan antar dua waktu: deforestasi, urban sprawl, kerusakan pasca bencana. Membandingkan citra T1 dan T2 — mendeteksi 'apa yang berubah'."],
+                ["label", "Ground truth spasial: polygon batas sawah, titik lokasi sumur, garis jalan. Labeling data spasial mahal — sering butuh survey lapangan atau interpretasi ahli."],
+                ["resolution", "Ukuran pixel di lapangan. Sentinel-2: 10m (setiap pixel = 10×10m). Resolusi menentukan apa yang bisa dideteksi — mobil butuh <1m, sawah cukup 10m."]
             ],
 quickCheck: {
                 question: "Jelaskan classification dengan kalimat sendiri dan berikan satu contoh.",
@@ -685,12 +685,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["time series", "konsep penting dalam spatiotemporal forecasting yang perlu diberi definisi operasional sebelum dipakai"],
-                ["grid", "konsep penting dalam spatiotemporal forecasting yang perlu diberi definisi operasional sebelum dipakai"],
-                ["mobility", "konsep penting dalam spatiotemporal forecasting yang perlu diberi definisi operasional sebelum dipakai"],
-                ["weather", "konsep penting dalam spatiotemporal forecasting yang perlu diberi definisi operasional sebelum dipakai"],
-                ["lag", "konsep penting dalam spatiotemporal forecasting yang perlu diberi definisi operasional sebelum dipakai"],
-                ["uncertainty", "tingkat ketidakpastian yang perlu ditampilkan dan dikelola"]
+                ["time series", "Urutan data temporal: NDVI mingguan, suhu permukaan harian. Analisis tren, musiman, dan anomali. Cloud cover adalah tantangan utama time series satelit."],
+                ["grid", "Struktur data raster: baris × kolom, setiap cell punya nilai. Regular grid = mudah diproses. Irregular grid (segitiga) = lebih efisien untuk terrain kompleks."],
+                ["mobility", "Data pergerakan: GPS tracker, call detail record, transport card. Menghasilkan trajectory — analisis pola mobilitas, estimasi OD matrix, deteksi anomali pergerakan."],
+                ["weather", "Data meteorologi: suhu, curah hujan, kelembaban, angin. Sering jadi kovariat penting dalam model spasial — mempengaruhi pertanian, penyakit, dan perilaku manusia."],
+                ["lag", "Delay antara sebab dan akibat dalam ruang dan waktu. Curah hujan hari ini mempengaruhi kelembaban tanah 3 hari kemudian. Spatial lag: efek dari tetangga tidak instan."],
+                ["uncertainty", "Ketidakpastian dalam data dan model spasial: akurasi GPS, resolusi satelit, error interpolasi. Harus dikomunikasikan — peta tanpa uncertainty band = menyesatkan."]
             ],
 quickCheck: {
                 question: "Jelaskan time series dengan kalimat sendiri dan berikan satu contoh.",
@@ -706,7 +706,7 @@ challenge: {
             },
 roadmapRef: "8"
         }
-    ];;
+    ];;;
 
     CHAPTERS.forEach(function (chapter, index) {
         Object.assign(chapter, PYTHON_GUIDES[index]);

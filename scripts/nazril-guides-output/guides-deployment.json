@@ -73,27 +73,27 @@
       "glossary": [
         [
           "artifact",
-          "konsep penting dalam siklus hidup deployment ai yang perlu diberi definisi operasional sebelum dipakai"
+          "Output build yang siap di-deploy: JAR, Docker image, wheel (.py), executable. Artifact versioning: setiap build punya tag unik. Reproducibility: build yang sama = artifact yang sama."
         ],
         [
           "environment",
-          "konsep penting dalam siklus hidup deployment ai yang perlu diberi definisi operasional sebelum dipakai"
+          "Tempat model dijalankan: development, staging, production. Environment harus konsisten: OS, library, dependency. Infrastruktur as code: environment dikonfigurasi via kode."
         ],
         [
           "release",
-          "konsep penting dalam siklus hidup deployment ai yang perlu diberi definisi operasional sebelum dipakai"
+          "Versi spesifik dari aplikasi/model yang dirilis ke produksi. Release notes: apa yang berubah, kenapa, risiko apa. Rollback plan: bagaimana jika release menyebabkan masalah."
         ],
         [
           "runtime",
-          "konsep penting dalam siklus hidup deployment ai yang perlu diberi definisi operasional sebelum dipakai"
+          "Platform yang menjalankan model: Docker container, serverless function, Kubernetes pod. Runtime menyediakan resource (CPU, RAM, GPU) dan dependency."
         ],
         [
           "feedback",
-          "konsep penting dalam siklus hidup deployment ai yang perlu diberi definisi operasional sebelum dipakai"
+          "Data dari deployment yang digunakan untuk improvement model: user action, prediction outcome, human feedback. Tanpa feedback loop, model tidak bisa belajar dari error."
         ],
         [
           "ownership",
-          "konsep penting dalam siklus hidup deployment ai yang perlu diberi definisi operasional sebelum dipakai"
+          "Tim/orang yang bertanggung jawab atas model di produksi: monitoring, maintenance, retraining. Model tanpa owner = model yang tidak terawat."
         ]
       ],
       "quickCheck": {
@@ -184,27 +184,27 @@
       "glossary": [
         [
           "serialization",
-          "konsep penting dalam packaging model dan registry yang perlu diberi definisi operasional sebelum dipakai"
+          "Menyimpan model ke format yang bisa di-load lagi: pickle (.pkl), ONNX (.onnx), MLflow (.mlmodel). Pilih format yang portable dan stable antar versi."
         ],
         [
           "dependency",
-          "konsep penting dalam packaging model dan registry yang perlu diberi definisi operasional sebelum dipakai"
+          "Library yang dibutuhkan model: scikit-learn, torch, transformers. Versi harus fixed — package version drift adalah sumber bug klasik. requirements.txt atau conda env."
         ],
         [
           "image",
-          "konsep penting dalam packaging model dan registry yang perlu diberi definisi operasional sebelum dipakai"
+          "Paket berisi kode + runtime + dependency + config. Docker image: reproducible environment. Image registry: Docker Hub, ECR, GCR. Image harus di-scan untuk vulnerability."
         ],
         [
           "registry",
-          "konsep penting dalam packaging model dan registry yang perlu diberi definisi operasional sebelum dipakai"
+          "Penyimpanan terpusat untuk artifact/image/model. MLflow Registry, Docker Registry. Registry menyediakan versioning, metadata, dan lineage."
         ],
         [
           "provenance",
-          "informasi asal, versi, pemilik, dan riwayat sebuah artefak"
+          "Riwayat dari mana model berasal: data training apa, parameter apa, code commit mana. Provenance untuk audit: 'Model ini di-train dengan dataset versi 3, kode di commit abc123.'"
         ],
         [
           "version",
-          "konsep penting dalam packaging model dan registry yang perlu diberi definisi operasional sebelum dipakai"
+          "Setiap perubahan model harus di-version. Semantic versioning: major.minor.patch. Breaking changes (schema change, input format) → major version bump."
         ]
       ],
       "quickCheck": {
@@ -295,27 +295,27 @@
       "glossary": [
         [
           "batch",
-          "konsep penting dalam pola batch, api, stream, dan edge yang perlu diberi definisi operasional sebelum dipakai"
+          "Proses data dalam group besar: prediksi semua user semalaman. Skalabilitas: proses ribuan request dalam satu job. Latency: menit-jam."
         ],
         [
           "online",
-          "konsep penting dalam pola batch, api, stream, dan edge yang perlu diberi definisi operasional sebelum dipakai"
+          "Prediksi real-time saat request datang. Latency: <100ms per prediksi. Infrastruktur: REST API dengan model loaded di memory. Scaling: horizontal (tambah instance)."
         ],
         [
           "stream",
-          "konsep penting dalam pola batch, api, stream, dan edge yang perlu diberi definisi operasional sebelum dipakai"
+          "Prediksi pada data streaming: fraud detection per transaksi, real-time recommendation. Input: event stream (Kafka). Output: decision stream."
         ],
         [
           "edge",
-          "konsep penting dalam pola batch, api, stream, dan edge yang perlu diberi definisi operasional sebelum dipakai"
+          "Menjalankan model di perangkat (phone, IoT, on-premise), bukan di cloud. Kelebihan: latency rendah, bisa offline, data tetap lokal. Kekurangan: resource terbatas."
         ],
         [
           "latency",
-          "waktu yang dibutuhkan sistem untuk menghasilkan respons"
+          "Waktu dari request sampai response. Target: <100ms (online), <10ms (edge), jam (batch). Latency tinggi = user experience buruk."
         ],
         [
           "availability",
-          "konsep penting dalam pola batch, api, stream, dan edge yang perlu diberi definisi operasional sebelum dipakai"
+          "Persentase waktu sistem berfungsi. Target: 99.9% (9 jam downtime/tahun), 99.99% (52 menit). Trade-off: availability tinggi = infrastructure mahal."
         ]
       ],
       "quickCheck": {
@@ -406,27 +406,27 @@
       "glossary": [
         [
           "server",
-          "konsep penting dalam model serving dan resource management yang perlu diberi definisi operasional sebelum dipakai"
+          "Instance yang menjalankan model API: CPU untuk inference, GPU untuk model besar. Server management: health check, auto-recovery, load balancer."
         ],
         [
           "worker",
-          "konsep penting dalam model serving dan resource management yang perlu diberi definisi operasional sebelum dipakai"
+          "Proses background yang menjalankan job: batch inference, feature computation, model retraining. Worker di-scale berdasarkan queue length."
         ],
         [
           "concurrency",
-          "konsep penting dalam model serving dan resource management yang perlu diberi definisi operasional sebelum dipakai"
+          "Jumlah request yang diproses bersamaan. Concurrency tinggi = throughput tinggi. Batas: CPU/GPU resource, memory. Concurrency diatur oleh thread pool atau async worker."
         ],
         [
           "GPU",
-          "konsep penting dalam model serving dan resource management yang perlu diberi definisi operasional sebelum dipakai"
+          "Graphics Processing Unit — chip yang mengakselerasi komputasi paralel. Diperlukan untuk training dan inference model besar (LLM, computer vision). Manajemen: VRAM monitoring, sharing antar model."
         ],
         [
           "autoscaling",
-          "konsep penting dalam model serving dan resource management yang perlu diberi definisi operasional sebelum dipakai"
+          "Menambah/mengurangi resource berdasarkan beban. CPU > 70% → tambah instance. Request turun → kurangi instance. Horizontal scaling: tambah server, bukan upgrade server."
         ],
         [
           "queue",
-          "konsep penting dalam model serving dan resource management yang perlu diberi definisi operasional sebelum dipakai"
+          "Antrian request yang menunggu diproses ketika semua server sibuk. Queue length = indikator perlu scaling. Jika antrian panjang terus = perlu scale up permanent."
         ]
       ],
       "quickCheck": {
@@ -517,27 +517,27 @@
       "glossary": [
         [
           "schema",
-          "aturan bentuk, tipe, dan makna field data"
+          "Struktur input/output model: field names, types, ranges. Model serving: validasi input sesuai schema sebelum inference. Schema change = model baru (version bump)."
         ],
         [
           "validation",
-          "konsep penting dalam api contract dan penanganan error yang perlu diberi definisi operasional sebelum dipakai"
+          "Memeriksa input sebelum diproses: tipe benar? range sesuai? required fields terisi? Validasi mencegah error runtime dan garbage in, garbage out."
         ],
         [
           "status code",
-          "konsep penting dalam api contract dan penanganan error yang perlu diberi definisi operasional sebelum dipakai"
+          "HTTP response code: 200 (OK, response sukses), 400 (Bad Request, input salah), 500 (Internal Error, server problem). Frontend harus handle semua status code."
         ],
         [
           "timeout",
-          "konsep penting dalam api contract dan penanganan error yang perlu diberi definisi operasional sebelum dipakai"
+          "Batas waktu menunggu response: 5 detik per request. Jika model butuh lebih lama → timeout error. Timeout handling: retry, fallback response, kirim ke queue async."
         ],
         [
           "idempotency",
-          "sifat proses yang aman diulang tanpa menggandakan efek"
+          "Request yang sama bisa dikirim berkali-kali dengan efek yang sama. Idempotency key di header: server deteksi duplikat dan return response yang sudah ada."
         ],
         [
           "compatibility",
-          "konsep penting dalam api contract dan penanganan error yang perlu diberi definisi operasional sebelum dipakai"
+          "Model baru harus kompatibel dengan client yang sudah ada. Backward compatible: model baru bisa handle format input lama. Breaking change: tidak kompatibel — butuh endpoint baru."
         ]
       ],
       "quickCheck": {
@@ -628,27 +628,27 @@
       "glossary": [
         [
           "build",
-          "konsep penting dalam ci/cd dan quality gate yang perlu diberi definisi operasional sebelum dipakai"
+          "Mengubah kode menjadi artifact: compile, package, test, scan. CI pipeline: trigger build setiap push. Build harus reproducible — hasil sama di mesin berbeda."
         ],
         [
           "test",
-          "konsep penting dalam ci/cd dan quality gate yang perlu diberi definisi operasional sebelum dipakai"
+          "Verifikasi: unit test (function level), integration test (API level), model test (accuracy tidak turun). Test failure = build gagal = tidak di-deploy."
         ],
         [
           "scan",
-          "konsep penting dalam ci/cd dan quality gate yang perlu diberi definisi operasional sebelum dipakai"
+          "Security scan: vulnerability di dependencies, secret exposed, malware. Image scan: Docker image di-scan sebelum registry. Policy as code: scan result menentukan pass/fail."
         ],
         [
           "deploy",
-          "konsep penting dalam ci/cd dan quality gate yang perlu diberi definisi operasional sebelum dipakai"
+          "Menempatkan artifact baru ke production. Deployment strategy: blue-green (cut over instan), canary (gradual), rolling (satu per satu)."
         ],
         [
           "approval",
-          "konsep penting dalam ci/cd dan quality gate yang perlu diberi definisi operasional sebelum dipakai"
+          "Gate sebelum deploy ke production: peer review, QA sign-off, compliance check. Approval bisa manual (human) atau otomatis (test pass + scan pass)."
         ],
         [
           "artifact promotion",
-          "konsep penting dalam ci/cd dan quality gate yang perlu diberi definisi operasional sebelum dipakai"
+          "Artifact pindah dari dev → staging → production. Setiap stage punya validation gates. Production hanya menerima artifact yang sudah lulus semua stage."
         ]
       ],
       "quickCheck": {
@@ -739,27 +739,27 @@
       "glossary": [
         [
           "blue-green",
-          "konsep penting dalam strategi rilis dan rollback yang perlu diberi definisi operasional sebelum dipakai"
+          "Dua environment identik: blue (active), green (idle). Deploy ke green → switch traffic ke green → blue jadi idle. Rollback: switch balik ke blue."
         ],
         [
           "canary",
-          "rilis bertahap ke sebagian kecil trafik sebelum diperluas"
+          "Rollout bertahap: 5% traffic ke versi baru, monitor error rate, naikkan persentase jika aman. Deteksi masalah awal tanpa dampak ke semua user."
         ],
         [
           "shadow",
-          "konsep penting dalam strategi rilis dan rollback yang perlu diberi definisi operasional sebelum dipakai"
+          "Deploy versi baru yang menerima traffic tapi tidak mempengaruhi response user. Shadow mode: bandingkan old vs new response. Tidak ada risiko ke user."
         ],
         [
           "feature flag",
-          "konsep penting dalam strategi rilis dan rollback yang perlu diberi definisi operasional sebelum dipakai"
+          "Toggle untuk mengaktifkan/menonaktifkan fitur tanpa deploy. 'Fitur X enabled untuk 10% user'. Memungkinkan dark launch dan gradual rollout."
         ],
         [
           "rollback",
-          "mengembalikan sistem ke versi stabil sebelumnya"
+          "Kembali ke versi sebelumnya jika versi baru bermasalah. Cepat: switch traffic ke artifact lama. Data migration rollback: lebih kompleks — pastikan backward compatible."
         ],
         [
           "migration",
-          "konsep penting dalam strategi rilis dan rollback yang perlu diberi definisi operasional sebelum dipakai"
+          "Perubahan data/schema saat deploy. Forward migration: skema baru. Backward migration: skema lama untuk rollback. Migration harus di-test sebelum deploy."
         ]
       ],
       "quickCheck": {
@@ -850,27 +850,27 @@
       "glossary": [
         [
           "latency",
-          "waktu yang dibutuhkan sistem untuk menghasilkan respons"
+          "Waktu respons API model. P99 latency: 99% request selesai dalam X ms. Monitoring: average, P95, P99. Latency spike = indikasi masalah."
         ],
         [
           "error",
-          "konsep penting dalam monitoring model dan data yang perlu diberi definisi operasional sebelum dipakai"
+          "Tingkat error model: prediction error rate, timeout rate, invalid input rate. Error budget: 'Kita toleransi 0.1% error rate per jam.' Jika terlampaui → stop deploy baru."
         ],
         [
           "drift",
-          "perubahan distribusi data atau hubungan yang dipelajari model"
+          "Perubahan distribusi data/model seiring waktu. Data drift: input distribution berubah. Concept drift: hubungan input-output berubah. Monitoring drift = trigger retraining."
         ],
         [
           "quality",
-          "konsep penting dalam monitoring model dan data yang perlu diberi definisi operasional sebelum dipakai"
+          "Kualitas prediksi di produksi. Berbeda dari offline metrics — data produksi bisa sangat berbeda dari data training. Golden dataset: label manual untuk monitoring quality."
         ],
         [
           "feedback",
-          "konsep penting dalam monitoring model dan data yang perlu diberi definisi operasional sebelum dipakai"
+          "Data aktual setelah prediksi: conversion (rekomendasi diklik), outcome (prediksi churn benar/salah). Feedback diperlukan untuk retraining dan evaluasi."
         ],
         [
           "alert",
-          "konsep penting dalam monitoring model dan data yang perlu diberi definisi operasional sebelum dipakai"
+          "Notifikasi ketika metrik melampaui threshold: latency > 500ms, error rate > 1%, drift detected. On-call: orang yang menerima alert harus bisa response."
         ]
       ],
       "quickCheck": {

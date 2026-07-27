@@ -495,6 +495,32 @@ node scripts/inject-guides.js --phase=1 --dry-run  # Preview
 
 ---
 
+## 63. Bug: Glossary Boilerplate di 14 Module — Definisi "konsep penting dalam..." Tidak Informatif
+
+**Deskripsi:**
+14 module JS (7 business + 7 data engineering) memiliki glossary entries dengan definisi boilerplate: "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai". Definisi identik untuk semua term dalam satu module.
+
+**Penyebab:**
+Nazril MD files menggunakan template placeholder untuk kolom "Penjelasan mudah" di tabel Konsep Inti. Extraction script `extract-nazril-guides.js` menyalin template ini apa adanya ke guides JSON, lalu `inject-guides.js` menginjeksinya ke ai-*.js.
+
+**Dampak:**
+- Glossary tidak memberikan nilai edukasi — definisi tidak menjelaskan apa pun tentang term spesifik
+- Peserta tidak bisa belajar dari glossary — hanya melihat teks yang sama di semua term
+- Term secara konsep sudah benar (domain-specific), hanya definisi yang placeholder
+
+**Cara Perbaikan:**
+1. Tulis definisi proper untuk 336 glossary terms di 7 business modules
+2. Tulis definisi proper untuk ~336 glossary terms di 7 data engineering modules
+3. Simpan definisi sebagai JSON di `scripts/glossary-defs/{module}.json`
+4. Jalankan `node scripts/fix-business-glossary.js` untuk update guides JSON
+5. Jalankan `node scripts/inject-guides.js --phase=1` (business) dan `--phase=2` (data eng)
+6. Verifikasi: node --check, grep boilerplate → 0
+
+**Boilerplate yang dihapus:** ~620 definitions ("konsep penting dalam..." / "perlu diberi definisi operasional...")
+**Verifikasi:** ✅ 29/29 syntax OK, ✅ 0 boilerplate tersisa
+
+---
+
 ## Aturan Kerja — 18 RULE WAJIB
 
 1. Commit PER FITUR — jangan gabung fitur beda

@@ -300,12 +300,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["patient", "konsep penting dalam ruang lingkup, intended use, dan keselamatan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["clinician", "konsep penting dalam ruang lingkup, intended use, dan keselamatan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["intended use", "tujuan, pengguna, konteks, dan batas penggunaan yang dinyatakan"],
-                ["hazard", "konsep penting dalam ruang lingkup, intended use, dan keselamatan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["benefit", "konsep penting dalam ruang lingkup, intended use, dan keselamatan yang perlu diberi definisi operasional sebelum dipakai"],
-                ["human oversight", "pengawasan manusia pada keputusan atau tindakan berisiko"]
+                ["patient", "Individu yang menerima layanan kesehatan — pusat dari seluruh desain sistem AI kesehatan. Setiap keputusan model harus mempertimbangkan keselamatan, privasi, dan otonomi pasien."],
+                ["clinician", "Tenaga profesional kesehatan (dokter, perawat, spesialis) yang menggunakan AI sebagai alat bantu keputusan. AI tidak menggantikan clinician — AI memperkuat kemampuan mereka."],
+                ["intended use", "Batasan resmi tentang untuk apa sistem AI dirancang dan siapa penggunanya. Keluar dari intended use = off-label, berisiko secara hukum dan keselamatan."],
+                ["hazard", "Sumber potensi bahaya: prediksi salah, bias data, kegagalan sistem. Setiap hazard harus diidentifikasi dan dimitigasi sebelum deployment."],
+                ["benefit", "Manfaat yang diharapkan dari sistem AI: diagnosis lebih cepat, deteksi dini, pengurangan beban administrasi. Benefit harus terukur dan lebih besar dari risiko."],
+                ["human oversight", "Pengawasan manusia terhadap keputusan AI. Dalam konteks kesehatan, keputusan akhir harus selalu ada di tangan clinician — AI adalah rekomendasi, bukan perintah."]
             ],
 quickCheck: {
                 question: "Jelaskan patient dengan kalimat sendiri dan berikan satu contoh.",
@@ -355,12 +355,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["EHR", "konsep penting dalam data kesehatan dan interoperabilitas yang perlu diberi definisi operasional sebelum dipakai"],
-                ["imaging", "konsep penting dalam data kesehatan dan interoperabilitas yang perlu diberi definisi operasional sebelum dipakai"],
-                ["laboratory", "konsep penting dalam data kesehatan dan interoperabilitas yang perlu diberi definisi operasional sebelum dipakai"],
-                ["wearable", "konsep penting dalam data kesehatan dan interoperabilitas yang perlu diberi definisi operasional sebelum dipakai"],
-                ["terminology", "konsep penting dalam data kesehatan dan interoperabilitas yang perlu diberi definisi operasional sebelum dipakai"],
-                ["FHIR", "konsep penting dalam data kesehatan dan interoperabilitas yang perlu diberi definisi operasional sebelum dipakai"]
+                ["EHR", "Electronic Health Record — catatan kesehatan digital pasien yang mencakup riwayat medis, diagnosis, obat, lab, dan catatan klinis. Sumber data utama untuk AI kesehatan."],
+                ["imaging", "Data citra medis: X-ray, CT scan, MRI, USG. AI imaging dapat mendeteksi anomali (tumor, fraktur) dengan akurasi yang mendekati atau melampaui radiolog."],
+                ["laboratory", "Data hasil uji lab: darah, urine, kultur, biomarker. Data terstruktur yang sangat berharga untuk model prediksi risiko dan diagnosis."],
+                ["wearable", "Perangkat yang dipakai pasien untuk mengumpulkan data kesehatan real-time: heart rate, sleep, activity, ECG. Menghasilkan data longitudinal yang tidak tersedia di setting klinik."],
+                ["terminology", "Standar istilah medis: SNOMED CT, ICD-10, LOINC. Penting untuk interoperabilitas — sistem yang berbeda harus 'berbicara bahasa yang sama'."],
+                ["FHIR", "Fast Healthcare Interoperability Resources — standar modern pertukaran data kesehatan via API. Memungkinkan sistem berbeda berbagi data pasien dengan format yang konsisten."]
             ],
 quickCheck: {
                 question: "Jelaskan EHR dengan kalimat sendiri dan berikan satu contoh.",
@@ -410,12 +410,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["workflow", "konsep penting dalam workflow klinis dan human-in-the-loop yang perlu diberi definisi operasional sebelum dipakai"],
-                ["handoff", "konsep penting dalam workflow klinis dan human-in-the-loop yang perlu diberi definisi operasional sebelum dipakai"],
-                ["alert", "konsep penting dalam workflow klinis dan human-in-the-loop yang perlu diberi definisi operasional sebelum dipakai"],
-                ["review", "konsep penting dalam workflow klinis dan human-in-the-loop yang perlu diberi definisi operasional sebelum dipakai"],
-                ["override", "konsep penting dalam workflow klinis dan human-in-the-loop yang perlu diberi definisi operasional sebelum dipakai"],
-                ["documentation", "konsep penting dalam workflow klinis dan human-in-the-loop yang perlu diberi definisi operasional sebelum dipakai"]
+                ["workflow", "Urutan langkah kerja klinis yang melibatkan AI: dari input data → analisis → rekomendasi → tindakan. AI harus terintegrasi ke workflow yang sudah ada, bukan menciptakan workflow baru."],
+                ["handoff", "Titik perpindahan tanggung jawab antar clinician atau antar sistem. Risiko tinggi kehilangan informasi — AI harus memastikan konteks tidak hilang saat handoff."],
+                ["alert", "Notifikasi dari sistem AI ke clinician: hasil abnormal, risiko tinggi, anomali. Tantangan utama: alert fatigue — terlalu banyak alert membuat clinician mengabaikan semuanya."],
+                ["review", "Proses clinician memeriksa dan memvalidasi output AI sebelum mengambil tindakan. Waktu review harus masuk akal — AI yang butuh review 10 menit per kasus tidak praktis."],
+                ["override", "Keputusan clinician untuk mengabaikan rekomendasi AI. Harus dicatat dengan alasan — data override adalah sumber berharga untuk improvement model."],
+                ["documentation", "Pencatatan semua interaksi AI: input, output, review, override, outcome. Penting untuk audit, regulasi, dan perbaikan model berkelanjutan."]
             ],
 quickCheck: {
                 question: "Jelaskan workflow dengan kalimat sendiri dan berikan satu contoh.",
@@ -465,12 +465,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["cohort", "kelompok yang berbagi titik awal atau karakteristik tertentu"],
-                ["endpoint", "konsep penting dalam problem framing, label, dan dataset yang perlu diberi definisi operasional sebelum dipakai"],
-                ["label", "konsep penting dalam problem framing, label, dan dataset yang perlu diberi definisi operasional sebelum dipakai"],
-                ["leakage", "konsep penting dalam problem framing, label, dan dataset yang perlu diberi definisi operasional sebelum dipakai"],
-                ["missingness", "konsep penting dalam problem framing, label, dan dataset yang perlu diberi definisi operasional sebelum dipakai"],
-                ["representativeness", "konsep penting dalam problem framing, label, dan dataset yang perlu diberi definisi operasional sebelum dipakai"]
+                ["cohort", "Kelompok pasien dengan karakteristik atau kondisi serupa yang dipelajari bersama. Pemilihan cohort yang tepat — tidak terlalu sempit (overfit) atau terlalu luas (underfit)."],
+                ["endpoint", "Outcome yang ingin diprediksi atau diukur: mortalitas 30-hari, readmisi, komplikasi. Harus didefinisikan dengan jelas — endpoint ambigu menghasilkan model tidak berguna."],
+                ["label", "Nilai kebenaran (ground truth) untuk setiap data point. Dalam supervised learning, model belajar dari label. Label di healthcare sering membutuhkan expert annotation yang mahal."],
+                ["leakage", "Informasi dari masa depan yang tanpa sengaja masuk ke data training. Contoh: menggunakan data dari setelah diagnosis untuk memprediksi diagnosis tersebut."],
+                ["missingness", "Data yang hilang — BUKAN random di healthcare. Pasien sakit lebih sering dicek lab-nya. Pattern missingness mengandung informasi dan harus dianalisis, bukan sekadar diisi."],
+                ["representativeness", "Sejauh mana data training mewakili populasi target. Data dari satu RS tidak mewakili RS lain. Model yang tidak representatif = bias dan tidak adil."]
             ],
 quickCheck: {
                 question: "Jelaskan cohort dengan kalimat sendiri dan berikan satu contoh.",
@@ -520,12 +520,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["risk model", "konsep penting dalam model untuk data klinis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["time series", "konsep penting dalam model untuk data klinis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["NLP", "konsep penting dalam model untuk data klinis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["imaging", "konsep penting dalam model untuk data klinis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["multimodal", "konsep penting dalam model untuk data klinis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["calibration", "kesesuaian antara skor probabilitas dan frekuensi kejadian nyata"]
+                ["risk model", "Model yang memprediksi probabilitas outcome negatif: risiko serangan jantung, risiko readmisi, risiko komplikasi. Output-nya probabilitas, bukan ya/tidak."],
+                ["time series", "Data yang dikumpulkan berurutan sepanjang waktu: vital sign per jam, lab per hari. Memerlukan teknik khusus karena observasi tidak independen."],
+                ["NLP", "Natural Language Processing — teknik AI untuk memahami teks klinis: catatan dokter, laporan radiologi, discharge summary. Sebagian besar data klinis adalah teks tidak terstruktur."],
+                ["imaging", "AI untuk analisis citra medis: klasifikasi (normal/abnormal), deteksi (lokasi lesi), segmentasi (batas organ/tumor), registrasi (menyelaraskan dua citra)."],
+                ["multimodal", "Menggabungkan beberapa jenis data: citra + teks klinis + lab + genomik. Multimodal AI mendekati cara clinician berpikir — mengintegrasikan semua informasi yang tersedia."],
+                ["calibration", "Seberapa akurat probabilitas yang dihasilkan model. Model terkalibrasi: ketika bilang 'risiko 70%', benar-benar terjadi di 70% kasus. Model tidak terkalibrasi = overconfident atau underconfident."]
             ],
 quickCheck: {
                 question: "Jelaskan risk model dengan kalimat sendiri dan berikan satu contoh.",
@@ -575,12 +575,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["sensitivity", "konsep penting dalam evaluasi klinis dan validasi eksternal yang perlu diberi definisi operasional sebelum dipakai"],
-                ["specificity", "konsep penting dalam evaluasi klinis dan validasi eksternal yang perlu diberi definisi operasional sebelum dipakai"],
-                ["PPV", "konsep penting dalam evaluasi klinis dan validasi eksternal yang perlu diberi definisi operasional sebelum dipakai"],
-                ["calibration", "kesesuaian antara skor probabilitas dan frekuensi kejadian nyata"],
-                ["external validation", "konsep penting dalam evaluasi klinis dan validasi eksternal yang perlu diberi definisi operasional sebelum dipakai"],
-                ["utility", "konsep penting dalam evaluasi klinis dan validasi eksternal yang perlu diberi definisi operasional sebelum dipakai"]
+                ["sensitivity", "Kemampuan model mendeteksi kasus positif: dari 100 pasien sakit, berapa yang terdeteksi. Sensitivity tinggi = sedikit false negative. Penting untuk penyakit yang tidak boleh terlewat."],
+                ["specificity", "Kemampuan model mengidentifikasi kasus negatif: dari 100 pasien sehat, berapa yang benar dinyatakan sehat. Specificity tinggi = sedikit false positive."],
+                ["PPV", "Positive Predictive Value — probabilitas pasien benar-benar sakit ketika model bilang sakit. Dipengaruhi oleh prevalensi penyakit di populasi."],
+                ["calibration", "Seberapa akurat probabilitas model. Plot kalibrasi: sumbu X = prediksi, sumbu Y = aktual. Garis diagonal sempurna = model terkalibrasi."],
+                ["external validation", "Menguji model pada data dari institusi/wilayah/waktu yang berbeda dari data training. Model yang hanya bagus di data training = useless. External validation adalah ujian sebenarnya."],
+                ["utility", "Apakah model benar-benar bermanfaat dalam praktik klinis. Bukan hanya akurat — tapi apakah mengubah keputusan clinician ke arah yang lebih baik."]
             ],
 quickCheck: {
                 question: "Jelaskan sensitivity dengan kalimat sendiri dan berikan satu contoh.",
@@ -630,12 +630,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["consent", "konsep penting dalam privasi, security, dan de-identification yang perlu diberi definisi operasional sebelum dipakai"],
-                ["minimization", "konsep penting dalam privasi, security, dan de-identification yang perlu diberi definisi operasional sebelum dipakai"],
-                ["de-identification", "pengurangan atau penghapusan pengenal pribadi dari data"],
-                ["access", "konsep penting dalam privasi, security, dan de-identification yang perlu diberi definisi operasional sebelum dipakai"],
-                ["encryption", "konsep penting dalam privasi, security, dan de-identification yang perlu diberi definisi operasional sebelum dipakai"],
-                ["audit", "konsep penting dalam privasi, security, dan de-identification yang perlu diberi definisi operasional sebelum dipakai"]
+                ["consent", "Persetujuan pasien untuk penggunaan data mereka dalam sistem AI. Harus informed: pasien paham apa yang terjadi dengan data mereka, bukan sekadar tanda tangan."],
+                ["minimization", "Prinsip: hanya kumpulkan data yang benar-benar dibutuhkan. Jangan kumpulkan 'siapa tahu nanti berguna' — setiap data tambahan = risiko privasi tambahan."],
+                ["de-identification", "Proses menghilangkan informasi yang bisa mengidentifikasi individu: nama, NIK, alamat, tanggal lahir. Tapi hati-hati — kombinasi data yang tampak anonim bisa di-reidentifikasi."],
+                ["access", "Kontrol siapa yang bisa melihat dan menggunakan data. Principle of least privilege: setiap orang hanya bisa akses data yang diperlukan untuk pekerjaannya."],
+                ["encryption", "Perlindungan data dengan mengubahnya menjadi format yang tidak bisa dibaca tanpa kunci. Wajib untuk data saat transit (HTTPS) dan saat disimpan (encryption at rest)."],
+                ["audit", "Log semua akses dan perubahan data. Audit trail memungkinkan investigasi jika terjadi kebocoran atau penyalahgunaan data."]
             ],
 quickCheck: {
                 question: "Jelaskan consent dengan kalimat sendiri dan berikan satu contoh.",
@@ -685,12 +685,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["cognitive load", "konsep penting dalam human factors dan interface klinis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["alert fatigue", "konsep penting dalam human factors dan interface klinis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["explanation", "konsep penting dalam human factors dan interface klinis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["uncertainty", "tingkat ketidakpastian yang perlu ditampilkan dan dikelola"],
-                ["accessibility", "kemampuan produk dipakai oleh orang dengan beragam kemampuan"],
-                ["usability", "konsep penting dalam human factors dan interface klinis yang perlu diberi definisi operasional sebelum dipakai"]
+                ["cognitive load", "Beban mental clinician saat menggunakan sistem. AI yang baik mengurangi cognitive load (otomatisasi tugas repetitif). AI yang buruk menambahnya (alert berlebihan, UI rumit)."],
+                ["alert fatigue", "Fenomena di mana clinician mengabaikan alert karena terlalu banyak. Setiap alert tambahan mengurangi perhatian ke semua alert. Desain alert: hanya yang benar-benar penting."],
+                ["explanation", "Penjelasan mengapa AI memberikan rekomendasi tertentu. Clinician perlu tahu 'mengapa', bukan hanya 'apa'. Explainability membangun kepercayaan."],
+                ["uncertainty", "AI harus mengkomunikasikan tingkat keyakinannya: 'Risiko 70% ± 15%'. Menyembunyikan uncertainty = berbahaya. Clinician perlu tahu kapan AI ragu."],
+                ["accessibility", "Desain yang bisa digunakan oleh clinician dengan berbagai kemampuan: penglihatan terbatas, motorik terbatas, atau bekerja di lingkungan dengan pencahayaan buruk."],
+                ["usability", "Seberapa mudah dan efisien clinician menggunakan sistem. Diukur dengan task completion rate, error rate, dan waktu. Sistem yang susah dipakai = tidak dipakai."]
             ],
 quickCheck: {
                 question: "Jelaskan cognitive load dengan kalimat sendiri dan berikan satu contoh.",
@@ -706,7 +706,7 @@ challenge: {
             },
 roadmapRef: "8"
         }
-    ];;
+    ];;;
 
     CHAPTERS.forEach(function (chapter, index) {
         Object.assign(chapter, PYTHON_GUIDES[index]);

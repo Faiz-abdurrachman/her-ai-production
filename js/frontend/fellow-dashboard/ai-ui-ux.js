@@ -300,12 +300,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["desirability", "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai"],
-                ["feasibility", "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai"],
-                ["viability", "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai"],
-                ["empathy", "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai"],
-                ["iteration", "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai"],
-                ["evidence", "konsep penting dalam human-centered design dan design thinking yang perlu diberi definisi operasional sebelum dipakai"]
+                ["desirability", "Tingkat kebutuhan/keinginan pengguna terhadap solusi. Diukur melalui user interview, survey, dan usability testing. Fokus pada 'apa yang benar-benar dibutuhkan', bukan 'apa yang diminta'."],
+                ["feasibility", "Tingkat kemungkinan solusi dapat dibangun dengan sumber daya yang tersedia. Meliputi kendala teknis, waktu, budget, dan kemampuan tim."],
+                ["viability", "Tingkat keberlanjutan solusi dari sisi bisnis. Apakah solusi menghasilkan nilai yang cukup untuk diadopsi dan dipertahankan jangka panjang."],
+                ["empathy", "Kemampuan memahami perasaan, pikiran, dan konteks pengguna tanpa menghakimi. Fondasi dari human-centered design — sebelum mendesain, pahami dulu manusianya."],
+                ["iteration", "Siklus berulang: desain → uji → pelajari → perbaiki. Setiap iterasi menghasilkan insight baru. Bukan berarti mengulang dari nol, tapi memperbaiki berdasarkan bukti."],
+                ["evidence", "Data konkret yang mendukung atau menolak asumsi desain. Bisa berupa hasil usability test, metrik penggunaan, A/B test, atau umpan balik pengguna."]
             ],
 quickCheck: {
                 question: "Jelaskan desirability dengan kalimat sendiri dan berikan satu contoh.",
@@ -355,12 +355,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["interview", "konsep penting dalam empathize dan user research yang perlu diberi definisi operasional sebelum dipakai"],
-                ["observation", "konsep penting dalam empathize dan user research yang perlu diberi definisi operasional sebelum dipakai"],
-                ["survey", "konsep penting dalam empathize dan user research yang perlu diberi definisi operasional sebelum dipakai"],
-                ["behavior", "konsep penting dalam empathize dan user research yang perlu diberi definisi operasional sebelum dipakai"],
-                ["need", "konsep penting dalam empathize dan user research yang perlu diberi definisi operasional sebelum dipakai"],
-                ["bias", "konsep penting dalam empathize dan user research yang perlu diberi definisi operasional sebelum dipakai"]
+                ["interview", "Metode riset kualitatif: tanya langsung ke pengguna tentang pengalaman, kebutuhan, dan pain point mereka. Kunci: dengarkan, jangan memimpin."],
+                ["observation", "Metode riset: amati pengguna saat berinteraksi dengan produk di konteks asli. Mengungkap perilaku aktual yang mungkin tidak disebutkan saat interview."],
+                ["survey", "Metode riset kuantitatif: kumpulkan data dari banyak responden via kuesioner terstruktur. Cocok untuk validasi statistik, tapi kurang dalam menggali 'mengapa'."],
+                ["behavior", "Apa yang pengguna LAKUKAN (bukan apa yang mereka katakan). Perilaku aktual sering berbeda dari pernyataan — observasi lebih akurat daripada self-report."],
+                ["need", "Kebutuhan mendasar pengguna yang harus dipenuhi produk. Bedakan dengan 'want' (keinginan) — user mungkin minta fitur X, tapi kebutuhannya adalah 'menyelesaikan tugas lebih cepat'."],
+                ["bias", "Kecenderungan sistematis yang mempengaruhi pengambilan keputusan atau interpretasi data. Waspadai confirmation bias (mencari bukti yang mendukung asumsi sendiri) saat riset pengguna."]
             ],
 quickCheck: {
                 question: "Jelaskan interview dengan kalimat sendiri dan berikan satu contoh.",
@@ -410,12 +410,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["problem statement", "konsep penting dalam define, persona, dan journey yang perlu diberi definisi operasional sebelum dipakai"],
-                ["persona", "konsep penting dalam define, persona, dan journey yang perlu diberi definisi operasional sebelum dipakai"],
-                ["journey", "konsep penting dalam define, persona, dan journey yang perlu diberi definisi operasional sebelum dipakai"],
-                ["pain point", "konsep penting dalam define, persona, dan journey yang perlu diberi definisi operasional sebelum dipakai"],
-                ["opportunity", "konsep penting dalam define, persona, dan journey yang perlu diberi definisi operasional sebelum dipakai"],
-                ["assumption", "konsep penting dalam define, persona, dan journey yang perlu diberi definisi operasional sebelum dipakai"]
+                ["problem statement", "Pernyataan yang menjabarkan masalah pengguna secara spesifik: siapa, apa masalahnya, mengapa penting, dan apa dampaknya. Panduan agar solusi tetap fokus pada masalah nyata."],
+                ["persona", "Representasi fiktif pengguna ideal berdasarkan data riset. Mencakup demografi, tujuan, pain point, dan perilaku. Membantu tim mendesain untuk manusia spesifik, bukan 'semua orang'."],
+                ["journey", "Peta langkah demi langkah yang dilalui pengguna saat berinteraksi dengan produk/layanan. Mengidentifikasi titik frustrasi (pain point) dan peluang perbaikan di setiap tahap."],
+                ["pain point", "Titik spesifik dalam pengalaman pengguna di mana mereka mengalami kesulitan, frustrasi, atau hambatan. Target utama yang harus diselesaikan dalam iterasi desain."],
+                ["opportunity", "Celah antara kondisi saat ini dan kondisi ideal yang bisa diisi dengan solusi. Ditemukan dari analisis pain point, unmet needs, atau teknologi baru yang memungkinkan."],
+                ["assumption", "Keyakinan yang belum diverifikasi tentang pengguna, masalah, atau solusi. Setiap asumsi harus dicatat dan diuji — asumsi yang salah adalah sumber kegagalan produk."]
             ],
 quickCheck: {
                 question: "Jelaskan problem statement dengan kalimat sendiri dan berikan satu contoh.",
@@ -465,12 +465,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["divergence", "konsep penting dalam ideate dan prioritization yang perlu diberi definisi operasional sebelum dipakai"],
-                ["convergence", "konsep penting dalam ideate dan prioritization yang perlu diberi definisi operasional sebelum dipakai"],
-                ["idea", "konsep penting dalam ideate dan prioritization yang perlu diberi definisi operasional sebelum dipakai"],
-                ["impact", "konsep penting dalam ideate dan prioritization yang perlu diberi definisi operasional sebelum dipakai"],
-                ["effort", "konsep penting dalam ideate dan prioritization yang perlu diberi definisi operasional sebelum dipakai"],
-                ["hypothesis", "konsep penting dalam ideate dan prioritization yang perlu diberi definisi operasional sebelum dipakai"]
+                ["divergence", "Fase brainstorming: menghasilkan sebanyak mungkin ide tanpa filter. Kuantitas di atas kualitas. Tujuannya eksplorasi, bukan seleksi."],
+                ["convergence", "Fase seleksi: menyaring dan menggabungkan ide-ide terbaik dari fase divergence. Gunakan kriteria objektif (impact, feasibility) untuk memilih."],
+                ["idea", "Konsep solusi yang dihasilkan dari proses kreatif. Belum tentu bagus — perlu diuji. Satu ide bagus biasanya lahir dari puluhan ide yang dibuang."],
+                ["impact", "Besarnya pengaruh solusi terhadap tujuan bisnis atau kebutuhan pengguna. Diukur dengan metrik seperti peningkatan konversi, penurunan error, atau kepuasan pengguna."],
+                ["effort", "Sumber daya yang dibutuhkan untuk mengimplementasikan ide: waktu tim, kompleksitas teknis, biaya, dan risiko. Gunakan matrix impact vs effort untuk prioritas."],
+                ["hypothesis", "Pernyataan yang bisa diuji: 'Jika kita [melakukan X], maka [metric Y] akan [berubah Z] karena [alasan].' Setiap keputusan desain sebaiknya dimulai dari hypothesis."]
             ],
 quickCheck: {
                 question: "Jelaskan divergence dengan kalimat sendiri dan berikan satu contoh.",
@@ -520,12 +520,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["content", "konsep penting dalam information architecture dan user flow yang perlu diberi definisi operasional sebelum dipakai"],
-                ["hierarchy", "konsep penting dalam information architecture dan user flow yang perlu diberi definisi operasional sebelum dipakai"],
-                ["navigation", "konsep penting dalam information architecture dan user flow yang perlu diberi definisi operasional sebelum dipakai"],
-                ["task flow", "konsep penting dalam information architecture dan user flow yang perlu diberi definisi operasional sebelum dipakai"],
-                ["state", "konsep penting dalam information architecture dan user flow yang perlu diberi definisi operasional sebelum dipakai"],
-                ["edge case", "konsep penting dalam information architecture dan user flow yang perlu diberi definisi operasional sebelum dipakai"]
+                ["content", "Informasi yang disampaikan ke pengguna: teks, gambar, video, data. Content strategy memastikan informasi tepat sampai ke pengguna tepat di saat yang tepat."],
+                ["hierarchy", "Struktur visual yang menunjukkan prioritas informasi. Dicapai melalui ukuran, warna, posisi, dan spacing. Pengguna harus bisa memahami halaman dalam 3 detik."],
+                ["navigation", "Sistem yang membantu pengguna berpindah antar halaman atau fitur. Harus konsisten, predictable, dan menunjukkan di mana pengguna berada sekarang."],
+                ["task flow", "Urutan langkah yang dilalui pengguna untuk menyelesaikan satu tugas spesifik. Setiap langkah harus jelas tujuannya dan tidak ada langkah yang bisa dihilangkan."],
+                ["state", "Kondisi sistem pada suatu momen: loading, empty, error, success, normal. Setiap state harus didesain — jangan hanya desain kondisi ideal."],
+                ["edge case", "Situasi tidak biasa yang jarang terjadi tapi harus ditangani: input ekstrem, koneksi lambat, user pertama kali, data kosong. Edge case yang tidak ditangani = bug."]
             ],
 quickCheck: {
                 question: "Jelaskan content dengan kalimat sendiri dan berikan satu contoh.",
@@ -575,12 +575,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["fidelity", "konsep penting dalam wireframe dan prototyping yang perlu diberi definisi operasional sebelum dipakai"],
-                ["wireframe", "konsep penting dalam wireframe dan prototyping yang perlu diberi definisi operasional sebelum dipakai"],
-                ["prototype", "konsep penting dalam wireframe dan prototyping yang perlu diberi definisi operasional sebelum dipakai"],
-                ["interaction", "konsep penting dalam wireframe dan prototyping yang perlu diberi definisi operasional sebelum dipakai"],
-                ["feedback", "konsep penting dalam wireframe dan prototyping yang perlu diberi definisi operasional sebelum dipakai"],
-                ["scope", "konsep penting dalam wireframe dan prototyping yang perlu diberi definisi operasional sebelum dipakai"]
+                ["fidelity", "Tingkat detail dan realisme prototype. Low-fidelity: sketsa kasar. High-fidelity: mendekati produk jadi dengan interaksi dan konten nyata."],
+                ["wireframe", "Representasi struktural layout tanpa styling visual. Menunjukkan hierarki, posisi elemen, dan alur — bukan warna atau tipografi. Blueprint sebelum dekorasi."],
+                ["prototype", "Versi interaktif dari desain yang bisa diklik dan diuji. Dari kertas sampai klikabel digital. Tujuan: validasi konsep sebelum development penuh."],
+                ["interaction", "Cara pengguna berinteraksi dengan elemen: klik, hover, swipe, scroll, drag. Setiap interaksi harus memberikan feedback visual yang jelas."],
+                ["feedback", "Respons sistem terhadap aksi pengguna: loading spinner, success toast, error message, hover state. Tanpa feedback, pengguna tidak tahu apakah aksinya berhasil."],
+                ["scope", "Batasan fitur dan fungsionalitas dalam satu rilis. Scope creep adalah musuh: tambahan fitur di tengah jalan yang memperlambat delivery."]
             ],
 quickCheck: {
                 question: "Jelaskan fidelity dengan kalimat sendiri dan berikan satu contoh.",
@@ -630,12 +630,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["task", "konsep penting dalam usability testing dan synthesis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["participant", "konsep penting dalam usability testing dan synthesis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["observation", "konsep penting dalam usability testing dan synthesis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["severity", "konsep penting dalam usability testing dan synthesis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["pattern", "konsep penting dalam usability testing dan synthesis yang perlu diberi definisi operasional sebelum dipakai"],
-                ["iteration", "konsep penting dalam usability testing dan synthesis yang perlu diberi definisi operasional sebelum dipakai"]
+                ["task", "Aktivitas spesifik yang diminta peserta lakukan saat usability testing. Harus realistis dan relevan: 'Cari produk X dan tambahkan ke keranjang', bukan 'Gunakan website'."],
+                ["participant", "Orang yang mewakili target pengguna dalam usability testing. Pilih 5 peserta per segmen — lebih dari itu biasanya menghasilkan diminishing returns."],
+                ["observation", "Catatan tentang apa yang terjadi saat testing: di mana peserta ragu, klik salah, atau berhenti. Fokus pada perilaku, bukan opini peserta."],
+                ["severity", "Tingkat keparahan masalah usability: cosmetic (minor), moderate (mengganggu), critical (menghalangi task), catastrophic (data loss/security). Prioritas perbaikan berdasarkan severity."],
+                ["pattern", "Masalah yang muncul berulang di beberapa peserta. Satu peserta kesulitan = mungkin kebetulan. Tiga peserta kesulitan = pattern yang harus diperbaiki."],
+                ["iteration", "Siklus perbaikan: uji → temukan masalah → perbaiki → uji lagi. Setiap iterasi harus lebih baik dari sebelumnya. Jangan perbaiki semua sekaligus — fokus pada severity tertinggi."]
             ],
 quickCheck: {
                 question: "Jelaskan task dengan kalimat sendiri dan berikan satu contoh.",
@@ -685,12 +685,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["typography", "konsep penting dalam visual design dan design system yang perlu diberi definisi operasional sebelum dipakai"],
-                ["color", "konsep penting dalam visual design dan design system yang perlu diberi definisi operasional sebelum dipakai"],
-                ["spacing", "konsep penting dalam visual design dan design system yang perlu diberi definisi operasional sebelum dipakai"],
-                ["component", "konsep penting dalam visual design dan design system yang perlu diberi definisi operasional sebelum dipakai"],
-                ["token", "konsep penting dalam visual design dan design system yang perlu diberi definisi operasional sebelum dipakai"],
-                ["consistency", "konsep penting dalam visual design dan design system yang perlu diberi definisi operasional sebelum dipakai"]
+                ["typography", "Seni dan teknik memilih dan mengatur huruf. Mencakup font family, ukuran, weight, line height, dan spacing. Typography yang baik = readability + personality."],
+                ["color", "Elemen visual paling kuat dalam desain. Setiap warna membawa makna psikologis. Sistem warna harus konsisten: primary, secondary, accent, neutral, semantic (error, success, warning)."],
+                ["spacing", "Jarak antar elemen yang menciptakan ritme visual. Gunakan sistem spacing konsisten (4px, 8px, 16px, 24px, 32px...) — bukan angka random."],
+                ["component", "Unit UI yang reusable: button, card, input, modal. Design system dibangun dari komponen yang konsisten. Satu perubahan di komponen = berubah di semua tempat."],
+                ["token", "Variabel yang menyimpan nilai desain: warna, spacing, typography. 'primary-500' bukan '#3B82F6'. Token memungkinkan theme switching dan konsistensi."],
+                ["consistency", "Keseragaman desain di seluruh produk. Tombol yang sama harus terlihat dan berperilaku sama di mana pun. Inkonsistensi membingungkan pengguna dan merusak kepercayaan."]
             ],
 quickCheck: {
                 question: "Jelaskan typography dengan kalimat sendiri dan berikan satu contoh.",
@@ -706,7 +706,7 @@ challenge: {
             },
 roadmapRef: "8"
         }
-    ];;
+    ];;;
 
     CHAPTERS.forEach(function (chapter, index) {
         Object.assign(chapter, PYTHON_GUIDES[index]);

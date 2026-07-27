@@ -73,27 +73,27 @@
       "glossary": [
         [
           "sumber data",
-          "konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai"
+          "Tempat data berasal: database transaksional, log, sensor, API eksternal, file. Sumber data menentukan format, volume, velocity, dan quality. Pahami sumber sebelum desain pipeline."
         ],
         [
           "ingestion",
-          "konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai"
+          "Proses menarik data dari sumber ke sistem data. Batch: terjadwal. Streaming: real-time. Tantangan: schema change, duplicate, delayed data."
         ],
         [
           "storage",
-          "konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai"
+          "Tempat data disimpan setelah ingestion: raw (seperti aslinya), staging (validated), curated (cleaned & transformed). Data lake = raw. Data warehouse = curated."
         ],
         [
           "transformation",
-          "konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai"
+          "Mengubah data dari bentuk mentah ke bentuk yang siap analisis: cleaning, aggregation, joining, feature engineering. dbt, Spark SQL, Pandas untuk transform."
         ],
         [
           "serving",
-          "konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai"
+          "Menyediakan data yang sudah diolah ke konsumen: BI tools, ML models, API, dashboard. Data mart = subset data untuk use case spesifik."
         ],
         [
           "konsumen data",
-          "konsep penting dalam peran dan arsitektur data engineering yang perlu diberi definisi operasional sebelum dipakai"
+          "Pengguna akhir data: data analyst (dashboard), data scientist (model), aplikasi (API), reporting (regulatory). Setiap konsumen butuh format dan SLA berbeda."
         ]
       ],
       "quickCheck": {
@@ -184,27 +184,27 @@
       "glossary": [
         [
           "CSV",
-          "konsep penting dalam sumber data, format, dan data contract yang perlu diberi definisi operasional sebelum dipakai"
+          "Comma-Separated Values — format tabular sederhana. Kelebihan: human-readable, universal. Kekurangan: no schema, no type, no nesting. Tidak cocok untuk data kompleks."
         ],
         [
           "JSON",
-          "konsep penting dalam sumber data, format, dan data contract yang perlu diberi definisi operasional sebelum dipakai"
+          "JavaScript Object Notation — format nested key-value. Mendukung struktur kompleks: arrays, objects, nested. Standar untuk API."
         ],
         [
           "Parquet",
-          "konsep penting dalam sumber data, format, dan data contract yang perlu diberi definisi operasional sebelum dipakai"
+          "Format columnar terkompresi untuk big data. Kelebihan: kompresi tinggi (10x dari CSV), fast scan (baca kolom, bukan baris). Standar untuk data warehouse modern."
         ],
         [
           "database",
-          "konsep penting dalam sumber data, format, dan data contract yang perlu diberi definisi operasional sebelum dipakai"
+          "Sistem penyimpanan terstruktur: PostgreSQL (relational), BigQuery (analytics), MongoDB (document), Neo4j (graph). Pilih database berdasarkan query pattern."
         ],
         [
           "API",
-          "konsep penting dalam sumber data, format, dan data contract yang perlu diberi definisi operasional sebelum dipakai"
+          "Application Programming Interface — endpoint untuk mengakses data secara terprogram. REST, GraphQL, gRPC. API memungkinkan integrasi sistem."
         ],
         [
           "schema",
-          "aturan bentuk, tipe, dan makna field data"
+          "Struktur data: nama kolom, tipe, constraint. Schema-on-write: validasi saat write (relational database). Schema-on-read: validasi saat read (data lake)."
         ]
       ],
       "quickCheck": {
@@ -295,27 +295,27 @@
       "glossary": [
         [
           "batch",
-          "konsep penting dalam batch processing dan stream processing yang perlu diberi definisi operasional sebelum dipakai"
+          "Proses data dalam kumpulan besar pada jadwal tetap: setiap jam, setiap hari. Cocok untuk: ETL, report, training data. Efisien untuk volume besar."
         ],
         [
           "event",
-          "konsep penting dalam batch processing dan stream processing yang perlu diberi definisi operasional sebelum dipakai"
+          "Satu kejadian diskrit: user klik, sensor reading, payment success. Event punya timestamp dan payload. Stream processing memproses event satu per satu."
         ],
         [
           "stream",
-          "konsep penting dalam batch processing dan stream processing yang perlu diberi definisi operasional sebelum dipakai"
+          "Data yang mengalir kontinu dari source. Event stream: ribuan event per detik. Kafka, Kinesis, Pub/Sub menangani stream. Tantangan: exactly-once processing, out-of-order."
         ],
         [
           "latency",
-          "waktu yang dibutuhkan sistem untuk menghasilkan respons"
+          "Waktu dari data dihasilkan sampai tersedia untuk query. Batch: menit-jam. Streaming: detik-menit. Real-time: milidetik-detik. Makin rendah latency = infrastructure makin kompleks."
         ],
         [
           "throughput",
-          "jumlah pekerjaan yang dapat diselesaikan per satuan waktu"
+          "Volume data yang diproses per unit waktu: GB/jam, records/detik. Throughput tergantung resource dan arsitektur. Pipeline harus di-scale sesuai throughput."
         ],
         [
           "watermark",
-          "konsep penting dalam batch processing dan stream processing yang perlu diberi definisi operasional sebelum dipakai"
+          "Batas toleransi late data dalam stream processing. 'Watermark 5 menit': data dengan timestamp >5 menit dari sekarang dianggap late dan skipped atau di-handle terpisah."
         ]
       ],
       "quickCheck": {
@@ -406,27 +406,27 @@
       "glossary": [
         [
           "extract",
-          "konsep penting dalam etl, elt, dan transformasi data yang perlu diberi definisi operasional sebelum dipakai"
+          "Membaca data dari source: query database, download file, consume API. Harus idempotent — extract ulang tidak mengubah source. CDC (Change Data Capture) untuk incremental."
         ],
         [
           "load",
-          "konsep penting dalam etl, elt, dan transformasi data yang perlu diberi definisi operasional sebelum dipakai"
+          "Memasukkan data ke target storage: data warehouse, data lake. Full load: semua data. Incremental load: hanya data baru/berubah. Full refresh periodically."
         ],
         [
           "transform",
-          "konsep penting dalam etl, elt, dan transformasi data yang perlu diberi definisi operasional sebelum dipakai"
+          "Membersihkan dan mengubah data: handling missing, deduplikasi, join antar tabel, agregasi, tipe conversion. Business logic diterapkan di sini."
         ],
         [
           "staging",
-          "konsep penting dalam etl, elt, dan transformasi data yang perlu diberi definisi operasional sebelum dipakai"
+          "Zona sementara antara extraction dan loading. Data mentah di staging siap untuk validasi. Jika transform gagal, bisa rollback dari staging tanpa re-extract."
         ],
         [
           "incremental load",
-          "konsep penting dalam etl, elt, dan transformasi data yang perlu diberi definisi operasional sebelum dipakai"
+          "Hanya memproses data baru atau berubah sejak load terakhir. Menghemat waktu dan resource. Diperlukan watermark/tracking untuk tahu data mana yang sudah diproses."
         ],
         [
           "idempotency",
-          "sifat proses yang aman diulang tanpa menggandakan efek"
+          "Pipeline bisa dijalankan ulang dengan hasil yang sama. Jika pipeline di-run 2x, data di target tidak duplikat. Key untuk reliability: replace partition, upsert."
         ]
       ],
       "quickCheck": {
@@ -517,27 +517,27 @@
       "glossary": [
         [
           "warehouse",
-          "konsep penting dalam data warehouse, data lake, dan lakehouse yang perlu diberi definisi operasional sebelum dipakai"
+          "Data terstruktur untuk BI/analytics: SQL-based, schema-on-write. Tools: Snowflake, BigQuery, Redshift. Kelebihan: fast query, ACID. Kekurangan: rigid schema."
         ],
         [
           "lake",
-          "konsep penting dalam data warehouse, data lake, dan lakehouse yang perlu diberi definisi operasional sebelum dipakai"
+          "Data mentah dalam format asli (CSV, JSON, Parquet, image). Schema-on-read: struktur ditentukan saat query. Tools: S3, ADLS, GCS. Lebih fleksibel dari warehouse."
         ],
         [
           "lakehouse",
-          "konsep penting dalam data warehouse, data lake, dan lakehouse yang perlu diberi definisi operasional sebelum dipakai"
+          "Gabungan lake + warehouse: data mentah dan terstruktur di storage yang sama. Delta Lake, Iceberg, Hudi. Memungkinkan BI dan ML di data yang sama."
         ],
         [
           "partition",
-          "konsep penting dalam data warehouse, data lake, dan lakehouse yang perlu diberi definisi operasional sebelum dipakai"
+          "Membagi data berdasarkan kolom: date=2024-01, date=2024-02. Partition pruning: query hanya baca partition relevan. Kritis untuk performa di big data."
         ],
         [
           "table format",
-          "konsep penting dalam data warehouse, data lake, dan lakehouse yang perlu diberi definisi operasional sebelum dipakai"
+          "Format yang mengelola metadata file data di lake: Delta Lake (ACID), Apache Iceberg (partition evolution), Apache Hudi (upsert). Memungkinkan warehouse functionality di data lake."
         ],
         [
           "medallion",
-          "konsep penting dalam data warehouse, data lake, dan lakehouse yang perlu diberi definisi operasional sebelum dipakai"
+          "Arsitektur 3-layer: bronze (raw), silver (cleaned), gold (aggregated/BI-ready). Setiap layer meningkatkan kualitas dan struktur data. Arrow: raw → clean → analytics."
         ]
       ],
       "quickCheck": {
@@ -628,27 +628,27 @@
       "glossary": [
         [
           "DAG",
-          "konsep penting dalam orkestrasi dan penjadwalan pipeline yang perlu diberi definisi operasional sebelum dipakai"
+          "Directed Acyclic Graph — representasi pipeline: task A → task B → task C (A harus selesai sebelum B). DAG menjamin eksekusi berurutan tanpa cycle. Tools: Airflow, Dagster, Prefect."
         ],
         [
           "dependency",
-          "konsep penting dalam orkestrasi dan penjadwalan pipeline yang perlu diberi definisi operasional sebelum dipakai"
+          "Task yang harus selesai sebelum task lain bisa dimulai. 'clean_data depends on extract_data'. Dependency chain menentukan urutan eksekusi dan paralelisme."
         ],
         [
           "scheduler",
-          "konsep penting dalam orkestrasi dan penjadwalan pipeline yang perlu diberi definisi operasional sebelum dipakai"
+          "Sistem yang menjalankan pipeline pada waktu yang ditentukan: setiap jam, setiap hari pukul 08:00. Menangani trigger, retry, dan alerting."
         ],
         [
           "retry",
-          "konsep penting dalam orkestrasi dan penjadwalan pipeline yang perlu diberi definisi operasional sebelum dipakai"
+          "Mengulang task yang gagal. Backoff: tunggu makin lama antar retry. Retry count maksimal — jangan infinite retry. Gagal terus = kirim alert, bukan retry forever."
         ],
         [
           "backfill",
-          "konsep penting dalam orkestrasi dan penjadwalan pipeline yang perlu diberi definisi operasional sebelum dipakai"
+          "Menjalankan pipeline untuk periode data di masa lalu. Diperlukan saat pipeline baru dibuat atau ada perubahan di logic. 'Backfill last 30 days' — proses ulang data 30 hari."
         ],
         [
           "SLA",
-          "konsep penting dalam orkestrasi dan penjadwalan pipeline yang perlu diberi definisi operasional sebelum dipakai"
+          "Service Level Agreement — janji tentang ketersediaan dan performa data: 'Dashboard harus update setiap jam, max delay 10 menit.' SLA dilanggar → on-call dipanggil."
         ]
       ],
       "quickCheck": {
@@ -739,27 +739,27 @@
       "glossary": [
         [
           "validity",
-          "konsep penting dalam kualitas data dan pengujian yang perlu diberi definisi operasional sebelum dipakai"
+          "Data sesuai dengan aturan bisnis: 'usia harus antara 0-150', 'email harus mengandung @'. Data invalid harus di-reject dengan alasan jelas."
         ],
         [
           "completeness",
-          "konsep penting dalam kualitas data dan pengujian yang perlu diberi definisi operasional sebelum dipakai"
+          "Semua data yang seharusnya ada, ada. Row count sesuai ekspektasi. No missing required fields. Completeness 100% jarang — definisikan toleransi."
         ],
         [
           "uniqueness",
-          "konsep penting dalam kualitas data dan pengujian yang perlu diberi definisi operasional sebelum dipakai"
+          "Tidak ada duplikat yang tidak diinginkan. Primary key harus unique. Duplikat terdeteksi oleh count distinct vs count total."
         ],
         [
           "freshness",
-          "konsep penting dalam kualitas data dan pengujian yang perlu diberi definisi operasional sebelum dipakai"
+          "Seberapa baru data: 'Data hari ini sudah masuk?' Freshness diukur dalam jam/menit sejak last update. Stale data = insight salah."
         ],
         [
           "schema test",
-          "konsep penting dalam kualitas data dan pengujian yang perlu diberi definisi operasional sebelum dipakai"
+          "Validasi struktur data: kolom ada, tipe benar, nullable benar. great_expectations, dbt test. Deteksi dini schema change dari upstream."
         ],
         [
           "reconciliation",
-          "konsep penting dalam kualitas data dan pengujian yang perlu diberi definisi operasional sebelum dipakai"
+          "Mencocokkan data antar sistem: 'Total revenue di OLTP = total revenue di warehouse?' Reconciliation adalah ultimate check — kalau tidak cocok, salah satu sistem error."
         ]
       ],
       "quickCheck": {
@@ -850,27 +850,27 @@
       "glossary": [
         [
           "catalog",
-          "konsep penting dalam metadata, lineage, dan governance yang perlu diberi definisi operasional sebelum dipakai"
+          "Registri semua aset data: tabel, kolom, owner, deskripsi, tag. Data catalog membantu orang menemukan dan memahami data. Tools: DataHub, Amundsen, Atlan."
         ],
         [
           "lineage",
-          "jejak asal dan transformasi data atau artefak"
+          "Jejak data dari source ke konsumen: tabel A → transform → tabel B → dashboard X. Lineage: impact analysis ('kalau tabel A berubah, apa yang terpengaruh?')."
         ],
         [
           "ownership",
-          "konsep penting dalam metadata, lineage, dan governance yang perlu diberi definisi operasional sebelum dipakai"
+          "Setiap dataset punya owner yang bertanggung jawab: kualitas, akses, dokumentasi. Data tanpa owner = data yang tidak terawat."
         ],
         [
           "classification",
-          "konsep penting dalam metadata, lineage, dan governance yang perlu diberi definisi operasional sebelum dipakai"
+          "Label sensitivitas data: public, internal, confidential, PII. Classification menentukan aturan akses dan retention. Automatic classification via pattern detection."
         ],
         [
           "retention",
-          "konsep penting dalam metadata, lineage, dan governance yang perlu diberi definisi operasional sebelum dipakai"
+          "Berapa lama data disimpan: log 30 hari, transaksi 7 tahun. Retention policy: hapus data lama untuk mengurangi biaya storage dan risiko compliance."
         ],
         [
           "audit",
-          "konsep penting dalam metadata, lineage, dan governance yang perlu diberi definisi operasional sebelum dipakai"
+          "Log semua akses ke data sensitif: siapa, kapan, data apa, tujuan. Diperlukan untuk compliance (HIPAA, GDPR). Audit trail harus immutable — tidak bisa dihapus."
         ]
       ],
       "quickCheck": {

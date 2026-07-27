@@ -300,12 +300,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["DNA", "konsep penting dalam fondasi biologi molekuler untuk komputasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["RNA", "konsep penting dalam fondasi biologi molekuler untuk komputasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["protein", "konsep penting dalam fondasi biologi molekuler untuk komputasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["gene", "konsep penting dalam fondasi biologi molekuler untuk komputasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["expression", "konsep penting dalam fondasi biologi molekuler untuk komputasi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["central dogma", "konsep penting dalam fondasi biologi molekuler untuk komputasi yang perlu diberi definisi operasional sebelum dipakai"]
+                ["DNA", "Molekul yang menyimpan informasi genetik — terdiri dari 4 nukleotida: A, T, G, C. Panjang: ~3 miliar pasang basa pada manusia. Fondasi dari semua analisis bioinformatika."],
+                ["RNA", "Molekul yang mentranskripsi dan mentranslasi informasi dari DNA ke protein. mRNA (messenger), tRNA (transfer), rRNA (ribosomal). RNA-seq mengukur ekspresi gen."],
+                ["protein", "Molekul yang menjalankan fungsi biologis: enzim, reseptor, struktural. Terdiri dari 20 asam amino. Struktur 3D protein menentukan fungsinya — fokus utama AI untuk bioinformatika."],
+                ["gene", "Segmen DNA yang mengkode protein atau RNA fungsional. Manusia punya ~20.000 gen coding. Ekspresi gen: seberapa aktif suatu gen di jaringan tertentu."],
+                ["expression", "Tingkat aktivitas gen — seberapa banyak mRNA diproduksi. Diukur dengan RNA-seq atau microarray. Ekspresi tinggi = gen aktif. Ekspresi berbeda antar jaringan dan kondisi."],
+                ["central dogma", "Aliran informasi dalam biologi: DNA → RNA → Protein. DNA ditranskripsi jadi RNA, RNA ditranslasi jadi protein. Ini adalah tulang punggung biologi molekuler."]
             ],
 quickCheck: {
                 question: "Jelaskan DNA dengan kalimat sendiri dan berikan satu contoh.",
@@ -355,12 +355,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["FASTA", "konsep penting dalam sekuens, format, dan database biologi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["FASTQ", "konsep penting dalam sekuens, format, dan database biologi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["quality score", "konsep penting dalam sekuens, format, dan database biologi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["annotation", "konsep penting dalam sekuens, format, dan database biologi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["accession", "konsep penting dalam sekuens, format, dan database biologi yang perlu diberi definisi operasional sebelum dipakai"],
-                ["database", "konsep penting dalam sekuens, format, dan database biologi yang perlu diberi definisi operasional sebelum dipakai"]
+                ["FASTA", "Format teks untuk menyimpan sekuens biologis: header (>) + sekuens (huruf). Sederhana, human-readable. Standar de facto untuk menyimpan DNA/RNA/protein sequences."],
+                ["FASTQ", "Format yang menggabungkan sekuens + kualitas (quality score). Setiap basa punya score Phred: Q30 = 1 error per 1000 basa. FASTQ mentah dari sequencing machine."],
+                ["quality score", "Nilai yang menunjukkan probabilitas error pada setiap basa. Q30: 99.9% akurat. Filter by quality score = langkah pertama preprocessing data sequencing."],
+                ["annotation", "Memberi informasi fungsional pada sekuens: gen apa yang ada, di mana exon/intron, apa fungsi proteinnya. Annotation database seperti RefSeq dan Ensembl."],
+                ["accession", "ID unik untuk setiap entri di database biologis: NC_000001 (kromosom 1 manusia), NP_001234 (protein). Gunakan accession sebagai referensi — bukan nama yang ambigu."],
+                ["database", "Repositori data biologis: NCBI (semua), Ensembl (genom), UniProt (protein), PDB (struktur 3D), COSMIC (kanker). Query via API atau FTP download."]
             ],
 quickCheck: {
                 question: "Jelaskan FASTA dengan kalimat sendiri dan berikan satu contoh.",
@@ -410,12 +410,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["pairwise", "konsep penting dalam alignment dan sequence search yang perlu diberi definisi operasional sebelum dipakai"],
-                ["multiple alignment", "konsep penting dalam alignment dan sequence search yang perlu diberi definisi operasional sebelum dipakai"],
-                ["similarity", "konsep penting dalam alignment dan sequence search yang perlu diberi definisi operasional sebelum dipakai"],
-                ["homology", "konsep penting dalam alignment dan sequence search yang perlu diberi definisi operasional sebelum dipakai"],
-                ["score", "konsep penting dalam alignment dan sequence search yang perlu diberi definisi operasional sebelum dipakai"],
-                ["gap", "konsep penting dalam alignment dan sequence search yang perlu diberi definisi operasional sebelum dipakai"]
+                ["pairwise", "Perbandingan dua sekuens — alignment optimal antara sekuens A dan B. Algoritma: Needleman-Wunsch (global alignment), Smith-Waterman (local alignment). Dasar dari homology search."],
+                ["multiple alignment", "Alignment tiga atau lebih sekuens secara simultan. Menunjukkan region conserved (penting secara evolusi/ fungsional). Lebih informatif dari pairwise — bisa lihat pattern antar spesies."],
+                ["similarity", "Persentase kemiripan antar sekuens: 'Human vs Chimp: 99% similarity pada gen X'. Similarity tinggi = kemungkinan fungsi serupa. Tapi homology (hubungan evolusi) ≠ similarity."],
+                ["homology", "Hubungan evolusi karena nenek moyang bersama. Ortholog: gen yang divergen karena spesiasi. Paralog: gen yang divergen karena duplikasi. Homology = derived from common ancestor."],
+                ["score", "Nilai numerik yang menunjukkan kualitas alignment: match (+1), mismatch (-1), gap (-2). Scoring matrix: BLOSUM62 untuk protein. Score lebih tinggi = alignment lebih baik."],
+                ["gap", "Celah yang dimasukkan ke alignment karena satu sekuens lebih pendek. Gap penalty: biaya untuk membuka (-11) dan memperpanjang (-1) gap. Gap = deletion atau insertion evolusi."]
             ],
 quickCheck: {
                 question: "Jelaskan pairwise dengan kalimat sendiri dan berikan satu contoh.",
@@ -465,12 +465,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["read", "konsep penting dalam genomics dan genome assembly yang perlu diberi definisi operasional sebelum dipakai"],
-                ["contig", "konsep penting dalam genomics dan genome assembly yang perlu diberi definisi operasional sebelum dipakai"],
-                ["coverage", "konsep penting dalam genomics dan genome assembly yang perlu diberi definisi operasional sebelum dipakai"],
-                ["assembly", "konsep penting dalam genomics dan genome assembly yang perlu diberi definisi operasional sebelum dipakai"],
-                ["reference", "konsep penting dalam genomics dan genome assembly yang perlu diberi definisi operasional sebelum dipakai"],
-                ["quality", "konsep penting dalam genomics dan genome assembly yang perlu diberi definisi operasional sebelum dipakai"]
+                ["read", "Pembacaan pendek (100-300 bp) dari sequencing machine. Hasil sequencing: jutaan reads. Setiap read adalah fragmen kecil dari genom asli — harus di-assembly."],
+                ["contig", "Kumpulan reads yang overlap menjadi fragmen kontinu. Hasil assembly: reads → contigs → scaffolds → chromosome. Contig panjang = assembly lebih baik."],
+                ["coverage", "Rata-rata berapa kali setiap posisi genom dibaca. 30x coverage = setiap posisi dibaca 30x. Coverage tinggi = akurat (bisa koreksi error), tapi biaya lebih mahal."],
+                ["assembly", "Proses menyusun reads pendek menjadi genom lengkap. de novo assembly: tanpa referensi. reference-based: align ke genom referensi yang sudah ada."],
+                ["reference", "Genom standar yang dipakai sebagai acuan: GRCh38 (human). Sampel baru di-align ke referensi, bukan di-assembly dari nol. Referensi adalah 'rata-rata' — tidak mewakili semua variasi."],
+                ["quality", "Metrics kualitas assembly: N50 (50% genome dalam contigs sepanjang X), completeness (berapa % gen lengkap), error rate. Assembly yang baik = N50 besar + completeness tinggi."]
             ],
 quickCheck: {
                 question: "Jelaskan read dengan kalimat sendiri dan berikan satu contoh.",
@@ -520,12 +520,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["RNA-seq", "konsep penting dalam transcriptomics dan gene expression yang perlu diberi definisi operasional sebelum dipakai"],
-                ["count", "konsep penting dalam transcriptomics dan gene expression yang perlu diberi definisi operasional sebelum dipakai"],
-                ["normalization", "konsep penting dalam transcriptomics dan gene expression yang perlu diberi definisi operasional sebelum dipakai"],
-                ["differential expression", "konsep penting dalam transcriptomics dan gene expression yang perlu diberi definisi operasional sebelum dipakai"],
-                ["batch effect", "konsep penting dalam transcriptomics dan gene expression yang perlu diberi definisi operasional sebelum dipakai"],
-                ["pathway", "konsep penting dalam transcriptomics dan gene expression yang perlu diberi definisi operasional sebelum dipakai"]
+                ["RNA-seq", "Teknologi untuk mengukur ekspresi gen: sekuensing RNA → mapping ke genom → hitung reads per gen. Output: count matrix (gen × sample). Input utama untuk differential expression."],
+                ["count", "Jumlah reads yang di-map ke setiap gen. Raw count: integer, dipengaruhi oleh library size dan panjang gen. Normalisasi diperlukan sebelum perbandingan antar sample."],
+                ["normalization", "Menyesuaikan count agar komparabel antar sample: TPM (per gen length), DESeq2 (median of ratios), edgeR (TMM). Tanpa normalisasi, perbedaan bisa karena library size, bukan biologi."],
+                ["differential expression", "Gen yang ekspresinya berbeda signifikan antar kondisi: healthy vs disease, treated vs control. Output: log2 fold change + p-value + adjusted p-value. Volcano plot untuk visualisasi."],
+                ["batch effect", "Variasi teknis antar batch eksperimen: lab berbeda, reagent berbeda, personel berbeda. Efek bisa lebih besar dari efek biologis. Koreksi: ComBat, limma, Harmony."],
+                ["pathway", "Kumpulan gen yang bekerja bersama dalam proses biologis: KEGG, Reactome, GO terms. Pathway analysis: gen yang naik/turun apakah meng-enrich pathway tertentu?"]
             ],
 quickCheck: {
                 question: "Jelaskan RNA-seq dengan kalimat sendiri dan berikan satu contoh.",
@@ -575,12 +575,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["variant", "konsep penting dalam variant calling dan annotation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["SNP", "konsep penting dalam variant calling dan annotation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["indel", "konsep penting dalam variant calling dan annotation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["genotype", "konsep penting dalam variant calling dan annotation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["filter", "konsep penting dalam variant calling dan annotation yang perlu diberi definisi operasional sebelum dipakai"],
-                ["annotation", "konsep penting dalam variant calling dan annotation yang perlu diberi definisi operasional sebelum dipakai"]
+                ["variant", "Perbedaan DNA individu dari referensi: SNP, indel, structural variant. Variant calling: membandingkan sample ke referensi dan mengidentifikasi perbedaan."],
+                ["SNP", "Single Nucleotide Polymorphism — perubahan satu basa: A→G, C→T. SNP paling umum: ~10 juta per genom. GWAS: mencari SNP yang berkorelasi dengan penyakit."],
+                ["indel", "Insertion atau deletion basa: +1 basa (insertion), -3 basa (deletion). Lebih sulit dideteksi dari SNP. Frameshift: indel yang mengubah reading frame protein."],
+                ["genotype", "Kombinasi alel pada satu posisi: homozygous (AA, aa), heterozygous (Aa). Genotype calling: dari sequencing data, tentukan genotipe di setiap posisi."],
+                ["filter", "Menghapus variant kualitas rendah: depth rendah, quality rendah, strand bias, cluster. Filter ketat mengurangi false positive — tapi juga mengurangi sensitivitas."],
+                ["annotation", "Informasi fungsional variant: apakah di gen coding? Missense (ubah asam amino) atau synonymous? Dampak: Benign, Pathogenic, Uncertain Significance (VUS). ClinVar adalah database."]
             ],
 quickCheck: {
                 question: "Jelaskan variant dengan kalimat sendiri dan berikan satu contoh.",
@@ -630,12 +630,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["amino acid", "konsep penting dalam protein structure dan function yang perlu diberi definisi operasional sebelum dipakai"],
-                ["domain", "konsep penting dalam protein structure dan function yang perlu diberi definisi operasional sebelum dipakai"],
-                ["structure", "konsep penting dalam protein structure dan function yang perlu diberi definisi operasional sebelum dipakai"],
-                ["binding", "konsep penting dalam protein structure dan function yang perlu diberi definisi operasional sebelum dipakai"],
-                ["function", "konsep penting dalam protein structure dan function yang perlu diberi definisi operasional sebelum dipakai"],
-                ["confidence", "konsep penting dalam protein structure dan function yang perlu diberi definisi operasional sebelum dipakai"]
+                ["amino acid", "Blok penyusun protein: 20 jenis. Sifat: hidrofobik (valine), polar (serine), charged (lysine). Mutasi asam amino bisa mengubah struktur dan fungsi protein."],
+                ["domain", "Region protein yang conserved dan punya fungsi spesifik: kinase domain (aktivitas enzim), zinc finger (binding DNA). Domain = unit fungsional protein."],
+                ["structure", "Bentuk 3D protein: primary (sequence), secondary (alpha helix, beta sheet), tertiary (3D fold), quaternary (multi-subunit). Struktur menentukan fungsi."],
+                ["binding", "Interaksi protein dengan molekul lain: protein-ligand (obat), protein-DNA (transkripsi), protein-protein (sinyaling). Binding affinity: seberapa kuat interaksi."],
+                ["function", "Aktivitas biologis protein: katalis (enzim), sinyal (reseptor), struktural (kolagen). Prediksi fungsi dari sequence/structure adalah masalah utama bioinformatika."],
+                ["confidence", "Tingkat kepercayaan prediksi: pLDDT (AlphaFold), pTM score. Confidence < 50 = unreliable. Prediksi struktur harus menyertakan confidence — jangan disajikan sebagai fakta."]
             ],
 quickCheck: {
                 question: "Jelaskan amino acid dengan kalimat sendiri dan berikan satu contoh.",
@@ -685,12 +685,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["embedding", "konsep penting dalam machine learning dan biological foundation model yang perlu diberi definisi operasional sebelum dipakai"],
-                ["representation", "konsep penting dalam machine learning dan biological foundation model yang perlu diberi definisi operasional sebelum dipakai"],
-                ["classification", "konsep penting dalam machine learning dan biological foundation model yang perlu diberi definisi operasional sebelum dipakai"],
-                ["generative model", "konsep penting dalam machine learning dan biological foundation model yang perlu diberi definisi operasional sebelum dipakai"],
-                ["transfer", "konsep penting dalam machine learning dan biological foundation model yang perlu diberi definisi operasional sebelum dipakai"],
-                ["benchmark", "konsep penting dalam machine learning dan biological foundation model yang perlu diberi definisi operasional sebelum dipakai"]
+                ["embedding", "Representasi vektor dari sekuens biologis: DNA → [0.3, -0.1, 0.8, ...]. Embedding memungkinkan operasi matematis pada data biologis. DNABert, ESM: foundation model untuk biologi."],
+                ["representation", "Cara mendeskripsikan molekul dalam format yang bisa diproses AI: one-hot encoding, k-mer frequency, learned embedding. Representasi yang baik menangkap informasi biologis relevan."],
+                ["classification", "Memprediksi kategori: 'Protein ini enzim atau bukan?', 'Variant ini patogenik atau benign?'. Classification sering kali langkah pertama memahami molekul baru."],
+                ["generative model", "Model yang menghasilkan molekul baru: protein baru dengan fungsi tertentu, drug candidate, RNA sequence. Generative biology = AI sebagai desainer, bukan hanya prediktor."],
+                ["transfer", "Model yang dilatih di data besar lalu diadaptasi ke tugas spesifik dengan data kecil. ESM-2 (protein foundation model) → fine-tune ke tugas classification specific. Lebih efisien dari training from scratch."],
+                ["benchmark", "Dataset standar untuk membandingkan performa model: CASP (struktur), OpenTarget (drug target), ClinVar (variant pathogenicity). Benchmark harus fair — train/test tidak overlap."]
             ],
 quickCheck: {
                 question: "Jelaskan embedding dengan kalimat sendiri dan berikan satu contoh.",
@@ -706,7 +706,7 @@ challenge: {
             },
 roadmapRef: "8"
         }
-    ];;
+    ];;;
 
     CHAPTERS.forEach(function (chapter, index) {
         Object.assign(chapter, PYTHON_GUIDES[index]);

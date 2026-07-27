@@ -300,12 +300,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["layer", "konsep penting dalam arsitektur back-end dan domain yang perlu diberi definisi operasional sebelum dipakai"],
-                ["domain", "konsep penting dalam arsitektur back-end dan domain yang perlu diberi definisi operasional sebelum dipakai"],
-                ["boundary", "konsep penting dalam arsitektur back-end dan domain yang perlu diberi definisi operasional sebelum dipakai"],
-                ["dependency", "konsep penting dalam arsitektur back-end dan domain yang perlu diberi definisi operasional sebelum dipakai"],
-                ["service", "konsep penting dalam arsitektur back-end dan domain yang perlu diberi definisi operasional sebelum dipakai"],
-                ["repository", "konsep penting dalam arsitektur back-end dan domain yang perlu diberi definisi operasional sebelum dipakai"]
+                ["layer", "Tingkat abstraksi dalam arsitektur backend: presentation (API), application (use case), domain (bisnis logic), infrastructure (database/eksternal). Pemisahan layer memungkinkan perubahan di satu layer tanpa mempengaruhi yang lain."],
+                ["domain", "Batas konteks bisnis yang menjadi tanggung jawab sistem: 'pemesanan', 'pembayaran', 'pengiriman'. Setiap domain punya model data dan aturan bisnis sendiri."],
+                ["boundary", "Antarmuka antara satu domain/layer dengan yang lain. Boundary yang jelas dan kontrak yang ketat (interface) mencegah kebocoran abstraksi antar layer."],
+                ["dependency", "Ketergantungan satu komponen ke komponen lain. Prinsip Dependency Inversion: modul high-level tidak boleh bergantung ke low-level — keduanya bergantung ke abstraksi."],
+                ["service", "Unit logika bisnis yang terisolasi: UserService, PaymentService, NotificationService. Service berisi operasi yang relevan dengan domainnya, tidak campur aduk."],
+                ["repository", "Abstraksi akses data: menyembunyikan detail database (SQL/NoSQL) di balik interface. Kode bisnis cukup panggil repository — tidak perlu tahu apakah datanya di Postgres atau Redis."]
             ],
 quickCheck: {
                 question: "Jelaskan layer dengan kalimat sendiri dan berikan satu contoh.",
@@ -355,12 +355,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["method", "konsep penting dalam http, rest, dan api design yang perlu diberi definisi operasional sebelum dipakai"],
-                ["resource", "konsep penting dalam http, rest, dan api design yang perlu diberi definisi operasional sebelum dipakai"],
-                ["status code", "konsep penting dalam http, rest, dan api design yang perlu diberi definisi operasional sebelum dipakai"],
-                ["pagination", "konsep penting dalam http, rest, dan api design yang perlu diberi definisi operasional sebelum dipakai"],
-                ["versioning", "konsep penting dalam http, rest, dan api design yang perlu diberi definisi operasional sebelum dipakai"],
-                ["OpenAPI", "konsep penting dalam http, rest, dan api design yang perlu diberi definisi operasional sebelum dipakai"]
+                ["method", "Operasi HTTP: GET (membaca), POST (membuat), PUT (mengganti), PATCH (memperbarui sebagian), DELETE (menghapus). Setiap method punya semantik dan aturan keamanan berbeda."],
+                ["resource", "Entitas yang diakses via API: /users, /orders, /products. Resource adalah noun — bukan verb. Design RESTful: URL = resource, method = operasi."],
+                ["status code", "Kode HTTP yang mengindikasikan hasil request: 200 (OK), 201 (Created), 400 (Bad Request), 401 (Unauthorized), 404 (Not Found), 500 (Server Error). Pilih kode yang tepat — jangan 200 semua."],
+                ["pagination", "Membagi respons besar menjadi halaman-halaman kecil. Parameter: page, limit, cursor. Pagination mencegah overload server saat data ribuan."],
+                ["versioning", "Memberi versi pada API: /api/v1/users, /api/v2/users. Perubahan breaking wajib versi baru — jangan ubah behavior API yang sudah dipakai klien."],
+                ["OpenAPI", "Spesifikasi standar untuk dokumentasi API: format YAML/JSON yang mendefinisikan semua endpoint, parameter, dan response. OpenAPI memungkinkan generate client dan test otomatis."]
             ],
 quickCheck: {
                 question: "Jelaskan method dengan kalimat sendiri dan berikan satu contoh.",
@@ -410,12 +410,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["entity", "konsep penting dalam data modeling dan database yang perlu diberi definisi operasional sebelum dipakai"],
-                ["relation", "konsep penting dalam data modeling dan database yang perlu diberi definisi operasional sebelum dipakai"],
-                ["index", "konsep penting dalam data modeling dan database yang perlu diberi definisi operasional sebelum dipakai"],
-                ["transaction", "konsep penting dalam data modeling dan database yang perlu diberi definisi operasional sebelum dipakai"],
-                ["migration", "konsep penting dalam data modeling dan database yang perlu diberi definisi operasional sebelum dipakai"],
-                ["consistency", "konsep penting dalam data modeling dan database yang perlu diberi definisi operasional sebelum dipakai"]
+                ["entity", "Objek yang memiliki identitas unik dan persisted di database: User(id, name, email), Order(id, items, total). Entity berbeda dari value object — entity punya identitas."],
+                ["relation", "Hubungan antar entity: one-to-one (User↔Profile), one-to-many (User↔Orders), many-to-many (Student↔Courses). Diagram ER (Entity-Relationship) memetakan semua relasi."],
+                ["index", "Struktur data yang mempercepat pencarian (seperti indeks buku). Index di kolom email membuat SELECT * FROM users WHERE email = 'x' cepat. Tapi index memperlambat write."],
+                ["transaction", "Kumpulan operasi database yang harus全部 berhasil atau全部 gagal. Klasik: transfer bank — debit + credit harus atomic. ACID: Atomicity, Consistency, Isolation, Durability."],
+                ["migration", "Perubahan skema database yang version-controlled: add column, rename table, change type. Migration harus forward-only dan bisa di-rollback. Jangan edit database langsung."],
+                ["consistency", "Data harus valid setiap saat: foreign key tidak boleh orphan, constraints tidak boleh dilanggar. Database-level consistency lebih aman daripada application-level."]
             ],
 quickCheck: {
                 question: "Jelaskan entity dengan kalimat sendiri dan berikan satu contoh.",
@@ -465,12 +465,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["identity", "konsep penting dalam authentication dan authorization yang perlu diberi definisi operasional sebelum dipakai"],
-                ["session", "konsep penting dalam authentication dan authorization yang perlu diberi definisi operasional sebelum dipakai"],
-                ["token", "konsep penting dalam authentication dan authorization yang perlu diberi definisi operasional sebelum dipakai"],
-                ["role", "konsep penting dalam authentication dan authorization yang perlu diberi definisi operasional sebelum dipakai"],
-                ["permission", "konsep penting dalam authentication dan authorization yang perlu diberi definisi operasional sebelum dipakai"],
-                ["policy", "konsep penting dalam authentication dan authorization yang perlu diberi definisi operasional sebelum dipakai"]
+                ["identity", "Siapa user — verifikasi identitas via login/SSO. Biasanya IDP (Identity Provider) eksternal: Google, GitHub, atau self-hosted Keycloak. Identity ≠ Authorization."],
+                ["session", "Data sementara tentang user yang login: disimpan di server-side (session store) atau client-side (JWT cookie). Session expire setelah timeout atau logout."],
+                ["token", "Proof of authentication: access token (short-lived, untuk API), refresh token (long-lived, untuk dapat access token baru). Jangan simpan token di localStorage — pakai httpOnly cookie."],
+                ["role", "Kategori user: admin, editor, viewer. Role menentukan permission. RBAC (Role-Based Access Control): assign role ke user, permission ke role."],
+                ["permission", "Izin spesifik: 'users.create', 'orders.delete'. Permission = action + resource. Granular: permission lebih detail dari role."],
+                ["policy", "Aturan yang mengkombinasikan role, permission, dan kondisi: 'Admin bisa hapus order kapan saja. Customer hanya bisa hapus order dalam 1 jam.' Policy complex butuh custom engine."]
             ],
 quickCheck: {
                 question: "Jelaskan identity dengan kalimat sendiri dan berikan satu contoh.",
@@ -520,12 +520,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["service", "konsep penting dalam service layer dan dependency management yang perlu diberi definisi operasional sebelum dipakai"],
-                ["interface", "konsep penting dalam service layer dan dependency management yang perlu diberi definisi operasional sebelum dipakai"],
-                ["dependency injection", "konsep penting dalam service layer dan dependency management yang perlu diberi definisi operasional sebelum dipakai"],
-                ["configuration", "konsep penting dalam service layer dan dependency management yang perlu diberi definisi operasional sebelum dipakai"],
-                ["error", "konsep penting dalam service layer dan dependency management yang perlu diberi definisi operasional sebelum dipakai"],
-                ["testability", "konsep penting dalam service layer dan dependency management yang perlu diberi definisi operasional sebelum dipakai"]
+                ["service", "Unit logika bisnis terisolasi yang menjalankan satu tanggung jawab. Service memanggil repository dan domain logic. Service layer adalah tempat koordinasi antar entitas."],
+                ["interface", "Kontrak abstrak yang mendefinisikan method apa yang harus ada. Implementasi bisa berbeda: UserRepository interface dengan implementasi PostgresUserRepository, MockUserRepository."],
+                ["dependency injection", "Pola memberikan dependency dari luar — bukan membuat sendiri di dalam class. Constructor injection: class terima dependency via constructor parameter. Memudahkan testing."],
+                ["configuration", "Parameter yang bisa berubah tanpa mengubah kode: database URL, API key, feature flag. Config terpisah per environment (dev/staging/prod). Jangan hardcode secret di kode."],
+                ["error", "Kegagalan harus explicit: return error atau throw exception. Jangan silent catch. Gunakan custom error type: ValidationError, NotFoundError, UnauthorizedError."],
+                ["testability", "Seberapa mudah suatu komponen diuji. Kunci: dependency injection (ganti real DB dengan mock), pure function (tidak ada side effect), interface (bisa stub)."]
             ],
 quickCheck: {
                 question: "Jelaskan service dengan kalimat sendiri dan berikan satu contoh.",
@@ -575,12 +575,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["queue", "konsep penting dalam asynchronous job dan message queue yang perlu diberi definisi operasional sebelum dipakai"],
-                ["worker", "konsep penting dalam asynchronous job dan message queue yang perlu diberi definisi operasional sebelum dipakai"],
-                ["retry", "konsep penting dalam asynchronous job dan message queue yang perlu diberi definisi operasional sebelum dipakai"],
-                ["dead letter", "konsep penting dalam asynchronous job dan message queue yang perlu diberi definisi operasional sebelum dipakai"],
-                ["idempotency", "sifat proses yang aman diulang tanpa menggandakan efek"],
-                ["schedule", "konsep penting dalam asynchronous job dan message queue yang perlu diberi definisi operasional sebelum dipakai"]
+                ["queue", "Antrian pesan: producer kirim pesan ke queue, consumer ambil dan proses. Decoupling: producer tidak perlu tahu consumer. Contoh: RabbitMQ, Kafka, SQS."],
+                ["worker", "Proses yang mengambil pesan dari queue dan menjalankan tugas: kirim email, proses gambar, generate report. Worker bisa di-scale horizontal — tambah worker = tambah throughput."],
+                ["retry", "Mengulang tugas yang gagal: immediate retry (1-3x), exponential backoff (delay makin lama). Retry tanpa backoff = DDoS ke dependensi yang sudah down."],
+                ["dead letter", "Pesan yang gagal diproses setelah retry maksimal. Dead letter queue (DLQ) menyimpan pesan ini untuk investigasi manual. Jangan buang pesan gagal — investigasi kenapa gagal."],
+                ["idempotency", "Operasi yang bisa dijalankan berkali-kali dengan hasil yang sama. Duplicate payment: jika user klik bayar 2x, jangan charge 2x. Idempotency key mencegah duplikasi."],
+                ["schedule", "Tugas yang dijalankan pada waktu tertentu: daily report pukul 08:00, cleanup job setiap jam, reminder email H-1. Cron job pattern untuk jadwal reguler."]
             ],
 quickCheck: {
                 question: "Jelaskan queue dengan kalimat sendiri dan berikan satu contoh.",
@@ -630,12 +630,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["model client", "konsep penting dalam integrasi model, rag, dan tool yang perlu diberi definisi operasional sebelum dipakai"],
-                ["prompt", "konsep penting dalam integrasi model, rag, dan tool yang perlu diberi definisi operasional sebelum dipakai"],
-                ["retrieval", "proses menemukan informasi relevan dari sumber yang tersedia"],
-                ["tool", "konsep penting dalam integrasi model, rag, dan tool yang perlu diberi definisi operasional sebelum dipakai"],
-                ["citation", "penunjuk sumber yang memungkinkan klaim diperiksa"],
-                ["fallback", "konsep penting dalam integrasi model, rag, dan tool yang perlu diberi definisi operasional sebelum dipakai"]
+                ["model client", "Klien yang memanggil AI model: backend service yang mengirim prompt ke LLM API. Menangani retry, timeout, token management, dan response parsing."],
+                ["prompt", "Instruksi ke AI model: 'Generate summary artikel ini dalam 3 kalimat'. Prompt engineering: struktur prompt sangat mempengaruhi kualitas output."],
+                ["retrieval", "Mengambil konteks relevan dari knowledge base sebelum generate response. RAG (Retrieval-Augmented Generation): cari dokumen relevan → kirim sebagai konteks prompt."],
+                ["tool", "Fungsi eksternal yang bisa dipanggil AI model: search web, hitung kalkulasi, query database. Tool calling = AI bisa melakukan aksi, bukan hanya generate teks."],
+                ["citation", "Sumber informasi yang digunakan AI untuk menghasilkan response. Wajib untuk factual content: 'Berdasarkan dokumen X (halaman 5)...'. Tanpa citation = hallucination risk."],
+                ["fallback", "Behavior ketika AI tidak bisa memberikan jawaban: 'Maaf, saya tidak bisa menjawab pertanyaan ini.' Fallback yang baik: beri tahu user limitasi, arahkan ke human support."]
             ],
 quickCheck: {
                 question: "Jelaskan model client dengan kalimat sendiri dan berikan satu contoh.",
@@ -685,12 +685,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["cache", "konsep penting dalam caching, rate limit, dan performa yang perlu diberi definisi operasional sebelum dipakai"],
-                ["TTL", "konsep penting dalam caching, rate limit, dan performa yang perlu diberi definisi operasional sebelum dipakai"],
-                ["invalidation", "konsep penting dalam caching, rate limit, dan performa yang perlu diberi definisi operasional sebelum dipakai"],
-                ["rate limit", "konsep penting dalam caching, rate limit, dan performa yang perlu diberi definisi operasional sebelum dipakai"],
-                ["pooling", "konsep penting dalam caching, rate limit, dan performa yang perlu diberi definisi operasional sebelum dipakai"],
-                ["profiling", "konsep penting dalam caching, rate limit, dan performa yang perlu diberi definisi operasional sebelum dipakai"]
+                ["cache", "Penyimpanan sementara data yang sering diakses: Redis, Memcached, in-memory. Cache mempercepat response 10-100x. Tantangan: cache invalidation — data basi vs stale."],
+                ["TTL", "Time To Live — berapa lama data cache valid: 5 menit, 1 jam, 1 hari. TTL pendek = data segar tapi cache hit rendah. TTL panjang = cepat tapi data mungkin basi."],
+                ["invalidation", "Menghapus atau memperbarui cache ketika data berubah. Strategi: TTL-based (otomatis expire), event-based (hapus cache saat data diupdate), manual (admin bisa purge)."],
+                ["rate limit", "Batas jumlah request dalam periode tertentu: 100 request/menit per user. Mencegah abuse dan overload. Response: 429 Too Many Requests + Retry-After header."],
+                ["pooling", "Kumpulan koneksi yang direuse: database connection pool, HTTP connection pool. Membuat koneksi baru setiap request mahal — pooling mengurangi overhead."],
+                ["profiling", "Mengukur performa kode: CPU time, memory usage, query duration, response time. Profiling menemukan bottleneck — jangan optimasi tanpa data profiling."]
             ],
 quickCheck: {
                 question: "Jelaskan cache dengan kalimat sendiri dan berikan satu contoh.",
@@ -706,7 +706,7 @@ challenge: {
             },
 roadmapRef: "8"
         }
-    ];;
+    ];;;
 
     CHAPTERS.forEach(function (chapter, index) {
         Object.assign(chapter, PYTHON_GUIDES[index]);

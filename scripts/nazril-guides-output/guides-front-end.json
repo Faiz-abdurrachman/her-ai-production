@@ -73,27 +73,27 @@
       "glossary": [
         [
           "interface",
-          "konsep penting dalam peran front-end dan karakteristik ai ux yang perlu diberi definisi operasional sebelum dipakai"
+          "Apa yang dilihat dan diinteraksikan user: layar, tombol, input, animasi, feedback. Interface adalah produk — backend tidak terlihat user. UI yang buruk = produk yang buruk."
         ],
         [
           "feedback",
-          "konsep penting dalam peran front-end dan karakteristik ai ux yang perlu diberi definisi operasional sebelum dipakai"
+          "Respon visual terhadap aksi user: loading spinner, success toast, error state, hover effect. Feedback < 100ms terasa instan. Feedback < 1s = delay natural. Feedback > 5s = return."
         ],
         [
           "uncertainty",
-          "tingkat ketidakpastian yang perlu ditampilkan dan dikelola"
+          "Ketidakpastian dalam UI: loading state (data belum ada), error state (gagal dapat data), empty state (data kosong). Setiap state harus di-handle — jangan hanya desain ideal."
         ],
         [
           "control",
-          "konsep penting dalam peran front-end dan karakteristik ai ux yang perlu diberi definisi operasional sebelum dipakai"
+          "User harus merasa mengontrol aplikasi: undo, cancel, konfirmasi sebelum aksi destruktif. Hilangkan 'Bagaimana cara kembali?' dengan navigation yang jelas."
         ],
         [
           "trust",
-          "konsep penting dalam peran front-end dan karakteristik ai ux yang perlu diberi definisi operasional sebelum dipakai"
+          "User percaya aplikasi: data aman, aksi bisa diprediksi, feedback konsisten. Trust rusak oleh: error tiba-tiba, data hilang, loading lama tanpa feedback."
         ],
         [
           "failure",
-          "konsep penting dalam peran front-end dan karakteristik ai ux yang perlu diberi definisi operasional sebelum dipakai"
+          "Aplikasi harus graceful saat gagal: error message jelas, langkah selanjutnya, tidak kehilangan data yang sudah diinput. 'Something went wrong' — itu bukan pesan error."
         ]
       ],
       "quickCheck": {
@@ -184,27 +184,27 @@
       "glossary": [
         [
           "semantic HTML",
-          "konsep penting dalam fondasi html, css, dan javascript yang perlu diberi definisi operasional sebelum dipakai"
+          "HTML yang menggunakan tag sesuai makna, bukan hanya tampilan: <nav> untuk navigasi, <article> untuk konten, <h1> untuk heading utama. Aksesibilitas dimulai dari semantic HTML."
         ],
         [
           "layout",
-          "konsep penting dalam fondasi html, css, dan javascript yang perlu diberi definisi operasional sebelum dipakai"
+          "Susunan elemen di halaman: header, sidebar, main content, footer. CSS Grid untuk layout 2D, Flexbox untuk 1D. Responsive: layout berubah sesuai ukuran layar."
         ],
         [
           "responsive",
-          "konsep penting dalam fondasi html, css, dan javascript yang perlu diberi definisi operasional sebelum dipakai"
+          "UI menyesuaikan ukuran layar. Mobile-first: desain untuk layar kecil dulu, tambah complexity untuk layar besar. Breakpoints: 640px, 768px, 1024px, 1280px."
         ],
         [
           "DOM",
-          "konsep penting dalam fondasi html, css, dan javascript yang perlu diberi definisi operasional sebelum dipakai"
+          "Document Object Model — representasi HTML di browser. JavaScript memanipulasi DOM untuk update UI. DOM manipulation mahal — minimalkan reflow dan repaint."
         ],
         [
           "event",
-          "konsep penting dalam fondasi html, css, dan javascript yang perlu diberi definisi operasional sebelum dipakai"
+          "Aksi user di browser: click, submit, input, scroll, resize. Event listener: kode JavaScript yang merespon event. Event delegation: satu listener untuk banyak elemen."
         ],
         [
           "module",
-          "konsep penting dalam fondasi html, css, dan javascript yang perlu diberi definisi operasional sebelum dipakai"
+          "File JavaScript terpisah untuk kode terorganisir: import/export. Module bundler: Webpack, Vite — menggabungkan module jadi file untuk browser."
         ]
       ],
       "quickCheck": {
@@ -295,27 +295,27 @@
       "glossary": [
         [
           "component",
-          "konsep penting dalam component, state, dan data flow yang perlu diberi definisi operasional sebelum dipakai"
+          "Unit UI independen: Button, Card, Modal, Input. Component = template + logic + style. Reusable: satu Button component dipakai di seluruh aplikasi."
         ],
         [
           "props",
-          "konsep penting dalam component, state, dan data flow yang perlu diberi definisi operasional sebelum dipakai"
+          "Parameter yang diberikan ke component. 'props' adalah input dari parent ke child: <Button variant='primary' label='Submit'>. Props tidak boleh diubah oleh child (immutable)."
         ],
         [
           "state",
-          "konsep penting dalam component, state, dan data flow yang perlu diberi definisi operasional sebelum dipakai"
+          "Data internal component yang bisa berubah: isOpen (modal), count (counter), inputValue. State update → UI re-render. State management: useState, useReducer, Redux, Zustand."
         ],
         [
           "derived state",
-          "konsep penting dalam component, state, dan data flow yang perlu diberi definisi operasional sebelum dipakai"
+          "Nilai yang dihitung dari state/props, bukan disimpan terpisah. 'fullName = firstName + lastName'. Derived state mencegah inkonsistensi — satu source of truth."
         ],
         [
           "lifecycle",
-          "konsep penting dalam component, state, dan data flow yang perlu diberi definisi operasional sebelum dipakai"
+          "Fase component: mount (pertama muncul), update (props/state berubah), unmount (dihapus). useEffect: efek samping terkait lifecycle."
         ],
         [
           "architecture",
-          "konsep penting dalam component, state, dan data flow yang perlu diberi definisi operasional sebelum dipakai"
+          "Struktur komponen: page → layout → component. Presentational (tampilan) vs Container (logic). Separation of concerns: satu component tidak campur UI dan data fetching."
         ]
       ],
       "quickCheck": {
@@ -406,27 +406,27 @@
       "glossary": [
         [
           "fetch",
-          "konsep penting dalam integrasi api dan async interaction yang perlu diberi definisi operasional sebelum dipakai"
+          "Mengirim HTTP request ke server: GET data, POST form. fetch() API: promise-based. Alternatif: axios, SWR, React Query."
         ],
         [
           "promise",
-          "konsep penting dalam integrasi api dan async interaction yang perlu diberi definisi operasional sebelum dipakai"
+          "Objek yang merepresentasikan operasi async: pending, fulfilled, rejected. async/await: syntax sugar untuk promise. Error handling: try/catch untuk await."
         ],
         [
           "loading",
-          "konsep penting dalam integrasi api dan async interaction yang perlu diberi definisi operasional sebelum dipakai"
+          "State saat data sedang diambil. Tampilkan skeleton loader atau spinner. Jangan tampilkan empty/error sebelum request selesai."
         ],
         [
           "timeout",
-          "konsep penting dalam integrasi api dan async interaction yang perlu diberi definisi operasional sebelum dipakai"
+          "Batas waktu request: 10 detik. Jika timeout, tampilkan error dan retry button. Jangan infinite waiting — user tidak tahu apakah aplikasi hang atau masih loading."
         ],
         [
           "retry",
-          "konsep penting dalam integrasi api dan async interaction yang perlu diberi definisi operasional sebelum dipakai"
+          "Mengulang request yang gagal. Automatic retry: 3x dengan exponential backoff. Retry button: untuk user yang ingin coba manual."
         ],
         [
           "cancellation",
-          "konsep penting dalam integrasi api dan async interaction yang perlu diberi definisi operasional sebelum dipakai"
+          "Membatalkan request yang tidak lagi diperlukan: pindah halaman sebelum request selesai. AbortController: cancel fetch. Mencegah race condition dan memory leak."
         ]
       ],
       "quickCheck": {
@@ -517,27 +517,27 @@
       "glossary": [
         [
           "stream",
-          "konsep penting dalam chat, streaming, dan progressive rendering yang perlu diberi definisi operasional sebelum dipakai"
+          "Menerima data sepotong-sepotong, bukan sekaligus. Server-Sent Events (SSE) untuk streaming text. WebSocket untuk bidirectional. Streaming: user lihat respons AI token per token."
         ],
         [
           "token",
-          "konsep penting dalam chat, streaming, dan progressive rendering yang perlu diberi definisi operasional sebelum dipakai"
+          "Unit teks yang dihasilkan AI model: kata atau subword. Token streaming: UI update setiap token — user melihat teks muncul real-time."
         ],
         [
           "typing state",
-          "konsep penting dalam chat, streaming, dan progressive rendering yang perlu diberi definisi operasional sebelum dipakai"
+          "Status yang menunjukkan AI sedang mengetik. 'AI sedang menulis...' memberi tahu user bahwa respons sedang diproses. Hilangkan typing state saat respons selesai."
         ],
         [
           "stop",
-          "konsep penting dalam chat, streaming, dan progressive rendering yang perlu diberi definisi operasional sebelum dipakai"
+          "User bisa menghentikan generasi AI di tengah jalan. Abort: cancel stream. Partial response: tampilkan yang sudah digenerate, jangan dibuang."
         ],
         [
           "regenerate",
-          "konsep penting dalam chat, streaming, dan progressive rendering yang perlu diberi definisi operasional sebelum dipakai"
+          "Meminta AI menghasilkan respons baru untuk input yang sama. New stream: mulai dari awal. Loading state: tunjukkan indikasi regenerasi."
         ],
         [
           "history",
-          "konsep penting dalam chat, streaming, dan progressive rendering yang perlu diberi definisi operasional sebelum dipakai"
+          "Riwayat chat: kirim pesan + response AI. History context: setiap request baru mengirim history untuk konteks. Virtual scrolling: hanya render pesan yang terlihat."
         ]
       ],
       "quickCheck": {
@@ -628,27 +628,27 @@
       "glossary": [
         [
           "file input",
-          "konsep penting dalam upload gambar, audio, dan dokumen yang perlu diberi definisi operasional sebelum dipakai"
+          "Element <input type='file'> untuk upload. Accept attribute: batasi tipe file. Multiple: upload banyak file sekaligus. Drag & drop: UX yang lebih baik."
         ],
         [
           "preview",
-          "konsep penting dalam upload gambar, audio, dan dokumen yang perlu diberi definisi operasional sebelum dipakai"
+          "Menampilkan file sebelum upload: image thumbnail, nama file, ukuran file. Preview membantu user konfirmasi file benar sebelum upload."
         ],
         [
           "validation",
-          "konsep penting dalam upload gambar, audio, dan dokumen yang perlu diberi definisi operasional sebelum dipakai"
+          "Memeriksa file sebelum upload: tipe (image, PDF), ukuran (max 10MB), dimensi (min 200px). Validasi client + server — client untuk UX, server untuk security."
         ],
         [
           "progress",
-          "konsep penting dalam upload gambar, audio, dan dokumen yang perlu diberi definisi operasional sebelum dipakai"
+          "Indikator upload: persentase, speed, estimated time. Progress bar memberi user kepastian. Tanpa progress, user mungkin curiga aplikasi hang."
         ],
         [
           "metadata",
-          "konsep penting dalam upload gambar, audio, dan dokumen yang perlu diberi definisi operasional sebelum dipakai"
+          "Informasi tambahan file: deskripsi, tag, tanggal, lokasi. Metadata bisa diisi user atau otomatis (EXIF, GPS). Metadata untuk search dan filter."
         ],
         [
           "consent",
-          "konsep penting dalam upload gambar, audio, dan dokumen yang perlu diberi definisi operasional sebelum dipakai"
+          "Konfirmasi user sebelum mengupload data: 'Saya setuju data ini diproses.' Consent diperlukan untuk data PII. Jangan upload tanpa consent — compliance violation."
         ]
       ],
       "quickCheck": {
@@ -739,27 +739,27 @@
       "glossary": [
         [
           "keyboard",
-          "konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai"
+          "Aksesibilitas keyboard: semua interaksi bisa dilakukan dengan Tab, Enter, Escape. Focus indicator visible — jangan hapus outline. Skip to content link."
         ],
         [
           "screen reader",
-          "konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai"
+          "Software yang membacakan UI untuk user tunanetra: JAWS, NVDA, VoiceOver. Gunakan ARIA labels untuk elemen tanpa teks. Alt text untuk gambar."
         ],
         [
           "contrast",
-          "konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai"
+          "Perbedaan warna teks vs background. WCAG AA: contrast ratio minimal 4.5:1 untuk text normal, 3:1 untuk text besar. Tes dengan color contrast checker."
         ],
         [
           "focus",
-          "konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai"
+          "Elemen yang aktif siap diinteraksi keyboard. Focus order: logical — dari kiri ke kanan, atas ke bawah. Visible focus: border atau outline yang jelas."
         ],
         [
           "language",
-          "konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai"
+          "Atribut lang pada HTML: <html lang='id'>. Screen reader menggunakan lang untuk pronounciation. Content campuran: <span lang='en'>Artificial Intelligence</span>."
         ],
         [
           "locale",
-          "konsep penting dalam accessibility dan internationalization yang perlu diberi definisi operasional sebelum dipakai"
+          "Format regional: tanggal (DD/MM/YYYY vs MM/DD/YYYY), angka (1.000,50 vs 1,000.50), mata uang. Locale dari browser atau preferensi user."
         ]
       ],
       "quickCheck": {
@@ -850,27 +850,27 @@
       "glossary": [
         [
           "XSS",
-          "konsep penting dalam keamanan dan privasi di browser yang perlu diberi definisi operasional sebelum dipakai"
+          "Cross-Site Scripting — injeksi skrip berbahaya ke halaman. Sanitize user input sebelum render. Jangan innerHTML dengan data user. Framework modern (React, Vue) punya proteksi built-in."
         ],
         [
           "CSRF",
-          "konsep penting dalam keamanan dan privasi di browser yang perlu diberi definisi operasional sebelum dipakai"
+          "Cross-Site Request Forgery — user terpaksa menjalankan aksi tanpa sadar. Proteksi: CSRF token, SameSite cookie, referer check."
         ],
         [
           "token",
-          "konsep penting dalam keamanan dan privasi di browser yang perlu diberi definisi operasional sebelum dipakai"
+          "Auth token disimpan dengan aman. Jangan localStorage untuk token sensitif — httpOnly cookie lebih aman dari XSS. Access token short-lived, refresh token rotation."
         ],
         [
           "CSP",
-          "konsep penting dalam keamanan dan privasi di browser yang perlu diberi definisi operasional sebelum dipakai"
+          "Content Security Policy — header HTTP yang membatasi sumber daya: 'script-src self' hanya allow script dari domain sendiri. Mencegah XSS meskipun ada injection."
         ],
         [
           "PII",
-          "konsep penting dalam keamanan dan privasi di browser yang perlu diberi definisi operasional sebelum dipakai"
+          "Personally Identifiable Information — data yang bisa mengidentifikasi individu: nama, email, NIK, alamat. Jangan tampilkan PII di URL, console, atau log client."
         ],
         [
           "local storage",
-          "konsep penting dalam keamanan dan privasi di browser yang perlu diberi definisi operasional sebelum dipakai"
+          "Penyimpanan browser: key-value, persist sampai dihapus. Jangan simpan: token, password, PII. Boleh: theme preference, UI state, cache non-sensitive."
         ]
       ],
       "quickCheck": {

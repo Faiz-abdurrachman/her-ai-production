@@ -300,12 +300,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["workload", "konsep penting dalam arsitektur infrastruktur ai yang perlu diberi definisi operasional sebelum dipakai"],
-                ["training", "konsep penting dalam arsitektur infrastruktur ai yang perlu diberi definisi operasional sebelum dipakai"],
-                ["inference", "konsep penting dalam arsitektur infrastruktur ai yang perlu diberi definisi operasional sebelum dipakai"],
-                ["control plane", "konsep penting dalam arsitektur infrastruktur ai yang perlu diberi definisi operasional sebelum dipakai"],
-                ["data plane", "konsep penting dalam arsitektur infrastruktur ai yang perlu diberi definisi operasional sebelum dipakai"],
-                ["non-functional requirement", "konsep penting dalam arsitektur infrastruktur ai yang perlu diberi definisi operasional sebelum dipakai"]
+                ["workload", "Tugas yang dijalankan sistem AI: training (komputasi intensif, jam-minggu), inference (latensi rendah, request per detik), preprocessing (data pipeline). Setiap workload butuh resource berbeda."],
+                ["training", "Proses melatih model: forward + backward pass ribuan iterasi. Butuh GPU dengan VRAM besar. Distribusi: data parallel, model parallel, pipeline parallel."],
+                ["inference", "Menjalankan model terlatih untuk prediksi. Latency critical: <100ms untuk real-time. Throughput: request per detik. Batching: gabungkan request untuk efisiensi GPU."],
+                ["control plane", "Sistem yang mengelola dan mengkonfigurasi: Kubernetes master, MLflow server, scheduler. Kontrol plane menentukan 'apa yang jalan'."],
+                ["data plane", "Sistem yang menjalankan workload aktual: compute nodes, GPU servers, storage nodes. Data plane mengeksekusi apa yang diperintahkan kontrol plane."],
+                ["non-functional requirement", "Requirements bukan fungsi: latency, throughput, availability, scalability, cost, security. Sama pentingnya dengan functional — tanpa NFR, model tidak bisa dipakai."]
             ],
 quickCheck: {
                 question: "Jelaskan workload dengan kalimat sendiri dan berikan satu contoh.",
@@ -355,12 +355,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["CPU", "konsep penting dalam cpu, gpu, accelerator, dan memori yang perlu diberi definisi operasional sebelum dipakai"],
-                ["GPU", "konsep penting dalam cpu, gpu, accelerator, dan memori yang perlu diberi definisi operasional sebelum dipakai"],
-                ["accelerator", "konsep penting dalam cpu, gpu, accelerator, dan memori yang perlu diberi definisi operasional sebelum dipakai"],
-                ["VRAM", "konsep penting dalam cpu, gpu, accelerator, dan memori yang perlu diberi definisi operasional sebelum dipakai"],
-                ["bandwidth", "konsep penting dalam cpu, gpu, accelerator, dan memori yang perlu diberi definisi operasional sebelum dipakai"],
-                ["precision", "konsep penting dalam cpu, gpu, accelerator, dan memori yang perlu diberi definisi operasional sebelum dipakai"]
+                ["CPU", "Central Processing Unit — komputasi sequential, clock speed tinggi, cache besar. Cocok untuk: data preprocessing, model kecil, serving dengan throughput rendah."],
+                ["GPU", "Graphics Processing Unit — ribuan core paralel. Diperlukan untuk: training deep learning, inference model besar (LLM, ViT), batch processing. Memory-bound: VRAM adalah batasan utama."],
+                ["accelerator", "Hardware khusus untuk AI: TPU (Google), NPU (chip AI di laptop), FPGA (reconfigurable). Lebih efisien dari GPU untuk use case spesifik."],
+                ["VRAM", "Video RAM — memori GPU. Ukuran: 8GB (entry), 24GB (RTX 3090), 80GB (A100). Menentukan model size maksimal: model 7B parameter = ~14GB VRAM (FP16)."],
+                ["bandwidth", "Kecepatan transfer data: GPU memory bandwidth (TB/s), inter-node (GB/s — NVLink, InfiniBand), network. Bandwidth sering jadi bottleneck — bukan compute."],
+                ["precision", "Format numerik: FP32 (32-bit, akurat, VRAM besar), FP16 (16-bit, lebih cepat, VRAM setengah), INT8 (8-bit, kuantisasi). Lower precision = lebih cepat + VRAM lebih kecil — trade-off accuracy."]
             ],
 quickCheck: {
                 question: "Jelaskan CPU dengan kalimat sendiri dan berikan satu contoh.",
@@ -410,12 +410,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["object storage", "konsep penting dalam storage dan siklus hidup data yang perlu diberi definisi operasional sebelum dipakai"],
-                ["block", "konsep penting dalam storage dan siklus hidup data yang perlu diberi definisi operasional sebelum dipakai"],
-                ["file", "konsep penting dalam storage dan siklus hidup data yang perlu diberi definisi operasional sebelum dipakai"],
-                ["IOPS", "konsep penting dalam storage dan siklus hidup data yang perlu diberi definisi operasional sebelum dipakai"],
-                ["throughput", "jumlah pekerjaan yang dapat diselesaikan per satuan waktu"],
-                ["tiering", "konsep penting dalam storage dan siklus hidup data yang perlu diberi definisi operasional sebelum dipakai"]
+                ["object storage", "Penyimpanan data tak terstruktur: S3, GCS, Azure Blob. Skalabel hingga exabyte. Akses via HTTP API. Untuk: dataset, model checkpoint, image, backup."],
+                ["block", "Penyimpanan seperti hard drive virtual: EBS, persistent disk. Performa tinggi, latency rendah. Untuk: database, aplikasi yang butuh random I/O."],
+                ["file", "Penyimpanan shared filesystem: NFS, EFS, FSx. Bisa di-mount multiple instances. Cocok untuk: shared dataset, model artifact, distributed training."],
+                ["IOPS", "Input/Output Operations Per Second — ukuran performa storage. Database butuh IOPS tinggi. Sequential read (training data) lebih penting IO throughput dari IOPS."],
+                ["throughput", "Jumlah data yang bisa dibaca/ditulis per detik: MB/s atau GB/s. Training butuh throughput tinggi — data loading jangan jadi bottleneck. Prefetching dan caching membantu."],
+                ["tiering", "Storage dengan berbagai level: hot (SSD, cepat, mahal), warm (HDD, murah), cold (tape/archive, termurah). Data otomatis pindah tier berdasarkan frekuensi akses."]
             ],
 quickCheck: {
                 question: "Jelaskan object storage dengan kalimat sendiri dan berikan satu contoh.",
@@ -465,12 +465,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["latency", "waktu yang dibutuhkan sistem untuk menghasilkan respons"],
-                ["bandwidth", "konsep penting dalam jaringan untuk workload ai yang perlu diberi definisi operasional sebelum dipakai"],
-                ["topology", "konsep penting dalam jaringan untuk workload ai yang perlu diberi definisi operasional sebelum dipakai"],
-                ["load balancer", "konsep penting dalam jaringan untuk workload ai yang perlu diberi definisi operasional sebelum dipakai"],
-                ["egress", "konsep penting dalam jaringan untuk workload ai yang perlu diberi definisi operasional sebelum dipakai"],
-                ["private network", "konsep penting dalam jaringan untuk workload ai yang perlu diberi definisi operasional sebelum dipakai"]
+                ["latency", "Waktu tempuh data antar node. Intra-node (GPU↔GPU): milidetik via NVLink. Inter-node (server↔server): milidetik via InfiniBand or Ethernet. Critical untuk distributed training."],
+                ["bandwidth", "Kecepatan transfer data jaringan: 1 Gbps (Ethernet), 100 Gbps (InfiniBand). Distributed training butuh bandwidth tinggi — gradient synchronization tiap batch."],
+                ["topology", "Cara node terhubung: star (switch pusat), mesh (semua terhubung), tree (hierarki). Topologi mempengaruhi latency dan bandwidth antar node."],
+                ["load balancer", "Mendistribusikan request ke multiple server. Round robin, least connections, weighted. Health check: hanya kirim ke server sehat."],
+                ["egress", "Data keluar dari cloud — biasanya berbayar ($$$). Optimasi: kompresi, cache, pilih region yang sama. Egress cost bisa melebihi compute cost."],
+                ["private network", "Jaringan antar node dalam cloud yang tidak melewati internet. VPC, private subnet. Latency lebih rendah, bandwidth lebih tinggi, lebih aman."]
             ],
 quickCheck: {
                 question: "Jelaskan latency dengan kalimat sendiri dan berikan satu contoh.",
@@ -520,12 +520,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["virtual machine", "konsep penting dalam virtualization dan container yang perlu diberi definisi operasional sebelum dipakai"],
-                ["container", "konsep penting dalam virtualization dan container yang perlu diberi definisi operasional sebelum dipakai"],
-                ["image", "konsep penting dalam virtualization dan container yang perlu diberi definisi operasional sebelum dipakai"],
-                ["runtime", "konsep penting dalam virtualization dan container yang perlu diberi definisi operasional sebelum dipakai"],
-                ["isolation", "konsep penting dalam virtualization dan container yang perlu diberi definisi operasional sebelum dipakai"],
-                ["registry", "konsep penting dalam virtualization dan container yang perlu diberi definisi operasional sebelum dipakai"]
+                ["virtual machine", "Emulasi komputer fisik: EC2, GCE, Azure VM. OS penuh, isolasi kuat. Cocok untuk: workload legacy, one-off jobs. Tidak seefisien container untuk scaling."],
+                ["container", "Paket aplikasi + dependency + OS minimal. Docker: standar container runtime. Kelebihan: ringan, fast start, reproducible. Kekurangan: sharing GPU kompleks."],
+                ["image", "Template untuk container. Dockerfile: instruksi build image. Image harus kecil (<500MB), aman (base image minimal), versioned."],
+                ["runtime", "Container runtime yang menjalankan gambar: Docker, containerd, CRI-O. Memanage container lifecycle: start, stop, restart."],
+                ["isolation", "Seberapa terpisah satu workload dari yang lain. VM: isolasi penuh (kernel sendiri). Container: berbagi kernel host — lebih ringan tapi kurang terisolasi."],
+                ["registry", "Penyimpanan terpusat untuk container images. Push: build → tag → push. Pull: deploy → pull dari registry. Private registry untuk internal images."]
             ],
 quickCheck: {
                 question: "Jelaskan virtual machine dengan kalimat sendiri dan berikan satu contoh.",
@@ -575,12 +575,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["cloud", "konsep penting dalam cloud, on-premise, dan hybrid yang perlu diberi definisi operasional sebelum dipakai"],
-                ["on-premise", "konsep penting dalam cloud, on-premise, dan hybrid yang perlu diberi definisi operasional sebelum dipakai"],
-                ["hybrid", "konsep penting dalam cloud, on-premise, dan hybrid yang perlu diberi definisi operasional sebelum dipakai"],
-                ["elasticity", "konsep penting dalam cloud, on-premise, dan hybrid yang perlu diberi definisi operasional sebelum dipakai"],
-                ["sovereignty", "konsep penting dalam cloud, on-premise, dan hybrid yang perlu diberi definisi operasional sebelum dipakai"],
-                ["shared responsibility", "konsep penting dalam cloud, on-premise, dan hybrid yang perlu diberi definisi operasional sebelum dipakai"]
+                ["cloud", "Infrastruktur di penyedia: AWS, GCP, Azure. Kelebihan: elastis, pay-per-use, managed services. Kekurangan: vendor lock-in, egress cost."],
+                ["on-premise", "Infrastruktur sendiri: server di kantor/data center. Kelebihan: kontrol penuh, data sovereignty. Kekurangan: capex besar, maintenance, tidak elastis."],
+                ["hybrid", "Kombinasi cloud + on-premise. Sensitive data di on-premise, compute burst ke cloud. Lebih kompleks — butuh jaringan aman antar lokasi."],
+                ["elasticity", "Kemampuan menambah/mengurangi resource otomatis sesuai kebutuhan. Cloud: elastis. On-premise: tidak elastis (fixed capacity). Elastisitas menghemat biaya."],
+                ["sovereignty", "Data harus tinggal di yurisdiksi tertentu: data Indonesia wajib di server Indonesia. Cloud provider punya region Jakarta. Sovereignty menentukan arsitektur."],
+                ["shared responsibility", "Cloud provider: security OF the cloud (infrastructure). Customer: security IN the cloud (data, access, config). Pahami batas tanggung jawab."]
             ],
 quickCheck: {
                 question: "Jelaskan cloud dengan kalimat sendiri dan berikan satu contoh.",
@@ -630,12 +630,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["pod", "konsep penting dalam orkestrasi dengan kubernetes yang perlu diberi definisi operasional sebelum dipakai"],
-                ["deployment", "konsep penting dalam orkestrasi dengan kubernetes yang perlu diberi definisi operasional sebelum dipakai"],
-                ["service", "konsep penting dalam orkestrasi dengan kubernetes yang perlu diberi definisi operasional sebelum dipakai"],
-                ["job", "konsep penting dalam orkestrasi dengan kubernetes yang perlu diberi definisi operasional sebelum dipakai"],
-                ["autoscaling", "konsep penting dalam orkestrasi dengan kubernetes yang perlu diberi definisi operasional sebelum dipakai"],
-                ["resource quota", "konsep penting dalam orkestrasi dengan kubernetes yang perlu diberi definisi operasional sebelum dipakai"]
+                ["pod", "Unit terkecil di Kubernetes: satu atau lebih container. Pod punya IP sendiri, bisa di-scale. Ephemeral: pod bisa mati kapan saja — jangan simpan state di pod."],
+                ["deployment", "Managed pod: jumlah replica, update strategy, rollback. Deployment mendeklarasikan 'saya mau 3 pod ini jalan'. Kubernetes menjaga jumlah replica."],
+                ["service", "Abstraksi network ke pod. Service punya IP stabil — pod bisa mati dan lahir lagi tanpa pengaruh client. Load balancer bawaan Kubernetes."],
+                ["job", "Pod yang menjalankan tugas sampai selesai: batch inference, data processing. CronJob: job terjadwal. Job berbeda dari deployment — deployment selalu running."],
+                ["autoscaling", "Horizontal Pod Autoscaler (HPA): tambah/kurang pod berdasarkan CPU/memory/ custom metric. Vertical Pod Autoscaler (VPA): tambah/kurang resource per pod."],
+                ["resource quota", "Batas resource per namespace: max CPU, max memory, max pod count. Mencegah satu tim memonopoli cluster. Default quota untuk project baru."]
             ],
 quickCheck: {
                 question: "Jelaskan pod dengan kalimat sendiri dan berikan satu contoh.",
@@ -685,12 +685,12 @@ workedExample: [
                 ["Perubahan berisiko", "Uji terbatas dan siapkan rollback"]
             ],
 glossary: [
-                ["declarative", "konsep penting dalam infrastructure as code yang perlu diberi definisi operasional sebelum dipakai"],
-                ["Terraform", "konsep penting dalam infrastructure as code yang perlu diberi definisi operasional sebelum dipakai"],
-                ["module", "konsep penting dalam infrastructure as code yang perlu diberi definisi operasional sebelum dipakai"],
-                ["state", "konsep penting dalam infrastructure as code yang perlu diberi definisi operasional sebelum dipakai"],
-                ["review", "konsep penting dalam infrastructure as code yang perlu diberi definisi operasional sebelum dipakai"],
-                ["drift", "perubahan distribusi data atau hubungan yang dipelajari model"]
+                ["declarative", "Mendeklarasikan 'apa yang diinginkan', bukan 'bagaimana mencapainya'. Kubectl apply -f deployment.yaml: Kubernetes mewujudkan state yang dideklarasikan."],
+                ["Terraform", "Infrastructure as Code tool: define resource di .tf file, apply → cloud resource dibuat. State file: menyimpan resource yang sudah dibuat. Plan: preview perubahan sebelum apply."],
+                ["module", "Kumpulan resource Terraform yang reusable: module 'eks-cluster' → AWS, module 'vpc' → network. Modul: DRY, standardisasi, versioned."],
+                ["state", "File yang mencatat resource yang sudah dibuat Terraform. State disimpan di backend (S3, Terraform Cloud). Jangan edit state manual — via Terraform commands."],
+                ["review", "Code review untuk infrastruktur change: Terraform plan di-PR, tim review sebelum apply. Infrastructure change = high risk — review wajib."],
+                ["drift", "Perbedaan antara state yang dideklarasikan di Terraform dengan resource aktual. Drift terjadi saat ada yang edit resource manual. Terraform plan mendeteksi drift."]
             ],
 quickCheck: {
                 question: "Jelaskan declarative dengan kalimat sendiri dan berikan satu contoh.",
@@ -706,7 +706,7 @@ challenge: {
             },
 roadmapRef: "8"
         }
-    ];;
+    ];;;
 
     CHAPTERS.forEach(function (chapter, index) {
         Object.assign(chapter, PYTHON_GUIDES[index]);

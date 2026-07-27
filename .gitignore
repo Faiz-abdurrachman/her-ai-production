@@ -17,6 +17,9 @@ reports/qa-report-*.md
 !reports/qa-report-latest.md
 Website-Portofolio-Chen/
 docs-faiz/
+scratch/
+scratch.js
+scripts/test-settings.js
 # Docs - jangan di-push ke GitHub
 docs-faiz/
 docs-nazril/
