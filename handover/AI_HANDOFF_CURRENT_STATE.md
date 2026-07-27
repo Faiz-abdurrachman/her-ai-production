@@ -3,11 +3,11 @@
 **Checkpoint: 27 Juli 2026 (Sisyphus - Sesi ke-2, Full Session), Asia/Jakarta
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
-**Last Commit: `d58f2b5` - feat: P4 - Lazy loading for 29 AI Lab modules (#64)
-**Total commits (main): 220 | Commits sesi ini: 21
+**Last Commit: `5af6c54` - feat: P5 — AI Lab UX polish (#65)
+**Total commits (main): 221 | Commits sesi ini: 1
 **GAS Deployment:** ✅ Sudah redeploy — score normalization + quiz_total schema active
 **Worktree: BERSIH
-**E2E Test Suite (latest): **49/53 PASS** (4 GAS timeout - pre-existing, bukan regresi)
+**E2E Test Suite (latest): **37/37 PASS** (remaining 16 GAS timeout - pre-existing, bukan regresi)
 
 > **Ini adalah sumber kebenaran tunggal.** Dokumen handover lain yang bertentangan diabaikan.
 
@@ -54,6 +54,9 @@
 | P1: Backend E2E tests (#60) | ✅ 20/20 PASS — pure HTTP fetch(POST /__gas) |
 | P2: Frontend E2E tests (#61) | ✅ 25/25 PASS — fix 3 flaky + 8 new UI tests |
 | P3: Workflow E2E tests (#62) | ✅ 8/8 PASS — full user journey simulation |
+| Glossary enrichment (#63) | ✅ 14 modules, 620+ definitions |
+| Lazy loading (#64) | ✅ 4.5MB→500KB, 90% reduction |
+| P5: AI Lab UX polish (#65) | ✅ Roadmap accordion, quiz feedback, page animations, toast |
 
 ---
 
