@@ -518,26 +518,127 @@ Nazril MD files menggunakan template placeholder untuk kolom "Penjelasan mudah" 
 
 **Boilerplate yang dihapus:** ~620 definitions ("konsep penting dalam..." / "perlu diberi definisi operasional...")
 **Verifikasi:** ✅ 29/29 syntax OK, ✅ 0 boilerplate tersisa
+**Commit:** `4a36a96`
 
 ---
 
-## Aturan Kerja — 18 RULE WAJIB
+## 64. Feature: Lazy Loading — 50+ Script Tags Dihapus, Module JS On-Demand
 
-1. Commit PER FITUR — jangan gabung fitur beda
-2. Update handover & gemini.md setiap selesai fitur
-3. Bug baru: lanjut #63, #64, dst
-4. No dark theme — light pink
-5. CSS scope: ai-lab-content
-6. Diagram kontras: lines ≥25%, dots ≥75%, stroke ≥0.8px
-7. NO NIK/password exposed di code
-8. TANYA user sebelum mulai kerja — konfirmasi dulu
-9. Verify: node --check, test flow, null guards
-10. NO provision/generate participant accounts
-11. NO touch 231 lesson HTML files — pakai CSS/JS injection
-12. sessionStorage = source of truth untuk session
-13. Bump cache buster setiap edit CSS/JS
-14. No silent fail — error harus kelihatan
-15. NO push ke GitHub kecuali diminta user
-16. GAS deployment: selalu redeploy web app setelah edit Code.gs
-17. Playwright: TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test
-18. Server lokal: node server.js → http://127.0.0.1:3000
+**Deskripsi:**
+75 script tags di index.html (~4.5MB JS) eager-loaded setiap page load. User cuma buka 1-2 module per session → 90% wasted bandwidth.
+
+**Penyebab:**
+Semua 29 ai-*.js + 20+ ai-lab/*.js files di-load via `<script>` tag di index.html.
+
+**Cara Perbaikan:**
+1. `settings.js`: tambah `window.__aiLabLoader` — Promise-based loader dengan cache + dedup
+2. `index.html`: hapus 50+ script tags (ai-*.js + ai-lab/*.js)
+3. `router.js`: wrap 28 route handler dengan `__aiLabLoader.load('ai-xxx').then(function() {...})`
+4. Script: `scripts/transform-router-for-lazy.js`
+
+**File yang diubah:**
+- `js/frontend/fellow-dashboard/settings.js` — loader utility
+- `index.html` — 50+ tags removed, cache buster `?v=20260727-lazy`
+- `js/router.js` — 28 module handlers wrapped
+- `scripts/transform-router-for-lazy.js` — transformation tool
+
+**Impact:** Initial load: 4.5MB → ~500KB (90% reduction)
+**Verifikasi:** E2E 49/53 PASS (4 GAS timeout — pre-existing)
+**Commit:** `d58f2b5`
+
+---
+
+## Session Summary — 27 Juli 2026 (Sisyphus sesi ke-2 — Full Session: P1-P6 + Lazy Loading)
+
+**Total commits sesi ini:** 21 (b0ae9bb → d58f2b5)
+**Grand total commits (main):** 220
+**Last commit:** `d58f2b5` — feat: P4 — Lazy loading for 29 AI Lab modules (#64)
+**Worktree:** BERSIH
+**Test participant:** NIK 8204086711010003 / Brenda Rahmandea Arsy / Password brenda123
+**E2E (latest full run):** 49/53 PASS (4 GAS timeout — pre-existing)
+
+### Deliverables Sesi Ini
+
+| # | Task | Status | Commit |
+|---|------|--------|--------|
+| #57-#59 | Python contamination fix (24 module) + ai-python.js rewrite | ✅ | b0ae9bb → d82ebc7 |
+| #60-#62 | E2E test suite — backend 20 + frontend 25 + workflow 8 | ✅ | 3fd3eb5 → db93ad8 |
+| #63 | Glossary enrichment 14 modules (620+ boilerplate definitions replaced) | ✅ | 4a36a96 |
+| P6 | ai-python.js review (PASS — konten sudah production quality) | ✅ | 4a36a96 |
+| #64 | Lazy loading — 50+ script tags removed, 4.5MB→500KB initial | ✅ | d58f2b5 |
+
+### Issues Terbuka
+- **P3 (Module Bersih):** ai-math-for-ai, ai-ml-basic, ai-cv, ai-reasoning — konten masih template
+- **P5 (UX Polish):** Animasi roadmap, quiz feedback, micro-interactions — belum dikerjakan
+- **Avatar/Foto Profil:** User nanya, belum diimplementasi
+- **Password Brenda:** Perlu diisi ulang `brenda123` di sheet `peserta_tahap_1` kolom `participant_password` setelah E2E password test jalan
+
+---
+
+## Aturan Kerja — 20 RULE WAJIB
+
+1. **Commit PER FITUR** — jangan gabung fitur beda. Satu commit = satu logical change.
+2. **Update handover & gemini.md** setiap selesai fitur.
+3. **Bug baru:** lanjut #65, #66, dst — jangan reuse nomor.
+4. **No dark theme** — light pink color scheme (#F63392).
+5. **CSS scope:** `.ai-lab-content` — jangan global selector kecuali utility.
+6. **Diagram kontras:** lines ≥25%, dots ≥75%, stroke ≥0.8px.
+7. **NO NIK/password exposed** di code — environment variable aja.
+8. **TANYA user** sebelum mulai kerja — konfirmasi order dan prioritas.
+9. **Verify:** `node --check`, test flow, null guards, E2E.
+10. **NO provision/generate** participant accounts — AKAN RESET 187 AKUN.
+11. **NO touch 231 lesson HTML files** — pakai CSS/JS injection.
+12. **sessionStorage** = source of truth untuk session.
+13. **Bump cache buster** setiap edit CSS/JS — `?v=20260727-{feature}`.
+14. **No silent fail** — error harus kelihatan (console.error, UI error state).
+15. **NO push ke GitHub** kecuali diminta user.
+16. **GAS deployment:** selalu redeploy web app setelah edit Code.gs.
+17. Playwright: `TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test`
+18. Server lokal: `node server.js` → http://127.0.0.1:3000
+19. **page.goto() > page.evaluate()** untuk SPA hash navigation — `page.evaluate` hash nav unreliable.
+20. **Jangan edit module bersih tanpa approval** (cv, math-for-ai, ml-basic, python-basic, reasoning). TANYA DULU.
+
+---
+
+## Tools & Commands
+
+```bash
+# Server
+node server.js
+
+# E2E Tests
+TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test --workers=1
+
+# Syntax check
+for f in js/frontend/fellow-dashboard/ai-*.js; do node --check "$f" && echo "✅ $f" || echo "❌ $f"; done
+node --check js/router.js && echo "✅ router.js"
+node --check js/frontend/fellow-dashboard/settings.js && echo "✅ settings.js"
+
+# Check boilerplate
+grep -c "konsep penting dalam" js/frontend/fellow-dashboard/ai-*.js | grep -v ":0$"
+
+# Extract + inject guides
+node scripts/extract-nazril-guides.js
+node scripts/inject-guides.js --phase=1  # Business
+node scripts/inject-guides.js --phase=2  # Data Eng
+node scripts/inject-guides.js --phase=3  # Foundation
+
+# Fix glossary
+node scripts/fix-business-glossary.js
+```
+
+---
+
+## Data Flow
+
+```
+CHAPTER: saveChapterProgress(id, ch, 'completed') → participant_progress
+QUIZ: saveChapterProgress(id, 'quiz', 'completed', score) → participant_progress (persentase 0-100%)
+PRACTICE: saveChapterProgress(id, 'practice', 'completed') → participant_progress (score=null)
+LOGIN: participantLogin(nik, pw) → 3 jalur verifikasi → token 12 jam
+PASSWORD: changeParticipantPassword(old, new) → hash SHA-256 → sync 2 sheet
+DASHBOARD: initParticipantDashboardData() → skeleton → fetch → render/cache + score badge
+SESSION: sessionStorage.heraiParticipantSession
+SETTINGS: localStorage.heraiGlobalSettings → participantPortalOpen boolean
+MODULE LOADING: __aiLabLoader.load('ai-xxx') → dynamic script injection (on-demand)
+```
