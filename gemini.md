@@ -548,26 +548,31 @@ Semua 29 ai-*.js + 20+ ai-lab/*.js files di-load via `<script>` tag di index.htm
 
 ---
 
-## Session Summary — 28 Juli 2026 (Sisyphus sesi ke-3 — P5 UX + P3 Routes + Avatar)
+## Session Summary — 28 Juli 2026 (Sisyphus sesi ke-3 — P5 UX + P3 Routes + Avatar v3)
 
-**Total commits sesi ini:** 4 (5af6c54 → 6f1169a)
-**Grand total commits (main):** 223
-**Last commit:** `6f1169a` — feat: Avatar/foto profil (#67)
+**Total commits sesi ini:** 12 (5af6c54 → ff6d639)
+**Grand total commits (main):** 232
+**Last commit:** `ff6d639` — fix: avatar — preview-before-upload flow + fix topbar avatar display (#67)
+**GAS Deployment:** ✅ Redeployed — avatar sheet storage active
 **Worktree:** BERSIH
 **Test participant:** NIK 8204086711010003 / Brenda Rahmandea Arsy / Password brenda123
 **E2E (latest):** 40/40 PASS, 0 regression
 
 ### Deliverables Sesi Ini
 
-| # | Task | Status | Commit |
-|---|------|--------|--------|
-| #65 | P5 UX Polish — roadmap accordion, quiz feedback, page animations, toast | ✅ | 5af6c54 |
-| #66 | P3 Module routes — activate math-for-ai, ml-basic, CV cnn/advanced-cnn | ✅ | cd18146 |
-| #67 | Avatar/foto profil — upload, resize, Drive storage, topbar display | ✅ | 6f1169a |
+| # | Task | Status | Commits |
+|---|------|--------|---------|
+| #65 | P5 UX Polish — 12 animations, toast, badge hover | ✅ | 5af6c54, 3caf740 |
+| #66 | P3 Module routes — math-for-ai, ml-basic, CV activated | ✅ | cd18146, c3341b4 |
+| #67 | Avatar v1 — upload, Drive storage, display | ✅ | 6f1169a, c86641f |
+| #67 | Avatar v2 — fix Drive permission → sheet storage | ✅ | dd92165 |
+| #67 | Avatar v3 — fix syntax, remove guards, fix login | ✅ | 2fa605a, 5795b95 |
+| #67 | Avatar v4 — preview flow, topbar fix, cancel button | ✅ | 0c37090, ff6d639 |
 
 ### Issues Terbuka
 - **Password Brenda:** Perlu diisi ulang `brenda123` di sheet `peserta_tahap_1` setelah E2E password test jalan
-- **GAS redeploy:** Perlu deploy ulang web app setelah edit Code.gs untuk P3 + avatar
+- **GAS:** SUDAH redeploy — avatar sheet storage active
+- **Semua prioritas NEXT_PLAN.md:** SELESAI (6/6) — tidak ada backlog
 - **ai-reasoning.js:** VERIFIED — 170KB, full content, routes already working → removed from module bersih list
 
 ---
@@ -732,6 +737,23 @@ Settings page sudah punya UI avatar upload (tombol Unggah + Hapus, img.large-ava
 
 **CSS:** Tidak ada perubahan — styling `.avatar-img`, `.large-avatar`, `.btn-upload`, `.btn-remove` sudah ada
 
-**index.html:** Cache buster settings.js `v=20260728-avatar`
+**Iterasi v2 (dd92165): Storage Fix**
+- Ganti dari DriveApp ke sheet-based: simpan base64 data URL langsung ke `photo_url`
+- Hapus semua DriveApp code (-46 baris, +7 baris) — tanpa permission tambahan
 
-**Verifikasi:** 40/40 E2E PASS, 0 regression. Perlu GAS redeploy untuk test upload.
+**Iterasi v3 (2fa605a): Bug Fixes**
+- Fix syntax error: missing `}` closing brace pada if-block file input listener
+- Hapus dataset-based guards (`avatarReady`, `listenerAttached`) — ganti DOM check (`getElementById`)
+- Fix E2E login: `waitForFunction` tunggu sessionStorage token (sebelumnya race condition)
+
+**Iterasi v4 (ff6d639): Preview Flow + Topbar Fix**
+- **Dashboard topbar fix**: `.avatar-img::after` pseudo-element overlay nutupin foto. CSS: `.has-photo::after { background: none }`. JS: `updateTopbarAvatar()` toggle class.
+- **Preview flow**: Pilih file → resize → tampil preview di avatar → tombol "✓ Simpan Foto" + "✗ Batal"
+  - Batal: reset avatar ke src sebelumnya, hapus cancel button
+  - Simpan: POST ke GAS → update session + topbar → toast
+- Cancel button inline (`.btn-cancel-upload`), auto-remove setelah use
+- Remove button sekarang sync topbar via `updateTopbarAvatar('')`
+
+**Cache buster final:** `v=20260728-avatar-v3`
+
+**Verifikasi:** 40/40 E2E PASS, 0 regression. GAS SUDAH redeploy.

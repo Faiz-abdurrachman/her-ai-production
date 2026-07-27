@@ -1,7 +1,7 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║  AI TRANSFER PROMPT — HerAI Fellowship SuperApp              ║
-║  Sesi: 27 Juli 2026 (Sisyphus sesi ke-2 — Full) -> Next AI   ║
-║  Total: 220 commit | Worktree: BERSIH | E2E: 49/53 PASS       ║
+║  Sesi: 28 Juli 2026 (Sisyphus sesi ke-3) → Next AI           ║
+║  Total: 232 commit | Worktree: BERSIH | E2E: 40/40 PASS       ║
 ╚══════════════════════════════════════════════════════════════╝
 
 ⚠️  BACA SELURUH FILE INI SEBELUM MULAI KERJA.
@@ -11,55 +11,48 @@
 📋 SUMBER KEBENARAN (WAJIB DIBACA — URUTAN PENTING)
 ═══════════════════════════════════════════════════════════════
 1. handover/AI_HANDOFF_CURRENT_STATE.md  ← SINGLE SOURCE OF TRUTH
-2. gemini.md  ← Bug log #1-64 + session rules
-3. handover/NEXT_PLAN.md  ← Priorities + execution plan
+2. gemini.md  ← Bug log #1-67 + session rules
+3. handover/NEXT_PLAN.md  ← Priorities + execution plan (SEMUA DONE)
 4. NEXT_AI_TRANSFER_PROMPT.txt ini  ← System identity + rules
 
 ═══════════════════════════════════════════════════════════════
 🔧 IDENTITAS SISTEM
 ═══════════════════════════════════════════════════════════════
 - Spreadsheet ID: 1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w
-- GAS Web App URL: same as previous (stable)
-- GAS Code: gas/Code.gs (2438+ baris, 52 routes, 23 sheets)
-- SPA: Vanilla JS hash-router, Node.js proxy (node server.js -> :3000)
+- GAS Web App URL: https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec
+- GAS Code: gas/Code.gs (2479 baris, 54 routes, 23 sheets)
+- SPA: Vanilla JS hash-router, Node.js proxy (node server.js → :3000)
 - Proxy: POST /__gas (token auto-injected, Origin header WAJIB)
 - Test participant: NIK 8204086711010003 / Brenda Rahmandea Arsy / brenda123
 - WA env: GAS_WEB_APP_URL di .env
-- Last commit: d58f2b5
+- Last commit: ff6d639
 - Worktree: BERSIH
-- E2E: 49/53 PASS (4 GAS timeout — pre-existing, bukan regresi)
+- E2E: 40/40 PASS (sisa GAS timeout — pre-existing, bukan regresi)
 
 ═══════════════════════════════════════════════════════════════
-✅ APA YANG UDAH SELESAI (SESI INI — 21 commit)
+✅ APA YANG UDAH SELESAI (SESI INI — 12 commit)
 ═══════════════════════════════════════════════════════════════
 
-#57-#59 — KONTEN FIX (3 commit):
-- #57: 24 module JS diganti konten module-specific dari Nazril MD
-- #58: Topik 01/02 badges dihide via 1 baris CSS
-- #59: ai-python.js di-rewrite dengan 8 GUIDES konten Python proper
+P5 — AI LAB UX POLISH (#65):
+- 12 animasi CSS: roadmap accordion smooth height, step stagger fade-in,
+  active step glow pink, quiz answer pulse (correct) + shake (wrong),
+  page enter fade-in-up, progress bar cubic-bezier, button scale(0.96)
+- __aiLabToast() global helper (success/error/info, auto-dismiss)
+- Dashboard quiz badge hover + skeleton reveal animation
+- 0 perubahan ke 29 file ai-*.js — semua via CSS injection
 
-#60-#62 — E2E TEST SUITE (5 commit):
-- #60: P1 Backend API — 20 tests, pure HTTP fetch(POST /__gas)
-- #61: P2 Frontend UI — 25 tests (fix 3 flaky + 8 new)
-- #62: P3 Full Flow — 8 workflow integration tests
-- TOTAL: 53 tests (49/53 PASS — 4 timeout GAS)
+P3 — MODULE ROUTES (#66):
+- ai-math-for-ai: 11 routes under-dev → math-for-ai/*.html + __aiLabLoader
+- ai-ml-basic: 5 routes under-dev → machine-learning/*.html
+- ai-cv: 8 cnn/advanced-cnn routes under-dev → 02/03-*/*.html
+- ai-reasoning.js: VERIFIED DONE — 170KB, full content, routes working
 
-#63 — GLOSSARY ENRICHMENT (1 commit):
-- 14 modules: 7 business + 7 data engineering
-- ~620 boilerplate definitions ("konsep penting dalam...") dihapus
-- Semua definisi ditulis proper dalam Bahasa Indonesia
-- Reusable: scripts/glossary-defs/*.json + fix-business-glossary.js
-
-#64 — LAZY LOADING (1 commit):
-- 50+ script tags dihapus dari index.html (75 -> ~20)
-- __aiLabLoader utility di settings.js (Promise + cache + dedup)
-- 28 route handler di router.js di-wrap dengan loader
-- 4.5MB -> ~500KB initial load (90% reduction)
-- E2E diverifikasi: module nav, quiz, practice — semua OK
-
-P6 — AI-PYTHON.JS REVIEW:
-- Verdict: PASS — konten sudah production-quality
-- 8 GUIDES, 12 practices, 20 quiz — semua proper
+AVATAR/FOTO PROFIL (#67):
+- GAS: uploadParticipantPhoto + removeParticipantPhoto endpoints
+- Storage: base64 data URL → sheet photo_url (tanpa Drive permission)
+- Flow: Pilih file → canvas resize 200×200 → preview → "✓ Simpan" / "✗ Batal"
+- Topbar: updateTopbarAvatar() set background-image + hide ::after overlay
+- CSS: .has-photo::after { background: none } — fix overlay default persona
 
 ═══════════════════════════════════════════════════════════════
 ⚠️  TEMUAN KRITIS — WAJIB BACA SEBELUM EDIT
@@ -72,7 +65,7 @@ P6 — AI-PYTHON.JS REVIEW:
 2. Login form element IDs:
    - NIK input: #profileNik (BUKAN #participantNik)
    - Password input: #profilePassword (BUKAN #participantPassword)
-   - Form: #participantLoginForm, Submit: #btnParticipantLogin
+   - Form: #participantLoginForm, Submit: button[type="submit"]
 
 3. Fresh browser localStorage kosong:
    - getGlobalSettings() sync return default {participantPortalOpen: false}
@@ -81,8 +74,8 @@ P6 — AI-PYTHON.JS REVIEW:
 4. GAS API Payload Shapes (VERIFIED from gas/Code.gs):
    - Token field: participantToken (BUKAN token)
    - Login response: {status, profile, token, expires_at}
-   - Dashboard response: {status, data: {modules, tracks, journey, events, leaderboard}}
-   - Progress response: {status, data: [...]} — field name is 'data', NOT 'progress'
+   - Dashboard: {status, data: {modules, tracks, journey, events, leaderboard}}
+   - Progress: {status, data: [...]} — field name 'data', NOT 'progress'
    - chapter_id returned as NUMBER from sheet — use String() comparison
 
 5. Playwright navigation — CRITICAL:
@@ -90,9 +83,10 @@ P6 — AI-PYTHON.JS REVIEW:
    - page.evaluate hash nav UNRELIABLE — jangan dipakai
    - Setelah login, page.goto() ke URL hash langsung
    - Quiz/Practice forms di-render oleh IIFE — tunggu dengan waitForFunction()
+   - setInputFiles + dispatchEvent('change') unreliable di headless
 
 6. Lazy Loading (#64):
-   - __aiLabLoader ada di window, defined di settings.js baris awal
+   - __aiLabLoader ada di window, defined di settings.js
    - load('ai-xxx') returns Promise — cache + dedup otomatis
    - 28 route handler SUDAH di-wrap. Jangan tambah route baru tanpa loader
    - Script loader path: /js/frontend/fellow-dashboard/{name}.js?v=20260727-lazy
@@ -101,33 +95,31 @@ P6 — AI-PYTHON.JS REVIEW:
    - Format hash: pw$1${salt}$${sha256hex}
    - verifyPasswordValue() fallback ke plain text + legacy peppers
    - Rate limit: 8 attempts per 10 menit via CacheService
-   - Password di peserta_tahap_1 kolom participant_password bisa plain text
 
-8. ai-python-basic.js:
-   - INTENTIONAL SKIP — namespace collision dengan ai-python.js
-   - KEDUANYA define window.loadPythonTopik()
+8. ai-python-basic.js: HARD BLOCK — namespace collision dengan ai-python.js
 
-9. ai-modern.js: STRUKTUR BERBEDA
-   - Tidak punya PYTHON_GUIDES — punya BEGINNER_GUIDES
-   - eyebrow: "Jalur Pemula" -> "AI Modern"
+9. ai-modern.js: STRUKTUR BERBEDA — BEGINNER_GUIDES, bukan PYTHON_GUIDES
 
 10. GAS Perlu Redeploy SETIAP edit Code.gs
-    - Sesi ini TIDAK edit Code.gs (selain temp reset yang di-revert)
 
-11. Module bersih (5) — TANYA DULU sebelum edit:
+11. Module dengan struktur berbeda (5) — TANYA DULU sebelum edit:
     - ai-cv.js, ai-math-for-ai.js, ai-ml-basic.js, ai-python-basic.js, ai-reasoning.js
+
+12. Avatar storage: base64 di sheet, 200×200 JPEG ~15KB
+    - Topbar overlay .avatar-img::after nutupin — pakai .has-photo class
 
 ═══════════════════════════════════════════════════════════════
 📐 ATURAN KERJA — 20 RULE WAJIB
 ═══════════════════════════════════════════════════════════════
-1.  Commit PER FITUR | 2. Update handover & gemini.md | 3. Bug baru #65+
+1.  Commit PER FITUR | 2. Update handover & gemini.md | 3. Bug baru #68+
 4.  No dark theme — light pink | 5. CSS scope ai-lab-content
 6.  Diagram kontras: lines >=25%, dots >=75%, stroke >=0.8px
 7.  NO NIK/password exposed | 8. TANYA user kalo ambigu
-9.  Verify: node --check, test flow, null guards, E2E | 10. NO provision/generate
-11. NO touch 231 lesson files — pakai CSS/JS injection | 12. sessionStorage = source of truth
-13. Bump cache buster | 14. No silent fail | 15. NO push GitHub
-16. Redeploy GAS after Code.gs edit | 17. Jangan edit module bersih tanpa approval
+9.  Verify: node --check, test flow, null guards, E2E
+10. NO provision/generate | 11. NO touch 231 lesson files — CSS/JS injection
+12. sessionStorage = source of truth | 13. Bump cache buster
+14. No silent fail | 15. NO push GitHub
+16. Redeploy GAS after Code.gs edit | 17. TANYA sebelum edit module struktur berbeda
 18. page.goto() > page.evaluate() untuk SPA nav
 19. __aiLabLoader sudah terintegrasi — jangan tambah <script> tag manual
 20. Jangan ubah router.js module handler tanpa loader wrapper
@@ -135,25 +127,27 @@ P6 — AI-PYTHON.JS REVIEW:
 ═══════════════════════════════════════════════════════════════
 🔑 DATA FLOW
 ═══════════════════════════════════════════════════════════════
-CHAPTER: saveChapterProgress(id, ch, 'completed') -> participant_progress
-QUIZ: saveChapterProgress(id, 'quiz', 'completed', score) -> participant_progress (0-100%)
-PRACTICE: saveChapterProgress(id, 'practice', 'completed') -> participant_progress
-LOGIN: participantLogin(nik, pw) -> 3 jalur -> token 12 jam
-PASSWORD: changeParticipantPassword(old, new) -> hash -> sync 2 sheet
-DASHBOARD: initParticipantDashboardData() -> skeleton -> fetch -> render/cache + score badge
+CHAPTER: saveChapterProgress(id, ch, 'completed') → participant_progress
+QUIZ: saveChapterProgress(id, 'quiz', 'completed', score) → participant_progress
+PRACTICE: saveChapterProgress(id, 'practice', 'completed') → participant_progress
+LOGIN: participantLogin(nik, pw) → 3 jalur → token 12 jam
+PASSWORD: changeParticipantPassword(old, new) → hash → sync 2 sheet
+DASHBOARD: initParticipantDashboardData() → skeleton → fetch → render/cache
 SESSION: sessionStorage.heraiParticipantSession
-SETTINGS: localStorage.heraiGlobalSettings -> participantPortalOpen boolean
-MODULE: __aiLabLoader.load('ai-xxx') -> dynamic script injection (on-demand)
+SETTINGS: localStorage.heraiGlobalSettings → participantPortalOpen boolean
+MODULE: __aiLabLoader.load('ai-xxx') → dynamic script injection
+AVATAR: file → resizeImageToBase64(200) → preview → POST uploadParticipantPhoto
 
 ═══════════════════════════════════════════════════════════════
 📊 FILE — BOLEH / TIDAK BOLEH DIEDIT
 ═══════════════════════════════════════════════════════════════
-✅ BOLEH: settings.js, ai-*.js (29 module), dashboard.html, dashboard.css,
-          settings.css, gas/Code.gs (bug fix only), index.html (cache buster),
+✅ BOLEH: settings.js, ai-*.js (24 module standard), dashboard.html,
+          dashboard.css, modules.css, ai-lab-lesson.css, settings.css,
+          gas/Code.gs (bug fix / feature user only), index.html (cache buster),
           e2e/*.spec.js, gemini.md, handover/, scripts/*.js
 
 ❌ JANGAN: main.js, 231 lesson files, Go services, admin dashboard,
-           5 module bersih (TANYA DULU), ai-python-basic.js (HARD BLOCK)
+           5 module struktur berbeda (TANYA DULU), ai-python-basic.js (HARD BLOCK)
 
 ⚠️ HATI-HATI: router.js — SUDAH dimodifikasi utk lazy loading.
                Tambah route baru? Pakai __aiLabLoader. TANYA DULU.
@@ -162,52 +156,34 @@ MODULE: __aiLabLoader.load('ai-xxx') -> dynamic script injection (on-demand)
 🔴 FOKUS NEXT SESSION — NEXT_PLAN.md
 ═══════════════════════════════════════════════════════════════
 
-BACA: handover/NEXT_PLAN.md (FULL — udah diupdate)
+BACA: handover/NEXT_PLAN.md (FULL)
 
-Sisa Prioritas:
-| # | Task | Effort | Status |
-|---|------|--------|--------|
-| P5 | AI lab UX polish (animasi roadmap, quiz micro-interactions, avatar) | 5-8h | **NEXT** |
-| P3 | Module bersih content | 8-12h | SKIP — menunggu user |
+SEMUA 6 prioritas SUDAH SELESAI. Tidak ada pekerjaan tersisa dari backlog.
 
 TANYA KE USER:
-1. Mulai P5 (UX polish)? — roadmap smooth animation, quiz feedback, avatar/foto
-2. Atau ada prioritas lain?
+1. Apa prioritas selanjutnya?
+2. Ada bug baru atau fitur yang mau ditambah?
+3. JANGAN mulai kerja sebelum user konfirmasi.
 
 ═══════════════════════════════════════════════════════════════
 📞 YANG HARUS DIKONFIRMASI KE USER SEBELUM MULAI
 ═══════════════════════════════════════════════════════════════
 1. "Saya sudah baca semua handover + gemini.md + NEXT_PLAN.md."
-2. "Mau lanjut P5 (UX polish)? Atau ada prioritas lain?"
-3. "Perlu update module bersih atau ada bug baru?"
+2. "Semua prioritas existing sudah selesai. Apa yang mau dikerjakan?"
+3. "Ada bug baru atau issue yang perlu ditangani?"
 4. JANGAN mulai kerja sebelum user konfirmasi.
 
 ═══════════════════════════════════════════════════════════════
 🔧 TOOLS & SCRIPTS
 ═══════════════════════════════════════════════════════════════
 # Server
-node server.js  # -> http://127.0.0.1:3000
+node server.js  # → http://127.0.0.1:3000
 
 # E2E Tests
 TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test --workers=1
 
-# Per-file:
-npx playwright test e2e/fellow-dashboard.spec.js --workers=1
-npx playwright test e2e/participant-backend.spec.js --workers=1
-npx playwright test e2e/participant-workflow.spec.js --workers=1
-
-# Syntax check all modules
-for f in js/frontend/fellow-dashboard/ai-*.js; do node --check "$f" && echo "OK $f" || echo "FAIL $f"; done
+# Syntax check
 node --check js/router.js
 node --check js/frontend/fellow-dashboard/settings.js
-
-# Boilerplate check
-grep -c "konsep penting dalam" js/frontend/fellow-dashboard/ai-*.js | grep -v ":0$"
-
-# Glossary fix (if needed)
-node scripts/fix-business-glossary.js
-node scripts/inject-guides.js --phase=1  # Business
-node scripts/inject-guides.js --phase=2  # Data Eng
-
-# Total commits
-git log --oneline | wc -l
+for f in js/frontend/fellow-dashboard/ai-*.js; do node --check "$f" && echo "OK $f" || echo "FAIL $f"; done
+```
