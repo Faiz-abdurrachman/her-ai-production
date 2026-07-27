@@ -84,8 +84,7 @@
                     article.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--fellow-muted);">Belum ada Quiz / Challenge untuk topik ini.</div>`;
                 }
             } else {
-                const secQuiz = container.querySelector('#sec-quiz');
-                if (secQuiz) secQuiz.remove();
+                // Keep quiz section visible in materi mode (don't remove)
             }
             
             // Execute scripts inside the fetched HTML manually (e.g. OpenCV canvas scripts)
@@ -107,9 +106,13 @@
                 newStyle.setAttribute("data-cv-dynamic", "true");
                 newStyle.textContent = oldStyle.innerHTML;
                 document.head.appendChild(newStyle);
-                // Optionally remove it from the container to keep it clean
                 oldStyle.remove();
             });
+
+            // Initialize interactive widgets (canvas demos, sandbox, quiz, challenges)
+            if (typeof window.initCvInteractives === 'function') {
+                setTimeout(window.initCvInteractives, 300);
+            }
 
             // Update Sidebar UI active states
             const sidebarList = document.getElementById(`${baseRoute}-sidebar-list`);
