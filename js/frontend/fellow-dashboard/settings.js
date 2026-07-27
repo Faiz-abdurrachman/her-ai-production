@@ -1941,18 +1941,50 @@
     }
 
     async function initParticipantDashboardData() {
+        var CACHE_KEY = '__dashboardCache';
+        var CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+        // 1. In-memory cache (fastest — SPA navigation)
         if (_dashboardDataCache) {
             renderParticipantDashboard(_dashboardDataCache);
             try {
                 var fresh = await fetchParticipantDashboardData();
                 if (Array.isArray(fresh.modules) && fresh.modules.length > 3) {
                     _dashboardDataCache = fresh;
+                    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: fresh })); } catch (_) {}
                 }
             } catch (_) { /* silent background refresh */ }
             return;
         }
 
-        renderDashboardSkeletons();
+        // 2. Persistent cache (survives refresh — sessionStorage)
+        try {
+            var cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
+            if (cached && cached.data && Array.isArray(cached.data.modules) && cached.data.modules.length > 3) {
+                var age = Date.now() - (cached.ts || 0);
+                if (age < CACHE_TTL) {
+                    // Fresh cache — render instantly
+                    _dashboardDataCache = cached.data;
+                    renderParticipantDashboard(cached.data);
+                    // Background refresh
+                    try {
+                        var bg = await fetchParticipantDashboardData();
+                        if (Array.isArray(bg.modules) && bg.modules.length > 3) {
+                            _dashboardDataCache = bg;
+                            sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: bg }));
+                        }
+                    } catch (_) {}
+                    return;
+                }
+                // Stale cache — show it while fetching fresh
+                renderParticipantDashboard(cached.data);
+            }
+        } catch (_) {}
+
+        // 3. No cache — show skeleton + fetch
+        if (!_dashboardDataCache) {
+            renderDashboardSkeletons();
+        }
 
         try {
             var data = await fetchParticipantDashboardData();
@@ -1960,6 +1992,7 @@
 
             if (isRealData) {
                 _dashboardDataCache = data;
+                try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: data })); } catch (_) {}
                 renderParticipantDashboard(data);
             } else {
                 renderDashboardError(new Error('Data dashboard belum tersedia.'));
