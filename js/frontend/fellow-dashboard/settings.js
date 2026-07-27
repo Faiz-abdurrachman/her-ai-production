@@ -2004,8 +2004,10 @@
             avatarSpan.style.backgroundImage = 'url(' + photoUrl + ')';
             avatarSpan.style.backgroundSize = 'cover';
             avatarSpan.style.backgroundPosition = 'center';
+            avatarSpan.classList.add('has-photo');
         } else {
             avatarSpan.style.backgroundImage = '';
+            avatarSpan.classList.remove('has-photo');
         }
     }
 
@@ -2060,63 +2062,9 @@
             uploadBtn.disabled = false;
             uploadBtn.title = '';
             uploadBtn.addEventListener('click', function() {
+                if (uploadBtn.classList.contains('btn-confirm')) return;
                 fileInput.click();
             });
-        }
-
-        if (!fileInput.dataset.listenerAttached) {
-            fileInput.dataset.listenerAttached = 'true';
-            fileInput.addEventListener('change', async function() {
-            var file = fileInput.files && fileInput.files[0];
-            if (!file) return;
-            if (!file.type.match(/image\/(jpeg|png|gif|webp)/)) {
-                window.__aiLabToast && window.__aiLabToast('Format tidak didukung. Gunakan JPG, PNG, atau GIF.', 'error');
-                return;
-            }
-            if (file.size > 2 * 1024 * 1024) {
-                window.__aiLabToast && window.__aiLabToast('Ukuran maksimal 2MB.', 'error');
-                return;
-            }
-
-            if (uploadBtn) {
-                uploadBtn.disabled = true;
-                uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-            }
-
-            try {
-                // Resize via canvas to 200x200
-                var base64 = await resizeImageToBase64(file, 200);
-                var response = await fetch('/__gas', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({
-                        action: 'uploadParticipantPhoto',
-                        photo_base64: base64
-                    })
-                });
-                if (!response.ok) throw new Error('Gagal terhubung.');
-                var result = await response.json();
-                if (result.status !== 'success') throw new Error(result.message || 'Gagal upload.');
-
-                profile.photo_url = result.photo_url;
-                if (avatar) avatar.src = result.photo_url;
-                updateRemoveVisibility();
-
-                // Update session with new photo_url
-                var sess = readParticipantSession();
-                if (sess) { sess.profile = profile; saveParticipantSession(sess); }
-
-                window.__aiLabToast && window.__aiLabToast('Foto profil berhasil diunggah!', 'success');
-            } catch (err) {
-                window.__aiLabToast && window.__aiLabToast(err.message || 'Gagal upload foto.', 'error');
-            } finally {
-                fileInput.value = '';
-                if (uploadBtn) {
-                    uploadBtn.disabled = false;
-                    uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Unggah Foto Baru';
-                }
-            }
-        });
         }
 
         if (removeBtn) {
@@ -2134,6 +2082,7 @@
                     profile.photo_url = '';
                     if (avatar) avatar.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=ffd0e6&color=b01865&size=120';
                     updateRemoveVisibility();
+                    updateTopbarAvatar('');
                     var sess2 = readParticipantSession();
                     if (sess2) { sess2.profile = profile; saveParticipantSession(sess2); }
                     window.__aiLabToast && window.__aiLabToast('Foto profil dihapus.', 'info');
@@ -2141,6 +2090,97 @@
                     window.__aiLabToast && window.__aiLabToast(err.message || 'Gagal.', 'error');
                 } finally {
                     removeBtn.disabled = false;
+                }
+            });
+        }
+
+        // File select → preview mode (no auto-upload)
+        var pendingBase64 = null;
+        var previousSrc = null;
+        if (!fileInput.dataset.listenerAttached) {
+            fileInput.dataset.listenerAttached = 'true';
+            fileInput.addEventListener('change', async function() {
+                var file = fileInput.files && fileInput.files[0];
+                if (!file) return;
+                if (!file.type.match(/image\/(jpeg|png|gif|webp)/)) {
+                    window.__aiLabToast && window.__aiLabToast('Format tidak didukung. Gunakan JPG, PNG, atau GIF.', 'error');
+                    fileInput.value = ''; return;
+                }
+                if (file.size > 2 * 1024 * 1024) {
+                    window.__aiLabToast && window.__aiLabToast('Ukuran maksimal 2MB.', 'error');
+                    fileInput.value = ''; return;
+                }
+                try {
+                    previousSrc = avatar ? avatar.src : '';
+                    pendingBase64 = await resizeImageToBase64(file, 200);
+                    if (avatar) avatar.src = pendingBase64;
+                    if (uploadBtn) {
+                        uploadBtn.innerHTML = '<i class="fas fa-check"></i> Simpan Foto';
+                        uploadBtn.classList.add('btn-confirm');
+                    }
+                    if (removeBtn) removeBtn.style.display = 'none';
+                    var cancelBtn = document.querySelector('.btn-cancel-upload');
+                    if (!cancelBtn) {
+                        cancelBtn = document.createElement('button');
+                        cancelBtn.className = 'btn-cancel-upload';
+                        cancelBtn.type = 'button';
+                        cancelBtn.innerHTML = '<i class="fas fa-times"></i> Batal';
+                        var btnGroup = document.querySelector('.btn-group');
+                        if (btnGroup) btnGroup.appendChild(cancelBtn);
+                        cancelBtn.addEventListener('click', function() {
+                            pendingBase64 = null;
+                            if (avatar) avatar.src = previousSrc || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=ffd0e6&color=b01865&size=120');
+                            if (uploadBtn) {
+                                uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Unggah Foto Baru';
+                                uploadBtn.classList.remove('btn-confirm');
+                            }
+                            if (cancelBtn) cancelBtn.remove();
+                            updateRemoveVisibility();
+                            fileInput.value = '';
+                        });
+                    }
+                } catch (err) {
+                    window.__aiLabToast && window.__aiLabToast('Gagal membaca gambar.', 'error');
+                    fileInput.value = '';
+                }
+            });
+        }
+
+        if (uploadBtn) {
+            uploadBtn.addEventListener('click', async function(e) {
+                if (!uploadBtn.classList.contains('btn-confirm') || !pendingBase64) return;
+                e.stopImmediatePropagation();
+                uploadBtn.disabled = true;
+                uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+
+                try {
+                    var resp = await fetch('/__gas', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({ action: 'uploadParticipantPhoto', photo_base64: pendingBase64 })
+                    });
+                    if (!resp.ok) throw new Error('Gagal terhubung.');
+                    var result = await resp.json();
+                    if (result.status !== 'success') throw new Error(result.message || 'Gagal upload.');
+
+                    profile.photo_url = result.photo_url;
+                    if (avatar) avatar.src = result.photo_url;
+                    updateRemoveVisibility();
+                    updateTopbarAvatar(result.photo_url);
+                    var sess = readParticipantSession();
+                    if (sess) { sess.profile = profile; saveParticipantSession(sess); }
+                    pendingBase64 = null;
+                    fileInput.value = '';
+                    window.__aiLabToast && window.__aiLabToast('Foto profil berhasil disimpan!', 'success');
+                } catch (err) {
+                    window.__aiLabToast && window.__aiLabToast(err.message || 'Gagal menyimpan.', 'error');
+                } finally {
+                    uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Unggah Foto Baru';
+                    uploadBtn.classList.remove('btn-confirm');
+                    uploadBtn.disabled = false;
+                    var cb = document.querySelector('.btn-cancel-upload');
+                    if (cb) cb.remove();
+                    pendingBase64 = null;
                 }
             });
         }

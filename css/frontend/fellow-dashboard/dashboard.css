@@ -727,6 +727,25 @@
     position: absolute;
 }
 
+.fellow-user-button .avatar-img.has-photo::after {
+    background: none;
+}
+
+.btn-cancel-upload {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    color: #475569;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 10px 20px;
+    transition: background 0.2s;
+}
+.btn-cancel-upload:hover {
+    background: #e2e8f0;
+}
+
 .fellow-user-button strong,
 .fellow-user-button small {
     display: block;
