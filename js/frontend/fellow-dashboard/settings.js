@@ -1791,7 +1791,15 @@
         if (moduleGrid) {
             const modules = nonEmpty(data.modules, fallbackData.modules);
             const isRealData = Array.isArray(data.modules) && data.modules.length > 3;
-            const displayModules = isRealData ? modules.slice(0, 8) : modules;
+            // Filter out under-development modules (only AI Fundamentals online)
+            var onlinePrefixes = ['ai-python', 'ai-reasoning', 'ai-modern', 'ai-evaluation', 'ai-evolution', 'ai-intro', 'ai-fundamentals'];
+            var filteredModules = modules.filter(function(m) {
+                var href = m.href || '';
+                if (href.includes('under-development')) return false;
+                if (href.includes('participant-modules') || href.includes('add')) return true;
+                return onlinePrefixes.some(function(p) { return href.includes(p); });
+            });
+            const displayModules = isRealData ? filteredModules.slice(0, 8) : filteredModules;
             moduleGrid.innerHTML = displayModules.map((item) => `
                 <a class="module-card dash-real ${escapeHtml(item.tone || 'pink')}" href="${escapeHtml(item.href || '#/participant-modules')}">
                     <div class="module-icon"><i class="${escapeHtml(item.icon || 'fas fa-book-open')}"></i></div>
