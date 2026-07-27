@@ -1667,6 +1667,10 @@
         if (nameNode) nameNode.textContent = showName || 'Peserta';
         if (greeting) greeting.textContent = showName ? `Halo, ${showName}!` : 'Halo, Peserta HerAI!';
 
+        // Set topbar avatar photo
+        var photoUrl = (readParticipantSession() || {}).profile?.photo_url;
+        updateTopbarAvatar(photoUrl);
+
         const notifBadge = document.querySelector('.fellow-icon-button[aria-label="Notifikasi"] span');
         if (notifBadge) notifBadge.style.display = 'none';
 
@@ -1969,6 +1973,42 @@
         initParticipantDashboardData();
     };
 
+    function resizeImageToBase64(file, maxSize) {
+        return new Promise(function(resolve, reject) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var img = new Image();
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    var size = Math.min(img.width, img.height, maxSize);
+                    canvas.width = size;
+                    canvas.height = size;
+                    var ctx = canvas.getContext('2d');
+                    var sx = (img.width - size) / 2;
+                    var sy = (img.height - size) / 2;
+                    ctx.drawImage(img, sx, sy, size, size, 0, 0, size, size);
+                    resolve(canvas.toDataURL('image/jpeg', 0.8));
+                };
+                img.onerror = function() { reject(new Error('Gagal membaca gambar.')); };
+                img.src = e.target.result;
+            };
+            reader.onerror = function() { reject(new Error('Gagal membaca file.')); };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function updateTopbarAvatar(photoUrl) {
+        var avatarSpan = document.querySelector('.fellow-user-button .avatar-img');
+        if (!avatarSpan) return;
+        if (photoUrl) {
+            avatarSpan.style.backgroundImage = 'url(' + photoUrl + ')';
+            avatarSpan.style.backgroundSize = 'cover';
+            avatarSpan.style.backgroundPosition = 'center';
+        } else {
+            avatarSpan.style.backgroundImage = '';
+        }
+    }
+
     function initSettingsPage() {
         const form = document.getElementById('settingsProfileForm');
         if (!form || form.dataset.settingsReady) return;
@@ -1986,14 +2026,117 @@
         var name = getParticipantDisplayName();
         var avatar = document.querySelector('.settings-page .large-avatar');
         if (avatar) {
-            avatar.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=ffd0e6&color=b01865&size=120';
+            if (profile.photo_url) {
+                avatar.src = profile.photo_url;
+            } else {
+                avatar.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=ffd0e6&color=b01865&size=120';
+            }
             avatar.alt = name;
         }
 
         var uploadBtn = document.querySelector('.btn-upload');
         var removeBtn = document.querySelector('.btn-remove');
-        if (uploadBtn) { uploadBtn.disabled = true; uploadBtn.title = 'Upload foto belum tersedia.'; }
-        if (removeBtn) { removeBtn.style.display = 'none'; }
+
+        // Hidden file input for photo upload
+        var fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
+        document.body.appendChild(fileInput);
+
+        // Update remove button visibility based on photo_url
+        function updateRemoveVisibility() {
+            if (removeBtn) {
+                removeBtn.style.display = profile.photo_url ? '' : 'none';
+            }
+        }
+        updateRemoveVisibility();
+
+        if (uploadBtn) {
+            uploadBtn.disabled = false;
+            uploadBtn.title = '';
+            uploadBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+        }
+
+        fileInput.addEventListener('change', async function() {
+            var file = fileInput.files && fileInput.files[0];
+            if (!file) return;
+            if (!file.type.match(/image\/(jpeg|png|gif|webp)/)) {
+                window.__aiLabToast && window.__aiLabToast('Format tidak didukung. Gunakan JPG, PNG, atau GIF.', 'error');
+                return;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+                window.__aiLabToast && window.__aiLabToast('Ukuran maksimal 2MB.', 'error');
+                return;
+            }
+
+            if (uploadBtn) {
+                uploadBtn.disabled = true;
+                uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            }
+
+            try {
+                // Resize via canvas to 200x200
+                var base64 = await resizeImageToBase64(file, 200);
+                var response = await fetch('/__gas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'uploadParticipantPhoto',
+                        photo_base64: base64
+                    })
+                });
+                if (!response.ok) throw new Error('Gagal terhubung.');
+                var result = await response.json();
+                if (result.status !== 'success') throw new Error(result.message || 'Gagal upload.');
+
+                profile.photo_url = result.photo_url;
+                if (avatar) avatar.src = result.photo_url;
+                updateRemoveVisibility();
+
+                // Update session with new photo_url
+                var sess = readParticipantSession();
+                if (sess) { sess.profile = profile; saveParticipantSession(sess); }
+
+                window.__aiLabToast && window.__aiLabToast('Foto profil berhasil diunggah!', 'success');
+            } catch (err) {
+                window.__aiLabToast && window.__aiLabToast(err.message || 'Gagal upload foto.', 'error');
+            } finally {
+                fileInput.value = '';
+                if (uploadBtn) {
+                    uploadBtn.disabled = false;
+                    uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Unggah Foto Baru';
+                }
+            }
+        });
+
+        if (removeBtn) {
+            removeBtn.addEventListener('click', async function() {
+                if (!confirm('Hapus foto profil?')) return;
+                removeBtn.disabled = true;
+                try {
+                    var resp = await fetch('/__gas', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({ action: 'removeParticipantPhoto' })
+                    });
+                    var r = await resp.json();
+                    if (r.status !== 'success') throw new Error(r.message || 'Gagal.');
+                    profile.photo_url = '';
+                    if (avatar) avatar.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=ffd0e6&color=b01865&size=120';
+                    updateRemoveVisibility();
+                    var sess2 = readParticipantSession();
+                    if (sess2) { sess2.profile = profile; saveParticipantSession(sess2); }
+                    window.__aiLabToast && window.__aiLabToast('Foto profil dihapus.', 'info');
+                } catch (err) {
+                    window.__aiLabToast && window.__aiLabToast(err.message || 'Gagal.', 'error');
+                } finally {
+                    removeBtn.disabled = false;
+                }
+            });
+        }
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -2035,6 +2178,8 @@
                     name: updatedProfile.nama_lengkap || session.name,
                     profile: updatedProfile
                 });
+
+                updateTopbarAvatar(updatedProfile.photo_url || profile.photo_url);
 
                 if (msg) {
                     msg.style.display = 'block';
