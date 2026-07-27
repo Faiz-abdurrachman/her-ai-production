@@ -2621,7 +2621,58 @@
     border-radius: 100px;
     display: block;
     height: 100%;
-    transition: width .2s ease;
+    transition: width .5s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── P5 UX Polish: Button micro-interactions ───────── */
+.reasoning-scaffold-check-button,
+.reasoning-scaffold-reveal-button,
+.reasoning-save-panel button {
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.reasoning-scaffold-check-button:active,
+.reasoning-scaffold-reveal-button:active,
+.reasoning-save-panel button:active {
+    transform: scale(.96);
+}
+.reasoning-scaffold-check-button:focus-visible,
+.reasoning-scaffold-reveal-button:focus-visible,
+.reasoning-save-panel button:focus-visible {
+    box-shadow: 0 0 0 3px rgba(246,51,146,.28);
+}
+
+/* ── P5 UX Polish: Practice save confirmation toast ─── */
+.ai-lab-toast {
+    align-items: center;
+    animation: aiToastIn .3s ease;
+    background: #1a1a2e;
+    border-radius: 12px;
+    box-shadow: 0 8px 28px rgba(0,0,0,.18);
+    color: #fff;
+    display: flex;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-size: .88rem;
+    font-weight: 700;
+    gap: 10px;
+    left: 50%;
+    padding: 14px 22px;
+    position: fixed;
+    top: 32px;
+    transform: translateX(-50%);
+    z-index: 9999;
+}
+.ai-lab-toast i { font-size: 1rem; }
+.ai-lab-toast.is-out { animation: aiToastOut .25s ease forwards; }
+
+/* ── P5 UX Polish: Quiz submit spinner ─────────────── */
+.ai-lab-spinner {
+    animation: aiSpinner .6s linear infinite;
+    border: 2.5px solid rgba(246,51,146,.18);
+    border-radius: 50%;
+    border-top-color: #f63392;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
 }
 
 .ai-modern-roadmap-steps {
@@ -4461,6 +4512,123 @@
 @keyframes reasoningCardIn {
     from { opacity: 0; transform: translateX(12px); }
     to { opacity: 1; transform: translateX(0); }
+}
+
+/* ── P5 UX Polish: Keyframes ───────────────────────── */
+@keyframes aiRoadmapStepIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes aiAnswerPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(130,199,110,.45); }
+    70%  { box-shadow: 0 0 0 8px rgba(130,199,110,0); }
+    100% { box-shadow: 0 0 0 0 rgba(130,199,110,0); }
+}
+@keyframes aiAnswerShake {
+    0%, 100% { transform: translateX(0); }
+    20%      { transform: translateX(-4px); }
+    40%      { transform: translateX(4px); }
+    60%      { transform: translateX(-3px); }
+    80%      { transform: translateX(2px); }
+}
+@keyframes aiPageEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes aiScoreReveal {
+    from { opacity: 0; transform: scale(.85); }
+    to   { opacity: 1; transform: scale(1); }
+}
+@keyframes aiToastIn {
+    from { opacity: 0; transform: translateY(-12px) scale(.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes aiToastOut {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to   { opacity: 0; transform: translateY(-8px) scale(.96); }
+}
+@keyframes aiSpinner {
+    to { transform: rotate(360deg); }
+}
+@keyframes aiProgressFill {
+    from { width: 0%; }
+}
+
+/* ── P5 UX Polish: Roadmap smooth accordion ────────── */
+.ai-modern-roadmap-steps details .ai-modern-roadmap-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .35s ease, padding .35s ease;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.ai-modern-roadmap-steps details[open] .ai-modern-roadmap-body {
+    grid-template-rows: 1fr;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+.ai-modern-roadmap-steps details .ai-modern-roadmap-body > * {
+    overflow: hidden;
+}
+
+/* ── P5 UX Polish: Roadmap step stagger ────────────── */
+.ai-modern-roadmap-steps details {
+    animation: aiRoadmapStepIn .4s ease both;
+}
+.ai-modern-roadmap-steps details:nth-child(1)  { animation-delay: .02s; }
+.ai-modern-roadmap-steps details:nth-child(2)  { animation-delay: .08s; }
+.ai-modern-roadmap-steps details:nth-child(3)  { animation-delay: .14s; }
+.ai-modern-roadmap-steps details:nth-child(4)  { animation-delay: .20s; }
+.ai-modern-roadmap-steps details:nth-child(5)  { animation-delay: .26s; }
+.ai-modern-roadmap-steps details:nth-child(6)  { animation-delay: .32s; }
+.ai-modern-roadmap-steps details:nth-child(7)  { animation-delay: .38s; }
+.ai-modern-roadmap-steps details:nth-child(8)  { animation-delay: .44s; }
+.ai-modern-roadmap-steps details:nth-child(9)  { animation-delay: .50s; }
+.ai-modern-roadmap-steps details:nth-child(10) { animation-delay: .56s; }
+
+/* ── P5 UX Polish: Roadmap active step glow ────────── */
+.ai-modern-roadmap-steps details[open] summary > span {
+    background: linear-gradient(135deg, #f63392, #ff6b9d);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(246,51,146,.22);
+    transition: background .25s ease, color .25s ease, box-shadow .25s ease;
+}
+.ai-modern-roadmap-steps details[open] summary strong {
+    color: #f63392;
+}
+
+/* ── P5 UX Polish: Roadmap strip stagger ───────────── */
+.ai-modern-roadmap-strip > div {
+    animation: aiRoadmapStepIn .35s ease both;
+}
+.ai-modern-roadmap-strip > div:nth-child(1)  { animation-delay: .04s; }
+.ai-modern-roadmap-strip > div:nth-child(2)  { animation-delay: .10s; }
+.ai-modern-roadmap-strip > div:nth-child(3)  { animation-delay: .16s; }
+.ai-modern-roadmap-strip > div:nth-child(4)  { animation-delay: .22s; }
+.ai-modern-roadmap-strip > div:nth-child(5)  { animation-delay: .28s; }
+.ai-modern-roadmap-strip > div:nth-child(6)  { animation-delay: .34s; }
+.ai-modern-roadmap-strip > div:nth-child(7)  { animation-delay: .40s; }
+.ai-modern-roadmap-strip > div:nth-child(8)  { animation-delay: .46s; }
+
+/* ── P5 UX Polish: Quiz answer feedback ────────────── */
+.reasoning-scaffold-options label.is-correct > span {
+    animation: aiAnswerPulse .4s ease;
+}
+.reasoning-scaffold-options label.is-wrong > span {
+    animation: aiAnswerShake .4s ease;
+}
+.reasoning-scaffold-feedback.is-correct,
+.reasoning-scaffold-feedback.is-wrong,
+.reasoning-scaffold-feedback.is-warning {
+    animation: aiPageEnter .3s ease;
+}
+
+/* ── P5 UX Polish: Quiz score reveal ───────────────── */
+[data-quiz-result] {
+    animation: aiScoreReveal .45s ease;
+}
+[data-quiz-result] strong {
+    display: inline-block;
 }
 
 .reasoning-practice-fields {

@@ -30,6 +30,25 @@
         }
     };
 
+    // P5 UX Polish: Global toast helper for save confirmations and feedback
+    window.__aiLabToast = function(message, type, duration) {
+        type = type || 'success';
+        duration = duration || 2200;
+        var existing = document.querySelector('.ai-lab-toast');
+        if (existing) existing.remove();
+        var icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', info: 'fa-circle-info' };
+        var colors = { success: '#22c55e', error: '#ef4444', info: '#f63392' };
+        var toast = document.createElement('div');
+        toast.className = 'ai-lab-toast';
+        toast.style.borderLeft = '3px solid ' + (colors[type] || colors.success);
+        toast.innerHTML = '<i class="fas ' + (icons[type] || icons.success) + '" style="color:' + (colors[type] || colors.success) + '"></i><span>' + (message || '') + '</span>';
+        document.body.appendChild(toast);
+        setTimeout(function() {
+            toast.classList.add('is-out');
+            setTimeout(function() { if (toast.parentNode) toast.remove(); }, 260);
+        }, duration);
+    };
+
     const DEFAULT_SETTINGS = {
         enabled: true,
         pages: {

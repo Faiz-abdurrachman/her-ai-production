@@ -2272,3 +2272,21 @@
 .track-grid article.dash-real:nth-child(4) { animation-delay: 0.12s; }
 .track-grid article.dash-real:nth-child(5) { animation-delay: 0.15s; }
 .track-grid article.dash-real:nth-child(6) { animation-delay: 0.18s; }
+
+/* Quiz badge hover micro-interaction */
+#dashboardModuleGrid .module-card .quiz-badge {
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+#dashboardModuleGrid .module-card:hover .quiz-badge {
+    transform: scale(1.08);
+    box-shadow: 0 3px 12px rgba(246,51,146,.22);
+}
+
+/* Skeleton → content smooth reveal for dynamic content */
+.module-card .quiz-badge[style] {
+    animation: skeletonFadeIn .35s ease;
+}
+@keyframes skeletonFadeIn {
+    from { opacity: 0; transform: scale(.9); }
+    to   { opacity: 1; transform: scale(1); }
+}

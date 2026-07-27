@@ -4,6 +4,11 @@
    ═══════════════════════════════════════════════════════ */
 
 /* ── AI Lab Content Box ───────────────────────────── */
+@keyframes aiContentEnter {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 .ai-lab-content {
   --ai-bg:       #fff7fb;
   --ai-bg2:      #fff0f7;
@@ -19,6 +24,7 @@
   --ai-r:        12px;
   --ai-r-sm:     8px;
 
+  animation: aiContentEnter .45s ease-out;
   background: var(--ai-bg);
   border: 1px solid var(--fellow-line);
   border-radius: 18px;
