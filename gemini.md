@@ -382,24 +382,62 @@ Dibutuhkan test suite komprehensif untuk memvalidasi GAS backend API secara lang
 
 **Verifikasi:** 20/20 tests PASS ✅
 
+**Verifikasi:** 25/25 tests PASS ✅
+
 ---
 
-## Session Summary — 27 Juli 2026 (Sisyphus — Bug #57 Resolution + ai-python.js + P1 Tests)
+## 61. Feature: P2 — Enhanced Frontend E2E Test Suite
 
-**Total commits:** 46 (25 sebelumnya + 7 sesi lalu + 9 sesi sebelumnya + 5 sesi ini)
-**Grand total bugs/features:** #1-#60
-**Files changed sesi ini:** 24 JS files + 2 CSS rules + 2 extraction scripts + 21 JSON outputs + 3 handover docs + 1 test file
+**Deskripsi:**
+Dua test flaky (Practice + Password) dan perlu 8 test baru untuk coverage dashboard UI yang komprehensif.
 
-**Key deliverables sesi ini:**
+**Fix — Flaky Tests:**
+
+1. **Practice page render** (was flaky):
+   - Akar: `waitForFunction` race — static HTML form exists but IIFE populates children async
+   - Fix: `waitForSelector('#aiDeepLearningPracticeForm', {state:'attached'})` lalu `waitForFunction` dengan `querySelector('textarea, input[type="text"]')` check
+
+2. **Password validation** (was flaky):
+   - Akar: settings page SPA timing — tab not visible when clicked
+   - Fix: `waitForSelector('.s-nav-list')` sebelum `click()` tab "Keamanan Akun"
+
+3. **Quiz page render** (was flaky):
+   - Akar: quiz form rendered by IIFE, `waitForTimeout` tidak cukup
+   - Fix: `waitForFunction(() => document.getElementById('aiDeepLearningQuizForm') !== null)` lalu `waitForTimeout(1000)`
+
+4. **Module navigation**: Semua test yang sebelumnya pakai `page.evaluate()` hash nav diganti `page.goto()` — SPA hash routing lebih reliable dengan full page load
+
+**New Tests (8):**
+
+| # | Test | Detail |
+|---|------|--------|
+| 15 | Module cards | Dashboard renders module cards (flexible selector) |
+| 16 | Quiz badge | Badge shows X% format (not raw /20) |
+| 17 | Skeleton loader | Skeleton appears then dashboard content loads |
+| 18 | Module content | Healthcare module has NO Python template text |
+| 19 | Roadmap cards | `ai-modern-beginner-roadmap` renders with content |
+| 20 | GUIDES hook | Deep Learning module shows module-specific content |
+| 21 | Topic label | `.topic-label` elements hidden (display:none) |
+| 22 | Logout | Click logout → sessionStorage cleared |
+
+**Verifikasi:** 25/25 tests PASS ✅
+
+---
+
+## Session Summary — 27 Juli 2026 (Sisyphus — P1 + P2 E2E Tests)
+
+**Total commits:** 48 (25 sebelumnya + 7 sesi lalu + 9 sesi sebelumnya + 7 sesi ini)
+**Grand total bugs/features:** #1-#61
+**Files changed sesi ini:** 24 JS files + 2 CSS rules + 2 extraction scripts + 21 JSON outputs + 3 handover docs + 2 test files
+
+**Key deliverables:**
 | # | Item | Detail |
 |---|------|--------|
 | #57 | Python contamination | 24 module JS — GUIDES dari Nazril MD (20) + placeholder (4) |
-| — | Roadmap headers | `<span>Jalur Pemula</span>` → module-specific badge + subtitle |
-| — | Extraction scripts | `extract-nazril-guides.js` + `inject-guides.js` — reusable |
 | #58 | Topic-label badges | 1 CSS rule hide 313+ labels di seluruh halaman |
-| — | ai-python.js | 8 GUIDES konten Python proper (dari placeholder) |
-| — | ai-modern.js | `eyebrow: "Jalur Pemula"` → `"AI Modern"` |
-| #60 | P1 Backend E2E tests | 20 tests, pure HTTP fetch(POST /__gas) — no browser |
+| — | ai-python.js | 8 GUIDES konten Python proper |
+| #60 | P1 Backend tests | 20 tests, pure HTTP, 20/20 PASS |
+| #61 | P2 Frontend tests | 25 tests, fix 3 flaky + 8 new, 25/25 PASS |
 
 **Tools created:**
 ```bash
@@ -409,10 +447,14 @@ node scripts/inject-guides.js --phase=all      # Inject all
 node scripts/inject-guides.js --phase=1 --dry-run  # Preview
 ```
 
-**Next priority:** E2E test suite (P1 DONE, P2/P3 remaining)
+**Next priority:** E2E test suite (P1/P2 DONE, P3 remaining)
 - ✅ P1: `e2e/participant-backend.spec.js` — 20 backend API tests (20/20 PASS)
-- 🔜 P2: `e2e/fellow-dashboard.spec.js` — Fix 2 flaky + 8 new tests (~25)
+- ✅ P2: `e2e/fellow-dashboard.spec.js` — 25 frontend UI tests (25/25 PASS)
 - 🔜 P3: `e2e/participant-workflow.spec.js` — Full flow integration (~8)
+
+---
+
+## 61. Feature: P2 — Enhanced Frontend E2E Test Suite (#61)
 
 ---
 
