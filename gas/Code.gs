@@ -1556,43 +1556,14 @@ function uploadParticipantPhoto(payload) {
   const base64Data = String(payload.photo_base64 || '');
   if (!base64Data) return { status: 'error', message: 'Data foto kosong.' };
 
-  try {
-    // Decode base64 → blob → upload to Drive
-    const parts = base64Data.split(',');
-    const mimeMatch = (parts[0] || '').match(/data:(image\/\w+);base64/);
-    const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-    const raw = Utilities.base64Decode(parts[1] || parts[0]);
-    const blob = Utilities.newBlob(raw, mimeType, 'photo_' + (participant.rowId || participant.nik) + '.jpg');
-
-    // Upload to a dedicated HerAI Photos folder (create if not exists)
-    var folder;
-    var folders = DriveApp.getFoldersByName('HerAI_Photos');
-    if (folders.hasNext()) {
-      folder = folders.next();
-    } else {
-      folder = DriveApp.createFolder('HerAI_Photos');
-    }
-
-    // Remove old photo if exists
-    if (participant.photo_url) {
-      try {
-        var oldFileId = participant.photo_url.match(/[-\w]{25,}/);
-        if (oldFileId) {
-          var oldFile = DriveApp.getFileById(oldFileId[0]);
-          oldFile.setTrashed(true);
-        }
-      } catch (e) { /* old file may already be deleted */ }
-    }
-
-    var file = folder.createFile(blob);
-    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-    var photoUrl = 'https://drive.google.com/uc?export=view&id=' + file.getId();
-
-    updateByKey(SHEETS.participants, 'rowId', participant.rowId, { photo_url: photoUrl });
-    return { status: 'success', photo_url: photoUrl };
-  } catch (e) {
-    return { status: 'error', message: 'Gagal upload foto: ' + (e.message || 'unknown') };
+  // Validate it's a data URL
+  if (!base64Data.match(/^data:image\//)) {
+    return { status: 'error', message: 'Format foto tidak valid.' };
   }
+
+  // Simpan base64 data URL langsung ke sheet (200x200 JPEG ≈ 15KB, muat dalam cell)
+  updateByKey(SHEETS.participants, 'rowId', participant.rowId, { photo_url: base64Data });
+  return { status: 'success', photo_url: base64Data };
 }
 
 function removeParticipantPhoto(payload) {
@@ -1604,16 +1575,6 @@ function removeParticipantPhoto(payload) {
     return String(row.nik || '').replace(/\D/g, '') === String(claims.sub || '');
   });
   if (!participant) return { status: 'error', message: 'NIK belum terdaftar.' };
-
-  if (participant.photo_url) {
-    try {
-      var fileId = participant.photo_url.match(/[-\w]{25,}/);
-      if (fileId) {
-        var file = DriveApp.getFileById(fileId[0]);
-        file.setTrashed(true);
-      }
-    } catch (e) { /* file may already be deleted */ }
-  }
 
   updateByKey(SHEETS.participants, 'rowId', participant.rowId, { photo_url: '' });
   return { status: 'success', photo_url: '' };
