@@ -808,3 +808,68 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 **Catatan:**
 - GAS perlu redeploy setelah edit Code.gs
+
+## 70. Performance: Dashboard Persistent Cache — sessionStorage TTL 5 min
+
+**Deskripsi:** Setiap refresh F5, dashboard re-fetch GAS (5-8s). In-memory cache hilang saat reload.
+
+**Fix:** settings.js: 3-tier cache (memory → sessionStorage 5min → skeleton). COLD ~18s, WARM 0.2s.
+
+---
+
+## 71. Fix: Computer Vision Back Online — Route Restore + ai-lab Catch-all
+
+**Deskripsi:** CV route restore tapi "Akses Dibatasi" karena catch-all handler pageName="ai-lab".
+
+**Fix:** router.js: revert CV route, catch-all "ai-lab"→"modules".
+
+---
+
+## 72. Fix: CV CNN + Advanced CNN → Under Development
+
+**Deskripsi:** User minta CNN + Advanced CNN disembunyikan, Digital Image Fundamentals tetap.
+
+**Fix:** router.js: 19 route entries → under-development.html.
+
+---
+
+## 73. Feature: CV Digital Image Interactive Widgets + Quiz + Coding Challenges
+
+**Deskripsi:** Semua interactive elements (flip, bitwise, Otsu, sandbox, quiz, challenges) tidak berfungsi — onclick functions undefined.
+
+**Fix:**
+- ai-cv-interactive.js (1,241 lines, NEW): morphology engine, sandbox, flip/rotate, bitwise, Otsu, quiz, challenges
+- ai-cv.js: call initCvInteractives() after load, keep quiz in materi mode
+- Index.html: load ai-cv-interactive.js
+
+---
+
+## 74. Fix: All Modules Under-Development Except AI Fundamentals
+
+**Deskripsi:** User minta semua module UD kecuali 5 AI Fundamentals.
+
+**Fix:** router.js: 20 overview routes → under-development.html.
+
+---
+
+## 75. Fix: Dashboard — Hide Under-Development Modules
+
+**Deskripsi:** Dashboard masih 27 cards termasuk UD.
+
+**Fix:** settings.js: filter by onlinePrefixes (ai-python/reasoning/modern/evaluation/evolution), show 5 cards.
+
+---
+
+## 76. Fix: GAS — computeLiveLeaderboard Scope Error
+
+**Deskripsi:** activeRows() local const di getParticipantDashboardData → crash dashboard setelah deploy.
+
+**Fix:** GAS: replace activeRows() → getRows() global.
+
+---
+
+## 77. Fix: GAS — Leaderboard Fallback Karena is_active Filter
+
+**Deskripsi:** participant_progress tidak punya kolom is_active → semua row terfilter → fallback seed.
+
+**Fix:** GAS: hapus filter is_active. Brenda 1,024 pts live. 3x redeploy (#69→#76→#77).

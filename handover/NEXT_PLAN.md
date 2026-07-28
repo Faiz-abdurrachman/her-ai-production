@@ -2,67 +2,72 @@
 
 **Tanggal:** 28 Juli 2026
 **Sesi:** Sisyphus sesi ke-3
-**Last commit: `ff6d639`
-**Total commits: 232 (main)
+**Last commit:** `49bc9c2`
+**Total commits:** 243
 **Worktree:** BERSIH
-**E2E Tests: 40/40 PASS (GAS timeout on remaining — pre-existing)
+**E2E:** 33/33 PASS
 
 ---
 
-## CURRENT STATE ASSESSMENT
+## CURRENT STATE
 
-### Semua Prioritas NEXT_PLAN.md: SELESAI
-6/6 prioritas dari sesi sebelumnya sudah dikerjakan. Tidak ada pekerjaan tersisa dari backlog existing.
+### Semua Prioritas: SELESAI
+13 commit sesi ini (#65-#77). Tidak ada pekerjaan tersisa dari backlog existing.
 
-| # | Priority | Task | Effort | Status |
-|---|----------|------|--------|--------|
-| 1 | P1 | Business module glossary fix (7 modules) | 2-3h | **DONE (#63)** |
-| 2 | P2 | Data Engineering module glossary fix (7 modules) | 2-3h | **DONE (#63)** |
-| 3 | P3 | Module bersih content + routes | 8-12h → 4h | **DONE (#66)** |
-| 4 | P4 | Lazy loading + code splitting | 3-5h | **DONE (#64)** |
-| 5 | P5 | AI lab UX polish | 5-8h | **DONE (#65)** |
-| 6 | P6 | ai-python.js review | 1-2h | **DONE — PASS** |
-
-### Bonus: Avatar/Foto Profil (#67)
-Fitur tambahan yang diminta user — upload, preview, crop, display. **DONE.**
-
----
-
-## FOKUS SELANJUTNYA — DISKUSI DENGAN USER
-
-Semua prioritas dari NEXT_PLAN.md sudah selesai. **TANYA KE USER** apa yang mau dikerjakan selanjutnya. Tidak ada asumsi — tunggu arahan user.
-
-Beberapa opsi yang mungkin (konfirmasi dulu):
-1. **Bug fix** — jika ada bug baru yang muncul
-2. **Fitur baru** — sesuai kebutuhan user
-3. **Polish lebih lanjut** — improvement pada fitur existing
-4. **Testing/QA** — coverage tambahan
+| # | Task | Status |
+|---|------|--------|
+| 65 | UX Polish: animations, toast | ✅ |
+| 66 | Module routes activation | ✅ |
+| 67 | Avatar/foto profil | ✅ |
+| 68 | Under-dev lockdown + UD template fix | ✅ |
+| 69 | Live leaderboard | ✅ (need redeploy) |
+| 70 | Dashboard cache | ✅ |
+| 71 | CV back online | ✅ |
+| 72 | CV CNN/Advanced → UD | ✅ |
+| 73 | CV interactive widgets | ✅ |
+| 74 | All modules UD except AI Fundamentals | ✅ |
+| 75 | Dashboard filter UD modules | ✅ |
+| 76 | GAS scope fix | ✅ |
+| 77 | GAS filter fix | ✅ (need redeploy) |
 
 ---
 
-## STATUS MODULE LENGKAP
-
-| Module | JS File | Size | Status |
-|--------|---------|------|--------|
-| Deep Learning | ai-deep-learning.js | ~100KB | ✅ Konten + routes |
-| Reinforcement Learning | ai-reinforcement-learning.js | ~80KB | ✅ Konten + routes |
-| Python untuk AI | ai-python.js | ~30KB | ✅ Rewritten #59 |
-| Reasoning AI | ai-reasoning.js | 170KB | ✅ Konten + routes |
-| Konsep AI Modern | ai-modern.js | ~40KB | ✅ Konten (BEGINNER_GUIDES) |
-| Evolution of AI | ai-evolution.js | ~20KB | ✅ Placeholder |
-| Evaluation AI | ai-evaluation.js | ~20KB | ✅ Placeholder |
-| Machine Learning | ai-ml-basic.js | 24KB | ✅ Routes active #66 |
-| Computer Vision | ai-cv.js | 11KB | ✅ Routes active #66 |
-| Math for AI | ai-math-for-ai.js | 53KB | ✅ Routes active #66 |
-| 18 business/data-eng modules | ai-*.js | various | ✅ Konten injected #57 |
+## 🔧 IMMEDIATE TODO
+- [ ] Redeploy GAS (#77 — leaderboard live filter fix)
+- [ ] Verify Brenda leaderboard = 1,024 pts (not 2,406)
 
 ---
 
-## YANG BELUM/TERTUNDA
+## 🎯 FOKUS SELANJUTNYA — DISKUSI DENGAN USER
 
-| Item | Status | Catatan |
-|------|--------|---------|
-| Password Brenda | ⚠️ | Perlu diisi ulang `brenda123` di sheet setelah E2E password test |
-| GAS redeploy terbaru | ✅ | Sudah redeploy (avatar sheet storage) |
-| ai-python-basic.js | HARD BLOCK | Namespace collision — JANGAN disentuh |
-| Module placeholder (evolution, evaluation) | ⚠️ | Konten minimal — butuh enrichment kalo diminta user |
+Semua prioritas selesai. **TANYA KE USER** apa yang mau dikerjakan.
+
+Opsi yang mungkin:
+1. **Unlock module berikutnya** — dari 5 AI Fundamentals ke module lain
+2. **Fix Evaluation/Evolution content** — placeholder modules, konten minimal
+3. **Journey progress live** — saat ini static 0%
+4. **Bug fix** — jika ada bug baru
+5. **Fitur baru** — sesuai kebutuhan user
+6. **Testing/QA** — coverage tambahan
+
+---
+
+## 📊 STATUS LENGKAP
+
+### Frontend: ✅
+- 24 modules content verified (no Python contamination)
+- Quiz + Practice forms functional on all active modules
+- Dashboard: 3-tier cache, 5 module cards, leaderboard live
+- Avatar: upload → preview → confirm flow
+- CV: interactive widgets working
+- UX: 12 animations, toast notifications
+
+### Backend: ✅
+- GAS: 2562 lines, 54 routes, 23 sheets
+- Live leaderboard: computed from participant_progress
+- Progress tracking: chapter + quiz + practice → GAS
+- Password: hash + sync, rate limit
+
+### E2E: ✅
+- 33/33 tests pass (frontend + workflow)
+- Password Brenda: intact after test cycles

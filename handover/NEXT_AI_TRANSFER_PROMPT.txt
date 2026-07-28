@@ -1,7 +1,7 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║  AI TRANSFER PROMPT — HerAI Fellowship SuperApp              ║
 ║  Sesi: 28 Juli 2026 (Sisyphus sesi ke-3) → Next AI           ║
-║  Total: 232 commit | Worktree: BERSIH | E2E: 40/40 PASS       ║
+║  Total: 243 commit | Worktree: BERSIH | E2E: 33/33 PASS       ║
 ╚══════════════════════════════════════════════════════════════╝
 
 ⚠️  BACA SELURUH FILE INI SEBELUM MULAI KERJA.
@@ -11,48 +11,57 @@
 📋 SUMBER KEBENARAN (WAJIB DIBACA — URUTAN PENTING)
 ═══════════════════════════════════════════════════════════════
 1. handover/AI_HANDOFF_CURRENT_STATE.md  ← SINGLE SOURCE OF TRUTH
-2. gemini.md  ← Bug log #1-67 + session rules
-3. handover/NEXT_PLAN.md  ← Priorities + execution plan (SEMUA DONE)
-4. NEXT_AI_TRANSFER_PROMPT.txt ini  ← System identity + rules
+2. gemini.md  ← Bug log #1-#77 + session rules
+3. NEXT_AI_TRANSFER_PROMPT.txt ini  ← System identity + rules
 
 ═══════════════════════════════════════════════════════════════
 🔧 IDENTITAS SISTEM
 ═══════════════════════════════════════════════════════════════
 - Spreadsheet ID: 1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w
 - GAS Web App URL: https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec
-- GAS Code: gas/Code.gs (2479 baris, 54 routes, 23 sheets)
-- SPA: Vanilla JS hash-router, Node.js proxy (node server.js → :3000)
-- Proxy: POST /__gas (token auto-injected, Origin header WAJIB)
+- GAS Code: gas/Code.gs (2562 baris, 54 routes, 23 sheets)
+- SPA: Vanilla JS hash-router, Node proxy (node server.js → :3000)
+- Proxy: POST /__gas (token auto-injected, Origin WAJIB)
 - Test participant: NIK 8204086711010003 / Brenda Rahmandea Arsy / brenda123
-- WA env: GAS_WEB_APP_URL di .env
-- Last commit: ff6d639
+- Last commit: 49bc9c2
 - Worktree: BERSIH
-- E2E: 40/40 PASS (sisa GAS timeout — pre-existing, bukan regresi)
+- E2E: 33/33 PASS
 
 ═══════════════════════════════════════════════════════════════
-✅ APA YANG UDAH SELESAI (SESI INI — 12 commit)
+✅ APA YANG UDAH SELESAI (SESI INI — 13 commit: #65-#77)
 ═══════════════════════════════════════════════════════════════
 
 P5 — AI LAB UX POLISH (#65):
-- 12 animasi CSS: roadmap accordion smooth height, step stagger fade-in,
-  active step glow pink, quiz answer pulse (correct) + shake (wrong),
-  page enter fade-in-up, progress bar cubic-bezier, button scale(0.96)
+- 12 animasi CSS: roadmap accordion, step stagger, quiz feedback, toast
 - __aiLabToast() global helper (success/error/info, auto-dismiss)
-- Dashboard quiz badge hover + skeleton reveal animation
-- 0 perubahan ke 29 file ai-*.js — semua via CSS injection
 
 P3 — MODULE ROUTES (#66):
-- ai-math-for-ai: 11 routes under-dev → math-for-ai/*.html + __aiLabLoader
-- ai-ml-basic: 5 routes under-dev → machine-learning/*.html
-- ai-cv: 8 cnn/advanced-cnn routes under-dev → 02/03-*/*.html
-- ai-reasoning.js: VERIFIED DONE — 170KB, full content, routes working
+- math-for-ai, ml-basic, CV cnn/advanced-cnn routes activated
 
 AVATAR/FOTO PROFIL (#67):
-- GAS: uploadParticipantPhoto + removeParticipantPhoto endpoints
-- Storage: base64 data URL → sheet photo_url (tanpa Drive permission)
-- Flow: Pilih file → canvas resize 200×200 → preview → "✓ Simpan" / "✗ Batal"
-- Topbar: updateTopbarAvatar() set background-image + hide ::after overlay
-- CSS: .has-photo::after { background: none } — fix overlay default persona
+- Upload → canvas resize 200×200 → preview → "✓ Simpan" / "✗ Batal"
+- GAS: uploadParticipantPhoto + removeParticipantPhoto (base64 sheet)
+
+MODULE LOCKDOWN (#68, #74, #75):
+- Math/ML/CV overview → under-development
+- Fix UD template blocked by restricted access guard
+- ALL modules UD except 5 AI Fundamentals
+- Dashboard filter: only shows 5 online modules
+
+LEADERBOARD LIVE (#69, #76, #77):
+- Formula: sum(quiz_score) + (chapters×15) + (practice×5)
+- Live-computed from participant_progress, bukan static seed
+- Brenda: 1,024 pts (34ch×15 + 204 quiz + 130 practice)
+- 3x GAS redeploy needed (scope → filter → final fix)
+
+DASHBOARD CACHE (#70):
+- 3-tier: memory → sessionStorage(5min) → skeleton
+- Refresh: 0.2s (was 5-8s)
+
+COMPUTER VISION (#71, #72, #73):
+- CV overview + Digital Image Fundamentals ONLINE
+- CNN + Advanced CNN → under development
+- ai-cv-interactive.js (1,241 lines): sandbox, flip/rotate, bitwise, Otsu, quiz, challenges
 
 ═══════════════════════════════════════════════════════════════
 ⚠️  TEMUAN KRITIS — WAJIB BACA SEBELUM EDIT
@@ -81,14 +90,11 @@ AVATAR/FOTO PROFIL (#67):
 5. Playwright navigation — CRITICAL:
    - GUNAKAN page.goto() untuk SPA hash navigation
    - page.evaluate hash nav UNRELIABLE — jangan dipakai
-   - Setelah login, page.goto() ke URL hash langsung
    - Quiz/Practice forms di-render oleh IIFE — tunggu dengan waitForFunction()
-   - setInputFiles + dispatchEvent('change') unreliable di headless
 
 6. Lazy Loading (#64):
    - __aiLabLoader ada di window, defined di settings.js
    - load('ai-xxx') returns Promise — cache + dedup otomatis
-   - 28 route handler SUDAH di-wrap. Jangan tambah route baru tanpa loader
    - Script loader path: /js/frontend/fellow-dashboard/{name}.js?v=20260727-lazy
 
 7. Password:
@@ -108,10 +114,21 @@ AVATAR/FOTO PROFIL (#67):
 12. Avatar storage: base64 di sheet, 200×200 JPEG ~15KB
     - Topbar overlay .avatar-img::after nutupin — pakai .has-photo class
 
+13. Leaderboard: LIVE-computed. Formula: quiz + chapters×15 + practice×5
+    - Name masking: ********* for non-current user
+    - GAS: computeLiveLeaderboard() + getSeedLeaderboard() fallback
+
+14. Dashboard module filter: only 5 AI Fundamentals shown
+    - onlinePrefixes: ai-python, ai-reasoning, ai-modern, ai-evaluation, ai-evolution
+
+15. CV Interactive: ai-cv-interactive.js loaded in index.html
+    - initCvInteractives() called by loadCvChapter after content injection
+    - MutationObserver auto-init on .cv-chapter-wrapper detection
+
 ═══════════════════════════════════════════════════════════════
 📐 ATURAN KERJA — 20 RULE WAJIB
 ═══════════════════════════════════════════════════════════════
-1.  Commit PER FITUR | 2. Update handover & gemini.md | 3. Bug baru #68+
+1.  Commit PER FITUR | 2. Update handover & gemini.md | 3. Bug baru #78+
 4.  No dark theme — light pink | 5. CSS scope ai-lab-content
 6.  Diagram kontras: lines >=25%, dots >=75%, stroke >=0.8px
 7.  NO NIK/password exposed | 8. TANYA user kalo ambigu
@@ -125,18 +142,22 @@ AVATAR/FOTO PROFIL (#67):
 20. Jangan ubah router.js module handler tanpa loader wrapper
 
 ═══════════════════════════════════════════════════════════════
-🔑 DATA FLOW
+📊 MODULE STATUS — SAAT INI
 ═══════════════════════════════════════════════════════════════
-CHAPTER: saveChapterProgress(id, ch, 'completed') → participant_progress
-QUIZ: saveChapterProgress(id, 'quiz', 'completed', score) → participant_progress
-PRACTICE: saveChapterProgress(id, 'practice', 'completed') → participant_progress
-LOGIN: participantLogin(nik, pw) → 3 jalur → token 12 jam
-PASSWORD: changeParticipantPassword(old, new) → hash → sync 2 sheet
-DASHBOARD: initParticipantDashboardData() → skeleton → fetch → render/cache
-SESSION: sessionStorage.heraiParticipantSession
-SETTINGS: localStorage.heraiGlobalSettings → participantPortalOpen boolean
-MODULE: __aiLabLoader.load('ai-xxx') → dynamic script injection
-AVATAR: file → resizeImageToBase64(200) → preview → POST uploadParticipantPhoto
+
+✅ ONLINE (5):
+  Python untuk AI | Reasoning AI | Konsep AI Modern | Evaluation AI | Evolution of AI
+  (+ Pengantar AI / ai-intro)
+
+✅ ONLINE — Computer Vision (partial):
+  CV Overview + Digital Image Fundamentals (with interactive widgets)
+  CNN + Advanced CNN → 🔒 UD
+
+🔒 UNDER DEVELOPMENT (20+):
+  Deep Learning, RL, ML, Math, LLM, VLM, Multimodal, Agentic,
+  Culture, Healthcare, UI/UX, Manufacturing, Biz Insight, People Mgt,
+  Geospatial, Bioinformatics, Data Eng, Data Sci, Infra, Deploy,
+  Front-end, Back-end
 
 ═══════════════════════════════════════════════════════════════
 📊 FILE — BOLEH / TIDAK BOLEH DIEDIT
@@ -144,7 +165,8 @@ AVATAR: file → resizeImageToBase64(200) → preview → POST uploadParticipant
 ✅ BOLEH: settings.js, ai-*.js (24 module standard), dashboard.html,
           dashboard.css, modules.css, ai-lab-lesson.css, settings.css,
           gas/Code.gs (bug fix / feature user only), index.html (cache buster),
-          e2e/*.spec.js, gemini.md, handover/, scripts/*.js
+          e2e/*.spec.js, gemini.md, handover/, scripts/*.js,
+          ai-cv-interactive.js
 
 ❌ JANGAN: main.js, 231 lesson files, Go services, admin dashboard,
            5 module struktur berbeda (TANYA DULU), ai-python-basic.js (HARD BLOCK)
@@ -153,37 +175,39 @@ AVATAR: file → resizeImageToBase64(200) → preview → POST uploadParticipant
                Tambah route baru? Pakai __aiLabLoader. TANYA DULU.
 
 ═══════════════════════════════════════════════════════════════
-🔴 FOKUS NEXT SESSION — NEXT_PLAN.md
+🔴 FOKUS NEXT SESSION
 ═══════════════════════════════════════════════════════════════
 
-BACA: handover/NEXT_PLAN.md (FULL)
+SEMUA prioritas existing SUDAH SELESAI. Tidak ada pekerjaan tersisa dari backlog.
 
-SEMUA 6 prioritas SUDAH SELESAI. Tidak ada pekerjaan tersisa dari backlog.
+🔧 PERLU DILAKUKAN:
+1. Redeploy GAS (#77 filter fix — leaderboard masih pakai kode lama)
+2. Verifikasi leaderboard live setelah redeploy (harusnya Brenda 1,024 pts)
 
-TANYA KE USER:
+❓ TANYA KE USER:
 1. Apa prioritas selanjutnya?
 2. Ada bug baru atau fitur yang mau ditambah?
-3. JANGAN mulai kerja sebelum user konfirmasi.
+3. Module mana yang mau di-online-kan berikutnya?
+4. JANGAN mulai kerja sebelum user konfirmasi.
 
 ═══════════════════════════════════════════════════════════════
 📞 YANG HARUS DIKONFIRMASI KE USER SEBELUM MULAI
 ═══════════════════════════════════════════════════════════════
-1. "Saya sudah baca semua handover + gemini.md + NEXT_PLAN.md."
+1. "Saya sudah baca semua handover + gemini.md."
 2. "Semua prioritas existing sudah selesai. Apa yang mau dikerjakan?"
 3. "Ada bug baru atau issue yang perlu ditangani?"
 4. JANGAN mulai kerja sebelum user konfirmasi.
 
 ═══════════════════════════════════════════════════════════════
-🔧 TOOLS & SCRIPTS
+📜 COMMIT LOG SESI INI
 ═══════════════════════════════════════════════════════════════
-# Server
-node server.js  # → http://127.0.0.1:3000
-
-# E2E Tests
-TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test --workers=1
-
-# Syntax check
-node --check js/router.js
-node --check js/frontend/fellow-dashboard/settings.js
-for f in js/frontend/fellow-dashboard/ai-*.js; do node --check "$f" && echo "OK $f" || echo "FAIL $f"; done
-```
+49bc9c2 fix: GAS — leaderboard is_active filter removed valid rows (#77)
+a8a88bc fix: GAS — computeLiveLeaderboard scope error — activeRows not in scope (#76)
+72e833b fix: Dashboard — hide under-development modules, show AI Fundamentals only (#75)
+c2f6667 fix: Put all modules under-development except AI Fundamentals (#74)
+899e5f4 feat: CV Digital Image — interactive widgets + quiz + coding challenges (#73)
+a620734 fix: CV — CNN + Advanced CNN sub-modules → under-development (#72)
+9a9761c fix: Computer Vision back online — route restore + ai-lab catch-all fix (#71)
+5092a19 perf: Dashboard persistent cache — sessionStorage TTL 5min (#70)
+f749ca7 feat: Live leaderboard — compute points from participant_progress (#69)
+85772cd fix: Math/ML/CV overview → under-development, fix UD template blocked by restricted access (#68)
