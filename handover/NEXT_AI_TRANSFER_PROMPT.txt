@@ -1,7 +1,8 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║  AI TRANSFER PROMPT — HerAI Fellowship SuperApp              ║
 ║  Sesi: 28 Juli 2026 (Sisyphus sesi ke-3) → Next AI           ║
-║  Total: 243 commit | Worktree: BERSIH | E2E: 33/33 PASS       ║
+║  Total: 244 commit | Worktree: BERSIH | E2E: 33/33 PASS       ║
+║  GAS: ✅ LIVE | Leaderboard: ✅ LIVE (1,024 pts)              ║
 ╚══════════════════════════════════════════════════════════════╝
 
 ⚠️  BACA SELURUH FILE INI SEBELUM MULAI KERJA.
@@ -11,8 +12,9 @@
 📋 SUMBER KEBENARAN (WAJIB DIBACA — URUTAN PENTING)
 ═══════════════════════════════════════════════════════════════
 1. handover/AI_HANDOFF_CURRENT_STATE.md  ← SINGLE SOURCE OF TRUTH
-2. gemini.md  ← Bug log #1-#77 + session rules
-3. NEXT_AI_TRANSFER_PROMPT.txt ini  ← System identity + rules
+2. gemini.md  ← Bug log #1-#77 + session rules + temuan kritis
+3. handover/NEXT_PLAN.md  ← Priorities + execution plan
+4. NEXT_AI_TRANSFER_PROMPT.txt ini  ← System identity + aturan + konfirmasi
 
 ═══════════════════════════════════════════════════════════════
 🔧 IDENTITAS SISTEM
@@ -23,45 +25,40 @@
 - SPA: Vanilla JS hash-router, Node proxy (node server.js → :3000)
 - Proxy: POST /__gas (token auto-injected, Origin WAJIB)
 - Test participant: NIK 8204086711010003 / Brenda Rahmandea Arsy / brenda123
-- Last commit: 49bc9c2
+- Last commit: 64dde11
 - Worktree: BERSIH
 - E2E: 33/33 PASS
+- Leaderboard: ✅ LIVE — Brenda 1,024 pts (#1), next 245 pts (#2)
 
 ═══════════════════════════════════════════════════════════════
 ✅ APA YANG UDAH SELESAI (SESI INI — 13 commit: #65-#77)
 ═══════════════════════════════════════════════════════════════
 
-P5 — AI LAB UX POLISH (#65):
-- 12 animasi CSS: roadmap accordion, step stagger, quiz feedback, toast
-- __aiLabToast() global helper (success/error/info, auto-dismiss)
+UX POLISH (#65): 12 animations, __aiLabToast(), quiz feedback, skeleton reveal
+MODULE ROUTES (#66): math-for-ai, ml-basic, CV routes activated
+AVATAR (#67): Upload→preview→confirm, base64 sheet storage, topbar display
+MODULE LOCKDOWN (#68,74,75): 20 modules UD, only 5 AI Fundamentals online, dashboard filtered
+LEADERBOARD LIVE (#69,76,77): Formula quiz+chapters×15+practice×5, computed from participant_progress
+DASHBOARD CACHE (#70): 3-tier (memory→sessionStorage 5min→skeleton), refresh 0.2s
+COMPUTER VISION (#71,72,73): CV overview + Digital Image online, CNN UD, interactive widgets 1,241 lines
 
-P3 — MODULE ROUTES (#66):
-- math-for-ai, ml-basic, CV cnn/advanced-cnn routes activated
+═══════════════════════════════════════════════════════════════
+📊 MODULE STATUS — SAAT INI
+═══════════════════════════════════════════════════════════════
 
-AVATAR/FOTO PROFIL (#67):
-- Upload → canvas resize 200×200 → preview → "✓ Simpan" / "✗ Batal"
-- GAS: uploadParticipantPhoto + removeParticipantPhoto (base64 sheet)
+✅ ONLINE (5 + AI Intro):
+  Pengantar AI | Python untuk AI | Reasoning AI | Konsep AI Modern
+  Evaluation AI | Evolution of AI
 
-MODULE LOCKDOWN (#68, #74, #75):
-- Math/ML/CV overview → under-development
-- Fix UD template blocked by restricted access guard
-- ALL modules UD except 5 AI Fundamentals
-- Dashboard filter: only shows 5 online modules
+✅ ONLINE — CV (partial):
+  CV Overview + Digital Image Fundamentals (interactive widgets active)
+  CNN + Advanced CNN → 🔒 UD
 
-LEADERBOARD LIVE (#69, #76, #77):
-- Formula: sum(quiz_score) + (chapters×15) + (practice×5)
-- Live-computed from participant_progress, bukan static seed
-- Brenda: 1,024 pts (34ch×15 + 204 quiz + 130 practice)
-- 3x GAS redeploy needed (scope → filter → final fix)
-
-DASHBOARD CACHE (#70):
-- 3-tier: memory → sessionStorage(5min) → skeleton
-- Refresh: 0.2s (was 5-8s)
-
-COMPUTER VISION (#71, #72, #73):
-- CV overview + Digital Image Fundamentals ONLINE
-- CNN + Advanced CNN → under development
-- ai-cv-interactive.js (1,241 lines): sandbox, flip/rotate, bitwise, Otsu, quiz, challenges
+🔒 UNDER DEVELOPMENT (20+):
+  Deep Learning, RL, ML, Math, LLM, VLM, Multimodal, Agentic,
+  Culture, Healthcare, UI/UX, Manufacturing, Biz Insight, People Mgt,
+  Geospatial, Bioinformatics, Data Eng, Data Sci, Infra, Deploy,
+  Front-end, Back-end
 
 ═══════════════════════════════════════════════════════════════
 ⚠️  TEMUAN KRITIS — WAJIB BACA SEBELUM EDIT
@@ -95,7 +92,7 @@ COMPUTER VISION (#71, #72, #73):
 6. Lazy Loading (#64):
    - __aiLabLoader ada di window, defined di settings.js
    - load('ai-xxx') returns Promise — cache + dedup otomatis
-   - Script loader path: /js/frontend/fellow-dashboard/{name}.js?v=20260727-lazy
+   - 28 route handler SUDAH di-wrap. Jangan tambah route baru tanpa loader
 
 7. Password:
    - Format hash: pw$1${salt}$${sha256hex}
@@ -114,16 +111,17 @@ COMPUTER VISION (#71, #72, #73):
 12. Avatar storage: base64 di sheet, 200×200 JPEG ~15KB
     - Topbar overlay .avatar-img::after nutupin — pakai .has-photo class
 
-13. Leaderboard: LIVE-computed. Formula: quiz + chapters×15 + practice×5
-    - Name masking: ********* for non-current user
-    - GAS: computeLiveLeaderboard() + getSeedLeaderboard() fallback
+13. Leaderboard: LIVE dari participant_progress
+    - Formula: sum(quiz_score) + (chapters × 15) + (practice × 5)
+    - Name masking: ********* for non-current
+    - Brenda 1,024 pts (#1), next 245 pts (#2)
 
 14. Dashboard module filter: only 5 AI Fundamentals shown
     - onlinePrefixes: ai-python, ai-reasoning, ai-modern, ai-evaluation, ai-evolution
 
-15. CV Interactive: ai-cv-interactive.js loaded in index.html
+15. CV Interactive: ai-cv-interactive.js (1,241 lines)
     - initCvInteractives() called by loadCvChapter after content injection
-    - MutationObserver auto-init on .cv-chapter-wrapper detection
+    - Sandbox, flip/rotate, bitwise ops, Otsu, quiz, coding challenges
 
 ═══════════════════════════════════════════════════════════════
 📐 ATURAN KERJA — 20 RULE WAJIB
@@ -142,24 +140,6 @@ COMPUTER VISION (#71, #72, #73):
 20. Jangan ubah router.js module handler tanpa loader wrapper
 
 ═══════════════════════════════════════════════════════════════
-📊 MODULE STATUS — SAAT INI
-═══════════════════════════════════════════════════════════════
-
-✅ ONLINE (5):
-  Python untuk AI | Reasoning AI | Konsep AI Modern | Evaluation AI | Evolution of AI
-  (+ Pengantar AI / ai-intro)
-
-✅ ONLINE — Computer Vision (partial):
-  CV Overview + Digital Image Fundamentals (with interactive widgets)
-  CNN + Advanced CNN → 🔒 UD
-
-🔒 UNDER DEVELOPMENT (20+):
-  Deep Learning, RL, ML, Math, LLM, VLM, Multimodal, Agentic,
-  Culture, Healthcare, UI/UX, Manufacturing, Biz Insight, People Mgt,
-  Geospatial, Bioinformatics, Data Eng, Data Sci, Infra, Deploy,
-  Front-end, Back-end
-
-═══════════════════════════════════════════════════════════════
 📊 FILE — BOLEH / TIDAK BOLEH DIEDIT
 ═══════════════════════════════════════════════════════════════
 ✅ BOLEH: settings.js, ai-*.js (24 module standard), dashboard.html,
@@ -175,16 +155,14 @@ COMPUTER VISION (#71, #72, #73):
                Tambah route baru? Pakai __aiLabLoader. TANYA DULU.
 
 ═══════════════════════════════════════════════════════════════
-🔴 FOKUS NEXT SESSION
+🔴 FOKUS NEXT SESSION — NEXT_PLAN.md
 ═══════════════════════════════════════════════════════════════
 
-SEMUA prioritas existing SUDAH SELESAI. Tidak ada pekerjaan tersisa dari backlog.
+BACA: handover/NEXT_PLAN.md (FULL)
 
-🔧 PERLU DILAKUKAN:
-1. Redeploy GAS (#77 filter fix — leaderboard masih pakai kode lama)
-2. Verifikasi leaderboard live setelah redeploy (harusnya Brenda 1,024 pts)
+SEMUA 13 prioritas SUDAH SELESAI. Tidak ada pekerjaan tersisa dari backlog.
 
-❓ TANYA KE USER:
+TANYA KE USER:
 1. Apa prioritas selanjutnya?
 2. Ada bug baru atau fitur yang mau ditambah?
 3. Module mana yang mau di-online-kan berikutnya?
@@ -193,21 +171,7 @@ SEMUA prioritas existing SUDAH SELESAI. Tidak ada pekerjaan tersisa dari backlog
 ═══════════════════════════════════════════════════════════════
 📞 YANG HARUS DIKONFIRMASI KE USER SEBELUM MULAI
 ═══════════════════════════════════════════════════════════════
-1. "Saya sudah baca semua handover + gemini.md."
+1. "Saya sudah baca semua handover + gemini.md + NEXT_PLAN.md."
 2. "Semua prioritas existing sudah selesai. Apa yang mau dikerjakan?"
 3. "Ada bug baru atau issue yang perlu ditangani?"
 4. JANGAN mulai kerja sebelum user konfirmasi.
-
-═══════════════════════════════════════════════════════════════
-📜 COMMIT LOG SESI INI
-═══════════════════════════════════════════════════════════════
-49bc9c2 fix: GAS — leaderboard is_active filter removed valid rows (#77)
-a8a88bc fix: GAS — computeLiveLeaderboard scope error — activeRows not in scope (#76)
-72e833b fix: Dashboard — hide under-development modules, show AI Fundamentals only (#75)
-c2f6667 fix: Put all modules under-development except AI Fundamentals (#74)
-899e5f4 feat: CV Digital Image — interactive widgets + quiz + coding challenges (#73)
-a620734 fix: CV — CNN + Advanced CNN sub-modules → under-development (#72)
-9a9761c fix: Computer Vision back online — route restore + ai-lab catch-all fix (#71)
-5092a19 perf: Dashboard persistent cache — sessionStorage TTL 5min (#70)
-f749ca7 feat: Live leaderboard — compute points from participant_progress (#69)
-85772cd fix: Math/ML/CV overview → under-development, fix UD template blocked by restricted access (#68)

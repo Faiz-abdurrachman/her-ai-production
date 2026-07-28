@@ -873,3 +873,5 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 **Deskripsi:** participant_progress tidak punya kolom is_active → semua row terfilter → fallback seed.
 
 **Fix:** GAS: hapus filter is_active. Brenda 1,024 pts live. 3x redeploy (#69→#76→#77).
+
+**Verifikasi Final:** ✅ Leaderboard LIVE — Brenda 1,024 pts (#1), peserta lain 245 pts (#2). GAS deployed dan verified.
