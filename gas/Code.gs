@@ -463,14 +463,7 @@ function getParticipantDashboardData(payload) {
  * Falls back to seed data if no progress exists yet.
  */
 function computeLiveLeaderboard(requesterNik) {
-  var allRows = getRows(SHEETS.participantProgress);
-  var progressRows = [];
-  for (var i = 0; i < allRows.length; i++) {
-    var row = allRows[i];
-    if (row.is_active === '' || isTruthy(row.is_active)) {
-      progressRows.push(row);
-    }
-  }
+  var progressRows = getRows(SHEETS.participantProgress);
   
   if (!progressRows || progressRows.length === 0) {
     return getSeedLeaderboard(requesterNik);
@@ -539,14 +532,7 @@ function computeLiveLeaderboard(requesterNik) {
  * Fallback: seed leaderboard when no progress data exists.
  */
 function getSeedLeaderboard(requesterNik) {
-  var allRows = getRows(SHEETS.participantDashboardLeaderboard);
-  var rows = [];
-  for (var i = 0; i < allRows.length; i++) {
-    var row = allRows[i];
-    if (row.is_active === '' || isTruthy(row.is_active)) {
-      rows.push(row);
-    }
-  }
+  var rows = getRows(SHEETS.participantDashboardLeaderboard);
   if (rows && rows.length > 0) {
     return rows.map(function(row) {
       const nik = String(row.nik || '').replace(/\D/g, '');
