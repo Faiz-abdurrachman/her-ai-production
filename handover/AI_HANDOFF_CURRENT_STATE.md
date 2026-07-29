@@ -1,21 +1,21 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint: 29 Juli 2026 (Fix #86 — Horizontal Quiz Navigator), Asia/Jakarta**
+**Checkpoint: 29 Juli 2026 (Playwright MCP E2E Audit #87–#91), Asia/Jakarta**
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
 **Baseline Commit:** `6c35926` - docs: Final handover update — leaderboard verified LIVE, GAS deployed, all systems go
-**Feature Commit:** current HEAD - `fix: keep quiz navigator horizontal and wrapping (#86)`
-**Total commits:** 248
+**Feature Commit:** current HEAD - `test: expand active module end-to-end audit (#87-#91)`
+**Total commits:** 249
 **GAS Deployment:** ✅ LIVE — leaderboard 1,024 pts verified
 **Worktree:** BERSIH
-**E2E Test Suite:** 115 test terdaftar | safe mock gate 62 test | live mutation default OFF
+**E2E Test Suite:** 123 test terdaftar | safe mock gate 70 test | live mutation default OFF
 **Leaderboard:** ✅ LIVE — Brenda 1,024 pts (#1), peserta lain 245 pts (#2)
 
 > **Ini sumber kebenaran tunggal.** Semua dokumen lain yang bertentangan diabaikan.
 
 ## CHECKPOINT QA 29 JULI 2026
 
-Phase 0 testing sudah dibangun dan fix #80 menambahkan bank kuis production untuk Evaluation/Evolution. Router, module khusus, dan GAS tidak diubah. Tidak ada request mutasi yang dikirim ke backend live.
+Phase 0 testing sudah dibangun, fix #80 menambahkan bank kuis production untuk Evaluation/Evolution, dan audit Playwright MCP menguji 20 route module pada desktop/mobile. Router, source module production, dan GAS tidak diubah pada audit ini. Tidak ada request mutasi yang dikirim ke backend live.
 
 ### Cakupan yang sekarang bisa dilacak
 
@@ -30,12 +30,14 @@ Phase 0 testing sudah dibangun dan fix #80 menambahkan bank kuis production untu
 
 ### Hasil safe mock gate
 
-- 62 test dieksekusi tanpa live write.
+- 70 test dieksekusi tanpa live write.
 - 56 alur memenuhi kontrak secara langsung.
-- 6 expected failures mewakili bug produk yang masih terbuka; suite exit code 0.
+- 14 expected failures mewakili bug produk yang masih terbuka; suite exit code 0.
 - Review kontrak backend menemukan tambahan #84–#85.
 - #80 FIXED: Evaluation dan Evolution masing-masing memiliki 20 soal nyata serta payload score terverifikasi.
 - #86 FIXED: navigator 1–20 horizontal, wrap, 44×44px, dan bebas overflow pada 375/1280px.
+- Audit MCP: 20/20 route render dan bebas horizontal overflow pada 375px.
+- Live read-back production belum dijalankan: sesi MCP kedaluwarsa dan credential secret environment tidak tersedia.
 
 ### Temuan terbuka
 
@@ -48,8 +50,13 @@ Phase 0 testing sudah dibangun dan fix #80 menambahkan bank kuis production untu
 | 83 | Medium | Dua tombol praktik mobile di bawah 44px |
 | 84 | High | Backend menghitung quiz/practice sebagai chapter selesai |
 | 85 | High | `saveChapterProgress` mengabaikan respons gagal dan catch kosong |
+| 87 | Medium | Navigator 26 soal Reasoning masih vertikal pada mobile |
+| 88 | Medium | AI Modern gagal source-integrity assertion |
+| 89 | High | Evaluation/Evolution melempar `PYTHON_GUIDES is not defined` |
+| 90 | Low | Label `Kuis Python`/`Forum Python AI` bocor ke Evaluation/Evolution |
+| 91 | High | Posting diskusi hanya tersimpan di localStorage, bukan backend |
 
-**Penting:** angka leaderboard/GAS live adalah status terverifikasi dari checkpoint sebelumnya. Phase QA ini tidak melakukan live mutation atau verifikasi ulang production.
+**Penting:** angka leaderboard/GAS live adalah status terverifikasi dari checkpoint sebelumnya. Audit QA ini tidak melakukan live mutation atau verifikasi ulang authenticated production. Laporan rinci ada di `handover/E2E_AUDIT_2026-07-29.md`.
 
 ---
 
@@ -76,8 +83,8 @@ Phase 0 testing sudah dibangun dan fix #80 menambahkan bank kuis production untu
 | Nama dinamis dashboard | ✅ | "Halo, [Nama]!" dari session |
 | Ganti password mandiri | ✅ | old→new→hash→sync 2 sheet, rate limit 8/10min |
 | Settings save profil | ✅ | form→GAS→session update |
-| Chapter progress auto-save | ⚠️ | Active modules teruji mock; AI Modern salah `chapter_id` (#82) |
-| Quiz score wiring | ⚠️ | Evaluation/Evolution lolos 20 soal; AI Modern scope crash (#81) |
+| Chapter progress auto-save | ⚠️ | Active modules teruji mock; AI Modern salah `chapter_id` (#82); live read-back belum dieksekusi |
+| Quiz score wiring | ⚠️ | Evaluation/Evolution lolos 20 soal; AI Modern scope crash (#81); UI dapat lock sebelum ack (#85) |
 | Practice/latihan wiring | ⚠️ | Mayoritas aktif; AI Modern gagal POST ke GAS (#81) |
 | Dashboard skeleton/cache | ✅ | 3-tier: memory→sessionStorage(5min)→skeleton, 0.2s refresh |
 | Dashboard modules filter | ✅ | Dashboard tepat 5 card; overview AI Fundamentals berisi Intro + 5 module |
@@ -90,6 +97,7 @@ Phase 0 testing sudah dibangun dan fix #80 menambahkan bank kuis production untu
 | Glossary enrichment (#63) | ✅ | 14 modules, 620+ definitions |
 | Lazy loading (#64) | ✅ | `__aiLabLoader`, 28 route wrapped, 4.5MB→500KB, 90% reduction |
 | P5: UX Polish (#65) | ✅ | 12 animations: accordion, quiz feedback, page enter, toast, button |
+| Discussion persistence | ⚠️ | Post masih browser-only/localStorage (#91) |
 | Avatar/foto profil (#67) | ✅ | Upload→canvas resize 200×200→preview→"✓ Simpan"/"✗ Batal", base64 sheet |
 | Module lockdown (#68, #74, #75) | ✅ | 20 module UD, dashboard shows only 5 AI Fundamentals |
 | CV Interactive widgets (#73) | ✅ | Sandbox, flip/rotate, bitwise, Otsu, quiz, coding challenges |

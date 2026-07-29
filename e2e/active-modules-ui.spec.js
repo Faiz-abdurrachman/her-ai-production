@@ -211,6 +211,90 @@ test.describe('Progress requests — mocked write verification', () => {
   }
 });
 
+test.describe('Persistence acknowledgement — known gaps', () => {
+  test('quiz remains retryable when backend rejects the progress write', async ({ page }) => {
+    test.fail(true, 'Known issue #85: quiz locks local state without checking the backend response.');
+    const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === 'python');
+    const { calls } = await installMockParticipant(page, {
+      saveProgressResponse: { status: 'error', message: 'QA rejected write' }
+    });
+
+    await page.goto(appUrl(module.routes.quiz));
+    const form = page.locator(module.selectors.quizForm);
+    await expect(form).toBeVisible({ timeout: 15000 });
+    await form.locator('input[type="radio"]').evaluateAll(inputs => {
+      const answered = new Set();
+      inputs.forEach(input => {
+        if (!answered.has(input.name)) {
+          input.checked = true;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          answered.add(input.name);
+        }
+      });
+    });
+    await form.locator('.quiz-submit-btn, button[type="submit"]').first().click();
+
+    await expect.poll(() => calls.some(call =>
+      call.action === 'saveParticipantProgress'
+      && call.module_id === module.moduleId
+      && call.chapter_id === 'quiz'
+    )).toBe(true);
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('heraiAiPythonQuizDone'))).not.toBe('true');
+    await expect(form.locator('.quiz-submit-btn, button[type="submit"]').first()).not.toContainText('Sudah Dikirim');
+  });
+
+  test('discussion submit emits a backend persistence request', async ({ page }) => {
+    test.fail(true, 'Known issue #91: discussion posts are stored in localStorage only.');
+    const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === 'python');
+    const { calls } = await installMockParticipant(page);
+
+    await page.goto(appUrl(module.routes.discussion));
+    const form = page.locator('form').filter({ has: page.locator('textarea') }).first();
+    await expect(form).toBeVisible({ timeout: 15000 });
+    const callCountBeforeSubmit = calls.length;
+    await form.locator('textarea').fill('QA deterministic discussion persistence check');
+    await form.locator('button[type="submit"], button:has-text("Posting Diskusi")').first().click();
+
+    await expect.poll(() => calls.length).toBeGreaterThan(callCountBeforeSubmit);
+  });
+});
+
+test.describe('Runtime and module identity — known gaps', () => {
+  for (const moduleKey of ['evaluation', 'evolution']) {
+    test(`${moduleKey} loads without PYTHON_GUIDES runtime errors`, async ({ page }) => {
+      test.fail(true, 'Known issue #89: copied cleanup code references PYTHON_GUIDES outside its scope.');
+      const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === moduleKey);
+      const pageErrors = [];
+      page.on('pageerror', error => pageErrors.push(error.message));
+      await installMockParticipant(page);
+      await page.goto(appUrl(module.routes.overview));
+      await expectLearningPage(page, module);
+      await page.waitForTimeout(300);
+      expect(pageErrors.filter(message => /PYTHON_GUIDES is not defined/i.test(message))).toEqual([]);
+    });
+
+    test(`${moduleKey} quiz headings use their own module name`, async ({ page }) => {
+      test.fail(true, 'Known issue #90: Evaluation/Evolution still expose copied Python labels.');
+      const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === moduleKey);
+      await installMockParticipant(page);
+      await page.goto(appUrl(module.routes.quiz));
+      await expectLearningPage(page, module);
+      const headings = await page.locator('h1, h2, h3').allTextContents();
+      expect(headings.join(' | ')).not.toMatch(/Kuis Python/i);
+    });
+  }
+
+  test('AI Modern preserves source integrity after enhancement', async ({ page }) => {
+    test.fail(true, 'Known issue #88: rendered source text differs from the source integrity baseline.');
+    const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === 'modern');
+    await installMockParticipant(page);
+    await page.goto(appUrl(module.routes.overview));
+    const source = page.locator('#modern-chapter-container');
+    await expect(source).toBeVisible({ timeout: 15000 });
+    await expect(source).toHaveAttribute('data-source-integrity', 'passed', { timeout: 15000 });
+  });
+});
+
 test.describe('AI Fundamentals summary — known dynamic-data gap', () => {
   test('summary reflects non-zero backend progress instead of static 0/0/6', async ({ page }) => {
     test.fail(true, 'Known issue #78: Ringkasan Belajar masih hardcoded di overview HTML.');

@@ -39,12 +39,13 @@ function defaultDashboardData() {
  * writing progress, scores, activity, or profile data to the live GAS deployment.
  *
  * @param {import('@playwright/test').Page} page
- * @param {{dashboardData?: object, progressData?: object[]}} [options]
+ * @param {{dashboardData?: object, progressData?: object[], saveProgressResponse?: object}} [options]
  */
 async function installMockParticipant(page, options = {}) {
   const calls = [];
   const dashboardData = options.dashboardData || defaultDashboardData();
   const progressData = options.progressData || [];
+  const saveProgressResponse = options.saveProgressResponse || { status: 'success' };
 
   await page.addInitScript(({ settings, session }) => {
     try {
@@ -77,6 +78,8 @@ async function installMockParticipant(page, options = {}) {
       response = { status: 'success', data: dashboardData };
     } else if (payload.action === 'getParticipantProgress') {
       response = { status: 'success', data: progressData };
+    } else if (payload.action === 'saveParticipantProgress') {
+      response = saveProgressResponse;
     }
 
     await route.fulfill({

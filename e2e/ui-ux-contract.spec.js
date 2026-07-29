@@ -97,6 +97,39 @@ test.describe('UI/UX quality gate — deterministic mock', () => {
     });
   }
 
+  test('mobile-375 keeps Reasoning quiz numbers horizontal and wrapping', async ({ page }) => {
+    test.fail(true, 'Known issue #87: Reasoning uses a separate navigator class that still stacks vertically.');
+    const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === 'reasoning');
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto(appUrl(module.routes.quiz));
+
+    const navigator = page.locator('#aiReasoningQuizNavigator');
+    await expect(navigator).toBeVisible({ timeout: 15000 });
+    const layout = await navigator.evaluate(element => {
+      const style = getComputedStyle(element);
+      const buttonBoxes = [...element.querySelectorAll('button')].map(button => {
+        const rect = button.getBoundingClientRect();
+        return { width: rect.width, height: rect.height, top: Math.round(rect.top) };
+      });
+      return {
+        display: style.display,
+        direction: style.flexDirection,
+        wrap: style.flexWrap,
+        clientWidth: element.clientWidth,
+        scrollWidth: element.scrollWidth,
+        buttonBoxes
+      };
+    });
+
+    expect(layout.buttonBoxes).toHaveLength(26);
+    expect(layout.display).toBe('flex');
+    expect(layout.direction).toBe('row');
+    expect(layout.wrap).toBe('wrap');
+    expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth + 1);
+    expect(layout.buttonBoxes[0].top).toBe(layout.buttonBoxes[1].top);
+    expect(new Set(layout.buttonBoxes.map(box => box.top)).size).toBeLessThan(26);
+  });
+
   test('primary practice controls meet the 44px touch-target minimum on mobile', async ({ page }) => {
     test.fail(true, 'Known issue #83: tombol praktik utama masih di bawah minimum touch target 44px.');
     await page.setViewportSize({ width: 375, height: 812 });

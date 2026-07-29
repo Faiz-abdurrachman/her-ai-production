@@ -6,7 +6,7 @@
 
 **GAS:** deployed dari checkpoint sebelumnya; tidak diubah pada Phase 0
 
-**QA:** 115 test terdaftar, safe mock gate 62 test, live mutation default OFF
+**QA:** 123 test terdaftar, safe mock gate 70 test, live mutation default OFF
 **Leaderboard:** status terakhir terverifikasi LIVE — 1.024 pts untuk peringkat pertama
 
 ---
@@ -22,27 +22,32 @@ Phase 0 QA untuk module aktif sudah tersedia. Test tidak lagi bergantung pada ro
 | Payload progress mock | ✅/⚠️ | empat module lolos; AI Modern gagal (#81, #82) |
 | Ringkasan Belajar | ❌ | masih statis (#78) |
 | Quiz readiness | ✅ | 5 module memiliki quiz nyata; Evaluation/Evolution masing-masing 20 soal |
-| Quiz navigator | ✅ | horizontal + wrap, tombol 44px, desktop/mobile (#86) |
+| Quiz navigator | ✅/❌ | Evaluation/Evolution lolos #86; Reasoning masih vertikal (#87) |
 | Metadata score | ⚠️ | hanya Reasoning: UI 26 vs GAS 20 (#79) |
 | Responsive/focus/motion | ✅ | 375/768/1280, keyboard focus, reduced motion |
 | Mobile touch target | ⚠️ | dua tombol praktik di bawah 44px (#83) |
 | Backend aggregation | ⚠️ | quiz/practice ikut dihitung sebagai chapter (#84) |
 | Error feedback save | ❌ | respons gagal ditelan frontend (#85) |
+| Reasoning quiz navigator | ❌ | 26 tombol masih vertikal pada mobile (#87) |
+| Runtime module | ❌ | AI Modern integrity mismatch; Evaluation/Evolution pageerror (#88–#89) |
+| Module identity copy | ⚠️ | label Python bocor ke Evaluation/Evolution (#90) |
+| Discussion persistence | ❌ | browser-only, belum backend (#91) |
 
-Safe mock gate: **62 dieksekusi = 56 ordinary pass + 6 expected failures**, tanpa live write. Expected failure dipertahankan supaya bug terbuka terlihat dan otomatis berubah menjadi failure saat perilakunya bergeser.
+Safe mock gate: **70 dieksekusi = 56 ordinary pass + 14 expected failures**, tanpa live write. Expected failure dipertahankan supaya bug terbuka terlihat dan otomatis berubah menjadi failure saat perilakunya bergeser. Audit MCP 20 route tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
 
 ---
 
 ## URUTAN PERBAIKAN YANG DIREKOMENDASIKAN
 
-1. **Data integrity:** #81, #82, #84, #85.
+1. **Data integrity:** #81, #82, #84, #85, #91.
    - Perubahan `ai-modern.js` perlu approval karena struktur khusus.
    - Perubahan `gas/Code.gs` wajib redeploy dan verifikasi.
 2. **Truthful progress UI:** #78 dan kontrak perhitungan status Tuntas/Dalam Proses/Belum Dimulai.
 3. **Quiz consistency:** selesaikan mismatch denominator Reasoning #79. #80 sudah fixed.
-4. **UI polish:** #83 untuk minimum touch target 44×44px.
-5. **Live read-only verification:** jalankan dengan kredensial via environment, tanpa `TEST_ALLOW_MUTATIONS`.
-6. **Staging mutation E2E:** hanya pada akun QA/dataset yang boleh diubah, dengan opt-in `TEST_ALLOW_MUTATIONS=true`.
+4. **Runtime/content integrity:** #88–#90.
+5. **UI polish:** #83 dan #87 untuk minimum touch target serta navigator Reasoning.
+6. **Live read-only verification:** jalankan dengan kredensial via environment, tanpa `TEST_ALLOW_MUTATIONS`.
+7. **Staging mutation E2E:** hanya pada akun QA/dataset yang boleh diubah, dengan opt-in `TEST_ALLOW_MUTATIONS=true`.
 
 ---
 

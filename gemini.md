@@ -988,3 +988,54 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Tambah test Evaluation/Evolution pada viewport 375px dan 1280px: 20 tombol, nomor awal satu baris, wrap, 44px, dan tanpa horizontal overflow.
 
 **Verifikasi:** targeted UI/UX 10/10; full safe gate 62/62; 0 unexpected failure dan 0 live write.
+
+## 87. Bug Audit UX: Navigator Kuis Reasoning Masih Vertikal
+
+**Status:** OPEN — terdeteksi Playwright MCP dan dikunci sebagai expected failure.
+
+**Temuan:** `#aiReasoningQuizNavigator` memakai `.reasoning-task-navigator`, bukan `.python-task-navigator`. Pada viewport 375px computed style tetap `flex-direction: column`, `flex-wrap: nowrap`, sehingga 26 tombol menjadi 26 baris.
+
+**Dampak:** halaman sangat panjang dan navigasi soal sulit dipindai. Fix #86 berhasil untuk Evaluation/Evolution, tetapi belum mencakup struktur khusus Reasoning.
+
+## 88. Bug Audit: AI Modern Source Integrity Mismatch
+
+**Status:** OPEN — terdeteksi console dan expected failure.
+
+**Temuan:** `assertSourceIntegrity()` melaporkan teks sumber expected 5.867 karakter tetapi hasil render 6.042 karakter. Container mendapat `data-source-integrity="failed"`.
+
+**Dampak:** enhancer materi mengubah teks sumber di luar baseline yang dijaga module.
+
+## 89. Bug Audit Runtime: Evaluation/Evolution Referensi PYTHON_GUIDES
+
+**Status:** OPEN — terdeteksi pageerror pada kedua module.
+
+**Penyebab:** setelah IIFE ditutup, kedua file menjalankan `PYTHON_GUIDES.length = 0`, padahal variabel tersebut tidak tersedia di scope global.
+
+**Dampak:** console tidak bersih dan eksekusi statement cleanup berikutnya terputus. Konten utama sudah sempat render, tetapi runtime error tetap merupakan failure production.
+
+## 90. Bug Audit UI: Label Python Bocor ke Evaluation/Evolution
+
+**Status:** OPEN — terdeteksi heading audit.
+
+**Temuan:** halaman kuis masih menampilkan `Kuis Python`; halaman diskusi masih memakai `Forum Python AI` dan breadcrumb/tombol `Kuis Python`.
+
+**Dampak:** identitas module membingungkan walau bank soal sudah module-specific.
+
+## 91. Gap Persistence: Diskusi Hanya Tersimpan di Browser
+
+**Status:** OPEN — requirement backend perlu diputuskan.
+
+**Temuan:** submit diskusi menulis localStorage, mengosongkan textarea, dan menampilkan pesan `tersimpan di browser ini`, tetapi tidak mengirim request persistence ke backend.
+
+**Dampak:** diskusi tidak lintas perangkat/browser, tidak dapat diaudit admin, dan hilang jika storage dibersihkan.
+
+---
+
+## Audit E2E Playwright MCP — 29 Juli 2026
+
+- 20 route (5 module × materi/latihan/kuis/diskusi) dirender dan diuji pada desktop serta 375px.
+- 20/20 bebas horizontal overflow.
+- Safe gate sekarang 70 test: 56 ordinary pass + 14 expected failures, 0 unexpected failure, 0 live write.
+- Total suite 123 test dalam 6 file.
+- Live backend suite: 3 public/security checks pass, 25 authenticated/mutation scenarios skip karena secret environment tidak tersedia.
+- Bukti rinci: `handover/E2E_AUDIT_2026-07-29.md`.
