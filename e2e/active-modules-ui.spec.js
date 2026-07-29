@@ -48,7 +48,7 @@ test.describe('Active module manifest — static contracts', () => {
 
   for (const module of ACTIVE_DASHBOARD_MODULES) {
     test(`${module.title} metadata matches GAS chapter/quiz totals`, () => {
-      const knownMismatch = ['reasoning', 'evaluation', 'evolution'].includes(module.key);
+      const knownMismatch = module.key === 'reasoning';
       test.fail(knownMismatch, `Known metadata mismatch: ${module.title}`);
 
       const gas = fs.readFileSync(path.join(ROOT, 'gas/Code.gs'), 'utf8');
@@ -111,6 +111,8 @@ test.describe('Active dashboard modules — mocked UI smoke', () => {
       const list = page.locator(module.selectors.quizList);
       await expect(form).toBeVisible({ timeout: 15000 });
       await expect(list).not.toContainText('Kuis belum tersedia');
+      const questionSelector = module.key === 'modern' ? '[data-quiz-jump]' : '[data-quiz-index]';
+      await expect(form.locator(questionSelector)).toHaveCount(module.quizTotal);
       await expect(form.locator('input[type="radio"], [data-quiz-option]').first()).toBeVisible();
       await expect(form.locator('.quiz-submit-btn, button[type="submit"]').first()).toBeVisible();
     });
@@ -160,6 +162,51 @@ test.describe('Progress requests — mocked write verification', () => {
         && call.module_id === module.moduleId
         && /^\d+$/.test(String(call.chapter_id))
       )).toBeTruthy();
+    });
+
+    test(`${module.title} quiz submit emits score with the correct GAS identity`, async ({ page }) => {
+      test.fail(module.key === 'modern', 'Known issue #81: MODULE_ID tidak tersedia di IIFE quiz AI Modern.');
+      const { calls } = await installMockParticipant(page);
+      await page.goto(appUrl(module.routes.quiz));
+
+      const form = page.locator(module.selectors.quizForm);
+      await expect(form).toBeVisible({ timeout: 15000 });
+      const radios = form.locator('input[type="radio"]');
+      if (await radios.count()) {
+        await radios.evaluateAll(inputs => {
+          const answered = new Set();
+          inputs.forEach(input => {
+            if (!answered.has(input.name)) {
+              input.checked = true;
+              input.dispatchEvent(new Event('change', { bubbles: true }));
+              answered.add(input.name);
+            }
+          });
+        });
+      } else {
+        for (let index = 0; index < module.quizTotal; index += 1) {
+          await form.locator('[data-quiz-option]').first().click();
+          if (index < module.quizTotal - 1) {
+            await form.locator('[data-quiz-next]').click();
+          }
+        }
+      }
+
+      await form.locator('.quiz-submit-btn, button[type="submit"]').first().click();
+      await expect.poll(() => calls.find(call =>
+        call.action === 'saveParticipantProgress'
+        && call.module_id === module.moduleId
+        && call.chapter_id === 'quiz'
+      )).toBeTruthy();
+
+      const captured = calls.find(call =>
+        call.action === 'saveParticipantProgress'
+        && call.module_id === module.moduleId
+        && call.chapter_id === 'quiz'
+      );
+      expect(captured.score).toEqual(expect.any(Number));
+      expect(captured.score).toBeGreaterThanOrEqual(0);
+      expect(captured.score).toBeLessThanOrEqual(module.quizTotal);
     });
   }
 });

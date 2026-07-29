@@ -6,7 +6,7 @@
 
 **GAS:** deployed dari checkpoint sebelumnya; tidak diubah pada Phase 0
 
-**QA:** 108 test terdaftar, safe mock gate 55 test, live mutation default OFF
+**QA:** 113 test terdaftar, safe mock gate 60 test, live mutation default OFF
 **Leaderboard:** status terakhir terverifikasi LIVE — 1.024 pts untuk peringkat pertama
 
 ---
@@ -21,14 +21,14 @@ Phase 0 QA untuk module aktif sudah tersedia. Test tidak lagi bergantung pada ro
 | Route/content smoke | ✅ | overview, practice, quiz, discussion |
 | Payload progress mock | ✅/⚠️ | empat module lolos; AI Modern gagal (#81, #82) |
 | Ringkasan Belajar | ❌ | masih statis (#78) |
-| Quiz readiness | ⚠️ | Evaluation/Evolution placeholder (#80) |
-| Metadata score | ⚠️ | tiga module tidak sinkron (#79) |
+| Quiz readiness | ✅ | 5 module memiliki quiz nyata; Evaluation/Evolution masing-masing 20 soal |
+| Metadata score | ⚠️ | hanya Reasoning: UI 26 vs GAS 20 (#79) |
 | Responsive/focus/motion | ✅ | 375/768/1280, keyboard focus, reduced motion |
 | Mobile touch target | ⚠️ | dua tombol praktik di bawah 44px (#83) |
 | Backend aggregation | ⚠️ | quiz/practice ikut dihitung sebagai chapter (#84) |
 | Error feedback save | ❌ | respons gagal ditelan frontend (#85) |
 
-Safe mock gate: **55 dieksekusi = 46 pass + 9 expected failures**, tanpa live write. Expected failure dipertahankan supaya bug terbuka terlihat dan otomatis berubah menjadi failure saat perilakunya bergeser.
+Safe mock gate: **60 dieksekusi = 54 ordinary pass + 6 expected failures**, tanpa live write. Expected failure dipertahankan supaya bug terbuka terlihat dan otomatis berubah menjadi failure saat perilakunya bergeser.
 
 ---
 
@@ -38,7 +38,7 @@ Safe mock gate: **55 dieksekusi = 46 pass + 9 expected failures**, tanpa live wr
    - Perubahan `ai-modern.js` perlu approval karena struktur khusus.
    - Perubahan `gas/Code.gs` wajib redeploy dan verifikasi.
 2. **Truthful progress UI:** #78 dan kontrak perhitungan status Tuntas/Dalam Proses/Belum Dimulai.
-3. **Quiz consistency:** #79 dan #80, termasuk definisi denominator score yang tunggal.
+3. **Quiz consistency:** selesaikan mismatch denominator Reasoning #79. #80 sudah fixed.
 4. **UI polish:** #83 untuk minimum touch target 44×44px.
 5. **Live read-only verification:** jalankan dengan kredensial via environment, tanpa `TEST_ALLOW_MUTATIONS`.
 6. **Staging mutation E2E:** hanya pada akun QA/dataset yang boleh diubah, dengan opt-in `TEST_ALLOW_MUTATIONS=true`.

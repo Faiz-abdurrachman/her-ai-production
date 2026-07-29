@@ -890,19 +890,30 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 79. Bug Audit: Metadata Jumlah Kuis Tidak Sinkron
 
-**Status:** OPEN — terdeteksi otomatis sebagai expected failure.
+**Status:** PARTIAL OPEN — Evaluation/Evolution sudah sinkron; Reasoning masih mismatch.
 
-**Temuan:** Reasoning menyediakan 26 soal, sedangkan seed GAS menetapkan `quiz_total: 20`. Evaluation dan Evolution hanya merender 1 item placeholder, tetapi GAS juga menetapkan `quiz_total: 20`.
+**Temuan awal:** Reasoning menyediakan 26 soal, sedangkan seed GAS menetapkan `quiz_total: 20`. Evaluation dan Evolution hanya merender 1 item placeholder, tetapi GAS juga menetapkan `quiz_total: 20`.
+
+**Update #80:** Evaluation dan Evolution sekarang masing-masing memiliki 20 soal, sehingga keduanya sudah cocok dengan `quiz_total: 20`. Expected failure metadata tersisa hanya untuk Reasoning.
 
 **Dampak:** normalisasi persentase kuis dan badge dashboard berpotensi salah.
 
 ## 80. Bug Audit: Kuis Evaluation dan Evolution Masih Placeholder
 
-**Status:** OPEN — terdeteksi otomatis sebagai expected failure.
+**Status:** FIXED — 29 Juli 2026.
 
 **Temuan:** route kuis dapat dibuka, tetapi kontennya hanya `Kuis belum tersedia`; belum ada pertanyaan serta opsi jawaban yang bisa diselesaikan peserta.
 
-**Dampak:** dua dari lima module dashboard tidak memiliki alur kuis end-to-end.
+**Perbaikan:**
+
+- `ai-evaluation.js`: 20 soal nyata tentang metrics, confusion matrix, data split/leakage, benchmark, robustness, calibration, fairness, human evaluation, latency/cost, threshold, dan evaluation plan.
+- `ai-evolution.js`: 20 soal nyata tentang symbolic AI, expert system, ML/DL, RL, autoencoder/VAE/GAN, diffusion, Transformer/LLM, multimodal, hybrid AI, agentic AI, dan responsible future.
+- Setiap soal memiliki empat opsi, satu jawaban valid, dan pembahasan setelah submit.
+- Alur existing tetap dipakai: pagination, answered counter, validasi semua soal, single attempt, localStorage, score 0–20, review benar/salah, dan POST progress.
+- Metadata manifest diubah menjadi 20 dan sekarang cocok dengan GAS tanpa perubahan/deploy backend.
+- Cache loader dibump ke `v=20260729-quiz-content` melalui `settings.js` dan `index.html`.
+
+**Verifikasi:** 40 soal tervalidasi unik; kedua quiz render 20 item; submit menghasilkan score numerik dan payload `chapter_id: 'quiz'` yang benar. Full safe gate 60/60, 0 unexpected failure, 0 live write.
 
 ## 81. Bug Audit: Simpan Praktik/Kuis AI Modern Crash
 
@@ -956,5 +967,6 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Siklus ganti password punya guard tambahan `TEST_ALLOW_PASSWORD_MUTATIONS=true`.
 - Test matrix mencakup overview, practice, quiz, discussion, route, script loader, payload module/chapter, ringkasan progress, responsif, keyboard focus, reduced motion, dan touch target.
 - Reporter Playwright: terminal, HTML, JSON, screenshot/trace/video saat gagal.
-- Suite terdaftar: 108 test. Safe mock gate: 55 test tanpa live write.
-- Temuan #78–#85 dicatat sebagai OPEN; tidak ada source production atau GAS yang diubah pada phase ini.
+- Baseline Phase 0: 108 test terdaftar dan safe mock gate 55 test tanpa live write.
+- Setelah fix #80: 113 test terdaftar dan safe mock gate 60 test; 54 ordinary pass + 6 expected failures.
+- #80 sudah FIXED; #79 tersisa untuk Reasoning. GAS tetap tidak diubah.

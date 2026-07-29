@@ -619,13 +619,224 @@ roadmapRef: "8"
 
 const QUIZ = [
     [
-        "Kuis belum tersedia",
+        "Apa ciri utama symbolic AI?",
         [
-            "Benar",
-            "Salah"
+            "Pengetahuan direpresentasikan dengan simbol, fakta, dan aturan eksplisit",
+            "Sistem selalu belajar langsung dari data mentah",
+            "Semua keputusan dibuat secara acak",
+            "Model hanya dapat memproses gambar"
         ],
         0,
-        ""
+        "Symbolic AI memanipulasi representasi dan aturan yang didefinisikan secara eksplisit untuk melakukan penalaran."
+    ],
+    [
+        "Dalam expert system klasik, inference engine berfungsi untuk...",
+        [
+            "Menyimpan seluruh file gambar",
+            "Menerapkan aturan pada fakta untuk menghasilkan kesimpulan",
+            "Mengumpulkan reward dari environment",
+            "Mengubah teks menjadi token saja"
+        ],
+        1,
+        "Inference engine mencocokkan fakta dengan rule pada knowledge base untuk menurunkan keputusan atau rekomendasi."
+    ],
+    [
+        "Keterbatasan umum sistem berbasis aturan adalah...",
+        [
+            "Aturannya selalu tidak dapat dibaca manusia",
+            "Sulit mencakup semua variasi dunia nyata dan maintenance aturan dapat membesar",
+            "Tidak dapat menghasilkan keputusan deterministik",
+            "Membutuhkan label dalam jumlah tak terbatas untuk setiap prediksi"
+        ],
+        1,
+        "Rule-based system dapat rapuh terhadap kasus yang tidak diantisipasi dan mengalami rule explosion saat domain berkembang."
+    ],
+    [
+        "Perubahan penting yang dibawa machine learning dibanding rule-based murni adalah...",
+        [
+            "Pola keputusan dipelajari dari data, bukan seluruhnya ditulis manual",
+            "Model tidak lagi membutuhkan tujuan",
+            "Semua output pasti dapat dijelaskan sempurna",
+            "Data tidak perlu diperiksa kualitasnya"
+        ],
+        0,
+        "Machine learning mengestimasi pola dari contoh data, walau tujuan, label, dan evaluasi tetap dirancang manusia."
+    ],
+    [
+        "Supervised learning membutuhkan...",
+        [
+            "Pasangan contoh input dan target/label untuk belajar",
+            "Hanya aturan if-then tanpa data",
+            "Reward dari interaksi berurutan saja",
+            "Tidak ada objective function"
+        ],
+        0,
+        "Pada supervised learning, model belajar memetakan input ke target berdasarkan contoh berlabel."
+    ],
+    [
+        "Mengapa deep learning menjadi penting untuk data seperti citra, audio, dan teks?",
+        [
+            "Jaringan berlapis dapat mempelajari representasi fitur secara bertingkat dari data",
+            "Deep learning tidak membutuhkan komputasi",
+            "Deep learning selalu bekerja dengan dataset kecil",
+            "Semua layer harus ditulis sebagai aturan bahasa manusia"
+        ],
+        0,
+        "Deep neural network dapat mempelajari representasi kompleks yang sebelumnya sering membutuhkan feature engineering manual."
+    ],
+    [
+        "Dalam reinforcement learning, policy adalah...",
+        [
+            "Aturan yang memetakan state/observasi ke pilihan action",
+            "Daftar label pada dataset supervised",
+            "Ukuran file replay buffer",
+            "Satu-satunya nilai reward akhir"
+        ],
+        0,
+        "Policy menentukan tindakan agen berdasarkan informasi keadaan yang tersedia."
+    ],
+    [
+        "Reward hacking terjadi ketika...",
+        [
+            "Agen memenuhi maksud manusia dengan sempurna",
+            "Agen memaksimalkan reward yang didefinisikan tetapi dengan perilaku yang tidak diinginkan",
+            "Dataset dibagi menjadi train dan test",
+            "Model memakai attention"
+        ],
+        1,
+        "Objective yang tidak lengkap dapat dieksploitasi oleh agen sehingga reward tinggi tidak sama dengan hasil yang benar-benar diinginkan."
+    ],
+    [
+        "Tujuan dasar autoencoder adalah...",
+        [
+            "Merekonstruksi input melalui representasi laten yang lebih ringkas",
+            "Menyusun aturan expert system",
+            "Memilih action dari reward",
+            "Mengurutkan token berdasarkan alfabet"
+        ],
+        0,
+        "Encoder membentuk latent representation dan decoder mencoba merekonstruksi input darinya."
+    ],
+    [
+        "Apa yang membedakan VAE dari autoencoder deterministik biasa?",
+        [
+            "VAE memodelkan distribusi probabilistik pada latent space",
+            "VAE tidak memiliki decoder",
+            "VAE hanya memakai aturan if-then",
+            "VAE tidak dapat menghasilkan sampel baru"
+        ],
+        0,
+        "Variational Autoencoder belajar parameter distribusi laten sehingga latent space dapat disampling secara terstruktur."
+    ],
+    [
+        "Pada GAN, generator dan discriminator berlatih dengan cara...",
+        [
+            "Bekerja sama menyalin label tanpa objective",
+            "Berkompetisi: generator membuat sampel, discriminator membedakan nyata dan buatan",
+            "Menghapus noise dalam langkah yang selalu sama",
+            "Menjalankan forward chaining pada rule base"
+        ],
+        1,
+        "Adversarial training mendorong generator menghasilkan sampel yang makin sulit dibedakan dari data nyata."
+    ],
+    [
+        "Ide inti diffusion model untuk generasi data adalah...",
+        [
+            "Belajar membalik proses penambahan noise secara bertahap",
+            "Menghafal satu gambar dan menyalinnya",
+            "Menggunakan hanya satu aturan logika",
+            "Menghilangkan objective training"
+        ],
+        0,
+        "Diffusion model belajar denoising bertahap untuk mengubah noise menjadi sampel yang mengikuti distribusi data."
+    ],
+    [
+        "Mekanisme attention pada Transformer membantu model untuk...",
+        [
+            "Menimbang hubungan antar token sesuai konteks",
+            "Menghapus kebutuhan data dan komputasi",
+            "Mengganti seluruh evaluasi manusia",
+            "Menjalankan aturan tanpa representasi numerik"
+        ],
+        0,
+        "Attention memungkinkan setiap posisi menggabungkan informasi relevan dari posisi lain dalam sequence."
+    ],
+    [
+        "Objective pretraining yang umum pada autoregressive language model adalah...",
+        [
+            "Memprediksi token berikutnya berdasarkan konteks sebelumnya",
+            "Menyusun confusion matrix secara manual",
+            "Maksimalkan reward tanpa data teks",
+            "Mengubah semua kata menjadi aturan tetap"
+        ],
+        0,
+        "Next-token prediction memungkinkan model mempelajari pola bahasa dari korpus besar sebelum diadaptasi ke tugas tertentu."
+    ],
+    [
+        "Mengapa foundation model dapat digunakan untuk banyak tugas?",
+        [
+            "Pretraining skala besar menghasilkan representasi yang dapat diadaptasi lewat prompting atau fine-tuning",
+            "Model tidak mempunyai batasan atau risiko",
+            "Semua tugas memiliki label yang identik",
+            "Foundation model tidak perlu evaluasi domain"
+        ],
+        0,
+        "Kemampuan umum dari pretraining dapat ditransfer, tetapi adaptasi dan evaluasi khusus domain tetap diperlukan."
+    ],
+    [
+        "Sistem multimodal dirancang untuk...",
+        [
+            "Mengolah dan menghubungkan lebih dari satu jenis data seperti teks, gambar, atau audio",
+            "Menggunakan hanya angka tabular",
+            "Menghindari representasi bersama",
+            "Menggantikan semua sensor dengan aturan"
+        ],
+        0,
+        "Multimodal AI menggabungkan informasi lintas modality agar sistem dapat memahami hubungan di antaranya."
+    ],
+    [
+        "Apa keuntungan potensial hybrid AI?",
+        [
+            "Menggabungkan pembelajaran statistik dengan aturan atau constraint eksplisit sesuai kebutuhan",
+            "Menjamin semua output selalu benar",
+            "Menghilangkan kebutuhan monitoring",
+            "Membuat setiap komponen tidak dapat diaudit"
+        ],
+        0,
+        "Pendekatan hybrid dapat memakai fleksibilitas model statistik sekaligus kontrol aturan pada bagian yang membutuhkan kepastian."
+    ],
+    [
+        "Apa yang menambah risiko pada agentic AI dibanding chatbot pasif?",
+        [
+            "Agen dapat merencanakan dan menjalankan tool atau action yang berdampak pada lingkungan",
+            "Agen selalu memiliki jawaban lebih pendek",
+            "Agen tidak menggunakan model",
+            "Agen hanya dapat membaca teks statis"
+        ],
+        0,
+        "Kemampuan bertindak memerlukan permission boundary, approval, logging, dan evaluasi failure mode yang lebih ketat."
+    ],
+    [
+        "Pernyataan paling tepat tentang evolusi AI adalah...",
+        [
+            "Setiap pendekatan baru selalu menghapus seluruh pendekatan lama",
+            "Pendekatan lama dan baru sering hidup berdampingan serta dipilih sesuai masalah dan constraint",
+            "AI berkembang tanpa pengaruh data dan hardware",
+            "Semua kemajuan hanya berasal dari satu algoritma"
+        ],
+        1,
+        "Evolusi AI bersifat kumulatif: rule, statistik, neural network, dan sistem hybrid masih digunakan sesuai konteks."
+    ],
+    [
+        "Prinsip paling sehat saat menilai tren AI masa depan adalah...",
+        [
+            "Menganggap demo sama dengan kesiapan production",
+            "Menilai kemampuan bersama reliability, safety, dampak, biaya, dan evidence nyata",
+            "Mengabaikan kelompok pengguna yang terdampak",
+            "Mengukur kemajuan hanya dari ukuran model"
+        ],
+        1,
+        "Kemajuan teknologi perlu dinilai secara menyeluruh agar kemampuan baru tetap aman, berguna, dan dapat dipertanggungjawabkan."
     ]
 ];
 

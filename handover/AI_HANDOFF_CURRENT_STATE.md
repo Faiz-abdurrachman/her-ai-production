@@ -1,21 +1,21 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint: 29 Juli 2026 (Phase 0 — Active Module QA Foundation), Asia/Jakarta**
+**Checkpoint: 29 Juli 2026 (Fix #80 — Evaluation/Evolution Quiz Content), Asia/Jakarta**
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
 **Baseline Commit:** `6c35926` - docs: Final handover update — leaderboard verified LIVE, GAS deployed, all systems go
-**QA Commit:** current HEAD - `test: establish safe active-module QA foundation (#78-#85)`
-**Total commits:** 246
+**Feature Commit:** current HEAD - `fix: add Evaluation and Evolution quiz content (#80)`
+**Total commits:** 247
 **GAS Deployment:** ✅ LIVE — leaderboard 1,024 pts verified
 **Worktree:** BERSIH
-**E2E Test Suite:** 108 test terdaftar | safe mock gate 55 test | live mutation default OFF
+**E2E Test Suite:** 113 test terdaftar | safe mock gate 60 test | live mutation default OFF
 **Leaderboard:** ✅ LIVE — Brenda 1,024 pts (#1), peserta lain 245 pts (#2)
 
 > **Ini sumber kebenaran tunggal.** Semua dokumen lain yang bertentangan diabaikan.
 
 ## CHECKPOINT QA 29 JULI 2026
 
-Phase 0 testing sudah dibangun tanpa mengubah source production, router, module khusus, atau GAS. Tidak ada request mutasi yang dikirim ke backend live.
+Phase 0 testing sudah dibangun dan fix #80 menambahkan bank kuis production untuk Evaluation/Evolution. Router, module khusus, dan GAS tidak diubah. Tidak ada request mutasi yang dikirim ke backend live.
 
 ### Cakupan yang sekarang bisa dilacak
 
@@ -30,18 +30,18 @@ Phase 0 testing sudah dibangun tanpa mengubah source production, router, module 
 
 ### Hasil safe mock gate
 
-- 55 test dieksekusi tanpa live write.
-- 46 alur memenuhi kontrak.
-- 9 expected failures mewakili bug produk #78–#83; suite exit code 0 setelah seluruh finding ditandai.
+- 60 test dieksekusi tanpa live write.
+- 54 alur memenuhi kontrak secara langsung.
+- 6 expected failures mewakili bug produk yang masih terbuka; suite exit code 0.
 - Review kontrak backend menemukan tambahan #84–#85.
+- #80 FIXED: Evaluation dan Evolution masing-masing memiliki 20 soal nyata serta payload score terverifikasi.
 
 ### Temuan terbuka
 
 | # | Severity | Temuan |
 |---|---|---|
 | 78 | High | Ringkasan Belajar hardcoded dan tidak membaca progress |
-| 79 | High | `quiz_total` Reasoning/Evaluation/Evolution tidak sinkron |
-| 80 | High | Kuis Evaluation dan Evolution masih placeholder |
+| 79 | High | `quiz_total` Reasoning 26 soal masih tercatat 20 di GAS |
 | 81 | Critical | AI Modern practice/quiz gagal mencatat karena scope `MODULE_ID` |
 | 82 | Critical | AI Modern mengirim object sebagai `chapter_id` |
 | 83 | Medium | Dua tombol praktik mobile di bawah 44px |
@@ -63,7 +63,7 @@ Phase 0 testing sudah dibangun tanpa mengubah source production, router, module 
 | Proxy | POST `/__gas` (token auto-injected, Origin header WAJIB) |
 | Test participant | Kredensial QA disuplai lewat environment variable; tidak disimpan di repo |
 | Module JS files | 30 ai-*.js (24 standard + 5 berbeda + 1 interactive) |
-| Cache buster | `?v=20260728-*` (update tiap edit CSS/JS) |
+| Cache buster | Module loader/settings `?v=20260729-quiz-content` |
 
 ---
 
@@ -76,13 +76,13 @@ Phase 0 testing sudah dibangun tanpa mengubah source production, router, module 
 | Ganti password mandiri | ✅ | old→new→hash→sync 2 sheet, rate limit 8/10min |
 | Settings save profil | ✅ | form→GAS→session update |
 | Chapter progress auto-save | ⚠️ | Active modules teruji mock; AI Modern salah `chapter_id` (#82) |
-| Quiz score wiring | ⚠️ | Evaluation/Evolution placeholder; AI Modern scope crash (#80, #81) |
+| Quiz score wiring | ⚠️ | Evaluation/Evolution lolos 20 soal; AI Modern scope crash (#81) |
 | Practice/latihan wiring | ⚠️ | Mayoritas aktif; AI Modern gagal POST ke GAS (#81) |
 | Dashboard skeleton/cache | ✅ | 3-tier: memory→sessionStorage(5min)→skeleton, 0.2s refresh |
 | Dashboard modules filter | ✅ | Dashboard tepat 5 card; overview AI Fundamentals berisi Intro + 5 module |
 | Dashboard quiz badge | ✅ | Persentase format (X%), pill pink, skeleton reveal |
 | **Leaderboard LIVE** | ✅ | Compute dari `participant_progress`, Brenda 1,024 pts #1 |
-| Score normalization (#55) | ⚠️ | mekanisme ada, metadata 3 module tidak sinkron (#79) |
+| Score normalization (#55) | ⚠️ | Evaluation/Evolution sinkron; Reasoning masih mismatch (#79) |
 | Restricted access (#54) | ✅ | Hanya Beranda/Modul/Pengaturan + under-development |
 | Python contamination fix (#57) | ✅ | 24 module JS — konten module-specific, 0 kontaminasi |
 | ai-python.js rewrite (#59) | ✅ | 8 GUIDES konten Python proper |
@@ -123,8 +123,8 @@ f749ca7 feat: Live leaderboard — compute points from participant_progress (#69
 | Python untuk AI | ai-python.js | ~30KB | `/participant-ai-python` | 80 radios | 12 textareas |
 | Reasoning AI | ai-reasoning.js | 170KB | `/participant-ai-reasoning` | 104 radios | 17 textareas |
 | Konsep AI Modern | ai-modern.js | ~40KB | `/participant-ai-modern` | UI ada, save crash #81 | UI ada, save crash #81 |
-| Evaluation AI | ai-evaluation.js | ~20KB | `/participant-ai-evaluation` | Placeholder #80 | 5 textareas |
-| Evolution of AI | ai-evolution.js | ~20KB | `/participant-ai-evolution` | Placeholder #80 | 7 textareas |
+| Evaluation AI | ai-evaluation.js | ~141KB | `/participant-ai-evaluation` | 20 soal + pembahasan ✅ | 5 textareas |
+| Evolution of AI | ai-evolution.js | ~143KB | `/participant-ai-evolution` | 20 soal + pembahasan ✅ | 7 textareas |
 
 ### ✅ ONLINE — Computer Vision (partial)
 | Sub-module | Status |

@@ -12,16 +12,16 @@
 
 **Status: BLOCKED untuk klaim “progress dan semua kuis sudah benar end-to-end”.**
 
-Navigation dan sebagian besar UI dasar sehat, tetapi ada data-integrity gap pada AI Modern, perhitungan backend, ringkasan progress, serta dua kuis placeholder.
+Navigation dan quiz readiness lima module sudah sehat, tetapi masih ada data-integrity gap pada AI Modern, perhitungan backend, dan ringkasan progress.
 
 ## Hasil Otomatis
 
 | Item | Hasil |
 |---|---:|
-| Seluruh test terdaftar | 108 |
-| Safe mock gate dieksekusi | 55 |
-| Kontrak lolos | 46 |
-| Expected known failures | 9 |
+| Seluruh test terdaftar | 113 |
+| Safe mock gate dieksekusi | 60 |
+| Kontrak lolos | 54 |
+| Expected known failures | 6 |
 | Unexpected failures | 0 |
 | Live backend writes | 0 |
 
@@ -34,8 +34,8 @@ Expected failure tetap merupakan bug produk terbuka. Test sengaja mempertahankan
 | Python untuk AI | PASS | PASS | PASS | PASS | PASS |
 | Reasoning AI | PASS | PASS | PASS | PASS | PASS; metadata quiz FAIL (#79) |
 | Konsep AI Modern | PASS | PASS | PASS | PASS | FAIL (#81, #82) |
-| Evaluation AI | PASS | PASS | FAIL placeholder (#80) | PASS | PASS; metadata quiz FAIL (#79) |
-| Evolution of AI | PASS | PASS | FAIL placeholder (#80) | PASS | PASS; metadata quiz FAIL (#79) |
+| Evaluation AI | PASS | PASS | PASS — 20 soal | PASS | PASS, score 0–20 tercatat |
+| Evolution of AI | PASS | PASS | PASS — 20 soal | PASS | PASS, score 0–20 tercatat |
 
 AI Intro ikut terdaftar dalam manifest enam module di halaman AI Fundamentals. CV Digital Image dicatat terpisah karena tidak termasuk lima card dashboard yang menjadi fokus phase ini.
 
@@ -44,13 +44,19 @@ AI Intro ikut terdaftar dalam manifest enam module di halaman AI Fundamentals. C
 | # | Severity | Area | Temuan | Bukti/kontrak |
 |---|---|---|---|---|
 | 78 | High | Frontend/data | Ringkasan Belajar tetap 0/0/6 saat mock backend non-zero | dynamic-summary test |
-| 79 | High | Frontend/backend | denominator kuis Reasoning/Evaluation/Evolution tidak sinkron dengan GAS | static metadata contract |
-| 80 | High | Content/UX | Evaluation dan Evolution menampilkan `Kuis belum tersedia` | real-question UI test |
+| 79 | High | Frontend/backend | denominator kuis Reasoning 26 soal masih tercatat 20 di GAS | static metadata contract |
 | 81 | Critical | Frontend/backend | submit AI Modern melempar `MODULE_ID is not defined` | intercepted GAS write + page error |
 | 82 | Critical | Frontend/backend | chapter AI Modern dikirim sebagai object, bukan ID numerik | numeric chapter contract |
 | 83 | Medium | Mobile UX | tombol 43,5px dan 42px pada viewport 375px | 44px touch-target gate |
 | 84 | High | Backend | quiz/practice berstatus completed ikut dihitung sebagai chapter | review `getParticipantDashboardData()` |
 | 85 | High | Error handling | response save tidak diperiksa dan `catch` kosong | review `saveChapterProgress()` |
+
+## Fixed pada Checkpoint Ini
+
+- #80 Evaluation AI: 20 soal nyata, empat opsi, jawaban benar, dan pembahasan.
+- #80 Evolution of AI: 20 soal nyata, empat opsi, jawaban benar, dan pembahasan.
+- Keduanya lolos render count, complete-answer validation, submit, score range 0–20, dan payload mock GAS.
+- Metadata keduanya sekarang cocok dengan GAS `quiz_total: 20`; #79 tersisa hanya untuk Reasoning.
 
 ## UI/UX Gate
 
@@ -98,6 +104,6 @@ Live mutation tidak direkomendasikan ke akun production. Gunakan staging/dedicat
 
 1. #81, #82, #84, #85 — integritas dan feedback penyimpanan.
 2. #78 — jadikan progress backend sumber tunggal untuk Ringkasan Belajar.
-3. #79, #80 — samakan denominator dan lengkapi kuis nyata.
+3. #79 — samakan denominator Reasoning.
 4. #83 — naikkan `min-height` control menjadi sekurangnya 44px.
 5. Setelah fix, jalankan safe gate lalu live read-only; lakukan mutation test hanya di staging.

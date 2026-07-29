@@ -583,13 +583,224 @@ roadmapRef: "8"
 
 const QUIZ = [
     [
-        "Kuis belum tersedia",
+        "Apa tujuan utama mengevaluasi sistem AI sebelum dirilis?",
         [
-            "Benar",
-            "Salah"
+            "Membuktikan model selalu benar",
+            "Mengukur apakah sistem memenuhi kebutuhan, batas risiko, dan kriteria keberhasilan",
+            "Menghilangkan kebutuhan monitoring setelah rilis",
+            "Memilih model dengan parameter terbanyak"
+        ],
+        1,
+        "Evaluasi menghubungkan performa teknis dengan tujuan pengguna, failure case, dan batas risiko yang dapat diterima."
+    ],
+    [
+        "Mengapa accuracy dapat menyesatkan pada dataset yang sangat tidak seimbang?",
+        [
+            "Accuracy hanya dapat digunakan untuk regresi",
+            "Accuracy tidak pernah memakai label benar",
+            "Model dapat terlihat akurat hanya dengan selalu menebak kelas mayoritas",
+            "Accuracy selalu lebih kecil daripada recall"
+        ],
+        2,
+        "Pada kelas langka, prediksi kelas mayoritas dapat menghasilkan accuracy tinggi sambil gagal mendeteksi kasus penting."
+    ],
+    [
+        "Precision menjawab pertanyaan yang mana?",
+        [
+            "Dari semua prediksi positif, berapa yang benar-benar positif?",
+            "Dari semua kasus positif, berapa yang berhasil ditemukan?",
+            "Berapa lama model menghasilkan prediksi?",
+            "Seberapa seimbang jumlah data tiap kelas?"
         ],
         0,
-        ""
+        "Precision = TP / (TP + FP), sehingga berfokus pada ketepatan kumpulan prediksi positif."
+    ],
+    [
+        "Untuk skrining penyakit ketika kasus positif yang terlewat sangat berbahaya, metrik mana yang biasanya diprioritaskan?",
+        [
+            "Recall",
+            "Ukuran file model",
+            "Throughput training",
+            "Jumlah parameter"
+        ],
+        0,
+        "Recall mengukur proporsi kasus positif yang ditemukan dan penting ketika false negative berbiaya tinggi."
+    ],
+    [
+        "Kapan F1-score paling berguna?",
+        [
+            "Saat hanya latency yang penting",
+            "Saat perlu menyeimbangkan precision dan recall dalam satu ukuran",
+            "Saat label ground truth tidak tersedia sama sekali",
+            "Saat menghitung biaya infrastruktur"
+        ],
+        1,
+        "F1 adalah harmonic mean precision dan recall, sehingga menghukum kondisi ketika salah satunya sangat rendah."
+    ],
+    [
+        "Dalam confusion matrix, false positive berarti apa?",
+        [
+            "Model memprediksi negatif dan kenyataannya negatif",
+            "Model memprediksi positif tetapi kenyataannya negatif",
+            "Model memprediksi negatif tetapi kenyataannya positif",
+            "Model tidak menghasilkan prediksi"
+        ],
+        1,
+        "False positive adalah alarm positif yang salah: prediksi positif pada contoh yang sebenarnya negatif."
+    ],
+    [
+        "Apa fungsi utama test set yang dijaga terpisah dari proses tuning?",
+        [
+            "Melatih ulang parameter pada setiap iterasi",
+            "Memberi estimasi akhir pada data yang belum dipakai memilih model",
+            "Menggantikan seluruh validation set",
+            "Menambah jumlah feature secara otomatis"
+        ],
+        1,
+        "Test set memberi estimasi yang lebih objektif karena tidak dipakai berulang kali untuk memilih model atau hyperparameter."
+    ],
+    [
+        "Contoh data leakage yang paling jelas adalah...",
+        [
+            "Membagi data menjadi train dan test",
+            "Menghitung normalisasi dari seluruh dataset sebelum train-test split",
+            "Mencatat versi dataset",
+            "Menguji beberapa threshold pada validation set"
+        ],
+        1,
+        "Statistik dari test set bocor ke proses training ketika normalisasi dihitung sebelum split, sehingga hasil evaluasi menjadi terlalu optimistis."
+    ],
+    [
+        "Benchmark yang baik untuk produk nyata seharusnya...",
+        [
+            "Hanya berisi contoh yang paling mudah",
+            "Mewakili tugas, populasi, dan kondisi penggunaan yang relevan",
+            "Selalu memakai dataset publik terbesar",
+            "Tidak pernah diperbarui"
+        ],
+        1,
+        "Benchmark harus relevan terhadap distribusi dan failure mode penggunaan nyata, bukan sekadar populer atau besar."
+    ],
+    [
+        "Mengapa slice analysis diperlukan walaupun skor agregat terlihat baik?",
+        [
+            "Untuk menyembunyikan performa keseluruhan",
+            "Untuk melihat kegagalan pada kelompok atau kondisi tertentu yang tertutup oleh rata-rata",
+            "Untuk menghapus kebutuhan data ground truth",
+            "Untuk menaikkan skor secara otomatis"
+        ],
+        1,
+        "Rata-rata dapat menutupi performa buruk pada wilayah, perangkat, bahasa, atau kelompok pengguna tertentu."
+    ],
+    [
+        "Stress test robustness bertujuan untuk...",
+        [
+            "Memastikan output stabil terhadap gangguan atau variasi input yang masuk akal",
+            "Mengukur kecepatan mengetik evaluator",
+            "Menambah label kelas mayoritas",
+            "Mengganti semua pengujian normal"
+        ],
+        0,
+        "Robustness diuji dengan typo, noise, perubahan format, input ekstrem, atau variasi lain yang mungkin terjadi di dunia nyata."
+    ],
+    [
+        "Apa tindakan tepat ketika distribusi data production berubah dari data evaluasi?",
+        [
+            "Mengabaikannya selama model masih dapat dipanggil",
+            "Memantau drift, menilai dampak per slice, lalu menentukan retraining atau mitigasi",
+            "Selalu menurunkan threshold menjadi nol",
+            "Menghapus log monitoring"
+        ],
+        1,
+        "Distribution shift perlu dideteksi dan dianalisis karena performa historis belum tentu mewakili kondisi baru."
+    ],
+    [
+        "Model yang terkalibrasi dengan baik memiliki sifat...",
+        [
+            "Semua prediksi memiliki confidence 100%",
+            "Di antara prediksi berconfidence sekitar 80%, kira-kira 80% memang benar",
+            "Accuracy selalu sama dengan F1",
+            "Tidak pernah menghasilkan false positive"
+        ],
+        1,
+        "Calibration membandingkan confidence prediksi dengan frekuensi kebenaran aktual."
+    ],
+    [
+        "Apa langkah awal yang paling berguna untuk audit fairness?",
+        [
+            "Hanya melihat skor global",
+            "Membandingkan metrik dan dampak kesalahan pada kelompok yang relevan",
+            "Menghapus atribut sensitif tanpa analisis lain",
+            "Menganggap dataset besar pasti adil"
+        ],
+        1,
+        "Fairness membutuhkan evaluasi per kelompok dan pemahaman dampak false positive/negative dalam konteks penggunaan."
+    ],
+    [
+        "Mengapa kesamaan satu metrik antar kelompok belum otomatis membuktikan sistem adil?",
+        [
+            "Karena fairness juga bergantung pada konteks, dampak, base rate, dan trade-off metrik lain",
+            "Karena fairness hanya bisa dinilai dari jumlah parameter",
+            "Karena semua metrik selalu identik",
+            "Karena kelompok pengguna tidak boleh dibandingkan"
+        ],
+        0,
+        "Tidak ada satu angka yang menangkap seluruh konsep fairness; konteks keputusan dan distribusi dampaknya tetap perlu diperiksa."
+    ],
+    [
+        "Rubrik human evaluation yang baik seharusnya...",
+        [
+            "Menggunakan istilah seperti bagus tanpa definisi",
+            "Memiliki kriteria jelas, skala konsisten, contoh acuan, dan panduan konflik",
+            "Mengizinkan evaluator mengganti tujuan di tengah penilaian",
+            "Menampilkan identitas model agar evaluator terpengaruh"
+        ],
+        1,
+        "Rubrik yang operasional meningkatkan konsistensi penilaian dan membuat keputusan dapat diaudit."
+    ],
+    [
+        "Untuk mengevaluasi risiko halusinasi pada jawaban AI generatif, evidence utama adalah...",
+        [
+            "Panjang jawaban",
+            "Kesesuaian klaim dengan sumber tepercaya dan dapat diverifikasi",
+            "Jumlah kata teknis",
+            "Warna antarmuka"
+        ],
+        1,
+        "Factuality perlu dinilai dengan memeriksa klaim terhadap sumber atau ground truth yang dapat dipercaya."
+    ],
+    [
+        "Mengapa latency dan biaya perlu masuk evaluation plan?",
+        [
+            "Karena kualitas sistem mencakup kelayakan operasional, bukan hanya skor model",
+            "Karena latency menggantikan accuracy",
+            "Karena biaya tidak pernah berubah",
+            "Karena keduanya hanya relevan saat training"
+        ],
+        0,
+        "Sistem dengan output bagus tetapi terlalu lambat atau mahal dapat gagal memenuhi kebutuhan produk."
+    ],
+    [
+        "Apa efek umum menaikkan classification threshold?",
+        [
+            "Prediksi positif biasanya lebih sedikit; precision dapat naik sementara recall turun",
+            "Semua metrik pasti naik",
+            "Jumlah data training otomatis bertambah",
+            "Model berubah menjadi regresi"
+        ],
+        0,
+        "Threshold mengatur trade-off: syarat positif yang lebih ketat sering mengurangi false positive sekaligus menambah false negative."
+    ],
+    [
+        "Evaluation plan yang lengkap paling tepat dipandang sebagai...",
+        [
+            "Dokumen sekali pakai sebelum demo",
+            "Siklus berkelanjutan dari tujuan, dataset, metrik, slice, stress test, acceptance criteria, dan monitoring",
+            "Daftar satu metrik benchmark",
+            "Pengganti observasi pengguna"
+        ],
+        1,
+        "Evaluasi harus berlanjut setelah rilis karena data, perilaku pengguna, dan risiko sistem dapat berubah."
     ]
 ];
 

@@ -101,8 +101,8 @@ Sebuah flow progress baru dianggap benar jika:
 ## Known Gaps dari Audit 29 Juli 2026
 
 - #78 Ringkasan Belajar masih hardcoded.
-- #79 denominator kuis tiga module tidak sinkron.
-- #80 Evaluation/Evolution masih placeholder.
+- #79 denominator kuis Reasoning masih tidak sinkron (UI 26 vs GAS 20).
+- #80 Evaluation/Evolution FIXED: masing-masing 20 soal dan score payload terverifikasi mock.
 - #81/#82 write identity AI Modern rusak.
 - #84 backend mengagregasi quiz/practice sebagai chapter.
 - #85 frontend menelan kegagalan save.
