@@ -1,7 +1,7 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║  AI TRANSFER PROMPT — HerAI Fellowship SuperApp              ║
 ║  Sesi: 29 Juli 2026 (Phase 0 Active Module QA) → Next AI      ║
-║  Total: 247 commit | QA: 113 test | Safe gate: 60 PASS        ║
+║  Total: 248 commit | QA: 115 test | Safe gate: 62 PASS        ║
 ║  GAS: ✅ LIVE | Leaderboard: ✅ LIVE (1,024 pts)              ║
 ╚══════════════════════════════════════════════════════════════╝
 
@@ -12,7 +12,7 @@
 📋 SUMBER KEBENARAN (WAJIB DIBACA — URUTAN PENTING)
 ═══════════════════════════════════════════════════════════════
 1. handover/AI_HANDOFF_CURRENT_STATE.md  ← SINGLE SOURCE OF TRUTH
-2. gemini.md  ← Bug log #1-#85 + session rules + temuan kritis
+2. gemini.md  ← Bug log #1-#86 + session rules + temuan kritis
 3. handover/NEXT_PLAN.md  ← Priorities + execution plan
 4. NEXT_AI_TRANSFER_PROMPT.txt ini  ← System identity + aturan + konfirmasi
 
@@ -26,7 +26,7 @@
 - Proxy: POST /__gas (token auto-injected, Origin WAJIB)
 - Test participant: kredensial QA disuplai melalui environment variable, tidak disimpan di repo
 - Baseline commit: 6c35926
-- QA: 113 test terdaftar; safe mock gate 60/60; live mutation default OFF
+- QA: 115 test terdaftar; safe mock gate 62/62; live mutation default OFF
 - Leaderboard: ✅ LIVE — Brenda 1,024 pts (#1), next 245 pts (#2)
 
 ═══════════════════════════════════════════════════════════════
@@ -129,6 +129,7 @@ COMPUTER VISION (#71,72,73): CV overview + Digital Image online, CNN UD, interac
     - Backend menghitung quiz/practice sebagai chapter
     - saveChapterProgress gagal diam-diam
     - #80 FIXED: Evaluation/Evolution masing-masing 20 soal + pembahasan
+    - #86 FIXED: navigator nomor kuis horizontal + wrap + 44px
 
 17. Test safety:
     - Mock gate tidak menyentuh GAS live

@@ -970,3 +970,21 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Baseline Phase 0: 108 test terdaftar dan safe mock gate 55 test tanpa live write.
 - Setelah fix #80: 113 test terdaftar dan safe mock gate 60 test; 54 ordinary pass + 6 expected failures.
 - #80 sudah FIXED; #79 tersisa untuk Reasoning. GAS tetap tidak diubah.
+
+## 86. Fix: Navigator Nomor Kuis Menumpuk Vertikal
+
+**Status:** FIXED — 29 Juli 2026.
+
+**Gejala:** navigator nomor 1–20 pada kuis Evaluation dan Evolution tersusun satu tombol per baris sehingga halaman menjadi sangat panjang.
+
+**Penyebab:** `.python-task-navigator` memakai layout grid satu kolom secara default. Override horizontal sebelumnya bergantung pada allowlist ID module lama dan belum mencakup `aiEvaluationQuizNavigator` serta `aiEvolutionQuizNavigator`.
+
+**Perbaikan:**
+
+- Tambah aturan generik `.ai-python-quiz-page .python-task-navigator` dengan `display:flex`, `flex-wrap:wrap`, gap 8px, dan alignment ke kiri.
+- Tombol navigator dikunci 44×44px agar konsisten dan memenuhi minimum touch target.
+- Solusi class-based berlaku untuk module kuis baru tanpa menambah allowlist ID lagi.
+- Cache buster `modules.css` dibump ke `v=20260729-quiz-nav`.
+- Tambah test Evaluation/Evolution pada viewport 375px dan 1280px: 20 tombol, nomor awal satu baris, wrap, 44px, dan tanpa horizontal overflow.
+
+**Verifikasi:** targeted UI/UX 10/10; full safe gate 62/62; 0 unexpected failure dan 0 live write.

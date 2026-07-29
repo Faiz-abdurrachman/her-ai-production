@@ -18,9 +18,9 @@ Navigation dan quiz readiness lima module sudah sehat, tetapi masih ada data-int
 
 | Item | Hasil |
 |---|---:|
-| Seluruh test terdaftar | 113 |
-| Safe mock gate dieksekusi | 60 |
-| Kontrak lolos | 54 |
+| Seluruh test terdaftar | 115 |
+| Safe mock gate dieksekusi | 62 |
+| Kontrak lolos | 56 |
 | Expected known failures | 6 |
 | Unexpected failures | 0 |
 | Live backend writes | 0 |
@@ -57,6 +57,7 @@ AI Intro ikut terdaftar dalam manifest enam module di halaman AI Fundamentals. C
 - #80 Evolution of AI: 20 soal nyata, empat opsi, jawaban benar, dan pembahasan.
 - Keduanya lolos render count, complete-answer validation, submit, score range 0–20, dan payload mock GAS.
 - Metadata keduanya sekarang cocok dengan GAS `quiz_total: 20`; #79 tersisa hanya untuk Reasoning.
+- #86 Navigator kuis Evaluation/Evolution sekarang horizontal, wrap otomatis, tombol 44×44px, dan bebas overflow pada 375/1280px.
 
 ## UI/UX Gate
 
@@ -68,6 +69,7 @@ PASS:
 - keyboard focus terlihat pada card dashboard;
 - CSS menghormati `prefers-reduced-motion`;
 - animasi/toast/accordion/progress baseline P5 tetap berfungsi.
+- navigator 20 soal tersusun horizontal dan wrap secara responsif.
 
 OPEN:
 

@@ -11500,6 +11500,16 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+/* Quiz step navigation is a horizontal, wrapping control group.
+   Keep this class-based so newly activated modules do not need an ID allowlist. */
+.ai-python-quiz-page .python-task-navigator {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start;
+}
+
 .ai-python-page .reasoning-nav-group {
     align-items: center;
     background: #ffffff;
@@ -11536,6 +11546,12 @@
     justify-content: center;
     min-width: 44px;
     transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+}
+
+.ai-python-quiz-page .python-task-navigator button {
+    flex: 0 0 44px;
+    max-width: 44px;
+    width: 44px;
 }
 
 .ai-python-page .python-task-navigator button:hover {

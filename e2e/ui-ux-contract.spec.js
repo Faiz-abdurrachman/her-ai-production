@@ -56,6 +56,47 @@ test.describe('UI/UX quality gate — deterministic mock', () => {
     await expect(summary.locator('li')).toHaveCount(3);
   });
 
+  for (const viewport of [
+    { name: 'mobile-375', width: 375, height: 812 },
+    { name: 'desktop-1280', width: 1280, height: 800 }
+  ]) {
+    test(`${viewport.name} keeps Evaluation/Evolution quiz numbers horizontal and wrapping`, async ({ page }) => {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+
+      for (const moduleKey of ['evaluation', 'evolution']) {
+        const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === moduleKey);
+        await page.goto(appUrl(module.routes.quiz));
+
+        const navigator = page.locator(`#${moduleKey === 'evaluation' ? 'aiEvaluation' : 'aiEvolution'}QuizNavigator`);
+        await expect(navigator).toBeVisible({ timeout: 15000 });
+        const buttons = navigator.locator('[data-quiz-step]');
+        await expect(buttons).toHaveCount(20);
+
+        const layout = await navigator.evaluate(element => {
+          const buttonBoxes = [...element.querySelectorAll('[data-quiz-step]')].map(button => {
+            const rect = button.getBoundingClientRect();
+            return { width: rect.width, height: rect.height, top: Math.round(rect.top) };
+          });
+          return {
+            display: getComputedStyle(element).display,
+            clientWidth: element.clientWidth,
+            scrollWidth: element.scrollWidth,
+            buttonBoxes
+          };
+        });
+
+        expect(layout.display).toBe('flex');
+        expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth + 1);
+        expect(layout.buttonBoxes[0].top).toBe(layout.buttonBoxes[1].top);
+        expect(new Set(layout.buttonBoxes.map(box => box.top)).size).toBeLessThan(20);
+        for (const box of layout.buttonBoxes) {
+          expect.soft(box.width).toBe(44);
+          expect.soft(box.height).toBeGreaterThanOrEqual(44);
+        }
+      }
+    });
+  }
+
   test('primary practice controls meet the 44px touch-target minimum on mobile', async ({ page }) => {
     test.fail(true, 'Known issue #83: tombol praktik utama masih di bawah minimum touch target 44px.');
     await page.setViewportSize({ width: 375, height: 812 });

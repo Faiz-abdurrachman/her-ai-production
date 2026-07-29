@@ -6,7 +6,7 @@
 
 **GAS:** deployed dari checkpoint sebelumnya; tidak diubah pada Phase 0
 
-**QA:** 113 test terdaftar, safe mock gate 60 test, live mutation default OFF
+**QA:** 115 test terdaftar, safe mock gate 62 test, live mutation default OFF
 **Leaderboard:** status terakhir terverifikasi LIVE — 1.024 pts untuk peringkat pertama
 
 ---
@@ -22,13 +22,14 @@ Phase 0 QA untuk module aktif sudah tersedia. Test tidak lagi bergantung pada ro
 | Payload progress mock | ✅/⚠️ | empat module lolos; AI Modern gagal (#81, #82) |
 | Ringkasan Belajar | ❌ | masih statis (#78) |
 | Quiz readiness | ✅ | 5 module memiliki quiz nyata; Evaluation/Evolution masing-masing 20 soal |
+| Quiz navigator | ✅ | horizontal + wrap, tombol 44px, desktop/mobile (#86) |
 | Metadata score | ⚠️ | hanya Reasoning: UI 26 vs GAS 20 (#79) |
 | Responsive/focus/motion | ✅ | 375/768/1280, keyboard focus, reduced motion |
 | Mobile touch target | ⚠️ | dua tombol praktik di bawah 44px (#83) |
 | Backend aggregation | ⚠️ | quiz/practice ikut dihitung sebagai chapter (#84) |
 | Error feedback save | ❌ | respons gagal ditelan frontend (#85) |
 
-Safe mock gate: **60 dieksekusi = 54 ordinary pass + 6 expected failures**, tanpa live write. Expected failure dipertahankan supaya bug terbuka terlihat dan otomatis berubah menjadi failure saat perilakunya bergeser.
+Safe mock gate: **62 dieksekusi = 56 ordinary pass + 6 expected failures**, tanpa live write. Expected failure dipertahankan supaya bug terbuka terlihat dan otomatis berubah menjadi failure saat perilakunya bergeser.
 
 ---
 

@@ -1,14 +1,14 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint: 29 Juli 2026 (Fix #80 — Evaluation/Evolution Quiz Content), Asia/Jakarta**
+**Checkpoint: 29 Juli 2026 (Fix #86 — Horizontal Quiz Navigator), Asia/Jakarta**
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
 **Baseline Commit:** `6c35926` - docs: Final handover update — leaderboard verified LIVE, GAS deployed, all systems go
-**Feature Commit:** current HEAD - `fix: add Evaluation and Evolution quiz content (#80)`
-**Total commits:** 247
+**Feature Commit:** current HEAD - `fix: keep quiz navigator horizontal and wrapping (#86)`
+**Total commits:** 248
 **GAS Deployment:** ✅ LIVE — leaderboard 1,024 pts verified
 **Worktree:** BERSIH
-**E2E Test Suite:** 113 test terdaftar | safe mock gate 60 test | live mutation default OFF
+**E2E Test Suite:** 115 test terdaftar | safe mock gate 62 test | live mutation default OFF
 **Leaderboard:** ✅ LIVE — Brenda 1,024 pts (#1), peserta lain 245 pts (#2)
 
 > **Ini sumber kebenaran tunggal.** Semua dokumen lain yang bertentangan diabaikan.
@@ -30,11 +30,12 @@ Phase 0 testing sudah dibangun dan fix #80 menambahkan bank kuis production untu
 
 ### Hasil safe mock gate
 
-- 60 test dieksekusi tanpa live write.
-- 54 alur memenuhi kontrak secara langsung.
+- 62 test dieksekusi tanpa live write.
+- 56 alur memenuhi kontrak secara langsung.
 - 6 expected failures mewakili bug produk yang masih terbuka; suite exit code 0.
 - Review kontrak backend menemukan tambahan #84–#85.
 - #80 FIXED: Evaluation dan Evolution masing-masing memiliki 20 soal nyata serta payload score terverifikasi.
+- #86 FIXED: navigator 1–20 horizontal, wrap, 44×44px, dan bebas overflow pada 375/1280px.
 
 ### Temuan terbuka
 
@@ -63,7 +64,7 @@ Phase 0 testing sudah dibangun dan fix #80 menambahkan bank kuis production untu
 | Proxy | POST `/__gas` (token auto-injected, Origin header WAJIB) |
 | Test participant | Kredensial QA disuplai lewat environment variable; tidak disimpan di repo |
 | Module JS files | 30 ai-*.js (24 standard + 5 berbeda + 1 interactive) |
-| Cache buster | Module loader/settings `?v=20260729-quiz-content` |
+| Cache buster | Loader `?v=20260729-quiz-content`; modules CSS `?v=20260729-quiz-nav` |
 
 ---
 

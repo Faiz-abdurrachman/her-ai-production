@@ -10,9 +10,9 @@
     "password_mutation_requires_second_opt_in": true
   },
   "tests": {
-    "registered": 113,
-    "safe_mock_executed": 60,
-    "passed": 54,
+    "registered": 115,
+    "safe_mock_executed": 62,
+    "passed": 56,
     "expected_failures": 6,
     "unexpected_failures": 0
   },
@@ -27,6 +27,7 @@
     { "id": 85, "severity": "high", "area": "progress-error-feedback" }
   ],
   "fixed_findings": [
-    { "id": 80, "area": "evaluation-evolution-quiz-content", "questions_added": 40 }
+    { "id": 80, "area": "evaluation-evolution-quiz-content", "questions_added": 40 },
+    { "id": 86, "area": "responsive-quiz-navigator", "viewports_verified": [375, 1280] }
   ]
 }
