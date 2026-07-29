@@ -1,15 +1,15 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + persistence audit #92 + UI #93 + dynamic tracking #94), Asia/Jakarta**
+**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + persistence audit #92 + UI #93 + dynamic tracking #94 + CV release lock #95), Asia/Jakarta**
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
 **Baseline Commit:** `6508121` - test: expand active module end-to-end audit (#87-#91)
 **Feature Commit:** `a3ff0a9` - `fix: persist active module learning progress (#78-#91)`
-**Latest Commit:** pending commit - `feat: add dynamic module release tracking (#94)`
-**Total commits:** 255 setelah commit #94
-**GAS Deployment:** ⚠️ production masih `2026.2-progress-persistence`; source lokal `2026.3-dynamic-module-tracking` wajib dimigrasi, redeploy, lalu live read-back
+**Latest Commit:** pending commit - `fix: lock Computer Vision release (#95)`
+**Total commits:** 256 setelah commit #95
+**GAS Deployment:** ⚠️ production masih `2026.2-progress-persistence`; source lokal `2026.3.1-cv-locked` wajib dimigrasi, redeploy, lalu live read-back
 **Worktree:** BERSIH
-**E2E Test Suite:** safe mock 82/82 PASS | full 93 PASS + 44 SKIP + 0 FAIL | authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2 | controlled live write/read-back terakhir PASS
+**E2E Test Suite:** safe mock 84/84 PASS | full 95 PASS + 44 SKIP + 0 FAIL | authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2 | controlled live write/read-back terakhir PASS
 **Leaderboard:** ✅ sumber LIVE — authenticated read-back terakhir 1.039 pts; screenshot user sesudahnya menampilkan Brenda 1.054 pts (belum di-read-back ulang)
 
 > **Ini sumber kebenaran tunggal.** Semua dokumen lain yang bertentangan diabaikan.
@@ -20,11 +20,13 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 
 Feature #94 menambahkan release contract dinamis untuk modul masa depan. Module UD tidak ikut dihitung sampai `is_active` dan `tracking_enabled` aktif; setelah route konten siap dan metadata diaktifkan, backend otomatis memasukkannya ke progress module, Ringkasan Belajar sesuai phase, serta Perjalanan Fellowship. Pengantar AI kini mencatat lima chapter materi nyata, bukan mengira progress dari urutan halaman.
 
+Release lock #95 menutup kembali seluruh Computer Vision. Hanya enam module Foundation—Pengantar AI dan lima AI Fundamentals—yang dapat membuka konten; semua route CV menampilkan Under Development, loader CV tidak dijalankan, dan default backend tidak lagi mengaktifkan tracking CV.
+
 ### Cakupan yang sekarang bisa dilacak
 
 | Gate | Cakupan |
 |---|---|
-| Manifest | 5 module dashboard, AI Intro, CV Digital Image, route dan metadata |
+| Manifest | Tepat 6 module Foundation: 5 module dashboard + Pengantar AI; Computer Vision terkunci |
 | Frontend | Overview, practice, quiz, discussion, own-content, loader tunggal, Pengantar AI chapter 1–5 |
 | Frontend → backend | Payload chapter/status practice/score quiz/diskusi, acknowledgment, retry, dan read-back memakai GAS mock; isi jawaban practice masih localStorage-only (#92) |
 | Safety | Kredensial tidak disimpan di E2E; live mutation perlu opt-in; password punya opt-in kedua |
@@ -33,8 +35,8 @@ Feature #94 menambahkan release contract dinamis untuk modul masa depan. Module 
 
 ### Hasil gate dan status temuan
 
-- Safe mock gate: **82/82 PASS**, tanpa expected failure dan tanpa live write.
-- Full suite: **137 terdaftar = 93 PASS + 44 SKIP + 0 FAIL**.
+- Safe mock gate: **84/84 PASS**, tanpa expected failure dan tanpa live write.
+- Full suite: **139 terdaftar = 95 PASS + 44 SKIP + 0 FAIL**.
 - 44 skip adalah alur authenticated/live-mutation yang sengaja tidak dijalankan tanpa secret environment.
 - #78, #79, #81–#85, dan #87–#91: **FIXED IN CODE**.
 - Lima module: chapter numerik, practice, quiz, score, discussion post/reply, dan read-back terverifikasi pada kontrak deterministik.
@@ -45,13 +47,14 @@ Feature #94 menambahkan release contract dinamis untuk modul masa depan. Module 
 - #92 **OPEN**: teks jawaban practice tetap hanya di localStorage; backend baru menyimpan marker `chapter_id='practice'` dengan status selesai.
 - #93 **FIXED**: kelima topik Pengantar AI sekarang menandai tepat satu materi aktif dengan highlight, ikon play, dan `aria-current="page"`.
 - #94 **FIXED IN CODE**: metadata release/tracking/visibility dinamis, agregasi phase, Pengantar AI save/read-back 1–5, cache invalidation, dan journey locked state. Production deployment/read-back masih pending.
+- #95 **FIXED IN CODE**: sembilan route CV dan seluruh prefix turunannya terkunci ke Under Development, loader/progress CV tidak berjalan, dan default tracking CV dinonaktifkan. Frontend/GAS deployment masih pending.
 
 ### Pekerjaan operasional tersisa
 
 | Item | Status | Tindakan |
 |---|---|---|
-| Migrasi + redeploy GAS #94 | ⏳ PENDING | Save source terbaru, jalankan `seedDashboardModules()` + `seedDashboardJourney()`, deploy, lalu cek `doGet.version=2026.3-dynamic-module-tracking` |
-| Frontend release #94 | ⏳ PENDING | Deploy setelah GAS 2026.3 dan schema berhasil diverifikasi; compatibility fallback menjaga urutan rollout |
+| Migrasi + redeploy GAS #94/#95 | ⏳ PENDING | Save source terbaru, jalankan `seedDashboardModules()` + `seedDashboardJourney()`, deploy, lalu cek `doGet.version=2026.3.1-cv-locked` |
+| Frontend release #94/#95 | ⏳ PENDING | Deploy setelah GAS 2026.3.1 dan schema berhasil diverifikasi; router `20260729-cv-locked` menutup CV di sisi peserta |
 | Authenticated live read-back | ✅ DONE | Login, dashboard, progress, diskusi, auth guard: 29 PASS; 18 mutation scenarios sengaja skip |
 | Controlled live mutation verification | ✅ DONE | 4 write sukses; 5 read-back cocok; summary dan leaderboard tidak berubah; tanpa profile/password mutation |
 | Practice answer persistence (#92) | ⚠️ OPEN | Tentukan schema/API untuk isi jawaban, lalu implement save + authenticated read-back lintas perangkat |
@@ -71,7 +74,7 @@ Feature #94 menambahkan release contract dinamis untuk modul masa depan. Module 
 | Proxy | POST `/__gas` (token auto-injected, Origin header WAJIB) |
 | Test participant | Kredensial QA disuplai lewat environment variable; tidak disimpan di repo |
 | Module JS files | 30 ai-*.js (24 standard + 5 berbeda + 1 interactive) |
-| Cache buster | `settings.js`, `dashboard.css`, `modules.css`: `v=20260729-dynamic-tracking` |
+| Cache buster | `settings.js`, `dashboard.css`, `modules.css`: `v=20260729-dynamic-tracking`; `router.js`: `v=20260729-cv-locked` |
 
 ---
 
@@ -84,7 +87,7 @@ Feature #94 menambahkan release contract dinamis untuk modul masa depan. Module 
 | Ganti password mandiri | ✅ | old→new→hash→sync 2 sheet, rate limit 8/10min |
 | Settings save profil | ✅ | form→GAS→session update |
 | Chapter progress auto-save | ✅ live | Write/read-back chapter numerik terverifikasi production |
-| Dynamic module tracking (#94) | ✅ code / ⏳ deploy | Backend metadata-driven; aktivasi module baru otomatis masuk cards/summary/journey setelah schema + GAS 2026.3 live |
+| Dynamic module tracking (#94) | ✅ code / ⏳ deploy | Backend metadata-driven; aktivasi module baru otomatis masuk cards/summary/journey setelah schema + GAS 2026.3.1 live |
 | Pengantar AI material tracking | ✅ code / ⏳ deploy | Lima route menyimpan chapter 1–5 dan read-back server; bukan progress berbasis posisi halaman |
 | Quiz score wiring | ✅ live | Write/read-back score terverifikasi; gagal-save tetap retryable; denominator 20/26 benar |
 | Practice/latihan wiring | ⚠️ partial live | Marker selesai terverifikasi production; isi jawaban masih localStorage-only (#92) |
@@ -103,8 +106,8 @@ Feature #94 menambahkan release contract dinamis untuk modul masa depan. Module 
 | Discussion persistence | ✅ live | Post/reply save + authenticated read-back terverifikasi production |
 | Avatar/foto profil (#67) | ✅ | Upload→canvas resize 200×200→preview→"✓ Simpan"/"✗ Batal", base64 sheet |
 | Module lockdown (#68, #74, #75) | ✅ | 20 module UD, dashboard shows only 5 AI Fundamentals |
-| CV Interactive widgets (#73) | ✅ | Sandbox, flip/rotate, bitwise, Otsu, quiz, coding challenges |
-| CV online (#71, #72) | ✅ | CV overview + Digital Image Fundamentals active, CNN/Advanced UD |
+| CV Interactive widgets (#73) | ✅ source / 🔒 release | Sandbox, flip/rotate, bitwise, Otsu, quiz, dan coding challenges tetap tersimpan untuk aktivasi nanti |
+| CV release lock (#95) | ✅ code / ⏳ deploy | Overview, Digital Image, latihan, kuis, diskusi, dan seluruh direct child route menampilkan Under Development |
 
 ---
 
@@ -138,16 +141,16 @@ f749ca7 feat: Live leaderboard — compute points from participant_progress (#69
 | Evaluation AI | ai-evaluation.js | ~141KB | `/participant-ai-evaluation` | 20 soal + pembahasan ✅ | 5 textareas |
 | Evolution of AI | ai-evolution.js | ~143KB | `/participant-ai-evolution` | 20 soal + pembahasan ✅ | 7 textareas |
 
-### ✅ ONLINE — Computer Vision (partial)
+### 🔒 UNDER DEVELOPMENT — Computer Vision
 | Sub-module | Status |
 |---|---|
-| CV Overview | ✅ Online |
-| Digital Image Fundamentals | ✅ Online (interactive widgets active!) |
+| CV Overview | 🔒 Under Development |
+| Digital Image Fundamentals | 🔒 Under Development (source interactive tetap tersedia) |
 | CNN | 🔒 Under Development |
 | Advanced CNN Architectures | 🔒 Under Development |
 
 ### 🔒 UNDER DEVELOPMENT (20+ modules)
-Deep Learning, Reinforcement Learning, Machine Learning, Math for AI,
+Computer Vision, Deep Learning, Reinforcement Learning, Machine Learning, Math for AI,
 LLM, VLM, Multimodal LLM, Agentic AI,
 Culture, Healthcare, UI/UX, Manufacturing, Business Insight, People Mgt,
 Geospatial, Bioinformatics, Data Engineering, Data Science, Infrastructure,

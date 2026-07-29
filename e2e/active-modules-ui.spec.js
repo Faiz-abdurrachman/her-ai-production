@@ -47,6 +47,20 @@ test.describe('Active module manifest — static contracts', () => {
     }
   });
 
+  test('all Computer Vision routes are locked and excluded from default tracking', () => {
+    const router = fs.readFileSync(path.join(ROOT, 'js/router.js'), 'utf8');
+    const gas = fs.readFileSync(path.join(ROOT, 'gas/Code.gs'), 'utf8');
+    const cvRouteRows = [...router.matchAll(/"(\/participant-(?:ai-lab-cv|specialization-computer-vision|cv-)[^"]*)"\s*:\s*"([^"]+)"/g)];
+
+    expect(cvRouteRows.length).toBeGreaterThan(10);
+    for (const [, route, target] of cvRouteRows) {
+      expect(target, `${route} still exposes Computer Vision content`).toContain('/under-development.html');
+    }
+    expect(router).toMatch(/isComputerVisionLockedRoute\(path\)/);
+    expect(router).toMatch(/path\.startsWith\("\/participant-cv-"\)/);
+    expect(gas).toMatch(/DEFAULT_RELEASED_TRACKING_MODULE_IDS\s*=\s*FOUNDATION_TRACKING_MODULE_IDS\.slice\(\)/);
+  });
+
   for (const module of ACTIVE_DASHBOARD_MODULES) {
     test(`${module.title} metadata matches GAS chapter/quiz totals`, () => {
       const gas = fs.readFileSync(path.join(ROOT, 'gas/Code.gs'), 'utf8');
@@ -282,6 +296,33 @@ test.describe('Future module release readiness', () => {
     )).toBe(true);
     await expect(doneButton).toBeDisabled();
     await expect(doneButton).toContainText('Lesson Selesai');
+  });
+});
+
+test.describe('Computer Vision release lock', () => {
+  test('overview, Digital Image, and specialization direct URLs render Under Development', async ({ page }) => {
+    const { calls } = await installMockParticipant(page);
+    const routes = [
+      '/participant-ai-lab-cv',
+      '/participant-cv-digital-image',
+      '/participant-cv-digital-image-practice',
+      '/participant-cv-digital-image-quiz',
+      '/participant-cv-digital-image-discussion',
+      '/participant-specialization-computer-vision',
+      '/participant-specialization-computer-vision-practice',
+      '/participant-specialization-computer-vision-quiz',
+      '/participant-specialization-computer-vision-discussion'
+    ];
+
+    for (const route of routes) {
+      await page.goto(appUrl(route));
+      await expect(page.locator('.fellow-under-page')).toBeVisible({ timeout: 15000 });
+      await expect(page.locator('body')).toContainText('Under Development');
+    }
+    expect(calls.some(call =>
+      call.action === 'saveParticipantProgress'
+      && call.module_id === 'computer-vision'
+    )).toBe(false);
   });
 });
 

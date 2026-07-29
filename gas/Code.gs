@@ -267,7 +267,7 @@ function doPost(e) {
 }
 
 function doGet() {
-  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.3-dynamic-module-tracking' });
+  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.3.1-cv-locked' });
 }
 
 function authorizeGasAction(action, payload) {
@@ -377,7 +377,7 @@ var FOUNDATION_TRACKING_MODULE_IDS = [
   'evolution'
 ];
 
-var DEFAULT_RELEASED_TRACKING_MODULE_IDS = FOUNDATION_TRACKING_MODULE_IDS.concat(['computer-vision']);
+var DEFAULT_RELEASED_TRACKING_MODULE_IDS = FOUNDATION_TRACKING_MODULE_IDS.slice();
 var DEFAULT_DASHBOARD_MODULE_IDS = ['python-untuk-ai', 'reasoning', 'konsep-ai-modern', 'evaluation', 'evolution'];
 
 function moduleFlag(value, fallback) {

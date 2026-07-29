@@ -148,23 +148,10 @@ const ACTIVE_DASHBOARD_MODULES = Object.freeze([
   })
 ]);
 
-const CV_DIGITAL_IMAGE = Object.freeze({
-  key: 'cv-digital-image',
-  moduleId: 'computer-vision',
-  title: 'Digital Image Fundamentals',
-  routes: Object.freeze({
-    overview: '/participant-cv-digital-image',
-    practice: '/participant-cv-digital-image-practice',
-    quiz: '/participant-cv-digital-image-quiz',
-    discussion: '/participant-cv-digital-image-discussion'
-  })
-});
-
 const AI_FUNDAMENTALS_MODULES = Object.freeze([AI_INTRO, ...ACTIVE_DASHBOARD_MODULES]);
 
 module.exports = {
   ACTIVE_DASHBOARD_MODULES,
   AI_FUNDAMENTALS_MODULES,
-  AI_INTRO,
-  CV_DIGITAL_IMAGE
+  AI_INTRO
 };

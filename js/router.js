@@ -133,7 +133,7 @@ const router = {
         "/participant-ai-lab-math-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/practice.html",
         "/participant-ai-lab-math-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/quiz.html",
         "/participant-ai-lab-math-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/discussion.html",
-        "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision.html",
+        "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/deep-learning/latihan.html",
@@ -209,12 +209,12 @@ const router = {
         "/participant-ai-lab-geospatial-practice": "/pages/frontend/fellow-dashboard/business-industry-application/geospatial/latihan.html",
         "/participant-ai-lab-geospatial-quiz": "/pages/frontend/fellow-dashboard/business-industry-application/geospatial/kuis.html",
         "/participant-ai-lab-geospatial-discussion": "/pages/frontend/fellow-dashboard/business-industry-application/geospatial/diskusi.html",
-        "/participant-specialization-computer-vision": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision.html",
+        "/participant-specialization-computer-vision": "/pages/frontend/fellow-dashboard/under-development.html",
 
-        "/participant-cv-digital-image": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/materi.html",
-        "/participant-cv-digital-image-practice": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/latihan.html",
-        "/participant-cv-digital-image-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/kuis.html",
-        "/participant-cv-digital-image-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/01-digital-image-fundamentals/diskusi.html",
+        "/participant-cv-digital-image": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-cv-digital-image-practice": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-cv-digital-image-quiz": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-cv-digital-image-discussion": "/pages/frontend/fellow-dashboard/under-development.html",
  "/participant-cv-cnn": "/pages/frontend/fellow-dashboard/under-development.html",
  "/participant-cv-cnn-practice": "/pages/frontend/fellow-dashboard/under-development.html",
  "/participant-cv-cnn-quiz": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -224,9 +224,9 @@ const router = {
  "/participant-cv-advanced-cnn-quiz": "/pages/frontend/fellow-dashboard/under-development.html",
  "/participant-cv-advanced-cnn-discussion": "/pages/frontend/fellow-dashboard/under-development.html",
 
-        "/participant-specialization-computer-vision-practice": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/latihan.html",
-        "/participant-specialization-computer-vision-quiz": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/kuis.html",
-        "/participant-specialization-computer-vision-discussion": "/pages/frontend/fellow-dashboard/data-engineering-domains/computer-vision/diskusi.html",
+        "/participant-specialization-computer-vision-practice": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-specialization-computer-vision-quiz": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-specialization-computer-vision-discussion": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-specialization-speech-recognition": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-specialization-nlp-llm": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-specialization-mlops-deployment": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -419,6 +419,14 @@ const router = {
         return path.startsWith("/participant-ai-") || path.startsWith("/participant-ai-lab-") || path.startsWith("/participant-specialization-") || path.startsWith("/participant-cv-");
     },
 
+    isComputerVisionLockedRoute(path) {
+        return path === "/participant-ai-lab-cv"
+            || path.startsWith("/participant-ai-lab-cv-")
+            || path === "/participant-specialization-computer-vision"
+            || path.startsWith("/participant-specialization-computer-vision-")
+            || path.startsWith("/participant-cv-");
+    },
+
     renderParticipantAccessNotice(appContent, navContainer, footerContainer, options = {}) {
         const title = options.title || "Akses Peserta Dibatasi";
         const message = options.message || "Sementara ini portal peserta hanya membuka Beranda, Modul, dan Pengaturan.";
@@ -479,7 +487,9 @@ const router = {
 
         path = this.routeAliases[path] || path;
 
-        const routeUrl = this.routes[path];
+        const routeUrl = this.isComputerVisionLockedRoute(path)
+            ? "/pages/frontend/fellow-dashboard/under-development.html"
+            : this.routes[path];
         const appContent = document.getElementById("app-content");
         const navContainer = document.getElementById("navbar-container");
         const footerContainer = document.getElementById("footer-container");

@@ -1114,3 +1114,20 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 **Kontrak aktivasi module berikutnya:** route harus menunjuk konten nyata (bukan UD), lalu row `participant_dashboard_modules` wajib memiliki `is_active=true`, `tracking_enabled=true`, `phase_id`, `total_chapters`, dan `dashboard_visible=true` bila kartu perlu tampil. Source `ai-*.js` yang sudah memiliki `MODULE_ID` telah diaudit mempunyai `saveChapterProgress`; Math for AI memakai `mathForAiCourse.id`.
 
 **Verifikasi lokal:** lima test baru mencakup seluruh source module masa depan, simulasi aktivasi Deep Learning, save/read-back lima topik Pengantar AI hingga 100%, journey locked pada mobile, dan acknowledgment chapter numerik Math for AI. Safe gate **82/82 PASS**; full suite **137 test = 93 PASS + 44 SKIP + 0 FAIL**. Tidak ada live write atau deployment pada verifikasi ini.
+
+## 95. Release Lock: Computer Vision Kembali Under Development
+
+**Status:** FIXED IN CODE — 29 Juli 2026. Frontend dan GAS terbaru masih menunggu deployment.
+
+**Permintaan:** peserta untuk sementara hanya boleh membuka enam module Foundation. Computer Vision Overview dan Digital Image Fundamentals yang sebelumnya online harus kembali ditutup.
+
+**Perbaikan:**
+
+- Sembilan route CV yang sebelumnya menunjuk konten asli dialihkan ke `under-development.html`: overview AI Lab, overview specialization, Digital Image materi/latihan/kuis/diskusi, serta specialization latihan/kuis/diskusi.
+- Tambah `isComputerVisionLockedRoute()` sebagai guard prefix untuk `/participant-ai-lab-cv*`, `/participant-specialization-computer-vision*`, dan `/participant-cv-*`; direct URL atau child route yang belum terdaftar juga tidak dapat membuka konten CV.
+- Guard Under Development berhenti sebelum loader `ai-cv` dieksekusi, sehingga route terkunci tidak mengirim progress.
+- `computer-vision` dihapus dari `DEFAULT_RELEASED_TRACKING_MODULE_IDS`; seed berikutnya menetapkan `is_active=false` dan `tracking_enabled=false`.
+- Fixture CV dihapus dari manifest module aktif dan cache buster router dinaikkan ke `20260729-cv-locked`.
+- Versi source GAS menjadi `2026.3.1-cv-locked`.
+
+**Verifikasi:** static contract membuktikan seluruh route CV mengarah ke Under Development dan default tracking mengecualikan CV. Browser mock membuka sembilan direct URL, semuanya menampilkan Under Development dan tidak menghasilkan write `computer-vision`. Targeted **2/2 PASS**; safe gate **84/84 PASS**; full suite **139 test = 95 PASS + 44 SKIP + 0 FAIL**.
