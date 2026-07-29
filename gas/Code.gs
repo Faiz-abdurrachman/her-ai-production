@@ -20,8 +20,8 @@ const LEGACY_PASSWORD_PEPPERS = [
   '120NQtFqErJiIfITlPfVo8wV6G0_79qFKMTaptxNF-RA',
   '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w'
 ];
-// Legacy cohort reference from the senior handoff. Existing ParticipantAccounts
-// remain authoritative and are never deactivated merely for not being in this list.
+// Cohort resmi peserta yang lolos tahap 2 dan berhak mengakses participant portal.
+// ParticipantAccounts direkonsiliasi terhadap daftar ini memakai normalized email.
 const TARGET_PARTICIPANT_PORTAL_EMAILS = [
   'sulyastrianggai@gmail.com',
   'rlputeri228@gmail.com',
@@ -124,6 +124,7 @@ const TARGET_PARTICIPANT_PORTAL_EMAILS = [
   'lismatulroqmah@gmail.com',
   'ariellacahyani@gmail.com'
 ];
+const EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT = 100;
 
 const SHEETS = {
   participants: 'peserta_tahap_1',
@@ -267,7 +268,7 @@ function doPost(e) {
 }
 
 function doGet() {
-  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.3.1-cv-locked' });
+  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.3.2-participant-access-reconciled' });
 }
 
 function authorizeGasAction(action, payload) {
@@ -741,7 +742,7 @@ function migrateExistingParticipantAccountCredentials() {
     const accountValues = accountSheet.getDataRange().getValues();
     const participantValues = participantSheet.getDataRange().getValues();
     if (accountValues.length <= 1) {
-      return { status: 'success', migrated: 0, activated: 0, skipped: 0, total: 0 };
+      return { status: 'success', migrated: 0, activated: 0, deactivated: 0, skipped: 0, total: 0 };
     }
 
     const accountHeaders = accountValues[0];
@@ -776,6 +777,7 @@ function migrateExistingParticipantAccountCredentials() {
 
     let migrated = 0;
     let activated = 0;
+    let deactivated = 0;
     let skipped = 0;
     const now = new Date().toISOString();
     accountValues.slice(1).forEach(function(row, index) {
@@ -788,9 +790,13 @@ function migrateExistingParticipantAccountCredentials() {
         skipped += 1;
         return;
       }
-      if (!String(row[accountIndex.access_status] || '').trim()) {
-        accessStatusColumn[index][0] = 'active';
-        activated += 1;
+      const expectedAccessStatus = isTargetParticipantForPortal({
+        email: row[accountIndex.email]
+      }) ? 'active' : 'inactive';
+      if (String(row[accountIndex.access_status] || '').trim().toLowerCase() !== expectedAccessStatus) {
+        accessStatusColumn[index][0] = expectedAccessStatus;
+        if (expectedAccessStatus === 'active') activated += 1;
+        else deactivated += 1;
       }
       const password = String(row[accountIndex.generated_password] || '');
       if (password) {
@@ -815,6 +821,7 @@ function migrateExistingParticipantAccountCredentials() {
       status: 'success',
       migrated: migrated,
       activated: activated,
+      deactivated: deactivated,
       skipped: skipped,
       total: accountValues.length - 1
     };
@@ -1273,6 +1280,9 @@ function participantLogin(payload) {
   if (!account || !account.account_id) {
     return { status: 'error', message: 'NIK atau password tidak valid.' };
   }
+  if (!isTargetParticipantForPortal(account)) {
+    return { status: 'error', message: 'Akses akun peserta sedang tidak aktif.' };
+  }
   if (!isParticipantAccountActive(account)) {
     return { status: 'error', message: 'Akses akun peserta sedang tidak aktif.' };
   }
@@ -1512,6 +1522,170 @@ function getTargetParticipantPortalEmailSet() {
   return emailSet;
 }
 
+function buildParticipantPortalAccessReconciliation(accounts) {
+  const targetEmails = TARGET_PARTICIPANT_PORTAL_EMAILS.map(normalizeEmail).filter(Boolean);
+  const targetEmailSet = getTargetParticipantPortalEmailSet();
+  const uniqueTargetTotal = Object.keys(targetEmailSet).length;
+  const seenAccountEmails = {};
+  const matchedTargetEmails = {};
+  const decisions = [];
+  let blankEmailRows = 0;
+  let duplicateAccountEmailKeys = 0;
+  let targetAccountRows = 0;
+  let outsideTargetRows = 0;
+  let toActivate = 0;
+  let toDeactivate = 0;
+  let unchanged = 0;
+
+  (accounts || []).forEach(function(account, index) {
+    const email = normalizeEmail(account && account.email);
+    const currentStatus = String(account && account.access_status || '').trim().toLowerCase();
+    if (!email) {
+      blankEmailRows += 1;
+    } else {
+      seenAccountEmails[email] = (seenAccountEmails[email] || 0) + 1;
+      if (seenAccountEmails[email] === 2) duplicateAccountEmailKeys += 1;
+    }
+    const isTarget = !!(email && targetEmailSet[email]);
+    if (isTarget) {
+      matchedTargetEmails[email] = true;
+      targetAccountRows += 1;
+    } else {
+      outsideTargetRows += 1;
+    }
+    const expectedStatus = isTarget ? 'active' : 'inactive';
+    if (currentStatus === expectedStatus) unchanged += 1;
+    else if (isTarget) toActivate += 1;
+    else toDeactivate += 1;
+    decisions.push({
+      source_index: account && account.__source_index !== undefined ? account.__source_index : index,
+      expected_status: expectedStatus
+    });
+  });
+
+  const matchedTargetTotal = Object.keys(matchedTargetEmails).length;
+  const duplicateTargetRows = targetEmails.length - uniqueTargetTotal;
+  const missingTargetTotal = uniqueTargetTotal - matchedTargetTotal;
+  const readyToApply = targetEmails.length === EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+    && uniqueTargetTotal === EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+    && duplicateTargetRows === 0
+    && matchedTargetTotal === EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+    && targetAccountRows === EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+    && missingTargetTotal === 0
+    && blankEmailRows === 0
+    && duplicateAccountEmailKeys === 0;
+
+  return {
+    summary: {
+      total_accounts: decisions.length,
+      target_rows: targetEmails.length,
+      target_unique: uniqueTargetTotal,
+      matched_target_accounts: targetAccountRows,
+      matched_target_emails: matchedTargetTotal,
+      outside_target_accounts: outsideTargetRows,
+      expected_active: targetAccountRows,
+      expected_inactive: outsideTargetRows,
+      to_activate: toActivate,
+      to_deactivate: toDeactivate,
+      unchanged: unchanged,
+      missing_targets: missingTargetTotal,
+      blank_email_rows: blankEmailRows,
+      duplicate_target_rows: duplicateTargetRows,
+      duplicate_account_email_keys: duplicateAccountEmailKeys,
+      ready_to_apply: readyToApply
+    },
+    decisions: decisions
+  };
+}
+
+function getParticipantPortalAccessSnapshot() {
+  const sheet = getSheet(SHEETS.participantAccounts);
+  const values = sheet.getDataRange().getValues();
+  const headers = values[0] || [];
+  const headerIndex = indexHeaders(headers);
+  ['email', 'access_status', 'updated_at'].forEach(function(header) {
+    if (headerIndex[header] === undefined) {
+      throw new Error('Kolom wajib ParticipantAccounts tidak tersedia: ' + header);
+    }
+  });
+  const accounts = [];
+  values.slice(1).forEach(function(row, index) {
+    const hasData = row.some(function(value) { return String(value || '').trim() !== ''; });
+    if (!hasData) return;
+    accounts.push({
+      email: row[headerIndex.email],
+      access_status: row[headerIndex.access_status],
+      __source_index: index
+    });
+  });
+  return {
+    sheet: sheet,
+    values: values,
+    header_index: headerIndex,
+    accounts: accounts
+  };
+}
+
+function auditParticipantPortalAccess() {
+  const snapshot = getParticipantPortalAccessSnapshot();
+  const plan = buildParticipantPortalAccessReconciliation(snapshot.accounts);
+  Logger.log(JSON.stringify(plan.summary));
+  return Object.assign({ status: 'success' }, plan.summary);
+}
+
+/**
+ * Rekonsiliasi idempotent untuk cohort portal peserta tahap 2.
+ * Hanya kolom access_status dan updated_at yang berubah; row, credential,
+ * progress, dan histori tidak dihapus atau dibuat ulang.
+ * Jalankan auditParticipantPortalAccess() dan review ready_to_apply lebih dulu.
+ */
+function reconcileParticipantPortalAccess() {
+  ensureParticipantBackendSchema();
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const snapshot = getParticipantPortalAccessSnapshot();
+    const plan = buildParticipantPortalAccessReconciliation(snapshot.accounts);
+    if (!plan.summary.ready_to_apply) {
+      const rejected = Object.assign({
+        status: 'error',
+        message: 'Rekonsiliasi dibatalkan karena preflight cohort tidak valid.'
+      }, plan.summary);
+      Logger.log(JSON.stringify(rejected));
+      return rejected;
+    }
+
+    const accessStatusColumn = snapshot.values.slice(1).map(function(row) {
+      return [row[snapshot.header_index.access_status] || ''];
+    });
+    const updatedAtColumn = snapshot.values.slice(1).map(function(row) {
+      return [row[snapshot.header_index.updated_at] || ''];
+    });
+    const now = new Date().toISOString();
+    let changed = 0;
+    plan.decisions.forEach(function(decision) {
+      const index = decision.source_index;
+      const currentStatus = String(accessStatusColumn[index][0] || '').trim().toLowerCase();
+      if (currentStatus === decision.expected_status) return;
+      accessStatusColumn[index][0] = decision.expected_status;
+      updatedAtColumn[index][0] = now;
+      changed += 1;
+    });
+
+    setColumnValues(snapshot.sheet, snapshot.header_index.access_status, accessStatusColumn);
+    setColumnValues(snapshot.sheet, snapshot.header_index.updated_at, updatedAtColumn);
+    SpreadsheetApp.flush();
+    const result = Object.assign({
+      status: 'success',
+      changed: changed
+    }, plan.summary);
+    Logger.log(JSON.stringify(result));
+    return result;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function isTargetParticipantForPortal(participant, targetEmailSet) {
   const emailSet = targetEmailSet || getTargetParticipantPortalEmailSet();
   const email = normalizeEmail(participant && participant.email);
@@ -1519,19 +1693,7 @@ function isTargetParticipantForPortal(participant, targetEmailSet) {
 }
 
 function isParticipantEligibleForPortal(participant) {
-  if (isTargetParticipantForPortal(participant)) return true;
-  const selection = String(participant.status_seleksi || '').toLowerCase();
-  const stage = String(participant.participant_stage || '').toLowerCase();
-  const stage2 = String(participant.status_tahap_2 || participant.competency_status || '').toLowerCase();
-  const finalStatus = String(participant.status_final || participant.final_status || '').toLowerCase();
-  return selection === 'lolos'
-    || stage.indexOf('accepted') === 0
-    || stage.indexOf('bootcamp') === 0
-    || stage === 'competency_submitted'
-    || stage === 'graduated'
-    || stage2 === 'lolos'
-    || finalStatus === 'lolos'
-    || finalStatus === 'accepted';
+  return isTargetParticipantForPortal(participant);
 }
 
 function generateParticipantPassword(length) {

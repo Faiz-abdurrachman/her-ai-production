@@ -73,6 +73,9 @@ const legacyDigest = crypto
   .digest('hex');
 const generatedOnlyNik = '3276010101010002';
 const generatedOnlyPassword = 'GeneratedOnly!8';
+const outsideTargetNik = '3276010101010003';
+const outsideTargetPassword = 'OutsideTarget!7';
+const targetEmails = vm.runInContext('TARGET_PARTICIPANT_PORTAL_EMAILS.slice()', context);
 const mismatchedDigest = crypto
   .createHash('sha256')
   .update(`${legacySalt}:DifferentPassword!8:${legacyPepper}`)
@@ -82,7 +85,7 @@ const participants = [{
   rowId: 'row-1',
   nik,
   nama_lengkap: 'Peserta Test',
-  email: 'participant@example.test',
+  email: targetEmails[0],
   status_seleksi: 'lolos',
   participant_stage: 'accepted_stage_1',
   participant_password: `pw$1$${legacySalt}$${legacyDigest}`
@@ -90,10 +93,18 @@ const participants = [{
   rowId: 'row-2',
   nik: generatedOnlyNik,
   nama_lengkap: 'Peserta Generated Password',
-  email: 'generated@example.test',
+  email: targetEmails[1],
   status_seleksi: 'lolos',
   participant_stage: 'accepted_stage_1',
   participant_password: `pw$1$${legacySalt}$${mismatchedDigest}`
+}, {
+  rowId: 'row-3',
+  nik: outsideTargetNik,
+  nama_lengkap: 'Peserta Di Luar Target',
+  email: 'outside-target@example.test',
+  status_seleksi: 'lolos',
+  participant_stage: 'accepted_stage_1',
+  participant_password: ''
 }];
 const accounts = [{
   account_id: 'pa-test',
@@ -105,7 +116,7 @@ const accounts = [{
   access_status: '',
   participant_rowId: 'row-1',
   nama_lengkap: 'Peserta Test',
-  email: 'participant@example.test'
+  email: targetEmails[0]
 }, {
   account_id: 'pa-generated',
   nik: generatedOnlyNik,
@@ -116,7 +127,18 @@ const accounts = [{
   access_status: '',
   participant_rowId: 'row-2',
   nama_lengkap: 'Peserta Generated Password',
-  email: 'generated@example.test'
+  email: targetEmails[1]
+}, {
+  account_id: 'pa-outside-target',
+  nik: outsideTargetNik,
+  username: outsideTargetNik,
+  generated_password: outsideTargetPassword,
+  password_hash: '',
+  password_status: 'generated',
+  access_status: 'active',
+  participant_rowId: 'row-3',
+  nama_lengkap: 'Peserta Di Luar Target',
+  email: 'outside-target@example.test'
 }];
 const admins = [{
   id_admin: 'super-admin',
@@ -171,6 +193,46 @@ assert.equal(generatedPasswordLogin.profile.nama_lengkap, 'Peserta Generated Pas
 assert.ok(context.verifyPasswordValueCurrent(participants[1].participant_password, generatedOnlyPassword));
 assert.equal(accounts[1].generated_password, generatedOnlyPassword);
 
+const outsideTargetLogin = context.participantLogin({
+  nik: outsideTargetNik,
+  password: outsideTargetPassword
+});
+assert.equal(outsideTargetLogin.status, 'error');
+assert.match(outsideTargetLogin.message, /tidak aktif/);
+assert.equal(participants[2].participant_password, '');
+
+const reconciliationAccounts = targetEmails.map((email, index) => ({
+  email,
+  access_status: index < 8 ? 'active' : ''
+}));
+for (let index = 0; index < 87; index += 1) {
+  reconciliationAccounts.push({
+    email: `outside-${index}@example.test`,
+    access_status: index < 6 ? 'active' : ''
+  });
+}
+const reconciliation = context.buildParticipantPortalAccessReconciliation(reconciliationAccounts);
+assert.equal(reconciliation.summary.total_accounts, 187);
+assert.equal(reconciliation.summary.target_unique, 100);
+assert.equal(reconciliation.summary.matched_target_accounts, 100);
+assert.equal(reconciliation.summary.matched_target_emails, 100);
+assert.equal(reconciliation.summary.outside_target_accounts, 87);
+assert.equal(reconciliation.summary.expected_active, 100);
+assert.equal(reconciliation.summary.expected_inactive, 87);
+assert.equal(reconciliation.summary.to_activate, 92);
+assert.equal(reconciliation.summary.to_deactivate, 87);
+assert.equal(reconciliation.summary.unchanged, 8);
+assert.equal(reconciliation.summary.missing_targets, 0);
+assert.equal(reconciliation.summary.duplicate_account_email_keys, 0);
+assert.equal(reconciliation.summary.ready_to_apply, true);
+
+const invalidReconciliation = context.buildParticipantPortalAccessReconciliation([
+  { email: targetEmails[0], access_status: 'active' },
+  { email: targetEmails[0], access_status: 'active' }
+]);
+assert.equal(invalidReconciliation.summary.duplicate_account_email_keys, 1);
+assert.equal(invalidReconciliation.summary.ready_to_apply, false);
+
 const participantPayload = { participantToken: login.token, nik };
 context.authorizeGasAction('updateParticipantProfile', participantPayload);
 assert.equal(participantPayload.__auth.sub, nik);
@@ -188,7 +250,7 @@ assert.equal(adminLogin.token, undefined);
 
 const publicResult = context.getPublicParticipantResult({
   nik,
-  email: 'participant@example.test'
+  email: targetEmails[0]
 });
 assert.equal(publicResult.status, 'success');
 assert.equal(publicResult.participant.nama_lengkap, 'Peserta Test');
@@ -198,5 +260,46 @@ accounts[0].access_status = 'inactive';
 const inactiveLogin = context.participantLogin({ nik, password });
 assert.equal(inactiveLogin.status, 'error');
 assert.match(inactiveLogin.message, /tidak aktif/);
+
+const reconciliationHeaders = ['email', 'access_status', 'updated_at', 'generated_password'];
+const reconciliationValues = [reconciliationHeaders].concat(reconciliationAccounts.map((account, index) => [
+  account.email,
+  account.access_status,
+  '',
+  `credential-${index}`
+]));
+const reconciliationSheet = { name: 'ParticipantAccounts' };
+const writeColumnIndexes = [];
+context.ensureParticipantBackendSchema = () => ({ status: 'success' });
+context.SpreadsheetApp = { flush() {} };
+context.getParticipantPortalAccessSnapshot = () => ({
+  sheet: reconciliationSheet,
+  values: reconciliationValues,
+  header_index: { email: 0, access_status: 1, updated_at: 2, generated_password: 3 },
+  accounts: reconciliationValues.slice(1).map((row, index) => ({
+    email: row[0],
+    access_status: row[1],
+    __source_index: index
+  }))
+});
+context.setColumnValues = (sheet, columnIndex, values) => {
+  assert.equal(sheet, reconciliationSheet);
+  writeColumnIndexes.push(columnIndex);
+  values.forEach((value, index) => {
+    reconciliationValues[index + 1][columnIndex] = value[0];
+  });
+};
+
+const applyReconciliation = context.reconcileParticipantPortalAccess();
+assert.equal(applyReconciliation.status, 'success');
+assert.equal(applyReconciliation.changed, 179);
+assert.deepEqual([...new Set(writeColumnIndexes)].sort(), [1, 2]);
+assert.equal(reconciliationValues.slice(1, 101).every(row => row[1] === 'active'), true);
+assert.equal(reconciliationValues.slice(101).every(row => row[1] === 'inactive'), true);
+assert.equal(reconciliationValues.slice(1).every((row, index) => row[3] === `credential-${index}`), true);
+
+const secondApplyReconciliation = context.reconcileParticipantPortalAccess();
+assert.equal(secondApplyReconciliation.status, 'success');
+assert.equal(secondApplyReconciliation.changed, 0);
 
 console.log('Participant login regression checks passed; admin login remains unchanged');
