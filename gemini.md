@@ -1051,4 +1051,12 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Evaluation/Evolution bebas `PYTHON_GUIDES` pageerror dan tidak lagi menampilkan label Python.
 - Navigator Reasoning dan touch target mobile memenuhi kontrak UI/UX.
 - Safe gate **76/76 PASS**. Full suite **131 terdaftar = 87 PASS + 44 SKIP + 0 FAIL**; skip adalah live authenticated/mutation karena secret environment tidak tersedia.
-- `gas/Code.gs` lolos syntax/contract test dan versi `2026.2-progress-persistence` sudah **LIVE**. Route diskusi + auth guard terverifikasi; authenticated read-back masih menunggu secret environment.
+- `gas/Code.gs` lolos syntax/contract test dan versi `2026.2-progress-persistence` sudah **LIVE**. Route diskusi + auth guard serta authenticated read-only terverifikasi; write/read-back mutation belum dijalankan.
+
+### Authenticated live read-back
+
+- Final gate: **29 PASS + 18 mutation SKIP + 0 FAIL**.
+- Production read-back: 94 progress rows = 42 chapter numerik unik + 26 practice + 25 quiz; diskusi 0.
+- Ringkasan Belajar live: 33%, dengan 1 tuntas, 4 dalam proses, dan 1 belum dimulai.
+- Helper login Playwright tidak lagi memakai fixed wait 3 detik; sekarang menunggu token session sampai 20 detik. Assertion lima kartu juga menunggu render event-based.
+- Tidak ada progress/profile/password/discussion mutation yang dilakukan.

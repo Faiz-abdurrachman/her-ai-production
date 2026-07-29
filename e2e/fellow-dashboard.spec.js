@@ -260,12 +260,8 @@ test.describe('Authenticated Flow', () => {
       return !body.includes('tidak valid') && !body.includes('kedaluwarsa');
     }, { timeout: 15000 }).catch(() => {});
 
-    await page.waitForTimeout(2000);
-
     const cards = page.locator('#dashboardModuleGrid > a.module-card.dash-real:not(.add)');
-    const count = await cards.count();
-    expect(count).toBe(5);
-    await expect(cards).toHaveCount(5);
+    await expect(cards).toHaveCount(5, { timeout: 20000 });
     for (const module of ACTIVE_DASHBOARD_MODULES) {
       await expect(cards.filter({ hasText: module.title })).toHaveCount(1);
     }
@@ -461,5 +457,13 @@ async function login(page) {
   await page.fill('#profileNik', TEST_NIK);
   await page.fill('#profilePassword', TEST_PASSWORD);
   await page.locator('#participantLoginForm button[type="submit"]').click();
-  await page.waitForTimeout(3000);
+  await page.waitForFunction(() => {
+    const session = sessionStorage.getItem('heraiParticipantSession');
+    if (!session) return false;
+    try {
+      return Boolean(JSON.parse(session).token);
+    } catch (_error) {
+      return false;
+    }
+  }, { timeout: 20000 });
 }

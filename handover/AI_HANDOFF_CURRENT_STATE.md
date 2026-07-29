@@ -5,10 +5,11 @@
 **Branch:** `main`
 **Baseline Commit:** `6508121` - test: expand active module end-to-end audit (#87-#91)
 **Feature Commit:** `a3ff0a9` - `fix: persist active module learning progress (#78-#91)`
-**Total commits:** 251 setelah dokumentasi verifikasi deploy
+**Latest Commit:** current HEAD - `test: stabilize authenticated live read-back`
+**Total commits:** 252
 **GAS Deployment:** ✅ `2026.2-progress-persistence` LIVE dan route diskusi terverifikasi terlindungi auth
 **Worktree:** BERSIH
-**E2E Test Suite:** 131 test terdaftar | safe mock gate 76/76 PASS | full 87 PASS + 44 SKIP + 0 FAIL
+**E2E Test Suite:** safe mock 76/76 PASS | full 87 PASS + 44 SKIP + 0 FAIL | authenticated live read-only 29 PASS + 18 SKIP + 0 FAIL
 **Leaderboard:** ✅ LIVE — Brenda 1,024 pts (#1), peserta lain 245 pts (#2)
 
 > **Ini sumber kebenaran tunggal.** Semua dokumen lain yang bertentangan diabaikan.
@@ -43,10 +44,10 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 | Item | Status | Tindakan |
 |---|---|---|
 | Redeploy GAS terbaru | ✅ DONE | `doGet.version` live = `2026.2-progress-persistence`; route diskusi baru terdeteksi dan menolak request tanpa token |
-| Authenticated live read-back | PENDING | Sediakan kredensial lewat secret environment dan jalankan read-only gate |
+| Authenticated live read-back | ✅ DONE | Login, dashboard, progress, diskusi, auth guard: 29 PASS; 18 mutation scenarios sengaja skip |
 | Live mutation verification | PENDING APPROVAL/OPT-IN | Jalankan hanya dengan `TEST_ALLOW_MUTATIONS=true` pada akun QA yang boleh diubah |
 
-**Penting:** source backend terbaru sudah live. Read-back authenticated untuk data peserta belum dijalankan karena credential secret environment belum tersedia; jangan mengklaim write/read-back production lulus sebelum gate tersebut dijalankan. Laporan rinci ada di `handover/E2E_AUDIT_2026-07-29.md`.
+**Read-back production:** 94 row progress terbaca: 42 chapter numerik unik, 26 practice, 25 quiz. Diskusi tersimpan saat ini 0. `learningSummary`: total 6, tuntas 1, dalam proses 4, belum dimulai 1, progress rata-rata 33%. Write/read-back mutation production belum dijalankan. Laporan rinci ada di `handover/E2E_AUDIT_2026-07-29.md`.
 
 ---
 
