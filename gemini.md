@@ -1143,3 +1143,11 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 **Perbaikan:** state hanya dikunci jika minimal satu jawaban tersimpan benar-benar berisi teks. Payload kosong/corrupt dibersihkan otomatis dan form dikembalikan ke mode edit. Klik Simpan tanpa isi sekarang menampilkan validasi, memfokuskan field pertama, dan tidak menulis atau mengunci state. Jawaban nyata tetap terkunci setelah disimpan, bertahan setelah reload, dan dapat dibuka kembali melalui tombol Edit. Cache buster `settings.js` menjadi `20260729-intro-practice-editable`.
 
 **Verifikasi:** targeted browser reproduction **1/1 PASS**; safe gate **85/85 PASS**; full suite **140 test = 96 PASS + 44 SKIP + 0 FAIL**.
+
+## Checkpoint Transfer Setelah #96 — 29 Juli 2026
+
+- Latest feature commit: `f854f9d fix: keep empty intro practice editable (#96)`; setelah commit dokumentasi transfer total menjadi 258 commit dan worktree diharapkan bersih.
+- Current release tepat enam module Foundation. Computer Vision sepenuhnya Under Development, tetapi source kontennya tidak dihapus.
+- #92 berstatus **OPEN/DEFERRED dengan sepengetahuan user**: marker latihan dapat masuk backend, sedangkan isi teks jawaban tetap localStorage-only dan tidak boleh diklaim tersimpan di GAS.
+- User melaporkan redeploy GAS setelah #94, tetapi deployment itu terjadi sebelum perubahan #95. Source lokal sekarang `2026.3.1-cv-locked`; versi live, seed metadata, frontend release, dan authenticated read-back pasca-#95 belum diverifikasi.
+- Prompt transfer canonical sudah diperbarui di `handover/NEXT_AI_TRANSFER_PROMPT.txt`. AI berikutnya wajib membaca SSOT → `gemini.md` → `NEXT_PLAN.md` → E2E audit → prompt transfer, lalu meminta konfirmasi user sebelum mulai bekerja.

@@ -4,7 +4,7 @@
 
 **Baseline:** `6508121` sebelum resolusi audit #78–#91
 
-**GAS:** production masih ✅ `2026.2-progress-persistence`; source #94/#95 adalah `2026.3.1-cv-locked` dan belum dideploy
+**GAS:** user melaporkan redeploy setelah #94, tetapi sebelum perubahan #95. Source lokal sekarang `2026.3.1-cv-locked`; versi live, seed metadata, dan read-back pasca-#95 belum diverifikasi
 
 **QA:** safe mock 85/85 PASS; full 96 PASS + 44 SKIP + 0 FAIL; authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2; controlled live write/read-back terakhir PASS
 **Leaderboard:** sumber live; authenticated read-back terakhir 1.039 pts, screenshot user berikutnya menampilkan Brenda 1.054 pts
@@ -32,9 +32,9 @@ Phase 0 QA dan seluruh perbaikan audit #78–#91 sudah tersedia di source. Test 
 | Runtime module | ✅ | Modern integrity passed; Evaluation/Evolution tanpa pageerror |
 | Module identity copy | ✅ | label module-specific |
 | Discussion persistence | ✅ live | post/reply + read-back production terverifikasi |
-| Isi jawaban practice (#92) | ⚠️ open | marker selesai masuk backend, tetapi teks jawaban masih localStorage-only |
+| Isi jawaban practice (#92) | ⚠️ deferred | User menerima batasan sementara: marker selesai masuk backend, tetapi teks jawaban masih localStorage-only |
 | Pengantar AI active material (#93) | ✅ | 5/5 route menandai satu current item dengan visual + `aria-current` |
-| Dynamic module release contract (#94) | ✅ code | `is_active` + `tracking_enabled` + `dashboard_visible` + `phase_id`; source GAS 2026.3 pending deploy |
+| Dynamic module release contract (#94) | ✅ code | `is_active` + `tracking_enabled` + `dashboard_visible` + `phase_id`; source GAS 2026.3.1, deployment pasca-#95 belum terverifikasi |
 | Pengantar AI chapter 1–5 (#94) | ✅ code | save + `getParticipantProgress` read-back; progress sidebar tidak lagi dihitung dari posisi route |
 | Journey Fellowship (#94) | ✅ code | Foundation/Specialization dihitung dari module aktif; phase tanpa sumber memakai ikon kunci + `Belum Dibuka` |
 | Computer Vision release lock (#95) | ✅ code | 9 route CV + seluruh prefix child menampilkan Under Development; loader/progress CV tidak berjalan; default tracking dinonaktifkan |
@@ -46,11 +46,11 @@ Safe mock gate: **85/85 PASS**, tanpa expected failure dan tanpa live write. Ful
 
 ## URUTAN LANGKAH BERIKUTNYA
 
-1. **Migrasi schema #94/#95:** paste/save `gas/Code.gs`, jalankan `seedDashboardModules()` dan `seedDashboardJourney()` dari Apps Script editor. Ini menambahkan metadata dan menetapkan current release tepat enam module: Pengantar AI + lima AI Fundamentals; Computer Vision dan 20+ module lain tetap nonaktif.
-2. **Redeploy GAS #94/#95:** buat deployment baru, pastikan `doGet.version` menjadi `2026.3.1-cv-locked`, lalu jalankan authenticated read-only contract untuk `trackingModules`, `learningSummary`, dan status `journey`. Pastikan `computer-vision` tidak masuk `trackingModules`.
-3. **Release frontend #94–#96:** deploy setelah backend/schema lolos. Cache buster `settings.js` sudah `20260729-intro-practice-editable`; router sudah `20260729-cv-locked`. Fix #96 tidak membutuhkan redeploy GAS.
+1. **Audit deployment live tanpa mutation:** buka endpoint GET GAS dan catat `doGet.version`. Jangan menganggap redeploy user sudah memuat #95 karena deployment tersebut terjadi sebelum source CV lock dibuat.
+2. **Migrasi/redeploy GAS #94/#95:** paste/save `gas/Code.gs`, jalankan `seedDashboardModules()` dan `seedDashboardJourney()` dari Apps Script editor, lalu buat deployment baru. Pastikan `doGet.version=2026.3.1-cv-locked`, `trackingModules` tepat enam Foundation, dan `computer-vision` tidak masuk tracking. Tindakan ini membutuhkan konfirmasi user.
+3. **Release/verifikasi frontend #94–#96:** pastikan build terbaru terdeploy. Cache buster `settings.js` harus `20260729-intro-practice-editable`; router harus `20260729-cv-locked`. Fix #96 tidak membutuhkan redeploy GAS.
 4. **Verifikasi Pengantar AI production:** dengan approval mutation, buka topik 1–5 memakai akun QA dan pastikan chapter `1..5` terbaca kembali serta summary berubah idempotent. Jangan mengubah password/profile.
-5. **Putuskan scope #92:** jika isi jawaban latihan harus tercatat lintas perangkat, tambah schema/API practice-response, frontend acknowledgment/read-back, dan E2E production-safe.
+5. **Scope #92 ditunda dengan sepengetahuan user:** isi jawaban latihan masih localStorage-only. Jika nanti harus tercatat lintas perangkat, tambah schema/API practice-response, frontend acknowledgment/read-back, dan E2E production-safe.
 
 Authenticated read-only sudah selesai pada baseline 94 row progress (42 chapter numerik unik, 26 practice, 25 quiz). Controlled mutation kemudian lulus untuk chapter, marker practice, quiz, diskusi, dan reply. Ringkasan Belajar tetap 33% (1 tuntas, 4 proses, 1 belum mulai) dan leaderboard tetap 1.039 poin.
 

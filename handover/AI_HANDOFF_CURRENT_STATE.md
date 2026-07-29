@@ -5,9 +5,9 @@
 **Branch:** `main`
 **Baseline Commit:** `6508121` - test: expand active module end-to-end audit (#87-#91)
 **Feature Commit:** `a3ff0a9` - `fix: persist active module learning progress (#78-#91)`
-**Latest Commit:** pending commit - `fix: keep empty intro practice editable (#96)`
-**Total commits:** 257 setelah commit #96
-**GAS Deployment:** ⚠️ production masih `2026.2-progress-persistence`; source lokal `2026.3.1-cv-locked` wajib dimigrasi, redeploy, lalu live read-back
+**Latest Feature Commit:** `f854f9d` - `fix: keep empty intro practice editable (#96)`
+**Total commits:** 258 setelah commit dokumentasi checkpoint transfer
+**GAS Deployment:** ⚠️ user melaporkan redeploy setelah #94, tetapi redeploy itu terjadi sebelum perubahan #95. Source lokal sekarang `2026.3.1-cv-locked`; deployment/version, seed metadata, dan read-back setelah #95 belum diverifikasi
 **Worktree:** BERSIH
 **E2E Test Suite:** safe mock 85/85 PASS | full 96 PASS + 44 SKIP + 0 FAIL | authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2 | controlled live write/read-back terakhir PASS
 **Leaderboard:** ✅ sumber LIVE — authenticated read-back terakhir 1.039 pts; screenshot user sesudahnya menampilkan Brenda 1.054 pts (belum di-read-back ulang)
@@ -46,7 +46,7 @@ Fix #96 memulihkan textarea Latihan Pengantar AI yang salah terkunci ketika loca
 - UI/UX: 375/768/1280 bebas overflow; Reasoning nav wrap; touch target minimum 44px; source integrity passed; pageerror cleanup selesai.
 - Controlled live write/read-back: chapter Python #1, status practice Python, quiz Evaluation score existing, post diskusi tetap, dan reply semuanya tersimpan lalu terbaca kembali.
 - Idempotent re-save tidak mengubah Ringkasan Belajar; leaderboard tetap **1.039 → 1.039**. Profile dan password tidak dimutasi.
-- #92 **OPEN**: teks jawaban practice tetap hanya di localStorage; backend baru menyimpan marker `chapter_id='practice'` dengan status selesai.
+- #92 **OPEN / DEFERRED DENGAN SEPENGETAHUAN USER**: teks jawaban practice tetap hanya di localStorage; backend baru menyimpan marker `chapter_id='practice'` dengan status selesai.
 - #93 **FIXED**: kelima topik Pengantar AI sekarang menandai tepat satu materi aktif dengan highlight, ikon play, dan `aria-current="page"`.
 - #94 **FIXED IN CODE**: metadata release/tracking/visibility dinamis, agregasi phase, Pengantar AI save/read-back 1–5, cache invalidation, dan journey locked state. Production deployment/read-back masih pending.
 - #95 **FIXED IN CODE**: sembilan route CV dan seluruh prefix turunannya terkunci ke Under Development, loader/progress CV tidak berjalan, dan default tracking CV dinonaktifkan. Frontend/GAS deployment masih pending.
@@ -56,12 +56,12 @@ Fix #96 memulihkan textarea Latihan Pengantar AI yang salah terkunci ketika loca
 
 | Item | Status | Tindakan |
 |---|---|---|
-| Migrasi + redeploy GAS #94/#95 | ⏳ PENDING | Save source terbaru, jalankan `seedDashboardModules()` + `seedDashboardJourney()`, deploy, lalu cek `doGet.version=2026.3.1-cv-locked` |
-| Frontend release #94/#95 | ⏳ PENDING | Deploy setelah GAS 2026.3.1 dan schema berhasil diverifikasi; router `20260729-cv-locked` menutup CV di sisi peserta |
-| Frontend fix #96 | ⏳ PENDING | Deploy `settings.js` dengan cache buster `20260729-intro-practice-editable`; tidak perlu redeploy GAS |
+| Verifikasi + redeploy GAS #94/#95 | ⏳ PENDING | Cek `doGet.version` live. Karena deployment user terjadi sebelum #95, save source terbaru, jalankan `seedDashboardModules()` + `seedDashboardJourney()`, redeploy, lalu pastikan `version=2026.3.1-cv-locked` |
+| Frontend release #94/#95 | ⏳ BELUM TERVERIFIKASI | Pastikan build terbaru terdeploy; router `20260729-cv-locked` menutup CV di sisi peserta |
+| Frontend fix #96 | ⏳ BELUM TERVERIFIKASI | Deploy/cek `settings.js` dengan cache buster `20260729-intro-practice-editable`; tidak perlu redeploy GAS |
 | Authenticated live read-back | ✅ DONE | Login, dashboard, progress, diskusi, auth guard: 29 PASS; 18 mutation scenarios sengaja skip |
 | Controlled live mutation verification | ✅ DONE | 4 write sukses; 5 read-back cocok; summary dan leaderboard tidak berubah; tanpa profile/password mutation |
-| Practice answer persistence (#92) | ⚠️ OPEN | Tentukan schema/API untuk isi jawaban, lalu implement save + authenticated read-back lintas perangkat |
+| Practice answer persistence (#92) | ⚠️ DEFERRED | User menerima batasan sementara. Jika scope dibuka lagi, tentukan schema/API isi jawaban lalu implement save + authenticated read-back lintas perangkat |
 
 **Read-back production:** baseline 94 row progress: 42 chapter numerik unik, 26 practice, 25 quiz. Controlled test melakukan re-save nilai existing pada tiga row progress dan membuat satu thread QA beserta satu reply. `learningSummary` tetap total 6, tuntas 1, dalam proses 4, belum dimulai 1, progress rata-rata 33%; leaderboard tetap 1.039 poin. Laporan rinci ada di `handover/E2E_AUDIT_2026-07-29.md`.
 
@@ -116,20 +116,21 @@ Fix #96 memulihkan textarea Latihan Pengantar AI yang salah terkunci ketika loca
 
 ---
 
-## COMMIT SESI INI (13 commits: #65-#77 + docs)
+## COMMIT CHECKPOINT TERBARU (#78–#96)
 
 ```
-64dde11 docs: Update all handover — bugs #68-#77, transfer prompt, next plan
-49bc9c2 fix: GAS — leaderboard is_active filter removed valid rows (#77)
-a8a88bc fix: GAS — computeLiveLeaderboard scope error — activeRows not in scope (#76)
-72e833b fix: Dashboard — hide under-development modules, show AI Fundamentals only (#75)
-c2f6667 fix: Put all modules under-development except AI Fundamentals (#74)
-899e5f4 feat: CV Digital Image — interactive widgets + quiz + coding challenges (#73)
-a620734 fix: CV — CNN + Advanced CNN sub-modules → under-development (#72)
-9a9761c fix: Computer Vision back online — route restore + ai-lab catch-all fix (#71)
-5092a19 perf: Dashboard persistent cache — sessionStorage TTL 5min (#70)
-f749ca7 feat: Live leaderboard — compute points from participant_progress (#69)
-85772cd fix: Math/ML/CV overview → under-development, fix UD template blocked by restricted access (#68)
+f854f9d fix: keep empty intro practice editable (#96)
+457d02c fix: lock Computer Vision release (#95)
+c195068 feat: add dynamic module release tracking (#94)
+84ec83c fix: mark current Pengantar AI material (#93)
+8d34a72 docs: record controlled live persistence verification (#92)
+16564ab test: stabilize authenticated live read-back
+d329725 docs: verify GAS progress persistence deployment
+a3ff0a9 fix: persist active module learning progress (#78-#91)
+6508121 test: expand active module end-to-end audit (#87-#91)
+0a1e3bd fix: keep quiz navigator horizontal and wrapping (#86)
+1dd857f fix: add Evaluation and Evolution quiz content (#80)
+4e02c3a test: establish safe active-module QA foundation (#78-#85)
 ```
 
 ---

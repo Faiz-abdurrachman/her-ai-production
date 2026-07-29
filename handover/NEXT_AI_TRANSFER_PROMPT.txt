@@ -1,187 +1,142 @@
-╔══════════════════════════════════════════════════════════════╗
-║  AI TRANSFER PROMPT — HerAI Fellowship SuperApp              ║
-║  Sesi: 29 Juli 2026 (Phase 0 Active Module QA) → Next AI      ║
-║  Total: 248 commit | QA: 115 test | Safe gate: 62 PASS        ║
-║  GAS: ✅ LIVE | Leaderboard: ✅ LIVE (1,024 pts)              ║
-╚══════════════════════════════════════════════════════════════╝
+AI TRANSFER PROMPT — HerAI Fellowship SuperApp
+Checkpoint: 29 Juli 2026, Asia/Jakarta
 
-⚠️  BACA SELURUH FILE INI SEBELUM MULAI KERJA.
-    JANGAN SKIP. JANGAN MENGANGGAP TAHU.
+Kamu adalah AI penerus untuk repository HerAI Fellowship SuperApp.
+Workspace: /home/faiz/her6/Her-AI
+Branch: main
 
-═══════════════════════════════════════════════════════════════
-📋 SUMBER KEBENARAN (WAJIB DIBACA — URUTAN PENTING)
-═══════════════════════════════════════════════════════════════
-1. handover/AI_HANDOFF_CURRENT_STATE.md  ← SINGLE SOURCE OF TRUTH
-2. gemini.md  ← Bug log #1-#86 + session rules + temuan kritis
-3. handover/NEXT_PLAN.md  ← Priorities + execution plan
-4. NEXT_AI_TRANSFER_PROMPT.txt ini  ← System identity + aturan + konfirmasi
+JANGAN LANGSUNG MENGUBAH KODE.
 
-═══════════════════════════════════════════════════════════════
-🔧 IDENTITAS SISTEM
-═══════════════════════════════════════════════════════════════
-- Spreadsheet ID: 1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w
-- GAS Web App URL: https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec
-- GAS Code: gas/Code.gs (2562 baris, 54 routes, 23 sheets)
-- SPA: Vanilla JS hash-router, Node proxy (node server.js → :3000)
-- Proxy: POST /__gas (token auto-injected, Origin WAJIB)
-- Test participant: kredensial QA disuplai melalui environment variable, tidak disimpan di repo
-- Baseline commit: 6c35926
-- QA: 115 test terdaftar; safe mock gate 62/62; live mutation default OFF
-- Leaderboard: ✅ LIVE — Brenda 1,024 pts (#1), next 245 pts (#2)
+Urutan wajib sebelum bekerja:
 
-═══════════════════════════════════════════════════════════════
-✅ APA YANG UDAH SELESAI (SESI INI — 13 commit: #65-#77)
-═══════════════════════════════════════════════════════════════
+1. Baca `handover/AI_HANDOFF_CURRENT_STATE.md` sampai selesai. Ini single source of truth.
+2. Baca `gemini.md` sampai selesai. Isinya bug log #1–#96 dan temuan kritis.
+3. Baca `handover/NEXT_PLAN.md` sampai selesai.
+4. Baca `handover/E2E_AUDIT_2026-07-29.md` dan prompt ini.
+5. Jalankan read-only check:
+   - `git status --short`
+   - `git log -5 --oneline`
+   - `git rev-list --count HEAD`
+6. Rangkum pemahamanmu kepada user dan MINTA KONFIRMASI sebelum mulai mengedit, menjalankan live mutation, deploy, atau push.
 
-UX POLISH (#65): 12 animations, __aiLabToast(), quiz feedback, skeleton reveal
-MODULE ROUTES (#66): math-for-ai, ml-basic, CV routes activated
-AVATAR (#67): Upload→preview→confirm, base64 sheet storage, topbar display
-MODULE LOCKDOWN (#68,74,75): 20 modules UD, only 5 AI Fundamentals online, dashboard filtered
-LEADERBOARD LIVE (#69,76,77): Formula quiz+chapters×15+practice×5, computed from participant_progress
-DASHBOARD CACHE (#70): 3-tier (memory→sessionStorage 5min→skeleton), refresh 0.2s
-COMPUTER VISION (#71,72,73): CV overview + Digital Image online, CNN UD, interactive widgets 1,241 lines
+CHECKPOINT REPOSITORY
 
-═══════════════════════════════════════════════════════════════
-📊 MODULE STATUS — SAAT INI
-═══════════════════════════════════════════════════════════════
+- Latest feature commit: `f854f9d fix: keep empty intro practice editable (#96)`.
+- Setelah commit dokumentasi transfer ini total menjadi 258 commit.
+- Expected worktree: bersih.
+- Safe deterministic E2E: 85/85 PASS.
+- Full suite: 140 test = 96 PASS + 44 SKIP + 0 FAIL.
+- 44 skip adalah authenticated/live-mutation test yang sengaja tidak dijalankan tanpa secret/opt-in.
+- Jangan menyimpan NIK/password dalam source, E2E, dokumentasi, atau commit. Minta user menyediakan credential via environment bila dibutuhkan.
 
-✅ ONLINE (5 + AI Intro):
-  Pengantar AI | Python untuk AI | Reasoning AI | Konsep AI Modern
-  Evaluation AI | Evolution of AI
+CURRENT RELEASE
 
-✅ ONLINE — CV (partial):
-  CV Overview + Digital Image Fundamentals (interactive widgets active)
-  CNN + Advanced CNN → 🔒 UD
+Tepat enam module Foundation dapat membuka konten:
 
-🔒 UNDER DEVELOPMENT (20+):
-  Deep Learning, RL, ML, Math, LLM, VLM, Multimodal, Agentic,
-  Culture, Healthcare, UI/UX, Manufacturing, Biz Insight, People Mgt,
-  Geospatial, Bioinformatics, Data Eng, Data Sci, Infra, Deploy,
-  Front-end, Back-end
+1. Pengantar AI (`ai-fundamentals`)
+2. Python untuk AI (`python-untuk-ai`)
+3. Reasoning AI (`reasoning`)
+4. Konsep AI Modern (`konsep-ai-modern`)
+5. Evaluation AI (`evaluation`)
+6. Evolution of AI (`evolution`)
 
-═══════════════════════════════════════════════════════════════
-⚠️  TEMUAN KRITIS — WAJIB BACA SEBELUM EDIT
-═══════════════════════════════════════════════════════════════
+Computer Vision sepenuhnya Under Development (#95):
 
-1. participantPortalOpen di sheet Settings:
-   - Value HARUS lowercase "true" (JSON boolean)
-   - String "TRUE" gagal — router cek !== true
+- Overview, Digital Image, latihan, kuis, diskusi, specialization, dan direct child URL terkunci.
+- Prefix guard router mencegah URL CV yang belum terdaftar membuka source konten.
+- Loader `ai-cv` dan progress write tidak berjalan pada route terkunci.
+- Source materi/widget CV tidak dihapus; disimpan untuk aktivasi nanti.
+- Default backend release/tracking tidak lagi memasukkan `computer-vision`.
 
-2. Login form element IDs:
-   - NIK input: #profileNik (BUKAN #participantNik)
-   - Password input: #profilePassword (BUKAN #participantPassword)
-   - Form: #participantLoginForm, Submit: button[type="submit"]
+20+ module lain juga tetap Under Development. Jangan mengaktifkan module hanya karena source materinya tersedia.
 
-3. Fresh browser localStorage kosong:
-   - getGlobalSettings() sync return default {participantPortalOpen: false}
-   - Playwright: primeSettings() inject localStorage sebelum navigasi
+BACKEND DAN DEPLOYMENT
 
-4. GAS API Payload Shapes (VERIFIED from gas/Code.gs):
-   - Token field: participantToken (BUKAN token)
-   - Login response: {status, profile, token, expires_at}
-   - Dashboard: {status, data: {modules, tracks, journey, events, leaderboard}}
-   - Progress: {status, data: [...]} — field name 'data', NOT 'progress'
-   - chapter_id returned as NUMBER from sheet — use String() comparison
+- GAS canonical: `gas/Code.gs`.
+- Source version: `2026.3.1-cv-locked`.
+- User melaporkan redeploy GAS setelah #94, tetapi deployment tersebut terjadi sebelum source #95 dibuat.
+- Karena itu versi live, seed metadata, dan authenticated read-back pasca-#95 BELUM terverifikasi.
+- Sebelum klaim live, cek GET endpoint/version secara read-only.
+- Untuk membawa #95 live: konfirmasi user, save source terbaru, jalankan `seedDashboardModules()` dan `seedDashboardJourney()`, redeploy, lalu verifikasi `doGet.version=2026.3.1-cv-locked` dan pastikan `computer-vision` tidak ada di `trackingModules`.
+- Setiap perubahan `gas/Code.gs` wajib redeploy; jangan deploy tanpa instruksi user eksplisit.
+- Frontend #94–#96 juga belum boleh diklaim live sampai deployment/read-back diverifikasi.
 
-5. Playwright navigation — CRITICAL:
-   - GUNAKAN page.goto() untuk SPA hash navigation
-   - page.evaluate hash nav UNRELIABLE — jangan dipakai
-   - Quiz/Practice forms di-render oleh IIFE — tunggu dengan waitForFunction()
+STATUS PERSISTENCE
 
-6. Lazy Loading (#64):
-   - __aiLabLoader ada di window, defined di settings.js
-   - load('ai-xxx') returns Promise — cache + dedup otomatis
-   - 28 route handler SUDAH di-wrap. Jangan tambah route baru tanpa loader
+Sudah memiliki backend contract dan bukti mock; beberapa jalur juga sudah pernah live read-back:
 
-7. Password:
-   - Format hash: pw$1${salt}$${sha256hex}
-   - verifyPasswordValue() fallback ke plain text + legacy peppers
-   - Rate limit: 8 attempts per 10 menit via CacheService
+- Chapter materi numerik.
+- Marker latihan `chapter_id='practice'`.
+- Nilai kuis `chapter_id='quiz'`.
+- Diskusi dan reply.
+- Ringkasan Belajar, progress module, journey, dan leaderboard.
+- Ganti password dan update profil tetap ada dan tidak diubah oleh #95/#96.
 
-8. ai-python-basic.js: HARD BLOCK — namespace collision dengan ai-python.js
+Batasan #92 — OPEN/DEFERRED DENGAN SEPENGETAHUAN USER:
 
-9. ai-modern.js: STRUKTUR BERBEDA — BEGINNER_GUIDES, bukan PYTHON_GUIDES
+- Isi teks jawaban latihan masih localStorage-only.
+- Backend hanya menyimpan marker latihan selesai, bukan response body essay.
+- UI “Tersimpan” pada latihan Pengantar AI berarti jawaban tersimpan di browser/perangkat, bukan database.
+- Pindah perangkat atau menghapus storage dapat menghilangkan isi jawaban.
+- Jangan mengklaim jawaban latihan tersimpan backend.
+- Jika user nanti meminta persistence lintas perangkat, desain schema/API save+get practice response, ownership/auth, acknowledgment, read-back, migration, dan E2E terlebih dahulu.
 
-10. GAS Perlu Redeploy SETIAP edit Code.gs
+FIX TERAKHIR #96
 
-11. Module dengan struktur berbeda (5) — TANYA DULU sebelum edit:
-    - ai-cv.js, ai-math-for-ai.js, ai-ml-basic.js, ai-python-basic.js, ai-reasoning.js
+- Bug: payload localStorage berisi empat key kosong membuat textarea Latihan Pengantar AI `readOnly` walau tampil kosong.
+- Fix: state kosong/corrupt dibersihkan, save kosong ditolak, hanya jawaban nyata yang mengunci, reload mempertahankan jawaban, tombol Edit membuka input.
+- File utama: `js/frontend/fellow-dashboard/settings.js`.
+- Cache buster: `settings.js?v=20260729-intro-practice-editable`.
+- Frontend-only; tidak perlu redeploy GAS.
+- Targeted 1/1, safe 85/85, full 96 PASS + 44 SKIP.
 
-12. Avatar storage: base64 di sheet, 200×200 JPEG ~15KB
-    - Topbar overlay .avatar-img::after nutupin — pakai .has-photo class
+HASIL LIVE TERAKHIR YANG BOLEH DIKLAIM
 
-13. Leaderboard: LIVE dari participant_progress
-    - Formula: sum(quiz_score) + (chapters × 15) + (practice × 5)
-    - Name masking: ********* for non-current
-    - Brenda 1,024 pts (#1), next 245 pts (#2)
+- Authenticated read-only lama: 29 PASS + 18 mutation SKIP pada deployment sebelum #94/#95 final.
+- Controlled mutation lama: chapter, marker practice, quiz, diskusi, dan reply berhasil save/read-back.
+- Baseline read-back: 94 progress row = 42 chapter numerik unik + 26 practice + 25 quiz.
+- Ringkasan saat itu: total 6, tuntas 1, proses 4, belum mulai 1, rata-rata 33%.
+- Leaderboard read-back saat itu 1.039 poin; screenshot user berikutnya memperlihatkan Brenda 1.054 poin, belum di-read-back ulang.
+- Jangan memakai angka ini sebagai bukti deployment #94/#95 sudah live.
 
-14. Dashboard module filter: only 5 AI Fundamentals shown
-    - onlinePrefixes: ai-python, ai-reasoning, ai-modern, ai-evaluation, ai-evolution
+SAFETY DAN HARD BLOCK
 
-15. CV Interactive: ai-cv-interactive.js (1,241 lines)
-    - initCvInteractives() called by loadCvChapter after content injection
-    - Sandbox, flip/rotate, bitwise ops, Otsu, quiz, coding challenges
+- Jangan push GitHub atau deploy tanpa instruksi eksplisit.
+- Live write membutuhkan `TEST_ALLOW_MUTATIONS=true`; password cycle membutuhkan opt-in kedua `TEST_ALLOW_PASSWORD_MUTATIONS=true`.
+- Jangan hardcode credential.
+- Jangan menjalankan `provisionParticipantAccounts`, `generateParticipantAccounts*`, atau `forceReset:true`; berisiko mereset 187 akun.
+- Jangan mengubah Go services, admin production, atau auth flow tanpa approval.
+- Jangan edit massal 231 lesson files; gunakan injection CSS/JS bila relevan.
+- `js/main.js` dan perubahan route/module loader perlu konfirmasi user.
+- `ai-python-basic.js` adalah intentional skip karena namespace collision.
+- Lima module berstruktur khusus perlu konfirmasi sebelum edit: `ai-cv.js`, `ai-math-for-ai.js`, `ai-ml-basic.js`, `ai-python-basic.js`, `ai-reasoning.js`.
+- `ai-modern.js` memakai `BEGINNER_GUIDES`, bukan `PYTHON_GUIDES`.
+- Bump cache buster setelah edit JS/CSS.
+- Gunakan `page.goto()` untuk SPA hash navigation pada Playwright.
 
-16. QA findings #78-#85:
-    - Ringkasan Belajar statis; metadata kuis Reasoning mismatch
-    - AI Modern practice/quiz scope crash + chapter_id object
-    - Touch target mobile <44px
-    - Backend menghitung quiz/practice sebagai chapter
-    - saveChapterProgress gagal diam-diam
-    - #80 FIXED: Evaluation/Evolution masing-masing 20 soal + pembahasan
-    - #86 FIXED: navigator nomor kuis horizontal + wrap + 44px
+COMMAND QA
 
-17. Test safety:
-    - Mock gate tidak menyentuh GAS live
-    - Live write perlu TEST_ALLOW_MUTATIONS=true
-    - Password cycle perlu tambahan TEST_ALLOW_PASSWORD_MUTATIONS=true
+Safe, tidak menulis ke production:
 
-═══════════════════════════════════════════════════════════════
-📐 ATURAN KERJA — 20 RULE WAJIB
-═══════════════════════════════════════════════════════════════
-1.  Commit PER FITUR | 2. Update handover & gemini.md | 3. Bug baru #78+
-4.  No dark theme — light pink | 5. CSS scope ai-lab-content
-6.  Diagram kontras: lines >=25%, dots >=75%, stroke >=0.8px
-7.  NO NIK/password exposed | 8. TANYA user kalo ambigu
-9.  Verify: node --check, test flow, null guards, E2E
-10. NO provision/generate | 11. NO touch 231 lesson files — CSS/JS injection
-12. sessionStorage = source of truth | 13. Bump cache buster
-14. No silent fail | 15. NO push GitHub
-16. Redeploy GAS after Code.gs edit | 17. TANYA sebelum edit module struktur berbeda
-18. page.goto() > page.evaluate() untuk SPA nav
-19. __aiLabLoader sudah terintegrasi — jangan tambah <script> tag manual
-20. Jangan ubah router.js module handler tanpa loader wrapper
+`npm run test:qa:mock`
 
-═══════════════════════════════════════════════════════════════
-📊 FILE — BOLEH / TIDAK BOLEH DIEDIT
-═══════════════════════════════════════════════════════════════
-✅ BOLEH: settings.js, ai-*.js (24 module standard), dashboard.html,
-          dashboard.css, modules.css, ai-lab-lesson.css, settings.css,
-          gas/Code.gs (bug fix / feature user only), index.html (cache buster),
-          e2e/*.spec.js, gemini.md, handover/, scripts/*.js,
-          ai-cv-interactive.js
+Read-only live, credential diberikan user via environment:
 
-❌ JANGAN: main.js, 231 lesson files, Go services, admin dashboard,
-           5 module struktur berbeda (TANYA DULU), ai-python-basic.js (HARD BLOCK)
+`TEST_PARTICIPANT_NIK="<qa-nik>" TEST_PARTICIPANT_PASSWORD="<qa-password>" npm run test:qa:live:read`
 
-⚠️ HATI-HATI: router.js — SUDAH dimodifikasi utk lazy loading.
-               Tambah route baru? Pakai __aiLabLoader. TANYA DULU.
+Mutation hanya setelah approval:
 
-═══════════════════════════════════════════════════════════════
-🔴 FOKUS NEXT SESSION — NEXT_PLAN.md
-═══════════════════════════════════════════════════════════════
+`TEST_ALLOW_MUTATIONS=true TEST_PARTICIPANT_NIK="<qa-nik>" TEST_PARTICIPANT_PASSWORD="<qa-password>" npm run test:qa:live:write`
 
-BACA: handover/NEXT_PLAN.md (FULL)
+PRIORITAS SESI BERIKUTNYA
 
-Phase 0 QA foundation selesai. #80 sudah FIXED; #78, #79, #81-#85 masih OPEN.
+1. Konfirmasi kepada user setelah membaca semua handover; jangan mulai kerja sebelum dikonfirmasi.
+2. Verifikasi versi/deployment GAS pasca-#95 secara read-only.
+3. Pastikan frontend terbaru #94–#96 benar-benar terdeploy.
+4. Jalankan authenticated read-only contract untuk tepat enam tracking module dan CV excluded.
+5. Lakukan live mutation hanya jika user secara eksplisit menyetujui.
+6. #92 tetap ditunda kecuali user membuka kembali scope persistence isi jawaban latihan.
 
-Urutan rekomendasi: #81/#82/#84/#85 → #78 → #79 → #83.
-Perbaikan ai-modern.js dan gas/Code.gs tetap perlu approval serta redeploy GAS bila backend berubah.
+Kalimat pembuka yang harus kamu kirim:
 
-═══════════════════════════════════════════════════════════════
-📞 YANG HARUS DIKONFIRMASI KE USER SEBELUM MULAI
-═══════════════════════════════════════════════════════════════
-1. "Saya sudah baca semua handover + gemini.md + NEXT_PLAN.md."
-2. "Semua prioritas existing sudah selesai. Apa yang mau dikerjakan?"
-3. "Ada bug baru atau issue yang perlu ditangani?"
-4. JANGAN mulai kerja sebelum user konfirmasi.
+“Saya sudah membaca AI_HANDOFF_CURRENT_STATE.md, gemini.md, NEXT_PLAN.md, E2E audit, dan prompt transfer. Saya memahami bahwa hanya enam module Foundation yang aktif, Computer Vision sepenuhnya Under Development, source GAS adalah 2026.3.1-cv-locked tetapi deployment pasca-#95 belum diverifikasi, serta isi jawaban latihan masih localStorage-only (#92). Worktree dan commit akan saya cek read-only. Saya menunggu konfirmasi Anda sebelum mulai bekerja.”
