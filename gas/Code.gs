@@ -269,7 +269,7 @@ function doPost(e) {
 }
 
 function doGet() {
-  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.3.3-participant-accounts-compacted' });
+  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.3.4-session-cohort-guard' });
 }
 
 function authorizeGasAction(action, payload) {
@@ -296,7 +296,7 @@ function authorizeGasAction(action, payload) {
   if (participantActions.indexOf(action) >= 0) {
     const claims = requireParticipantToken(payload);
     const retestActions = ['startReTestSession', 'heartbeatReTestSession', 'saveReTestAnswer', 'submitReTest'];
-    const normalActions = ['updateParticipantProfile', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest'];
+    const normalActions = ['updateParticipantProfile', 'uploadParticipantPhoto', 'removeParticipantPhoto', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest'];
     if (retestActions.indexOf(action) >= 0 && claims.scope !== 'retest') {
       throw new Error('Sesi Re-Test tidak valid. Silakan login ulang.');
     }
@@ -317,6 +317,14 @@ function requireParticipantToken(payload) {
   const claims = verifyAuthToken(payload.participantToken || payload.authToken || '');
   if (!claims || claims.type !== 'participant') {
     throw new Error('Sesi peserta tidak valid atau sudah kedaluwarsa.');
+  }
+  if (claims.scope === 'participant') {
+    const account = findParticipantAccount(claims.sub);
+    if (!account || !account.account_id
+      || !isTargetParticipantForPortal(account)
+      || !isParticipantAccountActive(account)) {
+      throw new Error('Sesi peserta tidak valid atau akses sudah tidak aktif.');
+    }
   }
   return claims;
 }

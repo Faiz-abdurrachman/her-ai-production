@@ -201,6 +201,34 @@ assert.equal(outsideTargetLogin.status, 'error');
 assert.match(outsideTargetLogin.message, /tidak aktif/);
 assert.equal(participants[2].participant_password, '');
 
+const outsideTargetLegacyToken = context.issueAuthToken('participant', outsideTargetNik, {
+  scope: 'participant',
+  rowId: 'row-3'
+}, 12 * 60 * 60).token;
+assert.throws(
+  () => context.authorizeGasAction('getParticipantProgress', {
+    participantToken: outsideTargetLegacyToken,
+    nik: outsideTargetNik
+  }),
+  /akses sudah tidak aktif/
+);
+
+const retestToken = context.issueAuthToken('participant', outsideTargetNik, {
+  scope: 'retest',
+  accessId: 'retest-access-1'
+}, 4 * 60 * 60).token;
+assert.doesNotThrow(() => context.authorizeGasAction('startReTestSession', {
+  participantToken: retestToken,
+  nik: outsideTargetNik
+}));
+assert.throws(
+  () => context.authorizeGasAction('uploadParticipantPhoto', {
+    participantToken: retestToken,
+    nik: outsideTargetNik
+  }),
+  /Sesi peserta tidak valid/
+);
+
 const reconciliationAccounts = targetEmails.map((email, index) => ({
   email,
   access_status: index < 8 ? 'active' : ''
@@ -260,6 +288,13 @@ accounts[0].access_status = 'inactive';
 const inactiveLogin = context.participantLogin({ nik, password });
 assert.equal(inactiveLogin.status, 'error');
 assert.match(inactiveLogin.message, /tidak aktif/);
+assert.throws(
+  () => context.authorizeGasAction('getParticipantProgress', {
+    participantToken: login.token,
+    nik
+  }),
+  /akses sudah tidak aktif/
+);
 
 const reconciliationHeaders = ['email', 'access_status', 'updated_at', 'generated_password'];
 const reconciliationValues = [reconciliationHeaders].concat(reconciliationAccounts.map((account, index) => [
