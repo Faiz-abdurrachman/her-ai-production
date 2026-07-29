@@ -6,8 +6,8 @@
 **Baseline Commit:** `6508121` - test: expand active module end-to-end audit (#87-#91)
 **Feature Commit:** `a3ff0a9` - `fix: persist active module learning progress (#78-#91)`
 **Latest Feature Commit:** `ce0434e` - `fix: reconcile participant portal access (#97)`
-**Total commits:** 260 setelah commit dokumentasi checkpoint #97
-**GAS Deployment:** ⚠️ source lokal sekarang `2026.3.2-participant-access-reconciled`; deployment/version, seed metadata #95, rekonsiliasi akses #97, dan authenticated read-back terbaru belum dijalankan di production
+**Total commits:** 261 setelah commit verifikasi live version #97
+**GAS Deployment:** ⚠️ GET read-only 29 Juli 2026 mengembalikan live `2026.2-progress-persistence`; source lokal `2026.3.2-participant-access-reconciled`, sehingga #94/#95/#97, seed metadata terbaru, rekonsiliasi akses, dan authenticated read-back terbaru belum live
 **Worktree:** source changes akan bersih setelah commit docs; CSV akun milik user tetap untracked dan tidak boleh di-commit karena memuat credential
 **E2E Test Suite:** safe mock 85/85 PASS | full 96 PASS + 44 SKIP + 0 FAIL | authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2 | controlled live write/read-back terakhir PASS
 **Leaderboard:** ✅ sumber LIVE — authenticated read-back terakhir 1.039 pts; screenshot user sesudahnya menampilkan Brenda 1.054 pts (belum di-read-back ulang)
@@ -59,6 +59,7 @@ Fix #97 menetapkan daftar `TARGET_PARTICIPANT_PORTAL_EMAILS` sebagai cohort resm
 
 | Item | Status | Tindakan |
 |---|---|---|
+| Audit versi GAS live | ✅ READ-ONLY | GET endpoint mengembalikan `2026.2-progress-persistence`; tidak ada mutation |
 | Verifikasi + redeploy GAS #94/#95/#97 | ⏳ PENDING | Backup `ParticipantAccounts`; cek versi live; save source terbaru; jalankan `auditParticipantPortalAccess()`; hanya bila `ready_to_apply=true` dan hasil 187/100/87 cocok, jalankan `reconcileParticipantPortalAccess()`; seed dashboard; redeploy; pastikan `version=2026.3.2-participant-access-reconciled` |
 | Participant access live #97 | ⏳ BELUM DIMUTASI | Dry-run lokal: 100 target, 87 non-target, 92 perlu aktivasi, 87 perlu deaktivasi, 8 sudah sesuai. Jangan menjalankan generator/reset atau migrasi password untuk pekerjaan ini |
 | Frontend release #94/#95 | ⏳ BELUM TERVERIFIKASI | Pastikan build terbaru terdeploy; router `20260729-cv-locked` menutup CV di sisi peserta |

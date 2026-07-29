@@ -22,7 +22,7 @@ Urutan wajib sebelum bekerja:
 CHECKPOINT REPOSITORY
 
 - Latest feature commit: `ce0434e fix: reconcile participant portal access (#97)`.
-- Setelah commit dokumentasi transfer #97 total menjadi 260 commit.
+- Setelah commit verifikasi live version #97 total menjadi 261 commit.
 - Expected worktree: hanya CSV akun lokal milik user yang untracked; file itu memuat credential dan tidak boleh di-stage/commit.
 - Safe deterministic E2E: 85/85 PASS.
 - Full suite: 140 test = 96 PASS + 44 SKIP + 0 FAIL.
@@ -54,7 +54,7 @@ BACKEND DAN DEPLOYMENT
 
 - GAS canonical: `gas/Code.gs`.
 - Source version: `2026.3.2-participant-access-reconciled`.
-- Deployment live, seed metadata #95, rekonsiliasi akses #97, dan authenticated read-back terbaru BELUM terverifikasi.
+- GET read-only 29 Juli 2026 mengonfirmasi deployment live masih `2026.2-progress-persistence`; source #94/#95/#97, seed metadata terbaru, rekonsiliasi akses, dan authenticated read-back terbaru BELUM live.
 - Sebelum klaim live, cek GET endpoint/version secara read-only.
 - Untuk membawa #95/#97 live: konfirmasi user, backup tab `ParticipantAccounts`, save source terbaru, jalankan `auditParticipantPortalAccess()`, review hasil 187/100/87 + `ready_to_apply=true`, lalu dengan approval live mutation jalankan `reconcileParticipantPortalAccess()`. Setelah itu seed dashboard, redeploy, dan verifikasi `doGet.version=2026.3.2-participant-access-reconciled` serta `computer-vision` tidak ada di `trackingModules`.
 - Setiap perubahan `gas/Code.gs` wajib redeploy; jangan deploy tanpa instruksi user eksplisit.
@@ -139,7 +139,7 @@ Mutation hanya setelah approval:
 PRIORITAS SESI BERIKUTNYA
 
 1. Konfirmasi kepada user setelah membaca semua handover; jangan mulai kerja sebelum dikonfirmasi.
-2. Verifikasi versi deployment GAS secara read-only.
+2. Versi live sudah diverifikasi read-only sebagai `2026.2-progress-persistence`; jangan klaim #94/#95/#97 live.
 3. Dengan approval live mutation: backup `ParticipantAccounts`, audit #97, rekonsiliasi 100 active + 87 inactive, lalu read-back agregat tanpa menampilkan PII.
 4. Seed/redeploy source `2026.3.2-participant-access-reconciled` dan verifikasi CV excluded.
 5. Pastikan frontend terbaru #94–#96 benar-benar terdeploy.

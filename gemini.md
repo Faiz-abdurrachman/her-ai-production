@@ -1186,8 +1186,9 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## Checkpoint Transfer Setelah #97 — 29 Juli 2026
 
-- Latest feature commit: `ce0434e fix: reconcile participant portal access (#97)`; setelah commit dokumentasi total menjadi 260.
+- Latest feature commit: `ce0434e fix: reconcile participant portal access (#97)`; setelah commit verifikasi live version total menjadi 261.
 - Source lokal GAS `2026.3.2-participant-access-reconciled`; source belum disimpan/dideploy ke production.
+- GET endpoint read-only 29 Juli 2026 mengembalikan live `2026.2-progress-persistence`; tidak ada mutation dan #94/#95/#97 belum live.
 - Sebelum live apply: backup tab `ParticipantAccounts`, jalankan audit, review 187/100/87 + `ready_to_apply=true`, lalu minta approval mutation untuk menjalankan reconciliation.
 - Jangan menjalankan `provisionParticipantAccounts`, `generateParticipantAccounts*`, `forceReset:true`, atau credential migration untuk pekerjaan akses ini.
 - Setelah reconciliation, redeploy GAS dan authenticated read-back harus membuktikan akun QA target bisa login, non-target ditolak, serta enam module Foundation/CV lock tetap benar.

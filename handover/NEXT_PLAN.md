@@ -4,7 +4,7 @@
 
 **Baseline:** `6508121` sebelum resolusi audit #78–#91
 
-**GAS:** source lokal sekarang `2026.3.2-participant-access-reconciled`; deployment live masih versi lama/tidak terverifikasi untuk #95/#97, seed metadata CV lock belum dibaca kembali, dan rekonsiliasi 100/87 belum diterapkan ke Sheet live
+**GAS:** GET read-only 29 Juli 2026 memverifikasi live masih `2026.2-progress-persistence`; source lokal `2026.3.2-participant-access-reconciled`, sehingga #94/#95/#97, seed metadata CV lock, dan rekonsiliasi 100/87 belum live
 
 **QA:** safe mock 85/85 PASS; full 96 PASS + 44 SKIP + 0 FAIL; authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2; controlled live write/read-back terakhir PASS
 **Leaderboard:** sumber live; authenticated read-back terakhir 1.039 pts, screenshot user berikutnya menampilkan Brenda 1.054 pts
@@ -47,7 +47,7 @@ Safe mock gate: **85/85 PASS**, tanpa expected failure dan tanpa live write. Ful
 
 ## URUTAN LANGKAH BERIKUTNYA
 
-1. **Audit deployment live tanpa mutation:** buka endpoint GET GAS dan catat `doGet.version`. Jangan menganggap deployment lama sudah memuat #95/#97.
+1. **Audit deployment live tanpa mutation — DONE:** endpoint GET mengembalikan `2026.2-progress-persistence`; deployment lama belum memuat #94/#95/#97.
 2. **Backup + rekonsiliasi akses #97:** duplikat tab `ParticipantAccounts`, save source terbaru, lalu jalankan `auditParticipantPortalAccess()`. Expected: total 187, target 100, outside 87, missing/blank/duplicate 0, `ready_to_apply=true`. Dengan approval live mutation, jalankan `reconcileParticipantPortalAccess()` dan pastikan 100 active + 87 inactive. Fungsi ini tidak mengubah password/progress dan tidak memakai provision/generate/reset.
 3. **Migrasi/redeploy GAS #94/#95/#97:** jalankan `seedDashboardModules()` dan `seedDashboardJourney()`, buat deployment baru, lalu pastikan `doGet.version=2026.3.2-participant-access-reconciled`, `trackingModules` tepat enam Foundation, dan `computer-vision` tidak masuk tracking.
 4. **Release/verifikasi frontend #94–#96:** pastikan build terbaru terdeploy. Cache buster `settings.js` harus `20260729-intro-practice-editable`; router harus `20260729-cv-locked`. Fix #96 tidak membutuhkan redeploy GAS.
