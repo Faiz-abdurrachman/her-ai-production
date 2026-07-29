@@ -4,7 +4,7 @@
 
 **Baseline:** `6508121` sebelum resolusi audit #78–#91
 
-**GAS:** GET read-only 29 Juli 2026 memverifikasi live masih `2026.2-progress-persistence`; source lokal `2026.3.4-session-cohort-guard`, sehingga #94/#95/#97–#99, seed metadata CV lock, compaction 187→100, dan session revalidation belum live
+**GAS:** GET read-only setelah compaction masih `2026.2-progress-persistence`; source editor/lokal `2026.3.4-session-cohort-guard`. Data #98 sudah live (100 target active), tetapi deployment code #94/#95/#97–#99, seed CV lock, dan session revalidation belum live
 
 **QA:** safe mock 85/85 PASS; full 96 PASS + 44 SKIP + 0 FAIL; authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2; controlled live write/read-back terakhir PASS
 **Leaderboard:** sumber live; authenticated read-back terakhir 1.039 pts, screenshot user berikutnya menampilkan Brenda 1.054 pts
@@ -40,7 +40,7 @@ Phase 0 QA dan seluruh perbaikan audit #78–#91 sudah tersedia di source. Test 
 | Computer Vision release lock (#95) | ✅ code | 9 route CV + seluruh prefix child menampilkan Under Development; loader/progress CV tidak berjalan; default tracking dinonaktifkan |
 | Pengantar AI practice editability (#96) | ✅ code | Payload kosong/corrupt tidak mengunci textarea; save kosong ditolak; jawaban nyata bertahan setelah reload dan dapat diedit |
 | Participant access reconciliation (#97) | ✅ code / ⏳ live apply | 187 akun → inner join 100 target + 87 non-target; login non-target ditolak; dry-run `ready_to_apply=true`; Sheet live belum dimutasi |
-| ParticipantAccounts compaction (#98) | ✅ code / ⏳ live apply | Strict preflight 187/100/87, backup otomatis, main sheet menjadi 100 target, read-back + rollback; user sudah membuat backup manual |
+| ParticipantAccounts compaction (#98) | ✅ live | Main sheet tepat 100 target active; 0 outside/missing/duplicate; backup manual + otomatis tersedia; export read-back lulus |
 | Session cohort guard (#99) | ✅ code / ⏳ deploy | Token lama non-target/inactive ditolak setiap protected request; token Re-Test tetap hanya untuk action Re-Test |
 
 Safe mock gate: **85/85 PASS**, tanpa expected failure dan tanpa live write. Full suite **140 = 96 PASS + 44 SKIP + 0 FAIL**. Audit serta bukti resolusi tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
@@ -50,8 +50,8 @@ Safe mock gate: **85/85 PASS**, tanpa expected failure dan tanpa live write. Ful
 ## URUTAN LANGKAH BERIKUTNYA
 
 1. **Audit deployment live tanpa mutation — DONE:** endpoint GET mengembalikan `2026.2-progress-persistence`; deployment lama belum memuat #94/#95/#97.
-2. **Compaction live #98:** user sudah membuat backup manual. Save source terbaru, jalankan `auditParticipantPortalAccess()`, dan pastikan total 187, target 100, outside 87, missing/blank/duplicate 0, `ready_to_apply=true`. Lalu jalankan `compactParticipantAccountsToTargetCohort()`; expected `before=187`, `after=100`, `removed=87`, `credentials_changed=0`, serta nama backup otomatis. Jangan jalankan reconciliation terpisah bila compaction dipilih.
-3. **Migrasi/redeploy GAS #94/#95/#97–#99:** jalankan `seedDashboardModules()` dan `seedDashboardJourney()`, update deployment existing ke versi baru, lalu pastikan `doGet.version=2026.3.4-session-cohort-guard`, `trackingModules` tepat enam Foundation, dan `computer-vision` tidak masuk tracking.
+2. **Compaction live #98 — DONE:** main sheet 100 target active; backup otomatis dan export read-back lulus.
+3. **Migrasi/redeploy GAS #94/#95/#97–#99:** jalankan `seedDashboardModules()` dan `seedDashboardJourney()`, update deployment existing ke versi baru, lalu pastikan `doGet.version=2026.3.4-session-cohort-guard`, `trackingModules` tepat enam Foundation, `computer-vision` excluded, dan token non-target ditolak.
 4. **Release/verifikasi frontend #94–#96:** pastikan build terbaru terdeploy. Cache buster `settings.js` harus `20260729-intro-practice-editable`; router harus `20260729-cv-locked`. Fix #96 tidak membutuhkan redeploy GAS.
 5. **Authenticated read-only:** gunakan akun QA target melalui environment untuk memastikan login tetap sukses, akun non-target ditolak lewat contract test tanpa memakai credential peserta riil, dan dashboard hanya melacak enam Foundation.
 6. **Scope #92 ditunda dengan sepengetahuan user:** isi jawaban latihan masih localStorage-only. Jika nanti harus tercatat lintas perangkat, tambah schema/API practice-response, frontend acknowledgment/read-back, dan E2E production-safe.

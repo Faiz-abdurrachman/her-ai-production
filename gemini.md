@@ -1251,3 +1251,12 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Latest feature commit: `2562ac1 fix: revalidate participant session cohort (#99)`; setelah commit dokumentasi total menjadi 265.
 - Source lokal `2026.3.4-session-cohort-guard`; deployment live tetap `2026.2-progress-persistence` sampai user update deployment.
 - Runbook live final: save source → audit 187/100/87 → compact → audit 100/100/0 → seed dashboard → update deployment existing → GET/read-back/auth verification.
+
+### Live Execution Update — Compaction #98 Selesai
+
+- User menjalankan `auditParticipantPortalAccess()` dari Apps Script editor: 187 total, 100 target, 87 outside, 0 missing/blank/duplicate, `ready_to_apply=true`.
+- `compactParticipantAccountsToTargetCohort()` sukses: `before=187`, `after=100`, `removed=87`, `credentials_changed=0`.
+- Backup otomatis: `ParticipantAccounts_Backup_20260729134827_8e6cc093`; user juga sudah memiliki backup manual.
+- Export pasca-compaction diaudit lokal: 100 row, 100 target unique, 0 outside/missing/duplicate, seluruh `access_status=active`, 100 account ID/NIK unik, dan seluruh row masih memiliki generated credential.
+- GET endpoint sesudah data mutation tetap `2026.2-progress-persistence`. Jadi data #98 sudah live, tetapi code session guard #99, CV lock #95, dynamic tracking #94, dan version `2026.3.4-session-cohort-guard` belum live sampai deployment existing di-update.
+- Setelah commit dokumentasi update live ini total repository menjadi 266.
