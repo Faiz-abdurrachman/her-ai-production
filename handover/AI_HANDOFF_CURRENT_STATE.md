@@ -1,16 +1,16 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + persistence audit #92 + UI fix #93), Asia/Jakarta**
+**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + persistence audit #92 + UI #93 + dynamic tracking #94), Asia/Jakarta**
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
 **Baseline Commit:** `6508121` - test: expand active module end-to-end audit (#87-#91)
 **Feature Commit:** `a3ff0a9` - `fix: persist active module learning progress (#78-#91)`
-**Latest Commit:** current HEAD - `fix: mark current Pengantar AI material (#93)`
-**Total commits:** 254
-**GAS Deployment:** ✅ `2026.2-progress-persistence` LIVE dan route diskusi terverifikasi terlindungi auth
+**Latest Commit:** pending commit - `feat: add dynamic module release tracking (#94)`
+**Total commits:** 255 setelah commit #94
+**GAS Deployment:** ⚠️ production masih `2026.2-progress-persistence`; source lokal `2026.3-dynamic-module-tracking` wajib dimigrasi, redeploy, lalu live read-back
 **Worktree:** BERSIH
-**E2E Test Suite:** safe mock 77/77 PASS | full 88 PASS + 44 SKIP + 0 FAIL | authenticated live read-only 29 PASS + 18 SKIP + 0 FAIL | controlled live write/read-back PASS
-**Leaderboard:** ✅ LIVE — 1.039 pts untuk peringkat pertama sebelum dan sesudah controlled mutation
+**E2E Test Suite:** safe mock 82/82 PASS | full 93 PASS + 44 SKIP + 0 FAIL | authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2 | controlled live write/read-back terakhir PASS
+**Leaderboard:** ✅ sumber LIVE — authenticated read-back terakhir 1.039 pts; screenshot user sesudahnya menampilkan Brenda 1.054 pts (belum di-read-back ulang)
 
 > **Ini sumber kebenaran tunggal.** Semua dokumen lain yang bertentangan diabaikan.
 
@@ -18,21 +18,23 @@
 
 Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Code.gs` diperbaiki untuk materi, latihan, kuis, progress, ringkasan, serta diskusi lima module aktif. Controlled production mutation yang disetujui user juga sudah lulus untuk chapter, status practice, score quiz, post diskusi, dan reply.
 
+Feature #94 menambahkan release contract dinamis untuk modul masa depan. Module UD tidak ikut dihitung sampai `is_active` dan `tracking_enabled` aktif; setelah route konten siap dan metadata diaktifkan, backend otomatis memasukkannya ke progress module, Ringkasan Belajar sesuai phase, serta Perjalanan Fellowship. Pengantar AI kini mencatat lima chapter materi nyata, bukan mengira progress dari urutan halaman.
+
 ### Cakupan yang sekarang bisa dilacak
 
 | Gate | Cakupan |
 |---|---|
 | Manifest | 5 module dashboard, AI Intro, CV Digital Image, route dan metadata |
-| Frontend | Overview, practice, quiz, discussion, own-content, loader tunggal |
+| Frontend | Overview, practice, quiz, discussion, own-content, loader tunggal, Pengantar AI chapter 1–5 |
 | Frontend → backend | Payload chapter/status practice/score quiz/diskusi, acknowledgment, retry, dan read-back memakai GAS mock; isi jawaban practice masih localStorage-only (#92) |
 | Safety | Kredensial tidak disimpan di E2E; live mutation perlu opt-in; password punya opt-in kedua |
-| UI/UX | 375/768/1280, overflow, touch target, keyboard focus, reduced motion, non-color status |
+| UI/UX | 375/768/1280, overflow, touch target, keyboard focus, reduced motion, non-color status, journey locked text+icon |
 | Artefak | HTML + JSON report, screenshot, trace dan video saat failure |
 
 ### Hasil gate dan status temuan
 
-- Safe mock gate: **77/77 PASS**, tanpa expected failure dan tanpa live write.
-- Full suite: **132 terdaftar = 88 PASS + 44 SKIP + 0 FAIL**.
+- Safe mock gate: **82/82 PASS**, tanpa expected failure dan tanpa live write.
+- Full suite: **137 terdaftar = 93 PASS + 44 SKIP + 0 FAIL**.
 - 44 skip adalah alur authenticated/live-mutation yang sengaja tidak dijalankan tanpa secret environment.
 - #78, #79, #81–#85, dan #87–#91: **FIXED IN CODE**.
 - Lima module: chapter numerik, practice, quiz, score, discussion post/reply, dan read-back terverifikasi pada kontrak deterministik.
@@ -42,12 +44,14 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 - Idempotent re-save tidak mengubah Ringkasan Belajar; leaderboard tetap **1.039 → 1.039**. Profile dan password tidak dimutasi.
 - #92 **OPEN**: teks jawaban practice tetap hanya di localStorage; backend baru menyimpan marker `chapter_id='practice'` dengan status selesai.
 - #93 **FIXED**: kelima topik Pengantar AI sekarang menandai tepat satu materi aktif dengan highlight, ikon play, dan `aria-current="page"`.
+- #94 **FIXED IN CODE**: metadata release/tracking/visibility dinamis, agregasi phase, Pengantar AI save/read-back 1–5, cache invalidation, dan journey locked state. Production deployment/read-back masih pending.
 
 ### Pekerjaan operasional tersisa
 
 | Item | Status | Tindakan |
 |---|---|---|
-| Redeploy GAS terbaru | ✅ DONE | `doGet.version` live = `2026.2-progress-persistence`; route diskusi baru terdeteksi dan menolak request tanpa token |
+| Migrasi + redeploy GAS #94 | ⏳ PENDING | Save source terbaru, jalankan `seedDashboardModules()` + `seedDashboardJourney()`, deploy, lalu cek `doGet.version=2026.3-dynamic-module-tracking` |
+| Frontend release #94 | ⏳ PENDING | Deploy setelah GAS 2026.3 dan schema berhasil diverifikasi; compatibility fallback menjaga urutan rollout |
 | Authenticated live read-back | ✅ DONE | Login, dashboard, progress, diskusi, auth guard: 29 PASS; 18 mutation scenarios sengaja skip |
 | Controlled live mutation verification | ✅ DONE | 4 write sukses; 5 read-back cocok; summary dan leaderboard tidak berubah; tanpa profile/password mutation |
 | Practice answer persistence (#92) | ⚠️ OPEN | Tentukan schema/API untuk isi jawaban, lalu implement save + authenticated read-back lintas perangkat |
@@ -67,7 +71,7 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 | Proxy | POST `/__gas` (token auto-injected, Origin header WAJIB) |
 | Test participant | Kredensial QA disuplai lewat environment variable; tidak disimpan di repo |
 | Module JS files | 30 ai-*.js (24 standard + 5 berbeda + 1 interactive) |
-| Cache buster | `settings.js?v=20260729-intro-active-state`; loader/modules CSS tetap `20260729-progress-persistence` |
+| Cache buster | `settings.js`, `dashboard.css`, `modules.css`: `v=20260729-dynamic-tracking` |
 
 ---
 
@@ -80,6 +84,8 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 | Ganti password mandiri | ✅ | old→new→hash→sync 2 sheet, rate limit 8/10min |
 | Settings save profil | ✅ | form→GAS→session update |
 | Chapter progress auto-save | ✅ live | Write/read-back chapter numerik terverifikasi production |
+| Dynamic module tracking (#94) | ✅ code / ⏳ deploy | Backend metadata-driven; aktivasi module baru otomatis masuk cards/summary/journey setelah schema + GAS 2026.3 live |
+| Pengantar AI material tracking | ✅ code / ⏳ deploy | Lima route menyimpan chapter 1–5 dan read-back server; bukan progress berbasis posisi halaman |
 | Quiz score wiring | ✅ live | Write/read-back score terverifikasi; gagal-save tetap retryable; denominator 20/26 benar |
 | Practice/latihan wiring | ⚠️ partial live | Marker selesai terverifikasi production; isi jawaban masih localStorage-only (#92) |
 | Dashboard skeleton/cache | ✅ | 3-tier: memory→sessionStorage(5min)→skeleton, 0.2s refresh |
@@ -120,7 +126,7 @@ f749ca7 feat: Live leaderboard — compute points from participant_progress (#69
 
 ---
 
-## 📊 MODULE STATUS — FINAL
+## 📊 MODULE STATUS — CURRENT RELEASE
 
 ### ✅ ONLINE (5 + AI Intro)
 | Module | JS | Size | Route | Quiz | Practice |
@@ -146,6 +152,10 @@ LLM, VLM, Multimodal LLM, Agentic AI,
 Culture, Healthcare, UI/UX, Manufacturing, Business Insight, People Mgt,
 Geospatial, Bioinformatics, Data Engineering, Data Science, Infrastructure,
 Deployment, Front-end, Back-end
+
+### Kontrak aktivasi #94
+
+Sebelum membuka satu module UD, pastikan route materi/latihan/kuis/diskusi tidak lagi mengarah ke template Under Development. Pada row `participant_dashboard_modules`, isi `total_chapters` dan `quiz_total` yang benar, pilih `phase_id` (`foundation` atau `specialization`), lalu set `is_active=true` dan `tracking_enabled=true`. Set `dashboard_visible=true` hanya bila kartu module harus muncul di Beranda. Backend kemudian menghitung chapter numerik unik, progress module, summary phase, dan journey secara otomatis; practice/quiz tetap dicatat tetapi tidak menaikkan jumlah chapter.
 
 ---
 
@@ -196,7 +206,7 @@ Deployment, Front-end, Back-end
 
 ### GAS Backend API
 5. **Token field**: `participantToken` (BUKAN `token`)
-6. **Dashboard response**: `{data: {modules, leaderboard, tracks, journey, events}}`
+6. **Dashboard response 2026.3**: `{data: {modules, trackingModules, learningSummary, leaderboard, tracks, journey, events}}`
 7. **Progress response**: `{data: [...]}` — field name `data`, NOT `progress`
 8. **chapter_id**: NUMBER dari sheet → gunakan `String()` comparison
 9. **quiz_score**: May be `undefined` (not `null`)
@@ -220,17 +230,18 @@ Deployment, Front-end, Back-end
 21. **Formula**: `points = Σ(quiz_score) + (chapters × 15) + (practice × 5)`
 22. **Source**: LIVE dari `participant_progress`, bukan static seed
 23. **Masking**: `*********` untuk non-current user
-24. **Status live terbaru**: 1.039 pts untuk peringkat pertama; nilai stabil sebelum/sesudah controlled mutation
+24. **Status terverifikasi terakhir**: 1.039 pts stabil sebelum/sesudah controlled mutation; screenshot user berikutnya menunjukkan Brenda 1.054 pts tetapi belum di-read-back ulang
 
 ### Dashboard
-25. **Module filter**: Only 5 AI Fundamentals + AI Intro
+25. **Module release contract #94**: `is_active` + `tracking_enabled`; kartu dikontrol `dashboard_visible`; phase dikontrol `phase_id`
 26. **Persistent cache**: sessionStorage 5min TTL, refresh 0.2s
 27. **Password akun QA**: simpan di luar repo; test mutasi wajib opt-in eksplisit
+28. **Aktivasi module baru**: route harus bukan UD, `total_chapters` benar, lalu set metadata; jangan mengandalkan allowlist URL frontend
 
 ### Avatar
-28. **Storage**: base64 data URL di sheet `photo_url` (tanpa Drive)
-29. **Size**: 200×200 JPEG quality 0.8, ~15KB
-30. **Topbar**: `.has-photo::after { background: none }` — fix overlay
+29. **Storage**: base64 data URL di sheet `photo_url` (tanpa Drive)
+30. **Size**: 200×200 JPEG quality 0.8, ~15KB
+31. **Topbar**: `.has-photo::after { background: none }` — fix overlay
 
 ---
 
@@ -238,6 +249,7 @@ Deployment, Front-end, Back-end
 
 ```
 CHAPTER   → saveChapterProgress(id, ch, 'completed') → participant_progress
+RELEASE   → module metadata → trackingModules → phase summary/journey → visible cards
 QUIZ      → saveChapterProgress(id, 'quiz', 'completed', score)
 PRACTICE  → saveChapterProgress(id, 'practice', 'completed')
 LOGIN     → participantLogin(nik, pw) → 3 jalur → token 12 jam

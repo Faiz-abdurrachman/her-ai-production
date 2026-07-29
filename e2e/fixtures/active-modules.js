@@ -13,7 +13,9 @@ const AI_INTRO = Object.freeze({
     quizForm: '#aiIntroQuizForm',
     practiceForm: '#aiIntroPracticeForm'
   }),
+  chapterTotal: 5,
   quizTotal: 10,
+  chapterWiringReady: true,
   dashboardCard: false,
   summaryCard: true
 });

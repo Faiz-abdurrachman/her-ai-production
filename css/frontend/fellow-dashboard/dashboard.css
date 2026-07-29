@@ -1158,7 +1158,7 @@
     align-items: center;
     display: grid;
     gap: 14px;
-    grid-template-columns: 52px minmax(0, 1fr) 46px;
+    grid-template-columns: 52px minmax(0, 1fr) minmax(46px, auto);
 }
 
 .journey-list article > i {
@@ -1211,10 +1211,32 @@
 }
 
 .journey-list em {
+    align-items: center;
+    display: inline-flex;
     font-size: 0.8rem;
     font-style: normal;
     font-weight: 800;
+    gap: 5px;
+    justify-content: flex-end;
     text-align: right;
+    white-space: nowrap;
+}
+
+.journey-list .journey-state-locked b::after,
+.journey-list .journey-state-unavailable b::after {
+    width: 0;
+}
+
+.journey-list .journey-state-locked em,
+.journey-list .journey-state-unavailable em {
+    color: #697083;
+    font-size: 0.7rem;
+}
+
+.journey-list .journey-state-locked > i,
+.journey-list .journey-state-unavailable > i {
+    filter: saturate(0.45);
+    opacity: 0.82;
 }
 
 .events-panel article {

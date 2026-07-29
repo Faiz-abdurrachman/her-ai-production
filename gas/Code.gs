@@ -181,10 +181,10 @@ const SCHEMA = {
   [SHEETS.projects]: ['project_id', 'team_id', 'team_name', 'title', 'members', 'institution', 'track', 'project_title', 'mentor', 'deck_url', 'repo_url', 'demo_url', 'overview', 'details', 'score', 'status', 'notes', 'submitted_at'],
   [SHEETS.certificates]: ['certificate_no', 'participant_rowId', 'nama_lengkap', 'final_score', 'status', 'issued_at', 'certificate_url'],
   [SHEETS.assets]: ['asset_id', 'title', 'type', 'url', 'visible_to', 'status', 'notes'],
-  [SHEETS.participantDashboardModules]: ['module_id', 'title', 'subtitle', 'progress', 'icon', 'tone', 'href', 'total_chapters', 'is_active', 'sort_order', 'quiz_total'],
+  [SHEETS.participantDashboardModules]: ['module_id', 'title', 'subtitle', 'progress', 'icon', 'tone', 'href', 'total_chapters', 'is_active', 'sort_order', 'quiz_total', 'phase_id', 'tracking_enabled', 'dashboard_visible'],
   [SHEETS.participantDashboardDiscussionTrails]: ['actor', 'action', 'topic', 'time_label', 'tone', 'is_active', 'created_at'],
   [SHEETS.participantDashboardTracks]: ['title', 'subtitle', 'icon', 'is_active', 'sort_order'],
-  [SHEETS.participantDashboardJourney]: ['title', 'subtitle', 'progress', 'icon', 'accent', 'is_active', 'sort_order'],
+  [SHEETS.participantDashboardJourney]: ['phase_id', 'title', 'subtitle', 'progress', 'icon', 'accent', 'source_type', 'locked_label', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardEvents]: ['day', 'month', 'title', 'time', 'url', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardLeaderboard]: ['rank', 'nik', 'name', 'points', 'is_active'],
   [SHEETS.participantAccounts]: ['account_id', 'nik', 'username', 'generated_password', 'password_hash', 'password_status', 'access_status', 'nama_lengkap', 'email', 'whatsapp', 'participant_rowId', 'participant_stage', 'status_seleksi', 'created_at', 'updated_at', 'created_by', 'last_login_at', 'password_changed_at'],
@@ -267,7 +267,7 @@ function doPost(e) {
 }
 
 function doGet() {
-  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.2-progress-persistence' });
+  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.3-dynamic-module-tracking' });
 }
 
 function authorizeGasAction(action, payload) {
@@ -368,13 +368,129 @@ function getAuthTokenSecret() {
   }
 }
 
+var FOUNDATION_TRACKING_MODULE_IDS = [
+  'ai-fundamentals',
+  'python-untuk-ai',
+  'reasoning',
+  'konsep-ai-modern',
+  'evaluation',
+  'evolution'
+];
+
+var DEFAULT_RELEASED_TRACKING_MODULE_IDS = FOUNDATION_TRACKING_MODULE_IDS.concat(['computer-vision']);
+var DEFAULT_DASHBOARD_MODULE_IDS = ['python-untuk-ai', 'reasoning', 'konsep-ai-modern', 'evaluation', 'evolution'];
+
+function moduleFlag(value, fallback) {
+  if (value === undefined || value === null || String(value).trim() === '') return Boolean(fallback);
+  return isTruthy(value);
+}
+
+function getModulePhaseId(row) {
+  var configured = String(row.phase_id || '').trim().toLowerCase();
+  if (configured) return configured;
+  return FOUNDATION_TRACKING_MODULE_IDS.indexOf(String(row.module_id || '')) >= 0 ? 'foundation' : 'specialization';
+}
+
+function isModuleTrackingEnabled(row) {
+  var moduleId = String(row.module_id || '');
+  return moduleFlag(row.tracking_enabled, DEFAULT_RELEASED_TRACKING_MODULE_IDS.indexOf(moduleId) >= 0);
+}
+
+function isModuleDashboardVisible(row) {
+  var moduleId = String(row.module_id || '');
+  return moduleFlag(row.dashboard_visible, DEFAULT_DASHBOARD_MODULE_IDS.indexOf(moduleId) >= 0);
+}
+
+function defaultIntroTrackingModule() {
+  return {
+    module_id: 'ai-fundamentals',
+    title: 'Pengantar AI',
+    subtitle: 'Fondasi cara kerja, risiko, dan penggunaan AI',
+    progress: 0,
+    icon: 'fas fa-book-open',
+    tone: 'pink',
+    href: '#/participant-ai-intro',
+    total_chapters: 5,
+    quiz_total: 10,
+    phase_id: 'foundation',
+    tracking_enabled: 'true',
+    dashboard_visible: 'false',
+    is_active: 'true',
+    sort_order: 0
+  };
+}
+
+function summarizeTrackedModules(moduleStates) {
+  var progressValues = (moduleStates || []).map(function(module) {
+    return Math.max(0, Math.min(100, Number(module.progress || 0)));
+  });
+  var completed = progressValues.filter(function(progress) { return progress >= 100; }).length;
+  var inProgress = progressValues.filter(function(progress) { return progress > 0 && progress < 100; }).length;
+  return {
+    total: progressValues.length,
+    completed: completed,
+    in_progress: inProgress,
+    not_started: progressValues.length - completed - inProgress,
+    progress: progressValues.length
+      ? Math.round(progressValues.reduce(function(total, progress) { return total + progress; }, 0) / progressValues.length)
+      : 0
+  };
+}
+
+function journeyPhaseId(row) {
+  var configured = String(row.phase_id || '').trim().toLowerCase();
+  if (configured) return configured;
+  var title = String(row.title || '').toLowerCase();
+  if (title.indexOf('foundation') >= 0) return 'foundation';
+  if (title.indexOf('specialization') >= 0) return 'specialization';
+  if (title.indexOf('project') >= 0) return 'project';
+  if (title.indexOf('graduation') >= 0) return 'graduation';
+  return title.replace(/[^a-z0-9]+/g, '-') || 'phase';
+}
+
+function computeParticipantJourney(journeyRows, moduleStates) {
+  return (journeyRows || []).map(function(row) {
+    var phaseId = journeyPhaseId(row);
+    var inferredSource = phaseId === 'foundation' || phaseId === 'specialization' ? 'modules' : 'locked';
+    var sourceType = String(row.source_type || inferredSource).trim().toLowerCase();
+    var phaseModules = (moduleStates || []).filter(function(module) {
+      return module.phase_id === phaseId;
+    });
+    var available = sourceType === 'modules' && phaseModules.length > 0;
+    var summary = summarizeTrackedModules(phaseModules);
+    var status = 'locked';
+    if (available) {
+      status = summary.progress >= 100 ? 'completed' : (summary.progress > 0 ? 'in_progress' : 'not_started');
+    }
+    return {
+      phase_id: phaseId,
+      title: row.title || '',
+      subtitle: row.subtitle || '',
+      progress: available ? summary.progress : null,
+      status: status,
+      status_label: available ? summary.progress + '%' : (row.locked_label || 'Belum Dibuka'),
+      module_count: phaseModules.length,
+      icon: row.icon || 'fas fa-book-open',
+      accent: row.accent || '#f63392'
+    };
+  });
+}
+
 function getParticipantDashboardData(payload) {
   const requesterNik = String(payload.nik || '').replace(/\D/g, '');
   const activeRows = sheetName => getRows(sheetName)
     .filter(row => row.is_active === '' || isTruthy(row.is_active))
     .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
 
-  const moduleRows = activeRows(SHEETS.participantDashboardModules);
+  var allModuleRows = getRows(SHEETS.participantDashboardModules).slice();
+  if (!allModuleRows.some(function(row) { return String(row.module_id || '') === 'ai-fundamentals'; })) {
+    allModuleRows.push(defaultIntroTrackingModule());
+  }
+  const moduleRows = allModuleRows
+    .filter(function(row) {
+      return moduleFlag(row.is_active, true) && isModuleTrackingEnabled(row);
+    })
+    .sort(function(a, b) { return Number(a.sort_order || 0) - Number(b.sort_order || 0); });
 
   const progressRows = requesterNik ? getRows(SHEETS.participantProgress).filter(function(row) {
     return String(row.nik || '').replace(/\D/g, '') === requesterNik;
@@ -402,11 +518,14 @@ function getParticipantDashboardData(payload) {
     }
   });
 
-  const modules = moduleRows.map(function(row) {
+  const trackingModules = moduleRows.map(function(row) {
     var totalChapters = Number(row.total_chapters || 0);
     var computedProgress = row.progress !== undefined ? Number(row.progress) : 0;
     if (totalChapters > 0) {
-      var completed = Object.keys(completedByModule[row.module_id] || {}).length;
+      var completed = Object.keys(completedByModule[row.module_id] || {}).filter(function(chapterId) {
+        var chapterNumber = Number(chapterId);
+        return chapterNumber >= 1 && chapterNumber <= totalChapters;
+      }).length;
       computedProgress = Math.min(100, Math.round((completed / totalChapters) * 100));
     }
     var quizScore = quizScoreByModule[row.module_id];
@@ -424,33 +543,16 @@ function getParticipantDashboardData(payload) {
       icon: row.icon || 'fas fa-book-open',
       tone: row.tone || 'pink',
       href: row.href || '#/participant-modules',
-      total_chapters: totalChapters
+      total_chapters: totalChapters,
+      quiz_total: quizTotal,
+      phase_id: getModulePhaseId(row),
+      dashboard_visible: isModuleDashboardVisible(row)
     };
   });
-
-  var learningModuleIds = ['python-untuk-ai', 'reasoning', 'konsep-ai-modern', 'evaluation', 'evolution'];
-  var learningProgress = learningModuleIds.map(function(moduleId) {
-    var module = modules.find(function(item) { return item.module_id === moduleId; });
-    return module ? Number(module.progress || 0) : 0;
-  });
-  var introRows = progressRows.filter(function(row) {
-    return String(row.module_id || '') === 'ai-fundamentals';
-  });
-  var introProgress = introRows.some(function(row) {
-    return String(row.chapter_id || '') === 'quiz' && row.status === 'completed';
-  }) ? 100 : (introRows.length ? 25 : 0);
-  learningProgress.unshift(introProgress);
-  var learningCompleted = learningProgress.filter(function(progress) { return progress >= 100; }).length;
-  var learningInProgress = learningProgress.filter(function(progress) { return progress > 0 && progress < 100; }).length;
-  var learningSummary = {
-    total: learningProgress.length,
-    completed: learningCompleted,
-    in_progress: learningInProgress,
-    not_started: learningProgress.length - learningCompleted - learningInProgress,
-    progress: learningProgress.length
-      ? Math.round(learningProgress.reduce(function(total, progress) { return total + progress; }, 0) / learningProgress.length)
-      : 0
-  };
+  const modules = trackingModules.filter(function(module) { return module.dashboard_visible; });
+  const learningSummary = summarizeTrackedModules(trackingModules.filter(function(module) {
+    return module.phase_id === 'foundation';
+  }));
 
   const discussionTrails = activeRows(SHEETS.participantDashboardDiscussionTrails).map(row => ({
     actor: row.actor || 'Panitia',
@@ -466,13 +568,7 @@ function getParticipantDashboardData(payload) {
     icon: row.icon || 'fas fa-layer-group'
   }));
 
-  const journey = activeRows(SHEETS.participantDashboardJourney).map(row => ({
-    title: row.title || '',
-    subtitle: row.subtitle || '',
-    progress: Number(row.progress || 0),
-    icon: row.icon || 'fas fa-book-open',
-    accent: row.accent || '#f63392'
-  }));
+  const journey = computeParticipantJourney(activeRows(SHEETS.participantDashboardJourney), trackingModules);
 
   const events = activeRows(SHEETS.participantDashboardEvents).map(row => ({
     day: row.day || '',
@@ -487,7 +583,7 @@ function getParticipantDashboardData(payload) {
 
   return {
     status: 'success',
-    data: { modules, learningSummary, discussionTrails, tracks, journey, events, leaderboard }
+    data: { modules, trackingModules, learningSummary, discussionTrails, tracks, journey, events, leaderboard }
   };
 }
 
@@ -896,6 +992,21 @@ function seedDashboardModules() {
     { module_id: 'math-for-ai', title: 'Math for AI', subtitle: 'Vektor, matriks, statistik, dan kalkulus untuk AI', progress: 0, icon: 'fas fa-calculator', tone: 'pink', href: '#/participant-ai-lab-math-for-ai', total_chapters: 7, quiz_total: 100, is_active: 'true', sort_order: 28 }
   ];
 
+  // Release controls are deliberately separate from route availability. A module
+  // only contributes to participant progress after tracking_enabled is turned on.
+  modules.unshift(defaultIntroTrackingModule());
+  modules = modules.map(function(module) {
+    var moduleId = String(module.module_id || '');
+    var released = DEFAULT_RELEASED_TRACKING_MODULE_IDS.indexOf(moduleId) >= 0;
+    var dashboardVisible = DEFAULT_DASHBOARD_MODULE_IDS.indexOf(moduleId) >= 0;
+    return Object.assign({}, module, {
+      phase_id: FOUNDATION_TRACKING_MODULE_IDS.indexOf(moduleId) >= 0 ? 'foundation' : 'specialization',
+      is_active: released ? 'true' : 'false',
+      tracking_enabled: released ? 'true' : 'false',
+      dashboard_visible: dashboardVisible ? 'true' : 'false'
+    });
+  });
+
   var sheet = getSheet(SHEETS.participantDashboardModules);
   ensureSchemaHeaders(sheet, SCHEMA[SHEETS.participantDashboardModules]);
   modules.forEach(function(m) {
@@ -905,10 +1016,10 @@ function seedDashboardModules() {
 
 function seedDashboardJourney() {
   var phases = [
-    { title: 'Foundation Phase', subtitle: 'Pemahaman dasar AI & Python', progress: 0, icon: 'fas fa-book-open', accent: '#f63392', quiz_total: 20, is_active: 'true', sort_order: 1 },
-    { title: 'Specialization', subtitle: 'Pilih dan dalami track AI pilihan', progress: 0, icon: 'fas fa-code', accent: '#8b5cf6', quiz_total: 20, is_active: 'true', sort_order: 2 },
-    { title: 'Project Building', subtitle: 'Bangun proyek portofolio nyata', progress: 0, icon: 'fas fa-briefcase', accent: '#f8b84e', quiz_total: 20, is_active: 'true', sort_order: 3 },
-    { title: 'Graduation', subtitle: 'Persiapan karier dan sertifikasi', progress: 0, icon: 'fas fa-graduation-cap', accent: '#45c598', quiz_total: 20, is_active: 'true', sort_order: 4 }
+    { phase_id: 'foundation', title: 'Foundation Phase', subtitle: 'Pemahaman dasar AI & Python', progress: 0, icon: 'fas fa-book-open', accent: '#f63392', source_type: 'modules', locked_label: 'Belum Dibuka', is_active: 'true', sort_order: 1 },
+    { phase_id: 'specialization', title: 'Specialization', subtitle: 'Pilih dan dalami track AI pilihan', progress: 0, icon: 'fas fa-code', accent: '#8b5cf6', source_type: 'modules', locked_label: 'Belum Dibuka', is_active: 'true', sort_order: 2 },
+    { phase_id: 'project', title: 'Project Building', subtitle: 'Bangun proyek portofolio nyata', progress: 0, icon: 'fas fa-briefcase', accent: '#f8b84e', source_type: 'locked', locked_label: 'Belum Dibuka', is_active: 'true', sort_order: 3 },
+    { phase_id: 'graduation', title: 'Graduation', subtitle: 'Persiapan karier dan sertifikasi', progress: 0, icon: 'fas fa-graduation-cap', accent: '#45c598', source_type: 'locked', locked_label: 'Belum Dibuka', is_active: 'true', sort_order: 4 }
   ];
 
   var sheet = getSheet(SHEETS.participantDashboardJourney);

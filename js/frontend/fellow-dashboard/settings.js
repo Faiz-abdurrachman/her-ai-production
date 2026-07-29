@@ -21,7 +21,7 @@
             if (this._pending[name]) return this._pending[name];
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
-                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260729-progress-persistence';
+                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260729-dynamic-tracking';
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
                 s.onerror = function() { delete window.__aiLabLoader._pending[name]; reject(new Error('Failed to load: ' + name)); };
                 document.head.appendChild(s);
@@ -1165,6 +1165,73 @@
         }).join('');
     }
 
+    function renderIntroLessonProgress(progressRows, activePath) {
+        if (currentPath() !== activePath) return;
+        const completedChapters = new Set((Array.isArray(progressRows) ? progressRows : [])
+            .filter(row => row.module_id === 'ai-fundamentals'
+                && row.status === 'completed'
+                && /^\d+$/.test(String(row.chapter_id || ''))
+                && Number(row.chapter_id) >= 1
+                && Number(row.chapter_id) <= introLessonRoutes.length)
+            .map(row => String(row.chapter_id)));
+        const progress = Math.round((completedChapters.size / introLessonRoutes.length) * 100);
+        const progressBar = document.querySelector('[data-lesson-progress-bar]');
+        const progressText = document.querySelector('[data-lesson-progress-text]');
+        const progressCaption = document.querySelector('[data-lesson-progress-caption]');
+        const lessonList = document.querySelector('[data-lesson-list], .lesson-list-card ol');
+
+        if (progressBar) {
+            progressBar.style.setProperty('--value', `${progress}%`);
+            progressBar.setAttribute('aria-label', `${progress}% progres Pengantar AI`);
+        }
+        if (progressText) progressText.textContent = `${progress}%`;
+        if (progressCaption) progressCaption.textContent = `${completedChapters.size} dari ${introLessonRoutes.length} topik selesai`;
+
+        lessonList?.querySelectorAll('li').forEach((item, index) => {
+            const chapterId = String(index + 1);
+            const lesson = introLessonRoutes[index];
+            const isCompleted = completedChapters.has(chapterId);
+            const isCurrent = lesson?.path === activePath;
+            const link = item.querySelector('a');
+            const icon = item.querySelector('i');
+            item.classList.toggle('completed', isCompleted);
+            item.classList.toggle('active', isCurrent);
+            if (link) {
+                if (isCurrent) link.setAttribute('aria-current', 'page');
+                else link.removeAttribute('aria-current');
+                const stateLabel = isCurrent ? 'sedang dibuka' : (isCompleted ? 'selesai' : 'belum selesai');
+                link.setAttribute('aria-label', `${lesson?.title || link.textContent}: ${stateLabel}`);
+            }
+            if (icon) {
+                icon.className = isCurrent ? 'far fa-circle-play' : (isCompleted ? 'fas fa-circle-check' : 'far fa-circle');
+                icon.setAttribute('aria-hidden', 'true');
+            }
+        });
+    }
+
+    async function initIntroLessonProgress() {
+        const path = currentPath();
+        const lessonIndex = introLessonRoutes.findIndex(item => item.path === path);
+        if (lessonIndex < 0) return;
+
+        const chapterId = String(lessonIndex + 1);
+        const saved = await window.saveChapterProgress('ai-fundamentals', chapterId, 'completed');
+        const progressResult = await window.getParticipantProgress('ai-fundamentals');
+        if (currentPath() !== path) return;
+
+        if (progressResult.status === 'success') {
+            renderIntroLessonProgress(progressResult.data, path);
+        } else if (saved.status === 'success') {
+            renderIntroLessonProgress([{
+                module_id: 'ai-fundamentals',
+                chapter_id: chapterId,
+                status: 'completed'
+            }], path);
+        } else {
+            renderIntroLessonProgress([], path);
+        }
+    }
+
     function initGeneratedLessonPage() {
         const page = document.querySelector('.ai-generated-lesson-page');
         if (!page || page.dataset.generatedReady) return;
@@ -1174,7 +1241,6 @@
         const index = Math.max(1, introLessonRoutes.findIndex(item => item.path === path));
         const prev = introLessonRoutes[index - 1] || introLessonRoutes[0];
         const next = introLessonRoutes[index + 1];
-        const progress = Math.round(((index + 1) / introLessonRoutes.length) * 100);
 
         page.querySelector('[data-lesson-breadcrumb]').textContent = lesson.title;
         page.querySelector('[data-lesson-title]').textContent = lesson.title;
@@ -1184,9 +1250,9 @@
         page.querySelector('[data-lesson-tag]').textContent = lesson.tag;
         page.querySelector('[data-lesson-content]').innerHTML = lesson.content;
         page.querySelector('[data-lesson-list]').innerHTML = renderLessonList(path);
-        page.querySelector('[data-lesson-progress-bar]').style.setProperty('--value', `${progress}%`);
-        page.querySelector('[data-lesson-progress-text]').textContent = `${progress}%`;
-        page.querySelector('[data-lesson-progress-caption]').textContent = `${index + 1} dari ${introLessonRoutes.length} topik selesai`;
+        page.querySelector('[data-lesson-progress-bar]').style.setProperty('--value', '0%');
+        page.querySelector('[data-lesson-progress-text]').textContent = '0%';
+        page.querySelector('[data-lesson-progress-caption]').textContent = 'Memuat progres tersimpan…';
         const prevLink = page.querySelector('[data-lesson-prev]');
         const nextLink = page.querySelector('[data-lesson-next]');
         prevLink.href = `#${prev.path}`;
@@ -1745,10 +1811,10 @@
                 { title: 'Bioinformatics', subtitle: 'Genomics, protein analysis, medical AI', icon: 'fas fa-dna' }
             ],
             journey: [
-                { title: 'Foundation Phase', subtitle: 'Pemahaman dasar AI', progress: 0, icon: 'fas fa-book-open', accent: '#f63392' },
-                { title: 'Specialization', subtitle: 'Pilih dan dalami track AI', progress: 0, icon: 'fas fa-code', accent: '#8b5cf6' },
-                { title: 'Project Building', subtitle: 'Bangun proyek nyata', progress: 0, icon: 'fas fa-briefcase', accent: '#f8b84e' },
-                { title: 'Graduation', subtitle: 'Persiapan karier dan sertifikasi', progress: 0, icon: 'fas fa-graduation-cap', accent: '#45c598' }
+                { phase_id: 'foundation', title: 'Foundation Phase', subtitle: 'Pemahaman dasar AI', progress: null, status: 'unavailable', status_label: 'Memuat', icon: 'fas fa-book-open', accent: '#f63392' },
+                { phase_id: 'specialization', title: 'Specialization', subtitle: 'Pilih dan dalami track AI', progress: null, status: 'unavailable', status_label: 'Memuat', icon: 'fas fa-code', accent: '#8b5cf6' },
+                { phase_id: 'project', title: 'Project Building', subtitle: 'Bangun proyek nyata', progress: null, status: 'locked', status_label: 'Belum Dibuka', icon: 'fas fa-briefcase', accent: '#f8b84e' },
+                { phase_id: 'graduation', title: 'Graduation', subtitle: 'Persiapan karier dan sertifikasi', progress: null, status: 'locked', status_label: 'Belum Dibuka', icon: 'fas fa-graduation-cap', accent: '#45c598' }
             ],
             events: [
                 { day: '22', month: 'MEI', title: 'Live Session: Build RAG Chatbot', time: '10.00 - 12.00 WIB', url: '#/participant-events' },
@@ -1874,14 +1940,18 @@
         if (moduleGrid) {
             const modules = nonEmpty(data.modules, fallbackData.modules);
             const isRealData = Array.isArray(data.modules) && data.modules.length > 3;
-            // Filter out under-development modules (only AI Fundamentals online)
-            var onlinePrefixes = ['ai-python', 'ai-reasoning', 'ai-modern', 'ai-evaluation', 'ai-evolution', 'ai-intro', 'ai-fundamentals'];
-            var filteredModules = modules.filter(function(m) {
-                var href = m.href || '';
-                if (href.includes('under-development')) return false;
-                if (href.includes('participant-modules') || href.includes('add')) return true;
-                return onlinePrefixes.some(function(p) { return href.includes(p); });
-            });
+            const hasVisibilityContract = modules.some(item => Object.prototype.hasOwnProperty.call(item, 'dashboard_visible'));
+            // New GAS controls visibility per module. Keep the legacy allow-list only
+            // during the safe deployment window where frontend may reach old GAS.
+            var filteredModules = hasVisibilityContract
+                ? modules.filter(item => item.dashboard_visible !== false)
+                : modules.filter(function(item) {
+                    var href = item.href || '';
+                    var legacyOnlinePrefixes = ['ai-python', 'ai-reasoning', 'ai-modern', 'ai-evaluation', 'ai-evolution', 'ai-intro', 'ai-fundamentals'];
+                    if (href.includes('under-development')) return false;
+                    if (href.includes('participant-modules') || href.includes('add')) return true;
+                    return legacyOnlinePrefixes.some(prefix => href.includes(prefix));
+                });
             const displayModules = isRealData ? filteredModules.slice(0, 8) : filteredModules;
             moduleGrid.innerHTML = displayModules.map((item) => `
                 <a class="module-card dash-real ${escapeHtml(item.tone || 'pink')}" href="${escapeHtml(item.href || '#/participant-modules')}">
@@ -1919,13 +1989,24 @@
         const journey = document.getElementById('dashboardJourneyList');
         if (journey) {
             const journeyItems = nonEmpty(data.journey, fallbackData.journey);
-            journey.innerHTML = journeyItems.map((item) => `
-                <article class="dash-real" style="--accent:${escapeHtml(item.accent || '#f63392')};--value:${Number(item.progress || 0)}%">
-                    <i class="${escapeHtml(item.icon || 'fas fa-book-open')}"></i>
-                    <div><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.subtitle)}</span><b></b></div>
-                    <em>${Number(item.progress || 0)}%</em>
-                </article>
-            `).join('');
+            journey.innerHTML = journeyItems.map((item) => {
+                const hasProgress = item.progress !== null && item.progress !== undefined && Number.isFinite(Number(item.progress));
+                const progress = hasProgress ? Math.max(0, Math.min(100, Math.round(Number(item.progress)))) : 0;
+                const safeStatus = ['completed', 'in_progress', 'not_started', 'locked', 'unavailable'].includes(item.status)
+                    ? item.status
+                    : (hasProgress ? 'not_started' : 'unavailable');
+                const statusLabel = hasProgress ? `${progress}%` : (item.status_label || 'Belum Dibuka');
+                const statusIcon = safeStatus === 'locked'
+                    ? '<i class="fas fa-lock" aria-hidden="true"></i>'
+                    : (safeStatus === 'unavailable' ? '<i class="fas fa-rotate" aria-hidden="true"></i>' : '');
+                return `
+                    <article class="dash-real journey-state-${safeStatus}" aria-label="${escapeHtml(item.title)}: ${escapeHtml(statusLabel)}" style="--accent:${escapeHtml(item.accent || '#f63392')};--value:${progress}%">
+                        <i class="${escapeHtml(item.icon || 'fas fa-book-open')}"></i>
+                        <div><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.subtitle)}</span><b></b></div>
+                        <em>${statusIcon}${escapeHtml(statusLabel)}</em>
+                    </article>
+                `;
+            }).join('');
         }
 
         const events = document.getElementById('dashboardUpcomingEvents');
@@ -2043,6 +2124,7 @@
                 if (Array.isArray(fresh.modules) && fresh.modules.length > 3) {
                     _dashboardDataCache = fresh;
                     try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: fresh })); } catch (_) {}
+                    renderParticipantDashboard(fresh);
                 }
             } catch (_) { /* silent background refresh */ }
             return;
@@ -2063,6 +2145,7 @@
                         if (Array.isArray(bg.modules) && bg.modules.length > 3) {
                             _dashboardDataCache = bg;
                             sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: bg }));
+                            renderParticipantDashboard(bg);
                         }
                     } catch (_) {}
                     return;
@@ -2556,9 +2639,39 @@
             if (!result || result.status !== 'success') {
                 return { status: 'error', message: result?.message || 'Progres belum tersimpan.' };
             }
+            _dashboardDataCache = null;
+            try { sessionStorage.removeItem('__dashboardCache'); } catch (_) {}
             return result;
         } catch (e) {
             return { status: 'error', message: 'Koneksi terputus. Coba simpan kembali.' };
+        }
+    };
+
+    window.getParticipantProgress = async function(moduleId) {
+        var session = readParticipantSession();
+        if (!session?.nik) {
+            return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.', data: [] };
+        }
+        try {
+            var response = await fetch('/__gas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action: 'getParticipantProgress',
+                    nik: session.nik,
+                    module_id: moduleId || ''
+                })
+            });
+            if (!response.ok) {
+                return { status: 'error', message: 'Server belum dapat memuat progres.', data: [] };
+            }
+            var result = await response.json();
+            if (!result || result.status !== 'success') {
+                return { status: 'error', message: result?.message || 'Progres belum dapat dimuat.', data: [] };
+            }
+            return { status: 'success', data: Array.isArray(result.data) ? result.data : [] };
+        } catch (e) {
+            return { status: 'error', message: 'Koneksi terputus. Progres belum dapat dimuat.', data: [] };
         }
     };
 
@@ -2644,6 +2757,7 @@
         if (pageName === 'modules') {
             initModuleInteractions();
             initGeneratedLessonPage();
+            initIntroLessonProgress();
             initPracticeNotes();
             initLessonDiscussion();
             initLessonControls();

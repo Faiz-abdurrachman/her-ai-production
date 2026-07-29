@@ -27,6 +27,25 @@ test.describe('UI/UX quality gate — deterministic mock', () => {
     }
   });
 
+  test('journey distinguishes live progress from phases that are still locked', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto(appUrl('/participant-dashboard'));
+    const journey = page.locator('#dashboardJourneyList');
+    await expect(journey).toBeVisible({ timeout: 15000 });
+    await expect(journey.locator('article')).toHaveCount(4);
+    await expect(journey.locator('article').first()).toContainText('13%');
+    await expect(journey.locator('.journey-state-locked')).toHaveCount(3);
+    await expect(journey.locator('.journey-state-locked .fa-lock')).toHaveCount(3);
+    await expect(journey.locator('.journey-state-locked')).toContainText(['Belum Dibuka', 'Belum Dibuka', 'Belum Dibuka']);
+    await expect(journey).not.toContainText('0%');
+
+    const width = await journey.evaluate(element => ({
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth
+    }));
+    expect(width.scrollWidth).toBeLessThanOrEqual(width.clientWidth + 1);
+  });
+
   for (const viewport of [
     { name: 'mobile-375', width: 375, height: 812 },
     { name: 'tablet-768', width: 768, height: 1024 },

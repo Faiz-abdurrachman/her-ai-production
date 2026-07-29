@@ -341,6 +341,9 @@ test.describe('Dashboard — getParticipantDashboardData', () => {
     expect(res.data).toBeDefined();
     expect(Array.isArray(res.data.modules)).toBe(true);
     expect(res.data.modules.length).toBeGreaterThan(0);
+    expect(Array.isArray(res.data.trackingModules)).toBe(true);
+    expect(res.data.trackingModules.length).toBeGreaterThanOrEqual(res.data.modules.length);
+    expect(res.data.trackingModules.some(module => module.module_id === 'ai-fundamentals')).toBe(true);
 
     const mod = res.data.modules[0];
     expect(typeof mod.module_id).toBe('string');
@@ -349,6 +352,8 @@ test.describe('Dashboard — getParticipantDashboardData', () => {
     expect(typeof mod.subtitle).toBe('string');
     expect(typeof mod.icon).toBe('string');
     expect(typeof mod.href).toBe('string');
+    expect(typeof mod.phase_id).toBe('string');
+    expect(mod.dashboard_visible).toBe(true);
     // quiz_score may be undefined if no quiz taken yet for this module
     const qs = mod.quiz_score;
     expect(qs === undefined || qs === null || typeof qs === 'number').toBe(true);
@@ -361,6 +366,11 @@ test.describe('Dashboard — getParticipantDashboardData', () => {
     // Secondary sections
     expect(res.data.tracks).toBeDefined();
     expect(res.data.journey).toBeDefined();
+    for (const phase of res.data.journey) {
+      expect(['completed', 'in_progress', 'not_started', 'locked']).toContain(phase.status);
+      expect(phase.progress === null || typeof phase.progress === 'number').toBe(true);
+      expect(typeof phase.status_label).toBe('string');
+    }
     expect(res.data.events).toBeDefined();
     expect(res.data.leaderboard).toBeDefined();
     expect(res.data.learningSummary).toEqual(expect.objectContaining({

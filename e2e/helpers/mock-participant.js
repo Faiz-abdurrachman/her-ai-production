@@ -26,15 +26,20 @@ function defaultDashboardData() {
       progress: 13
     },
     modules: [
-      { title: 'Python untuk AI', subtitle: 'Workflow AI', progress: 25, quiz_score: 80, icon: 'fab fa-python', tone: 'blue', href: '#/participant-ai-python' },
-      { title: 'Reasoning AI', subtitle: 'Penalaran mesin', progress: 50, quiz_score: 75, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-reasoning' },
-      { title: 'Konsep AI Modern', subtitle: 'Sistem AI modern', progress: 0, quiz_score: null, icon: 'fas fa-microchip', tone: 'purple', href: '#/participant-ai-modern' },
-      { title: 'Evaluation AI', subtitle: 'Evaluasi sistem AI', progress: 0, quiz_score: null, icon: 'fas fa-chart-simple', tone: 'green', href: '#/participant-ai-evaluation' },
-      { title: 'Evolution of AI', subtitle: 'Perjalanan AI', progress: 0, quiz_score: null, icon: 'fas fa-timeline', tone: 'orange', href: '#/participant-ai-evolution' }
+      { module_id: 'python-untuk-ai', title: 'Python untuk AI', subtitle: 'Workflow AI', progress: 25, quiz_score: 80, icon: 'fab fa-python', tone: 'blue', href: '#/participant-ai-python', phase_id: 'foundation', dashboard_visible: true },
+      { module_id: 'reasoning', title: 'Reasoning AI', subtitle: 'Penalaran mesin', progress: 50, quiz_score: 75, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-reasoning', phase_id: 'foundation', dashboard_visible: true },
+      { module_id: 'konsep-ai-modern', title: 'Konsep AI Modern', subtitle: 'Sistem AI modern', progress: 0, quiz_score: null, icon: 'fas fa-microchip', tone: 'purple', href: '#/participant-ai-modern', phase_id: 'foundation', dashboard_visible: true },
+      { module_id: 'evaluation', title: 'Evaluation AI', subtitle: 'Evaluasi sistem AI', progress: 0, quiz_score: null, icon: 'fas fa-chart-simple', tone: 'green', href: '#/participant-ai-evaluation', phase_id: 'foundation', dashboard_visible: true },
+      { module_id: 'evolution', title: 'Evolution of AI', subtitle: 'Perjalanan AI', progress: 0, quiz_score: null, icon: 'fas fa-timeline', tone: 'orange', href: '#/participant-ai-evolution', phase_id: 'foundation', dashboard_visible: true }
     ],
     discussionTrails: [],
     tracks: [],
-    journey: [],
+    journey: [
+      { phase_id: 'foundation', title: 'Foundation Phase', subtitle: 'Pemahaman dasar AI', progress: 13, status: 'in_progress', status_label: '13%', icon: 'fas fa-book-open', accent: '#f63392' },
+      { phase_id: 'specialization', title: 'Specialization', subtitle: 'Pilih dan dalami track AI', progress: null, status: 'locked', status_label: 'Belum Dibuka', icon: 'fas fa-code', accent: '#8b5cf6' },
+      { phase_id: 'project', title: 'Project Building', subtitle: 'Bangun proyek nyata', progress: null, status: 'locked', status_label: 'Belum Dibuka', icon: 'fas fa-briefcase', accent: '#f8b84e' },
+      { phase_id: 'graduation', title: 'Graduation', subtitle: 'Persiapan karier dan sertifikasi', progress: null, status: 'locked', status_label: 'Belum Dibuka', icon: 'fas fa-graduation-cap', accent: '#45c598' }
+    ],
     events: [],
     leaderboard: []
   };
@@ -88,6 +93,19 @@ async function installMockParticipant(page, options = {}) {
       response = { status: 'success', data: progressData };
     } else if (payload.action === 'saveParticipantProgress') {
       response = saveProgressResponse;
+      if (response.status === 'success') {
+        const savedRow = {
+          module_id: payload.module_id,
+          chapter_id: payload.chapter_id,
+          status: payload.status || 'completed',
+          score: payload.score
+        };
+        const index = progressData.findIndex(row =>
+          row.module_id === savedRow.module_id
+          && String(row.chapter_id) === String(savedRow.chapter_id));
+        if (index >= 0) progressData[index] = Object.assign({}, progressData[index], savedRow);
+        else progressData.push(savedRow);
+      }
     } else if (payload.action === 'saveParticipantDiscussion') {
       const discussion = {
         id: payload.discussion_id || `mock-discussion-${discussionData.length + 1}`,

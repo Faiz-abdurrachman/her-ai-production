@@ -527,11 +527,25 @@
             </section>
         `;
         renderMathAiProgressPanel('mathAiLessonNav', lesson.id);
-        container.querySelector('[data-mark-lesson]')?.addEventListener('click', (event) => {
-            markMathAiLessonDone(event.currentTarget.dataset.markLesson);
-            event.currentTarget.innerHTML = '<i class="fas fa-circle-check"></i> Lesson Selesai';
-            event.currentTarget.disabled = true;
+        container.querySelector('[data-mark-lesson]')?.addEventListener('click', async (event) => {
+            const button = event.currentTarget;
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan…';
+            const result = typeof window.saveChapterProgress === 'function'
+                ? await window.saveChapterProgress(mathForAiCourse.id, String(index + 1), 'completed')
+                : { status: 'error', message: 'Layanan progres belum tersedia.' };
+            if (!result || result.status !== 'success') {
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-rotate-right"></i> Coba Simpan Lagi';
+                button.title = result?.message || 'Progres belum tersimpan.';
+                window.__aiLabToast?.(result?.message || 'Progres Math for AI belum tersimpan.', 'error');
+                return;
+            }
+            markMathAiLessonDone(button.dataset.markLesson);
+            button.innerHTML = '<i class="fas fa-circle-check"></i> Lesson Selesai';
+            button.title = '';
             renderMathAiProgressPanel('mathAiLessonNav', lesson.id);
+            window.__aiLabToast?.('Progres Math for AI tersimpan.', 'success');
         });
     };
 

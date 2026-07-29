@@ -6690,6 +6690,10 @@
     background: #fff0f7;
 }
 
+.lesson-list-card li.completed:not(.active) {
+    background: #f4fbf8;
+}
+
 .lesson-list-card span {
     color: #171827;
     font-size: 0.76rem;
@@ -6720,6 +6724,15 @@
 .lesson-list-card li.active a,
 .lesson-list-card li.active i {
     color: var(--fellow-pink);
+}
+
+.lesson-list-card li.completed:not(.active) a,
+.lesson-list-card li.completed:not(.active) i {
+    color: #16795b;
+}
+
+.lesson-list-card li.completed:not(.active) a {
+    font-weight: 700;
 }
 
 .lesson-list-card i {

@@ -82,6 +82,35 @@ test.describe('Active module manifest — static contracts', () => {
     expect(gas).toMatch(/function\s+getParticipantDiscussions\s*\(/);
   });
 
+  test('every future module source with a module identity has progress wiring and seed metadata', () => {
+    const gas = fs.readFileSync(path.join(ROOT, 'gas/Code.gs'), 'utf8');
+    const moduleFiles = fs.readdirSync(path.join(ROOT, 'js/frontend/fellow-dashboard'))
+      .filter(name => /^ai-.+\.js$/.test(name));
+    const identities = [];
+    const sourceByIdentity = new Map();
+
+    for (const fileName of moduleFiles) {
+      const source = fs.readFileSync(path.join(ROOT, 'js/frontend/fellow-dashboard', fileName), 'utf8');
+      const moduleId = source.match(/MODULE_ID\s*=\s*['"]([^'"]+)/)?.[1];
+      if (!moduleId) continue;
+      identities.push(moduleId);
+      sourceByIdentity.set(moduleId, `${sourceByIdentity.get(moduleId) || ''}\n${source}`);
+    }
+    for (const [moduleId, source] of sourceByIdentity) {
+      expect(source, `${moduleId} has no numeric chapter progress contract`)
+        .toMatch(/saveChapterProgress\s*\(\s*MODULE_ID,\s*(?:chapter|chapterId|chapterNumber|number)\b/);
+    }
+
+    identities.push('math-for-ai');
+    const mathSource = fs.readFileSync(path.join(ROOT, 'js/frontend/fellow-dashboard/ai-math-for-ai.js'), 'utf8');
+    expect(mathSource).toMatch(/saveChapterProgress\s*\(\s*mathForAiCourse\.id,\s*String\(index \+ 1\),\s*'completed'/);
+    expect(mathSource).toMatch(/if \(!result \|\| result\.status !== 'success'\)/);
+    for (const moduleId of new Set(identities)) {
+      expect(gas, `GAS seed missing future tracking metadata for ${moduleId}`).toContain(`module_id: '${moduleId}'`);
+    }
+    expect(gas).toMatch(/participantDashboardModules\]: \[[^\]]*phase_id[^\]]*tracking_enabled[^\]]*dashboard_visible/);
+  });
+
   test('GAS dashboard counts only unique numeric chapters in progress and summary', () => {
     const gas = fs.readFileSync(path.join(ROOT, 'gas/Code.gs'), 'utf8');
     const context = vm.createContext({ console, Date, JSON, Math, Number, String, Array, Object, RegExp, isNaN });
@@ -102,6 +131,7 @@ test.describe('Active module manifest — static contracts', () => {
       { nik, module_id: 'python-untuk-ai', chapter_id: '1', status: 'completed' },
       { nik, module_id: 'python-untuk-ai', chapter_id: 1, status: 'completed' },
       { nik, module_id: 'python-untuk-ai', chapter_id: '2', status: 'completed' },
+      { nik, module_id: 'python-untuk-ai', chapter_id: '999', status: 'completed' },
       { nik, module_id: 'python-untuk-ai', chapter_id: 'practice', status: 'completed' },
       { nik, module_id: 'python-untuk-ai', chapter_id: 'quiz', status: 'completed', score: 15 },
       { nik, module_id: 'reasoning', chapter_id: '1', status: 'completed' }
@@ -122,6 +152,68 @@ test.describe('Active module manifest — static contracts', () => {
     expect(result.data.learningSummary.total).toBe(6);
     expect(result.data.learningSummary.in_progress).toBe(2);
     expect(result.data.learningSummary.not_started).toBe(4);
+  });
+
+  test('GAS automatically includes a newly released module in cards, summary, and journey', () => {
+    const gas = fs.readFileSync(path.join(ROOT, 'gas/Code.gs'), 'utf8');
+    const context = vm.createContext({ console, Date, JSON, Math, Number, String, Array, Object, RegExp, isNaN });
+    vm.runInContext(gas, context, { filename: 'gas/Code.gs' });
+
+    const moduleRows = [
+      { module_id: 'python-untuk-ai', title: 'Python', total_chapters: 4, phase_id: 'foundation', tracking_enabled: true, dashboard_visible: true, is_active: true, sort_order: 1 },
+      { module_id: 'deep-learning', title: 'Deep Learning', total_chapters: 2, phase_id: 'foundation', tracking_enabled: true, dashboard_visible: true, is_active: true, sort_order: 2 },
+      { module_id: 'reinforcement-learning', title: 'RL', total_chapters: 2, phase_id: 'foundation', tracking_enabled: false, dashboard_visible: true, is_active: true, sort_order: 3 },
+      { module_id: 'computer-vision', title: 'Computer Vision', total_chapters: 4, phase_id: 'specialization', tracking_enabled: true, dashboard_visible: false, is_active: true, sort_order: 4 }
+    ];
+    const journeyRows = [
+      { phase_id: 'foundation', title: 'Foundation Phase', source_type: 'modules', is_active: true, sort_order: 1 },
+      { phase_id: 'specialization', title: 'Specialization', source_type: 'modules', is_active: true, sort_order: 2 },
+      { phase_id: 'project', title: 'Project Building', source_type: 'locked', locked_label: 'Belum Dibuka', is_active: true, sort_order: 3 }
+    ];
+    const nik = '0000000000000000';
+    const progressRows = [
+      { nik, module_id: 'ai-fundamentals', chapter_id: '1', status: 'completed' },
+      { nik, module_id: 'python-untuk-ai', chapter_id: '1', status: 'completed' },
+      { nik, module_id: 'deep-learning', chapter_id: '1', status: 'completed' },
+      { nik, module_id: 'deep-learning', chapter_id: '2', status: 'completed' },
+      { nik, module_id: 'computer-vision', chapter_id: '1', status: 'completed' },
+      { nik, module_id: 'computer-vision', chapter_id: '2', status: 'completed' }
+    ];
+    context.__qaGetRows = sheetName => {
+      if (sheetName === 'participant_dashboard_modules') return moduleRows;
+      if (sheetName === 'participant_dashboard_journey') return journeyRows;
+      if (sheetName === 'participant_progress') return progressRows;
+      return [];
+    };
+    vm.runInContext('getRows = __qaGetRows;', context);
+    const result = vm.runInContext(`getParticipantDashboardData({ nik: '${nik}' })`, context);
+
+    expect(result.data.modules.map(module => module.module_id)).toEqual(['python-untuk-ai', 'deep-learning']);
+    expect(result.data.trackingModules.map(module => module.module_id)).toEqual([
+      'ai-fundamentals', 'python-untuk-ai', 'deep-learning', 'computer-vision'
+    ]);
+    expect(result.data.learningSummary).toEqual({
+      total: 3,
+      completed: 1,
+      in_progress: 2,
+      not_started: 0,
+      progress: 48
+    });
+    expect(result.data.journey.find(item => item.phase_id === 'foundation')).toEqual(expect.objectContaining({
+      progress: 48,
+      status: 'in_progress',
+      module_count: 3
+    }));
+    expect(result.data.journey.find(item => item.phase_id === 'specialization')).toEqual(expect.objectContaining({
+      progress: 50,
+      status: 'in_progress',
+      module_count: 1
+    }));
+    expect(result.data.journey.find(item => item.phase_id === 'project')).toEqual(expect.objectContaining({
+      progress: null,
+      status: 'locked',
+      status_label: 'Belum Dibuka'
+    }));
   });
 });
 
@@ -172,6 +264,25 @@ test.describe('Active dashboard modules — mocked UI smoke', () => {
       await expect(page.locator('body')).toContainText(/Diskusi/i);
     });
   }
+});
+
+test.describe('Future module release readiness', () => {
+  test('Math for AI lesson waits for backend and emits its numeric chapter identity', async ({ page }) => {
+    const { calls } = await installMockParticipant(page);
+    await page.goto(appUrl('/participant-ai-lab-math-intro'));
+    const doneButton = page.locator('[data-mark-lesson="intro"]');
+    await expect(doneButton).toBeVisible({ timeout: 15000 });
+    await doneButton.click();
+
+    await expect.poll(() => calls.some(call =>
+      call.action === 'saveParticipantProgress'
+      && call.module_id === 'math-for-ai'
+      && String(call.chapter_id) === '1'
+      && call.status === 'completed'
+    )).toBe(true);
+    await expect(doneButton).toBeDisabled();
+    await expect(doneButton).toContainText('Lesson Selesai');
+  });
 });
 
 test.describe('Progress requests — mocked write verification', () => {
@@ -351,6 +462,33 @@ test.describe('Runtime and module identity', () => {
 });
 
 test.describe('AI Fundamentals summary', () => {
+  test('five Pengantar AI topics persist numeric chapters and read back 100%', async ({ page }) => {
+    const { calls, progressData } = await installMockParticipant(page);
+    const lessonRoutes = [
+      '/participant-ai-intro',
+      '/participant-ai-history',
+      '/participant-ai-types',
+      '/participant-ai-ml-dl',
+      '/participant-ai-summary'
+    ];
+
+    for (const [index, route] of lessonRoutes.entries()) {
+      await page.goto(appUrl(route));
+      await expect.poll(() => calls.some(call =>
+        call.action === 'saveParticipantProgress'
+        && call.module_id === 'ai-fundamentals'
+        && String(call.chapter_id) === String(index + 1)
+      )).toBe(true);
+      await expect(page.locator('[data-lesson-progress-caption]')).toContainText(`${index + 1} dari 5 topik selesai`);
+    }
+
+    expect(progressData.filter(row => row.module_id === 'ai-fundamentals' && /^\d+$/.test(String(row.chapter_id)))).toHaveLength(5);
+    await expect(page.locator('[data-lesson-progress-text]')).toHaveText('100%');
+    await expect(page.locator('.lesson-list-card li.completed')).toHaveCount(5);
+    await expect(page.locator('.lesson-list-card li.active')).toHaveCount(1);
+    await expect(page.locator('.lesson-list-card li.completed:not(.active) .fa-circle-check')).toHaveCount(4);
+  });
+
   test('summary reflects non-zero backend progress instead of static 0/0/6', async ({ page }) => {
     const dashboardData = defaultDashboardData();
     await installMockParticipant(page, { dashboardData });

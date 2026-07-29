@@ -4,10 +4,10 @@
 
 **Baseline:** `6508121` sebelum resolusi audit #78–#91
 
-**GAS:** ✅ `2026.2-progress-persistence` deployed; route diskusi baru + auth guard terverifikasi live
+**GAS:** production masih ✅ `2026.2-progress-persistence`; source #94 adalah `2026.3-dynamic-module-tracking` dan belum dideploy
 
-**QA:** safe mock 77/77 PASS; full 88 PASS + 44 SKIP + 0 FAIL; authenticated live read-only 29 PASS + 18 SKIP + 0 FAIL; controlled live write/read-back PASS
-**Leaderboard:** status terakhir terverifikasi LIVE — 1.039 pts sebelum dan sesudah controlled mutation
+**QA:** safe mock 82/82 PASS; full 93 PASS + 44 SKIP + 0 FAIL; authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2; controlled live write/read-back terakhir PASS
+**Leaderboard:** sumber live; authenticated read-back terakhir 1.039 pts, screenshot user berikutnya menampilkan Brenda 1.054 pts
 
 ---
 
@@ -34,16 +34,21 @@ Phase 0 QA dan seluruh perbaikan audit #78–#91 sudah tersedia di source. Test 
 | Discussion persistence | ✅ live | post/reply + read-back production terverifikasi |
 | Isi jawaban practice (#92) | ⚠️ open | marker selesai masuk backend, tetapi teks jawaban masih localStorage-only |
 | Pengantar AI active material (#93) | ✅ | 5/5 route menandai satu current item dengan visual + `aria-current` |
+| Dynamic module release contract (#94) | ✅ code | `is_active` + `tracking_enabled` + `dashboard_visible` + `phase_id`; source GAS 2026.3 pending deploy |
+| Pengantar AI chapter 1–5 (#94) | ✅ code | save + `getParticipantProgress` read-back; progress sidebar tidak lagi dihitung dari posisi route |
+| Journey Fellowship (#94) | ✅ code | Foundation/Specialization dihitung dari module aktif; phase tanpa sumber memakai ikon kunci + `Belum Dibuka` |
 
-Safe mock gate: **77/77 PASS**, tanpa expected failure dan tanpa live write. Audit serta bukti resolusi tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
+Safe mock gate: **82/82 PASS**, tanpa expected failure dan tanpa live write. Full suite **137 = 93 PASS + 44 SKIP + 0 FAIL**. Audit serta bukti resolusi tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
 
 ---
 
 ## URUTAN LANGKAH BERIKUTNYA
 
-1. **Putuskan scope #92:** jika isi jawaban latihan harus tercatat lintas perangkat, tambah schema/API practice-response, frontend acknowledgment/read-back, dan E2E production-safe.
-2. **Perluas controlled live matrix bila dibutuhkan:** test kelima module satu per satu dengan fixture QA terisolasi; test saat ini membuktikan seluruh tipe data utama tanpa mengubah score/progress logis.
-3. **Frontend release:** push/deploy hanya jika diminta user; cache buster `settings.js` sudah `20260729-intro-active-state`.
+1. **Migrasi schema #94:** paste/save `gas/Code.gs`, jalankan `seedDashboardModules()` dan `seedDashboardJourney()` dari Apps Script editor. Ini menambahkan metadata dan menetapkan current release: Pengantar AI + lima AI Fundamentals serta CV terpisah; 20+ UD tetap nonaktif.
+2. **Redeploy GAS #94:** buat deployment baru, pastikan `doGet.version` menjadi `2026.3-dynamic-module-tracking`, lalu jalankan authenticated read-only contract untuk `trackingModules`, `learningSummary`, dan status `journey`.
+3. **Release frontend #94:** deploy setelah backend/schema lolos. Cache buster `settings.js`, `dashboard.css`, dan `modules.css` sudah `20260729-dynamic-tracking`.
+4. **Verifikasi Pengantar AI production:** dengan approval mutation, buka topik 1–5 memakai akun QA dan pastikan chapter `1..5` terbaca kembali serta summary berubah idempotent. Jangan mengubah password/profile.
+5. **Putuskan scope #92:** jika isi jawaban latihan harus tercatat lintas perangkat, tambah schema/API practice-response, frontend acknowledgment/read-back, dan E2E production-safe.
 
 Authenticated read-only sudah selesai pada baseline 94 row progress (42 chapter numerik unik, 26 practice, 25 quiz). Controlled mutation kemudian lulus untuk chapter, marker practice, quiz, diskusi, dan reply. Ringkasan Belajar tetap 33% (1 tuntas, 4 proses, 1 belum mulai) dan leaderboard tetap 1.039 poin.
 
@@ -54,11 +59,13 @@ Authenticated read-only sudah selesai pada baseline 94 row progress (42 chapter 
 Satu module baru boleh dinyatakan sehat jika:
 
 - semua route mengarah ke konten module yang benar, bukan UD/restricted;
+- row metadata memiliki `is_active=true`, `tracking_enabled=true`, `phase_id`, serta `total_chapters` benar; `dashboard_visible=true` hanya bila kartunya perlu tampil;
 - overview mencatat chapter ID numerik yang valid;
 - practice dan quiz menampilkan konten nyata serta feedback loading/success/error;
 - chapter, score quiz, status practice, diskusi, dan reply tersimpan ke backend serta terbaca kembali setelah reload;
 - bila isi jawaban practice wajib lintas perangkat, response body juga harus dipersist sebelum module dinyatakan lengkap (#92);
 - dashboard dan Ringkasan Belajar merefleksikan sumber data yang sama;
+- Foundation/Specialization journey berubah dari sumber module yang sama; phase tanpa sumber tidak boleh mengaku `0%` live;
 - tidak ada console/page error;
 - tombol, keyboard focus, touch target, dan layout 375/768/1280 lolos;
 - test tidak membutuhkan kredensial hardcoded atau menulis ke production secara default.

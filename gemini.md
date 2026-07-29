@@ -1094,3 +1094,23 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 **Perbaikan:** Topik 1 sekarang memiliki class `active`, ikon `fa-circle-play`, dan `aria-current="page"`. Renderer Topik 2–5 juga menambahkan `aria-current` dan icon dekoratif disembunyikan dari screen reader. Cache buster `settings.js` menjadi `20260729-intro-active-state`.
 
 **Verifikasi:** targeted Playwright 1/1 PASS untuk 5 route topik; safe gate **77/77 PASS**; full suite **132 test = 88 PASS + 44 SKIP + 0 FAIL**.
+
+## 94. Feature: Tracking Dinamis untuk Aktivasi Modul Masa Depan
+
+**Status:** FIXED IN CODE — 29 Juli 2026. GAS `2026.3-dynamic-module-tracking`, migrasi schema/seed, frontend release, dan authenticated live read-back masih menunggu deployment.
+
+**Masalah:** dashboard hanya dapat mengenali lima kartu aktif lewat allowlist URL di frontend. Sheet seed juga menandai seluruh 28 module `is_active=true`, sedangkan Ringkasan Belajar dan Perjalanan Fellowship memakai daftar/angka terpisah. Jika satu module Under Development dibuka, route bisa hidup tetapi progress-nya belum otomatis masuk kartu, ringkasan, dan journey yang sama.
+
+**Perbaikan:**
+
+- Tambah metadata module `phase_id`, `tracking_enabled`, dan `dashboard_visible`; `is_active` tetap menjadi release gate.
+- Backend membentuk `trackingModules`, kartu `modules`, `learningSummary`, dan `journey` dari metadata serta chapter numerik unik pada `participant_progress`; ID di luar `1..total_chapters`, quiz, dan practice tidak dihitung sebagai chapter.
+- Seed default hanya merilis Pengantar AI + lima AI Fundamentals serta Computer Vision yang online terpisah; 20+ module lain tetap nonaktif sampai metadata dan route siap.
+- Frontend memakai `dashboard_visible` sebagai source of truth dan mempertahankan allowlist lama hanya sebagai compatibility bridge selama urutan deployment.
+- Lima materi Pengantar AI sekarang menyimpan chapter `1..5`, membaca kembali `getParticipantProgress`, menampilkan jumlah selesai nyata, dan membedakan current/completed dengan teks, ikon, ARIA, serta warna.
+- Setelah write sukses, cache dashboard memory/session diinvalidasi; background refresh sekarang merender respons terbaru.
+- Project Building dan Graduation tanpa sumber tracking menampilkan ikon kunci + `Belum Dibuka`, bukan angka `0%` palsu.
+
+**Kontrak aktivasi module berikutnya:** route harus menunjuk konten nyata (bukan UD), lalu row `participant_dashboard_modules` wajib memiliki `is_active=true`, `tracking_enabled=true`, `phase_id`, `total_chapters`, dan `dashboard_visible=true` bila kartu perlu tampil. Source `ai-*.js` yang sudah memiliki `MODULE_ID` telah diaudit mempunyai `saveChapterProgress`; Math for AI memakai `mathForAiCourse.id`.
+
+**Verifikasi lokal:** lima test baru mencakup seluruh source module masa depan, simulasi aktivasi Deep Learning, save/read-back lima topik Pengantar AI hingga 100%, journey locked pada mobile, dan acknowledgment chapter numerik Math for AI. Safe gate **82/82 PASS**; full suite **137 test = 93 PASS + 44 SKIP + 0 FAIL**. Tidak ada live write atau deployment pada verifikasi ini.
