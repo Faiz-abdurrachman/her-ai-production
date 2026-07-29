@@ -4,7 +4,7 @@
 
 **Baseline:** `6508121` sebelum resolusi audit #78–#91
 
-**GAS:** source terbaru sudah diperbaiki; **manual redeploy masih pending**
+**GAS:** ✅ `2026.2-progress-persistence` deployed; route diskusi baru + auth guard terverifikasi live
 
 **QA:** 131 test terdaftar; safe mock gate 76/76 PASS; full 87 PASS + 44 SKIP + 0 FAIL
 **Leaderboard:** status terakhir terverifikasi LIVE — 1.024 pts untuk peringkat pertama
@@ -39,10 +39,9 @@ Safe mock gate: **76/76 PASS**, tanpa expected failure dan tanpa live write. Aud
 
 ## URUTAN LANGKAH BERIKUTNYA
 
-1. **Manual redeploy GAS:** paste source `gas/Code.gs`, deploy Web App versi baru, pertahankan access policy existing, lalu verifikasi versi `2026.2-progress-persistence`.
-2. **Live read-only verification:** jalankan dengan kredensial via secret environment, tanpa `TEST_ALLOW_MUTATIONS`.
-3. **Staging mutation E2E:** hanya pada akun QA/dataset yang boleh diubah, dengan opt-in `TEST_ALLOW_MUTATIONS=true`; verifikasi chapter, practice, quiz, discussion, dan dashboard read-back.
-4. **Frontend release:** push/deploy hanya jika diminta user; cache buster sudah `20260729-progress-persistence`.
+1. **Live read-only verification:** jalankan dengan kredensial via secret environment, tanpa `TEST_ALLOW_MUTATIONS`.
+2. **Staging mutation E2E:** hanya pada akun QA/dataset yang boleh diubah, dengan opt-in `TEST_ALLOW_MUTATIONS=true`; verifikasi chapter, practice, quiz, discussion, dan dashboard read-back.
+3. **Frontend release:** push/deploy hanya jika diminta user; cache buster sudah `20260729-progress-persistence`.
 
 ---
 

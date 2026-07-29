@@ -1051,4 +1051,4 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Evaluation/Evolution bebas `PYTHON_GUIDES` pageerror dan tidak lagi menampilkan label Python.
 - Navigator Reasoning dan touch target mobile memenuhi kontrak UI/UX.
 - Safe gate **76/76 PASS**. Full suite **131 terdaftar = 87 PASS + 44 SKIP + 0 FAIL**; skip adalah live authenticated/mutation karena secret environment tidak tersedia.
-- `gas/Code.gs` lolos syntax/contract test, tetapi deployment production masih **PENDING MANUAL REDEPLOY**; versi target `2026.2-progress-persistence`.
+- `gas/Code.gs` lolos syntax/contract test dan versi `2026.2-progress-persistence` sudah **LIVE**. Route diskusi + auth guard terverifikasi; authenticated read-back masih menunggu secret environment.
