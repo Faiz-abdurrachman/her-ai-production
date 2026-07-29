@@ -270,18 +270,29 @@ const reconciliationValues = [reconciliationHeaders].concat(reconciliationAccoun
 ]));
 const reconciliationSheet = { name: 'ParticipantAccounts' };
 const writeColumnIndexes = [];
+let forceInvalidCompactionReadback = false;
 context.ensureParticipantBackendSchema = () => ({ status: 'success' });
-context.SpreadsheetApp = { flush() {} };
-context.getParticipantPortalAccessSnapshot = () => ({
-  sheet: reconciliationSheet,
-  values: reconciliationValues,
-  header_index: { email: 0, access_status: 1, updated_at: 2, generated_password: 3 },
-  accounts: reconciliationValues.slice(1).map((row, index) => ({
+context.SpreadsheetApp = {
+  flush() {},
+  openById: () => ({ name: 'HerAI Test Spreadsheet' })
+};
+context.getParticipantPortalAccessSnapshot = () => {
+  const snapshotAccounts = reconciliationValues.slice(1).map((row, index) => ({
     email: row[0],
     access_status: row[1],
     __source_index: index
-  }))
-});
+  }));
+  if (forceInvalidCompactionReadback && reconciliationValues.length === 101) {
+    snapshotAccounts.pop();
+    forceInvalidCompactionReadback = false;
+  }
+  return {
+    sheet: reconciliationSheet,
+    values: reconciliationValues,
+    header_index: { email: 0, access_status: 1, updated_at: 2, generated_password: 3 },
+    accounts: snapshotAccounts
+  };
+};
 context.setColumnValues = (sheet, columnIndex, values) => {
   assert.equal(sheet, reconciliationSheet);
   writeColumnIndexes.push(columnIndex);
@@ -301,5 +312,74 @@ assert.equal(reconciliationValues.slice(1).every((row, index) => row[3] === `cre
 const secondApplyReconciliation = context.reconcileParticipantPortalAccess();
 assert.equal(secondApplyReconciliation.status, 'success');
 assert.equal(secondApplyReconciliation.changed, 0);
+
+let backupCount = 0;
+let lastBackupName = '';
+let backupHidden = false;
+const backupSheet = {
+  setName(name) {
+    lastBackupName = name;
+    return this;
+  },
+  setFrozenRows() { return this; },
+  hideSheet() {
+    backupHidden = true;
+    return this;
+  }
+};
+Object.assign(reconciliationSheet, {
+  copyTo() {
+    backupCount += 1;
+    return backupSheet;
+  },
+  getDataRange() {
+    return {
+      clearContent() {
+        reconciliationValues.length = 0;
+      }
+    };
+  },
+  getRange() {
+    return {
+      setValues(values) {
+        reconciliationValues.length = 0;
+        values.forEach(row => reconciliationValues.push(row.slice()));
+      }
+    };
+  },
+  setFrozenRows() { return this; }
+});
+
+const beforeRollbackCredentials = reconciliationValues.slice(1).map(row => row[3]);
+forceInvalidCompactionReadback = true;
+assert.throws(
+  () => context.compactParticipantAccountsToTargetCohort(),
+  /Read-back compaction tidak menghasilkan tepat 100 account target/
+);
+assert.equal(reconciliationValues.length, 188);
+assert.deepEqual(reconciliationValues.slice(1).map(row => row[3]), beforeRollbackCredentials);
+
+const compaction = context.compactParticipantAccountsToTargetCohort();
+assert.equal(compaction.status, 'success');
+assert.equal(compaction.already_compacted, false);
+assert.equal(compaction.before, 187);
+assert.equal(compaction.after, 100);
+assert.equal(compaction.removed, 87);
+assert.equal(compaction.credentials_changed, 0);
+assert.match(compaction.backup_sheet, /^ParticipantAccounts_Backup_/);
+assert.equal(lastBackupName, compaction.backup_sheet);
+assert.equal(backupHidden, true);
+assert.equal(reconciliationValues.length, 101);
+assert.equal(reconciliationValues.slice(1).every(row => row[1] === 'active'), true);
+assert.deepEqual(
+  reconciliationValues.slice(1).map(row => row[3]),
+  beforeRollbackCredentials.slice(0, 100)
+);
+
+const secondCompaction = context.compactParticipantAccountsToTargetCohort();
+assert.equal(secondCompaction.status, 'success');
+assert.equal(secondCompaction.already_compacted, true);
+assert.equal(secondCompaction.removed, 0);
+assert.equal(backupCount, 2);
 
 console.log('Participant login regression checks passed; admin login remains unchanged');

@@ -125,6 +125,7 @@ const TARGET_PARTICIPANT_PORTAL_EMAILS = [
   'ariellacahyani@gmail.com'
 ];
 const EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT = 100;
+const EXPECTED_PARTICIPANT_ACCOUNT_TOTAL_BEFORE_COMPACTION = 187;
 
 const SHEETS = {
   participants: 'peserta_tahap_1',
@@ -268,7 +269,7 @@ function doPost(e) {
 }
 
 function doGet() {
-  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.3.2-participant-access-reconciled' });
+  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.3.3-participant-accounts-compacted' });
 }
 
 function authorizeGasAction(action, payload) {
@@ -1679,6 +1680,120 @@ function reconcileParticipantPortalAccess() {
       status: 'success',
       changed: changed
     }, plan.summary);
+    Logger.log(JSON.stringify(result));
+    return result;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/**
+ * Memadatkan ParticipantAccounts dari cohort lama 187 row menjadi tepat 100
+ * peserta target tahap 2. Fungsi membuat backup sheet otomatis dan menjaga
+ * seluruh nilai row target, termasuk credential existing. Tidak ada password
+ * yang dibuat, dirotasi, atau dihapus.
+ */
+function compactParticipantAccountsToTargetCohort() {
+  ensureParticipantBackendSchema();
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const snapshot = getParticipantPortalAccessSnapshot();
+    const plan = buildParticipantPortalAccessReconciliation(snapshot.accounts);
+    const summary = plan.summary;
+    if (!summary.ready_to_apply) {
+      const rejected = Object.assign({
+        status: 'error',
+        message: 'Compaction dibatalkan karena preflight cohort tidak valid.'
+      }, summary);
+      Logger.log(JSON.stringify(rejected));
+      return rejected;
+    }
+    if (summary.total_accounts === EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+      && summary.matched_target_accounts === EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+      && summary.outside_target_accounts === 0) {
+      const alreadyCompacted = Object.assign({
+        status: 'success',
+        already_compacted: true,
+        removed: 0
+      }, summary);
+      Logger.log(JSON.stringify(alreadyCompacted));
+      return alreadyCompacted;
+    }
+    if (summary.total_accounts !== EXPECTED_PARTICIPANT_ACCOUNT_TOTAL_BEFORE_COMPACTION
+      || summary.matched_target_accounts !== EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+      || summary.outside_target_accounts !== (
+        EXPECTED_PARTICIPANT_ACCOUNT_TOTAL_BEFORE_COMPACTION - EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+      )) {
+      const unexpectedTotal = Object.assign({
+        status: 'error',
+        message: 'Compaction dibatalkan: expected 187 total, 100 target, dan 87 non-target.'
+      }, summary);
+      Logger.log(JSON.stringify(unexpectedTotal));
+      return unexpectedTotal;
+    }
+
+    const targetEmailSet = getTargetParticipantPortalEmailSet();
+    const now = new Date().toISOString();
+    const compactedRows = [];
+    snapshot.values.slice(1).forEach(function(row) {
+      const hasData = row.some(function(value) { return String(value || '').trim() !== ''; });
+      if (!hasData) return;
+      const email = normalizeEmail(row[snapshot.header_index.email]);
+      if (!targetEmailSet[email]) return;
+      const preservedRow = row.slice();
+      preservedRow[snapshot.header_index.access_status] = 'active';
+      preservedRow[snapshot.header_index.updated_at] = now;
+      compactedRows.push(preservedRow);
+    });
+    if (compactedRows.length !== EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT) {
+      throw new Error('Compaction dibatalkan: jumlah row target hasil filter bukan 100.');
+    }
+
+    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const backupName = 'ParticipantAccounts_Backup_' + new Date().toISOString()
+      .replace(/\D/g, '')
+      .slice(0, 14)
+      + '_' + Utilities.getUuid().slice(0, 8);
+    const backupSheet = snapshot.sheet.copyTo(spreadsheet).setName(backupName);
+    backupSheet.setFrozenRows(1);
+    if (typeof backupSheet.hideSheet === 'function') backupSheet.hideSheet();
+
+    const originalValues = snapshot.values.map(function(row) { return row.slice(); });
+    const compactedValues = [snapshot.values[0].slice()].concat(compactedRows);
+    try {
+      snapshot.sheet.getDataRange().clearContent();
+      snapshot.sheet.getRange(1, 1, compactedValues.length, compactedValues[0].length)
+        .setValues(compactedValues);
+      snapshot.sheet.setFrozenRows(1);
+      SpreadsheetApp.flush();
+
+      const verification = buildParticipantPortalAccessReconciliation(
+        getParticipantPortalAccessSnapshot().accounts
+      ).summary;
+      if (!verification.ready_to_apply
+        || verification.total_accounts !== EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+        || verification.matched_target_accounts !== EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+        || verification.outside_target_accounts !== 0) {
+        throw new Error('Read-back compaction tidak menghasilkan tepat 100 account target.');
+      }
+    } catch (error) {
+      snapshot.sheet.getDataRange().clearContent();
+      snapshot.sheet.getRange(1, 1, originalValues.length, originalValues[0].length)
+        .setValues(originalValues);
+      SpreadsheetApp.flush();
+      throw error;
+    }
+
+    const result = {
+      status: 'success',
+      already_compacted: false,
+      before: summary.total_accounts,
+      after: EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT,
+      removed: summary.outside_target_accounts,
+      backup_sheet: backupName,
+      credentials_changed: 0
+    };
     Logger.log(JSON.stringify(result));
     return result;
   } finally {
