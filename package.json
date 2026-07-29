@@ -7,7 +7,11 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:qa:mock",
+    "test:qa:list": "playwright test --list",
+    "test:qa:mock": "playwright test e2e/active-modules-ui.spec.js e2e/ui-ux-contract.spec.js e2e/p5-ux-polish.spec.js --workers=1",
+    "test:qa:live:read": "playwright test e2e/participant-backend.spec.js e2e/fellow-dashboard.spec.js --workers=1",
+    "test:qa:live:write": "playwright test e2e/participant-backend.spec.js e2e/participant-workflow.spec.js --workers=1"
   },
   "repository": {
     "type": "git",

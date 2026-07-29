@@ -1,5 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
+const { ACTIVE_DASHBOARD_MODULES } = require('./fixtures/active-modules');
+const { canRunLiveMutations } = require('./helpers/test-policy');
 
 // Credentials from environment (DO NOT hardcode NIK/password)
 const TEST_NIK = process.env.TEST_PARTICIPANT_NIK || '';
@@ -97,6 +99,7 @@ test.describe('Login Validation', () => {
 
 const hasCredentials = TEST_NIK && TEST_PASSWORD;
 const authTest = hasCredentials ? test : test.skip;
+const mutatingAuthTest = canRunLiveMutations ? test : test.skip;
 
 // Pre-populate settings so portal gate opens (fresh browser localStorage is empty)
 async function primeSettings(page) {
@@ -161,36 +164,31 @@ test.describe('Authenticated Flow', () => {
     // Password form validation tested via client-side JS in settings.js (#44a)
   });
 
-  authTest('Module navigation works', async ({ page }) => {
+  mutatingAuthTest('Module navigation works', async ({ page }) => {
     await login(page);
     await page.goto(`${TEST_BASE}/#/participant-dashboard`);
     await page.waitForTimeout(3000);
 
     // Click first module card
-    const moduleCard = page.locator('.module-card a, [data-module-id] a, .dash-module-card a').first();
-    if (await moduleCard.isVisible({ timeout: 5000 }).catch(() => false)) {
-      await moduleCard.click();
-      await page.waitForTimeout(2000);
-
-      const url = page.url();
-      // Should have navigated to a module page
-      expect(url).toMatch(/participant-ai-lab-|participant-ai-/i);
-    }
+    const moduleCard = page.locator('#dashboardModuleGrid > a.module-card.dash-real').first();
+    await expect(moduleCard).toBeVisible({ timeout: 10000 });
+    await moduleCard.click();
+    await expect(page).toHaveURL(/#\/participant-ai-/);
   });
 
   // ─── Quiz Submit ─────────────────────────────────────────
 
-    authTest('Quiz page renders with form and submit button', async ({ page }) => {
+  mutatingAuthTest('Quiz page renders with form and submit button', async ({ page }) => {
     await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning-quiz`);
+    await page.goto(`${TEST_BASE}/#${ACTIVE_DASHBOARD_MODULES[0].routes.quiz}`);
 
     // Quiz form is rendered by IIFE, wait for it to appear in DOM
     await page.waitForFunction(() => {
-      return document.getElementById('aiDeepLearningQuizForm') !== null;
+      return document.getElementById('aiPythonQuizForm') !== null;
     }, { timeout: 15000 });
     await page.waitForTimeout(1000);
 
-    const form = page.locator('#aiDeepLearningQuizForm');
+    const form = page.locator('#aiPythonQuizForm');
     await expect(form).toBeVisible({ timeout: 5000 });
 
     const radios = form.locator('input[type="radio"]');
@@ -203,20 +201,20 @@ test.describe('Authenticated Flow', () => {
 
   // ─── Practice Save ───────────────────────────────────────
 
-  authTest('Practice page renders with form and textarea', async ({ page }) => {
+  mutatingAuthTest('Practice page renders with form and textarea', async ({ page }) => {
     await login(page);
-    await page.evaluate(() => { window.location.hash = '#/participant-ai-lab-deep-learning-practice'; });
+    await page.goto(`${TEST_BASE}/#${ACTIVE_DASHBOARD_MODULES[0].routes.practice}`);
 
     // Wait for the practice form to exist in DOM
-    await page.waitForSelector('#aiDeepLearningPracticeForm', { state: 'attached', timeout: 15000 });
+    await page.waitForSelector('#aiPythonPracticeForm', { state: 'attached', timeout: 15000 });
 
     // Wait for practice list to actually have children (IIFE populates async)
     await page.waitForFunction(() => {
-      const list = document.getElementById('aiDeepLearningPracticeList');
+      const list = document.getElementById('aiPythonPracticeList');
       return list && list.children.length > 0 && list.querySelector('textarea, input[type="text"]');
     }, { timeout: 15000 });
 
-    const form = page.locator('#aiDeepLearningPracticeForm');
+    const form = page.locator('#aiPythonPracticeForm');
     const textareas = form.locator('textarea, input[type="text"]');
     const count = await textareas.count();
     expect(count).toBeGreaterThan(0);
@@ -252,7 +250,7 @@ test.describe('Authenticated Flow', () => {
 
   // ─── Dashboard Module Cards ─────────────────────────────
 
-  authTest('Dashboard renders minimum 5 module cards', async ({ page }) => {
+  authTest('Dashboard renders exactly 5 active module cards', async ({ page }) => {
     await login(page);
     await page.goto(`${TEST_BASE}/#/participant-dashboard`);
 
@@ -264,17 +262,12 @@ test.describe('Authenticated Flow', () => {
 
     await page.waitForTimeout(2000);
 
-    const cards = page.locator(
-      '.dash-module-card, [class*="module-card"], [class*="moduleCard"], .course-card'
-    );
+    const cards = page.locator('#dashboardModuleGrid > a.module-card.dash-real:not(.add)');
     const count = await cards.count();
-    // Even if GAS data fails, dashboard should render something
-    expect(count).toBeGreaterThanOrEqual(0);
-    if (count > 0) {
-      // If cards rendered, verify they have content
-      const firstCard = cards.first();
-      const text = await firstCard.textContent();
-      expect(text.trim().length).toBeGreaterThan(0);
+    expect(count).toBe(5);
+    await expect(cards).toHaveCount(5);
+    for (const module of ACTIVE_DASHBOARD_MODULES) {
+      await expect(cards.filter({ hasText: module.title })).toHaveCount(1);
     }
   });
 
@@ -318,9 +311,9 @@ test.describe('Authenticated Flow', () => {
 
   // ─── Module-Specific Content ─────────────────────────────
 
-  authTest('Module overview — no Python content in healthcare module', async ({ page }) => {
+  mutatingAuthTest('Active module overview has no copied Python contamination', async ({ page }) => {
     await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-healthcare`);
+    await page.goto(`${TEST_BASE}/#${ACTIVE_DASHBOARD_MODULES[1].routes.overview}`);
     await page.waitForTimeout(4000);
 
     const bodyText = await page.evaluate(() => document.body.innerText);
@@ -329,9 +322,9 @@ test.describe('Authenticated Flow', () => {
 
   // ─── Roadmap Cards ───────────────────────────────────────
 
-  authTest('Module overview — roadmap cards with chapter titles', async ({ page }) => {
+  mutatingAuthTest('Module overview — roadmap cards with chapter titles', async ({ page }) => {
     await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#${ACTIVE_DASHBOARD_MODULES[2].routes.overview}`);
 
     // Wait for module content to render (roadmap is built by IIFE)
     await page.waitForFunction(() => {
@@ -357,9 +350,9 @@ test.describe('Authenticated Flow', () => {
 
   // ─── GUIDES Hook Question ────────────────────────────────
 
-  authTest('Module overview — GUIDES hook question is module-specific', async ({ page }) => {
+  mutatingAuthTest('Module overview — GUIDES hook question is module-specific', async ({ page }) => {
     await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#${ACTIVE_DASHBOARD_MODULES[2].routes.overview}`);
     await page.waitForTimeout(4000);
 
     const bodyText = await page.evaluate(() => document.body.innerText);
@@ -369,9 +362,9 @@ test.describe('Authenticated Flow', () => {
 
   // ─── Topic Label Hidden ──────────────────────────────────
 
-  authTest('Topic label badges are hidden via CSS', async ({ page }) => {
+  mutatingAuthTest('Topic label badges are hidden via CSS', async ({ page }) => {
     await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#${ACTIVE_DASHBOARD_MODULES[2].routes.overview}`);
     await page.waitForTimeout(4000);
 
     const labels = page.locator('.topic-label');
@@ -405,7 +398,7 @@ test.describe('Authenticated Flow', () => {
 
   authTest('Restricted pages show access denied message', async ({ page }) => {
     await login(page);
-    await page.evaluate(() => { window.location.hash = '#/participant-mentor'; });
+    await page.goto(`${TEST_BASE}/#/participant-mentor`);
     await page.waitForFunction(() => document.body.innerText.includes('Akses Peserta Dibatasi'), { timeout: 10000 });
 
     const bodyText = await page.evaluate(() => document.body.innerText);

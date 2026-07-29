@@ -1,137 +1,103 @@
-# HerAI QA Smoke Report
+# HerAI Active Modules QA Report
 
-Generated: 2026-07-17T18:06:54.183Z
+**Tanggal:** 29 Juli 2026, Asia/Jakarta
 
-## Summary
+**Baseline:** `6c35926`
 
-- PASS: 78
-- WARN: 6
-- FAIL: 2
-- Frontend URL: http://127.0.0.1:3000
-- Messaging URL: http://127.0.0.1:8091
-- Signaling URL: http://127.0.0.1:8080
-- GAS live check: skipped
+**Scope:** 5 module dashboard, AI Intro, progress/quiz/practice contract, route, UI/UX
+
+**Safety:** deterministic mock; tidak ada write ke GAS/akun peserta live
 
 ## Release Gate
 
-Status: BLOCKED
+**Status: BLOCKED untuk klaim “progress dan semua kuis sudah benar end-to-end”.**
 
-Masih ada FAIL yang harus diperbaiki sebelum dianggap aman untuk deploy.
+Navigation dan sebagian besar UI dasar sehat, tetapi ada data-integrity gap pada AI Modern, perhitungan backend, ringkasan progress, serta dua kuis placeholder.
 
-## Failed Checks
+## Hasil Otomatis
 
-- Go Services / messaging: go test ./...: failed to initialize build cache at /private/tmp/herai-go-build-cache: mkdir /private: permission denied
-- Go Services / signaling: go test ./...: failed to initialize build cache at /private/tmp/herai-go-build-cache: mkdir /private: permission denied
+| Item | Hasil |
+|---|---:|
+| Seluruh test terdaftar | 108 |
+| Safe mock gate dieksekusi | 55 |
+| Kontrak lolos | 46 |
+| Expected known failures | 9 |
+| Unexpected failures | 0 |
+| Live backend writes | 0 |
 
-## Warnings
+Expected failure tetap merupakan bug produk terbuka. Test sengaja mempertahankan assertion yang benar dan menandainya agar suite bisa menjadi baseline berulang, tanpa menyamarkan defect.
 
-- Runtime Endpoint / Frontend http://127.0.0.1:3000: HTTP 200, expected text not found
-- Runtime Endpoint / Messaging http://127.0.0.1:8091/healthz: Not reachable or not OK: 0 fetch failed
-- Runtime Endpoint / Messaging http://127.0.0.1:8091/api/config: Not reachable or not OK: 0 fetch failed
-- Runtime Endpoint / Signaling http://127.0.0.1:8080/healthz: Not reachable or not OK: 0 fetch failed
-- Runtime Endpoint / Signaling http://127.0.0.1:8080/meeting-config: Not reachable or not OK: 0 fetch failed
-- Runtime Endpoint / GAS Web App: GAS_WEB_APP_URL not provided in environment; skipped live GAS check
+## Matriks Module Aktif
 
-## Detailed Results
+| Module | Overview | Practice UI | Quiz UI | Discussion | Progress write contract |
+|---|---|---|---|---|---|
+| Python untuk AI | PASS | PASS | PASS | PASS | PASS |
+| Reasoning AI | PASS | PASS | PASS | PASS | PASS; metadata quiz FAIL (#79) |
+| Konsep AI Modern | PASS | PASS | PASS | PASS | FAIL (#81, #82) |
+| Evaluation AI | PASS | PASS | FAIL placeholder (#80) | PASS | PASS; metadata quiz FAIL (#79) |
+| Evolution of AI | PASS | PASS | FAIL placeholder (#80) | PASS | PASS; metadata quiz FAIL (#79) |
 
-| Area | Check | Status | Detail |
-|---|---|---|---|
-| Required Files | index.html | PASS | Found |
-| Required Files | server.js | PASS | Found |
-| Required Files | render.yaml | PASS | Found |
-| Required Files | gas/Code.gs | PASS | Found |
-| Required Files | js/router.js | PASS | Found |
-| Required Files | components/navbar.html | PASS | Found |
-| Required Files | components/sidebar.html | PASS | Found |
-| Required Files | components/footer.html | PASS | Found |
-| Required Files | messaging/main.go | PASS | Found |
-| Required Files | signaling/main.go | PASS | Found |
-| Required Files | docs/DEVELOPER_HANDOVER_AND_ROADMAP.md | PASS | Found |
-| Required Files | docs/DEVELOPER_HANDOVER_AND_ROADMAP.pdf | PASS | Found |
-| Required Files | docs/HerAI_Developer_Prompt_Templates.pdf | PASS | Found |
-| SPA Routes | Route count | PASS | 157 routes detected |
-| SPA Routes | Every route points to existing HTML | PASS | All route files exist |
-| JavaScript Syntax | js/dashboard/admin-modules.js | PASS | Syntax OK |
-| JavaScript Syntax | js/dashboard/ai-prescreening.js | PASS | Syntax OK |
-| JavaScript Syntax | js/dashboard/audit-trail.js | PASS | Syntax OK |
-| JavaScript Syntax | js/dashboard/competency-monitor.js | PASS | Syntax OK |
-| JavaScript Syntax | js/dashboard/dashboard.js | PASS | Syntax OK |
-| JavaScript Syntax | js/dashboard/data-visualization.js | PASS | Syntax OK |
-| JavaScript Syntax | js/dashboard/retest-monitor.js | PASS | Syntax OK |
-| JavaScript Syntax | js/dashboard/skoring.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/announcement.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/competency-test.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/data-penduduk.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-evaluation.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-evolution.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/bow.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-arch-builder.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-arch.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-fc.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-hands.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-intro.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-relu.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cnn-why.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/cv-overview.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/filtering-kernels.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/gen-overview.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/image-processing-opencv.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/machine-learning-overview.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/ml-bias-variance.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/ml-hypothesis.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/ml-intro.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/ml-overview.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/ml-vc-dim.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/morphological-transforms.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/nlp-overview.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/pixel-anatomy.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/pos-ner.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/preprocessing.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/tfidf.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-lab/tokenization.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-math-for-ai.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-ml-basic.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-modern.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-python-basic.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-python.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/ai-reasoning.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/course-placeholder.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard/settings.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/fellow-dashboard.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/meeting.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/messaging.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/profile.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/projects.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/register.js | PASS | Syntax OK |
-| JavaScript Syntax | js/frontend/twibbon.js | PASS | Syntax OK |
-| JavaScript Syntax | js/main.js | PASS | Syntax OK |
-| JavaScript Syntax | js/router.js | PASS | Syntax OK |
-| JavaScript Syntax | server.js | PASS | Syntax OK |
-| Go Services | messaging: go test ./... | FAIL | failed to initialize build cache at /private/tmp/herai-go-build-cache: mkdir /private: permission denied |
-| Go Services | signaling: go test ./... | FAIL | failed to initialize build cache at /private/tmp/herai-go-build-cache: mkdir /private: permission denied |
-| GAS | Sheet registry count | PASS | 72 sheets detected |
-| GAS | Action route count | PASS | 48 actions detected |
-| GAS | Duplicate actions | PASS | None |
-| GAS | Critical actions available | PASS | All critical actions found |
-| Documentation | docs/DEVELOPER_HANDOVER_AND_ROADMAP.md | PASS | 21 KB |
-| Documentation | docs/DEVELOPER_HANDOVER_AND_ROADMAP.pdf | PASS | 36 KB |
-| Documentation | docs/HerAI_Developer_Prompt_Templates.pdf | PASS | 15 KB |
-| Runtime Endpoint | Frontend http://127.0.0.1:3000 | WARN | HTTP 200, expected text not found |
-| Runtime Endpoint | Messaging http://127.0.0.1:8091/healthz | WARN | Not reachable or not OK: 0 fetch failed |
-| Runtime Endpoint | Messaging http://127.0.0.1:8091/api/config | WARN | Not reachable or not OK: 0 fetch failed |
-| Runtime Endpoint | Signaling http://127.0.0.1:8080/healthz | WARN | Not reachable or not OK: 0 fetch failed |
-| Runtime Endpoint | Signaling http://127.0.0.1:8080/meeting-config | WARN | Not reachable or not OK: 0 fetch failed |
-| Runtime Endpoint | GAS Web App | WARN | GAS_WEB_APP_URL not provided in environment; skipped live GAS check |
+AI Intro ikut terdaftar dalam manifest enam module di halaman AI Fundamentals. CV Digital Image dicatat terpisah karena tidak termasuk lima card dashboard yang menjadi fokus phase ini.
 
-## How To Re-run
+## Temuan Prioritas
+
+| # | Severity | Area | Temuan | Bukti/kontrak |
+|---|---|---|---|---|
+| 78 | High | Frontend/data | Ringkasan Belajar tetap 0/0/6 saat mock backend non-zero | dynamic-summary test |
+| 79 | High | Frontend/backend | denominator kuis Reasoning/Evaluation/Evolution tidak sinkron dengan GAS | static metadata contract |
+| 80 | High | Content/UX | Evaluation dan Evolution menampilkan `Kuis belum tersedia` | real-question UI test |
+| 81 | Critical | Frontend/backend | submit AI Modern melempar `MODULE_ID is not defined` | intercepted GAS write + page error |
+| 82 | Critical | Frontend/backend | chapter AI Modern dikirim sebagai object, bukan ID numerik | numeric chapter contract |
+| 83 | Medium | Mobile UX | tombol 43,5px dan 42px pada viewport 375px | 44px touch-target gate |
+| 84 | High | Backend | quiz/practice berstatus completed ikut dihitung sebagai chapter | review `getParticipantDashboardData()` |
+| 85 | High | Error handling | response save tidak diperiksa dan `catch` kosong | review `saveChapterProgress()` |
+
+## UI/UX Gate
+
+PASS:
+
+- dashboard memaparkan tepat lima card module aktif dengan accessible name;
+- tidak ada horizontal overflow pada 375px, 768px, dan 1280px;
+- ringkasan tidak mengandalkan warna saja dan donut punya label aksesibel;
+- keyboard focus terlihat pada card dashboard;
+- CSS menghormati `prefers-reduced-motion`;
+- animasi/toast/accordion/progress baseline P5 tetap berfungsi.
+
+OPEN:
+
+- dua tombol praktik mobile belum mencapai 44×44px (#83);
+- save progress tidak menunjukkan loading/error yang dapat dipercaya ketika backend gagal (#85).
+
+## Safety dan Observability
+
+- E2E source tidak menyimpan literal kredensial peserta.
+- Mock mencegat `/__gas` dan menyimpan request untuk assertion, bukan meneruskannya ke production.
+- Kredensial live hanya dibaca dari environment variable.
+- Mutating suites tidak berjalan kecuali kredensial tersedia **dan** `TEST_ALLOW_MUTATIONS=true`.
+- Siklus ganti password tetap skip kecuali `TEST_ALLOW_PASSWORD_MUTATIONS=true` juga diberikan.
+- Playwright menghasilkan reporter list, HTML, JSON, plus screenshot/trace/video saat failure.
+
+## Perintah Re-run
 
 ```bash
-node scripts/qa-smoke.mjs
+# Safe gate
+npm run test:qa:mock
 
-# Optional live endpoint override
-QA_FRONTEND_URL=http://127.0.0.1:3000 \
-QA_MESSAGING_URL=http://127.0.0.1:8091 \
-QA_SIGNALING_URL=http://127.0.0.1:8080 \
-GAS_WEB_APP_URL=https://script.google.com/macros/s/.../exec \
-node scripts/qa-smoke.mjs
+# Enumerasi seluruh coverage
+npm run test:qa:list
+
+# Read-only live contract (kredensial dari luar repo)
+TEST_PARTICIPANT_NIK="<qa-nik>" \
+TEST_PARTICIPANT_PASSWORD="<qa-password>" \
+npm run test:qa:live:read
 ```
+
+Live mutation tidak direkomendasikan ke akun production. Gunakan staging/dedicated QA dataset dan opt-in eksplisit bila siklus write→read→reload→cleanup sudah diotorisasi.
+
+## Rekomendasi Urutan Fix
+
+1. #81, #82, #84, #85 — integritas dan feedback penyimpanan.
+2. #78 — jadikan progress backend sumber tunggal untuk Ringkasan Belajar.
+3. #79, #80 — samakan denominator dan lengkapi kuis nyata.
+4. #83 — naikkan `min-height` control menjadi sekurangnya 44px.
+5. Setelah fix, jalankan safe gate lalu live read-only; lakukan mutation test hanya di staging.

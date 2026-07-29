@@ -1,5 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
+const { ACTIVE_DASHBOARD_MODULES } = require('./fixtures/active-modules');
+const { canRunLiveMutations, canRunPasswordMutations } = require('./helpers/test-policy');
 
 /**
  * E2E Workflow Integration Tests — HerAI Fellowship
@@ -7,19 +9,18 @@ const { test, expect } = require('@playwright/test');
  * Full end-to-end user journey tests. Simulates real participant behavior:
  * Login → Dashboard → Module → Quiz → Verify score.
  *
- * Run:
- *   TEST_PARTICIPANT_NIK="8204086711010003" \
- *   TEST_PARTICIPANT_PASSWORD="brenda123" \
- *   npx playwright test e2e/participant-workflow.spec.js
+ * Live workflow tests require TEST_ALLOW_MUTATIONS=true in addition to
+ * credentials because opening modules currently writes chapter progress.
  */
 
 const TEST_BASE = 'http://127.0.0.1:3000';
 const TEST_NIK = process.env.TEST_PARTICIPANT_NIK || '';
 const TEST_PASSWORD = process.env.TEST_PARTICIPANT_PASSWORD || '';
-const TEST_MODULE = 'deep-learning';
+const TEST_MODULE = ACTIVE_DASHBOARD_MODULES[0];
+const SECOND_MODULE = ACTIVE_DASHBOARD_MODULES[1];
 
-const hasCredentials = TEST_NIK && TEST_PASSWORD;
-const wfTest = hasCredentials ? test : test.skip;
+const wfTest = canRunLiveMutations ? test : test.skip;
+const passwordWfTest = canRunPasswordMutations ? test : test.skip;
 
 // ─── Helpers ──────────────────────────────────────────────
 
@@ -66,24 +67,23 @@ test.describe('Workflow — Full Journey', () => {
     const bodyText = await page.evaluate(() => document.body.innerText);
     expect(bodyText).toMatch(/Halo|Peserta/i);
 
-    // Navigate to deep-learning module
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#${TEST_MODULE.routes.overview}`);
     await page.waitForTimeout(3000);
 
     // Navigate to quiz
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning-quiz`);
+    await page.goto(`${TEST_BASE}/#${TEST_MODULE.routes.quiz}`);
     await page.waitForFunction(() => {
-      return document.getElementById('aiDeepLearningQuizForm') !== null;
+      return document.getElementById('aiPythonQuizForm') !== null;
     }, { timeout: 15000 });
     await page.waitForTimeout(2000);
 
     // Answer some quiz questions (click first radio in each question)
-    const radioGroups = page.locator('#aiDeepLearningQuizForm input[type="radio"]');
+    const radioGroups = page.locator(`${TEST_MODULE.selectors.quizForm} input[type="radio"]`);
     const radioCount = await radioGroups.count();
 
     if (radioCount > 0) {
       // Click first radio of each visible group
-      const form = page.locator('#aiDeepLearningQuizForm');
+      const form = page.locator(TEST_MODULE.selectors.quizForm);
       const questions = form.locator('.quiz-question, .question-block, [class*="question"]');
       const qCount = await questions.count();
 
@@ -115,12 +115,12 @@ test.describe('Workflow — Full Journey', () => {
 
   wfTest('Chapter auto-save — navigate → reload → resume last chapter', async ({ page }) => {
     await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#${TEST_MODULE.routes.overview}`);
     await page.waitForTimeout(3000);
 
     // Check that chapter progress is saved to localStorage
     const chapterSaved = await page.evaluate(() => {
-      // ai-deep-learning.js stores chapter in localStorage under a module-specific key
+      // Active modules store the current chapter under a module-specific key.
       const keys = Object.keys(localStorage).filter(k => k.includes('chapter') || k.includes('herai'));
       return keys.length > 0;
     });
@@ -140,22 +140,22 @@ test.describe('Workflow — Full Journey', () => {
 
   wfTest('Practice — type answer → save → localStorage persisted', async ({ page }) => {
     await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning-practice`);
-    await page.waitForSelector('#aiDeepLearningPracticeForm', { state: 'attached', timeout: 15000 });
+    await page.goto(`${TEST_BASE}/#${TEST_MODULE.routes.practice}`);
+    await page.waitForSelector(TEST_MODULE.selectors.practiceForm, { state: 'attached', timeout: 15000 });
     await page.waitForFunction(() => {
-      const list = document.getElementById('aiDeepLearningPracticeList');
+      const list = document.getElementById('aiPythonPracticeList');
       return list && list.querySelector('textarea, input[type="text"]');
     }, { timeout: 15000 });
     await page.waitForTimeout(1000);
 
     // Type in the first textarea
-    const textarea = page.locator('#aiDeepLearningPracticeForm textarea').first();
+    const textarea = page.locator(`${TEST_MODULE.selectors.practiceForm} textarea`).first();
     if (await textarea.isVisible({ timeout: 3000 }).catch(() => false)) {
       await textarea.fill('Jawaban test workflow — automation test');
     }
 
     // Click save button
-    const saveBtn = page.locator('#aiDeepLearningPracticeForm button:has-text("Simpan"), button:has-text("Save"), .practice-save-btn').first();
+    const saveBtn = page.locator(`${TEST_MODULE.selectors.practiceForm} button:has-text("Simpan"), ${TEST_MODULE.selectors.practiceForm} .practice-save-btn`).first();
     if (await saveBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
       await saveBtn.click();
       await page.waitForTimeout(1500);
@@ -173,7 +173,7 @@ test.describe('Workflow — Full Journey', () => {
 
   // ─── Test 4: Password Change Full Cycle ──────────────────
 
-  wfTest('Password change — ganti → logout → login baru → ganti balik', async ({ page }) => {
+  passwordWfTest('Password change — ganti → logout → login baru → ganti balik', async ({ page }) => {
     await login(page);
     await page.goto(`${TEST_BASE}/#/participant-settings`);
     await page.waitForSelector('.s-nav-list', { timeout: 10000 });
@@ -185,7 +185,7 @@ test.describe('Workflow — Full Journey', () => {
     await keamananTab.click();
     await page.waitForSelector('#passwordChangeForm', { timeout: 10000 });
 
-    const tempPass = 'testbaru456';
+    const tempPass = `Qa-${Date.now()}-Z9!`;
 
     // Step 1: Change password
     await page.fill('#oldPassword', TEST_PASSWORD);
@@ -237,7 +237,7 @@ test.describe('Workflow — Full Journey', () => {
     await page.waitForTimeout(3000);
 
     // Navigate away to a module
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#${TEST_MODULE.routes.overview}`);
     await page.waitForTimeout(2000);
 
     // Navigate back to dashboard
@@ -255,22 +255,20 @@ test.describe('Workflow — Full Journey', () => {
   wfTest('Multi-module — progress tracked independently per module', async ({ page }) => {
     await login(page);
 
-    // Visit deep-learning module
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#${TEST_MODULE.routes.overview}`);
     await page.waitForTimeout(3000);
 
-    const dlBody = await page.evaluate(() => document.body.innerText);
-    expect(dlBody.length).toBeGreaterThan(100);
+    const firstBody = await page.evaluate(() => document.body.innerText);
+    expect(firstBody).toMatch(TEST_MODULE.titlePattern);
 
-    // Visit python module
-    await page.goto(`${TEST_BASE}/#/participant-ai-python`);
+    await page.goto(`${TEST_BASE}/#${SECOND_MODULE.routes.overview}`);
     await page.waitForTimeout(3000);
 
-    const pyBody = await page.evaluate(() => document.body.innerText);
-    expect(pyBody.length).toBeGreaterThan(100);
+    const secondBody = await page.evaluate(() => document.body.innerText);
+    expect(secondBody).toMatch(SECOND_MODULE.titlePattern);
 
     // Each module should have different content
-    expect(dlBody).not.toBe(pyBody);
+    expect(firstBody).not.toBe(secondBody);
   });
 
   // ─── Test 7: Quiz Badge Update ───────────────────────────
@@ -285,14 +283,14 @@ test.describe('Workflow — Full Journey', () => {
     const hadBadgeBefore = await badgeBefore.isVisible({ timeout: 2000 }).catch(() => false);
 
     // Navigate to quiz and submit
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning-quiz`);
+    await page.goto(`${TEST_BASE}/#${TEST_MODULE.routes.quiz}`);
     await page.waitForFunction(() => {
-      return document.getElementById('aiDeepLearningQuizForm') !== null;
+      return document.getElementById('aiPythonQuizForm') !== null;
     }, { timeout: 15000 });
     await page.waitForTimeout(2000);
 
     // Click some answers
-    const form = page.locator('#aiDeepLearningQuizForm');
+    const form = page.locator(TEST_MODULE.selectors.quizForm);
     const questions = form.locator('.quiz-question, .question-block, [class*="question"]');
     const qCount = await questions.count();
     for (let i = 0; i < Math.min(qCount, 5); i++) {

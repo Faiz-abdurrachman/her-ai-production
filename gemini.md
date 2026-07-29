@@ -169,7 +169,7 @@ Playwright e2e test suite untuk validasi fungsionalitas utama dan regression tes
 
 **Run command:**
 ```bash
-TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test
+TEST_PARTICIPANT_NIK="<qa-nik>" TEST_PARTICIPANT_PASSWORD="<qa-password>" npx playwright test
 ```
 
 **Critical debug findings:**
@@ -273,7 +273,7 @@ Lainnya (2): python, modern
 14. Jangan silent fail — tambah error feedback di UI
 15. JANGAN push ke GitHub kecuali diminta user
 16. GAS deployment: selalu redeploy web app setelah edit Code.gs
-17. Playwright: TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test
+17. Playwright: TEST_PARTICIPANT_NIK="<qa-nik>" TEST_PARTICIPANT_PASSWORD="<qa-password>" npx playwright test
 18. Server lokal: node server.js → http://127.0.0.1:3000
 
 ---
@@ -555,7 +555,7 @@ Semua 29 ai-*.js + 20+ ai-lab/*.js files di-load via `<script>` tag di index.htm
 **Last commit:** `ff6d639` — fix: avatar — preview-before-upload flow + fix topbar avatar display (#67)
 **GAS Deployment:** ✅ Redeployed — avatar sheet storage active
 **Worktree:** BERSIH
-**Test participant:** NIK 8204086711010003 / Brenda Rahmandea Arsy / Password brenda123
+**Test participant:** kredensial QA disuplai melalui environment variable, tidak disimpan di repo
 **E2E (latest):** 40/40 PASS, 0 regression
 
 ### Deliverables Sesi Ini
@@ -570,7 +570,7 @@ Semua 29 ai-*.js + 20+ ai-lab/*.js files di-load via `<script>` tag di index.htm
 | #67 | Avatar v4 — preview flow, topbar fix, cancel button | ✅ | 0c37090, ff6d639 |
 
 ### Issues Terbuka
-- **Password Brenda:** Perlu diisi ulang `brenda123` di sheet `peserta_tahap_1` setelah E2E password test jalan
+- **Password akun QA:** test password bersifat mutatif dan wajib memakai akun/staging khusus
 - **GAS:** SUDAH redeploy — avatar sheet storage active
 - **Semua prioritas NEXT_PLAN.md:** SELESAI (6/6) — tidak ada backlog
 - **ai-reasoning.js:** VERIFIED — 170KB, full content, routes already working → removed from module bersih list
@@ -628,7 +628,7 @@ Semua animasi via CSS + 1 utility JS — tidak ada perubahan ke 29 file ai-*.js.
 14. **No silent fail** — error harus kelihatan (console.error, UI error state).
 15. **NO push ke GitHub** kecuali diminta user.
 16. **GAS deployment:** selalu redeploy web app setelah edit Code.gs.
-17. Playwright: `TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test`
+17. Playwright: `TEST_PARTICIPANT_NIK="<qa-nik>" TEST_PARTICIPANT_PASSWORD="<qa-password>" npx playwright test`
 18. Server lokal: `node server.js` → http://127.0.0.1:3000
 19. **page.goto() > page.evaluate()** untuk SPA hash navigation — `page.evaluate` hash nav unreliable.
 20. **Jangan edit module bersih tanpa approval** (cv, math-for-ai, ml-basic, python-basic, reasoning). TANYA DULU.
@@ -642,7 +642,7 @@ Semua animasi via CSS + 1 utility JS — tidak ada perubahan ke 29 file ai-*.js.
 node server.js
 
 # E2E Tests
-TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" npx playwright test --workers=1
+TEST_PARTICIPANT_NIK="<qa-nik>" TEST_PARTICIPANT_PASSWORD="<qa-password>" npx playwright test --workers=1
 
 # Syntax check
 for f in js/frontend/fellow-dashboard/ai-*.js; do node --check "$f" && echo "✅ $f" || echo "❌ $f"; done
@@ -875,3 +875,86 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 **Fix:** GAS: hapus filter is_active. Brenda 1,024 pts live. 3x redeploy (#69→#76→#77).
 
 **Verifikasi Final:** ✅ Leaderboard LIVE — Brenda 1,024 pts (#1), peserta lain 245 pts (#2). GAS deployed dan verified.
+
+---
+
+## 78. Bug Audit: Ringkasan Belajar Tidak Terhubung ke Progress
+
+**Status:** OPEN — terdeteksi otomatis sebagai expected failure.
+
+**Temuan:** Kartu `Ringkasan Belajar` di halaman AI Fundamentals masih berisi nilai statis `0%`, `0 Modul`, `0 Modul`, dan `6 Modul`. Data dashboard mock yang memiliki progress non-zero tidak mengubah kartu tersebut.
+
+**Dampak:** UI dapat menampilkan 0% walaupun backend sudah mencatat aktivitas peserta. Ini menjelaskan tampilan pada screenshot user.
+
+**Acceptance test:** progress backend non-zero harus mengubah donut, Tuntas, Dalam Proses, dan Belum Dimulai secara konsisten.
+
+## 79. Bug Audit: Metadata Jumlah Kuis Tidak Sinkron
+
+**Status:** OPEN — terdeteksi otomatis sebagai expected failure.
+
+**Temuan:** Reasoning menyediakan 26 soal, sedangkan seed GAS menetapkan `quiz_total: 20`. Evaluation dan Evolution hanya merender 1 item placeholder, tetapi GAS juga menetapkan `quiz_total: 20`.
+
+**Dampak:** normalisasi persentase kuis dan badge dashboard berpotensi salah.
+
+## 80. Bug Audit: Kuis Evaluation dan Evolution Masih Placeholder
+
+**Status:** OPEN — terdeteksi otomatis sebagai expected failure.
+
+**Temuan:** route kuis dapat dibuka, tetapi kontennya hanya `Kuis belum tersedia`; belum ada pertanyaan serta opsi jawaban yang bisa diselesaikan peserta.
+
+**Dampak:** dua dari lima module dashboard tidak memiliki alur kuis end-to-end.
+
+## 81. Bug Audit: Simpan Praktik/Kuis AI Modern Crash
+
+**Status:** OPEN — terdeteksi otomatis sebagai expected failure.
+
+**Penyebab:** `MODULE_ID` dideklarasikan di IIFE pertama `ai-modern.js`, tetapi handler praktik dan kuis berada di IIFE kedua. Saat submit, browser menghasilkan `ReferenceError: MODULE_ID is not defined`.
+
+**Dampak:** jawaban lokal dapat tampil, tetapi pencatatan ke GAS tidak terkirim.
+
+**Catatan:** `ai-modern.js` termasuk module berstruktur khusus; perbaikan source menunggu approval eksplisit.
+
+## 82. Bug Audit: Chapter AI Modern Mengirim Object sebagai chapter_id
+
+**Status:** OPEN — terdeteksi otomatis sebagai expected failure.
+
+**Temuan:** `loadModernTopik()` memanggil `saveChapterProgress(MODULE_ID, chapter, ...)`, dengan `chapter` berupa object. Backend mengubahnya menjadi string `[object Object]`, bukan nomor chapter.
+
+**Dampak:** progress chapter tidak dapat diagregasi secara benar dan deduplikasi row menjadi keliru.
+
+## 83. Bug Audit UX: Touch Target Tombol Praktik di Bawah 44px
+
+**Status:** OPEN — terdeteksi otomatis sebagai expected failure.
+
+**Temuan pada viewport 375px:** tombol `Berikutnya` setinggi 43,5px dan `Simpan Jawaban` 42px.
+
+**Dampak:** target sentuh kurang nyaman dan tidak memenuhi quality gate minimum 44×44px yang dipakai suite QA.
+
+## 84. Bug Audit Backend: Quiz dan Practice Terhitung sebagai Chapter
+
+**Status:** OPEN — ditemukan lewat contract review, belum diperbaiki.
+
+**Penyebab:** `getParticipantDashboardData()` menambah setiap row `status === 'completed'` ke `completedByModule`, termasuk `chapter_id === 'quiz'` dan `chapter_id === 'practice'`.
+
+**Dampak:** persentase module dapat lebih tinggi dari progress chapter sebenarnya, lalu tertutup oleh clamp 100%.
+
+## 85. Bug Audit: saveChapterProgress Gagal Secara Diam-diam
+
+**Status:** OPEN — ditemukan lewat contract review, belum diperbaiki.
+
+**Penyebab:** frontend tidak memeriksa `response.ok` atau body status dari `/__gas`, dan blok `catch` kosong.
+
+**Dampak:** peserta tidak mendapat feedback ketika progress gagal tersimpan; UI dapat tampak berhasil walau backend tidak menerima data.
+
+---
+
+## Phase 0 QA Foundation — Active Modules
+
+- Manifest tunggal untuk 5 module dashboard + AI Intro dan CV Digital Image.
+- Mock participant/GAS deterministik agar UI test tidak menulis ke production.
+- Live mutation guard: kredensial saja tidak cukup; wajib `TEST_ALLOW_MUTATIONS=true`.
+- Siklus ganti password punya guard tambahan `TEST_ALLOW_PASSWORD_MUTATIONS=true`.
+- Test matrix mencakup overview, practice, quiz, discussion, route, script loader, payload module/chapter, ringkasan progress, responsif, keyboard focus, reduced motion, dan touch target.
+- Reporter Playwright: terminal, HTML, JSON, screenshot/trace/video saat gagal.
+- Suite terdaftar: 108 test. Safe mock gate: 55 test tanpa live write.
+- Temuan #78–#85 dicatat sebagai OPEN; tidak ada source production atau GAS yang diubah pada phase ini.

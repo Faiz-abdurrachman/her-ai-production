@@ -1,55 +1,84 @@
 # NEXT PLAN — HerAI Fellowship SuperApp
 
-**Tanggal:** 28 Juli 2026
-**Sesi:** Sisyphus sesi ke-3
-**Last commit:** `64dde11`
-**Total commits:** 244
-**Worktree:** BERSIH
-**E2E:** 33/33 PASS
-**Leaderboard:** ✅ LIVE — Brenda 1,024 pts
+**Tanggal:** 29 Juli 2026
+
+**Baseline:** `6c35926` (245 commits sebelum Phase 0 QA)
+
+**GAS:** deployed dari checkpoint sebelumnya; tidak diubah pada Phase 0
+
+**QA:** 108 test terdaftar, safe mock gate 55 test, live mutation default OFF
+**Leaderboard:** status terakhir terverifikasi LIVE — 1.024 pts untuk peringkat pertama
 
 ---
 
 ## CURRENT STATE
 
-### Semua Prioritas: SELESAI ✅
-13 commit sesi ini (#65-#77). Tidak ada pekerjaan tersisa.
+Phase 0 QA untuk module aktif sudah tersedia. Test tidak lagi bergantung pada route Deep Learning/Healthcare yang sekarang Under Development, dan tidak menulis ke GAS production secara default.
 
-| # | Task | Status |
-|---|------|--------|
-| 65 | UX Polish: animations, toast | ✅ |
-| 66 | Module routes activation | ✅ |
-| 67 | Avatar/foto profil | ✅ |
-| 68 | Under-dev lockdown + UD template fix | ✅ |
-| 69 | Live leaderboard (formula + compute) | ✅ |
-| 70 | Dashboard cache (sessionStorage) | ✅ |
-| 71 | CV back online | ✅ |
-| 72 | CV CNN/Advanced → UD | ✅ |
-| 73 | CV interactive widgets (1,241 lines) | ✅ |
-| 74 | All modules UD except AI Fundamentals | ✅ |
-| 75 | Dashboard filter UD modules | ✅ |
-| 76 | GAS scope fix (activeRows) | ✅ |
-| 77 | GAS filter fix (is_active) | ✅ |
+| Area | Status | Catatan |
+|---|---|---|
+| Active-module manifest | ✅ | 5 card dashboard + AI Intro; CV Digital Image dicatat terpisah |
+| Route/content smoke | ✅ | overview, practice, quiz, discussion |
+| Payload progress mock | ✅/⚠️ | empat module lolos; AI Modern gagal (#81, #82) |
+| Ringkasan Belajar | ❌ | masih statis (#78) |
+| Quiz readiness | ⚠️ | Evaluation/Evolution placeholder (#80) |
+| Metadata score | ⚠️ | tiga module tidak sinkron (#79) |
+| Responsive/focus/motion | ✅ | 375/768/1280, keyboard focus, reduced motion |
+| Mobile touch target | ⚠️ | dua tombol praktik di bawah 44px (#83) |
+| Backend aggregation | ⚠️ | quiz/practice ikut dihitung sebagai chapter (#84) |
+| Error feedback save | ❌ | respons gagal ditelan frontend (#85) |
 
-### Verifikasi Final
-- Leaderboard: LIVE, Brenda 1,024 pts (#1), 245 pts (#2)
-- Dashboard: 5 AI Fundamentals modules, 0.2s refresh
-- CV: Interactive widgets working, Digital Image online
-- E2E: 33/33 PASS, password intact
-- GAS: Deployed and verified
+Safe mock gate: **55 dieksekusi = 46 pass + 9 expected failures**, tanpa live write. Expected failure dipertahankan supaya bug terbuka terlihat dan otomatis berubah menjadi failure saat perilakunya bergeser.
 
 ---
 
-## 🎯 FOKUS SELANJUTNYA — DISKUSI DENGAN USER
+## URUTAN PERBAIKAN YANG DIREKOMENDASIKAN
 
-**Semua prioritas selesai.** TANYA KE USER apa yang mau dikerjakan.
+1. **Data integrity:** #81, #82, #84, #85.
+   - Perubahan `ai-modern.js` perlu approval karena struktur khusus.
+   - Perubahan `gas/Code.gs` wajib redeploy dan verifikasi.
+2. **Truthful progress UI:** #78 dan kontrak perhitungan status Tuntas/Dalam Proses/Belum Dimulai.
+3. **Quiz consistency:** #79 dan #80, termasuk definisi denominator score yang tunggal.
+4. **UI polish:** #83 untuk minimum touch target 44×44px.
+5. **Live read-only verification:** jalankan dengan kredensial via environment, tanpa `TEST_ALLOW_MUTATIONS`.
+6. **Staging mutation E2E:** hanya pada akun QA/dataset yang boleh diubah, dengan opt-in `TEST_ALLOW_MUTATIONS=true`.
 
-Opsi yang mungkin:
-| Opsi | Deskripsi | Estimasi |
-|---|---|---|
-| Unlock module baru | Dari 5 AI Fundamentals → module berikutnya | 1-2h |
-| Fix Evaluation/Evolution | Placeholder modules, konten minimal | 3-5h |
-| Journey progress live | Saat ini static 0%, compute dari progress | 2-3h |
-| Bug fix | Jika ada bug baru ditemukan | varies |
-| Fitur baru | Sesuai kebutuhan user | varies |
-| Testing/QA | Coverage tambahan pada active modules | 1-2h |
+---
+
+## DEFINITION OF DONE PER MODULE
+
+Satu module baru boleh dinyatakan sehat jika:
+
+- semua route mengarah ke konten module yang benar, bukan UD/restricted;
+- overview mencatat chapter ID numerik yang valid;
+- practice dan quiz menampilkan konten nyata serta feedback loading/success/error;
+- payload tersimpan ke backend dan terbaca kembali setelah reload;
+- dashboard dan Ringkasan Belajar merefleksikan sumber data yang sama;
+- tidak ada console/page error;
+- tombol, keyboard focus, touch target, dan layout 375/768/1280 lolos;
+- test tidak membutuhkan kredensial hardcoded atau menulis ke production secara default.
+
+---
+
+## COMMANDS
+
+```bash
+# Safe deterministic gate — tidak menyentuh GAS live
+npm run test:qa:mock
+
+# Hanya baca backend live; kredensial disuplai dari luar repo
+TEST_PARTICIPANT_NIK="<qa-nik>" \
+TEST_PARTICIPANT_PASSWORD="<qa-password>" \
+npm run test:qa:live:read
+
+# Mutasi hanya untuk staging/akun QA yang diizinkan
+TEST_ALLOW_MUTATIONS=true \
+TEST_PARTICIPANT_NIK="<qa-nik>" \
+TEST_PARTICIPANT_PASSWORD="<qa-password>" \
+npm run test:qa:live:write
+
+# Untuk ikut mengizinkan siklus password, tambahkan pada command yang sama:
+# TEST_ALLOW_PASSWORD_MUTATIONS=true TEST_ALLOW_MUTATIONS=true ... npm run test:qa:live:write
+```
+
+Jangan push, edit module berstruktur khusus, atau mengubah/deploy GAS tanpa instruksi user yang eksplisit.

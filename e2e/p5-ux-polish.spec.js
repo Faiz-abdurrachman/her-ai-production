@@ -1,43 +1,15 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
-
-const TEST_NIK = process.env.TEST_PARTICIPANT_NIK || '8204086711010003';
-const TEST_PASSWORD = process.env.TEST_PARTICIPANT_PASSWORD || 'brenda123';
-const TEST_BASE = 'http://127.0.0.1:3000';
-
-async function primeSettings(page) {
-  await page.goto(`${TEST_BASE}/#/participant-login`);
-  await page.waitForTimeout(2000);
-  await page.evaluate(() => {
-    localStorage.setItem('heraiGlobalSettings', JSON.stringify({
-      participantPortalOpen: true,
-      registrationOpen: true,
-      maintenanceMode: false
-    }));
-  });
-  await page.reload();
-  await page.waitForTimeout(2000);
-}
-
-async function login(page) {
-  await primeSettings(page);
-  await page.waitForSelector('#profileNik', { timeout: 10000 });
-  const alreadyLoggedIn = await page.evaluate(() => {
-    const session = sessionStorage.getItem('heraiParticipantSession');
-    return session && JSON.parse(session).token;
-  }).catch(() => false);
-  if (alreadyLoggedIn) return;
-  await page.fill('#profileNik', TEST_NIK);
-  await page.fill('#profilePassword', TEST_PASSWORD);
-  await page.locator('#participantLoginForm button[type="submit"]').click();
-  await page.waitForTimeout(3000);
-}
+const { TEST_BASE, installMockParticipant } = require('./helpers/mock-participant');
 
 test.describe('P5 UX Polish', () => {
 
+  test.beforeEach(async ({ page }) => {
+    await installMockParticipant(page);
+  });
+
   test('1 — Page enter: content area has fade-in animation', async ({ page }) => {
-    await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#/participant-ai-modern`);
     // The module overview uses .ai-modern-beginner-roadmap, not .ai-lab-content
     await page.waitForSelector('.ai-modern-beginner-roadmap', { timeout: 15000 });
 
@@ -48,13 +20,12 @@ test.describe('P5 UX Polish', () => {
 
     // Check if page content rendered (smoke test)
     const text = await page.evaluate(() => document.body.innerText.substring(0, 200));
-    expect(text).toMatch(/Deep Learning|Materi|Kuis/i);
+    expect(text).toMatch(/Konsep AI Modern|Materi|Kuis/i);
     console.log('  ✓ Module page rendered with content');
   });
 
   test('2 — Roadmap grid-template-rows transition', async ({ page }) => {
-    await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#/participant-ai-modern`);
     await page.waitForSelector('.ai-modern-beginner-roadmap', { timeout: 15000 });
 
     // Verify transition property
@@ -76,8 +47,7 @@ test.describe('P5 UX Polish', () => {
   });
 
   test('3 — Active step glow: open step badge pink gradient + shadow', async ({ page }) => {
-    await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#/participant-ai-modern`);
     await page.waitForSelector('.ai-modern-roadmap-steps details[open]', { timeout: 15000 });
 
     const span = page.locator('.ai-modern-roadmap-steps details[open] summary > span').first();
@@ -93,10 +63,9 @@ test.describe('P5 UX Polish', () => {
   });
 
   test('4 — Quiz: is-correct/is-wrong animation CSS exists in stylesheet', async ({ page }) => {
-    await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning-quiz`);
+    await page.goto(`${TEST_BASE}/#/participant-ai-modern-quiz`);
     await page.waitForFunction(() => {
-      return document.querySelectorAll('[data-quiz-index], .reasoning-scaffold-options label').length > 0;
+      return document.querySelectorAll('[data-quiz-option], .ai-modern-quiz-card').length > 0;
     }, { timeout: 15000 });
 
     // Check CSS animation rules exist by checking computed style
@@ -115,7 +84,7 @@ test.describe('P5 UX Polish', () => {
     console.log('  @keyframes aiAnswerPulse/aiAnswerShake in stylesheets:', hasAnim);
     // If stylesheet check fails (CORS), verify via animation on the rule selector
     if (!hasAnim) {
-      const label = page.locator('.reasoning-scaffold-options label').first();
+      const label = page.locator('.reasoning-scaffold-options label, [data-quiz-option]').first();
       if (await label.count() > 0) {
         // Force class to check computed animation
         await label.evaluate(el => el.classList.add('is-correct'));
@@ -132,7 +101,6 @@ test.describe('P5 UX Polish', () => {
   });
 
   test('5 — __aiLabToast: exists + success + error + auto-dismiss', async ({ page }) => {
-    await login(page);
     await page.goto(`${TEST_BASE}/#/participant-dashboard`);
     await page.waitForSelector('.fellow-dashboard', { timeout: 10000 });
 
@@ -170,8 +138,7 @@ test.describe('P5 UX Polish', () => {
   });
 
   test('6 — Strip stagger animation', async ({ page }) => {
-    await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#/participant-ai-modern`);
     await page.waitForSelector('.ai-modern-roadmap-strip', { timeout: 15000 });
 
     const items = page.locator('.ai-modern-roadmap-strip > div');
@@ -186,8 +153,7 @@ test.describe('P5 UX Polish', () => {
   });
 
   test('7 — Progress bar cubic-bezier transition', async ({ page }) => {
-    await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#/participant-ai-modern`);
     await page.waitForSelector('.ai-modern-roadmap-progress', { timeout: 15000 });
 
     const bar = page.locator('[data-roadmap-bar]');
@@ -198,8 +164,7 @@ test.describe('P5 UX Polish', () => {
   });
 
   test('8 — Button has transform transition for :active', async ({ page }) => {
-    await login(page);
-    await page.goto(`${TEST_BASE}/#/participant-ai-lab-deep-learning`);
+    await page.goto(`${TEST_BASE}/#/participant-ai-modern`);
     await page.waitForSelector('.ai-modern-beginner-roadmap', { timeout: 15000 });
 
     // Find any reasoning button on the page

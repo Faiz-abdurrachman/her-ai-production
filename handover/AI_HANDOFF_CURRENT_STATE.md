@@ -1,16 +1,54 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint: 28 Juli 2026 (Sisyphus - Sesi ke-3, Full Session), Asia/Jakarta**
+**Checkpoint: 29 Juli 2026 (Phase 0 — Active Module QA Foundation), Asia/Jakarta**
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
-**Last Commit:** `64dde11` - docs: Update all handover — bugs #68-#77, transfer prompt, next plan
-**Total commits:** 244
+**Baseline Commit:** `6c35926` - docs: Final handover update — leaderboard verified LIVE, GAS deployed, all systems go
+**QA Commit:** current HEAD - `test: establish safe active-module QA foundation (#78-#85)`
+**Total commits:** 246
 **GAS Deployment:** ✅ LIVE — leaderboard 1,024 pts verified
 **Worktree:** BERSIH
-**E2E Test Suite:** 33/33 PASS | Password Brenda: intact
+**E2E Test Suite:** 108 test terdaftar | safe mock gate 55 test | live mutation default OFF
 **Leaderboard:** ✅ LIVE — Brenda 1,024 pts (#1), peserta lain 245 pts (#2)
 
 > **Ini sumber kebenaran tunggal.** Semua dokumen lain yang bertentangan diabaikan.
+
+## CHECKPOINT QA 29 JULI 2026
+
+Phase 0 testing sudah dibangun tanpa mengubah source production, router, module khusus, atau GAS. Tidak ada request mutasi yang dikirim ke backend live.
+
+### Cakupan yang sekarang bisa dilacak
+
+| Gate | Cakupan |
+|---|---|
+| Manifest | 5 module dashboard, AI Intro, CV Digital Image, route dan metadata |
+| Frontend | Overview, practice, quiz, discussion, own-content, loader tunggal |
+| Frontend → backend | Payload `module_id`, `chapter_id`, status dan score memakai GAS mock |
+| Safety | Kredensial tidak disimpan di E2E; live mutation perlu opt-in; password punya opt-in kedua |
+| UI/UX | 375/768/1280, overflow, touch target, keyboard focus, reduced motion, non-color status |
+| Artefak | HTML + JSON report, screenshot, trace dan video saat failure |
+
+### Hasil safe mock gate
+
+- 55 test dieksekusi tanpa live write.
+- 46 alur memenuhi kontrak.
+- 9 expected failures mewakili bug produk #78–#83; suite exit code 0 setelah seluruh finding ditandai.
+- Review kontrak backend menemukan tambahan #84–#85.
+
+### Temuan terbuka
+
+| # | Severity | Temuan |
+|---|---|---|
+| 78 | High | Ringkasan Belajar hardcoded dan tidak membaca progress |
+| 79 | High | `quiz_total` Reasoning/Evaluation/Evolution tidak sinkron |
+| 80 | High | Kuis Evaluation dan Evolution masih placeholder |
+| 81 | Critical | AI Modern practice/quiz gagal mencatat karena scope `MODULE_ID` |
+| 82 | Critical | AI Modern mengirim object sebagai `chapter_id` |
+| 83 | Medium | Dua tombol praktik mobile di bawah 44px |
+| 84 | High | Backend menghitung quiz/practice sebagai chapter selesai |
+| 85 | High | `saveChapterProgress` mengabaikan respons gagal dan catch kosong |
+
+**Penting:** angka leaderboard/GAS live adalah status terverifikasi dari checkpoint sebelumnya. Phase QA ini tidak melakukan live mutation atau verifikasi ulang production.
 
 ---
 
@@ -23,7 +61,7 @@
 | GAS Code | `gas/Code.gs` (2562 baris, 54 routes, 23 sheets) |
 | SPA | Vanilla JS hash-router, Node proxy (`node server.js` → `http://127.0.0.1:3000`) |
 | Proxy | POST `/__gas` (token auto-injected, Origin header WAJIB) |
-| Test participant | NIK `8204086711010003` / Brenda Rahmandea Arsy / `brenda123` |
+| Test participant | Kredensial QA disuplai lewat environment variable; tidak disimpan di repo |
 | Module JS files | 30 ai-*.js (24 standard + 5 berbeda + 1 interactive) |
 | Cache buster | `?v=20260728-*` (update tiap edit CSS/JS) |
 
@@ -37,14 +75,14 @@
 | Nama dinamis dashboard | ✅ | "Halo, [Nama]!" dari session |
 | Ganti password mandiri | ✅ | old→new→hash→sync 2 sheet, rate limit 8/10min |
 | Settings save profil | ✅ | form→GAS→session update |
-| Chapter progress auto-save | ✅ | 28 module wired via `saveChapterProgress()` |
-| Quiz score wiring | ✅ | 28 module + ai-intro, score → GAS `participant_progress` |
-| Practice/latihan wiring | ✅ | 28 module, localStorage + GAS dual save |
+| Chapter progress auto-save | ⚠️ | Active modules teruji mock; AI Modern salah `chapter_id` (#82) |
+| Quiz score wiring | ⚠️ | Evaluation/Evolution placeholder; AI Modern scope crash (#80, #81) |
+| Practice/latihan wiring | ⚠️ | Mayoritas aktif; AI Modern gagal POST ke GAS (#81) |
 | Dashboard skeleton/cache | ✅ | 3-tier: memory→sessionStorage(5min)→skeleton, 0.2s refresh |
-| Dashboard modules filter | ✅ | Only 5 AI Fundamentals + AI Intro shown |
+| Dashboard modules filter | ✅ | Dashboard tepat 5 card; overview AI Fundamentals berisi Intro + 5 module |
 | Dashboard quiz badge | ✅ | Persentase format (X%), pill pink, skeleton reveal |
 | **Leaderboard LIVE** | ✅ | Compute dari `participant_progress`, Brenda 1,024 pts #1 |
-| Score normalization (#55) | ✅ | `quiz_total` column, GAS compute % seragam |
+| Score normalization (#55) | ⚠️ | mekanisme ada, metadata 3 module tidak sinkron (#79) |
 | Restricted access (#54) | ✅ | Hanya Beranda/Modul/Pengaturan + under-development |
 | Python contamination fix (#57) | ✅ | 24 module JS — konten module-specific, 0 kontaminasi |
 | ai-python.js rewrite (#59) | ✅ | 8 GUIDES konten Python proper |
@@ -84,9 +122,9 @@ f749ca7 feat: Live leaderboard — compute points from participant_progress (#69
 | Pengantar AI | settings.js | — | `/participant-ai-intro` | ✅ | ✅ |
 | Python untuk AI | ai-python.js | ~30KB | `/participant-ai-python` | 80 radios | 12 textareas |
 | Reasoning AI | ai-reasoning.js | 170KB | `/participant-ai-reasoning` | 104 radios | 17 textareas |
-| Konsep AI Modern | ai-modern.js | ~40KB | `/participant-ai-modern` | Button-based | 1 textarea |
-| Evaluation AI | ai-evaluation.js | ~20KB | `/participant-ai-evaluation` | 2 radios | 5 textareas |
-| Evolution of AI | ai-evolution.js | ~20KB | `/participant-ai-evolution` | 2 radios | 7 textareas |
+| Konsep AI Modern | ai-modern.js | ~40KB | `/participant-ai-modern` | UI ada, save crash #81 | UI ada, save crash #81 |
+| Evaluation AI | ai-evaluation.js | ~20KB | `/participant-ai-evaluation` | Placeholder #80 | 5 textareas |
+| Evolution of AI | ai-evolution.js | ~20KB | `/participant-ai-evolution` | Placeholder #80 | 7 textareas |
 
 ### ✅ ONLINE — Computer Vision (partial)
 | Sub-module | Status |
@@ -181,7 +219,7 @@ Deployment, Front-end, Back-end
 ### Dashboard
 25. **Module filter**: Only 5 AI Fundamentals + AI Intro
 26. **Persistent cache**: sessionStorage 5min TTL, refresh 0.2s
-27. **Password Brenda**: `brenda123` — reset manual setelah E2E password test
+27. **Password akun QA**: simpan di luar repo; test mutasi wajib opt-in eksplisit
 
 ### Avatar
 28. **Storage**: base64 data URL di sheet `photo_url` (tanpa Drive)
@@ -215,8 +253,8 @@ LEADERBOARD → computeLiveLeaderboard() → aggregate progress by NIK → top 1
 node server.js                                    # → http://127.0.0.1:3000
 
 # E2E Tests (all)
-TEST_PARTICIPANT_NIK="8204086711010003" TEST_PARTICIPANT_PASSWORD="brenda123" \
-  npx playwright test --workers=1
+TEST_PARTICIPANT_NIK="<qa-nik>" TEST_PARTICIPANT_PASSWORD="<qa-password>" \
+  npm run test:qa:live:read
 
 # E2E Tests (specific files)
 npx playwright test e2e/fellow-dashboard.spec.js --workers=1

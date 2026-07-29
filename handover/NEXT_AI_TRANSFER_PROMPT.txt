@@ -1,7 +1,7 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║  AI TRANSFER PROMPT — HerAI Fellowship SuperApp              ║
-║  Sesi: 28 Juli 2026 (Sisyphus sesi ke-3) → Next AI           ║
-║  Total: 244 commit | Worktree: BERSIH | E2E: 33/33 PASS       ║
+║  Sesi: 29 Juli 2026 (Phase 0 Active Module QA) → Next AI      ║
+║  Total: 246 commit | QA: 108 test | Safe gate: 55 PASS        ║
 ║  GAS: ✅ LIVE | Leaderboard: ✅ LIVE (1,024 pts)              ║
 ╚══════════════════════════════════════════════════════════════╝
 
@@ -12,7 +12,7 @@
 📋 SUMBER KEBENARAN (WAJIB DIBACA — URUTAN PENTING)
 ═══════════════════════════════════════════════════════════════
 1. handover/AI_HANDOFF_CURRENT_STATE.md  ← SINGLE SOURCE OF TRUTH
-2. gemini.md  ← Bug log #1-#77 + session rules + temuan kritis
+2. gemini.md  ← Bug log #1-#85 + session rules + temuan kritis
 3. handover/NEXT_PLAN.md  ← Priorities + execution plan
 4. NEXT_AI_TRANSFER_PROMPT.txt ini  ← System identity + aturan + konfirmasi
 
@@ -24,10 +24,9 @@
 - GAS Code: gas/Code.gs (2562 baris, 54 routes, 23 sheets)
 - SPA: Vanilla JS hash-router, Node proxy (node server.js → :3000)
 - Proxy: POST /__gas (token auto-injected, Origin WAJIB)
-- Test participant: NIK 8204086711010003 / Brenda Rahmandea Arsy / brenda123
-- Last commit: 64dde11
-- Worktree: BERSIH
-- E2E: 33/33 PASS
+- Test participant: kredensial QA disuplai melalui environment variable, tidak disimpan di repo
+- Baseline commit: 6c35926
+- QA: 108 test terdaftar; safe mock gate 55/55; live mutation default OFF
 - Leaderboard: ✅ LIVE — Brenda 1,024 pts (#1), next 245 pts (#2)
 
 ═══════════════════════════════════════════════════════════════
@@ -123,6 +122,18 @@ COMPUTER VISION (#71,72,73): CV overview + Digital Image online, CNN UD, interac
     - initCvInteractives() called by loadCvChapter after content injection
     - Sandbox, flip/rotate, bitwise ops, Otsu, quiz, coding challenges
 
+16. QA findings #78-#85 masih OPEN:
+    - Ringkasan Belajar statis; metadata kuis mismatch; 2 kuis placeholder
+    - AI Modern practice/quiz scope crash + chapter_id object
+    - Touch target mobile <44px
+    - Backend menghitung quiz/practice sebagai chapter
+    - saveChapterProgress gagal diam-diam
+
+17. Test safety:
+    - Mock gate tidak menyentuh GAS live
+    - Live write perlu TEST_ALLOW_MUTATIONS=true
+    - Password cycle perlu tambahan TEST_ALLOW_PASSWORD_MUTATIONS=true
+
 ═══════════════════════════════════════════════════════════════
 📐 ATURAN KERJA — 20 RULE WAJIB
 ═══════════════════════════════════════════════════════════════
@@ -160,13 +171,10 @@ COMPUTER VISION (#71,72,73): CV overview + Digital Image online, CNN UD, interac
 
 BACA: handover/NEXT_PLAN.md (FULL)
 
-SEMUA 13 prioritas SUDAH SELESAI. Tidak ada pekerjaan tersisa dari backlog.
+Phase 0 QA foundation selesai. Bug #78-#85 masih OPEN.
 
-TANYA KE USER:
-1. Apa prioritas selanjutnya?
-2. Ada bug baru atau fitur yang mau ditambah?
-3. Module mana yang mau di-online-kan berikutnya?
-4. JANGAN mulai kerja sebelum user konfirmasi.
+Urutan rekomendasi: #81/#82/#84/#85 → #78 → #79/#80 → #83.
+Perbaikan ai-modern.js dan gas/Code.gs tetap perlu approval serta redeploy GAS bila backend berubah.
 
 ═══════════════════════════════════════════════════════════════
 📞 YANG HARUS DIKONFIRMASI KE USER SEBELUM MULAI

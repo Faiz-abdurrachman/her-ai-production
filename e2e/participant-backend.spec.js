@@ -1,5 +1,11 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
+const {
+  canRunLiveMutations,
+  canRunPasswordMutations,
+  hasCredentials
+} = require('./helpers/test-policy');
+const { ACTIVE_DASHBOARD_MODULES } = require('./fixtures/active-modules');
 
 /**
  * E2E Backend API Tests — HerAI Fellowship
@@ -14,19 +20,18 @@ const { test, expect } = require('@playwright/test');
  * - Dashboard modules TIDAK punya `module_id` — pakai `title` atau `href`
  * - Score Math.max hanya di dashboard query, BUKAN di saveProgress
  *
- * Run:
- *   TEST_PARTICIPANT_NIK="8204086711010003" \
- *   TEST_PARTICIPANT_PASSWORD="brenda123" \
- *   npx playwright test e2e/participant-backend.spec.js
+ * Live write tests require TEST_ALLOW_MUTATIONS=true in addition to credentials.
+ * Keep the flag disabled for normal local/production smoke runs.
  */
 
 const TEST_BASE = 'http://127.0.0.1:3000';
 const TEST_NIK = process.env.TEST_PARTICIPANT_NIK || '';
 const TEST_PASSWORD = process.env.TEST_PARTICIPANT_PASSWORD || '';
-const TEST_MODULE = 'deep-learning';
+const TEST_MODULE = ACTIVE_DASHBOARD_MODULES[0].moduleId;
 
-const hasCredentials = TEST_NIK && TEST_PASSWORD;
-const apiTest = hasCredentials ? test : test.skip;
+const liveTest = hasCredentials ? test : test.skip;
+const mutatingTest = canRunLiveMutations ? test : test.skip;
+const passwordMutatingTest = canRunPasswordMutations ? test : test.skip;
 
 // ─── Helpers ──────────────────────────────────────────────
 
@@ -71,7 +76,7 @@ async function getSession() {
 // ─── Group 1: Authentication ──────────────────────────────
 
 test.describe('Auth — participantLogin', () => {
-  test('valid login returns token + profile', async () => {
+  liveTest('valid login returns token + profile', async () => {
     const res = await gasPost({
       action: 'participantLogin',
       nik: TEST_NIK,
@@ -99,7 +104,7 @@ test.describe('Auth — participantLogin', () => {
     expect(res.message).toMatch(/NIK|password|tidak valid/i);
   });
 
-  test('wrong password returns error', async () => {
+  liveTest('wrong password returns error', async () => {
     const res = await gasPost({
       action: 'participantLogin',
       nik: TEST_NIK,
@@ -110,7 +115,7 @@ test.describe('Auth — participantLogin', () => {
     expect(res.message).toBeDefined();
   });
 
-  test('empty NIK returns error', async () => {
+  liveTest('empty NIK returns error', async () => {
     const res = await gasPost({
       action: 'participantLogin',
       nik: '',
@@ -121,7 +126,7 @@ test.describe('Auth — participantLogin', () => {
     expect(res.message).toBeDefined();
   });
 
-  test('empty password returns error', async () => {
+  liveTest('empty password returns error', async () => {
     const res = await gasPost({
       action: 'participantLogin',
       nik: TEST_NIK,
@@ -157,7 +162,7 @@ test.describe('Auth — participantLogin', () => {
 // ─── Group 2: Progress CRUD ───────────────────────────────
 
 test.describe('Progress — save + get', () => {
-  apiTest('save chapter progress returns success', async () => {
+  mutatingTest('save chapter progress returns success', async () => {
     const session = await getSession();
     const res = await gasPost({
       action: 'saveParticipantProgress',
@@ -170,7 +175,7 @@ test.describe('Progress — save + get', () => {
     expect(res.status).toBe('success');
   });
 
-  apiTest('save quiz score returns success', async () => {
+  mutatingTest('save quiz score returns success', async () => {
     const session = await getSession();
     const res = await gasPost({
       action: 'saveParticipantProgress',
@@ -184,7 +189,7 @@ test.describe('Progress — save + get', () => {
     expect(res.status).toBe('success');
   });
 
-  apiTest('save practice returns success', async () => {
+  mutatingTest('save practice returns success', async () => {
     const session = await getSession();
     const res = await gasPost({
       action: 'saveParticipantProgress',
@@ -197,7 +202,7 @@ test.describe('Progress — save + get', () => {
     expect(res.status).toBe('success');
   });
 
-  apiTest('get progress returns saved data', async () => {
+  mutatingTest('get progress returns saved data', async () => {
     const session = await getSession();
 
     // Save chapter 1 first to ensure data exists
@@ -234,7 +239,7 @@ test.describe('Progress — save + get', () => {
     }
   });
 
-  apiTest('idempotent save — no duplicate entries', async () => {
+  mutatingTest('idempotent save — no duplicate entries', async () => {
     const session = await getSession();
 
     // Save chapter 1 twice
@@ -270,7 +275,7 @@ test.describe('Progress — save + get', () => {
 // ─── Group 3: Dashboard Data ──────────────────────────────
 
 test.describe('Dashboard — getParticipantDashboardData', () => {
-  apiTest('returns full dashboard data', async () => {
+  liveTest('returns full dashboard data', async () => {
     const session = await getSession();
 
     const res = await gasPost({
@@ -304,7 +309,7 @@ test.describe('Dashboard — getParticipantDashboardData', () => {
     expect(res.data.leaderboard).toBeDefined();
   });
 
-  apiTest('quiz score is percentage (not raw count)', async () => {
+  mutatingTest('quiz score is percentage (not raw count)', async () => {
     const session = await getSession();
 
     // Submit quiz to ensure data
@@ -343,9 +348,9 @@ test.describe('Dashboard — getParticipantDashboardData', () => {
 // ─── Group 4: Password Management ─────────────────────────
 
 test.describe('Password — changeParticipantPassword', () => {
-  apiTest('valid password change full cycle', async () => {
+  passwordMutatingTest('valid password change full cycle', async () => {
     const session = await getSession();
-    const tempPass = 'testbaru456';
+    const tempPass = `Qa-${Date.now()}-Z9!`;
 
     // Step 1: Ganti password
     const changeRes = await gasPost({
@@ -386,7 +391,7 @@ test.describe('Password — changeParticipantPassword', () => {
     cachedSession = { token: finalLogin.token, nama_lengkap: finalLogin.profile?.nama_lengkap || '' };
   });
 
-  apiTest('wrong old password returns error', async () => {
+  liveTest('wrong old password returns error', async () => {
     const session = await getSession();
 
     const res = await gasPost({
@@ -400,7 +405,7 @@ test.describe('Password — changeParticipantPassword', () => {
     expect(res.message).toMatch(/Password lama tidak sesuai/i);
   });
 
-  apiTest('empty fields return validation error', async () => {
+  liveTest('empty fields return validation error', async () => {
     const session = await getSession();
 
     const res = await gasPost({
@@ -418,7 +423,7 @@ test.describe('Password — changeParticipantPassword', () => {
 // ─── Group 5: Edge Cases ──────────────────────────────────
 
 test.describe('Edge Cases — profile + score + multi-module', () => {
-  apiTest('update profile returns updated participant', async () => {
+  mutatingTest('update profile returns updated participant', async () => {
     const session = await getSession();
 
     const res = await gasPost({
@@ -432,7 +437,7 @@ test.describe('Edge Cases — profile + score + multi-module', () => {
     expect(typeof res.profile.nama_lengkap).toBe('string');
   });
 
-  apiTest('quiz score — dashboard Math.max vs sheet last-write', async () => {
+  mutatingTest('quiz score — dashboard Math.max vs sheet last-write', async () => {
     const session = await getSession();
 
     // Submit scores: 10, then 20 (highest), then 12
@@ -489,7 +494,7 @@ test.describe('Edge Cases — profile + score + multi-module', () => {
     }
   });
 
-  apiTest('multiple module progress tracked independently', async () => {
+  mutatingTest('multiple module progress tracked independently', async () => {
     const session = await getSession();
 
     // Save progress for 2 different modules
