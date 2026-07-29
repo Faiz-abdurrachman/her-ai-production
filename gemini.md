@@ -1224,3 +1224,30 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Source GAS lokal `2026.3.3-participant-accounts-compacted`; GET live terakhir masih `2026.2-progress-persistence`.
 - Live order: save source → audit 187/100/87 → run compaction → verify main sheet 100 + backup → seed dashboard → redeploy → authenticated read-back.
 - Jangan jalankan reconciliation terpisah, credential migration, provision/generate, atau reset bila compaction #98 dipakai.
+
+## 99. Fix: Token Sesi Lama Non-Target Tetap Berlaku Setelah Compaction
+
+**Status:** FIXED IN CODE — 29 Juli 2026. Deployment live masih pending.
+
+**Temuan:** compaction menghapus 87 non-target dari `ParticipantAccounts` dan login baru sudah diblokir, tetapi signed participant token lama hanya diverifikasi signature + expiry. Token yang sudah terbit dapat tetap mengakses protected action sampai TTL 12 jam karena account/cohort tidak dibaca ulang.
+
+**Perbaikan:**
+
+- `requireParticipantToken()` untuk scope `participant` sekarang mencari account berdasarkan NIK dan mewajibkan account masih ada, email termasuk `TARGET_PARTICIPANT_PORTAL_EMAILS`, serta `access_status` aktif.
+- Non-target legacy token langsung invalid setelah compaction; target token juga invalid bila account dinonaktifkan.
+- Scope `retest` tetap bypass cohort portal agar alur Re-Test tidak rusak, tetapi `authorizeGasAction()` kini mengklasifikasikan upload/remove foto sebagai normal participant action sehingga token Re-Test ditolak.
+- Source version menjadi `2026.3.4-session-cohort-guard`.
+
+**Verifikasi:**
+
+- Target login/token valid PASS.
+- Signed token non-target dengan status active ditolak PASS.
+- Token target existing setelah account inactive ditolak PASS.
+- Token Re-Test untuk action Re-Test PASS; token yang sama untuk avatar action ditolak PASS.
+- Auth/compaction regression PASS dan safe deterministic E2E **85/85 PASS**.
+
+## Checkpoint Transfer Setelah #99 — 29 Juli 2026
+
+- Latest feature commit: `2562ac1 fix: revalidate participant session cohort (#99)`; setelah commit dokumentasi total menjadi 265.
+- Source lokal `2026.3.4-session-cohort-guard`; deployment live tetap `2026.2-progress-persistence` sampai user update deployment.
+- Runbook live final: save source → audit 187/100/87 → compact → audit 100/100/0 → seed dashboard → update deployment existing → GET/read-back/auth verification.

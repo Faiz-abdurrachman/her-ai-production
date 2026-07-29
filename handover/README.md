@@ -27,13 +27,13 @@ Prompt siap tempel untuk memindahkan pekerjaan ke AI lain:
 
 Status singkat checkpoint 29 Juli:
 
-- Branch `main`; checkpoint dokumentasi #98 menghasilkan total 263 commit; CSV akun lokal tetap untracked dan tidak boleh di-commit karena memuat credential.
+- Branch `main`; checkpoint dokumentasi #99 menghasilkan total 265 commit; CSV akun lokal tetap untracked dan tidak boleh di-commit karena memuat credential.
 - Tepat enam module Foundation dapat membuka konten: Pengantar AI + Python, Reasoning, Konsep AI Modern, Evaluation, dan Evolution.
 - Computer Vision dan 20+ module lain berada di Under Development; source materi tetap dipertahankan untuk aktivasi nanti.
 - Safe deterministic gate **85/85 PASS**; full suite **140 = 96 PASS + 44 SKIP + 0 FAIL**.
 - Materi numerik, marker latihan, nilai kuis, diskusi, reply, Ringkasan Belajar, dan leaderboard mempunyai kontrak backend; bukti live terakhir dijelaskan di SSOT.
 - Isi teks jawaban latihan masih localStorage-only (#92), diterima user sebagai batasan sementara; marker selesai latihan tetap dapat masuk backend.
-- Source GAS canonical `gas/Code.gs` berada pada `2026.3.3-participant-accounts-compacted`; GET read-only memverifikasi live masih `2026.2-progress-persistence`. Compaction #98 dapat mengubah main sheet 187→100 dengan backup/rollback, tetapi belum dijalankan live.
+- Source GAS canonical `gas/Code.gs` berada pada `2026.3.4-session-cohort-guard`; GET read-only memverifikasi live masih `2026.2-progress-persistence`. Compaction #98 dan invalidasi sesi non-target #99 belum live.
 - Fix textarea Pengantar AI #96 adalah frontend-only dan menunggu verifikasi deployment frontend.
 - Jangan provision/reset akun, push, deploy, atau melakukan live mutation tanpa instruksi user eksplisit.
 

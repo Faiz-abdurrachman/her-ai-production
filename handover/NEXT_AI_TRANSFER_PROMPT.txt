@@ -10,7 +10,7 @@ JANGAN LANGSUNG MENGUBAH KODE.
 Urutan wajib sebelum bekerja:
 
 1. Baca `handover/AI_HANDOFF_CURRENT_STATE.md` sampai selesai. Ini single source of truth.
-2. Baca `gemini.md` sampai selesai. Isinya bug log #1–#98 dan temuan kritis.
+2. Baca `gemini.md` sampai selesai. Isinya bug log #1–#99 dan temuan kritis.
 3. Baca `handover/NEXT_PLAN.md` sampai selesai.
 4. Baca `handover/E2E_AUDIT_2026-07-29.md` dan prompt ini.
 5. Jalankan read-only check:
@@ -21,8 +21,8 @@ Urutan wajib sebelum bekerja:
 
 CHECKPOINT REPOSITORY
 
-- Latest feature commit: `cdb28a2 feat: compact participant accounts to target cohort (#98)`.
-- Setelah commit dokumentasi #98 total menjadi 263 commit.
+- Latest feature commit: `2562ac1 fix: revalidate participant session cohort (#99)`.
+- Setelah commit dokumentasi #99 total menjadi 265 commit.
 - Expected worktree: hanya CSV akun lokal milik user yang untracked; file itu memuat credential dan tidak boleh di-stage/commit.
 - Safe deterministic E2E: 85/85 PASS.
 - Full suite: 140 test = 96 PASS + 44 SKIP + 0 FAIL.
@@ -53,10 +53,10 @@ Computer Vision sepenuhnya Under Development (#95):
 BACKEND DAN DEPLOYMENT
 
 - GAS canonical: `gas/Code.gs`.
-- Source version: `2026.3.3-participant-accounts-compacted`.
+- Source version: `2026.3.4-session-cohort-guard`.
 - GET read-only 29 Juli 2026 mengonfirmasi deployment live masih `2026.2-progress-persistence`; source #94/#95/#97, seed metadata terbaru, rekonsiliasi akses, dan authenticated read-back terbaru BELUM live.
 - Sebelum klaim live, cek GET endpoint/version secara read-only.
-- User melaporkan backup database sudah dibuat. Untuk membawa #95/#97/#98 live: save source terbaru, jalankan `auditParticipantPortalAccess()`, review 187/100/87 + `ready_to_apply=true`, lalu dengan approval live mutation jalankan `compactParticipantAccountsToTargetCohort()`. Fungsi membuat backup otomatis kedua dan harus menghasilkan `before=187`, `after=100`, `removed=87`, `credentials_changed=0`. Setelah itu seed dashboard, redeploy, dan verifikasi `doGet.version=2026.3.3-participant-accounts-compacted` serta CV excluded.
+- User melaporkan backup database sudah dibuat. Untuk membawa #95/#97–#99 live: save source terbaru, audit 187/100/87, lalu jalankan compaction dengan approval mutation. Setelah itu seed dashboard, update deployment existing, dan verifikasi `doGet.version=2026.3.4-session-cohort-guard` serta CV excluded.
 - Setiap perubahan `gas/Code.gs` wajib redeploy; jangan deploy tanpa instruksi user eksplisit.
 - Frontend #94–#96 serta access reconciliation #97 belum boleh diklaim live sampai deployment/read-back diverifikasi.
 
@@ -77,6 +77,13 @@ PARTICIPANT ACCOUNTS COMPACTION #98
 - Bila read-back gagal, original 187 row dipulihkan; backup otomatis tetap tersedia.
 - Jika tab sudah tepat 100 target, rerun mengembalikan `already_compacted=true` dan tidak membuat backup/write baru.
 - Jangan menjalankan `reconcileParticipantPortalAccess()` terpisah bila memilih compaction #98.
+
+SESSION COHORT GUARD #99
+
+- Protected participant request sekarang selalu re-check account masih ada, email termasuk cohort 100, dan `access_status` aktif.
+- Setelah compaction, signed token lama non-target langsung invalid tanpa menunggu TTL 12 jam.
+- Token target juga langsung invalid bila account dinonaktifkan.
+- Scope `retest` tidak diwajibkan masuk cohort portal dan tetap hanya boleh memakai action Re-Test; token Re-Test ditolak untuk upload/remove foto serta action participant biasa.
 
 STATUS PERSISTENCE
 
@@ -150,11 +157,11 @@ PRIORITAS SESI BERIKUTNYA
 1. Konfirmasi kepada user setelah membaca semua handover; jangan mulai kerja sebelum dikonfirmasi.
 2. Versi live sudah diverifikasi read-only sebagai `2026.2-progress-persistence`; jangan klaim #94/#95/#97 live.
 3. Dengan approval live mutation: audit #97 lalu jalankan compaction #98 agar main sheet tepat 100 target; review output agregat tanpa menampilkan PII.
-4. Seed/redeploy source `2026.3.3-participant-accounts-compacted` dan verifikasi CV excluded.
+4. Seed/redeploy source `2026.3.4-session-cohort-guard` dan verifikasi CV excluded + token non-target ditolak.
 5. Pastikan frontend terbaru #94–#96 benar-benar terdeploy.
 6. Jalankan authenticated read-only contract untuk akun QA target dan enam tracking module.
 7. #92 tetap ditunda kecuali user membuka kembali scope persistence isi jawaban latihan.
 
 Kalimat pembuka yang harus kamu kirim:
 
-“Saya sudah membaca AI_HANDOFF_CURRENT_STATE.md, gemini.md, NEXT_PLAN.md, E2E audit, dan prompt transfer. Saya memahami bahwa hanya enam module Foundation yang aktif, Computer Vision sepenuhnya Under Development, source GAS adalah 2026.3.3-participant-accounts-compacted tetapi deployment dan compaction ParticipantAccounts 187→100 belum dijalankan live, serta isi jawaban latihan masih localStorage-only (#92). Worktree dan commit akan saya cek read-only. Saya menunggu konfirmasi Anda sebelum mulai bekerja.”
+“Saya sudah membaca AI_HANDOFF_CURRENT_STATE.md, gemini.md, NEXT_PLAN.md, E2E audit, dan prompt transfer. Saya memahami bahwa hanya enam module Foundation yang aktif, Computer Vision sepenuhnya Under Development, source GAS adalah 2026.3.4-session-cohort-guard tetapi deployment dan compaction ParticipantAccounts 187→100 belum dijalankan live, serta isi jawaban latihan masih localStorage-only (#92). Worktree dan commit akan saya cek read-only. Saya menunggu konfirmasi Anda sebelum mulai bekerja.”
