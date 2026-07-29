@@ -6,7 +6,7 @@
 
 **GAS:** production masih ✅ `2026.2-progress-persistence`; source #94/#95 adalah `2026.3.1-cv-locked` dan belum dideploy
 
-**QA:** safe mock 84/84 PASS; full 95 PASS + 44 SKIP + 0 FAIL; authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2; controlled live write/read-back terakhir PASS
+**QA:** safe mock 85/85 PASS; full 96 PASS + 44 SKIP + 0 FAIL; authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2; controlled live write/read-back terakhir PASS
 **Leaderboard:** sumber live; authenticated read-back terakhir 1.039 pts, screenshot user berikutnya menampilkan Brenda 1.054 pts
 
 ---
@@ -38,8 +38,9 @@ Phase 0 QA dan seluruh perbaikan audit #78–#91 sudah tersedia di source. Test 
 | Pengantar AI chapter 1–5 (#94) | ✅ code | save + `getParticipantProgress` read-back; progress sidebar tidak lagi dihitung dari posisi route |
 | Journey Fellowship (#94) | ✅ code | Foundation/Specialization dihitung dari module aktif; phase tanpa sumber memakai ikon kunci + `Belum Dibuka` |
 | Computer Vision release lock (#95) | ✅ code | 9 route CV + seluruh prefix child menampilkan Under Development; loader/progress CV tidak berjalan; default tracking dinonaktifkan |
+| Pengantar AI practice editability (#96) | ✅ code | Payload kosong/corrupt tidak mengunci textarea; save kosong ditolak; jawaban nyata bertahan setelah reload dan dapat diedit |
 
-Safe mock gate: **84/84 PASS**, tanpa expected failure dan tanpa live write. Full suite **139 = 95 PASS + 44 SKIP + 0 FAIL**. Audit serta bukti resolusi tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
+Safe mock gate: **85/85 PASS**, tanpa expected failure dan tanpa live write. Full suite **140 = 96 PASS + 44 SKIP + 0 FAIL**. Audit serta bukti resolusi tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
 
 ---
 
@@ -47,7 +48,7 @@ Safe mock gate: **84/84 PASS**, tanpa expected failure dan tanpa live write. Ful
 
 1. **Migrasi schema #94/#95:** paste/save `gas/Code.gs`, jalankan `seedDashboardModules()` dan `seedDashboardJourney()` dari Apps Script editor. Ini menambahkan metadata dan menetapkan current release tepat enam module: Pengantar AI + lima AI Fundamentals; Computer Vision dan 20+ module lain tetap nonaktif.
 2. **Redeploy GAS #94/#95:** buat deployment baru, pastikan `doGet.version` menjadi `2026.3.1-cv-locked`, lalu jalankan authenticated read-only contract untuk `trackingModules`, `learningSummary`, dan status `journey`. Pastikan `computer-vision` tidak masuk `trackingModules`.
-3. **Release frontend #94/#95:** deploy setelah backend/schema lolos. Cache buster tracking tetap `20260729-dynamic-tracking`; router sudah `20260729-cv-locked`.
+3. **Release frontend #94–#96:** deploy setelah backend/schema lolos. Cache buster `settings.js` sudah `20260729-intro-practice-editable`; router sudah `20260729-cv-locked`. Fix #96 tidak membutuhkan redeploy GAS.
 4. **Verifikasi Pengantar AI production:** dengan approval mutation, buka topik 1–5 memakai akun QA dan pastikan chapter `1..5` terbaca kembali serta summary berubah idempotent. Jangan mengubah password/profile.
 5. **Putuskan scope #92:** jika isi jawaban latihan harus tercatat lintas perangkat, tambah schema/API practice-response, frontend acknowledgment/read-back, dan E2E production-safe.
 

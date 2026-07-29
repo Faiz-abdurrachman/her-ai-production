@@ -1131,3 +1131,15 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Versi source GAS menjadi `2026.3.1-cv-locked`.
 
 **Verifikasi:** static contract membuktikan seluruh route CV mengarah ke Under Development dan default tracking mengecualikan CV. Browser mock membuka sembilan direct URL, semuanya menampilkan Under Development dan tidak menghasilkan write `computer-vision`. Targeted **2/2 PASS**; safe gate **84/84 PASS**; full suite **139 test = 95 PASS + 44 SKIP + 0 FAIL**.
+
+## 96. Fix: Latihan Pengantar AI Tidak Bisa Diketik Setelah Save Kosong
+
+**Status:** FIXED IN CODE — 29 Juli 2026. Frontend release masih menunggu deployment; tidak ada perubahan GAS.
+
+**Gejala:** textarea Latihan Pengantar AI terlihat kosong dan normal, tetapi tidak dapat diketik.
+
+**Penyebab:** tombol Simpan sebelumnya menerima empat field kosong dan tetap menulis object berisi key `system`, `flow`, `humanCheck`, dan `risk` ke localStorage. Saat halaman dibuka kembali, keberadaan key saja dianggap sebagai jawaban tersimpan sehingga seluruh textarea diberi `readOnly`, walaupun nilainya kosong.
+
+**Perbaikan:** state hanya dikunci jika minimal satu jawaban tersimpan benar-benar berisi teks. Payload kosong/corrupt dibersihkan otomatis dan form dikembalikan ke mode edit. Klik Simpan tanpa isi sekarang menampilkan validasi, memfokuskan field pertama, dan tidak menulis atau mengunci state. Jawaban nyata tetap terkunci setelah disimpan, bertahan setelah reload, dan dapat dibuka kembali melalui tombol Edit. Cache buster `settings.js` menjadi `20260729-intro-practice-editable`.
+
+**Verifikasi:** targeted browser reproduction **1/1 PASS**; safe gate **85/85 PASS**; full suite **140 test = 96 PASS + 44 SKIP + 0 FAIL**.

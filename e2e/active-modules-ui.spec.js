@@ -503,6 +503,44 @@ test.describe('Runtime and module identity', () => {
 });
 
 test.describe('AI Fundamentals summary', () => {
+  test('Pengantar AI practice keeps legacy empty saves editable and only locks real answers', async ({ page }) => {
+    await installMockParticipant(page);
+    await page.addInitScript(() => {
+      if (!localStorage.getItem('heraiAiIntroPracticeAnswers')) {
+        localStorage.setItem('heraiAiIntroPracticeAnswers', JSON.stringify({
+          system: '',
+          flow: '',
+          humanCheck: '',
+          risk: ''
+        }));
+      }
+    });
+
+    await page.goto(appUrl(AI_INTRO.routes.practice));
+    const form = page.locator(AI_INTRO.selectors.practiceForm);
+    const firstField = form.locator('textarea').first();
+    const saveButton = form.locator('[data-practice-save]');
+
+    await expect(form).toBeVisible({ timeout: 15000 });
+    await expect(firstField).toBeEditable();
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('heraiAiIntroPracticeAnswers'))).toBeNull();
+
+    await saveButton.click();
+    await expect(form.locator('.practice-status')).toContainText('Isi minimal satu jawaban');
+    await expect(firstField).toBeEditable();
+
+    await firstField.fill('Rekomendasi video yang saya gunakan pagi ini.');
+    await saveButton.click();
+    await expect(firstField).toHaveAttribute('readonly', '');
+    await expect(saveButton).toHaveText('Tersimpan');
+
+    await page.reload();
+    await expect(firstField).toHaveValue('Rekomendasi video yang saya gunakan pagi ini.');
+    await expect(firstField).toHaveAttribute('readonly', '');
+    await form.locator('[data-practice-edit]').click();
+    await expect(firstField).toBeEditable();
+  });
+
   test('five Pengantar AI topics persist numeric chapters and read back 100%', async ({ page }) => {
     const { calls, progressData } = await installMockParticipant(page);
     const lessonRoutes = [

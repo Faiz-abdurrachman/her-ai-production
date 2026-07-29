@@ -1283,15 +1283,30 @@
             fields.forEach(field => field.readOnly = readonly);
             if (saveButton) saveButton.textContent = readonly ? 'Tersimpan' : 'Simpan Jawaban';
         };
-        const saved = JSON.parse(localStorage.getItem(key) || '{}');
-        fields.forEach(field => field.value = saved[field.name] || '');
-        if (Object.keys(saved).length) {
+        let saved = {};
+        try {
+            saved = JSON.parse(localStorage.getItem(key) || '{}') || {};
+        } catch (_error) {
+            localStorage.removeItem(key);
+        }
+        fields.forEach(field => field.value = String(saved[field.name] || ''));
+        const hasSavedAnswer = fields.some(field => field.value.trim());
+        if (hasSavedAnswer) {
             setReadonly(true);
             setStatus('Jawaban latihan tersimpan di perangkatmu.');
+        } else {
+            localStorage.removeItem(key);
+            setReadonly(false);
         }
         saveButton?.addEventListener('click', () => {
             const payload = {};
             fields.forEach(field => payload[field.name] = field.value.trim());
+            if (!Object.values(payload).some(Boolean)) {
+                setReadonly(false);
+                setStatus('Isi minimal satu jawaban sebelum menyimpan.');
+                fields[0]?.focus();
+                return;
+            }
             localStorage.setItem(key, JSON.stringify(payload));
             setReadonly(true);
             setStatus('Jawaban berhasil disimpan. Kamu bisa edit atau hapus kapan saja.');

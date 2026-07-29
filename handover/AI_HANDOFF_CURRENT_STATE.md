@@ -1,15 +1,15 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + persistence audit #92 + UI #93 + dynamic tracking #94 + CV release lock #95), Asia/Jakarta**
+**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + persistence audit #92 + UI #93 + dynamic tracking #94 + CV release lock #95 + practice editability #96), Asia/Jakarta**
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
 **Baseline Commit:** `6508121` - test: expand active module end-to-end audit (#87-#91)
 **Feature Commit:** `a3ff0a9` - `fix: persist active module learning progress (#78-#91)`
-**Latest Commit:** pending commit - `fix: lock Computer Vision release (#95)`
-**Total commits:** 256 setelah commit #95
+**Latest Commit:** pending commit - `fix: keep empty intro practice editable (#96)`
+**Total commits:** 257 setelah commit #96
 **GAS Deployment:** ⚠️ production masih `2026.2-progress-persistence`; source lokal `2026.3.1-cv-locked` wajib dimigrasi, redeploy, lalu live read-back
 **Worktree:** BERSIH
-**E2E Test Suite:** safe mock 84/84 PASS | full 95 PASS + 44 SKIP + 0 FAIL | authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2 | controlled live write/read-back terakhir PASS
+**E2E Test Suite:** safe mock 85/85 PASS | full 96 PASS + 44 SKIP + 0 FAIL | authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2 | controlled live write/read-back terakhir PASS
 **Leaderboard:** ✅ sumber LIVE — authenticated read-back terakhir 1.039 pts; screenshot user sesudahnya menampilkan Brenda 1.054 pts (belum di-read-back ulang)
 
 > **Ini sumber kebenaran tunggal.** Semua dokumen lain yang bertentangan diabaikan.
@@ -21,6 +21,8 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 Feature #94 menambahkan release contract dinamis untuk modul masa depan. Module UD tidak ikut dihitung sampai `is_active` dan `tracking_enabled` aktif; setelah route konten siap dan metadata diaktifkan, backend otomatis memasukkannya ke progress module, Ringkasan Belajar sesuai phase, serta Perjalanan Fellowship. Pengantar AI kini mencatat lima chapter materi nyata, bukan mengira progress dari urutan halaman.
 
 Release lock #95 menutup kembali seluruh Computer Vision. Hanya enam module Foundation—Pengantar AI dan lima AI Fundamentals—yang dapat membuka konten; semua route CV menampilkan Under Development, loader CV tidak dijalankan, dan default backend tidak lagi mengaktifkan tracking CV.
+
+Fix #96 memulihkan textarea Latihan Pengantar AI yang salah terkunci ketika localStorage berisi object jawaban kosong. State kosong/corrupt sekarang dibersihkan, penyimpanan kosong ditolak, dan hanya jawaban nyata yang mengaktifkan mode read-only; tombol Edit tetap membuka kembali input.
 
 ### Cakupan yang sekarang bisa dilacak
 
@@ -35,8 +37,8 @@ Release lock #95 menutup kembali seluruh Computer Vision. Hanya enam module Foun
 
 ### Hasil gate dan status temuan
 
-- Safe mock gate: **84/84 PASS**, tanpa expected failure dan tanpa live write.
-- Full suite: **139 terdaftar = 95 PASS + 44 SKIP + 0 FAIL**.
+- Safe mock gate: **85/85 PASS**, tanpa expected failure dan tanpa live write.
+- Full suite: **140 terdaftar = 96 PASS + 44 SKIP + 0 FAIL**.
 - 44 skip adalah alur authenticated/live-mutation yang sengaja tidak dijalankan tanpa secret environment.
 - #78, #79, #81–#85, dan #87–#91: **FIXED IN CODE**.
 - Lima module: chapter numerik, practice, quiz, score, discussion post/reply, dan read-back terverifikasi pada kontrak deterministik.
@@ -48,6 +50,7 @@ Release lock #95 menutup kembali seluruh Computer Vision. Hanya enam module Foun
 - #93 **FIXED**: kelima topik Pengantar AI sekarang menandai tepat satu materi aktif dengan highlight, ikon play, dan `aria-current="page"`.
 - #94 **FIXED IN CODE**: metadata release/tracking/visibility dinamis, agregasi phase, Pengantar AI save/read-back 1–5, cache invalidation, dan journey locked state. Production deployment/read-back masih pending.
 - #95 **FIXED IN CODE**: sembilan route CV dan seluruh prefix turunannya terkunci ke Under Development, loader/progress CV tidak berjalan, dan default tracking CV dinonaktifkan. Frontend/GAS deployment masih pending.
+- #96 **FIXED IN CODE**: payload latihan Pengantar AI kosong/corrupt tidak lagi mengunci textarea; penyimpanan kosong divalidasi dan jawaban nyata tetap dapat disimpan, reload, serta diedit. Hanya frontend deployment yang pending.
 
 ### Pekerjaan operasional tersisa
 
@@ -55,6 +58,7 @@ Release lock #95 menutup kembali seluruh Computer Vision. Hanya enam module Foun
 |---|---|---|
 | Migrasi + redeploy GAS #94/#95 | ⏳ PENDING | Save source terbaru, jalankan `seedDashboardModules()` + `seedDashboardJourney()`, deploy, lalu cek `doGet.version=2026.3.1-cv-locked` |
 | Frontend release #94/#95 | ⏳ PENDING | Deploy setelah GAS 2026.3.1 dan schema berhasil diverifikasi; router `20260729-cv-locked` menutup CV di sisi peserta |
+| Frontend fix #96 | ⏳ PENDING | Deploy `settings.js` dengan cache buster `20260729-intro-practice-editable`; tidak perlu redeploy GAS |
 | Authenticated live read-back | ✅ DONE | Login, dashboard, progress, diskusi, auth guard: 29 PASS; 18 mutation scenarios sengaja skip |
 | Controlled live mutation verification | ✅ DONE | 4 write sukses; 5 read-back cocok; summary dan leaderboard tidak berubah; tanpa profile/password mutation |
 | Practice answer persistence (#92) | ⚠️ OPEN | Tentukan schema/API untuk isi jawaban, lalu implement save + authenticated read-back lintas perangkat |
@@ -74,7 +78,7 @@ Release lock #95 menutup kembali seluruh Computer Vision. Hanya enam module Foun
 | Proxy | POST `/__gas` (token auto-injected, Origin header WAJIB) |
 | Test participant | Kredensial QA disuplai lewat environment variable; tidak disimpan di repo |
 | Module JS files | 30 ai-*.js (24 standard + 5 berbeda + 1 interactive) |
-| Cache buster | `settings.js`, `dashboard.css`, `modules.css`: `v=20260729-dynamic-tracking`; `router.js`: `v=20260729-cv-locked` |
+| Cache buster | `settings.js`: `v=20260729-intro-practice-editable`; `dashboard.css`/`modules.css`: `v=20260729-dynamic-tracking`; `router.js`: `v=20260729-cv-locked` |
 
 ---
 
@@ -95,6 +99,7 @@ Release lock #95 menutup kembali seluruh Computer Vision. Hanya enam module Foun
 | Dashboard modules filter | ✅ | Dashboard tepat 5 card; overview AI Fundamentals berisi Intro + 5 module |
 | Dashboard quiz badge | ✅ | Persentase format (X%), pill pink, skeleton reveal |
 | Pengantar AI current material (#93) | ✅ | Topik aktif sinkron dengan route; highlight + ikon play + `aria-current` |
+| Pengantar AI practice editability (#96) | ✅ code / ⏳ deploy | Empty/corrupt local state dibersihkan; save kosong ditolak; jawaban nyata tetap save/reload/edit |
 | **Leaderboard LIVE** | ✅ | Compute dari `participant_progress`; 1.039 poin stabil pada controlled mutation |
 | Score normalization (#55) | ✅ live | Evaluation/Evolution 20; Reasoning 26 |
 | Restricted access (#54) | ✅ | Hanya Beranda/Modul/Pengaturan + under-development |
