@@ -109,6 +109,8 @@ Setiap file `ai-*.js` memiliki practice save handler yang menyimpan jawaban essa
 - Cache buster di-bump ke `?v=20260727-practice`.
 - **Verifikasi:** Test manual save latihan → `participant_progress` muncul entry ✅
 
+**Batasan yang dikonfirmasi 29 Juli 2026:** perbaikan ini hanya mempersist marker completion `practice`. Isi jawaban essay tetap berada di localStorage dan belum dapat dibaca lintas perangkat; dilacak sebagai #92.
+
 ---
 
 ## 52. Feature: Dashboard Score Display — Quiz Score Tidak Ditampilkan di UI
@@ -1024,7 +1026,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 91. Gap Persistence: Diskusi Hanya Tersimpan di Browser
 
-**Status:** FIXED IN CODE — schema/route GAS, save/update reply, dan read-back lima module tersedia. Redeploy production masih wajib.
+**Status:** FIXED LIVE — schema/route GAS, save/update reply, dan authenticated read-back production terverifikasi.
 
 **Temuan:** submit diskusi menulis localStorage, mengosongkan textarea, dan menampilkan pesan `tersimpan di browser ini`, tetapi tidak mengirim request persistence ke backend.
 
@@ -1051,12 +1053,32 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Evaluation/Evolution bebas `PYTHON_GUIDES` pageerror dan tidak lagi menampilkan label Python.
 - Navigator Reasoning dan touch target mobile memenuhi kontrak UI/UX.
 - Safe gate **76/76 PASS**. Full suite **131 terdaftar = 87 PASS + 44 SKIP + 0 FAIL**; skip adalah live authenticated/mutation karena secret environment tidak tersedia.
-- `gas/Code.gs` lolos syntax/contract test dan versi `2026.2-progress-persistence` sudah **LIVE**. Route diskusi + auth guard serta authenticated read-only terverifikasi; write/read-back mutation belum dijalankan.
+- `gas/Code.gs` lolos syntax/contract test dan versi `2026.2-progress-persistence` sudah **LIVE**. Route diskusi + auth guard, authenticated read-only, dan controlled write/read-back sudah terverifikasi.
 
-### Authenticated live read-back
+### Authenticated live read-back (baseline sebelum mutation)
 
 - Final gate: **29 PASS + 18 mutation SKIP + 0 FAIL**.
 - Production read-back: 94 progress rows = 42 chapter numerik unik + 26 practice + 25 quiz; diskusi 0.
 - Ringkasan Belajar live: 33%, dengan 1 tuntas, 4 dalam proses, dan 1 belum dimulai.
 - Helper login Playwright tidak lagi memakai fixed wait 3 detik; sekarang menunggu token session sampai 20 detik. Assertion lima kartu juga menunggu render event-based.
 - Tidak ada progress/profile/password/discussion mutation yang dilakukan.
+
+## 92. Gap Persistence: Isi Jawaban Practice Tidak Masuk Backend
+
+**Status:** OPEN — ditemukan lewat controlled live write/read-back, 29 Juli 2026.
+
+**Temuan:** tombol simpan latihan mengirim `saveParticipantProgress(module_id, 'practice', 'completed')`, tetapi payload tidak membawa isi jawaban textarea. Isi jawaban hanya disimpan oleh frontend ke localStorage.
+
+**Bukti live:** marker practice berhasil ditulis dan dibaca kembali dari `participant_progress`; tidak ada field atau route backend yang dapat mengembalikan response body latihan.
+
+**Dampak:** dashboard dan leaderboard dapat mengetahui latihan selesai, tetapi jawaban tidak tersedia lintas browser/perangkat dan belum dapat diaudit atau direview dari backend.
+
+**Rencana fix:** sepakati retensi dan schema jawaban, tambah save/get practice response dengan ownership check, hubungkan acknowledgment + read-back frontend, lalu tambah E2E yang memastikan jawaban tetap ada setelah localStorage dibersihkan.
+
+### Controlled authenticated live mutation
+
+- Write chapter, marker practice, quiz, dan diskusi: **4/4 success**.
+- Read-back chapter, practice, quiz, thread diskusi, dan reply: **5/5 cocok**.
+- Progress writes memakai nilai existing; Ringkasan Belajar tetap 33% dan leaderboard tetap **1.039 → 1.039**.
+- Satu thread QA tetap beserta satu reply dibuat untuk membuktikan persistence diskusi.
+- Tidak ada mutation profile atau password; environment credential dibersihkan setelah test.

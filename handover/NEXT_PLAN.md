@@ -6,8 +6,8 @@
 
 **GAS:** ✅ `2026.2-progress-persistence` deployed; route diskusi baru + auth guard terverifikasi live
 
-**QA:** safe mock 76/76 PASS; full 87 PASS + 44 SKIP + 0 FAIL; authenticated live read-only 29 PASS + 18 SKIP + 0 FAIL
-**Leaderboard:** status terakhir terverifikasi LIVE — 1.024 pts untuk peringkat pertama
+**QA:** safe mock 76/76 PASS; full 87 PASS + 44 SKIP + 0 FAIL; authenticated live read-only 29 PASS + 18 SKIP + 0 FAIL; controlled live write/read-back PASS
+**Leaderboard:** status terakhir terverifikasi LIVE — 1.039 pts sebelum dan sesudah controlled mutation
 
 ---
 
@@ -20,18 +20,19 @@ Phase 0 QA dan seluruh perbaikan audit #78–#91 sudah tersedia di source. Test 
 | Active-module manifest | ✅ | 5 card dashboard + AI Intro; CV Digital Image dicatat terpisah |
 | Route/content smoke | ✅ | overview, practice, quiz, discussion |
 | Payload progress mock | ✅ | lima module: chapter/practice/quiz + score benar |
-| Ringkasan Belajar | ✅ code | dinamis dari `learningSummary`; live menunggu redeploy |
+| Ringkasan Belajar | ✅ live | dinamis dari `learningSummary`; tetap 33% setelah controlled mutation |
 | Quiz readiness | ✅ | 5 module memiliki quiz nyata; Evaluation/Evolution masing-masing 20 soal |
 | Quiz navigator | ✅ | Evaluation/Evolution/Reasoning horizontal + wrap |
 | Metadata score | ✅ code | Reasoning 26; module lain 20 |
 | Responsive/focus/motion | ✅ | 375/768/1280, keyboard focus, reduced motion |
 | Mobile touch target | ✅ | kontrol utama minimum 44px |
-| Backend aggregation | ✅ code | hanya chapter numerik unik; redeploy pending |
+| Backend aggregation | ✅ live | hanya chapter numerik unik; summary stabil setelah re-save idempotent |
 | Error feedback save | ✅ | loading/success/error + retry; lock setelah ack |
 | Reasoning quiz navigator | ✅ | 26 tombol horizontal/wrap pada mobile |
 | Runtime module | ✅ | Modern integrity passed; Evaluation/Evolution tanpa pageerror |
 | Module identity copy | ✅ | label module-specific |
-| Discussion persistence | ✅ code | post/reply + read-back lima module; redeploy pending |
+| Discussion persistence | ✅ live | post/reply + read-back production terverifikasi |
+| Isi jawaban practice (#92) | ⚠️ open | marker selesai masuk backend, tetapi teks jawaban masih localStorage-only |
 
 Safe mock gate: **76/76 PASS**, tanpa expected failure dan tanpa live write. Audit serta bukti resolusi tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
 
@@ -39,10 +40,11 @@ Safe mock gate: **76/76 PASS**, tanpa expected failure dan tanpa live write. Aud
 
 ## URUTAN LANGKAH BERIKUTNYA
 
-1. **Staging mutation E2E:** hanya jika user menyetujui perubahan data, dengan opt-in `TEST_ALLOW_MUTATIONS=true`; verifikasi write/read-back chapter, practice, quiz, discussion, dan dashboard.
-2. **Frontend release:** push/deploy hanya jika diminta user; cache buster sudah `20260729-progress-persistence`.
+1. **Putuskan scope #92:** jika isi jawaban latihan harus tercatat lintas perangkat, tambah schema/API practice-response, frontend acknowledgment/read-back, dan E2E production-safe.
+2. **Perluas controlled live matrix bila dibutuhkan:** test kelima module satu per satu dengan fixture QA terisolasi; test saat ini membuktikan seluruh tipe data utama tanpa mengubah score/progress logis.
+3. **Frontend release:** push/deploy hanya jika diminta user; cache buster sudah `20260729-progress-persistence`.
 
-Authenticated read-only sudah selesai: 94 row progress (42 chapter numerik unik, 26 practice, 25 quiz), diskusi 0, dan Ringkasan Belajar live 33% (1 tuntas, 4 proses, 1 belum mulai).
+Authenticated read-only sudah selesai pada baseline 94 row progress (42 chapter numerik unik, 26 practice, 25 quiz). Controlled mutation kemudian lulus untuk chapter, marker practice, quiz, diskusi, dan reply. Ringkasan Belajar tetap 33% (1 tuntas, 4 proses, 1 belum mulai) dan leaderboard tetap 1.039 poin.
 
 ---
 
@@ -53,7 +55,8 @@ Satu module baru boleh dinyatakan sehat jika:
 - semua route mengarah ke konten module yang benar, bukan UD/restricted;
 - overview mencatat chapter ID numerik yang valid;
 - practice dan quiz menampilkan konten nyata serta feedback loading/success/error;
-- payload tersimpan ke backend dan terbaca kembali setelah reload;
+- chapter, score quiz, status practice, diskusi, dan reply tersimpan ke backend serta terbaca kembali setelah reload;
+- bila isi jawaban practice wajib lintas perangkat, response body juga harus dipersist sebelum module dinyatakan lengkap (#92);
 - dashboard dan Ringkasan Belajar merefleksikan sumber data yang sama;
 - tidak ada console/page error;
 - tombol, keyboard focus, touch target, dan layout 375/768/1280 lolos;

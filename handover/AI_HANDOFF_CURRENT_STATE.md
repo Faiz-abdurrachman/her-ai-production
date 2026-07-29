@@ -1,22 +1,22 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91), Asia/Jakarta**
+**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + live mutation audit #92), Asia/Jakarta**
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
 **Baseline Commit:** `6508121` - test: expand active module end-to-end audit (#87-#91)
 **Feature Commit:** `a3ff0a9` - `fix: persist active module learning progress (#78-#91)`
-**Latest Commit:** current HEAD - `test: stabilize authenticated live read-back`
-**Total commits:** 252
+**Latest Commit:** current HEAD - `docs: record controlled live persistence verification (#92)`
+**Total commits:** 253
 **GAS Deployment:** ✅ `2026.2-progress-persistence` LIVE dan route diskusi terverifikasi terlindungi auth
 **Worktree:** BERSIH
-**E2E Test Suite:** safe mock 76/76 PASS | full 87 PASS + 44 SKIP + 0 FAIL | authenticated live read-only 29 PASS + 18 SKIP + 0 FAIL
-**Leaderboard:** ✅ LIVE — Brenda 1,024 pts (#1), peserta lain 245 pts (#2)
+**E2E Test Suite:** safe mock 76/76 PASS | full 87 PASS + 44 SKIP + 0 FAIL | authenticated live read-only 29 PASS + 18 SKIP + 0 FAIL | controlled live write/read-back PASS
+**Leaderboard:** ✅ LIVE — 1.039 pts untuk peringkat pertama sebelum dan sesudah controlled mutation
 
 > **Ini sumber kebenaran tunggal.** Semua dokumen lain yang bertentangan diabaikan.
 
 ## CHECKPOINT RESOLUSI 29 JULI 2026
 
-Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Code.gs` diperbaiki untuk materi, latihan, kuis, progress, ringkasan, serta diskusi lima module aktif. Tidak ada request mutasi yang dikirim ke backend live pada sesi ini.
+Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Code.gs` diperbaiki untuk materi, latihan, kuis, progress, ringkasan, serta diskusi lima module aktif. Controlled production mutation yang disetujui user juga sudah lulus untuk chapter, status practice, score quiz, post diskusi, dan reply.
 
 ### Cakupan yang sekarang bisa dilacak
 
@@ -24,7 +24,7 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 |---|---|
 | Manifest | 5 module dashboard, AI Intro, CV Digital Image, route dan metadata |
 | Frontend | Overview, practice, quiz, discussion, own-content, loader tunggal |
-| Frontend → backend | Payload materi/practice/quiz/diskusi, acknowledgment, retry, dan read-back memakai GAS mock |
+| Frontend → backend | Payload chapter/status practice/score quiz/diskusi, acknowledgment, retry, dan read-back memakai GAS mock; isi jawaban practice masih localStorage-only (#92) |
 | Safety | Kredensial tidak disimpan di E2E; live mutation perlu opt-in; password punya opt-in kedua |
 | UI/UX | 375/768/1280, overflow, touch target, keyboard focus, reduced motion, non-color status |
 | Artefak | HTML + JSON report, screenshot, trace dan video saat failure |
@@ -38,6 +38,9 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 - Lima module: chapter numerik, practice, quiz, score, discussion post/reply, dan read-back terverifikasi pada kontrak deterministik.
 - GAS aggregation diuji langsung dengan row duplicate + quiz + practice; hasil hanya menghitung chapter numerik unik.
 - UI/UX: 375/768/1280 bebas overflow; Reasoning nav wrap; touch target minimum 44px; source integrity passed; pageerror cleanup selesai.
+- Controlled live write/read-back: chapter Python #1, status practice Python, quiz Evaluation score existing, post diskusi tetap, dan reply semuanya tersimpan lalu terbaca kembali.
+- Idempotent re-save tidak mengubah Ringkasan Belajar; leaderboard tetap **1.039 → 1.039**. Profile dan password tidak dimutasi.
+- #92 **OPEN**: teks jawaban practice tetap hanya di localStorage; backend baru menyimpan marker `chapter_id='practice'` dengan status selesai.
 
 ### Pekerjaan operasional tersisa
 
@@ -45,9 +48,10 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 |---|---|---|
 | Redeploy GAS terbaru | ✅ DONE | `doGet.version` live = `2026.2-progress-persistence`; route diskusi baru terdeteksi dan menolak request tanpa token |
 | Authenticated live read-back | ✅ DONE | Login, dashboard, progress, diskusi, auth guard: 29 PASS; 18 mutation scenarios sengaja skip |
-| Live mutation verification | PENDING APPROVAL/OPT-IN | Jalankan hanya dengan `TEST_ALLOW_MUTATIONS=true` pada akun QA yang boleh diubah |
+| Controlled live mutation verification | ✅ DONE | 4 write sukses; 5 read-back cocok; summary dan leaderboard tidak berubah; tanpa profile/password mutation |
+| Practice answer persistence (#92) | ⚠️ OPEN | Tentukan schema/API untuk isi jawaban, lalu implement save + authenticated read-back lintas perangkat |
 
-**Read-back production:** 94 row progress terbaca: 42 chapter numerik unik, 26 practice, 25 quiz. Diskusi tersimpan saat ini 0. `learningSummary`: total 6, tuntas 1, dalam proses 4, belum dimulai 1, progress rata-rata 33%. Write/read-back mutation production belum dijalankan. Laporan rinci ada di `handover/E2E_AUDIT_2026-07-29.md`.
+**Read-back production:** baseline 94 row progress: 42 chapter numerik unik, 26 practice, 25 quiz. Controlled test melakukan re-save nilai existing pada tiga row progress dan membuat satu thread QA beserta satu reply. `learningSummary` tetap total 6, tuntas 1, dalam proses 4, belum dimulai 1, progress rata-rata 33%; leaderboard tetap 1.039 poin. Laporan rinci ada di `handover/E2E_AUDIT_2026-07-29.md`.
 
 ---
 
@@ -74,21 +78,21 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 | Nama dinamis dashboard | ✅ | "Halo, [Nama]!" dari session |
 | Ganti password mandiri | ✅ | old→new→hash→sync 2 sheet, rate limit 8/10min |
 | Settings save profil | ✅ | form→GAS→session update |
-| Chapter progress auto-save | ✅ code / ⚠️ live | Lima module mengirim chapter numerik; production menunggu redeploy/read-back |
-| Quiz score wiring | ✅ code / ⚠️ live | Menunggu ack backend; gagal-save tetap retryable; denominator 20/26 benar |
-| Practice/latihan wiring | ✅ code / ⚠️ live | Lima module menunggu ack backend dan menampilkan error/retry |
+| Chapter progress auto-save | ✅ live | Write/read-back chapter numerik terverifikasi production |
+| Quiz score wiring | ✅ live | Write/read-back score terverifikasi; gagal-save tetap retryable; denominator 20/26 benar |
+| Practice/latihan wiring | ⚠️ partial live | Marker selesai terverifikasi production; isi jawaban masih localStorage-only (#92) |
 | Dashboard skeleton/cache | ✅ | 3-tier: memory→sessionStorage(5min)→skeleton, 0.2s refresh |
 | Dashboard modules filter | ✅ | Dashboard tepat 5 card; overview AI Fundamentals berisi Intro + 5 module |
 | Dashboard quiz badge | ✅ | Persentase format (X%), pill pink, skeleton reveal |
-| **Leaderboard LIVE** | ✅ | Compute dari `participant_progress`, Brenda 1,024 pts #1 |
-| Score normalization (#55) | ✅ code / ⚠️ live | Evaluation/Evolution 20; Reasoning 26; redeploy GAS pending |
+| **Leaderboard LIVE** | ✅ | Compute dari `participant_progress`; 1.039 poin stabil pada controlled mutation |
+| Score normalization (#55) | ✅ live | Evaluation/Evolution 20; Reasoning 26 |
 | Restricted access (#54) | ✅ | Hanya Beranda/Modul/Pengaturan + under-development |
 | Python contamination fix (#57) | ✅ | 24 module JS — konten module-specific, 0 kontaminasi |
 | ai-python.js rewrite (#59) | ✅ | 8 GUIDES konten Python proper |
 | Glossary enrichment (#63) | ✅ | 14 modules, 620+ definitions |
 | Lazy loading (#64) | ✅ | `__aiLabLoader`, 28 route wrapped, 4.5MB→500KB, 90% reduction |
 | P5: UX Polish (#65) | ✅ | 12 animations: accordion, quiz feedback, page enter, toast, button |
-| Discussion persistence | ✅ code / ⚠️ live | Post/reply save + read-back lima module; redeploy GAS pending |
+| Discussion persistence | ✅ live | Post/reply save + authenticated read-back terverifikasi production |
 | Avatar/foto profil (#67) | ✅ | Upload→canvas resize 200×200→preview→"✓ Simpan"/"✗ Batal", base64 sheet |
 | Module lockdown (#68, #74, #75) | ✅ | 20 module UD, dashboard shows only 5 AI Fundamentals |
 | CV Interactive widgets (#73) | ✅ | Sandbox, flip/rotate, bitwise, Otsu, quiz, coding challenges |
@@ -214,7 +218,7 @@ Deployment, Front-end, Back-end
 21. **Formula**: `points = Σ(quiz_score) + (chapters × 15) + (practice × 5)`
 22. **Source**: LIVE dari `participant_progress`, bukan static seed
 23. **Masking**: `*********` untuk non-current user
-24. **Brenda**: 1,024 pts (#1), peserta lain 245 pts (#2)
+24. **Status live terbaru**: 1.039 pts untuk peringkat pertama; nilai stabil sebelum/sesudah controlled mutation
 
 ### Dashboard
 25. **Module filter**: Only 5 AI Fundamentals + AI Intro
