@@ -1,13 +1,13 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + persistence audit #92 + UI #93 + dynamic tracking #94 + CV release lock #95 + practice editability #96 + participant access reconciliation #97), Asia/Jakarta**
+**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + persistence audit #92 + UI #93 + dynamic tracking #94 + CV release lock #95 + practice editability #96 + participant access #97 + account compaction #98), Asia/Jakarta**
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
 **Baseline Commit:** `6508121` - test: expand active module end-to-end audit (#87-#91)
 **Feature Commit:** `a3ff0a9` - `fix: persist active module learning progress (#78-#91)`
-**Latest Feature Commit:** `ce0434e` - `fix: reconcile participant portal access (#97)`
-**Total commits:** 261 setelah commit verifikasi live version #97
-**GAS Deployment:** ⚠️ GET read-only 29 Juli 2026 mengembalikan live `2026.2-progress-persistence`; source lokal `2026.3.2-participant-access-reconciled`, sehingga #94/#95/#97, seed metadata terbaru, rekonsiliasi akses, dan authenticated read-back terbaru belum live
+**Latest Feature Commit:** `cdb28a2` - `feat: compact participant accounts to target cohort (#98)`
+**Total commits:** 263 setelah commit dokumentasi checkpoint #98
+**GAS Deployment:** ⚠️ GET read-only 29 Juli 2026 mengembalikan live `2026.2-progress-persistence`; source lokal `2026.3.3-participant-accounts-compacted`, sehingga #94/#95/#97/#98, seed metadata terbaru, compaction 187→100, dan authenticated read-back terbaru belum live
 **Worktree:** source changes akan bersih setelah commit docs; CSV akun milik user tetap untracked dan tidak boleh di-commit karena memuat credential
 **E2E Test Suite:** safe mock 85/85 PASS | full 96 PASS + 44 SKIP + 0 FAIL | authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2 | controlled live write/read-back terakhir PASS
 **Leaderboard:** ✅ sumber LIVE — authenticated read-back terakhir 1.039 pts; screenshot user sesudahnya menampilkan Brenda 1.054 pts (belum di-read-back ulang)
@@ -25,6 +25,8 @@ Release lock #95 menutup kembali seluruh Computer Vision. Hanya enam module Foun
 Fix #96 memulihkan textarea Latihan Pengantar AI yang salah terkunci ketika localStorage berisi object jawaban kosong. State kosong/corrupt sekarang dibersihkan, penyimpanan kosong ditolak, dan hanya jawaban nyata yang mengaktifkan mode read-only; tombol Edit tetap membuka kembali input.
 
 Fix #97 menetapkan daftar `TARGET_PARTICIPANT_PORTAL_EMAILS` sebagai cohort resmi 100 peserta lolos tahap 2. Audit CSV lokal menemukan 187 akun: seluruh 100 target cocok unik dan 87 akun berada di luar cohort. Login source terbaru menolak akun non-target meskipun `access_status` kosong/aktif. Fungsi audit dan rekonsiliasi idempotent hanya mengubah `access_status` serta `updated_at`; password, row, progress, dan histori tidak disentuh. Dry-run lokal siap diterapkan, tetapi Google Sheet live belum dimutasi.
+
+Feature #98 menambahkan compaction fail-safe agar tab `ParticipantAccounts` utama dapat benar-benar berisi tepat 100 row target, bukan 187 row dengan 87 inactive. Fungsi hanya berjalan pada preflight persis 187/100/87, membuat backup sheet otomatis, mempertahankan semua nilai row target termasuk credential, mengaktifkan 100 target, melakukan read-back, dan rollback ke 187 row bila verifikasi gagal. User melaporkan backup database manual sudah dibuat; compaction live belum dijalankan.
 
 ### Cakupan yang sekarang bisa dilacak
 
@@ -54,14 +56,15 @@ Fix #97 menetapkan daftar `TARGET_PARTICIPANT_PORTAL_EMAILS` sebagai cohort resm
 - #95 **FIXED IN CODE**: sembilan route CV dan seluruh prefix turunannya terkunci ke Under Development, loader/progress CV tidak berjalan, dan default tracking CV dinonaktifkan. Frontend/GAS deployment masih pending.
 - #96 **FIXED IN CODE**: payload latihan Pengantar AI kosong/corrupt tidak lagi mengunci textarea; penyimpanan kosong divalidasi dan jawaban nyata tetap dapat disimpan, reload, serta diedit. Hanya frontend deployment yang pending.
 - #97 **FIXED IN CODE / LIVE PENDING**: inner join email menghasilkan 100 target + 87 non-target; preflight 0 missing/blank/duplicate dan `ready_to_apply=true`. Login guard, migration guard, audit, serta rekonsiliasi telah diuji lokal. Sheet live belum diubah dan GAS `2026.3.2-participant-access-reconciled` belum dideploy.
+- #98 **FIXED IN CODE / LIVE PENDING**: `compactParticipantAccountsToTargetCohort()` membuat backup otomatis dan menulis ulang sheet utama menjadi header + 100 target. Forced failure rollback, credential preservation, exact read-back, dan rerun idempotent lulus lokal. Source GAS `2026.3.3-participant-accounts-compacted` belum disimpan/dijalankan live.
 
 ### Pekerjaan operasional tersisa
 
 | Item | Status | Tindakan |
 |---|---|---|
 | Audit versi GAS live | ✅ READ-ONLY | GET endpoint mengembalikan `2026.2-progress-persistence`; tidak ada mutation |
-| Verifikasi + redeploy GAS #94/#95/#97 | ⏳ PENDING | Backup `ParticipantAccounts`; cek versi live; save source terbaru; jalankan `auditParticipantPortalAccess()`; hanya bila `ready_to_apply=true` dan hasil 187/100/87 cocok, jalankan `reconcileParticipantPortalAccess()`; seed dashboard; redeploy; pastikan `version=2026.3.2-participant-access-reconciled` |
-| Participant access live #97 | ⏳ BELUM DIMUTASI | Dry-run lokal: 100 target, 87 non-target, 92 perlu aktivasi, 87 perlu deaktivasi, 8 sudah sesuai. Jangan menjalankan generator/reset atau migrasi password untuk pekerjaan ini |
+| Verifikasi + redeploy GAS #94/#95/#97/#98 | ⏳ PENDING | Save source terbaru; jalankan audit; bila 187/100/87 valid, jalankan compaction #98; seed dashboard; redeploy; pastikan `version=2026.3.3-participant-accounts-compacted` |
+| ParticipantAccounts exact 100 (#98) | ⏳ BELUM DIMUTASI | User sudah membuat backup manual; fungsi juga membuat backup otomatis. Jalankan `auditParticipantPortalAccess()` lalu `compactParticipantAccountsToTargetCohort()`—bukan provision/generate/reset/migrasi password |
 | Frontend release #94/#95 | ⏳ BELUM TERVERIFIKASI | Pastikan build terbaru terdeploy; router `20260729-cv-locked` menutup CV di sisi peserta |
 | Frontend fix #96 | ⏳ BELUM TERVERIFIKASI | Deploy/cek `settings.js` dengan cache buster `20260729-intro-practice-editable`; tidak perlu redeploy GAS |
 | Authenticated live read-back | ✅ DONE | Login, dashboard, progress, diskusi, auth guard: 29 PASS; 18 mutation scenarios sengaja skip |
@@ -98,6 +101,7 @@ Fix #97 menetapkan daftar `TARGET_PARTICIPANT_PORTAL_EMAILS` sebagai cohort resm
 | Chapter progress auto-save | ✅ live | Write/read-back chapter numerik terverifikasi production |
 | Dynamic module tracking (#94) | ✅ code / ⏳ deploy | Backend metadata-driven; aktivasi module baru otomatis masuk cards/summary/journey setelah schema + GAS 2026.3.2 live |
 | Participant access reconciliation (#97) | ✅ code / ⏳ live apply | Audit/reconcile tepat 100 active + 87 inactive; hanya `access_status`/`updated_at`; login menolak akun di luar cohort |
+| ParticipantAccounts compaction (#98) | ✅ code / ⏳ live apply | Main sheet 187→100 target dengan backup otomatis, exact read-back, rollback, dan credential preservation |
 | Pengantar AI material tracking | ✅ code / ⏳ deploy | Lima route menyimpan chapter 1–5 dan read-back server; bukan progress berbasis posisi halaman |
 | Quiz score wiring | ✅ live | Write/read-back score terverifikasi; gagal-save tetap retryable; denominator 20/26 benar |
 | Practice/latihan wiring | ⚠️ partial live | Marker selesai terverifikasi production; isi jawaban masih localStorage-only (#92) |
@@ -122,9 +126,10 @@ Fix #97 menetapkan daftar `TARGET_PARTICIPANT_PORTAL_EMAILS` sebagai cohort resm
 
 ---
 
-## COMMIT CHECKPOINT TERBARU (#78–#97)
+## COMMIT CHECKPOINT TERBARU (#78–#98)
 
 ```
+cdb28a2 feat: compact participant accounts to target cohort (#98)
 ce0434e fix: reconcile participant portal access (#97)
 f854f9d fix: keep empty intro practice editable (#96)
 457d02c fix: lock Computer Vision release (#95)

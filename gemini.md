@@ -1192,3 +1192,35 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Sebelum live apply: backup tab `ParticipantAccounts`, jalankan audit, review 187/100/87 + `ready_to_apply=true`, lalu minta approval mutation untuk menjalankan reconciliation.
 - Jangan menjalankan `provisionParticipantAccounts`, `generateParticipantAccounts*`, `forceReset:true`, atau credential migration untuk pekerjaan akses ini.
 - Setelah reconciliation, redeploy GAS dan authenticated read-back harus membuktikan akun QA target bisa login, non-target ditolak, serta enam module Foundation/CV lock tetap benar.
+
+## 98. Feature: Compact ParticipantAccounts Menjadi Tepat 100 Target
+
+**Status:** FIXED IN CODE — 29 Juli 2026. User melaporkan backup database sudah dibuat; compaction Google Sheet live dan deployment belum dilakukan.
+
+**Requirement baru:** user/senior meminta tab utama `ParticipantAccounts` benar-benar berisi 100 peserta lolos tahap 2, bukan mempertahankan 187 row dengan 87 row berstatus inactive.
+
+**Implementasi:**
+
+- Tambah `compactParticipantAccountsToTargetCohort()` sebagai mutation manual dari Apps Script editor; tidak diekspos sebagai API action.
+- Strict preflight hanya menerima 187 total, 100 target, 87 non-target, 0 missing, 0 blank email, 0 duplicate, dan `ready_to_apply=true`.
+- Membuat backup sheet otomatis dengan nama timestamp + UUID sebelum main sheet diubah; backup disembunyikan untuk mengurangi perubahan tidak sengaja.
+- Mempertahankan seluruh kolom dan nilai row target, termasuk credential existing; hanya `access_status` target distandardisasi menjadi `active` dan `updated_at` diperbarui.
+- Menulis ulang tab `ParticipantAccounts` yang sama menjadi header + 100 target agar referensi sheet tetap memakai nama/ID tab utama.
+- Melakukan exact read-back 100 target. Jika gagal, original 187 row ditulis kembali; backup otomatis tetap tersedia.
+- Rerun pada sheet yang sudah 100 target mengembalikan `already_compacted=true` tanpa backup atau write baru.
+- Source version menjadi `2026.3.3-participant-accounts-compacted`.
+
+**Verifikasi lokal:**
+
+- Forced invalid read-back memicu rollback dan memulihkan 187 row + credential identik.
+- Success path menghasilkan 100 target, menghapus 87 non-target dari main sheet, membuat backup, dan menjaga credential target byte-for-byte.
+- Rerun idempotent tidak mengubah data.
+- GAS auth/compaction regression PASS; safe deterministic E2E **85/85 PASS**; dry-run CSV tetap 187/100/87 dan `ready_to_apply=true`.
+- Tidak ada live mutation, deploy, push, provision, generate, reset, atau password rotation.
+
+## Checkpoint Transfer Setelah #98 — 29 Juli 2026
+
+- Latest feature commit: `cdb28a2 feat: compact participant accounts to target cohort (#98)`; setelah commit dokumentasi total menjadi 263.
+- Source GAS lokal `2026.3.3-participant-accounts-compacted`; GET live terakhir masih `2026.2-progress-persistence`.
+- Live order: save source → audit 187/100/87 → run compaction → verify main sheet 100 + backup → seed dashboard → redeploy → authenticated read-back.
+- Jangan jalankan reconciliation terpisah, credential migration, provision/generate, atau reset bila compaction #98 dipakai.
