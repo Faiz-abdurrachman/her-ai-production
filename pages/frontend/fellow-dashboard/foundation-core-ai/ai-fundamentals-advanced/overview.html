@@ -140,14 +140,15 @@
             </div>
 
             <aside class="module-right course-detail-right">
-                <section class="module-side-card progress-card course-summary-card">
+                <section class="module-side-card progress-card course-summary-card" data-learning-summary-state="loading" aria-busy="true">
                     <h2>Ringkasan Belajar</h2>
-                    <div class="progress-donut" aria-label="0 persen progress"><strong>0%</strong><span>Progress</span></div>
+                    <div class="progress-donut" data-learning-summary-donut aria-label="Memuat progres belajar"><strong data-learning-summary-progress>0%</strong><span>Progress</span></div>
                     <ul>
-                        <li><i class="green"></i><span><strong>Tuntas</strong>0 Modul</span></li>
-                        <li><i class="orange"></i><span><strong>Dalam Proses</strong>0 Modul</span></li>
-                        <li><i class="soft"></i><span><strong>Belum Dimulai</strong>6 Modul</span></li>
+                        <li><i class="green"></i><span><strong>Tuntas</strong><b data-learning-summary-completed>0</b> Modul</span></li>
+                        <li><i class="orange"></i><span><strong>Dalam Proses</strong><b data-learning-summary-in-progress>0</b> Modul</span></li>
+                        <li><i class="soft"></i><span><strong>Belum Dimulai</strong><b data-learning-summary-not-started>6</b> Modul</span></li>
                     </ul>
+                    <p class="summary-sync-state" data-learning-summary-status aria-live="polite">Memuat progres terbaru...</p>
                 </section>
 
                 <section class="module-side-card course-achievement-card">

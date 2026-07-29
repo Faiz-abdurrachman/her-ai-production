@@ -49,7 +49,7 @@ test.describe('UI/UX quality gate — deterministic mock', () => {
     await page.goto(appUrl('/participant-ai-fundamentals'));
     const summary = page.locator('.course-summary-card');
     const donut = summary.locator('.progress-donut');
-    await expect(donut).toHaveAttribute('aria-label', /\d+ persen progress/i);
+    await expect(donut).toHaveAttribute('aria-label', /\d+ persen progres/i);
     await expect(summary).toContainText('Tuntas');
     await expect(summary).toContainText('Dalam Proses');
     await expect(summary).toContainText('Belum Dimulai');
@@ -98,7 +98,6 @@ test.describe('UI/UX quality gate — deterministic mock', () => {
   }
 
   test('mobile-375 keeps Reasoning quiz numbers horizontal and wrapping', async ({ page }) => {
-    test.fail(true, 'Known issue #87: Reasoning uses a separate navigator class that still stacks vertically.');
     const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === 'reasoning');
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto(appUrl(module.routes.quiz));
@@ -131,7 +130,6 @@ test.describe('UI/UX quality gate — deterministic mock', () => {
   });
 
   test('primary practice controls meet the 44px touch-target minimum on mobile', async ({ page }) => {
-    test.fail(true, 'Known issue #83: tombol praktik utama masih di bawah minimum touch target 44px.');
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto(appUrl('/participant-ai-modern-practice'));
     const controls = page.locator('#aiModernPracticeForm [data-practice-save], #aiModernPracticeApp [data-practice-next]');

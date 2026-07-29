@@ -2,52 +2,47 @@
 
 **Tanggal:** 29 Juli 2026
 
-**Baseline:** `6c35926` (245 commits sebelum Phase 0 QA)
+**Baseline:** `6508121` sebelum resolusi audit #78–#91
 
-**GAS:** deployed dari checkpoint sebelumnya; tidak diubah pada Phase 0
+**GAS:** source terbaru sudah diperbaiki; **manual redeploy masih pending**
 
-**QA:** 123 test terdaftar, safe mock gate 70 test, live mutation default OFF
+**QA:** 131 test terdaftar; safe mock gate 76/76 PASS; full 87 PASS + 44 SKIP + 0 FAIL
 **Leaderboard:** status terakhir terverifikasi LIVE — 1.024 pts untuk peringkat pertama
 
 ---
 
 ## CURRENT STATE
 
-Phase 0 QA untuk module aktif sudah tersedia. Test tidak lagi bergantung pada route Deep Learning/Healthcare yang sekarang Under Development, dan tidak menulis ke GAS production secara default.
+Phase 0 QA dan seluruh perbaikan audit #78–#91 sudah tersedia di source. Test tidak menulis ke GAS production secara default.
 
 | Area | Status | Catatan |
 |---|---|---|
 | Active-module manifest | ✅ | 5 card dashboard + AI Intro; CV Digital Image dicatat terpisah |
 | Route/content smoke | ✅ | overview, practice, quiz, discussion |
-| Payload progress mock | ✅/⚠️ | empat module lolos; AI Modern gagal (#81, #82) |
-| Ringkasan Belajar | ❌ | masih statis (#78) |
+| Payload progress mock | ✅ | lima module: chapter/practice/quiz + score benar |
+| Ringkasan Belajar | ✅ code | dinamis dari `learningSummary`; live menunggu redeploy |
 | Quiz readiness | ✅ | 5 module memiliki quiz nyata; Evaluation/Evolution masing-masing 20 soal |
-| Quiz navigator | ✅/❌ | Evaluation/Evolution lolos #86; Reasoning masih vertikal (#87) |
-| Metadata score | ⚠️ | hanya Reasoning: UI 26 vs GAS 20 (#79) |
+| Quiz navigator | ✅ | Evaluation/Evolution/Reasoning horizontal + wrap |
+| Metadata score | ✅ code | Reasoning 26; module lain 20 |
 | Responsive/focus/motion | ✅ | 375/768/1280, keyboard focus, reduced motion |
-| Mobile touch target | ⚠️ | dua tombol praktik di bawah 44px (#83) |
-| Backend aggregation | ⚠️ | quiz/practice ikut dihitung sebagai chapter (#84) |
-| Error feedback save | ❌ | respons gagal ditelan frontend (#85) |
-| Reasoning quiz navigator | ❌ | 26 tombol masih vertikal pada mobile (#87) |
-| Runtime module | ❌ | AI Modern integrity mismatch; Evaluation/Evolution pageerror (#88–#89) |
-| Module identity copy | ⚠️ | label Python bocor ke Evaluation/Evolution (#90) |
-| Discussion persistence | ❌ | browser-only, belum backend (#91) |
+| Mobile touch target | ✅ | kontrol utama minimum 44px |
+| Backend aggregation | ✅ code | hanya chapter numerik unik; redeploy pending |
+| Error feedback save | ✅ | loading/success/error + retry; lock setelah ack |
+| Reasoning quiz navigator | ✅ | 26 tombol horizontal/wrap pada mobile |
+| Runtime module | ✅ | Modern integrity passed; Evaluation/Evolution tanpa pageerror |
+| Module identity copy | ✅ | label module-specific |
+| Discussion persistence | ✅ code | post/reply + read-back lima module; redeploy pending |
 
-Safe mock gate: **70 dieksekusi = 56 ordinary pass + 14 expected failures**, tanpa live write. Expected failure dipertahankan supaya bug terbuka terlihat dan otomatis berubah menjadi failure saat perilakunya bergeser. Audit MCP 20 route tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
+Safe mock gate: **76/76 PASS**, tanpa expected failure dan tanpa live write. Audit serta bukti resolusi tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
 
 ---
 
-## URUTAN PERBAIKAN YANG DIREKOMENDASIKAN
+## URUTAN LANGKAH BERIKUTNYA
 
-1. **Data integrity:** #81, #82, #84, #85, #91.
-   - Perubahan `ai-modern.js` perlu approval karena struktur khusus.
-   - Perubahan `gas/Code.gs` wajib redeploy dan verifikasi.
-2. **Truthful progress UI:** #78 dan kontrak perhitungan status Tuntas/Dalam Proses/Belum Dimulai.
-3. **Quiz consistency:** selesaikan mismatch denominator Reasoning #79. #80 sudah fixed.
-4. **Runtime/content integrity:** #88–#90.
-5. **UI polish:** #83 dan #87 untuk minimum touch target serta navigator Reasoning.
-6. **Live read-only verification:** jalankan dengan kredensial via environment, tanpa `TEST_ALLOW_MUTATIONS`.
-7. **Staging mutation E2E:** hanya pada akun QA/dataset yang boleh diubah, dengan opt-in `TEST_ALLOW_MUTATIONS=true`.
+1. **Manual redeploy GAS:** paste source `gas/Code.gs`, deploy Web App versi baru, pertahankan access policy existing, lalu verifikasi versi `2026.2-progress-persistence`.
+2. **Live read-only verification:** jalankan dengan kredensial via secret environment, tanpa `TEST_ALLOW_MUTATIONS`.
+3. **Staging mutation E2E:** hanya pada akun QA/dataset yang boleh diubah, dengan opt-in `TEST_ALLOW_MUTATIONS=true`; verifikasi chapter, practice, quiz, discussion, dan dashboard read-back.
+4. **Frontend release:** push/deploy hanya jika diminta user; cache buster sudah `20260729-progress-persistence`.
 
 ---
 

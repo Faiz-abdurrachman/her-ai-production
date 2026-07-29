@@ -611,7 +611,7 @@
             var expectedText = sourceText(source);
             var visual = SOURCE_VISUALS[getSourceFile(path)];
             var beginnerGuide = BEGINNER_GUIDES[getSourceFile(path)];
-            var headerHtml = '<div class="ai-modern-chapter-hero" style="margin-bottom: 24px;"><span class="reasoning-topic-tag" style="display:inline-block; margin-bottom: 8px;">TOPIK ' + (chapterNumber + 1) + ' — ' + escapeHtml((chapter.shortTitle || chapter.topic).toUpperCase()) + '</span><h2 style="margin: 0; font-size: 1.8rem; color: var(--text-primary); line-height: 1.3;">' + escapeHtml(chapter.title) + '</h2><p style="color: var(--text-secondary); margin-top: 8px; font-size: 1.05rem;">' + escapeHtml(chapter.summary) + '</p></div>';
+            var headerHtml = '<div class="ai-modern-chapter-hero" data-modern-injected style="margin-bottom: 24px;"><span class="reasoning-topic-tag" style="display:inline-block; margin-bottom: 8px;">TOPIK ' + (chapterNumber + 1) + ' — ' + escapeHtml((chapter.shortTitle || chapter.topic).toUpperCase()) + '</span><h2 style="margin: 0; font-size: 1.8rem; color: var(--text-primary); line-height: 1.3;">' + escapeHtml(chapter.title) + '</h2><p style="color: var(--text-secondary); margin-top: 8px; font-size: 1.05rem;">' + escapeHtml(chapter.summary) + '</p></div>';
             container.innerHTML = headerHtml + source + renderEndOfChapter(chapter, chapterNumber, CHAPTERS.length);
             var sourceHero = container.querySelector(".ai-modern-chapter-hero");
             if (sourceHero) sourceHero.insertAdjacentHTML("afterend", renderOrientationAndNav(chapter, chapterNumber, CHAPTERS.length) + finalRenderHookSection(chapter.hook) + renderBeginnerRoadmap(beginnerGuide));
@@ -650,7 +650,7 @@
         if (next) next.hidden = number >= CHAPTERS.length;
         if (finish) finish.hidden = number !== CHAPTERS.length;
         updateProgress(number, CHAPTERS.length);
-        window.saveChapterProgress(MODULE_ID, chapter, 'completed');
+        window.saveChapterProgress(MODULE_ID, number, 'completed');
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
@@ -671,6 +671,9 @@
 })();
 
 (function () {
+    "use strict";
+
+    var MODULE_ID = 'konsep-ai-modern';
     var STORAGE = {
         practice: "heraiAiModernPractice",
         quizDone: "heraiAiModernQuizDone",
@@ -903,17 +906,29 @@
         }
 
         if (saveButton) {
-            saveButton.addEventListener("click", function () {
+            saveButton.addEventListener("click", async function () {
                 captureCurrent();
                 if (!completedCount()) {
                     setStatus("#aiModernPracticeStatus", "Isi minimal satu skenario sebelum menyimpan.", "warning");
                     return;
                 }
                 saveJson(STORAGE.practice, { version: 3, updatedAt: new Date().toISOString(), answers: saved.answers, revealed: saved.revealed, current: saved.current });
-                window.saveChapterProgress(MODULE_ID, 'practice', 'completed');
+                var originalLabel = saveButton.innerHTML;
+                saveButton.disabled = true;
+                saveButton.setAttribute("aria-busy", "true");
+                saveButton.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Menyimpan...';
+                setStatus("#aiModernPracticeStatus", "Menyimpan latihan ke server...", "neutral");
+                var result = await window.saveChapterProgress(MODULE_ID, 'practice', 'completed');
+                saveButton.disabled = false;
+                saveButton.removeAttribute("aria-busy");
+                saveButton.innerHTML = originalLabel;
+                if (!result || result.status !== "success") {
+                    setStatus("#aiModernPracticeStatus", "Jawaban aman di browser, tetapi belum masuk server. Periksa koneksi lalu coba Simpan Jawaban lagi.", "error");
+                    return;
+                }
                 readonly = true;
                 render();
-                setStatus("#aiModernPracticeStatus", "Latihan AI Modern tersimpan. Kamu bisa lanjut kuis atau edit lagi.", "success");
+                setStatus("#aiModernPracticeStatus", "Latihan AI Modern berhasil tersimpan ke server. Kamu bisa lanjut kuis atau edit lagi.", "success");
             });
         }
 
@@ -1040,7 +1055,7 @@
             if (next && percent >= 75) next.classList.remove("is-disabled");
         }
 
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", async function (event) {
             event.preventDefault();
             if (state.done) return;
             if (answeredCount() < QUIZ.length) {
@@ -1050,13 +1065,29 @@
             state.score = state.answers.reduce(function (score, answer, index) {
                 return score + (answer === QUIZ[index][2] ? 1 : 0);
             }, 0);
+            var submit = form.querySelector(".quiz-submit-btn");
+            var originalLabel = submit ? submit.innerHTML : "";
+            if (submit) {
+                submit.disabled = true;
+                submit.setAttribute("aria-busy", "true");
+                submit.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Menyimpan...';
+            }
+            var result = await window.saveChapterProgress(MODULE_ID, 'quiz', 'completed', state.score);
+            if (submit) {
+                submit.disabled = false;
+                submit.removeAttribute("aria-busy");
+                submit.innerHTML = originalLabel;
+            }
+            if (!result || result.status !== "success") {
+                renderResult("Skor belum dikunci karena gagal tersimpan ke server. Jawabanmu tetap tersedia; periksa koneksi lalu kirim lagi.");
+                return;
+            }
             state.done = true;
             localStorage.setItem(STORAGE.quizDone, "true");
             localStorage.setItem(STORAGE.quizScore, String(state.score));
-            window.saveChapterProgress(MODULE_ID, 'quiz', 'completed', state.score);
             saveJson(STORAGE.quizAnswers, state.answers);
             renderQuestion();
-            renderResult();
+            renderResult("Skor berhasil tersimpan ke server. Pembahasan dibuka untuk review.");
         });
 
         renderQuestion();
@@ -1116,7 +1147,7 @@
         });
 
         list.querySelectorAll("[data-reply-save]").forEach(function (button) {
-            button.addEventListener("click", function () {
+            button.addEventListener("click", async function () {
                 var composer = button.closest(".ai-modern-reply-composer");
                 var field = composer ? composer.querySelector("textarea") : null;
                 var status = composer ? composer.querySelector(".practice-status") : null;
@@ -1130,8 +1161,21 @@
                 if (!target) return;
                 target.replies = Array.isArray(target.replies) ? target.replies : [];
                 target.replies.push({ text: text.trim(), createdAt: new Date().toISOString() });
+                button.disabled = true;
+                button.setAttribute("aria-busy", "true");
+                if (status) { status.textContent = "Menyimpan balasan ke server..."; status.dataset.tone = "info"; }
+                var result = await window.saveParticipantDiscussion(MODULE_ID, target);
+                button.disabled = false;
+                button.removeAttribute("aria-busy");
+                if (!result || result.status !== "success") {
+                    if (status) { status.textContent = result?.message || "Balasan belum tersimpan. Coba kirim kembali."; status.dataset.tone = "error"; }
+                    return;
+                }
+                var targetIndex = nextPosts.findIndex(function (post) { return post.id === button.dataset.replySave; });
+                if (targetIndex !== -1) nextPosts[targetIndex] = result.discussion;
                 saveDiscussionPosts(nextPosts);
                 renderDiscussion(nextPosts);
+                setStatus("#aiModernDiscussionStatus", "Balasan tersimpan ke server.", "success");
             });
         });
 
@@ -1145,7 +1189,7 @@
         });
     }
 
-    window.initAiModernDiscussion = function () {
+    window.initAiModernDiscussion = async function () {
         var form = document.getElementById("aiModernDiscussionForm");
         var textarea = form ? form.querySelector("textarea") : null;
         var select = form ? form.querySelector("select") : null;
@@ -1168,19 +1212,48 @@
 
         if (!form || !textarea || !select) return;
 
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", async function (event) {
             event.preventDefault();
             var text = textarea.value.trim();
             if (!text) {
                 setStatus("#aiModernDiscussionStatus", "Tulis isi diskusi terlebih dahulu.", "warning");
                 return;
             }
+            var post = { id: "post-" + Date.now(), prompt: select.value, text: text, createdAt: new Date().toISOString(), replies: [] };
+            var submitButton = form.querySelector('[type="submit"]');
+            var originalHtml = submitButton ? submitButton.innerHTML : "";
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.setAttribute("aria-busy", "true");
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Menyimpan...';
+            }
+            setStatus("#aiModernDiscussionStatus", "Menyimpan diskusi ke server...", "info");
+            var result = await window.saveParticipantDiscussion(MODULE_ID, post);
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.removeAttribute("aria-busy");
+                submitButton.innerHTML = originalHtml;
+            }
+            if (!result || result.status !== "success") {
+                setStatus("#aiModernDiscussionStatus", result?.message || "Diskusi belum tersimpan. Isi tetap tersedia untuk dicoba lagi.", "error");
+                return;
+            }
             posts = getDiscussionPosts();
-            posts.unshift({ id: "post-" + Date.now(), prompt: select.value, text: text, createdAt: new Date().toISOString(), replies: [] });
+            posts.unshift(result.discussion);
             saveDiscussionPosts(posts);
             form.reset();
-            setStatus("#aiModernDiscussionStatus", "Diskusi berhasil diposting dan tersimpan di browser ini.", "success");
+            setStatus("#aiModernDiscussionStatus", "Diskusi berhasil diposting dan tersimpan ke server.", "success");
             renderDiscussion(posts);
         });
+
+        var remote = await window.getParticipantDiscussions(MODULE_ID);
+        if (remote && remote.status === "success") {
+            var local = getDiscussionPosts();
+            var merged = remote.data.concat(local.filter(function (post) {
+                return !remote.data.some(function (saved) { return saved.id === post.id; });
+            }));
+            saveDiscussionPosts(merged);
+            renderDiscussion(merged);
+        }
     };
 })();

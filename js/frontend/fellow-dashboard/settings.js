@@ -21,7 +21,7 @@
             if (this._pending[name]) return this._pending[name];
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
-                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260729-quiz-content';
+                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260729-progress-persistence';
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
                 s.onerror = function() { delete window.__aiLabLoader._pending[name]; reject(new Error('Failed to load: ' + name)); };
                 document.head.appendChild(s);
@@ -1774,6 +1774,87 @@
         return Object.assign({}, defaultParticipantDashboardData(), result.data || {});
     }
 
+    function normalizeLearningSummary(data) {
+        var supplied = data && data.learningSummary;
+        if (supplied && Number.isFinite(Number(supplied.total))) {
+            var total = Math.max(0, Number(supplied.total || 0));
+            var completed = Math.max(0, Math.min(total, Number(supplied.completed || 0)));
+            var inProgress = Math.max(0, Math.min(total - completed, Number(supplied.in_progress || 0)));
+            return {
+                total: total,
+                completed: completed,
+                in_progress: inProgress,
+                not_started: Math.max(0, total - completed - inProgress),
+                progress: Math.max(0, Math.min(100, Math.round(Number(supplied.progress || 0))))
+            };
+        }
+
+        var modules = Array.isArray(data?.modules) ? data.modules : [];
+        var activeModules = [
+            ['python-untuk-ai', 'participant-ai-python'],
+            ['reasoning', 'participant-ai-reasoning'],
+            ['konsep-ai-modern', 'participant-ai-modern'],
+            ['evaluation', 'participant-ai-evaluation'],
+            ['evolution', 'participant-ai-evolution']
+        ];
+        var moduleProgress = activeModules.map(function(identity) {
+            var module = modules.find(function(item) {
+                return item.module_id === identity[0] || String(item.href || '').includes(identity[1]);
+            });
+            return module ? Math.max(0, Math.min(100, Number(module.progress || 0))) : 0;
+        });
+        moduleProgress.unshift(0); // Pengantar AI belum memiliki kartu dashboard terpisah.
+        var completedCount = moduleProgress.filter(function(value) { return value >= 100; }).length;
+        var startedCount = moduleProgress.filter(function(value) { return value > 0 && value < 100; }).length;
+        return {
+            total: moduleProgress.length,
+            completed: completedCount,
+            in_progress: startedCount,
+            not_started: moduleProgress.length - completedCount - startedCount,
+            progress: Math.round(moduleProgress.reduce(function(sum, value) { return sum + value; }, 0) / moduleProgress.length)
+        };
+    }
+
+    function renderAiFundamentalsSummary(data, state) {
+        var card = document.querySelector('.course-summary-card[data-learning-summary-state]');
+        if (!card) return;
+        var summary = normalizeLearningSummary(data || defaultParticipantDashboardData());
+        var total = Math.max(1, summary.total);
+        var completedEnd = Math.round((summary.completed / total) * 100);
+        var startedEnd = Math.round(((summary.completed + summary.in_progress) / total) * 100);
+        var donut = card.querySelector('[data-learning-summary-donut]');
+        if (donut) {
+            donut.style.setProperty('--completed-end', completedEnd + '%');
+            donut.style.setProperty('--started-end', startedEnd + '%');
+            donut.setAttribute('aria-label', summary.progress + ' persen progres; ' + summary.completed + ' modul tuntas, ' + summary.in_progress + ' dalam proses, ' + summary.not_started + ' belum dimulai');
+        }
+        var progress = card.querySelector('[data-learning-summary-progress]');
+        var completed = card.querySelector('[data-learning-summary-completed]');
+        var inProgress = card.querySelector('[data-learning-summary-in-progress]');
+        var notStarted = card.querySelector('[data-learning-summary-not-started]');
+        var status = card.querySelector('[data-learning-summary-status]');
+        if (progress) progress.textContent = summary.progress + '%';
+        if (completed) completed.textContent = String(summary.completed);
+        if (inProgress) inProgress.textContent = String(summary.in_progress);
+        if (notStarted) notStarted.textContent = String(summary.not_started);
+        if (status) status.textContent = state === 'error' ? 'Progres terbaru belum dapat dimuat.' : 'Sinkron dengan progres server.';
+        card.dataset.learningSummaryState = state === 'error' ? 'error' : 'ready';
+        card.setAttribute('aria-busy', 'false');
+    }
+
+    async function initAiFundamentalsSummary() {
+        var card = document.querySelector('.course-summary-card[data-learning-summary-state]');
+        if (!card) return;
+        if (_dashboardDataCache) renderAiFundamentalsSummary(_dashboardDataCache, 'ready');
+        try {
+            var data = await fetchParticipantDashboardData();
+            _dashboardDataCache = data;
+            renderAiFundamentalsSummary(data, 'ready');
+        } catch (error) {
+            renderAiFundamentalsSummary(_dashboardDataCache || defaultParticipantDashboardData(), 'error');
+        }
+    }
+
     // Format quiz score badge for module card.
     // Returns empty string if no score, HTML badge otherwise.
     // All scores are already normalized to percentage (0-100) by GAS backend.
@@ -2450,9 +2531,11 @@
 
     window.saveChapterProgress = async function(moduleId, chapterId, status, score) {
         var session = readParticipantSession();
-        if (!session?.nik) return;
+        if (!session?.nik) {
+            return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.' };
+        }
         try {
-            await fetch('/__gas', {
+            var response = await fetch('/__gas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({
@@ -2464,7 +2547,77 @@
                     score: score !== undefined ? score : null
                 })
             });
+            if (!response.ok) {
+                return { status: 'error', message: 'Server belum dapat menyimpan progres.' };
+            }
+            var result = await response.json();
+            if (!result || result.status !== 'success') {
+                return { status: 'error', message: result?.message || 'Progres belum tersimpan.' };
+            }
+            return result;
         } catch (e) {
+            return { status: 'error', message: 'Koneksi terputus. Coba simpan kembali.' };
+        }
+    };
+
+    window.saveParticipantDiscussion = async function(moduleId, discussion) {
+        var session = readParticipantSession();
+        if (!session?.nik) {
+            return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.' };
+        }
+        try {
+            var response = await fetch('/__gas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action: 'saveParticipantDiscussion',
+                    nik: session.nik,
+                    module_id: moduleId,
+                    discussion_id: discussion?.id || '',
+                    prompt: discussion?.prompt || 'Diskusi',
+                    text: discussion?.text || '',
+                    replies: Array.isArray(discussion?.replies) ? discussion.replies : [],
+                    created_at: discussion?.createdAt || ''
+                })
+            });
+            if (!response.ok) {
+                return { status: 'error', message: 'Server belum dapat menyimpan diskusi.' };
+            }
+            var result = await response.json();
+            if (!result || result.status !== 'success' || !result.discussion) {
+                return { status: 'error', message: result?.message || 'Diskusi belum tersimpan.' };
+            }
+            return result;
+        } catch (e) {
+            return { status: 'error', message: 'Koneksi terputus. Coba kirim kembali.' };
+        }
+    };
+
+    window.getParticipantDiscussions = async function(moduleId) {
+        var session = readParticipantSession();
+        if (!session?.nik) {
+            return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.', data: [] };
+        }
+        try {
+            var response = await fetch('/__gas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action: 'getParticipantDiscussions',
+                    nik: session.nik,
+                    module_id: moduleId
+                })
+            });
+            if (!response.ok) {
+                return { status: 'error', message: 'Server belum dapat memuat diskusi.', data: [] };
+            }
+            var result = await response.json();
+            if (!result || result.status !== 'success') {
+                return { status: 'error', message: result?.message || 'Diskusi belum dapat dimuat.', data: [] };
+            }
+            return { status: 'success', data: Array.isArray(result.data) ? result.data : [] };
+        } catch (e) {
+            return { status: 'error', message: 'Koneksi terputus. Diskusi lokal tetap tersedia.', data: [] };
         }
     };
 
@@ -2493,6 +2646,9 @@
             initLessonDiscussion();
             initLessonControls();
             initAiIntroInteractive();
+            if (currentPath() === '/participant-ai-fundamentals') {
+                initAiFundamentalsSummary();
+            }
         }
         if (pageName === 'settings') {
             initSettingsPage();

@@ -1174,7 +1174,62 @@
 }
 
 .course-summary-card .progress-donut {
-    background: conic-gradient(#45c598 0 28%, #f8b84e 28% 62%, #f0eaf0 62% 100%);
+    --completed-end: 0%;
+    --started-end: 0%;
+    background: conic-gradient(#45c598 0 var(--completed-end), #f8b84e var(--completed-end) var(--started-end), #f0eaf0 var(--started-end) 100%);
+}
+
+.course-summary-card li b {
+    color: inherit;
+    font: inherit;
+}
+
+.course-summary-card .summary-sync-state {
+    color: #697083;
+    font-size: 0.72rem;
+    margin: 10px 0 0;
+    text-align: center;
+}
+
+.course-summary-card[data-learning-summary-state="error"] .summary-sync-state {
+    color: #b4235a;
+}
+
+/* Active-module interaction contract: horizontal quiz navigation and 44px touch targets. */
+#aiReasoningQuizNavigator {
+    align-items: center;
+    display: flex;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#aiReasoningQuizNavigator button {
+    flex: 0 0 44px;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 6px;
+    width: 44px;
+}
+
+.lesson-material-panel [data-practice-save],
+.lesson-material-panel [data-practice-next],
+.lesson-material-panel [data-practice-prev],
+.lesson-material-panel [data-quiz-submit],
+.lesson-material-panel [type="submit"] {
+    min-height: 44px;
+}
+
+.ai-modern-practice-page .reasoning-practice-actions button,
+.ai-modern-practice-page .reasoning-practice-pagination button,
+.ai-modern-practice-page .reasoning-task-navigator button {
+    min-height: 44px !important;
+}
+
+.ai-modern-practice-page .reasoning-task-navigator button {
+    height: 44px !important;
+    min-width: 44px !important;
+    width: 44px !important;
 }
 
 .progress-card li i.orange {

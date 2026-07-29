@@ -1,21 +1,21 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint: 29 Juli 2026 (Playwright MCP E2E Audit #87–#91), Asia/Jakarta**
+**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91), Asia/Jakarta**
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
-**Baseline Commit:** `6c35926` - docs: Final handover update — leaderboard verified LIVE, GAS deployed, all systems go
-**Feature Commit:** current HEAD - `test: expand active module end-to-end audit (#87-#91)`
-**Total commits:** 249
-**GAS Deployment:** ✅ LIVE — leaderboard 1,024 pts verified
+**Baseline Commit:** `6508121` - test: expand active module end-to-end audit (#87-#91)
+**Feature Commit:** current HEAD - `fix: persist active module learning progress (#78-#91)`
+**Total commits:** 250
+**GAS Deployment:** ⚠️ deployment lama LIVE; perubahan terbaru `gas/Code.gs` belum diredeploy
 **Worktree:** BERSIH
-**E2E Test Suite:** 123 test terdaftar | safe mock gate 70 test | live mutation default OFF
+**E2E Test Suite:** 131 test terdaftar | safe mock gate 76/76 PASS | full 87 PASS + 44 SKIP + 0 FAIL
 **Leaderboard:** ✅ LIVE — Brenda 1,024 pts (#1), peserta lain 245 pts (#2)
 
 > **Ini sumber kebenaran tunggal.** Semua dokumen lain yang bertentangan diabaikan.
 
-## CHECKPOINT QA 29 JULI 2026
+## CHECKPOINT RESOLUSI 29 JULI 2026
 
-Phase 0 testing sudah dibangun, fix #80 menambahkan bank kuis production untuk Evaluation/Evolution, dan audit Playwright MCP menguji 20 route module pada desktop/mobile. Router, source module production, dan GAS tidak diubah pada audit ini. Tidak ada request mutasi yang dikirim ke backend live.
+Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Code.gs` diperbaiki untuk materi, latihan, kuis, progress, ringkasan, serta diskusi lima module aktif. Tidak ada request mutasi yang dikirim ke backend live pada sesi ini.
 
 ### Cakupan yang sekarang bisa dilacak
 
@@ -23,40 +23,30 @@ Phase 0 testing sudah dibangun, fix #80 menambahkan bank kuis production untuk E
 |---|---|
 | Manifest | 5 module dashboard, AI Intro, CV Digital Image, route dan metadata |
 | Frontend | Overview, practice, quiz, discussion, own-content, loader tunggal |
-| Frontend → backend | Payload `module_id`, `chapter_id`, status dan score memakai GAS mock |
+| Frontend → backend | Payload materi/practice/quiz/diskusi, acknowledgment, retry, dan read-back memakai GAS mock |
 | Safety | Kredensial tidak disimpan di E2E; live mutation perlu opt-in; password punya opt-in kedua |
 | UI/UX | 375/768/1280, overflow, touch target, keyboard focus, reduced motion, non-color status |
 | Artefak | HTML + JSON report, screenshot, trace dan video saat failure |
 
-### Hasil safe mock gate
+### Hasil gate dan status temuan
 
-- 70 test dieksekusi tanpa live write.
-- 56 alur memenuhi kontrak secara langsung.
-- 14 expected failures mewakili bug produk yang masih terbuka; suite exit code 0.
-- Review kontrak backend menemukan tambahan #84–#85.
-- #80 FIXED: Evaluation dan Evolution masing-masing memiliki 20 soal nyata serta payload score terverifikasi.
-- #86 FIXED: navigator 1–20 horizontal, wrap, 44×44px, dan bebas overflow pada 375/1280px.
-- Audit MCP: 20/20 route render dan bebas horizontal overflow pada 375px.
-- Live read-back production belum dijalankan: sesi MCP kedaluwarsa dan credential secret environment tidak tersedia.
+- Safe mock gate: **76/76 PASS**, tanpa expected failure dan tanpa live write.
+- Full suite: **131 terdaftar = 87 PASS + 44 SKIP + 0 FAIL**.
+- 44 skip adalah alur authenticated/live-mutation yang sengaja tidak dijalankan tanpa secret environment.
+- #78, #79, #81–#85, dan #87–#91: **FIXED IN CODE**.
+- Lima module: chapter numerik, practice, quiz, score, discussion post/reply, dan read-back terverifikasi pada kontrak deterministik.
+- GAS aggregation diuji langsung dengan row duplicate + quiz + practice; hasil hanya menghitung chapter numerik unik.
+- UI/UX: 375/768/1280 bebas overflow; Reasoning nav wrap; touch target minimum 44px; source integrity passed; pageerror cleanup selesai.
 
-### Temuan terbuka
+### Pekerjaan operasional tersisa
 
-| # | Severity | Temuan |
+| Item | Status | Tindakan |
 |---|---|---|
-| 78 | High | Ringkasan Belajar hardcoded dan tidak membaca progress |
-| 79 | High | `quiz_total` Reasoning 26 soal masih tercatat 20 di GAS |
-| 81 | Critical | AI Modern practice/quiz gagal mencatat karena scope `MODULE_ID` |
-| 82 | Critical | AI Modern mengirim object sebagai `chapter_id` |
-| 83 | Medium | Dua tombol praktik mobile di bawah 44px |
-| 84 | High | Backend menghitung quiz/practice sebagai chapter selesai |
-| 85 | High | `saveChapterProgress` mengabaikan respons gagal dan catch kosong |
-| 87 | Medium | Navigator 26 soal Reasoning masih vertikal pada mobile |
-| 88 | Medium | AI Modern gagal source-integrity assertion |
-| 89 | High | Evaluation/Evolution melempar `PYTHON_GUIDES is not defined` |
-| 90 | Low | Label `Kuis Python`/`Forum Python AI` bocor ke Evaluation/Evolution |
-| 91 | High | Posting diskusi hanya tersimpan di localStorage, bukan backend |
+| Redeploy GAS terbaru | PENDING | Paste `gas/Code.gs`, deploy Web App versi baru, lalu pastikan `doGet.version` = `2026.2-progress-persistence` |
+| Authenticated live read-back | PENDING | Sediakan kredensial lewat secret environment dan jalankan read-only gate |
+| Live mutation verification | PENDING APPROVAL/OPT-IN | Jalankan hanya dengan `TEST_ALLOW_MUTATIONS=true` pada akun QA yang boleh diubah |
 
-**Penting:** angka leaderboard/GAS live adalah status terverifikasi dari checkpoint sebelumnya. Audit QA ini tidak melakukan live mutation atau verifikasi ulang authenticated production. Laporan rinci ada di `handover/E2E_AUDIT_2026-07-29.md`.
+**Penting:** leaderboard 1.024 pts adalah status deployment lama yang terakhir terverifikasi. Fitur diskusi backend dan perhitungan progress terbaru belum boleh diklaim live sebelum redeploy. Laporan rinci ada di `handover/E2E_AUDIT_2026-07-29.md`.
 
 ---
 
@@ -66,12 +56,12 @@ Phase 0 testing sudah dibangun, fix #80 menambahkan bank kuis production untuk E
 |---|---|
 | Spreadsheet ID | `1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w` |
 | GAS Web App URL | `https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec` |
-| GAS Code | `gas/Code.gs` (2562 baris, 54 routes, 23 sheets) |
+| GAS Code | `gas/Code.gs` (termasuk `participant_discussions`, summary, dan aggregation fix) |
 | SPA | Vanilla JS hash-router, Node proxy (`node server.js` → `http://127.0.0.1:3000`) |
 | Proxy | POST `/__gas` (token auto-injected, Origin header WAJIB) |
 | Test participant | Kredensial QA disuplai lewat environment variable; tidak disimpan di repo |
 | Module JS files | 30 ai-*.js (24 standard + 5 berbeda + 1 interactive) |
-| Cache buster | Loader `?v=20260729-quiz-content`; modules CSS `?v=20260729-quiz-nav` |
+| Cache buster | Loader/settings/modules CSS `?v=20260729-progress-persistence` |
 
 ---
 
@@ -83,21 +73,21 @@ Phase 0 testing sudah dibangun, fix #80 menambahkan bank kuis production untuk E
 | Nama dinamis dashboard | ✅ | "Halo, [Nama]!" dari session |
 | Ganti password mandiri | ✅ | old→new→hash→sync 2 sheet, rate limit 8/10min |
 | Settings save profil | ✅ | form→GAS→session update |
-| Chapter progress auto-save | ⚠️ | Active modules teruji mock; AI Modern salah `chapter_id` (#82); live read-back belum dieksekusi |
-| Quiz score wiring | ⚠️ | Evaluation/Evolution lolos 20 soal; AI Modern scope crash (#81); UI dapat lock sebelum ack (#85) |
-| Practice/latihan wiring | ⚠️ | Mayoritas aktif; AI Modern gagal POST ke GAS (#81) |
+| Chapter progress auto-save | ✅ code / ⚠️ live | Lima module mengirim chapter numerik; production menunggu redeploy/read-back |
+| Quiz score wiring | ✅ code / ⚠️ live | Menunggu ack backend; gagal-save tetap retryable; denominator 20/26 benar |
+| Practice/latihan wiring | ✅ code / ⚠️ live | Lima module menunggu ack backend dan menampilkan error/retry |
 | Dashboard skeleton/cache | ✅ | 3-tier: memory→sessionStorage(5min)→skeleton, 0.2s refresh |
 | Dashboard modules filter | ✅ | Dashboard tepat 5 card; overview AI Fundamentals berisi Intro + 5 module |
 | Dashboard quiz badge | ✅ | Persentase format (X%), pill pink, skeleton reveal |
 | **Leaderboard LIVE** | ✅ | Compute dari `participant_progress`, Brenda 1,024 pts #1 |
-| Score normalization (#55) | ⚠️ | Evaluation/Evolution sinkron; Reasoning masih mismatch (#79) |
+| Score normalization (#55) | ✅ code / ⚠️ live | Evaluation/Evolution 20; Reasoning 26; redeploy GAS pending |
 | Restricted access (#54) | ✅ | Hanya Beranda/Modul/Pengaturan + under-development |
 | Python contamination fix (#57) | ✅ | 24 module JS — konten module-specific, 0 kontaminasi |
 | ai-python.js rewrite (#59) | ✅ | 8 GUIDES konten Python proper |
 | Glossary enrichment (#63) | ✅ | 14 modules, 620+ definitions |
 | Lazy loading (#64) | ✅ | `__aiLabLoader`, 28 route wrapped, 4.5MB→500KB, 90% reduction |
 | P5: UX Polish (#65) | ✅ | 12 animations: accordion, quiz feedback, page enter, toast, button |
-| Discussion persistence | ⚠️ | Post masih browser-only/localStorage (#91) |
+| Discussion persistence | ✅ code / ⚠️ live | Post/reply save + read-back lima module; redeploy GAS pending |
 | Avatar/foto profil (#67) | ✅ | Upload→canvas resize 200×200→preview→"✓ Simpan"/"✗ Batal", base64 sheet |
 | Module lockdown (#68, #74, #75) | ✅ | 20 module UD, dashboard shows only 5 AI Fundamentals |
 | CV Interactive widgets (#73) | ✅ | Sandbox, flip/rotate, bitwise, Otsu, quiz, coding challenges |
@@ -131,7 +121,7 @@ f749ca7 feat: Live leaderboard — compute points from participant_progress (#69
 | Pengantar AI | settings.js | — | `/participant-ai-intro` | ✅ | ✅ |
 | Python untuk AI | ai-python.js | ~30KB | `/participant-ai-python` | 80 radios | 12 textareas |
 | Reasoning AI | ai-reasoning.js | 170KB | `/participant-ai-reasoning` | 104 radios | 17 textareas |
-| Konsep AI Modern | ai-modern.js | ~40KB | `/participant-ai-modern` | UI ada, save crash #81 | UI ada, save crash #81 |
+| Konsep AI Modern | ai-modern.js | ~40KB | `/participant-ai-modern` | 20 soal + ack/retry ✅ | Save + ack/retry ✅ |
 | Evaluation AI | ai-evaluation.js | ~141KB | `/participant-ai-evaluation` | 20 soal + pembahasan ✅ | 5 textareas |
 | Evolution of AI | ai-evolution.js | ~143KB | `/participant-ai-evolution` | 20 soal + pembahasan ✅ | 7 textareas |
 

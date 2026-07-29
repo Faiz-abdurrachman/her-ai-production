@@ -149,7 +149,8 @@ const SHEETS = {
   participantDashboardLeaderboard: 'participant_dashboard_leaderboard',
   participantAccounts: 'ParticipantAccounts',
   participantActivity: 'ParticipantActivity',
-  participantProgress: 'participant_progress'
+  participantProgress: 'participant_progress',
+  participantDiscussions: 'participant_discussions'
 };
 
 const SCHEMA = {
@@ -188,7 +189,8 @@ const SCHEMA = {
   [SHEETS.participantDashboardLeaderboard]: ['rank', 'nik', 'name', 'points', 'is_active'],
   [SHEETS.participantAccounts]: ['account_id', 'nik', 'username', 'generated_password', 'password_hash', 'password_status', 'access_status', 'nama_lengkap', 'email', 'whatsapp', 'participant_rowId', 'participant_stage', 'status_seleksi', 'created_at', 'updated_at', 'created_by', 'last_login_at', 'password_changed_at'],
   [SHEETS.participantActivity]: ['activity_id', 'timestamp', 'nik', 'nama_lengkap', 'activity_type', 'page', 'module_id', 'lesson_id', 'activity', 'score', 'total', 'payload_json', 'user_agent', 'session_id'],
-  [SHEETS.participantProgress]: ['progress_id', 'participant_rowId', 'nik', 'module_id', 'chapter_id', 'status', 'score', 'started_at', 'completed_at', 'updated_at']
+  [SHEETS.participantProgress]: ['progress_id', 'participant_rowId', 'nik', 'module_id', 'chapter_id', 'status', 'score', 'started_at', 'completed_at', 'updated_at'],
+  [SHEETS.participantDiscussions]: ['discussion_id', 'participant_rowId', 'nik', 'module_id', 'prompt', 'text', 'replies_json', 'created_at', 'updated_at']
 };
 
 function doPost(e) {
@@ -202,6 +204,8 @@ function doPost(e) {
       changeParticipantPassword: () => changeParticipantPassword(payload),
       saveParticipantProgress: () => saveParticipantProgress(payload),
       getParticipantProgress: () => getParticipantProgress(payload),
+      saveParticipantDiscussion: () => saveParticipantDiscussion(payload),
+      getParticipantDiscussions: () => getParticipantDiscussions(payload),
       updateParticipantProfile: () => updateParticipantProfile(payload),
       uploadParticipantPhoto: () => uploadParticipantPhoto(payload),
       removeParticipantPhoto: () => removeParticipantPhoto(payload),
@@ -263,7 +267,7 @@ function doPost(e) {
 }
 
 function doGet() {
-  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.1' });
+  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.2-progress-persistence' });
 }
 
 function authorizeGasAction(action, payload) {
@@ -274,6 +278,8 @@ function authorizeGasAction(action, payload) {
     'changeParticipantPassword',
     'saveParticipantProgress',
     'getParticipantProgress',
+    'saveParticipantDiscussion',
+    'getParticipantDiscussions',
     'recordParticipantActivity',
     'getParticipantDashboardData',
     'startCompetencySession',
@@ -288,7 +294,7 @@ function authorizeGasAction(action, payload) {
   if (participantActions.indexOf(action) >= 0) {
     const claims = requireParticipantToken(payload);
     const retestActions = ['startReTestSession', 'heartbeatReTestSession', 'saveReTestAnswer', 'submitReTest'];
-    const normalActions = ['updateParticipantProfile', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest'];
+    const normalActions = ['updateParticipantProfile', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest'];
     if (retestActions.indexOf(action) >= 0 && claims.scope !== 'retest') {
       throw new Error('Sesi Re-Test tidak valid. Silakan login ulang.');
     }
@@ -377,8 +383,10 @@ function getParticipantDashboardData(payload) {
   var completedByModule = {};
   progressRows.forEach(function(row) {
     var key = String(row.module_id || '');
-    if (row.status === 'completed') {
-      completedByModule[key] = (completedByModule[key] || 0) + 1;
+    var chapterId = String(row.chapter_id || '');
+    if (row.status === 'completed' && /^\d+$/.test(chapterId)) {
+      if (!completedByModule[key]) completedByModule[key] = {};
+      completedByModule[key][chapterId] = true;
     }
   });
 
@@ -398,7 +406,7 @@ function getParticipantDashboardData(payload) {
     var totalChapters = Number(row.total_chapters || 0);
     var computedProgress = row.progress !== undefined ? Number(row.progress) : 0;
     if (totalChapters > 0) {
-      var completed = completedByModule[row.module_id] || 0;
+      var completed = Object.keys(completedByModule[row.module_id] || {}).length;
       computedProgress = Math.min(100, Math.round((completed / totalChapters) * 100));
     }
     var quizScore = quizScoreByModule[row.module_id];
@@ -408,15 +416,41 @@ function getParticipantDashboardData(payload) {
       normalizedScore = Math.round((quizScore / quizTotal) * 100);
     }
     return {
+      module_id: row.module_id || '',
       title: row.title || '',
       subtitle: row.subtitle || '',
       progress: computedProgress,
       quiz_score: normalizedScore,
       icon: row.icon || 'fas fa-book-open',
       tone: row.tone || 'pink',
-      href: row.href || '#/participant-modules'
+      href: row.href || '#/participant-modules',
+      total_chapters: totalChapters
     };
   });
+
+  var learningModuleIds = ['python-untuk-ai', 'reasoning', 'konsep-ai-modern', 'evaluation', 'evolution'];
+  var learningProgress = learningModuleIds.map(function(moduleId) {
+    var module = modules.find(function(item) { return item.module_id === moduleId; });
+    return module ? Number(module.progress || 0) : 0;
+  });
+  var introRows = progressRows.filter(function(row) {
+    return String(row.module_id || '') === 'ai-fundamentals';
+  });
+  var introProgress = introRows.some(function(row) {
+    return String(row.chapter_id || '') === 'quiz' && row.status === 'completed';
+  }) ? 100 : (introRows.length ? 25 : 0);
+  learningProgress.unshift(introProgress);
+  var learningCompleted = learningProgress.filter(function(progress) { return progress >= 100; }).length;
+  var learningInProgress = learningProgress.filter(function(progress) { return progress > 0 && progress < 100; }).length;
+  var learningSummary = {
+    total: learningProgress.length,
+    completed: learningCompleted,
+    in_progress: learningInProgress,
+    not_started: learningProgress.length - learningCompleted - learningInProgress,
+    progress: learningProgress.length
+      ? Math.round(learningProgress.reduce(function(total, progress) { return total + progress; }, 0) / learningProgress.length)
+      : 0
+  };
 
   const discussionTrails = activeRows(SHEETS.participantDashboardDiscussionTrails).map(row => ({
     actor: row.actor || 'Panitia',
@@ -453,7 +487,7 @@ function getParticipantDashboardData(payload) {
 
   return {
     status: 'success',
-    data: { modules, discussionTrails, tracks, journey, events, leaderboard }
+    data: { modules, learningSummary, discussionTrails, tracks, journey, events, leaderboard }
   };
 }
 
@@ -829,7 +863,7 @@ function seedDashboardModules() {
     { module_id: 'deep-learning', title: 'Deep Learning', subtitle: 'Neural networks, backpropagation, PyTorch', progress: 0, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-lab-deep-learning', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 1 },
     { module_id: 'reinforcement-learning', title: 'Reinforcement Learning', subtitle: 'Agent, environment, reward, policy optimization', progress: 0, icon: 'fas fa-robot', tone: 'purple', href: '#/participant-ai-lab-reinforcement-learning', total_chapters: 13, quiz_total: 20, is_active: 'true', sort_order: 2 },
     { module_id: 'python-untuk-ai', title: 'Python untuk AI', subtitle: 'NumPy, Pandas, data pipeline, workflow AI', progress: 0, icon: 'fab fa-python', tone: 'blue', href: '#/participant-ai-python', total_chapters: 8, quiz_total: 20, is_active: 'true', sort_order: 3 },
-    { module_id: 'reasoning', title: 'Reasoning AI', subtitle: 'Logika, inferensi, dan penalaran mesin', progress: 0, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-reasoning', total_chapters: 6, quiz_total: 20, is_active: 'true', sort_order: 4 },
+    { module_id: 'reasoning', title: 'Reasoning AI', subtitle: 'Logika, inferensi, dan penalaran mesin', progress: 0, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-reasoning', total_chapters: 6, quiz_total: 26, is_active: 'true', sort_order: 4 },
     { module_id: 'konsep-ai-modern', title: 'Konsep AI Modern', subtitle: 'Foundation models, transfer learning, RLHF', progress: 0, icon: 'fas fa-microchip', tone: 'purple', href: '#/participant-ai-modern', total_chapters: 4, quiz_total: 20, is_active: 'true', sort_order: 5 },
     { module_id: 'evolution', title: 'Evolution of AI', subtitle: 'Sejarah, milestone, dan arah perkembangan AI', progress: 0, icon: 'fas fa-timeline', tone: 'orange', href: '#/participant-ai-evolution', total_chapters: 7, quiz_total: 20, is_active: 'true', sort_order: 6 },
     { module_id: 'evaluation', title: 'Evaluation AI', subtitle: 'Metrik, benchmark, dan validasi model', progress: 0, icon: 'fas fa-chart-simple', tone: 'green', href: '#/participant-ai-evaluation', total_chapters: 6, quiz_total: 20, is_active: 'true', sort_order: 7 },
@@ -1598,6 +1632,116 @@ function getParticipantProgress(payload) {
         completed_at: row.completed_at,
         updated_at: row.updated_at
       };
+    })
+  };
+}
+
+function saveParticipantDiscussion(payload) {
+  var claims = payload.__auth || requireParticipantToken(payload);
+  var moduleId = String(payload.module_id || '').trim().slice(0, 100);
+  var text = String(payload.text || '').trim().slice(0, 5000);
+  if (!moduleId || !text) {
+    return { status: 'error', message: 'module_id dan isi diskusi wajib diisi.' };
+  }
+
+  var participants = getRows(SHEETS.participants);
+  var participant = participants.find(function(row) {
+    return claims.rowId && String(row.rowId || '') === String(claims.rowId);
+  }) || participants.find(function(row) {
+    return String(row.nik || '').replace(/\D/g, '') === String(claims.sub || '');
+  });
+  if (!participant) return { status: 'error', message: 'Peserta tidak ditemukan.' };
+
+  var participantRowId = String(participant.rowId || '');
+  var discussionId = String(payload.discussion_id || '').trim() || ('dsc_' + Utilities.getUuid());
+  var existing = getRows(SHEETS.participantDiscussions).find(function(row) {
+    return String(row.discussion_id || '') === discussionId;
+  });
+  if (existing && String(existing.participant_rowId || '') !== participantRowId) {
+    return { status: 'error', message: 'Diskusi tidak dapat diubah oleh peserta ini.' };
+  }
+
+  var replies = Array.isArray(payload.replies) ? payload.replies.slice(0, 50).map(function(reply) {
+    return {
+      text: String(reply && reply.text || '').trim().slice(0, 2000),
+      createdAt: String(reply && reply.createdAt || new Date().toISOString())
+    };
+  }).filter(function(reply) { return Boolean(reply.text); }) : [];
+  var now = new Date().toISOString();
+  var discussion = {
+    discussion_id: discussionId,
+    participant_rowId: participantRowId,
+    nik: String(participant.nik || '').replace(/\D/g, ''),
+    module_id: moduleId,
+    prompt: String(payload.prompt || 'Diskusi').trim().slice(0, 300),
+    text: text,
+    replies_json: JSON.stringify(replies),
+    created_at: existing && existing.created_at ? existing.created_at : String(payload.created_at || now),
+    updated_at: now
+  };
+
+  if (existing) {
+    updateByKey(SHEETS.participantDiscussions, 'discussion_id', discussionId, discussion);
+  } else {
+    addRowObject(SHEETS.participantDiscussions, discussion);
+  }
+
+  recordParticipantActivity({
+    nik: participant.nik,
+    nama_lengkap: participant.nama_lengkap,
+    activity_type: existing ? 'discussion_reply' : 'discussion_post',
+    module_id: moduleId,
+    lesson_id: discussionId,
+    activity: existing ? 'Memperbarui diskusi module' : 'Membuat diskusi module'
+  });
+
+  return {
+    status: 'success',
+    discussion: {
+      id: discussionId,
+      module_id: moduleId,
+      prompt: discussion.prompt,
+      text: discussion.text,
+      replies: replies,
+      createdAt: discussion.created_at,
+      updatedAt: discussion.updated_at
+    }
+  };
+}
+
+function getParticipantDiscussions(payload) {
+  var claims = payload.__auth || requireParticipantToken(payload);
+  var participants = getRows(SHEETS.participants);
+  var participant = participants.find(function(row) {
+    return claims.rowId && String(row.rowId || '') === String(claims.rowId);
+  }) || participants.find(function(row) {
+    return String(row.nik || '').replace(/\D/g, '') === String(claims.sub || '');
+  });
+  if (!participant) return { status: 'error', message: 'Peserta tidak ditemukan.' };
+
+  var participantRowId = String(participant.rowId || '');
+  var moduleId = String(payload.module_id || '').trim();
+  var rows = getRows(SHEETS.participantDiscussions).filter(function(row) {
+    return String(row.participant_rowId || '') === participantRowId
+      && (!moduleId || String(row.module_id || '') === moduleId);
+  });
+
+  return {
+    status: 'success',
+    data: rows.map(function(row) {
+      var replies = [];
+      try { replies = JSON.parse(row.replies_json || '[]'); } catch (error) { replies = []; }
+      return {
+        id: row.discussion_id,
+        module_id: row.module_id,
+        prompt: row.prompt,
+        text: row.text,
+        replies: Array.isArray(replies) ? replies : [],
+        createdAt: row.created_at,
+        updatedAt: row.updated_at
+      };
+    }).sort(function(a, b) {
+      return String(b.updatedAt || b.createdAt || '').localeCompare(String(a.updatedAt || a.createdAt || ''));
     })
   };
 }

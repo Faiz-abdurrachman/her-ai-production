@@ -1979,14 +1979,24 @@ var SOURCE_VISUALS = {
         const resetButton = form.querySelector("[data-practice-reset]");
 
         if (saveButton) {
-            saveButton.addEventListener("click", function () {
+            saveButton.addEventListener("click", async function () {
                 savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed });
-savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed });
-                window.saveChapterProgress(MODULE_ID, 'practice', 'completed');
-savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed });
+                const originalLabel = saveButton.innerHTML;
+                saveButton.disabled = true;
+                saveButton.setAttribute("aria-busy", "true");
+                saveButton.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Menyimpan...';
+                setStatus("#aiPythonPracticeStatus", "Menyimpan latihan ke server...", "neutral");
+                const result = await window.saveChapterProgress(MODULE_ID, 'practice', 'completed');
+                saveButton.disabled = false;
+                saveButton.removeAttribute("aria-busy");
+                saveButton.innerHTML = originalLabel;
+                if (!result || result.status !== "success") {
+                    setStatus("#aiPythonPracticeStatus", "Jawaban aman di browser, tetapi belum masuk server. Periksa koneksi lalu coba Simpan Jawaban lagi.", "error");
+                    return;
+                }
                 form.classList.add("is-saved");
                 form.querySelectorAll("textarea").forEach(field => { field.disabled = true; });
-                setStatus("#aiPythonPracticeStatus", "Latihan Python tersimpan. Kamu bisa lanjut ke kuis atau edit lagi bila perlu.", "success");
+                setStatus("#aiPythonPracticeStatus", "Latihan Python berhasil tersimpan ke server. Kamu bisa lanjut ke kuis atau edit lagi bila perlu.", "success");
             });
         }
 
@@ -2185,7 +2195,7 @@ savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed 
             updateQuizNavigator();
         });
 
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", async function (event) {
             event.preventDefault();
             const answers = getQuizAnswers(form);
             const unanswered = Object.values(answers).filter(value => !value).length;
@@ -2200,11 +2210,27 @@ savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed 
                 return total + (Number(answers["python-q" + index]) === question[2] ? 1 : 0);
             }, 0);
 
+            const submit = form.querySelector(".quiz-submit-btn");
+            const originalLabel = submit ? submit.innerHTML : "";
+            if (submit) {
+                submit.disabled = true;
+                submit.setAttribute("aria-busy", "true");
+                submit.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Menyimpan...';
+            }
+            const result = await window.saveChapterProgress(MODULE_ID, 'quiz', 'completed', score);
+            if (submit) {
+                submit.disabled = false;
+                submit.removeAttribute("aria-busy");
+                submit.innerHTML = originalLabel;
+            }
+            if (!result || result.status !== "success") {
+                renderQuizResult(score, QUIZ.length, "Skor belum dikunci karena gagal tersimpan ke server. Jawabanmu tetap tersedia; periksa koneksi lalu tekan Kirim Kuis lagi.");
+                return;
+            }
             localStorage.setItem(STORAGE.quizDone, "true");
             localStorage.setItem(STORAGE.quizScore, String(score));
-            window.saveChapterProgress(MODULE_ID, 'quiz', 'completed', score);
             localStorage.setItem(STORAGE.quizAnswers, JSON.stringify(answers));
-            renderQuizResult(score, QUIZ.length, "Pembahasan dibuka. Gunakan kartu merah/hijau untuk membaca ulang topik yang belum kuat.");
+            renderQuizResult(score, QUIZ.length, "Skor berhasil tersimpan ke server. Pembahasan dibuka untuk review.");
             lockQuiz(form, answers);
         });
     };
@@ -2271,7 +2297,7 @@ savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed 
         });
 
         list.querySelectorAll("[data-reply-send]").forEach(function (button) {
-            button.addEventListener("click", function () {
+            button.addEventListener("click", async function () {
                 var postId = button.dataset.replySend;
                 var composer = list.querySelector('[data-reply-composer="' + postId + '"]');
                 if (!composer) return;
@@ -2287,8 +2313,23 @@ savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed 
                 if (!target) return;
                 target.replies = Array.isArray(target.replies) ? target.replies : [];
                 target.replies.push({ text: textarea.value.trim(), createdAt: new Date().toISOString() });
+                button.disabled = true;
+                button.setAttribute("aria-busy", "true");
+                var result = await window.saveParticipantDiscussion(MODULE_ID, target);
+                button.disabled = false;
+                button.removeAttribute("aria-busy");
+                if (!result || result.status !== "success") {
+                    if (validation) {
+                        validation.hidden = false;
+                        validation.textContent = result?.message || "Balasan belum tersimpan. Coba kirim kembali.";
+                    }
+                    return;
+                }
+                var targetIndex = posts.findIndex(function (post) { return post.id === postId; });
+                if (targetIndex !== -1) posts[targetIndex] = result.discussion;
                 saveDiscussionPosts(posts);
                 renderDiscussion(posts);
+                setStatus("#aiPythonDiscussionStatus", "Balasan tersimpan ke server.", "success");
             });
         });
 
@@ -2306,7 +2347,7 @@ savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed 
         });
     }
 
-    window.initAiPythonDiscussion = function () {
+    window.initAiPythonDiscussion = async function () {
         const form = document.getElementById("aiPythonDiscussionForm");
         const select = form ? form.querySelector("select") : null;
         const textarea = form ? form.querySelector("textarea") : null;
@@ -2337,7 +2378,7 @@ savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed 
         });
 
         if (!form || !select || !textarea) return;
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", async function (event) {
             event.preventDefault();
             const text = textarea.value.trim();
             if (!text) {
@@ -2345,18 +2386,47 @@ savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed 
                 return;
             }
 
-            const posts = getDiscussionPosts();
-            posts.unshift({
+            const post = {
                 id: "post-" + Date.now(),
                 prompt: select.value,
                 text: text,
                 createdAt: new Date().toISOString(),
                 replies: []
-            });
+            };
+            const submitButton = form.querySelector('[type="submit"]');
+            const originalHtml = submitButton ? submitButton.innerHTML : "";
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.setAttribute("aria-busy", "true");
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Menyimpan...';
+            }
+            setStatus("#aiPythonDiscussionStatus", "Menyimpan diskusi ke server...", "info");
+            const result = await window.saveParticipantDiscussion(MODULE_ID, post);
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.removeAttribute("aria-busy");
+                submitButton.innerHTML = originalHtml;
+            }
+            if (!result || result.status !== "success") {
+                setStatus("#aiPythonDiscussionStatus", result?.message || "Diskusi belum tersimpan. Isi tetap tersedia untuk dicoba lagi.", "error");
+                return;
+            }
+            const posts = getDiscussionPosts();
+            posts.unshift(result.discussion);
             saveDiscussionPosts(posts);
             form.reset();
-            setStatus("#aiPythonDiscussionStatus", "Diskusi berhasil diposting dan tersimpan di browser ini.", "success");
+            setStatus("#aiPythonDiscussionStatus", "Diskusi berhasil diposting dan tersimpan ke server.", "success");
             renderDiscussion(posts);
         });
+
+        const remote = await window.getParticipantDiscussions(MODULE_ID);
+        if (remote && remote.status === "success") {
+            const local = getDiscussionPosts();
+            const merged = remote.data.concat(local.filter(function (post) {
+                return !remote.data.some(function (saved) { return saved.id === post.id; });
+            }));
+            saveDiscussionPosts(merged);
+            renderDiscussion(merged);
+        }
     };
 })();

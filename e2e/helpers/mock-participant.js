@@ -18,6 +18,13 @@ const MOCK_SESSION = Object.freeze({
 
 function defaultDashboardData() {
   return {
+    learningSummary: {
+      total: 6,
+      completed: 0,
+      in_progress: 2,
+      not_started: 4,
+      progress: 13
+    },
     modules: [
       { title: 'Python untuk AI', subtitle: 'Workflow AI', progress: 25, quiz_score: 80, icon: 'fab fa-python', tone: 'blue', href: '#/participant-ai-python' },
       { title: 'Reasoning AI', subtitle: 'Penalaran mesin', progress: 50, quiz_score: 75, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-reasoning' },
@@ -39,12 +46,13 @@ function defaultDashboardData() {
  * writing progress, scores, activity, or profile data to the live GAS deployment.
  *
  * @param {import('@playwright/test').Page} page
- * @param {{dashboardData?: object, progressData?: object[], saveProgressResponse?: object}} [options]
+ * @param {{dashboardData?: object, progressData?: object[], discussionData?: object[], saveProgressResponse?: object}} [options]
  */
 async function installMockParticipant(page, options = {}) {
   const calls = [];
   const dashboardData = options.dashboardData || defaultDashboardData();
   const progressData = options.progressData || [];
+  const discussionData = Array.isArray(options.discussionData) ? options.discussionData.slice() : [];
   const saveProgressResponse = options.saveProgressResponse || { status: 'success' };
 
   await page.addInitScript(({ settings, session }) => {
@@ -80,6 +88,25 @@ async function installMockParticipant(page, options = {}) {
       response = { status: 'success', data: progressData };
     } else if (payload.action === 'saveParticipantProgress') {
       response = saveProgressResponse;
+    } else if (payload.action === 'saveParticipantDiscussion') {
+      const discussion = {
+        id: payload.discussion_id || `mock-discussion-${discussionData.length + 1}`,
+        module_id: payload.module_id,
+        prompt: payload.prompt || 'Diskusi',
+        text: payload.text || '',
+        replies: Array.isArray(payload.replies) ? payload.replies : [],
+        createdAt: payload.created_at || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      const index = discussionData.findIndex(item => item.id === discussion.id);
+      if (index >= 0) discussionData[index] = discussion;
+      else discussionData.unshift(discussion);
+      response = { status: 'success', discussion };
+    } else if (payload.action === 'getParticipantDiscussions') {
+      response = {
+        status: 'success',
+        data: discussionData.filter(item => !payload.module_id || item.module_id === payload.module_id)
+      };
     }
 
     await route.fulfill({
@@ -89,7 +116,7 @@ async function installMockParticipant(page, options = {}) {
     });
   });
 
-  return { calls, dashboardData, progressData };
+  return { calls, dashboardData, progressData, discussionData };
 }
 
 module.exports = {

@@ -880,7 +880,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 78. Bug Audit: Ringkasan Belajar Tidak Terhubung ke Progress
 
-**Status:** OPEN — terdeteksi otomatis sebagai expected failure.
+**Status:** FIXED IN CODE — 29 Juli 2026; ringkasan membaca `learningSummary` backend dan memiliki fallback terhitung.
 
 **Temuan:** Kartu `Ringkasan Belajar` di halaman AI Fundamentals masih berisi nilai statis `0%`, `0 Modul`, `0 Modul`, dan `6 Modul`. Data dashboard mock yang memiliki progress non-zero tidak mengubah kartu tersebut.
 
@@ -890,7 +890,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 79. Bug Audit: Metadata Jumlah Kuis Tidak Sinkron
 
-**Status:** PARTIAL OPEN — Evaluation/Evolution sudah sinkron; Reasoning masih mismatch.
+**Status:** FIXED IN CODE — Reasoning `quiz_total` disinkronkan menjadi 26; Evaluation/Evolution tetap 20.
 
 **Temuan awal:** Reasoning menyediakan 26 soal, sedangkan seed GAS menetapkan `quiz_total: 20`. Evaluation dan Evolution hanya merender 1 item placeholder, tetapi GAS juga menetapkan `quiz_total: 20`.
 
@@ -917,7 +917,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 81. Bug Audit: Simpan Praktik/Kuis AI Modern Crash
 
-**Status:** OPEN — terdeteksi otomatis sebagai expected failure.
+**Status:** FIXED — `MODULE_ID = 'konsep-ai-modern'` tersedia di IIFE practice/quiz dan payload terverifikasi.
 
 **Penyebab:** `MODULE_ID` dideklarasikan di IIFE pertama `ai-modern.js`, tetapi handler praktik dan kuis berada di IIFE kedua. Saat submit, browser menghasilkan `ReferenceError: MODULE_ID is not defined`.
 
@@ -927,7 +927,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 82. Bug Audit: Chapter AI Modern Mengirim Object sebagai chapter_id
 
-**Status:** OPEN — terdeteksi otomatis sebagai expected failure.
+**Status:** FIXED — `loadModernTopik()` mengirim nomor chapter, bukan object.
 
 **Temuan:** `loadModernTopik()` memanggil `saveChapterProgress(MODULE_ID, chapter, ...)`, dengan `chapter` berupa object. Backend mengubahnya menjadi string `[object Object]`, bukan nomor chapter.
 
@@ -935,7 +935,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 83. Bug Audit UX: Touch Target Tombol Praktik di Bawah 44px
 
-**Status:** OPEN — terdeteksi otomatis sebagai expected failure.
+**Status:** FIXED — kontrol praktik aktif memenuhi minimum 44px pada viewport 375px.
 
 **Temuan pada viewport 375px:** tombol `Berikutnya` setinggi 43,5px dan `Simpan Jawaban` 42px.
 
@@ -943,7 +943,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 84. Bug Audit Backend: Quiz dan Practice Terhitung sebagai Chapter
 
-**Status:** OPEN — ditemukan lewat contract review, belum diperbaiki.
+**Status:** FIXED IN CODE — GAS hanya menghitung chapter ID numerik unik. Redeploy production masih wajib.
 
 **Penyebab:** `getParticipantDashboardData()` menambah setiap row `status === 'completed'` ke `completedByModule`, termasuk `chapter_id === 'quiz'` dan `chapter_id === 'practice'`.
 
@@ -951,7 +951,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 85. Bug Audit: saveChapterProgress Gagal Secara Diam-diam
 
-**Status:** OPEN — ditemukan lewat contract review, belum diperbaiki.
+**Status:** FIXED — frontend memeriksa HTTP/body status, menampilkan loading/error, dan mempertahankan retry.
 
 **Penyebab:** frontend tidak memeriksa `response.ok` atau body status dari `/__gas`, dan blok `catch` kosong.
 
@@ -968,8 +968,9 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Test matrix mencakup overview, practice, quiz, discussion, route, script loader, payload module/chapter, ringkasan progress, responsif, keyboard focus, reduced motion, dan touch target.
 - Reporter Playwright: terminal, HTML, JSON, screenshot/trace/video saat gagal.
 - Baseline Phase 0: 108 test terdaftar dan safe mock gate 55 test tanpa live write.
-- Setelah fix #80: 113 test terdaftar dan safe mock gate 60 test; 54 ordinary pass + 6 expected failures.
-- #80 sudah FIXED; #79 tersisa untuk Reasoning. GAS tetap tidak diubah.
+- Setelah resolusi #78–#91: 131 test terdaftar dan safe mock gate 76/76 PASS tanpa expected failure.
+- Full suite: 87 PASS + 44 SKIP + 0 FAIL; skip adalah live authenticated/mutation tanpa secret environment.
+- Source GAS berubah dan wajib redeploy manual sebelum fitur backend terbaru diklaim live.
 
 ## 86. Fix: Navigator Nomor Kuis Menumpuk Vertikal
 
@@ -991,7 +992,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 87. Bug Audit UX: Navigator Kuis Reasoning Masih Vertikal
 
-**Status:** OPEN — terdeteksi Playwright MCP dan dikunci sebagai expected failure.
+**Status:** FIXED — 26 tombol horizontal, wrap, 44px, dan bebas overflow pada mobile.
 
 **Temuan:** `#aiReasoningQuizNavigator` memakai `.reasoning-task-navigator`, bukan `.python-task-navigator`. Pada viewport 375px computed style tetap `flex-direction: column`, `flex-wrap: nowrap`, sehingga 26 tombol menjadi 26 baris.
 
@@ -999,7 +1000,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 88. Bug Audit: AI Modern Source Integrity Mismatch
 
-**Status:** OPEN — terdeteksi console dan expected failure.
+**Status:** FIXED — chapter hero ditandai sebagai konten enhancer; source integrity kembali `passed`.
 
 **Temuan:** `assertSourceIntegrity()` melaporkan teks sumber expected 5.867 karakter tetapi hasil render 6.042 karakter. Container mendapat `data-source-integrity="failed"`.
 
@@ -1007,7 +1008,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 89. Bug Audit Runtime: Evaluation/Evolution Referensi PYTHON_GUIDES
 
-**Status:** OPEN — terdeteksi pageerror pada kedua module.
+**Status:** FIXED — cleanup global di luar IIFE dihapus; kedua module load tanpa pageerror.
 
 **Penyebab:** setelah IIFE ditutup, kedua file menjalankan `PYTHON_GUIDES.length = 0`, padahal variabel tersebut tidak tersedia di scope global.
 
@@ -1015,7 +1016,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 90. Bug Audit UI: Label Python Bocor ke Evaluation/Evolution
 
-**Status:** OPEN — terdeteksi heading audit.
+**Status:** FIXED — heading, breadcrumb, forum, dan error copy kini module-specific.
 
 **Temuan:** halaman kuis masih menampilkan `Kuis Python`; halaman diskusi masih memakai `Forum Python AI` dan breadcrumb/tombol `Kuis Python`.
 
@@ -1023,7 +1024,7 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 
 ## 91. Gap Persistence: Diskusi Hanya Tersimpan di Browser
 
-**Status:** OPEN — requirement backend perlu diputuskan.
+**Status:** FIXED IN CODE — schema/route GAS, save/update reply, dan read-back lima module tersedia. Redeploy production masih wajib.
 
 **Temuan:** submit diskusi menulis localStorage, mengosongkan textarea, dan menampilkan pesan `tersimpan di browser ini`, tetapi tidak mengirim request persistence ke backend.
 
@@ -1039,3 +1040,15 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Total suite 123 test dalam 6 file.
 - Live backend suite: 3 public/security checks pass, 25 authenticated/mutation scenarios skip karena secret environment tidak tersedia.
 - Bukti rinci: `handover/E2E_AUDIT_2026-07-29.md`.
+
+## Resolusi Audit #78–#91 — 29 Juli 2026
+
+- Ringkasan Belajar tersambung ke backend dan menghitung Intro + 5 module aktif.
+- Metadata Reasoning menjadi 26 soal; progress GAS mengabaikan quiz/practice dan deduplikasi chapter numerik.
+- AI Modern memperbaiki scope `MODULE_ID`, chapter ID numerik, dan source-integrity.
+- Practice/quiz lima module menunggu acknowledgment backend; failure tidak lagi mengunci state lokal.
+- Diskusi dan balasan lima module memakai `participant_discussions`, dengan save dan read-back lintas reload.
+- Evaluation/Evolution bebas `PYTHON_GUIDES` pageerror dan tidak lagi menampilkan label Python.
+- Navigator Reasoning dan touch target mobile memenuhi kontrak UI/UX.
+- Safe gate **76/76 PASS**. Full suite **131 terdaftar = 87 PASS + 44 SKIP + 0 FAIL**; skip adalah live authenticated/mutation karena secret environment tidak tersedia.
+- `gas/Code.gs` lolos syntax/contract test, tetapi deployment production masih **PENDING MANUAL REDEPLOY**; versi target `2026.2-progress-persistence`.

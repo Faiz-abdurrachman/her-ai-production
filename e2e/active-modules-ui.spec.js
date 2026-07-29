@@ -1,6 +1,7 @@
 // @ts-check
 const fs = require('fs');
 const path = require('path');
+const vm = require('vm');
 const { test, expect } = require('@playwright/test');
 const {
   ACTIVE_DASHBOARD_MODULES,
@@ -48,9 +49,6 @@ test.describe('Active module manifest — static contracts', () => {
 
   for (const module of ACTIVE_DASHBOARD_MODULES) {
     test(`${module.title} metadata matches GAS chapter/quiz totals`, () => {
-      const knownMismatch = module.key === 'reasoning';
-      test.fail(knownMismatch, `Known metadata mismatch: ${module.title}`);
-
       const gas = fs.readFileSync(path.join(ROOT, 'gas/Code.gs'), 'utf8');
       const escapedId = module.moduleId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const row = gas.match(new RegExp(`module_id:\\s*'${escapedId}'[^\\n]+`));
@@ -73,6 +71,57 @@ test.describe('Active module manifest — static contracts', () => {
       const source = fs.readFileSync(fullPath, 'utf8');
       expect(source, `credential-like literal in ${fullPath}`).not.toMatch(credentialPattern);
     }
+  });
+
+  test('GAS registers participant discussion schema, protected routes, and handlers', () => {
+    const gas = fs.readFileSync(path.join(ROOT, 'gas/Code.gs'), 'utf8');
+    expect(gas).toMatch(/participantDiscussions:\s*'participant_discussions'/);
+    expect(gas).toMatch(/saveParticipantDiscussion:\s*\(\)\s*=>\s*saveParticipantDiscussion\(payload\)/);
+    expect(gas).toMatch(/getParticipantDiscussions:\s*\(\)\s*=>\s*getParticipantDiscussions\(payload\)/);
+    expect(gas).toMatch(/function\s+saveParticipantDiscussion\s*\(/);
+    expect(gas).toMatch(/function\s+getParticipantDiscussions\s*\(/);
+  });
+
+  test('GAS dashboard counts only unique numeric chapters in progress and summary', () => {
+    const gas = fs.readFileSync(path.join(ROOT, 'gas/Code.gs'), 'utf8');
+    const context = vm.createContext({ console, Date, JSON, Math, Number, String, Array, Object, RegExp, isNaN });
+    vm.runInContext(gas, context, { filename: 'gas/Code.gs' });
+
+    const moduleRows = ACTIVE_DASHBOARD_MODULES.map((module, index) => ({
+      module_id: module.moduleId,
+      title: module.title,
+      subtitle: module.title,
+      href: `#${module.routes.overview}`,
+      total_chapters: module.chapterTotal,
+      quiz_total: module.quizTotal,
+      is_active: true,
+      sort_order: index + 1
+    }));
+    const nik = '0000000000000000';
+    const progressRows = [
+      { nik, module_id: 'python-untuk-ai', chapter_id: '1', status: 'completed' },
+      { nik, module_id: 'python-untuk-ai', chapter_id: 1, status: 'completed' },
+      { nik, module_id: 'python-untuk-ai', chapter_id: '2', status: 'completed' },
+      { nik, module_id: 'python-untuk-ai', chapter_id: 'practice', status: 'completed' },
+      { nik, module_id: 'python-untuk-ai', chapter_id: 'quiz', status: 'completed', score: 15 },
+      { nik, module_id: 'reasoning', chapter_id: '1', status: 'completed' }
+    ];
+    context.__qaGetRows = sheetName => {
+      if (sheetName === 'participant_dashboard_modules') return moduleRows;
+      if (sheetName === 'participant_progress') return progressRows;
+      return [];
+    };
+    vm.runInContext('getRows = __qaGetRows;', context);
+    const result = vm.runInContext(`getParticipantDashboardData({ nik: '${nik}' })`, context);
+    const python = result.data.modules.find(module => module.module_id === 'python-untuk-ai');
+    const reasoning = result.data.modules.find(module => module.module_id === 'reasoning');
+
+    expect(python.progress).toBe(25);
+    expect(python.quiz_score).toBe(75);
+    expect(reasoning.progress).toBe(17);
+    expect(result.data.learningSummary.total).toBe(6);
+    expect(result.data.learningSummary.in_progress).toBe(2);
+    expect(result.data.learningSummary.not_started).toBe(4);
   });
 });
 
@@ -165,7 +214,6 @@ test.describe('Progress requests — mocked write verification', () => {
     });
 
     test(`${module.title} quiz submit emits score with the correct GAS identity`, async ({ page }) => {
-      test.fail(module.key === 'modern', 'Known issue #81: MODULE_ID tidak tersedia di IIFE quiz AI Modern.');
       const { calls } = await installMockParticipant(page);
       await page.goto(appUrl(module.routes.quiz));
 
@@ -211,9 +259,8 @@ test.describe('Progress requests — mocked write verification', () => {
   }
 });
 
-test.describe('Persistence acknowledgement — known gaps', () => {
+test.describe('Persistence acknowledgement and read-back', () => {
   test('quiz remains retryable when backend rejects the progress write', async ({ page }) => {
-    test.fail(true, 'Known issue #85: quiz locks local state without checking the backend response.');
     const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === 'python');
     const { calls } = await installMockParticipant(page, {
       saveProgressResponse: { status: 'error', message: 'QA rejected write' }
@@ -243,26 +290,36 @@ test.describe('Persistence acknowledgement — known gaps', () => {
     await expect(form.locator('.quiz-submit-btn, button[type="submit"]').first()).not.toContainText('Sudah Dikirim');
   });
 
-  test('discussion submit emits a backend persistence request', async ({ page }) => {
-    test.fail(true, 'Known issue #91: discussion posts are stored in localStorage only.');
-    const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === 'python');
-    const { calls } = await installMockParticipant(page);
+  for (const module of ACTIVE_DASHBOARD_MODULES) {
+    test(`${module.title} discussion persists to backend and reads back after reload`, async ({ page }) => {
+      const { calls, discussionData } = await installMockParticipant(page);
 
-    await page.goto(appUrl(module.routes.discussion));
-    const form = page.locator('form').filter({ has: page.locator('textarea') }).first();
-    await expect(form).toBeVisible({ timeout: 15000 });
-    const callCountBeforeSubmit = calls.length;
-    await form.locator('textarea').fill('QA deterministic discussion persistence check');
-    await form.locator('button[type="submit"], button:has-text("Posting Diskusi")').first().click();
+      await page.goto(appUrl(module.routes.discussion));
+      const form = page.locator('form').filter({ has: page.locator('textarea') }).first();
+      await expect(form).toBeVisible({ timeout: 15000 });
+      const discussionText = `QA discussion read-back ${module.key}`;
+      await form.locator('textarea').fill(discussionText);
+      await form.locator('button[type="submit"], button:has-text("Posting Diskusi")').first().click();
 
-    await expect.poll(() => calls.length).toBeGreaterThan(callCountBeforeSubmit);
-  });
+      await expect.poll(() => calls.some(call =>
+        call.action === 'saveParticipantDiscussion'
+        && call.module_id === module.moduleId
+        && call.text === discussionText
+      )).toBe(true);
+      expect(discussionData).toEqual(expect.arrayContaining([
+        expect.objectContaining({ module_id: module.moduleId, text: discussionText })
+      ]));
+
+      await page.evaluate(() => localStorage.clear());
+      await page.reload();
+      await expect(page.locator('[data-discussion-id]').filter({ hasText: discussionText })).toBeVisible({ timeout: 15000 });
+    });
+  }
 });
 
-test.describe('Runtime and module identity — known gaps', () => {
+test.describe('Runtime and module identity', () => {
   for (const moduleKey of ['evaluation', 'evolution']) {
     test(`${moduleKey} loads without PYTHON_GUIDES runtime errors`, async ({ page }) => {
-      test.fail(true, 'Known issue #89: copied cleanup code references PYTHON_GUIDES outside its scope.');
       const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === moduleKey);
       const pageErrors = [];
       page.on('pageerror', error => pageErrors.push(error.message));
@@ -274,7 +331,6 @@ test.describe('Runtime and module identity — known gaps', () => {
     });
 
     test(`${moduleKey} quiz headings use their own module name`, async ({ page }) => {
-      test.fail(true, 'Known issue #90: Evaluation/Evolution still expose copied Python labels.');
       const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === moduleKey);
       await installMockParticipant(page);
       await page.goto(appUrl(module.routes.quiz));
@@ -285,7 +341,6 @@ test.describe('Runtime and module identity — known gaps', () => {
   }
 
   test('AI Modern preserves source integrity after enhancement', async ({ page }) => {
-    test.fail(true, 'Known issue #88: rendered source text differs from the source integrity baseline.');
     const module = ACTIVE_DASHBOARD_MODULES.find(item => item.key === 'modern');
     await installMockParticipant(page);
     await page.goto(appUrl(module.routes.overview));
@@ -295,16 +350,18 @@ test.describe('Runtime and module identity — known gaps', () => {
   });
 });
 
-test.describe('AI Fundamentals summary — known dynamic-data gap', () => {
+test.describe('AI Fundamentals summary', () => {
   test('summary reflects non-zero backend progress instead of static 0/0/6', async ({ page }) => {
-    test.fail(true, 'Known issue #78: Ringkasan Belajar masih hardcoded di overview HTML.');
     const dashboardData = defaultDashboardData();
     await installMockParticipant(page, { dashboardData });
 
     await page.goto(appUrl('/participant-ai-fundamentals'));
     const summary = page.locator('.course-summary-card');
     await expect(summary).toBeVisible();
-    await expect(summary.locator('.progress-donut strong')).not.toHaveText('0%');
-    await expect(summary).not.toContainText('Dalam Proses0 Modul');
+    await expect(summary).toHaveAttribute('data-learning-summary-state', 'ready');
+    await expect(summary.locator('[data-learning-summary-progress]')).toHaveText('13%');
+    await expect(summary.locator('[data-learning-summary-completed]')).toHaveText('0');
+    await expect(summary.locator('[data-learning-summary-in-progress]')).toHaveText('2');
+    await expect(summary.locator('[data-learning-summary-not-started]')).toHaveText('4');
   });
 });

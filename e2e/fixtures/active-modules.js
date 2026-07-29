@@ -79,10 +79,8 @@ const ACTIVE_DASHBOARD_MODULES = Object.freeze([
     chapterTotal: 4,
     quizTotal: 20,
     quizReady: true,
-    practiceWiringReady: false,
-    chapterWiringReady: false,
-    practiceKnownIssue: 'MODULE_ID tidak tersedia di IIFE practice/quiz AI Modern.',
-    chapterKnownIssue: 'Chapter AI Modern mengirim object chapter, bukan ID numerik.',
+    practiceWiringReady: true,
+    chapterWiringReady: true,
     routes: Object.freeze({
       overview: '/participant-ai-modern',
       practice: '/participant-ai-modern-practice',

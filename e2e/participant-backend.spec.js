@@ -17,7 +17,7 @@ const { ACTIVE_DASHBOARD_MODULES } = require('./fixtures/active-modules');
  * - Token field untuk protected actions: `participantToken` (BUKAN `token`)
  * - Login response field `token` benar
  * - getParticipantProgress response: `data` array (BUKAN `progress`)
- * - Dashboard modules TIDAK punya `module_id` — pakai `title` atau `href`
+ * - Dashboard modules expose `module_id`, `total_chapters`, and normalized progress
  * - Score Math.max hanya di dashboard query, BUKAN di saveProgress
  *
  * Live write tests require TEST_ALLOW_MUTATIONS=true in addition to credentials.
@@ -272,7 +272,61 @@ test.describe('Progress — save + get', () => {
   });
 });
 
-// ─── Group 3: Dashboard Data ──────────────────────────────
+// ─── Group 3: Discussion CRUD ─────────────────────────────
+
+test.describe('Discussion — save + get', () => {
+  liveTest('get discussions returns an array', async () => {
+    const session = await getSession();
+    const res = await gasPost({
+      action: 'getParticipantDiscussions',
+      participantToken: session.token,
+      module_id: TEST_MODULE
+    });
+
+    expect(res.status).toBe('success');
+    expect(Array.isArray(res.data)).toBe(true);
+  });
+
+  mutatingTest('discussion and reply persist with read-back', async () => {
+    const session = await getSession();
+    const discussionId = 'qa-e2e-discussion-readback';
+    const text = 'QA backend discussion persistence check';
+    const replies = [{ text: 'QA backend reply persistence check', createdAt: new Date().toISOString() }];
+    const saveRes = await gasPost({
+      action: 'saveParticipantDiscussion',
+      participantToken: session.token,
+      module_id: TEST_MODULE,
+      discussion_id: discussionId,
+      prompt: 'QA persistence',
+      text,
+      replies
+    });
+
+    expect(saveRes.status).toBe('success');
+    expect(saveRes.discussion).toEqual(expect.objectContaining({
+      id: discussionId,
+      module_id: TEST_MODULE,
+      text
+    }));
+
+    const getRes = await gasPost({
+      action: 'getParticipantDiscussions',
+      participantToken: session.token,
+      module_id: TEST_MODULE
+    });
+    expect(getRes.status).toBe('success');
+    expect(getRes.data).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: discussionId,
+        module_id: TEST_MODULE,
+        text,
+        replies: expect.arrayContaining([expect.objectContaining({ text: replies[0].text })])
+      })
+    ]));
+  });
+});
+
+// ─── Group 4: Dashboard Data ──────────────────────────────
 
 test.describe('Dashboard — getParticipantDashboardData', () => {
   liveTest('returns full dashboard data', async () => {
@@ -289,6 +343,8 @@ test.describe('Dashboard — getParticipantDashboardData', () => {
     expect(res.data.modules.length).toBeGreaterThan(0);
 
     const mod = res.data.modules[0];
+    expect(typeof mod.module_id).toBe('string');
+    expect(typeof mod.total_chapters).toBe('number');
     expect(typeof mod.title).toBe('string');
     expect(typeof mod.subtitle).toBe('string');
     expect(typeof mod.icon).toBe('string');
@@ -307,6 +363,13 @@ test.describe('Dashboard — getParticipantDashboardData', () => {
     expect(res.data.journey).toBeDefined();
     expect(res.data.events).toBeDefined();
     expect(res.data.leaderboard).toBeDefined();
+    expect(res.data.learningSummary).toEqual(expect.objectContaining({
+      total: 6,
+      completed: expect.any(Number),
+      in_progress: expect.any(Number),
+      not_started: expect.any(Number),
+      progress: expect.any(Number)
+    }));
   });
 
   mutatingTest('quiz score is percentage (not raw count)', async () => {
@@ -330,9 +393,9 @@ test.describe('Dashboard — getParticipantDashboardData', () => {
     expect(res.status).toBe('success');
     expect(res.data).toBeDefined();
 
-    // Find module by href (no module_id in dashboard response)
+    // Find module by stable backend identity.
     const dlModule = res.data.modules.find(
-      m => m.href && m.href.includes(TEST_MODULE)
+      m => m.module_id === TEST_MODULE
     );
 
     if (dlModule && dlModule.quiz_score != null) {
@@ -345,7 +408,7 @@ test.describe('Dashboard — getParticipantDashboardData', () => {
   });
 });
 
-// ─── Group 4: Password Management ─────────────────────────
+// ─── Group 5: Password Management ─────────────────────────
 
 test.describe('Password — changeParticipantPassword', () => {
   passwordMutatingTest('valid password change full cycle', async () => {
@@ -420,7 +483,7 @@ test.describe('Password — changeParticipantPassword', () => {
   });
 });
 
-// ─── Group 5: Edge Cases ──────────────────────────────────
+// ─── Group 6: Edge Cases ──────────────────────────────────
 
 test.describe('Edge Cases — profile + score + multi-module', () => {
   mutatingTest('update profile returns updated participant', async () => {
