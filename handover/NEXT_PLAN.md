@@ -6,7 +6,7 @@
 
 **GAS:** ✅ `2026.2-progress-persistence` deployed; route diskusi baru + auth guard terverifikasi live
 
-**QA:** safe mock 76/76 PASS; full 87 PASS + 44 SKIP + 0 FAIL; authenticated live read-only 29 PASS + 18 SKIP + 0 FAIL; controlled live write/read-back PASS
+**QA:** safe mock 77/77 PASS; full 88 PASS + 44 SKIP + 0 FAIL; authenticated live read-only 29 PASS + 18 SKIP + 0 FAIL; controlled live write/read-back PASS
 **Leaderboard:** status terakhir terverifikasi LIVE — 1.039 pts sebelum dan sesudah controlled mutation
 
 ---
@@ -33,8 +33,9 @@ Phase 0 QA dan seluruh perbaikan audit #78–#91 sudah tersedia di source. Test 
 | Module identity copy | ✅ | label module-specific |
 | Discussion persistence | ✅ live | post/reply + read-back production terverifikasi |
 | Isi jawaban practice (#92) | ⚠️ open | marker selesai masuk backend, tetapi teks jawaban masih localStorage-only |
+| Pengantar AI active material (#93) | ✅ | 5/5 route menandai satu current item dengan visual + `aria-current` |
 
-Safe mock gate: **76/76 PASS**, tanpa expected failure dan tanpa live write. Audit serta bukti resolusi tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
+Safe mock gate: **77/77 PASS**, tanpa expected failure dan tanpa live write. Audit serta bukti resolusi tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
 
 ---
 
@@ -42,7 +43,7 @@ Safe mock gate: **76/76 PASS**, tanpa expected failure dan tanpa live write. Aud
 
 1. **Putuskan scope #92:** jika isi jawaban latihan harus tercatat lintas perangkat, tambah schema/API practice-response, frontend acknowledgment/read-back, dan E2E production-safe.
 2. **Perluas controlled live matrix bila dibutuhkan:** test kelima module satu per satu dengan fixture QA terisolasi; test saat ini membuktikan seluruh tipe data utama tanpa mengubah score/progress logis.
-3. **Frontend release:** push/deploy hanya jika diminta user; cache buster sudah `20260729-progress-persistence`.
+3. **Frontend release:** push/deploy hanya jika diminta user; cache buster `settings.js` sudah `20260729-intro-active-state`.
 
 Authenticated read-only sudah selesai pada baseline 94 row progress (42 chapter numerik unik, 26 practice, 25 quiz). Controlled mutation kemudian lulus untuk chapter, marker practice, quiz, diskusi, dan reply. Ringkasan Belajar tetap 33% (1 tuntas, 4 proses, 1 belum mulai) dan leaderboard tetap 1.039 poin.
 

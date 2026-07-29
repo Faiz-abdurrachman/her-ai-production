@@ -1082,3 +1082,15 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Progress writes memakai nilai existing; Ringkasan Belajar tetap 33% dan leaderboard tetap **1.039 → 1.039**.
 - Satu thread QA tetap beserta satu reply dibuat untuk membuktikan persistence diskusi.
 - Tidak ada mutation profile atau password; environment credential dibersihkan setelah test.
+
+## 93. Bug UI: Daftar Materi Pengantar AI Tidak Menandai Topik Aktif
+
+**Status:** FIXED — 29 Juli 2026.
+
+**Gejala:** saat Topik 1 tampil, kelima item `Daftar Materi` tetap memakai lingkaran kosong. Peserta tidak mendapat orientasi visual mengenai materi yang sedang dibaca.
+
+**Penyebab:** Topik 1 memakai daftar HTML statis tanpa class `active`, sedangkan `renderLessonList()` yang memberi state aktif hanya dipakai halaman Topik 2–5.
+
+**Perbaikan:** Topik 1 sekarang memiliki class `active`, ikon `fa-circle-play`, dan `aria-current="page"`. Renderer Topik 2–5 juga menambahkan `aria-current` dan icon dekoratif disembunyikan dari screen reader. Cache buster `settings.js` menjadi `20260729-intro-active-state`.
+
+**Verifikasi:** targeted Playwright 1/1 PASS untuk 5 route topik; safe gate **77/77 PASS**; full suite **132 test = 88 PASS + 44 SKIP + 0 FAIL**.

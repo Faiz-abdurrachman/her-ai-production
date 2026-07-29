@@ -1158,8 +1158,10 @@
 
     function renderLessonList(activePath) {
         return introLessonRoutes.map((lesson, index) => {
-            const active = lesson.path === activePath ? ' class="active"' : '';
-            return `<li${active}><span>${index + 1}</span><a href="#${lesson.path}">${lesson.title}</a><i class="${active ? 'far fa-circle-play' : 'far fa-circle'}"></i></li>`;
+            const isActive = lesson.path === activePath;
+            const activeClass = isActive ? ' class="active"' : '';
+            const currentState = isActive ? ' aria-current="page"' : '';
+            return `<li${activeClass}><span>${index + 1}</span><a href="#${lesson.path}"${currentState}>${lesson.title}</a><i class="${isActive ? 'far fa-circle-play' : 'far fa-circle'}" aria-hidden="true"></i></li>`;
         }).join('');
     }
 

@@ -1,15 +1,15 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + live mutation audit #92), Asia/Jakarta**
+**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + persistence audit #92 + UI fix #93), Asia/Jakarta**
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
 **Baseline Commit:** `6508121` - test: expand active module end-to-end audit (#87-#91)
 **Feature Commit:** `a3ff0a9` - `fix: persist active module learning progress (#78-#91)`
-**Latest Commit:** current HEAD - `docs: record controlled live persistence verification (#92)`
-**Total commits:** 253
+**Latest Commit:** current HEAD - `fix: mark current Pengantar AI material (#93)`
+**Total commits:** 254
 **GAS Deployment:** ✅ `2026.2-progress-persistence` LIVE dan route diskusi terverifikasi terlindungi auth
 **Worktree:** BERSIH
-**E2E Test Suite:** safe mock 76/76 PASS | full 87 PASS + 44 SKIP + 0 FAIL | authenticated live read-only 29 PASS + 18 SKIP + 0 FAIL | controlled live write/read-back PASS
+**E2E Test Suite:** safe mock 77/77 PASS | full 88 PASS + 44 SKIP + 0 FAIL | authenticated live read-only 29 PASS + 18 SKIP + 0 FAIL | controlled live write/read-back PASS
 **Leaderboard:** ✅ LIVE — 1.039 pts untuk peringkat pertama sebelum dan sesudah controlled mutation
 
 > **Ini sumber kebenaran tunggal.** Semua dokumen lain yang bertentangan diabaikan.
@@ -31,8 +31,8 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 
 ### Hasil gate dan status temuan
 
-- Safe mock gate: **76/76 PASS**, tanpa expected failure dan tanpa live write.
-- Full suite: **131 terdaftar = 87 PASS + 44 SKIP + 0 FAIL**.
+- Safe mock gate: **77/77 PASS**, tanpa expected failure dan tanpa live write.
+- Full suite: **132 terdaftar = 88 PASS + 44 SKIP + 0 FAIL**.
 - 44 skip adalah alur authenticated/live-mutation yang sengaja tidak dijalankan tanpa secret environment.
 - #78, #79, #81–#85, dan #87–#91: **FIXED IN CODE**.
 - Lima module: chapter numerik, practice, quiz, score, discussion post/reply, dan read-back terverifikasi pada kontrak deterministik.
@@ -41,6 +41,7 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 - Controlled live write/read-back: chapter Python #1, status practice Python, quiz Evaluation score existing, post diskusi tetap, dan reply semuanya tersimpan lalu terbaca kembali.
 - Idempotent re-save tidak mengubah Ringkasan Belajar; leaderboard tetap **1.039 → 1.039**. Profile dan password tidak dimutasi.
 - #92 **OPEN**: teks jawaban practice tetap hanya di localStorage; backend baru menyimpan marker `chapter_id='practice'` dengan status selesai.
+- #93 **FIXED**: kelima topik Pengantar AI sekarang menandai tepat satu materi aktif dengan highlight, ikon play, dan `aria-current="page"`.
 
 ### Pekerjaan operasional tersisa
 
@@ -66,7 +67,7 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 | Proxy | POST `/__gas` (token auto-injected, Origin header WAJIB) |
 | Test participant | Kredensial QA disuplai lewat environment variable; tidak disimpan di repo |
 | Module JS files | 30 ai-*.js (24 standard + 5 berbeda + 1 interactive) |
-| Cache buster | Loader/settings/modules CSS `?v=20260729-progress-persistence` |
+| Cache buster | `settings.js?v=20260729-intro-active-state`; loader/modules CSS tetap `20260729-progress-persistence` |
 
 ---
 
@@ -84,6 +85,7 @@ Audit Phase 0 sudah ditindaklanjuti. Source frontend, test contract, dan `gas/Co
 | Dashboard skeleton/cache | ✅ | 3-tier: memory→sessionStorage(5min)→skeleton, 0.2s refresh |
 | Dashboard modules filter | ✅ | Dashboard tepat 5 card; overview AI Fundamentals berisi Intro + 5 module |
 | Dashboard quiz badge | ✅ | Persentase format (X%), pill pink, skeleton reveal |
+| Pengantar AI current material (#93) | ✅ | Topik aktif sinkron dengan route; highlight + ikon play + `aria-current` |
 | **Leaderboard LIVE** | ✅ | Compute dari `participant_progress`; 1.039 poin stabil pada controlled mutation |
 | Score normalization (#55) | ✅ live | Evaluation/Evolution 20; Reasoning 26 |
 | Restricted access (#54) | ✅ | Hanya Beranda/Modul/Pengaturan + under-development |

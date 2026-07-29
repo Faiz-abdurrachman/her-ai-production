@@ -56,6 +56,28 @@ test.describe('UI/UX quality gate — deterministic mock', () => {
     await expect(summary.locator('li')).toHaveCount(3);
   });
 
+  test('Pengantar AI marks exactly one current material in the sidebar', async ({ page }) => {
+    const lessonRoutes = [
+      '/participant-ai-intro',
+      '/participant-ai-history',
+      '/participant-ai-types',
+      '/participant-ai-ml-dl',
+      '/participant-ai-summary'
+    ];
+
+    for (const route of lessonRoutes) {
+      await page.goto(appUrl(route));
+      const list = page.locator('.lesson-list-card ol');
+      await expect(list).toBeVisible({ timeout: 15000 });
+
+      const activeItems = list.locator('li.active');
+      await expect(activeItems).toHaveCount(1);
+      await expect(activeItems.locator('a')).toHaveAttribute('href', `#${route}`);
+      await expect(activeItems.locator('a')).toHaveAttribute('aria-current', 'page');
+      await expect(activeItems.locator('i')).toHaveClass(/fa-circle-play/);
+    }
+  });
+
   for (const viewport of [
     { name: 'mobile-375', width: 375, height: 812 },
     { name: 'desktop-1280', width: 1280, height: 800 }
