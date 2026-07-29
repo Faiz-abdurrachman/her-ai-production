@@ -22,7 +22,7 @@ Urutan wajib sebelum bekerja:
 CHECKPOINT REPOSITORY
 
 - Latest feature commit: `2562ac1 fix: revalidate participant session cohort (#99)`.
-- Setelah commit dokumentasi live compaction #98 total menjadi 266 commit.
+- Setelah commit dokumentasi verifikasi deployment #99 total menjadi 267 commit.
 - Expected worktree: hanya export CSV pasca-compaction milik user yang untracked; file itu memuat credential dan tidak boleh di-stage/commit.
 - Safe deterministic E2E: 85/85 PASS.
 - Full suite: 140 test = 96 PASS + 44 SKIP + 0 FAIL.
@@ -54,11 +54,11 @@ BACKEND DAN DEPLOYMENT
 
 - GAS canonical: `gas/Code.gs`.
 - Source version: `2026.3.4-session-cohort-guard`.
-- GET read-only setelah compaction mengonfirmasi deployment live masih `2026.2-progress-persistence`; data #98 sudah live, tetapi code #94/#95/#97–#99, seed metadata terbaru, dan authenticated read-back code terbaru BELUM live.
-- Sebelum klaim live, cek GET endpoint/version secara read-only.
-- User sudah menjalankan live compaction: main `ParticipantAccounts` tepat 100 target active, 0 outside; backup manual + otomatis tersedia. Berikutnya seed dashboard, update deployment existing, dan verifikasi `doGet.version=2026.3.4-session-cohort-guard`, CV excluded, serta session guard aktif.
+- GET read-only user dan workspace mengonfirmasi deployment live `2026.3.4-session-cohort-guard`; data #98 juga live.
+- User sudah menjalankan live compaction: main `ParticipantAccounts` tepat 100 target active, 0 outside; backup manual + otomatis tersedia.
+- User menjalankan seed dashboard dan update existing deployment. Versi code sudah terverifikasi, tetapi isi metadata seed, CV exclusion, login target, dan protected session guard masih memerlukan authenticated read-back.
 - Setiap perubahan `gas/Code.gs` wajib redeploy; jangan deploy tanpa instruksi user eksplisit.
-- Frontend #94–#96 serta access reconciliation #97 belum boleh diklaim live sampai deployment/read-back diverifikasi.
+- Backend #94/#95/#97–#99 sudah berada pada deployment live 2026.3.4. Frontend #94–#96 belum boleh diklaim live sampai deployment frontend diverifikasi.
 
 PARTICIPANT ACCESS #97
 
@@ -122,7 +122,7 @@ HASIL LIVE TERAKHIR YANG BOLEH DIKLAIM
 - Baseline read-back: 94 progress row = 42 chapter numerik unik + 26 practice + 25 quiz.
 - Ringkasan saat itu: total 6, tuntas 1, proses 4, belum mulai 1, rata-rata 33%.
 - Leaderboard read-back saat itu 1.039 poin; screenshot user berikutnya memperlihatkan Brenda 1.054 poin, belum di-read-back ulang.
-- Jangan memakai angka ini sebagai bukti deployment #94/#95/#97 sudah live.
+- Jangan memakai angka ini sebagai authenticated proof deployment 2026.3.4; angka tersebut berasal dari baseline deployment sebelumnya.
 
 SAFETY DAN HARD BLOCK
 
@@ -156,13 +156,13 @@ Mutation hanya setelah approval:
 PRIORITAS SESI BERIKUTNYA
 
 1. Konfirmasi kepada user setelah membaca semua handover; jangan mulai kerja sebelum dikonfirmasi.
-2. Versi live sudah diverifikasi read-only sebagai `2026.2-progress-persistence`; jangan klaim #94/#95/#97 live.
+2. Versi live sudah diverifikasi user + workspace sebagai `2026.3.4-session-cohort-guard`.
 3. Compaction #98 sudah live; jangan run ulang/reconcile/migrate credentials.
-4. Seed/redeploy source `2026.3.4-session-cohort-guard` dan verifikasi CV excluded + token non-target ditolak.
+4. Jalankan authenticated read-only contract untuk akun QA target, protected action, enam tracking module, dan CV exclusion; credential hanya melalui environment.
 5. Pastikan frontend terbaru #94–#96 benar-benar terdeploy.
-6. Jalankan authenticated read-only contract untuk akun QA target dan enam tracking module.
+6. Jangan menguji akun non-target dengan credential peserta riil; session rejection sudah memiliki contract regression, dan pengujian live tambahan harus production-safe.
 7. #92 tetap ditunda kecuali user membuka kembali scope persistence isi jawaban latihan.
 
 Kalimat pembuka yang harus kamu kirim:
 
-“Saya sudah membaca AI_HANDOFF_CURRENT_STATE.md, gemini.md, NEXT_PLAN.md, E2E audit, dan prompt transfer. Saya memahami bahwa hanya enam module Foundation yang aktif, Computer Vision sepenuhnya Under Development, compaction ParticipantAccounts 187→100 sudah live, tetapi endpoint masih 2026.2 dan source 2026.3.4-session-cohort-guard belum dideploy, serta isi jawaban latihan masih localStorage-only (#92). Worktree dan commit akan saya cek read-only. Saya menunggu konfirmasi Anda sebelum mulai bekerja.”
+“Saya sudah membaca AI_HANDOFF_CURRENT_STATE.md, gemini.md, NEXT_PLAN.md, E2E audit, dan prompt transfer. Saya memahami bahwa hanya enam module Foundation yang aktif, Computer Vision sepenuhnya Under Development, compaction ParticipantAccounts 187→100 dan GAS 2026.3.4-session-cohort-guard sudah live, authenticated read-back deployment terbaru serta frontend release masih pending, dan isi jawaban latihan masih localStorage-only (#92). Worktree dan commit akan saya cek read-only. Saya menunggu konfirmasi Anda sebelum mulai bekerja.”

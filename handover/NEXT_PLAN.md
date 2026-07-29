@@ -4,7 +4,7 @@
 
 **Baseline:** `6508121` sebelum resolusi audit #78–#91
 
-**GAS:** GET read-only setelah compaction masih `2026.2-progress-persistence`; source editor/lokal `2026.3.4-session-cohort-guard`. Data #98 sudah live (100 target active), tetapi deployment code #94/#95/#97–#99, seed CV lock, dan session revalidation belum live
+**GAS:** GET read-only user + workspace memverifikasi live `2026.3.4-session-cohort-guard`; data #98 live (100 target active). Authenticated seed/tracking read-back dan frontend release masih pending
 
 **QA:** safe mock 85/85 PASS; full 96 PASS + 44 SKIP + 0 FAIL; authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2; controlled live write/read-back terakhir PASS
 **Leaderboard:** sumber live; authenticated read-back terakhir 1.039 pts, screenshot user berikutnya menampilkan Brenda 1.054 pts
@@ -34,14 +34,14 @@ Phase 0 QA dan seluruh perbaikan audit #78–#91 sudah tersedia di source. Test 
 | Discussion persistence | ✅ live | post/reply + read-back production terverifikasi |
 | Isi jawaban practice (#92) | ⚠️ deferred | User menerima batasan sementara: marker selesai masuk backend, tetapi teks jawaban masih localStorage-only |
 | Pengantar AI active material (#93) | ✅ | 5/5 route menandai satu current item dengan visual + `aria-current` |
-| Dynamic module release contract (#94) | ✅ code | `is_active` + `tracking_enabled` + `dashboard_visible` + `phase_id`; source GAS 2026.3.4, deployment pasca-#99 belum terverifikasi |
-| Pengantar AI chapter 1–5 (#94) | ✅ code | save + `getParticipantProgress` read-back; progress sidebar tidak lagi dihitung dari posisi route |
-| Journey Fellowship (#94) | ✅ code | Foundation/Specialization dihitung dari module aktif; phase tanpa sumber memakai ikon kunci + `Belum Dibuka` |
-| Computer Vision release lock (#95) | ✅ code | 9 route CV + seluruh prefix child menampilkan Under Development; loader/progress CV tidak berjalan; default tracking dinonaktifkan |
-| Pengantar AI practice editability (#96) | ✅ code | Payload kosong/corrupt tidak mengunci textarea; save kosong ditolak; jawaban nyata bertahan setelah reload dan dapat diedit |
-| Participant access reconciliation (#97) | ✅ code / ⏳ live apply | 187 akun → inner join 100 target + 87 non-target; login non-target ditolak; dry-run `ready_to_apply=true`; Sheet live belum dimutasi |
+| Dynamic module release contract (#94) | ✅ deployed / ⏳ auth read-back | `is_active` + `tracking_enabled` + `dashboard_visible` + `phase_id`; endpoint 2026.3.4 live, tracking output belum dibaca dengan akun QA |
+| Pengantar AI chapter 1–5 (#94) | ✅ backend deployed / ⏳ frontend+auth check | save + `getParticipantProgress` read-back; progress sidebar tidak lagi dihitung dari posisi route |
+| Journey Fellowship (#94) | ✅ backend deployed / ⏳ frontend check | Foundation/Specialization dihitung dari module aktif; phase tanpa sumber memakai ikon kunci + `Belum Dibuka` |
+| Computer Vision release lock (#95) | ✅ backend deployed / ⏳ frontend+auth check | 9 route CV + seluruh prefix child menampilkan Under Development; loader/progress CV tidak berjalan; default tracking dinonaktifkan |
+| Pengantar AI practice editability (#96) | ✅ code / ⏳ frontend check | Payload kosong/corrupt tidak mengunci textarea; save kosong ditolak; jawaban nyata bertahan setelah reload dan dapat diedit |
+| Participant access reconciliation (#97) | ✅ live code + data / ⏳ auth read-back | Inner join 100 target + 87 non-target selesai; main sheet tepat 100 target active dan login guard berada pada deployment 2026.3.4 |
 | ParticipantAccounts compaction (#98) | ✅ live | Main sheet tepat 100 target active; 0 outside/missing/duplicate; backup manual + otomatis tersedia; export read-back lulus |
-| Session cohort guard (#99) | ✅ code / ⏳ deploy | Token lama non-target/inactive ditolak setiap protected request; token Re-Test tetap hanya untuk action Re-Test |
+| Session cohort guard (#99) | ✅ deployed / ⏳ auth read-back | Token lama non-target/inactive ditolak setiap protected request; token Re-Test tetap hanya untuk action Re-Test |
 
 Safe mock gate: **85/85 PASS**, tanpa expected failure dan tanpa live write. Full suite **140 = 96 PASS + 44 SKIP + 0 FAIL**. Audit serta bukti resolusi tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
 
@@ -49,11 +49,11 @@ Safe mock gate: **85/85 PASS**, tanpa expected failure dan tanpa live write. Ful
 
 ## URUTAN LANGKAH BERIKUTNYA
 
-1. **Audit deployment live tanpa mutation — DONE:** endpoint GET mengembalikan `2026.2-progress-persistence`; deployment lama belum memuat #94/#95/#97.
+1. **Audit deployment lama tanpa mutation — DONE:** endpoint sebelum redeploy mengembalikan `2026.2-progress-persistence`.
 2. **Compaction live #98 — DONE:** main sheet 100 target active; backup otomatis dan export read-back lulus.
-3. **Migrasi/redeploy GAS #94/#95/#97–#99:** jalankan `seedDashboardModules()` dan `seedDashboardJourney()`, update deployment existing ke versi baru, lalu pastikan `doGet.version=2026.3.4-session-cohort-guard`, `trackingModules` tepat enam Foundation, `computer-vision` excluded, dan token non-target ditolak.
-4. **Release/verifikasi frontend #94–#96:** pastikan build terbaru terdeploy. Cache buster `settings.js` harus `20260729-intro-practice-editable`; router harus `20260729-cv-locked`. Fix #96 tidak membutuhkan redeploy GAS.
-5. **Authenticated read-only:** gunakan akun QA target melalui environment untuk memastikan login tetap sukses, akun non-target ditolak lewat contract test tanpa memakai credential peserta riil, dan dashboard hanya melacak enam Foundation.
+3. **GAS deployment — DONE:** endpoint live `2026.3.4-session-cohort-guard`.
+4. **Authenticated read-back:** dengan credential QA via environment, pastikan login target, protected action, enam `trackingModules`, CV excluded, dan dashboard summary konsisten.
+5. **Release/verifikasi frontend #94–#96:** pastikan build terbaru terdeploy. Cache buster `settings.js` harus `20260729-intro-practice-editable`; router harus `20260729-cv-locked`. Fix #96 tidak membutuhkan redeploy GAS.
 6. **Scope #92 ditunda dengan sepengetahuan user:** isi jawaban latihan masih localStorage-only. Jika nanti harus tercatat lintas perangkat, tambah schema/API practice-response, frontend acknowledgment/read-back, dan E2E production-safe.
 
 Authenticated read-only sudah selesai pada baseline 94 row progress (42 chapter numerik unik, 26 practice, 25 quiz). Controlled mutation kemudian lulus untuk chapter, marker practice, quiz, diskusi, dan reply. Ringkasan Belajar tetap 33% (1 tuntas, 4 proses, 1 belum mulai) dan leaderboard tetap 1.039 poin.

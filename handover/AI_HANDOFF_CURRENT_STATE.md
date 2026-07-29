@@ -6,8 +6,8 @@
 **Baseline Commit:** `6508121` - test: expand active module end-to-end audit (#87-#91)
 **Feature Commit:** `a3ff0a9` - `fix: persist active module learning progress (#78-#91)`
 **Latest Feature Commit:** `2562ac1` - `fix: revalidate participant session cohort (#99)`
-**Total commits:** 266 setelah commit dokumentasi live compaction #98
-**GAS Deployment:** ⚠️ GET read-only setelah compaction tetap mengembalikan live `2026.2-progress-persistence`; source editor/lokal `2026.3.4-session-cohort-guard`, sehingga code #94/#95/#97–#99 dan seed metadata terbaru belum live. Data mutation #98 sudah LIVE: `ParticipantAccounts` tepat 100 target active
+**Total commits:** 267 setelah commit verifikasi deployment #99
+**GAS Deployment:** ✅ GET read-only user + workspace mengembalikan live `2026.3.4-session-cohort-guard`; data #98 juga LIVE (`ParticipantAccounts` tepat 100 target active). Authenticated read-back seed/tracking dan frontend release masih perlu diverifikasi
 **Worktree:** source bersih setelah commit docs; export CSV pasca-compaction milik user tetap untracked dan tidak boleh di-commit karena memuat credential
 **E2E Test Suite:** safe mock 85/85 PASS | full 96 PASS + 44 SKIP + 0 FAIL | authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2 | controlled live write/read-back terakhir PASS
 **Leaderboard:** ✅ sumber LIVE — authenticated read-back terakhir 1.039 pts; screenshot user sesudahnya menampilkan Brenda 1.054 pts (belum di-read-back ulang)
@@ -54,23 +54,25 @@ Fix #99 menutup sesi lama non-target: setiap protected participant action kini m
 - Idempotent re-save tidak mengubah Ringkasan Belajar; leaderboard tetap **1.039 → 1.039**. Profile dan password tidak dimutasi.
 - #92 **OPEN / DEFERRED DENGAN SEPENGETAHUAN USER**: teks jawaban practice tetap hanya di localStorage; backend baru menyimpan marker `chapter_id='practice'` dengan status selesai.
 - #93 **FIXED**: kelima topik Pengantar AI sekarang menandai tepat satu materi aktif dengan highlight, ikon play, dan `aria-current="page"`.
-- #94 **FIXED IN CODE**: metadata release/tracking/visibility dinamis, agregasi phase, Pengantar AI save/read-back 1–5, cache invalidation, dan journey locked state. Production deployment/read-back masih pending.
-- #95 **FIXED IN CODE**: sembilan route CV dan seluruh prefix turunannya terkunci ke Under Development, loader/progress CV tidak berjalan, dan default tracking CV dinonaktifkan. Frontend/GAS deployment masih pending.
+- #94 **BACKEND DEPLOYED / AUTH READ-BACK PENDING**: metadata release/tracking/visibility dinamis, agregasi phase, Pengantar AI save/read-back 1–5, cache invalidation, dan journey locked state. GAS 2026.3.4 sudah live; frontend dan authenticated production read-back masih pending.
+- #95 **BACKEND DEPLOYED / FRONTEND PENDING**: sembilan route CV dan seluruh prefix turunannya terkunci ke Under Development, loader/progress CV tidak berjalan, dan default tracking CV dinonaktifkan. GAS 2026.3.4 sudah live; hasil seed perlu authenticated read-back dan frontend belum terverifikasi.
 - #96 **FIXED IN CODE**: payload latihan Pengantar AI kosong/corrupt tidak lagi mengunci textarea; penyimpanan kosong divalidasi dan jawaban nyata tetap dapat disimpan, reload, serta diedit. Hanya frontend deployment yang pending.
-- #97 **FIXED IN CODE / LIVE PENDING**: inner join email menghasilkan 100 target + 87 non-target; preflight 0 missing/blank/duplicate dan `ready_to_apply=true`. Login guard, migration guard, audit, serta rekonsiliasi telah diuji lokal. Sheet live belum diubah dan GAS `2026.3.2-participant-access-reconciled` belum dideploy.
+- #97 **LIVE CODE + DATA**: inner join menghasilkan 100 target + 87 non-target; main sheet sekarang tepat 100 target active dan login guard sudah berada pada deployment 2026.3.4. Authenticated login read-back terbaru tetap pending.
 - #98 **LIVE APPLIED**: main `ParticipantAccounts` sekarang tepat 100 target active; 87 non-target hanya tersisa pada backup. Backup otomatis `ParticipantAccounts_Backup_20260729134827_8e6cc093`; output dan export read-back cocok. Tidak ada credential rotation.
-- #99 **FIXED IN CODE / DEPLOY PENDING**: token participant scope direvalidasi terhadap account, target cohort, dan `access_status` pada setiap request. Non-target legacy token/inactive target ditolak; Re-Test isolation serta avatar action scope lulus regression. Source `2026.3.4-session-cohort-guard` belum live.
+- #99 **LIVE CODE / AUTH READ-BACK PENDING**: token participant scope direvalidasi terhadap account, target cohort, dan `access_status` pada setiap request. Deployment `2026.3.4-session-cohort-guard` terverifikasi live; contract regression lulus, authenticated production read-back belum dijalankan.
 
 ### Pekerjaan operasional tersisa
 
 | Item | Status | Tindakan |
 |---|---|---|
-| Audit versi GAS live | ✅ READ-ONLY | GET endpoint mengembalikan `2026.2-progress-persistence`; tidak ada mutation |
-| Verifikasi + redeploy GAS #94/#95/#97–#99 | ⏳ PENDING | Compaction selesai; jalankan seed dashboard yang disetujui, update deployment existing, lalu pastikan `version=2026.3.4-session-cohort-guard` |
+| Audit versi GAS live | ✅ READ-ONLY | GET endpoint user + workspace mengembalikan `2026.3.4-session-cohort-guard` |
+| Redeploy GAS #94/#95/#97–#99 | ✅ LIVE | GET endpoint terverifikasi `2026.3.4-session-cohort-guard` |
+| Seed/tracking authenticated read-back | ⏳ PENDING | Pastikan `trackingModules` tepat enam Foundation, CV excluded, akun QA target login, dan protected request sukses |
 | ParticipantAccounts exact 100 (#98) | ✅ LIVE | 100 target active, 0 outside; backup manual + otomatis tersedia; export read-back lulus |
 | Frontend release #94/#95 | ⏳ BELUM TERVERIFIKASI | Pastikan build terbaru terdeploy; router `20260729-cv-locked` menutup CV di sisi peserta |
 | Frontend fix #96 | ⏳ BELUM TERVERIFIKASI | Deploy/cek `settings.js` dengan cache buster `20260729-intro-practice-editable`; tidak perlu redeploy GAS |
-| Authenticated live read-back | ✅ DONE | Login, dashboard, progress, diskusi, auth guard: 29 PASS; 18 mutation scenarios sengaja skip |
+| Authenticated live baseline lama | ✅ DONE | Login, dashboard, progress, diskusi, auth guard: 29 PASS pada deployment 2026.2; 18 mutation scenarios sengaja skip |
+| Authenticated read-back 2026.3.4 | ⏳ PENDING | Verifikasi akun target, protected action, enam tracking module, CV excluded, dan session guard deployment terbaru |
 | Controlled live mutation verification | ✅ DONE | 4 write sukses; 5 read-back cocok; summary dan leaderboard tidak berubah; tanpa profile/password mutation |
 | Practice answer persistence (#92) | ⚠️ DEFERRED | User menerima batasan sementara. Jika scope dibuka lagi, tentukan schema/API isi jawaban lalu implement save + authenticated read-back lintas perangkat |
 
@@ -97,23 +99,23 @@ Fix #99 menutup sesi lama non-target: setiap protected participant action kini m
 
 | Fitur | Status | Catatan |
 |---|---|---|
-| Login peserta | ✅ code / ⏳ deploy | 3 jalur verifikasi + membership cohort 100 + `access_status`; non-target ditolak sebelum verifikasi password |
+| Login peserta | ✅ deployed / ⏳ auth read-back | 3 jalur verifikasi + membership cohort 100 + `access_status`; non-target ditolak sebelum verifikasi password |
 | Nama dinamis dashboard | ✅ | "Halo, [Nama]!" dari session |
 | Ganti password mandiri | ✅ | old→new→hash→sync 2 sheet, rate limit 8/10min |
 | Settings save profil | ✅ | form→GAS→session update |
 | Chapter progress auto-save | ✅ live | Write/read-back chapter numerik terverifikasi production |
-| Dynamic module tracking (#94) | ✅ code / ⏳ deploy | Backend metadata-driven; aktivasi module baru otomatis masuk cards/summary/journey setelah schema + GAS 2026.3.2 live |
-| Participant access reconciliation (#97) | ✅ code / ⏳ live apply | Audit/reconcile tepat 100 active + 87 inactive; hanya `access_status`/`updated_at`; login menolak akun di luar cohort |
+| Dynamic module tracking (#94) | ✅ deployed / ⏳ auth read-back | Backend metadata-driven; GAS 2026.3.4 live, hasil tracking deployment terbaru belum dibaca dengan akun QA |
+| Participant access reconciliation (#97) | ✅ live code + data / ⏳ auth read-back | Main sheet tepat 100 target active; login menolak akun di luar cohort |
 | ParticipantAccounts compaction (#98) | ✅ live | Main sheet 187→100 target; backup otomatis, exact read-back, rollback, dan credential preservation |
-| Session cohort guard (#99) | ✅ code / ⏳ deploy | Setiap participant request re-check account + target + active; legacy token non-target langsung invalid; Re-Test terisolasi |
-| Pengantar AI material tracking | ✅ code / ⏳ deploy | Lima route menyimpan chapter 1–5 dan read-back server; bukan progress berbasis posisi halaman |
+| Session cohort guard (#99) | ✅ live code / ⏳ auth read-back | Setiap participant request re-check account + target + active; legacy token non-target langsung invalid; Re-Test terisolasi |
+| Pengantar AI material tracking | ✅ backend deployed / ⏳ frontend+auth check | Lima route menyimpan chapter 1–5 dan read-back server; frontend release dan read-back 2026.3.4 belum terverifikasi |
 | Quiz score wiring | ✅ live | Write/read-back score terverifikasi; gagal-save tetap retryable; denominator 20/26 benar |
 | Practice/latihan wiring | ⚠️ partial live | Marker selesai terverifikasi production; isi jawaban masih localStorage-only (#92) |
 | Dashboard skeleton/cache | ✅ | 3-tier: memory→sessionStorage(5min)→skeleton, 0.2s refresh |
 | Dashboard modules filter | ✅ | Dashboard tepat 5 card; overview AI Fundamentals berisi Intro + 5 module |
 | Dashboard quiz badge | ✅ | Persentase format (X%), pill pink, skeleton reveal |
 | Pengantar AI current material (#93) | ✅ | Topik aktif sinkron dengan route; highlight + ikon play + `aria-current` |
-| Pengantar AI practice editability (#96) | ✅ code / ⏳ deploy | Empty/corrupt local state dibersihkan; save kosong ditolak; jawaban nyata tetap save/reload/edit |
+| Pengantar AI practice editability (#96) | ✅ code / ⏳ frontend release | Empty/corrupt local state dibersihkan; save kosong ditolak; jawaban nyata tetap save/reload/edit |
 | **Leaderboard LIVE** | ✅ | Compute dari `participant_progress`; 1.039 poin stabil pada controlled mutation |
 | Score normalization (#55) | ✅ live | Evaluation/Evolution 20; Reasoning 26 |
 | Restricted access (#54) | ✅ | Hanya Beranda/Modul/Pengaturan + under-development |
@@ -126,7 +128,7 @@ Fix #99 menutup sesi lama non-target: setiap protected participant action kini m
 | Avatar/foto profil (#67) | ✅ | Upload→canvas resize 200×200→preview→"✓ Simpan"/"✗ Batal", base64 sheet |
 | Module lockdown (#68, #74, #75) | ✅ | 20 module UD, dashboard shows only 5 AI Fundamentals |
 | CV Interactive widgets (#73) | ✅ source / 🔒 release | Sandbox, flip/rotate, bitwise, Otsu, quiz, dan coding challenges tetap tersimpan untuk aktivasi nanti |
-| CV release lock (#95) | ✅ code / ⏳ deploy | Overview, Digital Image, latihan, kuis, diskusi, dan seluruh direct child route menampilkan Under Development |
+| CV release lock (#95) | ✅ backend live / ⏳ frontend release | Overview, Digital Image, latihan, kuis, diskusi, dan seluruh direct child route menampilkan Under Development |
 
 ---
 

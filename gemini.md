@@ -1260,3 +1260,13 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - Export pasca-compaction diaudit lokal: 100 row, 100 target unique, 0 outside/missing/duplicate, seluruh `access_status=active`, 100 account ID/NIK unik, dan seluruh row masih memiliki generated credential.
 - GET endpoint sesudah data mutation tetap `2026.2-progress-persistence`. Jadi data #98 sudah live, tetapi code session guard #99, CV lock #95, dynamic tracking #94, dan version `2026.3.4-session-cohort-guard` belum live sampai deployment existing di-update.
 - Setelah commit dokumentasi update live ini total repository menjadi 266.
+
+### Live Deployment Update — #99 Selesai
+
+- User melanjutkan runbook dengan seed dashboard dan update existing deployment ke New version; URL `/exec` tetap dipertahankan.
+- GET endpoint yang dilaporkan user mengembalikan `status=success`, service `HerAI GAS Backend`, dan version `2026.3.4-session-cohort-guard`.
+- Workspace memverifikasi ulang endpoint yang sama secara read-only dan menerima version `2026.3.4-session-cohort-guard`.
+- Dengan demikian code backend #94/#95/#97–#99 sudah live. Data #98 tetap tepat 100 target active berdasarkan compaction output dan export read-back sebelumnya.
+- GET health check tidak membuktikan isi metadata atau akses authenticated. Login akun QA target, protected action, enam `trackingModules`, CV exclusion, dan dashboard summary deployment terbaru masih perlu read-back menggunakan credential via environment.
+- Frontend #94–#96 masih perlu deployment/verifikasi terpisah; update GAS tidak otomatis merilis frontend.
+- Setelah commit dokumentasi verifikasi deployment ini total repository menjadi 267.
