@@ -1151,3 +1151,43 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - #92 berstatus **OPEN/DEFERRED dengan sepengetahuan user**: marker latihan dapat masuk backend, sedangkan isi teks jawaban tetap localStorage-only dan tidak boleh diklaim tersimpan di GAS.
 - User melaporkan redeploy GAS setelah #94, tetapi deployment itu terjadi sebelum perubahan #95. Source lokal sekarang `2026.3.1-cv-locked`; versi live, seed metadata, frontend release, dan authenticated read-back pasca-#95 belum diverifikasi.
 - Prompt transfer canonical sudah diperbarui di `handover/NEXT_AI_TRANSFER_PROMPT.txt`. AI berikutnya wajib membaca SSOT → `gemini.md` → `NEXT_PLAN.md` → E2E audit → prompt transfer, lalu meminta konfirmasi user sebelum mulai bekerja.
+
+## 97. Fix: Rekonsiliasi Akses Portal untuk 100 Peserta Lolos Tahap 2
+
+**Status:** FIXED IN CODE — 29 Juli 2026. Dry-run lokal lulus; Google Sheet live, deployment, dan read-back belum dilakukan.
+
+**Masalah:** `ParticipantAccounts` berisi 187 akun karena generator awal sempat berjalan untuk seluruh cohort tahap sebelumnya. Daftar resmi peserta lolos tahap 2 hanya 100 email di `TARGET_PARTICIPANT_PORTAL_EMAILS`. Filter target sudah dipakai untuk provisioning baru, tetapi tidak menonaktifkan 87 akun existing. Login juga menganggap `access_status` kosong sebagai aktif, sehingga akun lama di luar target tetap berpotensi masuk bila memiliki credential.
+
+**Audit inner join lokal:**
+
+- 187 account row dan 187 email unik.
+- 100 target email unik; seluruhnya cocok dengan account row.
+- 87 account berada di luar target; 0 target hilang, 0 email kosong, dan 0 duplikat.
+- Kondisi awal: 8 target `active`, 92 target blank, 6 non-target `active`, 81 non-target blank.
+- Expected final: tepat 100 `active` dan 87 `inactive`; apply pertama perlu 179 perubahan, apply kedua 0.
+
+**Perbaikan:**
+
+- `participantLogin()` sekarang menolak account email yang tidak ada di target sebelum memeriksa password.
+- `isParticipantEligibleForPortal()` hanya memakai membership target, bukan lagi fallback status tahap 1 yang terlalu luas.
+- `migrateExistingParticipantAccountCredentials()` tidak lagi mengaktifkan semua status kosong; status mengikuti membership target.
+- Tambah `auditParticipantPortalAccess()` untuk preflight read-only dan `reconcileParticipantPortalAccess()` untuk bulk update idempotent.
+- Reconciliation hanya menulis `access_status` serta `updated_at`; password, hash, NIK, row, progress, dan histori tidak dihapus/diubah.
+- Apply otomatis dibatalkan bila target bukan tepat 100 atau ditemukan missing target, blank email, maupun duplicate email.
+- Tambah `scripts/audit-participant-access.mjs` agar export CSV dapat diaudit tanpa mencetak PII/credential.
+- Versi source GAS menjadi `2026.3.2-participant-access-reconciled`.
+
+**Verifikasi:**
+
+- Syntax `gas/Code.gs`, test auth/reconciliation, dan `git diff --check` PASS.
+- Apply mock: 179 perubahan, output 100 active + 87 inactive, credential column identik; rerun idempotent 0 perubahan.
+- Safe deterministic E2E tetap **85/85 PASS**, tanpa live write.
+- CSV akun lokal tetap untracked dan tidak ikut commit karena memuat credential.
+
+## Checkpoint Transfer Setelah #97 — 29 Juli 2026
+
+- Latest feature commit: `ce0434e fix: reconcile participant portal access (#97)`; setelah commit dokumentasi total menjadi 260.
+- Source lokal GAS `2026.3.2-participant-access-reconciled`; source belum disimpan/dideploy ke production.
+- Sebelum live apply: backup tab `ParticipantAccounts`, jalankan audit, review 187/100/87 + `ready_to_apply=true`, lalu minta approval mutation untuk menjalankan reconciliation.
+- Jangan menjalankan `provisionParticipantAccounts`, `generateParticipantAccounts*`, `forceReset:true`, atau credential migration untuk pekerjaan akses ini.
+- Setelah reconciliation, redeploy GAS dan authenticated read-back harus membuktikan akun QA target bisa login, non-target ditolak, serta enam module Foundation/CV lock tetap benar.

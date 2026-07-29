@@ -4,7 +4,7 @@
 
 **Baseline:** `6508121` sebelum resolusi audit #78–#91
 
-**GAS:** user melaporkan redeploy setelah #94, tetapi sebelum perubahan #95. Source lokal sekarang `2026.3.1-cv-locked`; versi live, seed metadata, dan read-back pasca-#95 belum diverifikasi
+**GAS:** source lokal sekarang `2026.3.2-participant-access-reconciled`; deployment live masih versi lama/tidak terverifikasi untuk #95/#97, seed metadata CV lock belum dibaca kembali, dan rekonsiliasi 100/87 belum diterapkan ke Sheet live
 
 **QA:** safe mock 85/85 PASS; full 96 PASS + 44 SKIP + 0 FAIL; authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2; controlled live write/read-back terakhir PASS
 **Leaderboard:** sumber live; authenticated read-back terakhir 1.039 pts, screenshot user berikutnya menampilkan Brenda 1.054 pts
@@ -34,11 +34,12 @@ Phase 0 QA dan seluruh perbaikan audit #78–#91 sudah tersedia di source. Test 
 | Discussion persistence | ✅ live | post/reply + read-back production terverifikasi |
 | Isi jawaban practice (#92) | ⚠️ deferred | User menerima batasan sementara: marker selesai masuk backend, tetapi teks jawaban masih localStorage-only |
 | Pengantar AI active material (#93) | ✅ | 5/5 route menandai satu current item dengan visual + `aria-current` |
-| Dynamic module release contract (#94) | ✅ code | `is_active` + `tracking_enabled` + `dashboard_visible` + `phase_id`; source GAS 2026.3.1, deployment pasca-#95 belum terverifikasi |
+| Dynamic module release contract (#94) | ✅ code | `is_active` + `tracking_enabled` + `dashboard_visible` + `phase_id`; source GAS 2026.3.2, deployment pasca-#97 belum terverifikasi |
 | Pengantar AI chapter 1–5 (#94) | ✅ code | save + `getParticipantProgress` read-back; progress sidebar tidak lagi dihitung dari posisi route |
 | Journey Fellowship (#94) | ✅ code | Foundation/Specialization dihitung dari module aktif; phase tanpa sumber memakai ikon kunci + `Belum Dibuka` |
 | Computer Vision release lock (#95) | ✅ code | 9 route CV + seluruh prefix child menampilkan Under Development; loader/progress CV tidak berjalan; default tracking dinonaktifkan |
 | Pengantar AI practice editability (#96) | ✅ code | Payload kosong/corrupt tidak mengunci textarea; save kosong ditolak; jawaban nyata bertahan setelah reload dan dapat diedit |
+| Participant access reconciliation (#97) | ✅ code / ⏳ live apply | 187 akun → inner join 100 target + 87 non-target; login non-target ditolak; dry-run `ready_to_apply=true`; Sheet live belum dimutasi |
 
 Safe mock gate: **85/85 PASS**, tanpa expected failure dan tanpa live write. Full suite **140 = 96 PASS + 44 SKIP + 0 FAIL**. Audit serta bukti resolusi tersedia di `handover/E2E_AUDIT_2026-07-29.md`.
 
@@ -46,11 +47,12 @@ Safe mock gate: **85/85 PASS**, tanpa expected failure dan tanpa live write. Ful
 
 ## URUTAN LANGKAH BERIKUTNYA
 
-1. **Audit deployment live tanpa mutation:** buka endpoint GET GAS dan catat `doGet.version`. Jangan menganggap redeploy user sudah memuat #95 karena deployment tersebut terjadi sebelum source CV lock dibuat.
-2. **Migrasi/redeploy GAS #94/#95:** paste/save `gas/Code.gs`, jalankan `seedDashboardModules()` dan `seedDashboardJourney()` dari Apps Script editor, lalu buat deployment baru. Pastikan `doGet.version=2026.3.1-cv-locked`, `trackingModules` tepat enam Foundation, dan `computer-vision` tidak masuk tracking. Tindakan ini membutuhkan konfirmasi user.
-3. **Release/verifikasi frontend #94–#96:** pastikan build terbaru terdeploy. Cache buster `settings.js` harus `20260729-intro-practice-editable`; router harus `20260729-cv-locked`. Fix #96 tidak membutuhkan redeploy GAS.
-4. **Verifikasi Pengantar AI production:** dengan approval mutation, buka topik 1–5 memakai akun QA dan pastikan chapter `1..5` terbaca kembali serta summary berubah idempotent. Jangan mengubah password/profile.
-5. **Scope #92 ditunda dengan sepengetahuan user:** isi jawaban latihan masih localStorage-only. Jika nanti harus tercatat lintas perangkat, tambah schema/API practice-response, frontend acknowledgment/read-back, dan E2E production-safe.
+1. **Audit deployment live tanpa mutation:** buka endpoint GET GAS dan catat `doGet.version`. Jangan menganggap deployment lama sudah memuat #95/#97.
+2. **Backup + rekonsiliasi akses #97:** duplikat tab `ParticipantAccounts`, save source terbaru, lalu jalankan `auditParticipantPortalAccess()`. Expected: total 187, target 100, outside 87, missing/blank/duplicate 0, `ready_to_apply=true`. Dengan approval live mutation, jalankan `reconcileParticipantPortalAccess()` dan pastikan 100 active + 87 inactive. Fungsi ini tidak mengubah password/progress dan tidak memakai provision/generate/reset.
+3. **Migrasi/redeploy GAS #94/#95/#97:** jalankan `seedDashboardModules()` dan `seedDashboardJourney()`, buat deployment baru, lalu pastikan `doGet.version=2026.3.2-participant-access-reconciled`, `trackingModules` tepat enam Foundation, dan `computer-vision` tidak masuk tracking.
+4. **Release/verifikasi frontend #94–#96:** pastikan build terbaru terdeploy. Cache buster `settings.js` harus `20260729-intro-practice-editable`; router harus `20260729-cv-locked`. Fix #96 tidak membutuhkan redeploy GAS.
+5. **Authenticated read-only:** gunakan akun QA target melalui environment untuk memastikan login tetap sukses, akun non-target ditolak lewat contract test tanpa memakai credential peserta riil, dan dashboard hanya melacak enam Foundation.
+6. **Scope #92 ditunda dengan sepengetahuan user:** isi jawaban latihan masih localStorage-only. Jika nanti harus tercatat lintas perangkat, tambah schema/API practice-response, frontend acknowledgment/read-back, dan E2E production-safe.
 
 Authenticated read-only sudah selesai pada baseline 94 row progress (42 chapter numerik unik, 26 practice, 25 quiz). Controlled mutation kemudian lulus untuk chapter, marker practice, quiz, diskusi, dan reply. Ringkasan Belajar tetap 33% (1 tuntas, 4 proses, 1 belum mulai) dan leaderboard tetap 1.039 poin.
 
@@ -77,6 +79,9 @@ Satu module baru boleh dinyatakan sehat jika:
 ## COMMANDS
 
 ```bash
+# Audit cohort dari export CSV; output hanya agregat, tanpa PII/credential
+node scripts/audit-participant-access.mjs --input "<ParticipantAccounts.csv>"
+
 # Safe deterministic gate — tidak menyentuh GAS live
 npm run test:qa:mock
 

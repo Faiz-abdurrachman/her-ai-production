@@ -10,7 +10,7 @@ JANGAN LANGSUNG MENGUBAH KODE.
 Urutan wajib sebelum bekerja:
 
 1. Baca `handover/AI_HANDOFF_CURRENT_STATE.md` sampai selesai. Ini single source of truth.
-2. Baca `gemini.md` sampai selesai. Isinya bug log #1–#96 dan temuan kritis.
+2. Baca `gemini.md` sampai selesai. Isinya bug log #1–#97 dan temuan kritis.
 3. Baca `handover/NEXT_PLAN.md` sampai selesai.
 4. Baca `handover/E2E_AUDIT_2026-07-29.md` dan prompt ini.
 5. Jalankan read-only check:
@@ -21,9 +21,9 @@ Urutan wajib sebelum bekerja:
 
 CHECKPOINT REPOSITORY
 
-- Latest feature commit: `f854f9d fix: keep empty intro practice editable (#96)`.
-- Setelah commit dokumentasi transfer ini total menjadi 258 commit.
-- Expected worktree: bersih.
+- Latest feature commit: `ce0434e fix: reconcile participant portal access (#97)`.
+- Setelah commit dokumentasi transfer #97 total menjadi 260 commit.
+- Expected worktree: hanya CSV akun lokal milik user yang untracked; file itu memuat credential dan tidak boleh di-stage/commit.
 - Safe deterministic E2E: 85/85 PASS.
 - Full suite: 140 test = 96 PASS + 44 SKIP + 0 FAIL.
 - 44 skip adalah authenticated/live-mutation test yang sengaja tidak dijalankan tanpa secret/opt-in.
@@ -53,13 +53,21 @@ Computer Vision sepenuhnya Under Development (#95):
 BACKEND DAN DEPLOYMENT
 
 - GAS canonical: `gas/Code.gs`.
-- Source version: `2026.3.1-cv-locked`.
-- User melaporkan redeploy GAS setelah #94, tetapi deployment tersebut terjadi sebelum source #95 dibuat.
-- Karena itu versi live, seed metadata, dan authenticated read-back pasca-#95 BELUM terverifikasi.
+- Source version: `2026.3.2-participant-access-reconciled`.
+- Deployment live, seed metadata #95, rekonsiliasi akses #97, dan authenticated read-back terbaru BELUM terverifikasi.
 - Sebelum klaim live, cek GET endpoint/version secara read-only.
-- Untuk membawa #95 live: konfirmasi user, save source terbaru, jalankan `seedDashboardModules()` dan `seedDashboardJourney()`, redeploy, lalu verifikasi `doGet.version=2026.3.1-cv-locked` dan pastikan `computer-vision` tidak ada di `trackingModules`.
+- Untuk membawa #95/#97 live: konfirmasi user, backup tab `ParticipantAccounts`, save source terbaru, jalankan `auditParticipantPortalAccess()`, review hasil 187/100/87 + `ready_to_apply=true`, lalu dengan approval live mutation jalankan `reconcileParticipantPortalAccess()`. Setelah itu seed dashboard, redeploy, dan verifikasi `doGet.version=2026.3.2-participant-access-reconciled` serta `computer-vision` tidak ada di `trackingModules`.
 - Setiap perubahan `gas/Code.gs` wajib redeploy; jangan deploy tanpa instruksi user eksplisit.
-- Frontend #94–#96 juga belum boleh diklaim live sampai deployment/read-back diverifikasi.
+- Frontend #94–#96 serta access reconciliation #97 belum boleh diklaim live sampai deployment/read-back diverifikasi.
+
+PARTICIPANT ACCESS #97
+
+- `TARGET_PARTICIPANT_PORTAL_EMAILS` adalah sumber kebenaran cohort 100 peserta lolos tahap 2.
+- Dry-run CSV lokal: 187 akun = 100 target unik + 87 non-target; 0 missing, blank email, atau duplicate; `ready_to_apply=true`.
+- Kondisi awal: 8 target active, 92 target blank, 6 non-target active, 81 non-target blank. Karena blank sebelumnya dianggap active, seluruh 87 non-target berpotensi login bila memiliki credential.
+- Source terbaru menolak login non-target sebelum pemeriksaan password.
+- `auditParticipantPortalAccess()` read-only dan tidak mencetak PII; `reconcileParticipantPortalAccess()` hanya mengubah `access_status` + `updated_at`, idempotent, dan abort bila preflight tidak valid.
+- Jangan menjalankan credential migration, provision/generate, atau reset untuk rekonsiliasi ini.
 
 STATUS PERSISTENCE
 
@@ -81,7 +89,7 @@ Batasan #92 — OPEN/DEFERRED DENGAN SEPENGETAHUAN USER:
 - Jangan mengklaim jawaban latihan tersimpan backend.
 - Jika user nanti meminta persistence lintas perangkat, desain schema/API save+get practice response, ownership/auth, acknowledgment, read-back, migration, dan E2E terlebih dahulu.
 
-FIX TERAKHIR #96
+FIX TERAKHIR FRONTEND #96
 
 - Bug: payload localStorage berisi empat key kosong membuat textarea Latihan Pengantar AI `readOnly` walau tampil kosong.
 - Fix: state kosong/corrupt dibersihkan, save kosong ditolak, hanya jawaban nyata yang mengunci, reload mempertahankan jawaban, tombol Edit membuka input.
@@ -97,7 +105,7 @@ HASIL LIVE TERAKHIR YANG BOLEH DIKLAIM
 - Baseline read-back: 94 progress row = 42 chapter numerik unik + 26 practice + 25 quiz.
 - Ringkasan saat itu: total 6, tuntas 1, proses 4, belum mulai 1, rata-rata 33%.
 - Leaderboard read-back saat itu 1.039 poin; screenshot user berikutnya memperlihatkan Brenda 1.054 poin, belum di-read-back ulang.
-- Jangan memakai angka ini sebagai bukti deployment #94/#95 sudah live.
+- Jangan memakai angka ini sebagai bukti deployment #94/#95/#97 sudah live.
 
 SAFETY DAN HARD BLOCK
 
@@ -131,12 +139,13 @@ Mutation hanya setelah approval:
 PRIORITAS SESI BERIKUTNYA
 
 1. Konfirmasi kepada user setelah membaca semua handover; jangan mulai kerja sebelum dikonfirmasi.
-2. Verifikasi versi/deployment GAS pasca-#95 secara read-only.
-3. Pastikan frontend terbaru #94–#96 benar-benar terdeploy.
-4. Jalankan authenticated read-only contract untuk tepat enam tracking module dan CV excluded.
-5. Lakukan live mutation hanya jika user secara eksplisit menyetujui.
-6. #92 tetap ditunda kecuali user membuka kembali scope persistence isi jawaban latihan.
+2. Verifikasi versi deployment GAS secara read-only.
+3. Dengan approval live mutation: backup `ParticipantAccounts`, audit #97, rekonsiliasi 100 active + 87 inactive, lalu read-back agregat tanpa menampilkan PII.
+4. Seed/redeploy source `2026.3.2-participant-access-reconciled` dan verifikasi CV excluded.
+5. Pastikan frontend terbaru #94–#96 benar-benar terdeploy.
+6. Jalankan authenticated read-only contract untuk akun QA target dan enam tracking module.
+7. #92 tetap ditunda kecuali user membuka kembali scope persistence isi jawaban latihan.
 
 Kalimat pembuka yang harus kamu kirim:
 
-“Saya sudah membaca AI_HANDOFF_CURRENT_STATE.md, gemini.md, NEXT_PLAN.md, E2E audit, dan prompt transfer. Saya memahami bahwa hanya enam module Foundation yang aktif, Computer Vision sepenuhnya Under Development, source GAS adalah 2026.3.1-cv-locked tetapi deployment pasca-#95 belum diverifikasi, serta isi jawaban latihan masih localStorage-only (#92). Worktree dan commit akan saya cek read-only. Saya menunggu konfirmasi Anda sebelum mulai bekerja.”
+“Saya sudah membaca AI_HANDOFF_CURRENT_STATE.md, gemini.md, NEXT_PLAN.md, E2E audit, dan prompt transfer. Saya memahami bahwa hanya enam module Foundation yang aktif, Computer Vision sepenuhnya Under Development, source GAS adalah 2026.3.2-participant-access-reconciled tetapi deployment dan rekonsiliasi 100/87 belum dijalankan live, serta isi jawaban latihan masih localStorage-only (#92). Worktree dan commit akan saya cek read-only. Saya menunggu konfirmasi Anda sebelum mulai bekerja.”

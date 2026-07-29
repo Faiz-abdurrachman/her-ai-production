@@ -1,14 +1,14 @@
 # AI Handoff — HerAI Fellowship SuperApp
 
-**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + persistence audit #92 + UI #93 + dynamic tracking #94 + CV release lock #95 + practice editability #96), Asia/Jakarta**
+**Checkpoint: 29 Juli 2026 (Resolution audit #78–#91 + persistence audit #92 + UI #93 + dynamic tracking #94 + CV release lock #95 + practice editability #96 + participant access reconciliation #97), Asia/Jakarta**
 **Workspace:** `/home/faiz/her6/Her-AI`
 **Branch:** `main`
 **Baseline Commit:** `6508121` - test: expand active module end-to-end audit (#87-#91)
 **Feature Commit:** `a3ff0a9` - `fix: persist active module learning progress (#78-#91)`
-**Latest Feature Commit:** `f854f9d` - `fix: keep empty intro practice editable (#96)`
-**Total commits:** 258 setelah commit dokumentasi checkpoint transfer
-**GAS Deployment:** ⚠️ user melaporkan redeploy setelah #94, tetapi redeploy itu terjadi sebelum perubahan #95. Source lokal sekarang `2026.3.1-cv-locked`; deployment/version, seed metadata, dan read-back setelah #95 belum diverifikasi
-**Worktree:** BERSIH
+**Latest Feature Commit:** `ce0434e` - `fix: reconcile participant portal access (#97)`
+**Total commits:** 260 setelah commit dokumentasi checkpoint #97
+**GAS Deployment:** ⚠️ source lokal sekarang `2026.3.2-participant-access-reconciled`; deployment/version, seed metadata #95, rekonsiliasi akses #97, dan authenticated read-back terbaru belum dijalankan di production
+**Worktree:** source changes akan bersih setelah commit docs; CSV akun milik user tetap untracked dan tidak boleh di-commit karena memuat credential
 **E2E Test Suite:** safe mock 85/85 PASS | full 96 PASS + 44 SKIP + 0 FAIL | authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2 | controlled live write/read-back terakhir PASS
 **Leaderboard:** ✅ sumber LIVE — authenticated read-back terakhir 1.039 pts; screenshot user sesudahnya menampilkan Brenda 1.054 pts (belum di-read-back ulang)
 
@@ -24,6 +24,8 @@ Release lock #95 menutup kembali seluruh Computer Vision. Hanya enam module Foun
 
 Fix #96 memulihkan textarea Latihan Pengantar AI yang salah terkunci ketika localStorage berisi object jawaban kosong. State kosong/corrupt sekarang dibersihkan, penyimpanan kosong ditolak, dan hanya jawaban nyata yang mengaktifkan mode read-only; tombol Edit tetap membuka kembali input.
 
+Fix #97 menetapkan daftar `TARGET_PARTICIPANT_PORTAL_EMAILS` sebagai cohort resmi 100 peserta lolos tahap 2. Audit CSV lokal menemukan 187 akun: seluruh 100 target cocok unik dan 87 akun berada di luar cohort. Login source terbaru menolak akun non-target meskipun `access_status` kosong/aktif. Fungsi audit dan rekonsiliasi idempotent hanya mengubah `access_status` serta `updated_at`; password, row, progress, dan histori tidak disentuh. Dry-run lokal siap diterapkan, tetapi Google Sheet live belum dimutasi.
+
 ### Cakupan yang sekarang bisa dilacak
 
 | Gate | Cakupan |
@@ -31,7 +33,7 @@ Fix #96 memulihkan textarea Latihan Pengantar AI yang salah terkunci ketika loca
 | Manifest | Tepat 6 module Foundation: 5 module dashboard + Pengantar AI; Computer Vision terkunci |
 | Frontend | Overview, practice, quiz, discussion, own-content, loader tunggal, Pengantar AI chapter 1–5 |
 | Frontend → backend | Payload chapter/status practice/score quiz/diskusi, acknowledgment, retry, dan read-back memakai GAS mock; isi jawaban practice masih localStorage-only (#92) |
-| Safety | Kredensial tidak disimpan di E2E; live mutation perlu opt-in; password punya opt-in kedua |
+| Safety | Kredensial tidak disimpan di E2E; cohort portal dibatasi tepat 100 email; live mutation perlu opt-in; password punya opt-in kedua |
 | UI/UX | 375/768/1280, overflow, touch target, keyboard focus, reduced motion, non-color status, journey locked text+icon |
 | Artefak | HTML + JSON report, screenshot, trace dan video saat failure |
 
@@ -51,12 +53,14 @@ Fix #96 memulihkan textarea Latihan Pengantar AI yang salah terkunci ketika loca
 - #94 **FIXED IN CODE**: metadata release/tracking/visibility dinamis, agregasi phase, Pengantar AI save/read-back 1–5, cache invalidation, dan journey locked state. Production deployment/read-back masih pending.
 - #95 **FIXED IN CODE**: sembilan route CV dan seluruh prefix turunannya terkunci ke Under Development, loader/progress CV tidak berjalan, dan default tracking CV dinonaktifkan. Frontend/GAS deployment masih pending.
 - #96 **FIXED IN CODE**: payload latihan Pengantar AI kosong/corrupt tidak lagi mengunci textarea; penyimpanan kosong divalidasi dan jawaban nyata tetap dapat disimpan, reload, serta diedit. Hanya frontend deployment yang pending.
+- #97 **FIXED IN CODE / LIVE PENDING**: inner join email menghasilkan 100 target + 87 non-target; preflight 0 missing/blank/duplicate dan `ready_to_apply=true`. Login guard, migration guard, audit, serta rekonsiliasi telah diuji lokal. Sheet live belum diubah dan GAS `2026.3.2-participant-access-reconciled` belum dideploy.
 
 ### Pekerjaan operasional tersisa
 
 | Item | Status | Tindakan |
 |---|---|---|
-| Verifikasi + redeploy GAS #94/#95 | ⏳ PENDING | Cek `doGet.version` live. Karena deployment user terjadi sebelum #95, save source terbaru, jalankan `seedDashboardModules()` + `seedDashboardJourney()`, redeploy, lalu pastikan `version=2026.3.1-cv-locked` |
+| Verifikasi + redeploy GAS #94/#95/#97 | ⏳ PENDING | Backup `ParticipantAccounts`; cek versi live; save source terbaru; jalankan `auditParticipantPortalAccess()`; hanya bila `ready_to_apply=true` dan hasil 187/100/87 cocok, jalankan `reconcileParticipantPortalAccess()`; seed dashboard; redeploy; pastikan `version=2026.3.2-participant-access-reconciled` |
+| Participant access live #97 | ⏳ BELUM DIMUTASI | Dry-run lokal: 100 target, 87 non-target, 92 perlu aktivasi, 87 perlu deaktivasi, 8 sudah sesuai. Jangan menjalankan generator/reset atau migrasi password untuk pekerjaan ini |
 | Frontend release #94/#95 | ⏳ BELUM TERVERIFIKASI | Pastikan build terbaru terdeploy; router `20260729-cv-locked` menutup CV di sisi peserta |
 | Frontend fix #96 | ⏳ BELUM TERVERIFIKASI | Deploy/cek `settings.js` dengan cache buster `20260729-intro-practice-editable`; tidak perlu redeploy GAS |
 | Authenticated live read-back | ✅ DONE | Login, dashboard, progress, diskusi, auth guard: 29 PASS; 18 mutation scenarios sengaja skip |
@@ -73,7 +77,7 @@ Fix #96 memulihkan textarea Latihan Pengantar AI yang salah terkunci ketika loca
 |---|---|
 | Spreadsheet ID | `1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w` |
 | GAS Web App URL | `https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec` |
-| GAS Code | `gas/Code.gs` (termasuk `participant_discussions`, summary, dan aggregation fix) |
+| GAS Code | `gas/Code.gs` (termasuk discussion persistence, dynamic tracking, CV lock, dan participant access reconciliation) |
 | SPA | Vanilla JS hash-router, Node proxy (`node server.js` → `http://127.0.0.1:3000`) |
 | Proxy | POST `/__gas` (token auto-injected, Origin header WAJIB) |
 | Test participant | Kredensial QA disuplai lewat environment variable; tidak disimpan di repo |
@@ -86,12 +90,13 @@ Fix #96 memulihkan textarea Latihan Pengantar AI yang salah terkunci ketika loca
 
 | Fitur | Status | Catatan |
 |---|---|---|
-| Login peserta | ✅ | 3 jalur verifikasi (hash + plain + account sync) |
+| Login peserta | ✅ code / ⏳ deploy | 3 jalur verifikasi + membership cohort 100 + `access_status`; non-target ditolak sebelum verifikasi password |
 | Nama dinamis dashboard | ✅ | "Halo, [Nama]!" dari session |
 | Ganti password mandiri | ✅ | old→new→hash→sync 2 sheet, rate limit 8/10min |
 | Settings save profil | ✅ | form→GAS→session update |
 | Chapter progress auto-save | ✅ live | Write/read-back chapter numerik terverifikasi production |
-| Dynamic module tracking (#94) | ✅ code / ⏳ deploy | Backend metadata-driven; aktivasi module baru otomatis masuk cards/summary/journey setelah schema + GAS 2026.3.1 live |
+| Dynamic module tracking (#94) | ✅ code / ⏳ deploy | Backend metadata-driven; aktivasi module baru otomatis masuk cards/summary/journey setelah schema + GAS 2026.3.2 live |
+| Participant access reconciliation (#97) | ✅ code / ⏳ live apply | Audit/reconcile tepat 100 active + 87 inactive; hanya `access_status`/`updated_at`; login menolak akun di luar cohort |
 | Pengantar AI material tracking | ✅ code / ⏳ deploy | Lima route menyimpan chapter 1–5 dan read-back server; bukan progress berbasis posisi halaman |
 | Quiz score wiring | ✅ live | Write/read-back score terverifikasi; gagal-save tetap retryable; denominator 20/26 benar |
 | Practice/latihan wiring | ⚠️ partial live | Marker selesai terverifikasi production; isi jawaban masih localStorage-only (#92) |
@@ -116,9 +121,10 @@ Fix #96 memulihkan textarea Latihan Pengantar AI yang salah terkunci ketika loca
 
 ---
 
-## COMMIT CHECKPOINT TERBARU (#78–#96)
+## COMMIT CHECKPOINT TERBARU (#78–#97)
 
 ```
+ce0434e fix: reconcile participant portal access (#97)
 f854f9d fix: keep empty intro practice editable (#96)
 457d02c fix: lock Computer Vision release (#95)
 c195068 feat: add dynamic module release tracking (#94)
