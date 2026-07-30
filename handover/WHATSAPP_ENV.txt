@@ -1,8 +1,0 @@
-HerAI — System Info
-
-Spreadsheet: 1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w
-GAS URL: https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec
-GitHub: github.com/Faiz-abdurrachman/her-ai-production
-
-Admin: super-admin / admin123
-Dev: node server.js → localhost:3000

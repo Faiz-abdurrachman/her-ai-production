@@ -25,3 +25,26 @@ scripts/test-settings.js
 docs-faiz/
 docs-nazril/
 .omo/
+
+# Production branch hygiene
+*.md
+/handover/
+/docs/
+/reports/
+/materi/
+/nazril/
+/e2e/
+/scratch/
+/.cursor/
+/assets/referensi/
+/scripts/*
+!/scripts/harden-public.mjs
+/gas/*
+!/gas/Code.gs
+/append_css.js
+/fix_*.js
+/rebuild_all_modules.sh
+/playwright.config.js
+*ParticipantAccounts*.csv
+*participant-accounts*.csv
+*database_pendaftar*.csv
