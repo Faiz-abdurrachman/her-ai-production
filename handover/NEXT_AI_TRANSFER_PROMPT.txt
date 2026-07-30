@@ -1,5 +1,5 @@
 AI TRANSFER PROMPT — HerAI Fellowship SuperApp
-Checkpoint: 29 Juli 2026, Asia/Jakarta
+Checkpoint: 30 Juli 2026, Asia/Jakarta
 
 Kamu adalah AI penerus untuk repository HerAI Fellowship SuperApp.
 Workspace: /home/faiz/her6/Her-AI
@@ -22,7 +22,7 @@ Urutan wajib sebelum bekerja:
 CHECKPOINT REPOSITORY
 
 - Latest feature commit: `2562ac1 fix: revalidate participant session cohort (#99)`.
-- Setelah commit dokumentasi verifikasi deployment #99 total menjadi 267 commit.
+- Setelah commit finalisasi transfer production total menjadi 268 commit.
 - Expected worktree: hanya export CSV pasca-compaction milik user yang untracked; file itu memuat credential dan tidak boleh di-stage/commit.
 - Safe deterministic E2E: 85/85 PASS.
 - Full suite: 140 test = 96 PASS + 44 SKIP + 0 FAIL.
@@ -58,7 +58,7 @@ BACKEND DAN DEPLOYMENT
 - User sudah menjalankan live compaction: main `ParticipantAccounts` tepat 100 target active, 0 outside; backup manual + otomatis tersedia.
 - User menjalankan seed dashboard dan update existing deployment. Versi code sudah terverifikasi, tetapi isi metadata seed, CV exclusion, login target, dan protected session guard masih memerlukan authenticated read-back.
 - Setiap perubahan `gas/Code.gs` wajib redeploy; jangan deploy tanpa instruksi user eksplisit.
-- Backend #94/#95/#97–#99 sudah berada pada deployment live 2026.3.4. Frontend #94–#96 belum boleh diklaim live sampai deployment frontend diverifikasi.
+- Backend #94/#95/#97–#99 berada pada deployment live 2026.3.4. Frontend #94–#96 juga sudah live di Vercel; authenticated behavior deployment terbaru masih perlu read-back dengan akun QA target.
 
 PARTICIPANT ACCESS #97
 
@@ -112,7 +112,7 @@ FIX TERAKHIR FRONTEND #96
 - Fix: state kosong/corrupt dibersihkan, save kosong ditolak, hanya jawaban nyata yang mengunci, reload mempertahankan jawaban, tombol Edit membuka input.
 - File utama: `js/frontend/fellow-dashboard/settings.js`.
 - Cache buster: `settings.js?v=20260729-intro-practice-editable`.
-- Frontend-only; tidak perlu redeploy GAS.
+- Frontend production terverifikasi memuat asset yang identik dengan source lokal; tidak perlu redeploy GAS.
 - Targeted 1/1, safe 85/85, full 96 PASS + 44 SKIP.
 
 HASIL LIVE TERAKHIR YANG BOLEH DIKLAIM
@@ -123,6 +123,9 @@ HASIL LIVE TERAKHIR YANG BOLEH DIKLAIM
 - Ringkasan saat itu: total 6, tuntas 1, proses 4, belum mulai 1, rata-rata 33%.
 - Leaderboard read-back saat itu 1.039 poin; screenshot user berikutnya memperlihatkan Brenda 1.054 poin, belum di-read-back ulang.
 - Jangan memakai angka ini sebagai authenticated proof deployment 2026.3.4; angka tersebut berasal dari baseline deployment sebelumnya.
+- Vercel production `https://her-ai-production.vercel.app/` mengembalikan HTTP 200. `/home` dan `/profile` render tanpa page error pada browser tanpa sesi; profile menampilkan guard karena tidak ada session.
+- `settings.js?v=20260729-intro-practice-editable` dan `router.js?v=20260729-cv-locked` production byte-identik dengan source lokal. Direct route Computer Vision menampilkan Under Development.
+- Request settings lama ke `http://127.0.0.1:8092` masih gagal pada route module dan memakai fallback. Ini temuan environment yang sudah dikenal, non-blocking untuk CV lock, tetapi console route tersebut belum sepenuhnya bersih.
 
 SAFETY DAN HARD BLOCK
 
@@ -159,10 +162,10 @@ PRIORITAS SESI BERIKUTNYA
 2. Versi live sudah diverifikasi user + workspace sebagai `2026.3.4-session-cohort-guard`.
 3. Compaction #98 sudah live; jangan run ulang/reconcile/migrate credentials.
 4. Jalankan authenticated read-only contract untuk akun QA target, protected action, enam tracking module, dan CV exclusion; credential hanya melalui environment.
-5. Pastikan frontend terbaru #94–#96 benar-benar terdeploy.
+5. Frontend terbaru #94–#96 sudah terdeploy; jangan push/redeploy ulang tanpa perubahan dan approval baru.
 6. Jangan menguji akun non-target dengan credential peserta riil; session rejection sudah memiliki contract regression, dan pengujian live tambahan harus production-safe.
 7. #92 tetap ditunda kecuali user membuka kembali scope persistence isi jawaban latihan.
 
 Kalimat pembuka yang harus kamu kirim:
 
-“Saya sudah membaca AI_HANDOFF_CURRENT_STATE.md, gemini.md, NEXT_PLAN.md, E2E audit, dan prompt transfer. Saya memahami bahwa hanya enam module Foundation yang aktif, Computer Vision sepenuhnya Under Development, compaction ParticipantAccounts 187→100 dan GAS 2026.3.4-session-cohort-guard sudah live, authenticated read-back deployment terbaru serta frontend release masih pending, dan isi jawaban latihan masih localStorage-only (#92). Worktree dan commit akan saya cek read-only. Saya menunggu konfirmasi Anda sebelum mulai bekerja.”
+“Saya sudah membaca AI_HANDOFF_CURRENT_STATE.md, gemini.md, NEXT_PLAN.md, E2E audit, dan prompt transfer. Saya memahami bahwa hanya enam module Foundation yang aktif, Computer Vision sepenuhnya Under Development, compaction ParticipantAccounts 187→100, GAS 2026.3.4-session-cohort-guard, dan frontend Vercel terbaru sudah live; authenticated read-back deployment terbaru masih pending dan isi jawaban latihan masih localStorage-only (#92). Worktree dan commit akan saya cek read-only. Saya menunggu konfirmasi Anda sebelum mulai bekerja.”

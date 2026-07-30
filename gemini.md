@@ -1270,3 +1270,12 @@ Leaderboard di dashboard menggunakan static seed data (`seedDashboardLeaderboard
 - GET health check tidak membuktikan isi metadata atau akses authenticated. Login akun QA target, protected action, enam `trackingModules`, CV exclusion, dan dashboard summary deployment terbaru masih perlu read-back menggunakan credential via environment.
 - Frontend #94–#96 masih perlu deployment/verifikasi terpisah; update GAS tidak otomatis merilis frontend.
 - Setelah commit dokumentasi verifikasi deployment ini total repository menjadi 267.
+
+### Live Frontend Deployment Update — 30 Juli 2026
+
+- User mengizinkan push; branch `main` pushed dari `6c35926` sampai `da0f39c` dan terverifikasi sinkron dengan `origin/main`. Export CSV credential tetap untracked dan tidak masuk Git.
+- Vercel production `https://her-ai-production.vercel.app/` menyajikan build terbaru. Browser read-only untuk `#/home` dan `#/profile` mengembalikan HTTP 200 tanpa page error; profile pada context baru menampilkan guard karena tidak ada session.
+- HTML production memuat cache buster `settings.js?v=20260729-intro-practice-editable`, `router.js?v=20260729-cv-locked`, serta CSS dynamic tracking. SHA-256 `settings.js` dan `router.js` production sama persis dengan source lokal.
+- Direct route `#/participant-ai-lab-cv` menampilkan Under Development. Request settings lama ke `http://127.0.0.1:8092` tetap gagal dan memakai fallback; ini known non-blocking environment issue yang sudah tercatat di E2E audit.
+- Frontend #94–#96 dan backend 2026.3.4 kini boleh diklaim deployed. Authenticated read-back akun QA target, enam tracking module, CV exclusion backend, protected request, dan functional UI #96 tetap pending; credential hanya melalui environment.
+- Setelah commit finalisasi transfer production ini total repository menjadi 268.

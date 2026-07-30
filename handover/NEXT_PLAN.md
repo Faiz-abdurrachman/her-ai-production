@@ -1,10 +1,10 @@
 # NEXT PLAN — HerAI Fellowship SuperApp
 
-**Tanggal:** 29 Juli 2026
+**Tanggal:** 30 Juli 2026
 
 **Baseline:** `6508121` sebelum resolusi audit #78–#91
 
-**GAS:** GET read-only user + workspace memverifikasi live `2026.3.4-session-cohort-guard`; data #98 live (100 target active). Authenticated seed/tracking read-back dan frontend release masih pending
+**Production:** GAS live `2026.3.4-session-cohort-guard`; data #98 live (100 target active); Vercel menyajikan build frontend terbaru. Authenticated seed/tracking read-back tetap pending
 
 **QA:** safe mock 85/85 PASS; full 96 PASS + 44 SKIP + 0 FAIL; authenticated live read-only terakhir 29 PASS + 18 SKIP pada GAS 2026.2; controlled live write/read-back terakhir PASS
 **Leaderboard:** sumber live; authenticated read-back terakhir 1.039 pts, screenshot user berikutnya menampilkan Brenda 1.054 pts
@@ -35,10 +35,10 @@ Phase 0 QA dan seluruh perbaikan audit #78–#91 sudah tersedia di source. Test 
 | Isi jawaban practice (#92) | ⚠️ deferred | User menerima batasan sementara: marker selesai masuk backend, tetapi teks jawaban masih localStorage-only |
 | Pengantar AI active material (#93) | ✅ | 5/5 route menandai satu current item dengan visual + `aria-current` |
 | Dynamic module release contract (#94) | ✅ deployed / ⏳ auth read-back | `is_active` + `tracking_enabled` + `dashboard_visible` + `phase_id`; endpoint 2026.3.4 live, tracking output belum dibaca dengan akun QA |
-| Pengantar AI chapter 1–5 (#94) | ✅ backend deployed / ⏳ frontend+auth check | save + `getParticipantProgress` read-back; progress sidebar tidak lagi dihitung dari posisi route |
-| Journey Fellowship (#94) | ✅ backend deployed / ⏳ frontend check | Foundation/Specialization dihitung dari module aktif; phase tanpa sumber memakai ikon kunci + `Belum Dibuka` |
-| Computer Vision release lock (#95) | ✅ backend deployed / ⏳ frontend+auth check | 9 route CV + seluruh prefix child menampilkan Under Development; loader/progress CV tidak berjalan; default tracking dinonaktifkan |
-| Pengantar AI practice editability (#96) | ✅ code / ⏳ frontend check | Payload kosong/corrupt tidak mengunci textarea; save kosong ditolak; jawaban nyata bertahan setelah reload dan dapat diedit |
+| Pengantar AI chapter 1–5 (#94) | ✅ backend+frontend live / ⏳ auth read-back | save + `getParticipantProgress` read-back; progress sidebar tidak lagi dihitung dari posisi route |
+| Journey Fellowship (#94) | ✅ backend+frontend live / ⏳ auth read-back | Foundation/Specialization dihitung dari module aktif; phase tanpa sumber memakai ikon kunci + `Belum Dibuka` |
+| Computer Vision release lock (#95) | ✅ production live / ⏳ auth read-back | Router production identik dan direct route CV menampilkan Under Development; hasil seed/tracking menunggu read-back akun QA |
+| Pengantar AI practice editability (#96) | ✅ frontend live / ⏳ auth UI check | Asset production identik; payload kosong/corrupt tidak mengunci textarea dan save kosong ditolak |
 | Participant access reconciliation (#97) | ✅ live code + data / ⏳ auth read-back | Inner join 100 target + 87 non-target selesai; main sheet tepat 100 target active dan login guard berada pada deployment 2026.3.4 |
 | ParticipantAccounts compaction (#98) | ✅ live | Main sheet tepat 100 target active; 0 outside/missing/duplicate; backup manual + otomatis tersedia; export read-back lulus |
 | Session cohort guard (#99) | ✅ deployed / ⏳ auth read-back | Token lama non-target/inactive ditolak setiap protected request; token Re-Test tetap hanya untuk action Re-Test |
@@ -53,7 +53,7 @@ Safe mock gate: **85/85 PASS**, tanpa expected failure dan tanpa live write. Ful
 2. **Compaction live #98 — DONE:** main sheet 100 target active; backup otomatis dan export read-back lulus.
 3. **GAS deployment — DONE:** endpoint live `2026.3.4-session-cohort-guard`.
 4. **Authenticated read-back:** dengan credential QA via environment, pastikan login target, protected action, enam `trackingModules`, CV excluded, dan dashboard summary konsisten.
-5. **Release/verifikasi frontend #94–#96:** pastikan build terbaru terdeploy. Cache buster `settings.js` harus `20260729-intro-practice-editable`; router harus `20260729-cv-locked`. Fix #96 tidak membutuhkan redeploy GAS.
+5. **Release/verifikasi frontend #94–#96 — DONE:** `main` sudah pushed dan sinkron; Vercel HTTP 200, asset production identik, cache buster benar, dan direct route CV menampilkan Under Development.
 6. **Scope #92 ditunda dengan sepengetahuan user:** isi jawaban latihan masih localStorage-only. Jika nanti harus tercatat lintas perangkat, tambah schema/API practice-response, frontend acknowledgment/read-back, dan E2E production-safe.
 
 Authenticated read-only sudah selesai pada baseline 94 row progress (42 chapter numerik unik, 26 practice, 25 quiz). Controlled mutation kemudian lulus untuk chapter, marker practice, quiz, diskusi, dan reply. Ringkasan Belajar tetap 33% (1 tuntas, 4 proses, 1 belum mulai) dan leaderboard tetap 1.039 poin.

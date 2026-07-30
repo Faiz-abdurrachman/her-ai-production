@@ -1,7 +1,7 @@
 # HerAI Fellowship SuperApp
 
 **Tanggal awal:** 17 Juli 2026  
-**Checkpoint terbaru:** 29 Juli 2026
+**Checkpoint terbaru:** 30 Juli 2026
 **Repository Lokal:** `/home/faiz/her6/Her-AI`
 **Stack:** Vanilla JS SPA (hash-router) + Node.js Gateway + Google Apps Script + Go Services
 
@@ -25,16 +25,16 @@ Versi ringkas yang dapat dikirim lewat WhatsApp:
 Prompt siap tempel untuk memindahkan pekerjaan ke AI lain:
 [`NEXT_AI_TRANSFER_PROMPT.txt`](NEXT_AI_TRANSFER_PROMPT.txt).
 
-Status singkat checkpoint 29 Juli:
+Status singkat checkpoint 30 Juli:
 
-- Branch `main`; checkpoint deployment #99 menghasilkan total 267 commit; export CSV akun tetap untracked dan tidak boleh di-commit karena memuat credential.
+- Branch `main`; checkpoint transfer production menghasilkan total 268 commit; export CSV akun tetap untracked dan tidak boleh di-commit karena memuat credential.
 - Tepat enam module Foundation dapat membuka konten: Pengantar AI + Python, Reasoning, Konsep AI Modern, Evaluation, dan Evolution.
 - Computer Vision dan 20+ module lain berada di Under Development; source materi tetap dipertahankan untuk aktivasi nanti.
 - Safe deterministic gate **85/85 PASS**; full suite **140 = 96 PASS + 44 SKIP + 0 FAIL**.
 - Materi numerik, marker latihan, nilai kuis, diskusi, reply, Ringkasan Belajar, dan leaderboard mempunyai kontrak backend; bukti live terakhir dijelaskan di SSOT.
 - Isi teks jawaban latihan masih localStorage-only (#92), diterima user sebagai batasan sementara; marker selesai latihan tetap dapat masuk backend.
-- GAS live dan source canonical sekarang sama-sama `2026.3.4-session-cohort-guard`; data compaction #98 live (100 target active). Authenticated tracking/session read-back dan frontend deployment tetap perlu diverifikasi.
-- Fix textarea Pengantar AI #96 adalah frontend-only dan menunggu verifikasi deployment frontend.
+- GAS live dan source canonical sama-sama `2026.3.4-session-cohort-guard`; data compaction #98 live (100 target active). Frontend Vercel terbaru juga live; authenticated tracking/session read-back tetap pending.
+- Fix textarea Pengantar AI #96 sudah berada pada asset production yang identik; functional check dengan sesi target menunggu authenticated rerun.
 - Jangan provision/reset akun, push, deploy, atau melakukan live mutation tanpa instruksi user eksplisit.
 
 Bagian lain di README ini memuat inventaris historis 17–19 Juli. Jika bertentangan, selalu ikuti `AI_HANDOFF_CURRENT_STATE.md`.
