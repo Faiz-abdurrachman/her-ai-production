@@ -13395,7 +13395,90 @@
 }
 
 .module-live-summary .module-side-head {
-    margin-bottom: 12px;
+    grid-column: 1 / -1;
+    margin-bottom: 2px;
+    min-width: 0;
+}
+
+.module-live-summary.progress-card {
+    column-gap: 22px;
+    grid-template-columns: minmax(128px, 148px) minmax(0, 1fr);
+    row-gap: 18px;
+}
+
+.module-live-summary .module-side-head h2 {
+    font-size: 0.94rem;
+    line-height: 1.3;
+}
+
+.module-live-summary .progress-donut {
+    --completed-end: 0%;
+    --started-end: 0%;
+    align-self: center;
+    background: conic-gradient(
+        #45c598 0 var(--completed-end),
+        #f75aa9 var(--completed-end) var(--started-end),
+        #eee8ed var(--started-end) 100%
+    );
+    box-shadow: 0 0 0 1px rgba(105, 78, 96, 0.06), 0 12px 28px rgba(131, 67, 101, 0.08);
+    justify-self: center;
+    width: min(148px, 100%);
+}
+
+.module-live-summary .progress-donut::after {
+    background: #fffafd;
+    box-shadow: inset 0 0 0 1px rgba(105, 78, 96, 0.06);
+    inset: 20px;
+}
+
+.module-live-summary .progress-donut strong {
+    color: #201a25;
+    font-size: 1.7rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.045em;
+    line-height: 1;
+}
+
+.module-live-summary .progress-donut span {
+    color: #716878;
+    font-size: 0.58rem;
+    line-height: 1.3;
+    margin-top: 5px;
+    max-width: 76px;
+    text-align: center;
+}
+
+.module-live-summary > ul {
+    align-self: center;
+    gap: 8px;
+}
+
+.module-live-summary > ul li {
+    background: #fffafd;
+    border: 1px solid rgba(105, 78, 96, 0.08);
+    border-radius: 12px;
+    gap: 9px;
+    min-width: 0;
+    padding: 8px 10px;
+}
+
+.module-live-summary > ul li i {
+    flex-basis: 8px;
+    height: 8px;
+    margin-top: 4px;
+    width: 8px;
+}
+
+.module-live-summary > ul li strong {
+    color: #4e4655;
+    font-size: 0.72rem;
+    line-height: 1.25;
+    margin-bottom: 2px;
+}
+
+.module-live-summary > ul li span {
+    font-size: 0.7rem;
+    line-height: 1.35;
 }
 
 .live-data-badge {
@@ -13404,6 +13487,7 @@
     color: #167f58;
     min-height: 28px;
     padding: 0 10px;
+    white-space: nowrap;
 }
 
 .live-data-badge > i {
@@ -13417,9 +13501,30 @@
 .module-live-summary .summary-sync-state {
     color: #6f7282;
     font-size: 0.72rem;
+    grid-column: 1 / -1;
     line-height: 1.45;
-    margin: 12px 0 0;
+    margin: 0;
+    padding-top: 2px;
     text-align: center;
+}
+
+.module-live-summary .module-summary-retry {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 560px) {
+    .module-live-summary.progress-card {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .module-live-summary .progress-donut {
+        width: 148px;
+    }
+
+    .module-live-summary > ul {
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+    }
 }
 
 .module-live-summary[data-module-side-summary-state="error"] .summary-sync-state {
