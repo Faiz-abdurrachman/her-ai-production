@@ -2033,16 +2033,22 @@
                     return legacyOnlinePrefixes.some(prefix => href.includes(prefix));
                 });
             const displayModules = isRealData ? filteredModules.slice(0, 8) : filteredModules;
-            moduleGrid.innerHTML = displayModules.map((item) => `
-                <a class="module-card dash-real ${escapeHtml(item.tone || 'pink')}" href="${escapeHtml(item.href || '#/participant-modules')}">
+            moduleGrid.innerHTML = displayModules.map((item) => {
+                const progress = Math.max(0, Math.min(100, Math.round(Number(item.progress || 0))));
+                const quizLabel = item.quiz_score === null || item.quiz_score === undefined || isNaN(Number(item.quiz_score))
+                    ? 'belum ada nilai kuis'
+                    : 'nilai kuis ' + Number(item.quiz_score) + ' persen';
+                return `
+                <a class="module-card dash-real ${escapeHtml(item.tone || 'pink')}" href="${escapeHtml(item.href || '#/participant-modules')}" aria-label="${escapeHtml(item.title)}, progres ${progress} persen, ${escapeHtml(quizLabel)}">
                     <div class="module-icon"><i class="${escapeHtml(item.icon || 'fas fa-book-open')}"></i></div>
-                    <span>${Number(item.progress || 0)}%</span>
+                    <span style="--progress:${progress}%" title="Progres ${progress}%">${progress}%</span>
                     ${formatQuizBadge(item.quiz_score)}
                     <h3>${escapeHtml(item.title)}</h3>
                     <p>${escapeHtml(item.subtitle || 'Mulai belajar')}</p>
                 </a>
-            `).join('') + `
-                <a class="module-card add dash-real" href="#/participant-modules">
+            `;
+            }).join('') + `
+                <a class="module-card add dash-real" href="#/participant-modules" aria-label="Lihat semua modul pembelajaran">
                     <div class="module-icon"><i class="fas fa-grid-2"></i></div>
                     <h3>${isRealData ? 'Lihat Semua Modul (' + modules.length + ')' : 'Pilih Modul Lainnya'}</h3>
                     <p>Jelajahi semua modul pembelajaran</p>

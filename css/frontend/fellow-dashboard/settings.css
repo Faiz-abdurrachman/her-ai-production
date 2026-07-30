@@ -41,7 +41,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    transition: all 0.2s;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .s-nav-list button i {
@@ -93,37 +93,37 @@
     overflow: hidden;
 }
 
-.card-header {
+.settings-layout .card-header {
     padding: 32px;
     border-bottom: 1px solid var(--fellow-line);
     background: #fdf2f8;
 }
 
-.card-header h2 {
+.settings-layout .card-header h2 {
     margin: 0 0 8px;
     font-size: 1.4rem;
     color: var(--fellow-text);
 }
 
-.card-header p {
+.settings-layout .card-header p {
     margin: 0;
     font-size: 0.9rem;
     color: var(--fellow-muted);
 }
 
-.card-body {
+.settings-layout .card-body {
     padding: 32px;
 }
 
 /* Avatar Section */
-.avatar-upload-section {
+.settings-layout .avatar-upload-section {
     display: flex;
     align-items: center;
     gap: 32px;
     margin-bottom: 32px;
 }
 
-.large-avatar {
+.settings-layout .large-avatar {
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -132,18 +132,18 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.avatar-actions {
+.settings-layout .avatar-actions {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.avatar-actions .btn-group {
+.settings-layout .avatar-actions .btn-group {
     display: flex;
     gap: 12px;
 }
 
-.btn-upload {
+.settings-layout .btn-upload {
     background: var(--fellow-pink);
     color: #fff;
     border: none;
@@ -155,11 +155,11 @@
     transition: background 0.2s;
 }
 
-.btn-upload:hover {
+.settings-layout .btn-upload:hover {
     background: #be185d;
 }
 
-.btn-remove {
+.settings-layout .btn-remove {
     background: #fff;
     color: #64748b;
     border: 1px solid var(--fellow-line);
@@ -168,49 +168,49 @@
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
-.btn-remove:hover {
+.settings-layout .btn-remove:hover {
     background: #f1f5f9;
     color: #334155;
 }
 
-.avatar-actions span {
+.settings-layout .avatar-actions span {
     font-size: 0.75rem;
     color: var(--fellow-muted);
 }
 
-.s-divider {
+.settings-layout .s-divider {
     border: 0;
     border-top: 1px solid var(--fellow-line);
     margin: 32px 0;
 }
 
 /* Form Styles */
-.settings-form {
+.settings-layout .settings-form {
     display: flex;
     flex-direction: column;
     gap: 24px;
 }
 
-.form-row {
+.settings-layout .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
 }
 
-.form-group {
+.settings-layout .form-group {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.form-group.full-width {
+.settings-layout .form-group.full-width {
     grid-column: 1 / -1;
 }
 
-.form-group label {
+.settings-layout .form-group label {
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--fellow-text);
@@ -219,12 +219,12 @@
     justify-content: space-between;
 }
 
-.form-group label i {
+.settings-layout .form-group label i {
     color: var(--fellow-muted);
     margin-right: 6px;
 }
 
-.badge-verified {
+.settings-layout .badge-verified {
     font-size: 0.7rem;
     color: #16a34a;
     background: #dcfce7;
@@ -233,7 +233,8 @@
     font-weight: bold;
 }
 
-.form-group input, .form-group textarea {
+.settings-layout .form-group input,
+.settings-layout .form-group textarea {
     width: 100%;
     padding: 14px 16px;
     border: 1px solid var(--fellow-line);
@@ -245,25 +246,26 @@
     background: #fff;
 }
 
-.form-group input:focus, .form-group textarea:focus {
+.settings-layout .form-group input:focus,
+.settings-layout .form-group textarea:focus {
     outline: none;
     border-color: var(--fellow-pink);
     box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1);
 }
 
-.form-group input:disabled {
+.settings-layout .form-group input:disabled {
     background: #f8fafc;
     color: #94a3b8;
     cursor: not-allowed;
 }
 
-.form-group small {
+.settings-layout .form-group small {
     font-size: 0.75rem;
     color: var(--fellow-muted);
 }
 
 /* Input with Prefix */
-.input-with-prefix {
+.settings-layout .input-with-prefix {
     display: flex;
     align-items: stretch;
     border: 1px solid var(--fellow-line);
@@ -272,12 +274,12 @@
     transition: border-color 0.2s;
 }
 
-.input-with-prefix:focus-within {
+.settings-layout .input-with-prefix:focus-within {
     border-color: var(--fellow-pink);
     box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1);
 }
 
-.input-with-prefix .prefix {
+.settings-layout .input-with-prefix .prefix {
     background: #f8fafc;
     padding: 0 16px;
     display: flex;
@@ -287,13 +289,13 @@
     border-right: 1px solid var(--fellow-line);
 }
 
-.input-with-prefix input {
+.settings-layout .input-with-prefix input {
     border: none;
     border-radius: 0;
     box-shadow: none !important;
 }
 
-.sub-heading {
+.settings-layout .sub-heading {
     margin: 16px 0 0;
     font-size: 1.1rem;
     color: var(--fellow-text);
@@ -302,7 +304,7 @@
 }
 
 /* Form Actions */
-.form-actions {
+.settings-layout .form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 16px;
@@ -311,7 +313,7 @@
     border-top: 1px solid var(--fellow-line);
 }
 
-.btn-cancel {
+.settings-layout .btn-cancel {
     background: #fff;
     color: #64748b;
     border: 1px solid var(--fellow-line);
@@ -320,14 +322,14 @@
     font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
-.btn-cancel:hover {
+.settings-layout .btn-cancel:hover {
     background: #f1f5f9;
 }
 
-.btn-save {
+.settings-layout .btn-save {
     background: var(--fellow-pink);
     color: #fff;
     border: none;
@@ -339,11 +341,11 @@
     transition: background 0.2s;
 }
 
-.btn-save:hover {
+.settings-layout .btn-save:hover {
     background: #be185d;
 }
 
-.settings-message {
+.settings-layout .settings-message {
     padding: 14px 18px;
     border-radius: 10px;
     font-size: 0.9rem;
@@ -351,13 +353,13 @@
     margin: 8px 0;
 }
 
-.settings-message.success {
+.settings-layout .settings-message.success {
     background: #dcfce7;
     color: #16a34a;
     border: 1px solid #86efac;
 }
 
-.settings-message.error {
+.settings-layout .settings-message.error {
     background: #fef2f2;
     color: #dc2626;
     border: 1px solid #fca5a5;
@@ -400,26 +402,117 @@
 }
 
 @media (max-width: 640px) {
-    .form-row {
+    .settings-layout .form-row {
         grid-template-columns: 1fr;
         gap: 16px;
     }
 
-    .avatar-upload-section {
+    .settings-layout .avatar-upload-section {
         flex-direction: column;
         align-items: flex-start;
         gap: 20px;
     }
 
-    .card-header, .card-body {
+    .settings-layout .card-header,
+    .settings-layout .card-body {
         padding: 24px 20px;
     }
 
-    .form-actions {
+    .settings-layout .form-actions {
         flex-direction: column-reverse;
     }
 
-    .btn-cancel, .btn-save {
+    .settings-layout .btn-cancel,
+    .settings-layout .btn-save {
         width: 100%;
+    }
+}
+
+/* HerAI soft-editorial settings surfaces */
+.settings-sidebar-nav,
+.settings-card {
+    border-color: var(--fellow-line);
+    border-radius: var(--fellow-radius-card, 20px);
+    box-shadow: var(--fellow-shadow-card, 0 12px 34px rgba(142, 48, 91, 0.08));
+}
+
+.settings-layout .card-header {
+    background:
+        radial-gradient(circle at 94% 12%, rgba(246, 51, 146, 0.12), transparent 28%),
+        linear-gradient(120deg, #fff5fa, #fff);
+    position: relative;
+}
+
+.settings-layout .card-header::before {
+    background: linear-gradient(90deg, var(--fellow-pink), rgba(246, 51, 146, 0.12));
+    border-radius: 999px;
+    bottom: -1px;
+    content: "";
+    height: 3px;
+    left: 32px;
+    position: absolute;
+    width: 72px;
+}
+
+.s-nav-list button,
+.settings-layout :where(.btn-upload, .btn-remove, .btn-cancel, .btn-save) {
+    min-height: 44px;
+    transition: background-color var(--fellow-motion-fast, 160ms) ease,
+                border-color var(--fellow-motion-fast, 160ms) ease,
+                box-shadow var(--fellow-motion-fast, 160ms) ease,
+                color var(--fellow-motion-fast, 160ms) ease,
+                transform var(--fellow-motion-fast, 160ms) var(--fellow-ease-out, ease-out);
+}
+
+.s-nav-list button.active {
+    box-shadow: 0 8px 18px rgba(246, 51, 146, 0.2);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .s-nav-list button:hover,
+    .settings-layout :where(.btn-upload, .btn-remove, .btn-cancel, .btn-save):hover:not(:disabled) {
+        transform: translateY(-1px);
+    }
+
+    .settings-layout :where(.btn-upload, .btn-save):hover:not(:disabled) {
+        box-shadow: 0 9px 22px rgba(246, 51, 146, 0.2);
+    }
+}
+
+.settings-layout :where(.btn-upload, .btn-remove, .btn-cancel, .btn-save):active:not(:disabled) {
+    box-shadow: none;
+    transform: scale(0.985);
+}
+
+.settings-layout .form-group input,
+.settings-layout .form-group textarea,
+.settings-layout .input-with-prefix {
+    background: #fffafd;
+    border-radius: 12px;
+    transition: background-color var(--fellow-motion-fast, 160ms) ease,
+                border-color var(--fellow-motion-fast, 160ms) ease,
+                box-shadow var(--fellow-motion-fast, 160ms) ease;
+}
+
+.settings-layout .form-group input:hover,
+.settings-layout .form-group textarea:hover,
+.settings-layout .input-with-prefix:hover {
+    border-color: #efa7c8;
+}
+
+.settings-layout .form-group input:focus,
+.settings-layout .form-group textarea:focus,
+.settings-layout .input-with-prefix:focus-within {
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(246, 51, 146, 0.1);
+}
+
+.settings-layout .large-avatar {
+    box-shadow: 0 0 0 1px var(--fellow-line), 0 12px 28px rgba(142, 48, 91, 0.14);
+}
+
+@media (max-width: 860px) {
+    .settings-layout {
+        grid-template-columns: minmax(0, 1fr);
     }
 }

@@ -5,6 +5,16 @@
     --fellow-pink-soft: #fff0f7;
     --fellow-text: #16141f;
     --fellow-muted: #6f7282;
+    --fellow-surface: rgba(255, 255, 255, 0.94);
+    --fellow-surface-soft: #fffafd;
+    --fellow-line-strong: rgba(224, 79, 146, 0.24);
+    --fellow-shadow-soft: 0 8px 26px rgba(142, 48, 91, 0.06);
+    --fellow-shadow-card: 0 12px 34px rgba(142, 48, 91, 0.08);
+    --fellow-shadow-hover: 0 18px 42px rgba(142, 48, 91, 0.13);
+    --fellow-radius-card: 20px;
+    --fellow-motion-fast: 160ms;
+    --fellow-motion-base: 220ms;
+    --fellow-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     --fellow-sidebar-collapsed: 92px;
     --fellow-sidebar-expanded: 288px;
     background: radial-gradient(circle at 78% 10%, rgba(255, 214, 234, 0.7), transparent 32%), #fffafd;
@@ -807,10 +817,10 @@
 .fellow-panel,
 .challenge-card,
 .help-card {
-    background: rgba(255, 255, 255, 0.92);
+    background: var(--fellow-surface);
     border: 1px solid var(--fellow-line);
-    border-radius: 18px;
-    box-shadow: 0 18px 50px rgba(170, 52, 104, 0.08);
+    border-radius: var(--fellow-radius-card);
+    box-shadow: var(--fellow-shadow-card);
 }
 
 .fellow-hero-card {
@@ -2358,4 +2368,299 @@
 @keyframes skeletonFadeIn {
     from { opacity: 0; transform: scale(.9); }
     to   { opacity: 1; transform: scale(1); }
+}
+
+/* ================================================================
+   HerAI soft-editorial UI system — participant surfaces
+   ================================================================ */
+
+.fellow-dashboard :where(a, button, input, textarea, select) {
+    touch-action: manipulation;
+}
+
+.fellow-dashboard :where(a, button, input, textarea, select):focus-visible {
+    outline: 3px solid rgba(246, 51, 146, 0.3);
+    outline-offset: 3px;
+}
+
+.fellow-panel {
+    isolation: isolate;
+    overflow: hidden;
+    position: relative;
+}
+
+.panel-heading h2 {
+    align-items: center;
+    display: inline-flex;
+    gap: 9px;
+}
+
+.panel-heading h2::before {
+    background: linear-gradient(180deg, #ff75b7, var(--fellow-pink));
+    border-radius: 999px;
+    box-shadow: 0 0 0 4px rgba(246, 51, 146, 0.08);
+    content: "";
+    height: 16px;
+    width: 4px;
+}
+
+.panel-heading a,
+.module-panel-head a,
+.module-side-head a {
+    align-items: center;
+    display: inline-flex;
+    gap: 5px;
+    min-height: 44px;
+    transition: color var(--fellow-motion-fast) ease,
+                transform var(--fellow-motion-fast) var(--fellow-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .panel-heading a:hover,
+    .module-panel-head a:hover,
+    .module-side-head a:hover {
+        color: #bd1f68;
+        transform: translateX(2px);
+    }
+}
+
+#dashboardModuleGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+#dashboardModuleGrid .module-card {
+    --module-accent: #f63392;
+    --module-soft: #fff1f7;
+    --module-line: rgba(246, 51, 146, 0.24);
+    background: linear-gradient(145deg, #fff 42%, var(--module-soft) 145%);
+    border: 1px solid var(--module-line);
+    border-radius: 16px;
+    box-shadow: var(--fellow-shadow-soft);
+    isolation: isolate;
+    min-height: 142px;
+    overflow: hidden;
+    padding: 16px;
+    position: relative;
+    transition: border-color var(--fellow-motion-base) ease,
+                box-shadow var(--fellow-motion-base) ease,
+                transform var(--fellow-motion-base) var(--fellow-ease-out);
+}
+
+#dashboardModuleGrid .module-card.blue {
+    --module-accent: #168ce5;
+    --module-soft: #edf7ff;
+    --module-line: rgba(22, 140, 229, 0.23);
+}
+
+#dashboardModuleGrid .module-card.purple {
+    --module-accent: #8b5cf6;
+    --module-soft: #f5f0ff;
+    --module-line: rgba(139, 92, 246, 0.23);
+}
+
+#dashboardModuleGrid .module-card.green {
+    --module-accent: #1fa971;
+    --module-soft: #eefbf6;
+    --module-line: rgba(31, 169, 113, 0.23);
+}
+
+#dashboardModuleGrid .module-card.orange {
+    --module-accent: #e97928;
+    --module-soft: #fff6ed;
+    --module-line: rgba(233, 121, 40, 0.24);
+}
+
+#dashboardModuleGrid .module-card::before {
+    background: linear-gradient(180deg, var(--module-accent), transparent 92%);
+    border-radius: 0 999px 999px 0;
+    content: "";
+    height: calc(100% - 24px);
+    left: 0;
+    opacity: 0.9;
+    position: absolute;
+    top: 12px;
+    width: 4px;
+    z-index: -1;
+}
+
+#dashboardModuleGrid .module-card::after {
+    background: var(--module-soft);
+    border-radius: 50%;
+    content: "";
+    height: 96px;
+    opacity: 0.72;
+    position: absolute;
+    right: -46px;
+    top: -48px;
+    transform: scale(1);
+    transition: transform var(--fellow-motion-base) var(--fellow-ease-out);
+    width: 96px;
+    z-index: -1;
+}
+
+#dashboardModuleGrid .module-card .module-icon {
+    background: var(--module-soft);
+    border: 1px solid var(--module-line);
+    border-radius: 13px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.72);
+    color: var(--module-accent);
+    height: 44px;
+    margin-bottom: 14px;
+    transition: transform var(--fellow-motion-base) var(--fellow-ease-out);
+    width: 48px;
+}
+
+#dashboardModuleGrid .module-card > span {
+    align-items: center;
+    background: conic-gradient(var(--module-accent) var(--progress, 0%), var(--module-soft) 0);
+    border: 0;
+    color: var(--module-accent);
+    font-size: 0.61rem;
+    height: 40px;
+    isolation: isolate;
+    right: 13px;
+    top: 13px;
+    width: 40px;
+}
+
+#dashboardModuleGrid .module-card > span::before {
+    background: #fff;
+    border-radius: inherit;
+    content: "";
+    inset: 4px;
+    position: absolute;
+    z-index: -1;
+}
+
+#dashboardModuleGrid .module-card h3 {
+    color: var(--fellow-text);
+    font-size: 0.82rem;
+    font-weight: 850;
+    letter-spacing: -0.01em;
+}
+
+#dashboardModuleGrid .module-card p {
+    color: #62687a;
+}
+
+#dashboardModuleGrid .module-card .quiz-badge {
+    background: var(--module-soft);
+    border-color: var(--module-line);
+    color: var(--module-accent);
+}
+
+#dashboardModuleGrid .module-card.add {
+    --module-accent: #c12b70;
+    --module-soft: #fff8fb;
+    --module-line: rgba(246, 51, 146, 0.28);
+    background: linear-gradient(145deg, #fffafd, #fff2f8);
+    border-style: dashed;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    #dashboardModuleGrid .module-card:hover {
+        border-color: var(--module-accent);
+        box-shadow: var(--fellow-shadow-hover);
+        transform: translateY(-3px);
+    }
+
+    #dashboardModuleGrid .module-card:hover::after {
+        transform: scale(1.16);
+    }
+
+    #dashboardModuleGrid .module-card:hover .module-icon {
+        transform: translateY(-1px) rotate(-2deg);
+    }
+}
+
+#dashboardModuleGrid .module-card:active {
+    box-shadow: var(--fellow-shadow-soft);
+    transform: translateY(-1px) scale(0.995);
+}
+
+#dashboardModuleGrid .module-card:focus-visible {
+    border-color: var(--module-accent);
+    box-shadow: 0 0 0 4px var(--module-soft), var(--fellow-shadow-hover);
+}
+
+.journey-list article {
+    background: linear-gradient(100deg, color-mix(in srgb, var(--accent), white 94%), #fff 72%);
+    border: 1px solid color-mix(in srgb, var(--accent), white 78%);
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.journey-list .journey-state-locked,
+.journey-list .journey-state-unavailable {
+    background: #fbfafc;
+    border-color: #ece8ee;
+}
+
+#dashboardUpcomingEvents article {
+    border: 1px solid transparent;
+    border-radius: 14px;
+    padding: 12px;
+    transition: background-color var(--fellow-motion-fast) ease,
+                border-color var(--fellow-motion-fast) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    #dashboardUpcomingEvents article:hover {
+        background: #fff8fb;
+        border-color: var(--fellow-line);
+    }
+}
+
+.leaderboard-panel li.current {
+    background: linear-gradient(100deg, #fff0f7, #fff);
+    border: 1px solid rgba(246, 51, 146, 0.17);
+    border-radius: 14px;
+    padding: 9px 10px;
+}
+
+#dashboardModuleGrid .skeleton-card {
+    border-radius: 16px;
+    min-height: 142px;
+    padding: 16px;
+}
+
+.fellow-dashboard [aria-busy="true"] {
+    cursor: progress;
+}
+
+@media (min-width: 1501px) {
+    #dashboardModuleGrid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 860px) {
+    .fellow-grid,
+    .module-grid,
+    .fellow-split,
+    .fellow-right,
+    .track-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #dashboardModuleGrid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #dashboardModuleGrid .module-card,
+    #dashboardModuleGrid .skeleton-card {
+        min-height: 132px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fellow-dashboard *,
+    .fellow-dashboard *::before,
+    .fellow-dashboard *::after {
+        animation-delay: 0s !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
 }
