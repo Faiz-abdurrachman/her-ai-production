@@ -2287,13 +2287,37 @@
     function updateTopbarAvatar(photoUrl) {
         var avatarSpan = document.querySelector('.fellow-user-button .avatar-img');
         if (!avatarSpan) return;
+        if (avatarSpan.tagName === 'IMG') {
+            var replacement = document.createElement('span');
+            replacement.className = avatarSpan.className;
+            replacement.setAttribute('aria-hidden', 'true');
+            avatarSpan.replaceWith(replacement);
+            avatarSpan = replacement;
+        }
+        avatarSpan.setAttribute('aria-hidden', 'true');
+        avatarSpan.style.backgroundImage = '';
+        avatarSpan.style.backgroundSize = '';
+        avatarSpan.style.backgroundPosition = '';
+        var photo = avatarSpan.querySelector('.avatar-photo');
+        if (!photo) {
+            photo = document.createElement('img');
+            photo.className = 'avatar-photo';
+            photo.alt = '';
+            photo.setAttribute('aria-hidden', 'true');
+            avatarSpan.appendChild(photo);
+        }
         if (photoUrl) {
-            avatarSpan.style.backgroundImage = 'url(' + photoUrl + ')';
-            avatarSpan.style.backgroundSize = 'cover';
-            avatarSpan.style.backgroundPosition = 'center';
-            avatarSpan.classList.add('has-photo');
+            photo.hidden = false;
+            photo.onload = function() { avatarSpan.classList.add('has-photo'); };
+            photo.onerror = function() {
+                photo.hidden = true;
+                photo.removeAttribute('src');
+                avatarSpan.classList.remove('has-photo');
+            };
+            photo.src = photoUrl;
         } else {
-            avatarSpan.style.backgroundImage = '';
+            photo.hidden = true;
+            photo.removeAttribute('src');
             avatarSpan.classList.remove('has-photo');
         }
     }
@@ -2317,10 +2341,17 @@
         if (avatar) {
             if (profile.photo_url) {
                 avatar.src = profile.photo_url;
+                avatar.style.objectPosition = 'center';
             } else {
-                avatar.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=ffd0e6&color=b01865&size=120';
+                avatar.src = '/assets/messaging/herai-chat-persona.png';
+                avatar.style.objectPosition = 'center 29%';
             }
             avatar.alt = name;
+            avatar.onerror = function() {
+                avatar.onerror = null;
+                avatar.src = '/assets/messaging/herai-chat-persona.png';
+                avatar.style.objectPosition = 'center 29%';
+            };
         }
 
         var uploadBtn = document.querySelector('.btn-upload');

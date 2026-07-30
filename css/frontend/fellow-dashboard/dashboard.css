@@ -663,9 +663,25 @@
 }
 
 .fellow-user-button {
-    gap: 12px;
-    min-width: 190px;
-    padding: 0;
+    border: 1px solid rgba(176, 24, 101, 0.12);
+    border-radius: 999px;
+    box-shadow: 0 8px 24px rgba(126, 34, 92, 0.07);
+    gap: 10px;
+    min-height: 58px;
+    min-width: 184px;
+    padding: 5px 12px 5px 5px;
+    transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.fellow-user-button:hover {
+    border-color: rgba(246, 51, 146, 0.3);
+    box-shadow: 0 12px 28px rgba(126, 34, 92, 0.12);
+    transform: translateY(-1px);
+}
+
+.fellow-user-button:focus-visible {
+    outline: 3px solid rgba(246, 51, 146, 0.22);
+    outline-offset: 3px;
 }
 
 .fellow-user-dropdown {
@@ -710,15 +726,21 @@
 }
 
 .fellow-user-button .avatar-img {
-    background: linear-gradient(135deg, #ffd0e6, #f63392);
+    background-color: #f7d6e6;
+    background-image: url('/assets/messaging/herai-chat-persona.png'), linear-gradient(135deg, #ffe6f1, #f8a8cf);
+    background-position: center 29%, center;
+    background-repeat: no-repeat;
+    background-size: 215% auto, cover;
     border-radius: 50%;
-    height: 54px;
+    box-shadow: inset 0 0 0 1px rgba(176, 24, 101, 0.08);
+    display: block;
+    flex: 0 0 48px;
+    height: 48px;
     overflow: hidden;
     position: relative;
-    width: 54px;
+    width: 48px;
 }
 
-.fellow-user-button .avatar-img::after,
 .mini-avatar::after,
 .avatar-small::after {
     background: url('/assets/messaging/herai-chat-persona.png') center 31% / 220% auto no-repeat;
@@ -727,8 +749,14 @@
     position: absolute;
 }
 
-.fellow-user-button .avatar-img.has-photo::after {
-    background: none;
+.fellow-user-button .avatar-img .avatar-photo {
+    border-radius: inherit;
+    display: block;
+    height: 100%;
+    inset: 0;
+    object-fit: cover;
+    position: absolute;
+    width: 100%;
 }
 
 .btn-cancel-upload {
