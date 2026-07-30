@@ -23,6 +23,8 @@ const QA_PARTICIPANT_PROPERTY_KEYS = {
   resetConfirmation: 'HERAI_QA_RESET_CONFIRMATION'
 };
 const QA_PARTICIPANT_RESET_CONFIRMATION = 'RESET_QA_ONLY';
+const PRELAUNCH_LEARNING_RESET_PROPERTY_KEY = 'HERAI_PRELAUNCH_LEARNING_RESET_CONFIRMATION';
+const PRELAUNCH_LEARNING_RESET_CONFIRMATION = 'RESET_ALL_LEARNING_BEFORE_LAUNCH';
 const AUTH_TOKEN_TTL_SECONDS = {
   admin: 8 * 60 * 60,
   participant: 12 * 60 * 60,
@@ -2329,6 +2331,7 @@ function getQaParticipantResetDescriptors(account) {
     { sheet_name: SHEETS.participantProgress, matches: byParticipant },
     { sheet_name: SHEETS.participantActivity, matches: byNik },
     { sheet_name: SHEETS.participantDiscussions, matches: byParticipant },
+    { sheet_name: SHEETS.participantExerciseSubmissions, matches: byParticipant },
     { sheet_name: SHEETS.competencySessions, matches: byNik },
     { sheet_name: SHEETS.retestSessions, matches: byNik },
     { sheet_name: SHEETS.retestAccess, matches: byNik },
@@ -2508,6 +2511,386 @@ function resetQaParticipantData() {
       SpreadsheetApp.flush();
     }
     throw new Error(error.message + (backupName ? ' Backup tersedia: ' + backupName : ''));
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function getPrelaunchLearningResetSheetNames() {
+  return [
+    SHEETS.participantProgress,
+    SHEETS.participantActivity,
+    SHEETS.participantDiscussions,
+    SHEETS.participantExerciseSubmissions,
+    SHEETS.participantDashboardLeaderboard,
+    SHEETS.participantDashboardDiscussionTrails
+  ];
+}
+
+function getPrelaunchResetRowsReadOnly(sheetName, spreadsheet) {
+  const sourceSpreadsheet = spreadsheet || SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = sourceSpreadsheet.getSheetByName(sheetName);
+  if (!sheet) throw new Error('Preflight gagal: sheet tidak ditemukan: ' + sheetName);
+  const values = sheet.getDataRange().getValues();
+  if (!values.length || !values[0].length) {
+    throw new Error('Preflight gagal: header sheet tidak tersedia: ' + sheetName);
+  }
+  const headers = values[0];
+  const missingHeaders = (SCHEMA[sheetName] || []).filter(function(header) {
+    return headers.indexOf(header) < 0;
+  });
+  if (missingHeaders.length) {
+    throw new Error('Preflight gagal: header wajib tidak tersedia di ' + sheetName + ': ' + missingHeaders.join(', '));
+  }
+  return values.slice(1).filter(function(row) {
+    return row.some(function(cell) { return cell !== ''; });
+  }).map(function(row) {
+    const object = {};
+    headers.forEach(function(header, index) { object[header] = row[index]; });
+    return object;
+  });
+}
+
+function collectPrelaunchLearningResetState() {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const rowsBySheet = {};
+  let totalRows = 0;
+  getPrelaunchLearningResetSheetNames().forEach(function(sheetName) {
+    const rowCount = getPrelaunchResetRowsReadOnly(sheetName, spreadsheet).length;
+    rowsBySheet[sheetName] = rowCount;
+    totalRows += rowCount;
+  });
+
+  const accounts = getPrelaunchResetRowsReadOnly(SHEETS.participantAccounts, spreadsheet);
+  const cohort = buildParticipantPortalAccessReconciliation(accounts).summary;
+  const officialAccounts = accounts.filter(function(account) {
+    return !isQaParticipantAccount(account) && isTargetParticipantForPortal(account);
+  });
+  const qaAccounts = accounts.filter(isQaParticipantAccount);
+  const expectedAccountTotal = EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT + qaAccounts.length;
+  const changedPasswordAccounts = officialAccounts.filter(function(account) {
+    return String(account.password_status || '').trim().toLowerCase() === 'changed';
+  }).length;
+  const previouslyLoggedInAccounts = officialAccounts.filter(function(account) {
+    return Boolean(String(account.last_login_at || '').trim());
+  }).length;
+  const ready = cohort.ready_to_apply
+    && cohort.matched_target_accounts === EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+    && cohort.outside_target_accounts === 0
+    && cohort.qa_accounts === 1
+    && cohort.total_accounts === expectedAccountTotal;
+
+  return {
+    rows_by_sheet: rowsBySheet,
+    total_rows_to_delete: totalRows,
+    cohort: cohort,
+    official_accounts: officialAccounts.length,
+    qa_accounts: qaAccounts.length,
+    expected_account_total: expectedAccountTotal,
+    previously_logged_in_official_accounts: previouslyLoggedInAccounts,
+    changed_password_official_accounts: changedPasswordAccounts,
+    ready_to_reset: ready
+  };
+}
+
+/**
+ * Preflight read-only untuk membersihkan seluruh state belajar sebelum portal
+ * dibuka. Tidak mengubah account, credential, profil, atau data seleksi.
+ */
+function previewPrelaunchLearningReset() {
+  const state = collectPrelaunchLearningResetState();
+  const armed = PropertiesService.getScriptProperties()
+    .getProperty(PRELAUNCH_LEARNING_RESET_PROPERTY_KEY) === PRELAUNCH_LEARNING_RESET_CONFIRMATION;
+  const result = {
+    status: 'success',
+    ready_to_reset: state.ready_to_reset,
+    reset_armed: armed,
+    total_rows_to_delete: state.total_rows_to_delete,
+    rows_by_sheet: state.rows_by_sheet,
+    official_accounts: state.official_accounts,
+    qa_accounts: state.qa_accounts,
+    account_total: state.cohort.total_accounts,
+    previously_logged_in_official_accounts: state.previously_logged_in_official_accounts,
+    changed_password_official_accounts: state.changed_password_official_accounts,
+    credentials_changed: 0,
+    cohort: state.cohort
+  };
+  Logger.log(JSON.stringify(result));
+  return result;
+}
+
+function createPrelaunchLearningResetBackups(sheetNames) {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const timestamp = new Date().toISOString().replace(/\D/g, '').slice(0, 14);
+  const suffix = Utilities.getUuid().slice(0, 8);
+  const backups = {};
+  sheetNames.forEach(function(sheetName, index) {
+    const source = getSheet(sheetName);
+    ensureSchemaHeaders(source, SCHEMA[sheetName] || []);
+    const backupName = ('PrelaunchReset_' + timestamp + '_' + (index + 1) + '_' + suffix).slice(0, 99);
+    const backup = source.copyTo(spreadsheet).setName(backupName);
+    backup.setFrozenRows(source.getFrozenRows());
+    if (typeof backup.hideSheet === 'function') backup.hideSheet();
+    backups[sheetName] = backupName;
+  });
+  SpreadsheetApp.flush();
+  return backups;
+}
+
+function clearPrelaunchLearningSheets(sheetNames) {
+  sheetNames.forEach(function(sheetName) {
+    const sheet = getSheet(sheetName);
+    ensureSchemaHeaders(sheet, SCHEMA[sheetName] || []);
+    const lastRow = sheet.getLastRow();
+    const lastColumn = sheet.getLastColumn();
+    if (lastRow > 1 && lastColumn > 0) {
+      sheet.getRange(2, 1, lastRow - 1, lastColumn).clearContent();
+    }
+  });
+  SpreadsheetApp.flush();
+}
+
+function restorePrelaunchLearningResetBackups(backups, sheetNames) {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const targetSheetNames = sheetNames || Object.keys(backups || {});
+  targetSheetNames.forEach(function(sheetName) {
+    const source = spreadsheet.getSheetByName(backups[sheetName]);
+    const target = getSheet(sheetName);
+    if (!source) throw new Error('Backup tidak ditemukan untuk rollback: ' + sheetName);
+    target.clearContents();
+    const values = source.getDataRange().getValues();
+    if (values.length && values[0].length) {
+      target.getRange(1, 1, values.length, values[0].length).setValues(values);
+    }
+    target.setFrozenRows(source.getFrozenRows());
+  });
+  SpreadsheetApp.flush();
+}
+
+function capturePrelaunchParticipantAccessSnapshot() {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = spreadsheet.getSheetByName(SHEETS.participantAccounts);
+  if (!sheet) throw new Error('ParticipantAccounts tidak ditemukan.');
+  const values = sheet.getDataRange().getValues();
+  const headers = values[0] || [];
+  const accessStatusIndex = headers.indexOf('access_status');
+  if (accessStatusIndex < 0) throw new Error('Kolom access_status ParticipantAccounts tidak ditemukan.');
+  const originalStatusValues = values.slice(1).map(function(row) {
+    return [row[accessStatusIndex]];
+  });
+  const targetRowOffsets = [];
+  values.slice(1).forEach(function(row, offset) {
+    if (!row.some(function(cell) { return cell !== ''; })) return;
+    const account = {};
+    headers.forEach(function(header, index) { account[header] = row[index]; });
+    if (isParticipantPortalAccountAllowed(account)) targetRowOffsets.push(offset);
+  });
+  if (targetRowOffsets.length !== EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT + 1) {
+    throw new Error('Suspend akses dibatalkan: target account bukan tepat 100 peserta + 1 QA.');
+  }
+  return {
+    row_count: originalStatusValues.length,
+    access_status_column: accessStatusIndex + 1,
+    original_status_values: originalStatusValues,
+    target_row_offsets: targetRowOffsets
+  };
+}
+
+function suspendPrelaunchParticipantAccess(snapshot) {
+  const sheet = getSheet(SHEETS.participantAccounts);
+  const statusValues = snapshot.original_status_values.map(function(row) { return [row[0]]; });
+  snapshot.target_row_offsets.forEach(function(offset) {
+    statusValues[offset][0] = 'disabled';
+  });
+  sheet.getRange(2, snapshot.access_status_column, snapshot.row_count, 1).setValues(statusValues);
+  SpreadsheetApp.flush();
+}
+
+function verifyPrelaunchParticipantAccessSuspended() {
+  return getPrelaunchParticipantAccessSuspendState().stable;
+}
+
+function getPrelaunchParticipantAccessSuspendState() {
+  const accounts = getPrelaunchResetRowsReadOnly(SHEETS.participantAccounts);
+  const portalAccounts = accounts.filter(isParticipantPortalAccountAllowed);
+  const activeAccounts = portalAccounts.filter(isParticipantAccountActive);
+  const statusCounts = {};
+  portalAccounts.forEach(function(account) {
+    const status = String(account.access_status || '').trim().toLowerCase() || '(blank)';
+    statusCounts[status] = (statusCounts[status] || 0) + 1;
+  });
+  return {
+    stable: portalAccounts.length === EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT + 1
+      && activeAccounts.length === 0,
+    portal_accounts: portalAccounts.length,
+    active_accounts: activeAccounts.length,
+    inactive_accounts: portalAccounts.length - activeAccounts.length,
+    status_counts: statusCounts
+  };
+}
+
+function rotatePrelaunchAuthTokenSecret() {
+  const nextSecret = Utilities.getUuid().replace(/-/g, '')
+    + Utilities.getUuid().replace(/-/g, '');
+  PropertiesService.getScriptProperties().setProperty('AUTH_TOKEN_SECRET', nextSecret);
+  return true;
+}
+
+function suspendPrelaunchParticipantAccessUntilStable(snapshot) {
+  const maxAttempts = 2;
+  let lastState = getPrelaunchParticipantAccessSuspendState();
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    suspendPrelaunchParticipantAccess(snapshot);
+    Utilities.sleep(5000);
+    lastState = getPrelaunchParticipantAccessSuspendState();
+    if (!lastState.stable) continue;
+    Utilities.sleep(3000);
+    lastState = getPrelaunchParticipantAccessSuspendState();
+    if (lastState.stable) {
+      return { stable: true, attempts: attempt, state: lastState };
+    }
+  }
+  return { stable: false, attempts: maxAttempts, state: lastState };
+}
+
+function restorePrelaunchParticipantAccess(snapshot) {
+  const sheet = getSheet(SHEETS.participantAccounts);
+  sheet.getRange(2, snapshot.access_status_column, snapshot.row_count, 1)
+    .setValues(snapshot.original_status_values);
+  SpreadsheetApp.flush();
+  const restored = sheet.getRange(2, snapshot.access_status_column, snapshot.row_count, 1).getValues();
+  const matches = restored.every(function(row, index) {
+    return String(row[0] || '') === String(snapshot.original_status_values[index][0] || '');
+  });
+  if (!matches) throw new Error('Status akses ParticipantAccounts gagal dipulihkan secara utuh.');
+}
+
+/**
+ * Reset destruktif pra-rilis. Jalankan hanya setelah preview menunjukkan
+ * ready_to_reset=true. Arm sekali pakai melalui Script Property:
+ * HERAI_PRELAUNCH_LEARNING_RESET_CONFIRMATION=RESET_ALL_LEARNING_BEFORE_LAUNCH
+ *
+ * Seluruh sheet target dibackup dan disembunyikan sebelum data row dihapus.
+ * ParticipantAccounts, peserta_tahap_1, credential, profil, serta data seleksi
+ * tidak disentuh.
+ */
+function resetAllLearningDataBeforeLaunch() {
+  ensureParticipantBackendSchema();
+  const properties = PropertiesService.getScriptProperties();
+  const confirmation = properties.getProperty(PRELAUNCH_LEARNING_RESET_PROPERTY_KEY);
+  if (confirmation !== PRELAUNCH_LEARNING_RESET_CONFIRMATION) {
+    throw new Error(
+      'Reset belum di-arm. Set HERAI_PRELAUNCH_LEARNING_RESET_CONFIRMATION='
+      + PRELAUNCH_LEARNING_RESET_CONFIRMATION + ' lalu jalankan preview ulang.'
+    );
+  }
+  properties.deleteProperty(PRELAUNCH_LEARNING_RESET_PROPERTY_KEY);
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  const learningSheetNames = getPrelaunchLearningResetSheetNames();
+  let backups = {};
+  let accessSnapshot = null;
+  let accessSuspended = false;
+  let suspension = null;
+  let authTokensInvalidated = false;
+  let mutationStarted = false;
+  let rollbackCompleted = false;
+  try {
+    const before = collectPrelaunchLearningResetState();
+    if (!before.ready_to_reset) {
+      throw new Error('Reset dibatalkan: cohort harus tepat 100 peserta resmi + 1 QA tanpa account di luar target.');
+    }
+
+    accessSnapshot = capturePrelaunchParticipantAccessSnapshot();
+    backups = createPrelaunchLearningResetBackups(
+      learningSheetNames.concat([SHEETS.participantAccounts])
+    );
+    suspendPrelaunchParticipantAccess(accessSnapshot);
+    accessSuspended = true;
+    authTokensInvalidated = rotatePrelaunchAuthTokenSecret();
+    // Tunggu request lama selesai. Exercise submission dapat menunggu ScriptLock
+    // hingga 30 detik setelah tokennya diverifikasi, jadi lock reset harus tetap
+    // dipegang melewati batas tersebut sebelum sheet dibersihkan.
+    Utilities.sleep(30000);
+    suspension = suspendPrelaunchParticipantAccessUntilStable(accessSnapshot);
+    mutationStarted = true;
+    clearPrelaunchLearningSheets(learningSheetNames);
+
+    const after = collectPrelaunchLearningResetState();
+    const remainingRows = Object.keys(after.rows_by_sheet).reduce(function(total, sheetName) {
+      return total + Number(after.rows_by_sheet[sheetName] || 0);
+    }, 0);
+    const readBack = {
+      remaining_rows: remainingRows,
+      rows_by_sheet: after.rows_by_sheet,
+      ready_to_reset: after.ready_to_reset,
+      account_total: after.cohort.total_accounts,
+      official_accounts: after.official_accounts,
+      qa_accounts: after.qa_accounts,
+      suspension: suspension
+    };
+    if (remainingRows !== 0 || !after.ready_to_reset
+      || after.cohort.total_accounts !== before.cohort.total_accounts
+      || after.official_accounts !== before.official_accounts
+      || after.qa_accounts !== before.qa_accounts) {
+      restorePrelaunchLearningResetBackups(backups, learningSheetNames);
+      rollbackCompleted = true;
+      throw new Error(
+        'Read-back reset tidak valid; data belajar telah dipulihkan dari backup. Diagnosis: '
+        + JSON.stringify(readBack)
+      );
+    }
+
+    restorePrelaunchParticipantAccess(accessSnapshot);
+    accessSuspended = false;
+
+    const result = {
+      status: 'success',
+      deleted_rows: before.total_rows_to_delete,
+      deleted_by_sheet: before.rows_by_sheet,
+      backup_sheets: backups,
+      official_accounts_preserved: after.official_accounts,
+      qa_accounts_preserved: after.qa_accounts,
+      account_total_preserved: after.cohort.total_accounts,
+      access_statuses_restored: true,
+      access_suspend_stable: Boolean(suspension && suspension.stable),
+      access_suspend_diagnostic: suspension && suspension.state || {},
+      auth_tokens_invalidated: authTokensInvalidated,
+      admin_relogin_required: authTokensInvalidated,
+      participant_relogin_required: authTokensInvalidated,
+      credentials_changed: 0,
+      local_storage_reset_required: true
+    };
+    Logger.log(JSON.stringify(result));
+    return result;
+  } catch (error) {
+    let rollbackMessage = '';
+    if (mutationStarted && !rollbackCompleted && Object.keys(backups).length) {
+      try {
+        restorePrelaunchLearningResetBackups(backups, learningSheetNames);
+        rollbackCompleted = true;
+        rollbackMessage = ' Data belajar telah dipulihkan otomatis dari backup.';
+      } catch (rollbackError) {
+        rollbackMessage = ' Rollback otomatis gagal: ' + rollbackError.message + '.';
+      }
+    }
+    let accessRestoreMessage = '';
+    if (accessSuspended && accessSnapshot) {
+      try {
+        restorePrelaunchParticipantAccess(accessSnapshot);
+        accessSuspended = false;
+        accessRestoreMessage = ' Status akses telah dipulihkan.';
+      } catch (accessError) {
+        accessRestoreMessage = ' Pemulihan status akses gagal: ' + accessError.message + '.';
+      }
+    }
+    const tokenMessage = authTokensInvalidated
+      ? ' Token sesi lama sudah diinvalidasi; login ulang diperlukan.'
+      : '';
+    throw new Error(error.message + rollbackMessage + accessRestoreMessage + tokenMessage + (Object.keys(backups).length
+      ? ' Backup tersedia: ' + JSON.stringify(backups)
+      : ''));
   } finally {
     lock.releaseLock();
   }
