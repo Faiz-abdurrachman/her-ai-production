@@ -316,7 +316,11 @@
                if (result.status === 'success') {
                    sessionStorage.setItem('isAdminLoggedIn', 'true');
                    localStorage.setItem('adminId', payload.id_admin);
-                   localStorage.setItem('heraiAdminProfile', JSON.stringify(result.admin || { id_admin: payload.id_admin, role: 'reviewer' }));
+                   localStorage.setItem('heraiAdminProfile', JSON.stringify(Object.assign(
+                       {},
+                       result.admin || { id_admin: payload.id_admin, role: 'reviewer' },
+                       { token: result.token || '', expires_at: result.expires_at || '' }
+                   )));
                    overlay.remove();
                    if (typeof window.applyAdminSidebarAccess === 'function') window.applyAdminSidebarAccess();
                    if (typeof window.applyAdminDashboardAccess === 'function') window.applyAdminDashboardAccess();

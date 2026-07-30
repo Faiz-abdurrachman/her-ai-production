@@ -11,7 +11,7 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
-const HERAI_BACKEND_VERSION = '2026.3.6-participant-runtime-fix';
+const HERAI_BACKEND_VERSION = '2026.3.7-exercise-review';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
 const PARTICIPANT_ACCOUNT_TYPE = 'participant';
 const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
@@ -24,9 +24,18 @@ const QA_PARTICIPANT_PROPERTY_KEYS = {
 };
 const QA_PARTICIPANT_RESET_CONFIRMATION = 'RESET_QA_ONLY';
 const AUTH_TOKEN_TTL_SECONDS = {
+  admin: 8 * 60 * 60,
   participant: 12 * 60 * 60,
   retest: 4 * 60 * 60
 };
+const ACTIVE_FOUNDATION_MODULE_IDS = [
+  'ai-fundamentals',
+  'python-untuk-ai',
+  'reasoning',
+  'konsep-ai-modern',
+  'evaluation',
+  'evolution'
+];
 const LEGACY_PASSWORD_PEPPERS = [
   '120NQtFqErJiIfITlPfVo8wV6G0_79qFKMTaptxNF-RA',
   '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w'
@@ -163,7 +172,8 @@ const SHEETS = {
   participantAccounts: 'ParticipantAccounts',
   participantActivity: 'ParticipantActivity',
   participantProgress: 'participant_progress',
-  participantDiscussions: 'participant_discussions'
+  participantDiscussions: 'participant_discussions',
+  participantExerciseSubmissions: 'participant_exercise_submissions'
 };
 
 const SCHEMA = {
@@ -203,7 +213,12 @@ const SCHEMA = {
   [SHEETS.participantAccounts]: ['account_id', 'nik', 'username', 'generated_password', 'password_hash', 'password_status', 'access_status', 'nama_lengkap', 'email', 'whatsapp', 'participant_rowId', 'participant_stage', 'status_seleksi', 'created_at', 'updated_at', 'created_by', 'last_login_at', 'password_changed_at', 'account_type'],
   [SHEETS.participantActivity]: ['activity_id', 'timestamp', 'nik', 'nama_lengkap', 'activity_type', 'page', 'module_id', 'lesson_id', 'activity', 'score', 'total', 'payload_json', 'user_agent', 'session_id'],
   [SHEETS.participantProgress]: ['progress_id', 'participant_rowId', 'nik', 'module_id', 'chapter_id', 'status', 'score', 'started_at', 'completed_at', 'updated_at'],
-  [SHEETS.participantDiscussions]: ['discussion_id', 'participant_rowId', 'nik', 'module_id', 'prompt', 'text', 'replies_json', 'created_at', 'updated_at']
+  [SHEETS.participantDiscussions]: ['discussion_id', 'participant_rowId', 'nik', 'module_id', 'prompt', 'text', 'replies_json', 'created_at', 'updated_at'],
+  [SHEETS.participantExerciseSubmissions]: [
+    'submission_id', 'submission_key', 'participant_rowId', 'nik', 'nama_lengkap',
+    'module_id', 'exercise_id', 'answers_json', 'answer_count', 'status',
+    'submitted_at', 'updated_at', 'reviewer_id', 'score', 'feedback', 'reviewed_at'
+  ]
 };
 
 function doPost(e) {
@@ -219,6 +234,11 @@ function doPost(e) {
       getParticipantProgress: () => getParticipantProgress(payload),
       saveParticipantDiscussion: () => saveParticipantDiscussion(payload),
       getParticipantDiscussions: () => getParticipantDiscussions(payload),
+      saveParticipantExerciseDraft: () => saveParticipantExerciseDraft(payload),
+      submitParticipantExercise: () => submitParticipantExercise(payload),
+      getParticipantExerciseSubmissions: () => getParticipantExerciseSubmissions(payload),
+      getExerciseSubmissions: () => getExerciseSubmissions(payload),
+      reviewExerciseSubmission: () => reviewExerciseSubmission(payload),
       updateParticipantProfile: () => updateParticipantProfile(payload),
       uploadParticipantPhoto: () => uploadParticipantPhoto(payload),
       removeParticipantPhoto: () => removeParticipantPhoto(payload),
@@ -293,6 +313,9 @@ function authorizeGasAction(action, payload) {
     'getParticipantProgress',
     'saveParticipantDiscussion',
     'getParticipantDiscussions',
+    'saveParticipantExerciseDraft',
+    'submitParticipantExercise',
+    'getParticipantExerciseSubmissions',
     'recordParticipantActivity',
     'getParticipantDashboardData',
     'startCompetencySession',
@@ -307,7 +330,7 @@ function authorizeGasAction(action, payload) {
   if (participantActions.indexOf(action) >= 0) {
     const claims = requireParticipantToken(payload);
     const retestActions = ['startReTestSession', 'heartbeatReTestSession', 'saveReTestAnswer', 'submitReTest'];
-    const normalActions = ['updateParticipantProfile', 'uploadParticipantPhoto', 'removeParticipantPhoto', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest'];
+    const normalActions = ['updateParticipantProfile', 'uploadParticipantPhoto', 'removeParticipantPhoto', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'saveParticipantExerciseDraft', 'submitParticipantExercise', 'getParticipantExerciseSubmissions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest'];
     if (retestActions.indexOf(action) >= 0 && claims.scope !== 'retest') {
       throw new Error('Sesi Re-Test tidak valid. Silakan login ulang.');
     }
@@ -321,6 +344,9 @@ function authorizeGasAction(action, payload) {
     payload.nik = String(claims.sub || '');
     payload.__auth = claims;
     return;
+  }
+  if (['getExerciseSubmissions', 'reviewExerciseSubmission'].indexOf(action) >= 0) {
+    payload.__adminAuth = requireAdminToken(payload);
   }
 }
 
@@ -338,6 +364,21 @@ function requireParticipantToken(payload) {
     }
   }
   return claims;
+}
+
+function requireAdminToken(payload) {
+  const claims = verifyAuthToken(payload.adminToken || payload.authToken || '');
+  if (!claims || claims.type !== 'admin' || claims.scope !== 'admin') {
+    throw new Error('Sesi admin tidak valid atau sudah kedaluwarsa. Silakan login ulang.');
+  }
+  const admin = getRows(SHEETS.admins).find(function(row) {
+    return String(row.id_admin || row.adminId || '') === String(claims.sub || '');
+  });
+  const status = String(admin && admin.status || 'active').toLowerCase();
+  if (!admin || ['inactive', 'disabled'].indexOf(status) >= 0) {
+    throw new Error('Sesi admin tidak valid atau akses sudah tidak aktif.');
+  }
+  return Object.assign({}, claims, { admin: admin });
 }
 
 function issueAuthToken(type, subject, details, ttlSeconds) {
@@ -748,7 +789,14 @@ function setupParticipantBackend() {
 
 function ensureParticipantBackendSchema() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  [SHEETS.participants, SHEETS.participantAccounts, SHEETS.participantActivity].forEach(function(name) {
+  [
+    SHEETS.participants,
+    SHEETS.participantAccounts,
+    SHEETS.participantActivity,
+    SHEETS.participantProgress,
+    SHEETS.participantDiscussions,
+    SHEETS.participantExerciseSubmissions
+  ].forEach(function(name) {
     const sheet = ss.getSheetByName(name) || ss.insertSheet(name);
     ensureSchemaHeaders(sheet, SCHEMA[name]);
     sheet.setFrozenRows(1);
@@ -2788,6 +2836,236 @@ function getParticipantDiscussions(payload) {
   };
 }
 
+function normalizeParticipantExerciseInput(payload) {
+  var moduleId = String(payload.module_id || payload.moduleId || '').trim();
+  var exerciseId = String(payload.exercise_id || payload.exerciseId || 'practice').trim();
+  if (ACTIVE_FOUNDATION_MODULE_IDS.indexOf(moduleId) < 0) {
+    throw new Error('Module latihan tidak aktif atau tidak dikenali.');
+  }
+  if (!/^[a-z0-9][a-z0-9_-]{0,79}$/i.test(exerciseId)) {
+    throw new Error('exercise_id tidak valid.');
+  }
+  var source = payload.answers;
+  if (!source || typeof source !== 'object' || Array.isArray(source)) {
+    throw new Error('Jawaban latihan wajib dikirim dalam format object.');
+  }
+  var answers = {};
+  Object.keys(source).slice(0, 100).forEach(function(key) {
+    var cleanKey = String(key || '').trim().slice(0, 120);
+    if (!cleanKey) return;
+    answers[cleanKey] = String(source[key] == null ? '' : source[key]).trim().slice(0, 10000);
+  });
+  var answerCount = Object.keys(answers).filter(function(key) { return Boolean(answers[key]); }).length;
+  if (!answerCount) throw new Error('Isi minimal satu jawaban sebelum menyimpan.');
+  var answersJson = JSON.stringify(answers);
+  if (answersJson.length > 45000) {
+    throw new Error('Jawaban latihan terlalu panjang. Ringkas jawaban lalu coba lagi.');
+  }
+  return {
+    moduleId: moduleId,
+    exerciseId: exerciseId,
+    answers: answers,
+    answersJson: answersJson,
+    answerCount: answerCount
+  };
+}
+
+function findAuthenticatedParticipant(claims) {
+  var participants = getRows(SHEETS.participants);
+  return participants.find(function(row) {
+    return claims.rowId && String(row.rowId || '') === String(claims.rowId);
+  }) || participants.find(function(row) {
+    return String(row.nik || '').replace(/\D/g, '') === String(claims.sub || '');
+  });
+}
+
+function participantExerciseForClient(row) {
+  var answers = {};
+  try { answers = JSON.parse(row.answers_json || '{}'); } catch (error) { answers = {}; }
+  return {
+    submission_id: row.submission_id,
+    module_id: row.module_id,
+    exercise_id: row.exercise_id,
+    answers: answers && typeof answers === 'object' && !Array.isArray(answers) ? answers : {},
+    answer_count: Number(row.answer_count || 0),
+    status: row.status || 'draft',
+    submitted_at: row.submitted_at || '',
+    updated_at: row.updated_at || '',
+    score: row.score === '' || row.score == null ? null : Number(row.score),
+    feedback: row.feedback || '',
+    reviewed_at: row.reviewed_at || ''
+  };
+}
+
+function saveParticipantExerciseSubmission(payload, requestedStatus) {
+  var claims = payload.__auth || requireParticipantToken(payload);
+  var participant = findAuthenticatedParticipant(claims);
+  if (!participant) return { status: 'error', message: 'Peserta tidak ditemukan.' };
+  var input = normalizeParticipantExerciseInput(payload);
+  var participantRowId = String(participant.rowId || claims.rowId || '');
+  var nik = String(participant.nik || claims.sub || '').replace(/\D/g, '');
+  var submissionKey = [participantRowId || nik, input.moduleId, input.exerciseId].join('|');
+  var now = new Date().toISOString();
+  var lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  var savedRow;
+  try {
+    var existing = getRows(SHEETS.participantExerciseSubmissions).find(function(row) {
+      return String(row.submission_key || '') === submissionKey;
+    });
+    var existingStatus = String(existing && existing.status || '').toLowerCase();
+    if (existingStatus === 'reviewed') {
+      throw new Error('Latihan sudah direview dan tidak dapat diubah. Hubungi mentor jika perlu revisi.');
+    }
+    if (requestedStatus === 'draft' && existingStatus === 'submitted') {
+      throw new Error('Latihan sudah dikirim. Gunakan Kirim Latihan untuk memperbarui submission.');
+    }
+    savedRow = {
+      submission_id: existing && existing.submission_id || ('sub_' + Utilities.getUuid()),
+      submission_key: submissionKey,
+      participant_rowId: participantRowId,
+      nik: nik,
+      nama_lengkap: participant.nama_lengkap || '',
+      module_id: input.moduleId,
+      exercise_id: input.exerciseId,
+      answers_json: input.answersJson,
+      answer_count: input.answerCount,
+      status: requestedStatus,
+      submitted_at: requestedStatus === 'submitted' ? now : (existing && existing.submitted_at || ''),
+      updated_at: now,
+      reviewer_id: existing && existing.reviewer_id || '',
+      score: existing && existing.score !== undefined ? existing.score : '',
+      feedback: existing && existing.feedback || '',
+      reviewed_at: existing && existing.reviewed_at || ''
+    };
+    if (existing && existing.submission_id) {
+      updateByKey(SHEETS.participantExerciseSubmissions, 'submission_id', existing.submission_id, savedRow);
+    } else {
+      addRowObject(SHEETS.participantExerciseSubmissions, savedRow);
+    }
+  } finally {
+    lock.releaseLock();
+  }
+
+  if (requestedStatus === 'submitted') {
+    saveParticipantProgress(Object.assign({}, payload, {
+      __auth: claims,
+      module_id: input.moduleId,
+      chapter_id: 'practice',
+      status: 'completed',
+      score: undefined
+    }));
+  }
+  recordParticipantActivity({
+    nik: nik,
+    nama_lengkap: participant.nama_lengkap,
+    activity_type: requestedStatus === 'submitted' ? 'exercise_submitted' : 'exercise_draft_saved',
+    module_id: input.moduleId,
+    lesson_id: input.exerciseId,
+    activity: requestedStatus === 'submitted' ? 'Mengirim latihan untuk review' : 'Menyimpan draft latihan',
+    payload: { submission_id: savedRow.submission_id, answer_count: input.answerCount }
+  });
+  return { status: 'success', submission: participantExerciseForClient(savedRow) };
+}
+
+function saveParticipantExerciseDraft(payload) {
+  return saveParticipantExerciseSubmission(payload, 'draft');
+}
+
+function submitParticipantExercise(payload) {
+  return saveParticipantExerciseSubmission(payload, 'submitted');
+}
+
+function getParticipantExerciseSubmissions(payload) {
+  var claims = payload.__auth || requireParticipantToken(payload);
+  var participant = findAuthenticatedParticipant(claims);
+  if (!participant) return { status: 'error', message: 'Peserta tidak ditemukan.', data: [] };
+  var participantRowId = String(participant.rowId || claims.rowId || '');
+  var moduleId = String(payload.module_id || payload.moduleId || '').trim();
+  var exerciseId = String(payload.exercise_id || payload.exerciseId || '').trim();
+  var rows = getRows(SHEETS.participantExerciseSubmissions).filter(function(row) {
+    return String(row.participant_rowId || '') === participantRowId
+      && (!moduleId || String(row.module_id || '') === moduleId)
+      && (!exerciseId || String(row.exercise_id || '') === exerciseId);
+  });
+  return {
+    status: 'success',
+    data: rows.map(participantExerciseForClient).sort(function(a, b) {
+      return String(b.updated_at || '').localeCompare(String(a.updated_at || ''));
+    })
+  };
+}
+
+function getExerciseSubmissions(payload) {
+  var moduleId = String(payload.module_id || payload.moduleId || '').trim();
+  var status = String(payload.submission_status || payload.status_filter || '').trim().toLowerCase();
+  var query = String(payload.query || '').trim().toLowerCase().slice(0, 120);
+  var rows = getRows(SHEETS.participantExerciseSubmissions).filter(function(row) {
+    if (moduleId && String(row.module_id || '') !== moduleId) return false;
+    if (status && String(row.status || '').toLowerCase() !== status) return false;
+    if (!query) return true;
+    return [row.nama_lengkap, row.nik, row.module_id].some(function(value) {
+      return String(value || '').toLowerCase().indexOf(query) >= 0;
+    });
+  }).sort(function(a, b) {
+    return String(b.submitted_at || b.updated_at || '').localeCompare(String(a.submitted_at || a.updated_at || ''));
+  }).slice(0, 500);
+  return {
+    status: 'success',
+    data: rows.map(function(row) {
+      return Object.assign(participantExerciseForClient(row), {
+        nik: String(row.nik || '').replace(/\D/g, ''),
+        nama_lengkap: row.nama_lengkap || '',
+        reviewer_id: row.reviewer_id || ''
+      });
+    })
+  };
+}
+
+function reviewExerciseSubmission(payload) {
+  var claims = payload.__adminAuth || requireAdminToken(payload);
+  var submissionId = String(payload.submission_id || '').trim();
+  var rawScore = payload.score;
+  var score = Number(rawScore);
+  var feedback = String(payload.feedback || '').trim().slice(0, 5000);
+  if (!submissionId) return { status: 'error', message: 'submission_id wajib diisi.' };
+  if (rawScore === '' || rawScore == null || !isFinite(score) || score < 0 || score > 100) {
+    return { status: 'error', message: 'Nilai harus berupa angka 0 sampai 100.' };
+  }
+  var existing = getRows(SHEETS.participantExerciseSubmissions).find(function(row) {
+    return String(row.submission_id || '') === submissionId;
+  });
+  if (!existing) return { status: 'error', message: 'Submission latihan tidak ditemukan.' };
+  if (String(existing.status || '').toLowerCase() === 'draft') {
+    return { status: 'error', message: 'Draft belum dapat direview sebelum dikirim peserta.' };
+  }
+  var now = new Date().toISOString();
+  var reviewerId = String(claims.sub || '');
+  updateByKey(SHEETS.participantExerciseSubmissions, 'submission_id', submissionId, {
+    status: 'reviewed',
+    reviewer_id: reviewerId,
+    score: score,
+    feedback: feedback,
+    reviewed_at: now,
+    updated_at: now
+  });
+  logActivity({
+    adminId: reviewerId,
+    tindakan: 'Review latihan ' + existing.module_id + ' milik ' + (existing.nama_lengkap || existing.nik || 'peserta') + ' dengan nilai ' + score,
+    perangkat: payload.perangkat || payload.device || 'Dashboard Admin',
+    lokasi: payload.lokasi || 'Learning Content'
+  });
+  var updated = Object.assign({}, existing, {
+    status: 'reviewed', reviewer_id: reviewerId, score: score,
+    feedback: feedback, reviewed_at: now, updated_at: now
+  });
+  return { status: 'success', submission: Object.assign(participantExerciseForClient(updated), {
+    nik: String(updated.nik || '').replace(/\D/g, ''),
+    nama_lengkap: updated.nama_lengkap || '',
+    reviewer_id: reviewerId
+  }) };
+}
+
 function updateParticipantProfile(payload) {
   const claims = payload.__auth || requireParticipantToken(payload);
   const participants = getRows(SHEETS.participants);
@@ -3452,7 +3730,16 @@ function login(payload) {
     perangkat: payload.perangkat || payload.device || 'Unknown Device',
     lokasi: payload.lokasi || 'Unknown Location'
   });
-  return { status: 'success', admin: normalizeAdminForClient(admin) };
+  const auth = issueAuthToken('admin', loginId, {
+    scope: 'admin',
+    role: admin.peran_admin || admin.role || 'reviewer'
+  }, AUTH_TOKEN_TTL_SECONDS.admin);
+  return {
+    status: 'success',
+    admin: normalizeAdminForClient(admin),
+    token: auth.token,
+    expires_at: auth.expires_at
+  };
 }
 
 function logActivity(payload) {

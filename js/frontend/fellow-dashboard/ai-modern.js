@@ -849,7 +849,7 @@
         form.dataset.aiModernInitialized = "true";
 
         var saved = getSavedPractice();
-        var readonly = Boolean(localStorage.getItem(STORAGE.practice));
+        var readonly = false;
         var saveButton = form.querySelector("[data-practice-save]");
         var editButton = form.querySelector("[data-practice-edit]");
         var deleteButton = form.querySelector("[data-practice-delete]");
@@ -918,7 +918,7 @@
                 saveButton.setAttribute("aria-busy", "true");
                 saveButton.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Menyimpan...';
                 setStatus("#aiModernPracticeStatus", "Menyimpan latihan ke server...", "neutral");
-                var result = await window.saveChapterProgress(MODULE_ID, 'practice', 'completed');
+                var result = await window.submitParticipantExercise(MODULE_ID, 'practice', saved.answers);
                 saveButton.disabled = false;
                 saveButton.removeAttribute("aria-busy");
                 saveButton.innerHTML = originalLabel;
@@ -928,7 +928,8 @@
                 }
                 readonly = true;
                 render();
-                setStatus("#aiModernPracticeStatus", "Latihan AI Modern berhasil tersimpan ke server. Kamu bisa lanjut kuis atau edit lagi.", "success");
+                window.noteParticipantExerciseSubmission(form, "#aiModernPracticeStatus", result.submission);
+                setStatus("#aiModernPracticeStatus", "Latihan AI Modern berhasil dikirim dan menunggu review mentor.", "success");
             });
         }
 
@@ -951,7 +952,23 @@
         }
 
         render();
-        setStatus("#aiModernPracticeStatus", completedCount() ? "Jawaban lama berhasil dipulihkan dari browsermu." : "Jawaban akan tersimpan di browsermu.", completedCount() ? "success" : "neutral");
+        setStatus("#aiModernPracticeStatus", completedCount() ? "Jawaban lama dipulihkan dari browser. Simpan draft atau kirim agar masuk ke server." : "Draft lokal tetap tersedia; kirim latihan agar masuk ke server.", completedCount() ? "success" : "neutral");
+        window.bindParticipantExerciseForm({
+            form: form,
+            moduleId: MODULE_ID,
+            statusSelector: "#aiModernPracticeStatus",
+            collectAnswers: function () { captureCurrent(); return saved.answers; },
+            saveLocal: function (answers) {
+                saved.answers = Object.assign({}, answers);
+                saveJson(STORAGE.practice, { version: 3, updatedAt: new Date().toISOString(), answers: saved.answers, revealed: saved.revealed, current: saved.current });
+            },
+            applyAnswers: function (answers) {
+                saved.answers = Object.assign({}, answers);
+                render();
+            },
+            setMessage: function (message, type) { setStatus("#aiModernPracticeStatus", message, type); },
+            setLocked: function (locked) { readonly = locked; render(); }
+        });
     };
 
     window.initAiModernBasic = window.initAiModernPractice;

@@ -209,10 +209,165 @@
        localStorage.setItem(LEARNING_STORAGE_KEY, JSON.stringify(items));
    }
 
+   const EXERCISE_MODULE_LABELS = {
+       'ai-fundamentals': 'Pengantar AI',
+       'python-untuk-ai': 'Python untuk AI',
+       'reasoning': 'Reasoning',
+       'konsep-ai-modern': 'Konsep AI Modern',
+       'evaluation': 'Evaluation',
+       'evolution': 'Evolution'
+   };
+
+   async function postExerciseReviewAction(action, extra) {
+       const profile = getStoredAdminProfile();
+       if (!profile.token) throw new Error('Token admin belum tersedia. Logout lalu login ulang setelah backend terbaru dideploy.');
+       const response = await fetch(API_URL, {
+           method: 'POST',
+           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+           body: JSON.stringify(Object.assign({
+               action,
+               adminToken: profile.token,
+               adminId: profile.id_admin || profile.adminId || localStorage.getItem('adminId') || ''
+           }, extra || {}))
+       });
+       const result = await response.json().catch(() => ({}));
+       if (!response.ok || !result || result.status !== 'success') {
+           throw new Error(result?.message || 'Server review latihan belum dapat diakses.');
+       }
+       return result;
+   }
+
+   function initExerciseReviewManager() {
+       const panel = document.getElementById('exerciseReviewPanel');
+       const list = document.getElementById('exerciseReviewList');
+       const form = document.getElementById('exerciseReviewForm');
+       if (!panel || !list || !form || panel.dataset.ready === 'true') return;
+       panel.dataset.ready = 'true';
+
+       const statusNode = document.getElementById('exerciseReviewStatus');
+       const content = document.getElementById('exerciseReviewContent');
+       const empty = document.getElementById('exerciseReviewEmpty');
+       const moduleFilter = document.getElementById('exerciseReviewModule');
+       const statusFilter = document.getElementById('exerciseReviewStatusFilter');
+       const search = document.getElementById('exerciseReviewSearch');
+       const scoreInput = document.getElementById('exerciseReviewScore');
+       const feedbackInput = document.getElementById('exerciseReviewFeedback');
+       const submitButton = document.getElementById('btnExerciseReviewSubmit');
+       let submissions = [];
+       let activeId = '';
+
+       const setStatus = (message, isError) => {
+           statusNode.textContent = message;
+           statusNode.style.color = isError ? 'var(--danger)' : 'var(--text-muted)';
+       };
+       const activeSubmission = () => submissions.find(item => item.submission_id === activeId) || null;
+       const statusLabel = value => ({ draft: 'Draft', submitted: 'Menunggu review', reviewed: 'Sudah direview' }[value] || value || '-');
+
+       const renderDetail = () => {
+           const item = activeSubmission();
+           empty.hidden = Boolean(item);
+           content.hidden = !item;
+           if (!item) return;
+           document.getElementById('exerciseReviewParticipant').textContent = `${item.nama_lengkap || 'Peserta'} · ${item.nik || '-'}`;
+           document.getElementById('exerciseReviewModuleLabel').textContent = EXERCISE_MODULE_LABELS[item.module_id] || item.module_id || '-';
+           document.getElementById('exerciseReviewSubmissionStatus').textContent = statusLabel(item.status);
+           const answers = item.answers && typeof item.answers === 'object' ? item.answers : {};
+           document.getElementById('exerciseReviewAnswers').innerHTML = Object.keys(answers).map((key, index) => `
+               <article class="exercise-review-answer">
+                   <strong>${index + 1}. ${escapeHtml(key)}</strong>
+                   <p>${escapeHtml(answers[key] || '(kosong)')}</p>
+               </article>
+           `).join('') || '<p>Jawaban tidak tersedia.</p>';
+           scoreInput.value = item.score == null ? '' : item.score;
+           feedbackInput.value = item.feedback || '';
+           const isDraft = item.status === 'draft';
+           scoreInput.disabled = isDraft;
+           feedbackInput.disabled = isDraft;
+           submitButton.disabled = isDraft;
+           submitButton.title = isDraft ? 'Peserta belum mengirim draft ini.' : '';
+       };
+
+       const renderList = () => {
+           list.innerHTML = submissions.map(item => `
+               <button type="button" class="${item.submission_id === activeId ? 'active' : ''}" data-exercise-submission="${escapeAttr(item.submission_id)}">
+                   <strong>${escapeHtml(item.nama_lengkap || 'Peserta')}</strong>
+                   <small>${escapeHtml(EXERCISE_MODULE_LABELS[item.module_id] || item.module_id || '-')} · ${escapeHtml(statusLabel(item.status))}</small>
+                   <small>${escapeHtml(item.nik || '-')} · ${escapeHtml(item.submitted_at || item.updated_at || '-')}</small>
+               </button>
+           `).join('') || '<div class="exercise-review-empty">Tidak ada submission sesuai filter.</div>';
+           list.querySelectorAll('[data-exercise-submission]').forEach(button => {
+               button.addEventListener('click', () => {
+                   activeId = button.dataset.exerciseSubmission;
+                   renderList();
+                   renderDetail();
+               });
+           });
+       };
+
+       const loadSubmissions = async () => {
+           setStatus('Memuat submission latihan...', false);
+           try {
+               const result = await postExerciseReviewAction('getExerciseSubmissions', {
+                   module_id: moduleFilter.value,
+                   submission_status: statusFilter.value,
+                   query: search.value.trim()
+               });
+               submissions = Array.isArray(result.data) ? result.data : [];
+               if (!submissions.some(item => item.submission_id === activeId)) activeId = submissions[0]?.submission_id || '';
+               renderList();
+               renderDetail();
+               setStatus(`${submissions.length} submission ditemukan.`, false);
+           } catch (error) {
+               submissions = [];
+               activeId = '';
+               renderList();
+               renderDetail();
+               setStatus(error.message, true);
+           }
+       };
+
+       document.getElementById('btnExerciseReviewRefresh')?.addEventListener('click', loadSubmissions);
+       moduleFilter.addEventListener('change', loadSubmissions);
+       statusFilter.addEventListener('change', loadSubmissions);
+       search.addEventListener('keydown', event => {
+           if (event.key === 'Enter') { event.preventDefault(); loadSubmissions(); }
+       });
+       form.addEventListener('submit', async event => {
+           event.preventDefault();
+           const item = activeSubmission();
+           if (!item || item.status === 'draft') return;
+           submitButton.disabled = true;
+           setStatus('Menyimpan review mentor...', false);
+           try {
+               const context = typeof window.getAdminSystemContext === 'function'
+                   ? await window.getAdminSystemContext()
+                   : { device: navigator.userAgent, lokasi: 'Learning Content' };
+               const result = await postExerciseReviewAction('reviewExerciseSubmission', {
+                   submission_id: item.submission_id,
+                   score: scoreInput.value,
+                   feedback: feedbackInput.value.trim(),
+                   perangkat: context.device,
+                   lokasi: context.lokasi
+               });
+               Object.assign(item, result.submission || {});
+               renderList();
+               renderDetail();
+               setStatus('Review tersimpan dan dapat dibaca peserta.', false);
+           } catch (error) {
+               setStatus(error.message, true);
+           } finally {
+               submitButton.disabled = activeSubmission()?.status === 'draft';
+           }
+       });
+
+       loadSubmissions();
+   }
+
    window.initLearningContentManager = async function() {
        if (!window.checkAdminAccess()) return;
        await window.loadSidebar?.();
        window.setActiveSidebar?.();
+       initExerciseReviewManager();
 
        const list = document.getElementById('learningModuleList');
        const form = document.getElementById('learningContentForm');

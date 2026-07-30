@@ -2304,13 +2304,14 @@
 
         if (saveButton) {
             saveButton.addEventListener("click", async function () {
-                savePracticePayload({ answers: collectPracticeAnswers(form), revealed: revealed });
+                const exerciseAnswers = collectPracticeAnswers(form);
+                savePracticePayload({ answers: exerciseAnswers, revealed: revealed });
                 const originalLabel = saveButton.innerHTML;
                 saveButton.disabled = true;
                 saveButton.setAttribute("aria-busy", "true");
                 saveButton.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Menyimpan...';
                 setStatus("#aiReasoningPracticeStatus", "Menyimpan latihan ke server...", "neutral");
-                const result = await window.saveChapterProgress(MODULE_ID, 'practice', 'completed');
+                const result = await window.submitParticipantExercise(MODULE_ID, 'practice', exerciseAnswers);
                 saveButton.disabled = false;
                 saveButton.removeAttribute("aria-busy");
                 saveButton.innerHTML = originalLabel;
@@ -2320,7 +2321,8 @@
                 }
                 form.classList.add("is-saved");
                 form.querySelectorAll("textarea").forEach(field => { field.disabled = true; });
-                setStatus("#aiReasoningPracticeStatus", "Latihan Reasoning berhasil tersimpan ke server. Kamu bisa lanjut ke kuis atau edit lagi bila perlu.", "success");
+                window.noteParticipantExerciseSubmission(form, "#aiReasoningPracticeStatus", result.submission);
+                setStatus("#aiReasoningPracticeStatus", "Latihan Reasoning berhasil dikirim dan menunggu review mentor.", "success");
             });
         }
 
@@ -2344,6 +2346,18 @@
                 setStatus("#aiReasoningPracticeStatus", "Jawaban latihan direset dari browser ini.", "warning");
             });
         }
+        window.bindParticipantExerciseForm({
+            form: form,
+            moduleId: MODULE_ID,
+            statusSelector: "#aiReasoningPracticeStatus",
+            collectAnswers: function () { return collectPracticeAnswers(form); },
+            saveLocal: function (answers) { savePracticePayload({ answers: answers, revealed: revealed }); },
+            setMessage: function (message, type) { setStatus("#aiReasoningPracticeStatus", message, type); },
+            setLocked: function (locked) {
+                form.classList.toggle("is-saved", locked);
+                form.querySelectorAll("textarea").forEach(function(field) { field.disabled = locked; });
+            }
+        });
     };
 
     function getQuizAnswers(form) {

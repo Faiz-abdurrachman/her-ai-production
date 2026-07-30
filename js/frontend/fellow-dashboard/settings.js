@@ -21,7 +21,7 @@
             if (this._pending[name]) return this._pending[name];
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
-                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260730-participant-runtime-fix';
+                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260730-exercise-review';
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
                 s.onerror = function() { delete window.__aiLabLoader._pending[name]; reject(new Error('Failed to load: ' + name)); };
                 document.head.appendChild(s);
@@ -1279,6 +1279,7 @@
         form.dataset.practiceReady = 'true';
         const key = 'heraiAiIntroPracticeAnswers';
         const status = document.getElementById('aiIntroPracticeStatus');
+        const draftButton = form.querySelector('[data-practice-draft]');
         const saveButton = form.querySelector('[data-practice-save]');
         const editButton = form.querySelector('[data-practice-edit]');
         const deleteButton = form.querySelector('[data-practice-delete]');
@@ -1286,9 +1287,16 @@
         const setStatus = (message) => {
             if (status) status.textContent = message;
         };
+        let serverSubmission = null;
         const setReadonly = (readonly) => {
             fields.forEach(field => field.readOnly = readonly);
-            if (saveButton) saveButton.textContent = readonly ? 'Tersimpan' : 'Simpan Jawaban';
+            if (saveButton) saveButton.textContent = readonly ? 'Sudah Dikirim' : 'Kirim Latihan';
+            if (draftButton) draftButton.disabled = readonly || serverSubmission?.status === 'submitted' || serverSubmission?.status === 'reviewed';
+        };
+        const collectAnswers = () => {
+            const payload = {};
+            fields.forEach(field => payload[field.name] = field.value.trim());
+            return payload;
         };
         let saved = {};
         try {
@@ -1299,15 +1307,14 @@
         fields.forEach(field => field.value = String(saved[field.name] || ''));
         const hasSavedAnswer = fields.some(field => field.value.trim());
         if (hasSavedAnswer) {
-            setReadonly(true);
-            setStatus('Jawaban latihan tersimpan di perangkatmu.');
+            setReadonly(false);
+            setStatus('Jawaban lama dipulihkan dari perangkat. Simpan draft atau kirim agar masuk ke server.');
         } else {
             localStorage.removeItem(key);
             setReadonly(false);
         }
-        saveButton?.addEventListener('click', () => {
-            const payload = {};
-            fields.forEach(field => payload[field.name] = field.value.trim());
+        draftButton?.addEventListener('click', async () => {
+            const payload = collectAnswers();
             if (!Object.values(payload).some(Boolean)) {
                 setReadonly(false);
                 setStatus('Isi minimal satu jawaban sebelum menyimpan.');
@@ -1315,20 +1322,55 @@
                 return;
             }
             localStorage.setItem(key, JSON.stringify(payload));
+            draftButton.disabled = true;
+            setStatus('Menyimpan draft ke server...');
+            const result = await window.saveParticipantExerciseDraft('ai-fundamentals', 'practice', payload);
+            draftButton.disabled = false;
+            if (!result || result.status !== 'success') {
+                setStatus('Draft aman di perangkat, tetapi belum masuk server: ' + (result?.message || 'coba lagi.'));
+                return;
+            }
+            serverSubmission = result.submission;
+            window.renderParticipantExerciseReview('#aiIntroPracticeStatus', serverSubmission);
+            setStatus('Draft latihan tersimpan di server.');
+        });
+        saveButton?.addEventListener('click', async () => {
+            const payload = collectAnswers();
+            if (!Object.values(payload).some(Boolean)) {
+                setReadonly(false);
+                setStatus('Isi minimal satu jawaban sebelum mengirim latihan.');
+                fields[0]?.focus();
+                return;
+            }
+            localStorage.setItem(key, JSON.stringify(payload));
+            saveButton.disabled = true;
+            setStatus('Mengirim jawaban latihan ke server...');
+            const result = await window.submitParticipantExercise('ai-fundamentals', 'practice', payload);
+            saveButton.disabled = false;
+            if (!result || result.status !== 'success') {
+                setStatus('Jawaban aman di perangkat, tetapi belum masuk server: ' + (result?.message || 'coba lagi.'));
+                return;
+            }
+            serverSubmission = result.submission;
             setReadonly(true);
-            setStatus('Jawaban berhasil disimpan. Kamu bisa edit atau hapus kapan saja.');
+            window.renderParticipantExerciseReview('#aiIntroPracticeStatus', serverSubmission);
+            setStatus('Latihan berhasil dikirim dan menunggu review mentor.');
             recordParticipantActivity({
-                activity_type: 'practice_saved',
+                activity_type: 'practice_submitted',
                 module_id: 'ai-fundamentals',
                 lesson_id: 'pengantar-ai',
-                activity: 'Latihan Pengantar AI disimpan',
+                activity: 'Latihan Pengantar AI dikirim',
                 payload: payload
             });
         });
         editButton?.addEventListener('click', () => {
+            if (serverSubmission?.status === 'reviewed') {
+                setStatus('Latihan sudah direview. Hubungi mentor jika perlu revisi.');
+                return;
+            }
             setReadonly(false);
             fields[0]?.focus();
-            setStatus('Mode edit aktif.');
+            setStatus('Mode edit aktif. Kirim ulang agar perubahan masuk ke server.');
         });
         deleteButton?.addEventListener('click', () => {
             localStorage.removeItem(key);
@@ -1336,7 +1378,21 @@
                 field.value = '';
                 field.readOnly = false;
             });
-            setStatus('Jawaban latihan dihapus.');
+            setStatus('Jawaban lokal dihapus. Submission server, jika ada, tetap tersimpan.');
+        });
+        window.restoreParticipantExercise({
+            form: form,
+            moduleId: 'ai-fundamentals',
+            exerciseId: 'practice',
+            statusSelector: '#aiIntroPracticeStatus',
+            onRestored: function(submission) {
+                serverSubmission = submission;
+                localStorage.setItem(key, JSON.stringify(submission.answers || {}));
+                setReadonly(submission.status === 'submitted' || submission.status === 'reviewed');
+                setStatus(submission.status === 'reviewed'
+                    ? 'Latihan sudah direview mentor.'
+                    : (submission.status === 'submitted' ? 'Latihan sudah dikirim dan menunggu review mentor.' : 'Draft latihan dipulihkan dari server.'));
+            }
         });
     }
 
@@ -2701,6 +2757,174 @@
         } catch (e) {
             return { status: 'error', message: 'Koneksi terputus. Progres belum dapat dimuat.', data: [] };
         }
+    };
+
+    async function requestParticipantExercise(action, moduleId, exerciseId, answers) {
+        var session = readParticipantSession();
+        if (!session?.nik || !session?.token) {
+            return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.' };
+        }
+        var payload = {
+            action: action,
+            nik: session.nik,
+            participantToken: session.token,
+            module_id: moduleId,
+            exercise_id: exerciseId || 'practice'
+        };
+        if (answers !== undefined) payload.answers = answers;
+        try {
+            var response = await fetch('/__gas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            });
+            var result = await response.json().catch(function() { return {}; });
+            if (!response.ok || !result || result.status !== 'success') {
+                return { status: 'error', message: result?.message || 'Server latihan belum dapat diakses.' };
+            }
+            if (action === 'submitParticipantExercise') {
+                _dashboardDataCache = null;
+                try { sessionStorage.removeItem('__dashboardCache'); } catch (_) {}
+            }
+            return result;
+        } catch (error) {
+            return { status: 'error', message: 'Koneksi terputus. Jawaban lokal tetap aman.' };
+        }
+    }
+
+    window.saveParticipantExerciseDraft = function(moduleId, exerciseId, answers) {
+        return requestParticipantExercise('saveParticipantExerciseDraft', moduleId, exerciseId, answers);
+    };
+
+    window.submitParticipantExercise = function(moduleId, exerciseId, answers) {
+        return requestParticipantExercise('submitParticipantExercise', moduleId, exerciseId, answers);
+    };
+
+    window.getParticipantExerciseSubmissions = function(moduleId, exerciseId) {
+        return requestParticipantExercise('getParticipantExerciseSubmissions', moduleId, exerciseId);
+    };
+
+    window.renderParticipantExerciseReview = function(statusSelector, submission) {
+        var statusNode = typeof statusSelector === 'string' ? document.querySelector(statusSelector) : statusSelector;
+        if (!statusNode || !submission) return;
+        var panel = statusNode.parentElement?.querySelector('[data-participant-exercise-review]');
+        if (!panel) {
+            panel = document.createElement('div');
+            panel.setAttribute('data-participant-exercise-review', '');
+            panel.style.cssText = 'margin-top:10px;padding:12px 14px;border:1px solid #eadcf0;border-radius:12px;background:#fff;color:#3c2445;line-height:1.55;';
+            statusNode.insertAdjacentElement('afterend', panel);
+        }
+        panel.replaceChildren();
+        var title = document.createElement('strong');
+        title.textContent = submission.status === 'reviewed'
+            ? 'Sudah direview mentor'
+            : (submission.status === 'submitted' ? 'Sudah dikirim untuk review' : 'Draft tersimpan di server');
+        panel.appendChild(title);
+        if (submission.status === 'reviewed') {
+            var score = document.createElement('div');
+            score.textContent = 'Nilai: ' + (submission.score == null ? '-' : submission.score + '/100');
+            panel.appendChild(score);
+            if (submission.feedback) {
+                var feedback = document.createElement('div');
+                feedback.textContent = 'Feedback: ' + submission.feedback;
+                panel.appendChild(feedback);
+            }
+        }
+    };
+
+    window.restoreParticipantExercise = async function(options) {
+        options = options || {};
+        var result = await window.getParticipantExerciseSubmissions(options.moduleId, options.exerciseId || 'practice');
+        if (!result || result.status !== 'success' || !Array.isArray(result.data) || !result.data.length) return null;
+        var submission = result.data[0];
+        if (typeof options.applyAnswers === 'function') {
+            options.applyAnswers(submission.answers || {}, submission);
+        } else if (options.form) {
+            Object.keys(submission.answers || {}).forEach(function(name) {
+                var field = Array.from(options.form.elements || []).find(function(element) { return element.name === name; });
+                if (field) field.value = submission.answers[name];
+            });
+        }
+        window.renderParticipantExerciseReview(options.statusSelector, submission);
+        if (typeof options.onRestored === 'function') options.onRestored(submission);
+        return submission;
+    };
+
+    window.noteParticipantExerciseSubmission = function(form, statusSelector, submission) {
+        if (!form || !submission) return;
+        form.dataset.exerciseSubmissionStatus = submission.status || '';
+        var draftButton = form.querySelector('[data-practice-draft]');
+        if (draftButton) draftButton.disabled = submission.status === 'submitted' || submission.status === 'reviewed';
+        window.renderParticipantExerciseReview(statusSelector, submission);
+    };
+
+    window.bindParticipantExerciseForm = function(options) {
+        options = options || {};
+        var form = options.form;
+        if (!form || form.dataset.exerciseSyncBound === 'true') return;
+        form.dataset.exerciseSyncBound = 'true';
+        var draftButton = form.querySelector('[data-practice-draft]');
+        var setMessage = typeof options.setMessage === 'function' ? options.setMessage : function() {};
+        var collectAnswers = typeof options.collectAnswers === 'function'
+            ? options.collectAnswers
+            : function() {
+                var answers = {};
+                Array.from(form.elements || []).forEach(function(field) {
+                    if (field.name) answers[field.name] = String(field.value || '').trim();
+                });
+                return answers;
+            };
+
+        form.addEventListener('click', function(event) {
+            if (!event.target.closest('[data-practice-edit]')) return;
+            if (form.dataset.exerciseSubmissionStatus !== 'reviewed') return;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            setMessage('Latihan sudah direview. Hubungi mentor jika perlu revisi.', 'warning');
+        }, true);
+
+        if (draftButton) {
+            draftButton.addEventListener('click', async function() {
+                var answers = collectAnswers();
+                if (!Object.keys(answers).some(function(key) { return String(answers[key] || '').trim(); })) {
+                    setMessage('Isi minimal satu jawaban sebelum menyimpan draft.', 'warning');
+                    return;
+                }
+                if (typeof options.saveLocal === 'function') options.saveLocal(answers);
+                var originalLabel = draftButton.innerHTML;
+                draftButton.disabled = true;
+                draftButton.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Menyimpan...';
+                setMessage('Menyimpan draft latihan ke server...', 'neutral');
+                var result = await window.saveParticipantExerciseDraft(options.moduleId, options.exerciseId || 'practice', answers);
+                draftButton.innerHTML = originalLabel;
+                if (!result || result.status !== 'success') {
+                    draftButton.disabled = false;
+                    setMessage('Draft aman di browser, tetapi belum masuk server: ' + (result?.message || 'coba lagi.'), 'error');
+                    return;
+                }
+                window.noteParticipantExerciseSubmission(form, options.statusSelector, result.submission);
+                setMessage('Draft latihan tersimpan di server.', 'success');
+            });
+        }
+
+        window.restoreParticipantExercise({
+            form: form,
+            moduleId: options.moduleId,
+            exerciseId: options.exerciseId || 'practice',
+            statusSelector: options.statusSelector,
+            applyAnswers: options.applyAnswers,
+            onRestored: function(submission) {
+                if (typeof options.saveLocal === 'function') options.saveLocal(submission.answers || {});
+                window.noteParticipantExerciseSubmission(form, options.statusSelector, submission);
+                if (typeof options.setLocked === 'function') {
+                    options.setLocked(submission.status === 'submitted' || submission.status === 'reviewed', submission);
+                }
+                if (typeof options.onRestored === 'function') options.onRestored(submission);
+                setMessage(submission.status === 'reviewed'
+                    ? 'Latihan sudah direview mentor.'
+                    : (submission.status === 'submitted' ? 'Latihan sudah dikirim dan menunggu review mentor.' : 'Draft latihan dipulihkan dari server.'), 'success');
+            }
+        });
     };
 
     window.saveParticipantDiscussion = async function(moduleId, discussion) {

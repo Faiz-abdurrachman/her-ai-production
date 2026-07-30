@@ -14,6 +14,64 @@
             </div>
         </header>
 
+        <section class="glass-panel exercise-review-panel" id="exerciseReviewPanel">
+            <div class="exercise-review-head">
+                <div>
+                    <span>Participant Assessment</span>
+                    <h2>Review Latihan Peserta</h2>
+                    <p>Jawaban yang dikirim peserta dapat dinilai 0–100 dan diberi feedback mentor.</p>
+                </div>
+                <button type="button" class="btn-cyber" id="btnExerciseReviewRefresh"><i class="fas fa-rotate"></i> Muat Ulang</button>
+            </div>
+            <div class="exercise-review-filters">
+                <label>
+                    <span>Module</span>
+                    <select id="exerciseReviewModule">
+                        <option value="">Semua module aktif</option>
+                        <option value="ai-fundamentals">Pengantar AI</option>
+                        <option value="python-untuk-ai">Python untuk AI</option>
+                        <option value="reasoning">Reasoning</option>
+                        <option value="konsep-ai-modern">Konsep AI Modern</option>
+                        <option value="evaluation">Evaluation</option>
+                        <option value="evolution">Evolution</option>
+                    </select>
+                </label>
+                <label>
+                    <span>Status</span>
+                    <select id="exerciseReviewStatusFilter">
+                        <option value="submitted">Menunggu review</option>
+                        <option value="reviewed">Sudah direview</option>
+                        <option value="draft">Draft</option>
+                        <option value="">Semua status</option>
+                    </select>
+                </label>
+                <label>
+                    <span>Cari peserta</span>
+                    <input type="search" id="exerciseReviewSearch" placeholder="Nama atau NIK">
+                </label>
+            </div>
+            <p id="exerciseReviewStatus" class="exercise-review-status" aria-live="polite">Memuat submission latihan...</p>
+            <div class="exercise-review-grid">
+                <div id="exerciseReviewList" class="exercise-review-list"></div>
+                <form id="exerciseReviewForm" class="exercise-review-detail">
+                    <div id="exerciseReviewEmpty" class="exercise-review-empty">Pilih submission peserta untuk melihat jawabannya.</div>
+                    <div id="exerciseReviewContent" hidden>
+                        <div class="exercise-review-identity">
+                            <div><span>Peserta</span><strong id="exerciseReviewParticipant">-</strong></div>
+                            <div><span>Module</span><strong id="exerciseReviewModuleLabel">-</strong></div>
+                            <div><span>Status</span><strong id="exerciseReviewSubmissionStatus">-</strong></div>
+                        </div>
+                        <div id="exerciseReviewAnswers" class="exercise-review-answers"></div>
+                        <div class="exercise-review-fields">
+                            <label><span>Nilai (0–100)</span><input type="number" id="exerciseReviewScore" min="0" max="100" step="1" required></label>
+                            <label><span>Feedback Mentor</span><textarea id="exerciseReviewFeedback" rows="5" maxlength="5000" placeholder="Tulis feedback yang jelas dan dapat ditindaklanjuti."></textarea></label>
+                        </div>
+                        <button type="submit" class="btn-cyber" id="btnExerciseReviewSubmit"><i class="fas fa-circle-check"></i> Simpan Review</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
         <section class="learning-admin-grid">
             <aside class="glass-panel learning-admin-list">
                 <div class="learning-admin-head">
@@ -123,6 +181,90 @@
         gap: 24px;
         grid-template-columns: minmax(300px, 390px) minmax(0, 1fr);
     }
+    .exercise-review-panel {
+        margin-bottom: 24px;
+        padding: 24px;
+    }
+    .exercise-review-head,
+    .exercise-review-identity {
+        align-items: center;
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+    }
+    .exercise-review-head h2 {
+        color: var(--dark-purple);
+        margin: 4px 0;
+    }
+    .exercise-review-head span,
+    .exercise-review-filters span,
+    .exercise-review-fields span,
+    .exercise-review-identity span {
+        color: var(--text-muted);
+        display: block;
+        font-size: .72rem;
+        font-weight: 900;
+        letter-spacing: .04em;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+    }
+    .exercise-review-head p,
+    .exercise-review-status {
+        color: var(--text-muted);
+        margin: 0;
+    }
+    .exercise-review-filters {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin: 22px 0 14px;
+    }
+    .exercise-review-filters select,
+    .exercise-review-filters input,
+    .exercise-review-fields input,
+    .exercise-review-fields textarea {
+        background: #f8fafc;
+        border: 1px solid var(--gray-border);
+        border-radius: 10px;
+        color: var(--text-dark);
+        font: 500 .92rem 'Inter', sans-serif;
+        padding: 11px 12px;
+        width: 100%;
+    }
+    .exercise-review-grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+        margin-top: 18px;
+    }
+    .exercise-review-list {
+        display: grid;
+        gap: 9px;
+        max-height: 700px;
+        overflow: auto;
+    }
+    .exercise-review-list button {
+        background: #fff;
+        border: 1px solid var(--gray-border);
+        border-radius: 12px;
+        color: var(--text-dark);
+        cursor: pointer;
+        display: grid;
+        gap: 5px;
+        padding: 13px;
+        text-align: left;
+    }
+    .exercise-review-list button.active { border-color: var(--primary-pink); box-shadow: 0 8px 20px rgba(245,47,145,.11); }
+    .exercise-review-list small { color: var(--text-muted); }
+    .exercise-review-detail { background: #fff; border: 1px solid var(--gray-border); border-radius: 16px; padding: 20px; }
+    .exercise-review-empty { color: var(--text-muted); padding: 28px 10px; text-align: center; }
+    .exercise-review-identity { align-items: flex-start; border-bottom: 1px solid var(--gray-border); margin-bottom: 18px; padding-bottom: 16px; }
+    .exercise-review-identity > div { flex: 1; }
+    .exercise-review-answers { display: grid; gap: 12px; max-height: 500px; overflow: auto; }
+    .exercise-review-answer { background: #f8fafc; border-radius: 12px; padding: 14px; }
+    .exercise-review-answer strong { color: var(--dark-purple); display: block; margin-bottom: 7px; overflow-wrap: anywhere; }
+    .exercise-review-answer p { color: var(--text-dark); margin: 0; white-space: pre-wrap; }
+    .exercise-review-fields { display: grid; gap: 14px; margin: 18px 0; }
     .learning-admin-list,
     .learning-editor-panel,
     .learning-gas-contract {
@@ -251,8 +393,12 @@
     }
     @media (max-width: 1100px) {
         .learning-admin-grid,
-        .learning-form-grid {
+        .learning-form-grid,
+        .exercise-review-grid,
+        .exercise-review-filters {
             grid-template-columns: 1fr;
         }
+        .exercise-review-head,
+        .exercise-review-identity { align-items: flex-start; flex-direction: column; }
     }
 </style>
