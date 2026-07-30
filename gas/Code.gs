@@ -11,7 +11,7 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
-const HERAI_BACKEND_VERSION = '2026.3.7-exercise-review';
+const HERAI_BACKEND_VERSION = '2026.3.8-dashboard-read-cache';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
 const PARTICIPANT_ACCOUNT_TYPE = 'participant';
 const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
@@ -42,6 +42,7 @@ const LEGACY_PASSWORD_PEPPERS = [
   '120NQtFqErJiIfITlPfVo8wV6G0_79qFKMTaptxNF-RA',
   '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w'
 ];
+let HERAI_REQUEST_SPREADSHEET = null;
 // Cohort resmi peserta yang lolos tahap 2 dan berhak mengakses participant portal.
 // ParticipantAccounts direkonsiliasi terhadap daftar ini memakai normalized email.
 const TARGET_PARTICIPANT_PORTAL_EMAILS = [
@@ -225,6 +226,7 @@ const SCHEMA = {
 
 function doPost(e) {
   try {
+    HERAI_REQUEST_SPREADSHEET = null;
     const payload = JSON.parse(e.postData.contents || '{}');
     const action = payload.action || 'register';
     authorizeGasAction(action, payload);
@@ -302,6 +304,7 @@ function doPost(e) {
 }
 
 function doGet() {
+  HERAI_REQUEST_SPREADSHEET = null;
   return json({ status: 'success', service: 'HerAI GAS Backend', version: HERAI_BACKEND_VERSION });
 }
 
@@ -556,7 +559,8 @@ function getParticipantDashboardData(payload) {
     })
     .sort(function(a, b) { return Number(a.sort_order || 0) - Number(b.sort_order || 0); });
 
-  const progressRows = requesterNik ? getRows(SHEETS.participantProgress).filter(function(row) {
+  const allProgressRows = getRows(SHEETS.participantProgress);
+  const progressRows = requesterNik ? allProgressRows.filter(function(row) {
     return String(row.nik || '').replace(/\D/g, '') === requesterNik;
   }) : [];
 
@@ -643,7 +647,16 @@ function getParticipantDashboardData(payload) {
   }));
 
   // Live-computed leaderboard from participant progress
-  const leaderboard = computeLiveLeaderboard(requesterNik);
+  const targetEmailSet = getTargetParticipantPortalEmailSet();
+  const activeAccounts = getRows(SHEETS.participantAccounts).filter(function(account) {
+    return account && account.account_id
+      && isParticipantPortalAccountAllowed(account, targetEmailSet)
+      && isParticipantAccountActive(account);
+  });
+  const leaderboard = computeLiveLeaderboard(requesterNik, {
+    activeAccounts: activeAccounts,
+    progressRows: allProgressRows
+  });
 
   return {
     status: 'success',
@@ -656,20 +669,26 @@ function getParticipantDashboardData(payload) {
  * Formula: points = sum(quiz_scores) + (chapters_completed × 15) + (practices_completed × 5)
  * Falls back to seed data if no progress exists yet.
  */
-function computeLiveLeaderboard(requesterNik) {
-  var activeAccounts = getActiveParticipantPortalAccounts();
+function computeLiveLeaderboard(requesterNik, context) {
+  var source = context || {};
+  var activeAccounts = Array.isArray(source.activeAccounts)
+    ? source.activeAccounts
+    : getActiveParticipantPortalAccounts();
   var activeNikSet = activeAccounts.reduce(function(result, account) {
     const nik = String(account.nik || account.username || '').replace(/\D/g, '');
     if (nik) result[nik] = true;
     return result;
   }, {});
-  var progressRows = getRows(SHEETS.participantProgress).filter(function(row) {
+  var sourceProgressRows = Array.isArray(source.progressRows)
+    ? source.progressRows
+    : getRows(SHEETS.participantProgress);
+  var progressRows = sourceProgressRows.filter(function(row) {
     const nik = String(row.nik || '').replace(/\D/g, '');
     return Boolean(nik && activeNikSet[nik]);
   });
   
   if (!progressRows || progressRows.length === 0) {
-    return getSeedLeaderboard(requesterNik);
+    return getSeedLeaderboard(requesterNik, activeAccounts);
   }
   
   // Aggregate by NIK: { chapters, totalQuizScore, practices }
@@ -733,9 +752,14 @@ function computeLiveLeaderboard(requesterNik) {
 /**
  * Fallback: seed leaderboard when no progress data exists.
  */
-function getSeedLeaderboard(requesterNik) {
+function getSeedLeaderboard(requesterNik, activeAccounts) {
   var rows = getRows(SHEETS.participantDashboardLeaderboard);
-  var activeNikSet = getActiveParticipantPortalNikSet();
+  var activeNikSet = (Array.isArray(activeAccounts) ? activeAccounts : getActiveParticipantPortalAccounts())
+    .reduce(function(result, account) {
+      const nik = String(account.nik || account.username || '').replace(/\D/g, '');
+      if (nik) result[nik] = true;
+      return result;
+    }, {});
   if (rows && rows.length > 0) {
     return rows.filter(function(row) {
       const nik = String(row.nik || '').replace(/\D/g, '');
@@ -4299,8 +4323,15 @@ function normalizeAdminForClient(admin) {
   };
 }
 
+function getRequestSpreadsheet() {
+  if (!HERAI_REQUEST_SPREADSHEET) {
+    HERAI_REQUEST_SPREADSHEET = SpreadsheetApp.openById(SPREADSHEET_ID);
+  }
+  return HERAI_REQUEST_SPREADSHEET;
+}
+
 function getSheet(name) {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ss = getRequestSpreadsheet();
   return ss.getSheetByName(name) || ss.insertSheet(name);
 }
 

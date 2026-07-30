@@ -6,8 +6,13 @@
     const ADMIN_KEY = 'heraiParticipantPortalAdminKey';
     const SIDEBAR_STATE_KEY = 'heraiFellowSidebarExpanded';
     const PARTICIPANT_SESSION_KEY = 'heraiParticipantSession';
+    const DASHBOARD_CACHE_PREFIX = 'heraiParticipantDashboardCache';
+    const DASHBOARD_CACHE_TTL_MS = 5 * 60 * 1000;
+    const DASHBOARD_CACHE_MAX_STALE_MS = 30 * 60 * 1000;
+    const DASHBOARD_REQUEST_TIMEOUT_MS = 20000;
 
     var _dashboardDataCache = null;
+    var _dashboardDataPromise = null;
 
     // ---------------------------------------------------------------
     // AI Lab Module Loader — Lazy loading for 29 ai-*.js modules
@@ -1770,6 +1775,53 @@
         }
     }
 
+    function participantDashboardCacheKey() {
+        const nik = String(readParticipantSession()?.nik || '').replace(/\D/g, '');
+        return nik ? `${DASHBOARD_CACHE_PREFIX}:${nik}` : '';
+    }
+
+    function readParticipantDashboardCache() {
+        const key = participantDashboardCacheKey();
+        if (!key) return null;
+        try {
+            // Remove the old unscoped cache so data can never cross participant sessions.
+            sessionStorage.removeItem('__dashboardCache');
+            const cached = JSON.parse(sessionStorage.getItem(key) || 'null');
+            if (!cached?.data || !Number.isFinite(Number(cached.ts))) return null;
+            const age = Math.max(0, Date.now() - Number(cached.ts));
+            if (age > DASHBOARD_CACHE_MAX_STALE_MS) {
+                sessionStorage.removeItem(key);
+                return null;
+            }
+            return { data: cached.data, age: age, fresh: age <= DASHBOARD_CACHE_TTL_MS };
+        } catch {
+            return null;
+        }
+    }
+
+    function writeParticipantDashboardCache(data) {
+        const key = participantDashboardCacheKey();
+        if (!key || !data) return;
+        try {
+            sessionStorage.setItem(key, JSON.stringify({ ts: Date.now(), data: data }));
+            sessionStorage.removeItem('__dashboardCache');
+        } catch {
+            // Cache is an optional speed layer; live data remains authoritative.
+        }
+    }
+
+    function clearParticipantDashboardCache() {
+        const key = participantDashboardCacheKey();
+        _dashboardDataCache = null;
+        _dashboardDataPromise = null;
+        try {
+            if (key) sessionStorage.removeItem(key);
+            sessionStorage.removeItem('__dashboardCache');
+        } catch {
+            // Ignore storage restrictions.
+        }
+    }
+
     function getParticipantDisplayName() {
         const session = readParticipantSession();
         var name = session?.profile?.nama_lengkap
@@ -1860,6 +1912,7 @@
             }
         });
         logout?.addEventListener('click', () => {
+            clearParticipantDashboardCache();
             sessionStorage.removeItem(PARTICIPANT_SESSION_KEY);
             window.__CURRENT_PARTICIPANT_PROFILE__ = null;
             window.location.hash = '#/participant-login';
@@ -1912,17 +1965,36 @@
     }
 
     async function fetchParticipantDashboardData() {
+        if (_dashboardDataPromise) return _dashboardDataPromise;
         var session = readParticipantSession();
         if (!session?.nik || !session?.token) throw new Error('Sesi peserta tidak tersedia. Silakan login ulang.');
-        var response = await fetch('/__gas', {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: 'getParticipantDashboardData', nik: session.nik, participantToken: session.token })
-        });
-        if (!response.ok) throw new Error('Gagal terhubung ke server.');
-        var result = await response.json();
-        if (result.status !== 'success') throw new Error(result.message || 'Gagal memuat data dashboard.');
-        return Object.assign({}, defaultParticipantDashboardData(), result.data || {});
+        var controller = typeof AbortController === 'function' ? new AbortController() : null;
+        var timeoutId = setTimeout(function() {
+            controller?.abort();
+        }, DASHBOARD_REQUEST_TIMEOUT_MS);
+        _dashboardDataPromise = (async function() {
+            try {
+                var response = await fetch('/__gas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'getParticipantDashboardData', nik: session.nik, participantToken: session.token }),
+                    signal: controller?.signal
+                });
+                if (!response.ok) throw new Error('Gagal terhubung ke server.');
+                var result = await response.json();
+                if (result.status !== 'success') throw new Error(result.message || 'Gagal memuat data dashboard.');
+                return Object.assign({}, defaultParticipantDashboardData(), result.data || {});
+            } catch (error) {
+                if (error?.name === 'AbortError') {
+                    throw new Error('Server membutuhkan waktu terlalu lama. Tampilkan cache atau coba lagi.');
+                }
+                throw error;
+            } finally {
+                clearTimeout(timeoutId);
+                _dashboardDataPromise = null;
+            }
+        })();
+        return _dashboardDataPromise;
     }
 
     function normalizeLearningSummary(data) {
@@ -1988,7 +2060,9 @@
         if (completed) completed.textContent = String(summary.completed);
         if (inProgress) inProgress.textContent = String(summary.in_progress);
         if (notStarted) notStarted.textContent = String(summary.not_started);
-        if (status) status.textContent = state === 'error' ? 'Progres terbaru belum dapat dimuat.' : 'Sinkron dengan progres server.';
+        if (status) status.textContent = state === 'error'
+            ? 'Progres terbaru belum dapat dimuat.'
+            : (state === 'cache' ? 'Menampilkan progres tersimpan sambil sinkronisasi.' : 'Sinkron dengan progres server.');
 
         var heroProgress = document.querySelector('[data-learning-hero-progress]');
         var heroBar = document.querySelector('[data-learning-hero-bar]');
@@ -2019,13 +2093,18 @@
     async function initAiFundamentalsSummary() {
         var card = document.querySelector('.course-summary-card[data-learning-summary-state]');
         if (!card) return;
-        if (_dashboardDataCache) renderAiFundamentalsSummary(_dashboardDataCache, 'ready');
+        var cached = _dashboardDataCache ? { data: _dashboardDataCache, fresh: true } : readParticipantDashboardCache();
+        if (cached?.data) {
+            _dashboardDataCache = cached.data;
+            renderAiFundamentalsSummary(cached.data, 'cache');
+        }
         try {
             var data = await fetchParticipantDashboardData();
             _dashboardDataCache = data;
+            writeParticipantDashboardCache(data);
             renderAiFundamentalsSummary(data, 'ready');
         } catch (error) {
-            renderAiFundamentalsSummary(_dashboardDataCache || defaultParticipantDashboardData(), 'error');
+            renderAiFundamentalsSummary(cached?.data || _dashboardDataCache || defaultParticipantDashboardData(), 'error');
         }
     }
 
@@ -2114,6 +2193,7 @@
             var progressBar = card.querySelector('[data-module-progress-bar]');
             card.classList.toggle('is-complete', !failedWithoutData && progress >= 100);
             card.classList.toggle('is-in-progress', !failedWithoutData && progress > 0 && progress < 100);
+            card.classList.remove('is-loading');
             if (progressLabel) {
                 progressLabel.textContent = failedWithoutData
                     ? 'Progres belum termuat'
@@ -2140,28 +2220,39 @@
         var retry = document.querySelector('[data-module-summary-retry]');
         if (status) status.textContent = state === 'error'
             ? (hasData ? 'Menampilkan cache terakhir. Sinkronisasi server gagal.' : 'Progres belum dapat dimuat. Periksa koneksi lalu coba lagi.')
-            : 'Sinkron dengan progres server.';
+            : (state === 'cache' ? 'Progres tersimpan tampil. Menyinkronkan data terbaru…' : 'Sinkron dengan progres server.');
         if (retry) retry.hidden = state !== 'error';
         if (summaryGrid) {
             summaryGrid.dataset.moduleSummaryState = state;
-            summaryGrid.setAttribute('aria-busy', 'false');
+            summaryGrid.setAttribute('aria-busy', String(state === 'cache'));
         }
         if (sideCard) {
             sideCard.dataset.moduleSideSummaryState = state;
-            sideCard.setAttribute('aria-busy', 'false');
+            sideCard.setAttribute('aria-busy', String(state === 'cache'));
         }
     }
 
     async function initParticipantModulesData() {
         if (!document.querySelector('.fellow-modules-page [data-module-summary-state]')) return;
-        if (_dashboardDataCache) renderParticipantModules(_dashboardDataCache, 'ready');
+        var cached = _dashboardDataCache ? { data: _dashboardDataCache, fresh: true } : readParticipantDashboardCache();
+        if (cached?.data) {
+            _dashboardDataCache = cached.data;
+            renderParticipantModules(cached.data, 'cache');
+        }
+        var slowTimer = setTimeout(function() {
+            if (cached?.data) return;
+            var status = document.querySelector('[data-module-summary-status]');
+            if (status) status.textContent = 'Server sedang menyiapkan progres pertamamu…';
+        }, 1200);
         try {
             var data = await fetchParticipantDashboardData();
             _dashboardDataCache = data;
-            try { sessionStorage.setItem('__dashboardCache', JSON.stringify({ ts: Date.now(), data: data })); } catch (_) {}
+            writeParticipantDashboardCache(data);
             renderParticipantModules(data, 'ready');
         } catch (error) {
-            renderParticipantModules(_dashboardDataCache, 'error');
+            renderParticipantModules(cached?.data || _dashboardDataCache, 'error');
+        } finally {
+            clearTimeout(slowTimer);
         }
     }
 
@@ -2256,12 +2347,15 @@
         initParticipantLeaderboardInteractions();
         var summary = document.querySelector('[data-leaderboard-state]');
         if (summary) summary.setAttribute('aria-busy', 'true');
+        var cached = _dashboardDataCache ? { data: _dashboardDataCache } : readParticipantDashboardCache();
+        if (cached?.data) renderParticipantLeaderboard(cached.data, 'ready');
         try {
             var data = await fetchParticipantDashboardData();
             _dashboardDataCache = data;
+            writeParticipantDashboardCache(data);
             renderParticipantLeaderboard(data, 'ready');
         } catch (error) {
-            renderParticipantLeaderboard(null, 'error');
+            if (!cached?.data) renderParticipantLeaderboard(null, 'error');
         }
     }
 
@@ -2461,9 +2555,6 @@
     }
 
     async function initParticipantDashboardData() {
-        var CACHE_KEY = '__dashboardCache';
-        var CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-
         // 1. In-memory cache (fastest — SPA navigation)
         if (_dashboardDataCache) {
             renderParticipantDashboard(_dashboardDataCache);
@@ -2471,37 +2562,28 @@
                 var fresh = await fetchParticipantDashboardData();
                 if (Array.isArray(fresh.modules) && fresh.modules.length > 3) {
                     _dashboardDataCache = fresh;
-                    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: fresh })); } catch (_) {}
+                    writeParticipantDashboardCache(fresh);
                     renderParticipantDashboard(fresh);
                 }
             } catch (_) { /* silent background refresh */ }
             return;
         }
 
-        // 2. Persistent cache (survives refresh — sessionStorage)
-        try {
-            var cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
-            if (cached && cached.data && Array.isArray(cached.data.modules) && cached.data.modules.length > 3) {
-                var age = Date.now() - (cached.ts || 0);
-                if (age < CACHE_TTL) {
-                    // Fresh cache — render instantly
-                    _dashboardDataCache = cached.data;
-                    renderParticipantDashboard(cached.data);
-                    // Background refresh
-                    try {
-                        var bg = await fetchParticipantDashboardData();
-                        if (Array.isArray(bg.modules) && bg.modules.length > 3) {
-                            _dashboardDataCache = bg;
-                            sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: bg }));
-                            renderParticipantDashboard(bg);
-                        }
-                    } catch (_) {}
-                    return;
+        // 2. Participant-scoped cache (survives refresh without crossing accounts)
+        var cached = readParticipantDashboardCache();
+        if (cached?.data && Array.isArray(cached.data.modules) && cached.data.modules.length > 3) {
+            _dashboardDataCache = cached.data;
+            renderParticipantDashboard(cached.data);
+            try {
+                var bg = await fetchParticipantDashboardData();
+                if (Array.isArray(bg.modules) && bg.modules.length > 3) {
+                    _dashboardDataCache = bg;
+                    writeParticipantDashboardCache(bg);
+                    renderParticipantDashboard(bg);
                 }
-                // Stale cache — show it while fetching fresh
-                renderParticipantDashboard(cached.data);
-            }
-        } catch (_) {}
+            } catch (_) {}
+            return;
+        }
 
         // 3. No cache — show skeleton + fetch
         if (!_dashboardDataCache) {
@@ -2514,7 +2596,7 @@
 
             if (isRealData) {
                 _dashboardDataCache = data;
-                try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: data })); } catch (_) {}
+                writeParticipantDashboardCache(data);
                 renderParticipantDashboard(data);
             } else {
                 renderDashboardError(new Error('Data dashboard belum tersedia.'));
@@ -2886,6 +2968,7 @@
                     var others = contentArea.querySelectorAll('.settings-card:not(:first-child)');
                     others.forEach(function(c) { c.remove(); });
                 } else if (tabName === 'Keluar Akun') {
+                    clearParticipantDashboardCache();
                     sessionStorage.removeItem(PARTICIPANT_SESSION_KEY);
                     window.location.hash = '#/profile';
                 } else if (tabName === 'Keamanan Akun') {
@@ -3021,8 +3104,7 @@
             if (!result || result.status !== 'success') {
                 return { status: 'error', message: result?.message || 'Progres belum tersimpan.' };
             }
-            _dashboardDataCache = null;
-            try { sessionStorage.removeItem('__dashboardCache'); } catch (_) {}
+            clearParticipantDashboardCache();
             return result;
         } catch (e) {
             return { status: 'error', message: 'Koneksi terputus. Coba simpan kembali.' };
@@ -3082,8 +3164,7 @@
                 return { status: 'error', message: result?.message || 'Server latihan belum dapat diakses.' };
             }
             if (action === 'submitParticipantExercise') {
-                _dashboardDataCache = null;
-                try { sessionStorage.removeItem('__dashboardCache'); } catch (_) {}
+                clearParticipantDashboardCache();
             }
             return result;
         } catch (error) {
