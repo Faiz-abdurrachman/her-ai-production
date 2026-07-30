@@ -143,6 +143,10 @@
             const key = link.getAttribute('data-fellow-nav');
             link.hidden = merged.pages[key] === false;
         });
+        document.querySelectorAll('[data-fellow-feature]').forEach(element => {
+            const key = element.getAttribute('data-fellow-feature');
+            element.hidden = merged.pages[key] === false;
+        });
 
         const isBlocked = merged.enabled === false || (pageName && merged.pages[pageName] === false);
         const root = document.querySelector('.fellow-dashboard');
@@ -222,7 +226,7 @@
             }
         });
 
-        var allowedNavKeys = ['dashboard', 'modules', 'settings'];
+        var allowedNavKeys = ['dashboard', 'modules', 'leaderboard', 'settings'];
         sidebar.querySelectorAll('.fellow-menu a[data-fellow-nav]').forEach(function(link) {
             if (allowedNavKeys.indexOf(link.dataset.fellowNav) === -1) {
                 link.addEventListener('click', function(e) {
@@ -284,7 +288,11 @@
 
         modulePage.querySelectorAll('[data-module-tab]').forEach((button) => {
             button.addEventListener('click', () => {
-                modulePage.querySelectorAll('[data-module-tab]').forEach(item => item.classList.toggle('active', item === button));
+                modulePage.querySelectorAll('[data-module-tab]').forEach(item => {
+                    const selected = item === button;
+                    item.classList.toggle('active', selected);
+                    item.setAttribute('aria-selected', String(selected));
+                });
                 const target = button.dataset.moduleTab;
                 if (target === 'foundation') {
                     document.getElementById('moduleCatalogPanel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -317,6 +325,24 @@
                 button.querySelector('i')?.classList.toggle('fa-chevron-down', collapsed);
             });
         });
+
+        const search = modulePage.querySelector('[data-module-search]');
+        const empty = modulePage.querySelector('[data-module-search-empty]');
+        if (search) {
+            search.addEventListener('input', () => {
+                const query = String(search.value || '').trim().toLocaleLowerCase('id-ID');
+                let visible = 0;
+                modulePage.querySelectorAll('.foundation-course-grid .course-card').forEach(card => {
+                    const matches = !query || card.textContent.toLocaleLowerCase('id-ID').includes(query);
+                    card.hidden = !matches;
+                    if (matches) visible += 1;
+                });
+                if (empty) empty.hidden = visible !== 0;
+            });
+        }
+
+        const retry = modulePage.querySelector('[data-module-summary-retry]');
+        retry?.addEventListener('click', () => window.__retryParticipantModules?.());
     }
 
     const introLessonRoutes = [
@@ -1871,40 +1897,17 @@
 
     function defaultParticipantDashboardData() {
         return {
-            modules: [
-                { title: 'AI Fundamentals & Advanced', subtitle: 'Pengantar AI dan konsep modern', progress: 0, icon: 'fas fa-brain', tone: 'pink', href: '#/participant-ai-fundamentals' },
-                { title: 'Math for AI', subtitle: 'Aljabar, kalkulus, probabilitas', progress: 0, icon: 'fas fa-square-root-variable', tone: 'purple', href: '#/participant-modules' },
-                { title: 'Machine Learning', subtitle: 'Model, evaluasi, dan pipeline', progress: 0, icon: 'fas fa-diagram-project', tone: 'orange', href: '#/participant-modules' }
-            ],
-            discussionTrails: [
-                { actor: 'Mentor Rani', action: 'membalas diskusi', topic: 'Pengantar AI', time: '2 jam yang lalu', tone: '' },
-                { actor: 'Peserta HerAI', action: 'menulis pertanyaan', topic: 'Reasoning', time: '3 jam yang lalu', tone: 'blue' },
-                { actor: 'Panitia', action: 'menandai referensi baru', topic: 'Evaluation', time: '5 jam yang lalu', tone: 'green' }
-            ],
-            tracks: [
-                { title: 'Vision', subtitle: 'Computer Vision, Image Processing, Object Detection', icon: 'fas fa-eye' },
-                { title: 'Speech', subtitle: 'ASR, TTS, Whisper, Audio ML', icon: 'fas fa-microphone-lines' },
-                { title: 'Language Model', subtitle: 'NLP, LLM, RAG, fine-tuning', icon: 'fas fa-message' },
-                { title: 'Infrastructure', subtitle: 'MLOps, cloud, deployment, scalability', icon: 'fas fa-house-laptop' },
-                { title: 'Multimodal Interaction', subtitle: 'VLM, multimodal LLM, cross-modal learning', icon: 'fas fa-layer-group' },
-                { title: 'Bioinformatics', subtitle: 'Genomics, protein analysis, medical AI', icon: 'fas fa-dna' }
-            ],
+            modules: [],
+            discussionTrails: [],
+            tracks: [],
             journey: [
                 { phase_id: 'foundation', title: 'Foundation Phase', subtitle: 'Pemahaman dasar AI', progress: null, status: 'unavailable', status_label: 'Memuat', icon: 'fas fa-book-open', accent: '#f63392' },
                 { phase_id: 'specialization', title: 'Specialization', subtitle: 'Pilih dan dalami track AI', progress: null, status: 'unavailable', status_label: 'Memuat', icon: 'fas fa-code', accent: '#8b5cf6' },
                 { phase_id: 'project', title: 'Project Building', subtitle: 'Bangun proyek nyata', progress: null, status: 'locked', status_label: 'Belum Dibuka', icon: 'fas fa-briefcase', accent: '#f8b84e' },
                 { phase_id: 'graduation', title: 'Graduation', subtitle: 'Persiapan karier dan sertifikasi', progress: null, status: 'locked', status_label: 'Belum Dibuka', icon: 'fas fa-graduation-cap', accent: '#45c598' }
             ],
-            events: [
-                { day: '22', month: 'MEI', title: 'Live Session: Build RAG Chatbot', time: '10.00 - 12.00 WIB', url: '#/participant-events' },
-                { day: '25', month: 'MEI', title: 'Mentor Clinic: Career in AI', time: '19.00 - 20.30 WIB', url: '#/participant-events' },
-                { day: '30', month: 'MEI', title: 'Workshop: Data Visualization', time: '13.00 - 15.00 WIB', url: '#/participant-events' }
-            ],
-            leaderboard: [
-                { rank: 1, name: 'Dewi Lestari', points: 2450 },
-                { rank: 2, name: 'Peserta HerAI', points: 2120, current: true },
-                { rank: 3, name: 'Siti Aulia', points: 1890 }
-            ]
+            events: [],
+            leaderboard: []
         };
     }
 
@@ -1986,6 +1989,29 @@
         if (inProgress) inProgress.textContent = String(summary.in_progress);
         if (notStarted) notStarted.textContent = String(summary.not_started);
         if (status) status.textContent = state === 'error' ? 'Progres terbaru belum dapat dimuat.' : 'Sinkron dengan progres server.';
+
+        var heroProgress = document.querySelector('[data-learning-hero-progress]');
+        var heroBar = document.querySelector('[data-learning-hero-bar]');
+        var heroCopy = document.querySelector('[data-learning-hero-copy]');
+        var heroAction = document.querySelector('[data-learning-hero-action]');
+        if (heroProgress) heroProgress.textContent = summary.progress + '%';
+        if (heroBar) heroBar.style.setProperty('--value', summary.progress + '%');
+        if (heroCopy) heroCopy.textContent = summary.completed + ' tuntas · ' + summary.in_progress + ' berjalan dari ' + summary.total + ' modul';
+
+        var foundationModules = participantFoundationModules(data || {});
+        var nextModule = foundationModules.find(function(module) { return module.progress > 0 && module.progress < 100; })
+            || foundationModules.find(function(module) { return module.progress < 100; })
+            || foundationModules[0];
+        if (heroAction && nextModule) {
+            heroAction.setAttribute('href', nextModule.href);
+            heroAction.innerHTML = (summary.progress > 0 ? 'Lanjutkan Belajar' : 'Mulai Belajar') + ' <i class="fas fa-play" aria-hidden="true"></i>';
+        }
+
+        var started = Math.min(3, summary.completed + summary.in_progress);
+        var achievementCount = document.querySelector('[data-learning-achievement-count]');
+        var achievementBar = document.querySelector('[data-learning-achievement-bar]');
+        if (achievementCount) achievementCount.textContent = started + ' / 3 Modul';
+        if (achievementBar) achievementBar.style.setProperty('--value', Math.round((started / 3) * 100) + '%');
         card.dataset.learningSummaryState = state === 'error' ? 'error' : 'ready';
         card.setAttribute('aria-busy', 'false');
     }
@@ -2000,6 +2026,242 @@
             renderAiFundamentalsSummary(data, 'ready');
         } catch (error) {
             renderAiFundamentalsSummary(_dashboardDataCache || defaultParticipantDashboardData(), 'error');
+        }
+    }
+
+    const FOUNDATION_MODULE_UI = [
+        { module_id: 'ai-fundamentals', title: 'Pengantar AI', href: '#/participant-ai-intro' },
+        { module_id: 'python-untuk-ai', title: 'Python untuk AI', href: '#/participant-ai-python' },
+        { module_id: 'reasoning', title: 'Reasoning', href: '#/participant-ai-reasoning' },
+        { module_id: 'konsep-ai-modern', title: 'Konsep AI Modern', href: '#/participant-ai-modern' },
+        { module_id: 'evaluation', title: 'Evaluation', href: '#/participant-ai-evaluation' },
+        { module_id: 'evolution', title: 'Evolution of AI', href: '#/participant-ai-evolution' }
+    ];
+
+    function participantFoundationModules(data) {
+        var source = Array.isArray(data?.trackingModules) && data.trackingModules.length
+            ? data.trackingModules
+            : (Array.isArray(data?.modules) ? data.modules : []);
+        return FOUNDATION_MODULE_UI.map(function(meta) {
+            var live = source.find(function(item) {
+                return String(item.module_id || '') === meta.module_id;
+            });
+            return Object.assign({}, meta, live || {}, {
+                module_id: meta.module_id,
+                title: live?.title || meta.title,
+                href: live?.href || meta.href,
+                progress: Math.max(0, Math.min(100, Math.round(Number(live?.progress || 0))))
+            });
+        });
+    }
+
+    function summarizeFoundationModules(modules) {
+        var progressValues = modules.map(function(module) { return module.progress; });
+        var completed = progressValues.filter(function(progress) { return progress >= 100; }).length;
+        var inProgress = progressValues.filter(function(progress) { return progress > 0 && progress < 100; }).length;
+        return {
+            total: modules.length,
+            completed: completed,
+            in_progress: inProgress,
+            not_started: modules.length - completed - inProgress,
+            progress: modules.length
+                ? Math.round(progressValues.reduce(function(total, progress) { return total + progress; }, 0) / modules.length)
+                : 0
+        };
+    }
+
+    function setModuleSummaryValue(selector, value) {
+        var node = document.querySelector(selector);
+        if (node) node.textContent = String(value);
+    }
+
+    function renderParticipantModules(data, state) {
+        var summaryGrid = document.querySelector('[data-module-summary-state]');
+        var sideCard = document.querySelector('[data-module-side-summary-state]');
+        if (!summaryGrid && !sideCard) return;
+
+        var hasData = data && (Array.isArray(data.trackingModules) || Array.isArray(data.modules));
+        var modules = participantFoundationModules(data || {});
+        var summary = summarizeFoundationModules(modules);
+        var failedWithoutData = state === 'error' && !hasData;
+
+        setModuleSummaryValue('[data-module-summary-total]', failedWithoutData ? '—' : summary.total);
+        setModuleSummaryValue('[data-module-summary-completed]', failedWithoutData ? '—' : summary.completed);
+        setModuleSummaryValue('[data-module-summary-in-progress]', failedWithoutData ? '—' : summary.in_progress);
+        setModuleSummaryValue('[data-module-summary-progress]', failedWithoutData ? '—' : summary.progress + '%');
+        setModuleSummaryValue('[data-module-side-progress]', failedWithoutData ? '—' : summary.progress + '%');
+        setModuleSummaryValue('[data-module-side-completed]', failedWithoutData ? '—' : summary.completed);
+        setModuleSummaryValue('[data-module-side-in-progress]', failedWithoutData ? '—' : summary.in_progress);
+        setModuleSummaryValue('[data-module-side-not-started]', failedWithoutData ? '—' : summary.not_started);
+
+        var donut = document.querySelector('[data-module-summary-donut]');
+        if (donut) {
+            var total = Math.max(1, summary.total);
+            var completedEnd = Math.round((summary.completed / total) * 100);
+            var startedEnd = Math.round(((summary.completed + summary.in_progress) / total) * 100);
+            donut.style.setProperty('--completed-end', completedEnd + '%');
+            donut.style.setProperty('--started-end', startedEnd + '%');
+            donut.setAttribute('aria-label', failedWithoutData
+                ? 'Progres belajar belum dapat dimuat'
+                : summary.progress + ' persen progres; ' + summary.completed + ' modul selesai, ' + summary.in_progress + ' sedang berjalan, ' + summary.not_started + ' belum dimulai');
+        }
+
+        modules.forEach(function(module) {
+            var card = document.querySelector('[data-module-id="' + module.module_id + '"]');
+            if (!card) return;
+            var progress = module.progress;
+            var progressLabel = card.querySelector('[data-module-progress-label]');
+            var progressBar = card.querySelector('[data-module-progress-bar]');
+            card.classList.toggle('is-complete', !failedWithoutData && progress >= 100);
+            card.classList.toggle('is-in-progress', !failedWithoutData && progress > 0 && progress < 100);
+            if (progressLabel) {
+                progressLabel.textContent = failedWithoutData
+                    ? 'Progres belum termuat'
+                    : (progress >= 100 ? 'Selesai' : (progress > 0 ? progress + '% dipelajari' : 'Belum dimulai'));
+            }
+            if (progressBar) progressBar.style.setProperty('--value', failedWithoutData ? '0%' : progress + '%');
+        });
+
+        var nextModule = modules.find(function(module) { return module.progress > 0 && module.progress < 100; })
+            || modules.find(function(module) { return module.progress < 100; })
+            || modules[0];
+        var focusTitle = document.querySelector('[data-learning-focus-title]');
+        var focusCopy = document.querySelector('[data-learning-focus-copy]');
+        var focusLink = document.querySelector('[data-learning-focus-link]');
+        if (nextModule && !failedWithoutData) {
+            if (focusTitle) focusTitle.textContent = nextModule.title;
+            if (focusCopy) focusCopy.textContent = nextModule.progress > 0
+                ? 'Lanjutkan dari progres ' + nextModule.progress + '% dan pertahankan ritme belajarmu.'
+                : 'Mulai modul berikutnya untuk melanjutkan perjalanan Foundation.';
+            if (focusLink) focusLink.setAttribute('href', nextModule.href);
+        }
+
+        var status = document.querySelector('[data-module-summary-status]');
+        var retry = document.querySelector('[data-module-summary-retry]');
+        if (status) status.textContent = state === 'error'
+            ? (hasData ? 'Menampilkan cache terakhir. Sinkronisasi server gagal.' : 'Progres belum dapat dimuat. Periksa koneksi lalu coba lagi.')
+            : 'Sinkron dengan progres server.';
+        if (retry) retry.hidden = state !== 'error';
+        if (summaryGrid) {
+            summaryGrid.dataset.moduleSummaryState = state;
+            summaryGrid.setAttribute('aria-busy', 'false');
+        }
+        if (sideCard) {
+            sideCard.dataset.moduleSideSummaryState = state;
+            sideCard.setAttribute('aria-busy', 'false');
+        }
+    }
+
+    async function initParticipantModulesData() {
+        if (!document.querySelector('.fellow-modules-page [data-module-summary-state]')) return;
+        if (_dashboardDataCache) renderParticipantModules(_dashboardDataCache, 'ready');
+        try {
+            var data = await fetchParticipantDashboardData();
+            _dashboardDataCache = data;
+            try { sessionStorage.setItem('__dashboardCache', JSON.stringify({ ts: Date.now(), data: data })); } catch (_) {}
+            renderParticipantModules(data, 'ready');
+        } catch (error) {
+            renderParticipantModules(_dashboardDataCache, 'error');
+        }
+    }
+
+    window.__retryParticipantModules = function() {
+        var summaryGrid = document.querySelector('[data-module-summary-state]');
+        var sideCard = document.querySelector('[data-module-side-summary-state]');
+        if (summaryGrid) summaryGrid.setAttribute('aria-busy', 'true');
+        if (sideCard) sideCard.setAttribute('aria-busy', 'true');
+        initParticipantModulesData();
+    };
+
+    function renderParticipantLeaderboard(data, state) {
+        var summary = document.querySelector('[data-leaderboard-state]');
+        var body = document.querySelector('[data-leaderboard-body]');
+        if (!summary || !body) return;
+
+        var entries = Array.isArray(data?.leaderboard) ? data.leaderboard : [];
+        var current = entries.find(function(item) { return item.current === true; });
+        var status = document.querySelector('[data-leaderboard-status]');
+        var empty = document.querySelector('[data-leaderboard-empty]');
+        var retry = document.querySelector('[data-leaderboard-retry]');
+        var displayName = getParticipantDisplayName() || 'Kamu';
+
+        setModuleSummaryValue('[data-leaderboard-rank]', current ? '#' + Number(current.rank || 0) : '—');
+        setModuleSummaryValue('[data-leaderboard-points]', current ? Number(current.points || 0).toLocaleString('id-ID') : '—');
+        setModuleSummaryValue('[data-leaderboard-count]', state === 'error' ? '—' : entries.length);
+        setModuleSummaryValue('[data-leaderboard-rank-copy]', current ? 'Dari peringkat yang ditampilkan' : 'Belum masuk peringkat');
+
+        if (state === 'error') {
+            body.innerHTML = '';
+            if (status) status.textContent = 'Data leaderboard belum dapat dimuat.';
+            if (empty) {
+                empty.hidden = false;
+                var emptyTitle = empty.querySelector('strong');
+                var emptyCopy = empty.querySelector('p');
+                if (emptyTitle) emptyTitle.textContent = 'Koneksi ke leaderboard terputus';
+                if (emptyCopy) emptyCopy.textContent = 'Tidak ada data contoh yang ditampilkan. Coba muat ulang setelah koneksi stabil.';
+            }
+            if (retry) retry.hidden = false;
+            summary.dataset.leaderboardState = 'error';
+            summary.setAttribute('aria-busy', 'false');
+            return;
+        }
+
+        body.innerHTML = entries.map(function(item, index) {
+            var rank = Math.max(1, Number(item.rank || index + 1));
+            var isCurrent = item.current === true;
+            var visibleName = isCurrent ? displayName + ' (Kamu)' : 'Peserta disamarkan';
+            var rankIcon = rank === 1 ? 'fa-crown' : (rank <= 3 ? 'fa-medal' : 'fa-ranking-star');
+            var statusLabel = isCurrent ? 'Posisimu' : 'Privat';
+            return '<tr class="lb-live-row' + (isCurrent ? ' is-current' : '') + '" data-leaderboard-search-row="' + escapeHtml((visibleName + ' ' + rank).toLowerCase()) + '">' +
+                '<td><span class="lb-rank-mark rank-' + rank + '"><i class="fas ' + rankIcon + '" aria-hidden="true"></i>' + rank + '</span></td>' +
+                '<td><div class="lb-live-user"><span class="lb-live-avatar ' + (isCurrent ? 'current' : 'masked') + '"><i class="fas ' + (isCurrent ? 'fa-user' : 'fa-lock') + '"></i></span><div><strong>' + escapeHtml(visibleName) + '</strong><small>' + (isCurrent ? 'Akun peserta aktif' : 'Identitas dilindungi') + '</small></div></div></td>' +
+                '<td><span class="lb-row-status ' + (isCurrent ? 'current' : '') + '"><i class="fas ' + (isCurrent ? 'fa-location-dot' : 'fa-shield-halved') + '"></i>' + statusLabel + '</span></td>' +
+                '<td><strong class="lb-live-points">' + Number(item.points || 0).toLocaleString('id-ID') + '</strong><small> poin</small></td>' +
+            '</tr>';
+        }).join('');
+
+        if (empty) {
+            empty.hidden = entries.length > 0;
+            var title = empty.querySelector('strong');
+            var copy = empty.querySelector('p');
+            if (title) title.textContent = 'Belum ada peringkat';
+            if (copy) copy.textContent = 'Peringkat akan muncul setelah progress belajar pertama tersimpan.';
+        }
+        if (status) status.textContent = entries.length
+            ? 'Sinkron dengan progress server.'
+            : 'Belum ada progress peserta untuk dihitung.';
+        if (retry) retry.hidden = true;
+        summary.dataset.leaderboardState = 'ready';
+        summary.setAttribute('aria-busy', 'false');
+    }
+
+    function initParticipantLeaderboardInteractions() {
+        var root = document.querySelector('.participant-leaderboard-page');
+        if (!root || root.dataset.leaderboardReady) return;
+        root.dataset.leaderboardReady = 'true';
+        var search = root.querySelector('[data-leaderboard-search]');
+        search?.addEventListener('input', function() {
+            var query = String(search.value || '').trim().toLocaleLowerCase('id-ID');
+            root.querySelectorAll('[data-leaderboard-search-row]').forEach(function(row) {
+                row.hidden = Boolean(query) && !String(row.dataset.leaderboardSearchRow || '').includes(query);
+            });
+        });
+        root.querySelector('[data-leaderboard-retry]')?.addEventListener('click', function() {
+            initParticipantLeaderboardData();
+        });
+    }
+
+    async function initParticipantLeaderboardData() {
+        if (!document.querySelector('.participant-leaderboard-page [data-leaderboard-state]')) return;
+        initParticipantLeaderboardInteractions();
+        var summary = document.querySelector('[data-leaderboard-state]');
+        if (summary) summary.setAttribute('aria-busy', 'true');
+        try {
+            var data = await fetchParticipantDashboardData();
+            _dashboardDataCache = data;
+            renderParticipantLeaderboard(data, 'ready');
+        } catch (error) {
+            renderParticipantLeaderboard(null, 'error');
         }
     }
 
@@ -2050,7 +2312,7 @@
             }).join('') + `
                 <a class="module-card add dash-real" href="#/participant-modules" aria-label="Lihat semua modul pembelajaran">
                     <div class="module-icon"><i class="fas fa-grid-2"></i></div>
-                    <h3>${isRealData ? 'Lihat Semua Modul (' + modules.length + ')' : 'Pilih Modul Lainnya'}</h3>
+                    <h3>${isRealData ? 'Lihat Semua Modul (' + normalizeLearningSummary(data).total + ')' : 'Pilih Modul Lainnya'}</h3>
                     <p>Jelajahi semua modul pembelajaran</p>
                 </a>
             `;
@@ -2058,24 +2320,24 @@
 
         const trail = document.getElementById('dashboardDiscussionTrail');
         if (trail) {
-            const discussionTrails = nonEmpty(data.discussionTrails, fallbackData.discussionTrails);
-            trail.innerHTML = discussionTrails.map((item) => `
+            const discussionTrails = Array.isArray(data.discussionTrails) ? data.discussionTrails : [];
+            trail.innerHTML = discussionTrails.length ? discussionTrails.map((item) => `
                 <li class="dash-real"><span class="mini-avatar ${escapeHtml(item.tone || '')}"></span><p><strong>${escapeHtml(item.actor)}</strong> ${escapeHtml(item.action)} di diskusi <b>#${escapeHtml(item.topic)}</b><small>${escapeHtml(item.time)}</small></p><i></i></li>
-            `).join('');
+            `).join('') : '<li class="dash-empty-state"><i class="fas fa-comments" aria-hidden="true"></i><p><strong>Belum ada aktivitas diskusi</strong><small>Aktivitas terbaru akan muncul di sini.</small></p></li>';
         }
 
         const tracks = document.getElementById('dashboardTrackGrid');
         if (tracks) {
-            const trackItems = nonEmpty(data.tracks, fallbackData.tracks);
-            tracks.innerHTML = trackItems.map((item) => `
+            const trackItems = Array.isArray(data.tracks) ? data.tracks : [];
+            tracks.innerHTML = trackItems.length ? trackItems.map((item) => `
                 <article class="dash-real"><i class="${escapeHtml(item.icon || 'fas fa-layer-group')}"></i><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.subtitle)}</span></article>
-            `).join('');
+            `).join('') : '<article class="dash-track-empty"><i class="fas fa-lock"></i><strong>Specialization belum dibuka</strong><span>Fokuskan progresmu pada enam modul Foundation.</span></article>';
         }
 
         const journey = document.getElementById('dashboardJourneyList');
         if (journey) {
-            const journeyItems = nonEmpty(data.journey, fallbackData.journey);
-            journey.innerHTML = journeyItems.map((item) => {
+            const journeyItems = Array.isArray(data.journey) ? data.journey : [];
+            journey.innerHTML = journeyItems.length ? journeyItems.map((item) => {
                 const hasProgress = item.progress !== null && item.progress !== undefined && Number.isFinite(Number(item.progress));
                 const progress = hasProgress ? Math.max(0, Math.min(100, Math.round(Number(item.progress)))) : 0;
                 const safeStatus = ['completed', 'in_progress', 'not_started', 'locked', 'unavailable'].includes(item.status)
@@ -2092,23 +2354,23 @@
                         <em>${statusIcon}${escapeHtml(statusLabel)}</em>
                     </article>
                 `;
-            }).join('');
+            }).join('') : '<article class="journey-state-unavailable dash-real" aria-label="Perjalanan belum tersedia"><i class="fas fa-route"></i><div><strong>Perjalanan belum tersedia</strong><span>Data fase akan tampil setelah disiapkan panitia.</span><b></b></div><em><i class="fas fa-clock"></i> Menunggu</em></article>';
         }
 
         const events = document.getElementById('dashboardUpcomingEvents');
         if (events) {
-            const eventItems = nonEmpty(data.events, fallbackData.events);
-            events.innerHTML = eventItems.map((item) => `
+            const eventItems = Array.isArray(data.events) ? data.events : [];
+            events.innerHTML = eventItems.length ? eventItems.map((item) => `
                 <article class="dash-real"><time><strong>${escapeHtml(item.day)}</strong>${escapeHtml(item.month)}</time><div><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.time)}</p></div><a class="event-join-button" href="${escapeHtml(item.url || '#/participant-events')}">Gabung</a></article>
-            `).join('');
+            `).join('') : '<div class="dash-panel-empty"><i class="far fa-calendar-check"></i><div><strong>Belum ada event terjadwal</strong><span>Jadwal baru akan muncul setelah diumumkan panitia.</span></div></div>';
         }
 
         const leaderboard = document.getElementById('dashboardLeaderboard');
         if (leaderboard) {
             const session = readParticipantSession();
             const currentName = getParticipantDisplayName();
-            const leaderboardItems = nonEmpty(data.leaderboard, fallbackData.leaderboard);
-            leaderboard.innerHTML = leaderboardItems.map((item, index) => {
+            const leaderboardItems = Array.isArray(data.leaderboard) ? data.leaderboard : [];
+            leaderboard.innerHTML = leaderboardItems.length ? leaderboardItems.map((item, index) => {
                 const rank = item.rank || index + 1;
                 const itemNik = String(item.nik || '').replace(/\D/g, '');
                 const sessionNik = String(session?.nik || '').replace(/\D/g, '');
@@ -2120,7 +2382,7 @@
                 const cleanName = shouldPreferStoredName ? item.name : currentName;
                 const visibleName = isCurrent ? `${escapeHtml(cleanName || 'Kamu')} (Kamu)` : '*********';
                 return `<li class="dash-real${isCurrent ? ' current' : ''}"><span>${rank}</span><b class="avatar-small ${isCurrent ? 'pink' : 'masked'}">${isCurrent ? '' : '****'}</b><strong>${visibleName}</strong><em>${Number(item.points || 0).toLocaleString('id-ID')} Poin</em><i class="fas fa-medal ${medal}"></i></li>`;
-            }).join('');
+            }).join('') : '<li class="dash-leaderboard-empty"><i class="fas fa-seedling"></i><span><strong>Belum ada peringkat</strong><small>Progress pertama akan memulai leaderboard.</small></span></li>';
         }
     }
 
@@ -3031,7 +3293,7 @@
     window.saveParticipantPortalSettings = saveSettings;
     window.applyParticipantPortalSettings = applySettings;
     window.initFellowDashboardPage = async function(pageName = 'dashboard') {
-        var allowedPages = ['dashboard', 'modules', 'settings', 'under-development'];
+        var allowedPages = ['dashboard', 'modules', 'leaderboard', 'settings', 'under-development'];
         if (allowedPages.indexOf(pageName) === -1) {
             renderParticipantRestricted();
             return;
@@ -3047,6 +3309,9 @@
         }
         if (pageName === 'modules') {
             initModuleInteractions();
+            if (currentPath() === '/participant-modules') {
+                initParticipantModulesData();
+            }
             initGeneratedLessonPage();
             initIntroLessonProgress();
             initPracticeNotes();
@@ -3056,6 +3321,9 @@
             if (currentPath() === '/participant-ai-fundamentals') {
                 initAiFundamentalsSummary();
             }
+        }
+        if (pageName === 'leaderboard') {
+            initParticipantLeaderboardData();
         }
         if (pageName === 'settings') {
             initSettingsPage();

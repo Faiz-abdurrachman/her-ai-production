@@ -415,7 +415,7 @@ const router = {
     },
 
     isParticipantRouteAllowed(path) {
-        if (path === "/participant-dashboard" || path === "/participant-modules" || path === "/participant-settings") return true;
+        if (path === "/participant-dashboard" || path === "/participant-modules" || path === "/participant-leaderboard" || path === "/participant-settings") return true;
         return path.startsWith("/participant-ai-") || path.startsWith("/participant-ai-lab-") || path.startsWith("/participant-specialization-") || path.startsWith("/participant-cv-");
     },
 
@@ -486,6 +486,17 @@ const router = {
         }
 
         path = this.routeAliases[path] || path;
+
+        // The legacy public leaderboard contained static showcase data. Keep one
+        // canonical, authenticated destination so public visitors never receive
+        // participant-ranking content outside the participant access controls.
+        if (path === "/leaderboard") {
+            const destination = this.readParticipantSession()?.nik
+                ? "/participant-leaderboard"
+                : "/participant-login";
+            window.location.hash = `#${destination}`;
+            return;
+        }
 
         const routeUrl = this.isComputerVisionLockedRoute(path)
             ? "/pages/frontend/fellow-dashboard/under-development.html"
@@ -997,6 +1008,8 @@ const router = {
                     window.initFellowDashboardPage("dashboard");
                 } else if (path === "/participant-modules" && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
+                } else if (path === "/participant-leaderboard" && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("leaderboard");
                 } else if (path === "/participant-settings" && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("settings");
                 } else if (path === "/participant-ai-fundamentals" && typeof window.initFellowDashboardPage === "function") {
