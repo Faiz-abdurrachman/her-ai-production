@@ -858,7 +858,7 @@ const router = {
 
             if (isParticipantDashboardPage) {
                 const participantSession = this.readParticipantSession();
-                if (false && !participantSession?.nik) {
+                if (!participantSession?.nik) {
                     this.renderParticipantAccessNotice(appContent, navContainer, footerContainer, {
                         title: "Login Peserta Diperlukan",
                         message: "Masuk dengan NIK dan password peserta untuk membuka dashboard HerAI Fellowship.",

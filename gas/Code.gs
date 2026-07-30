@@ -11,7 +11,7 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
-const HERAI_BACKEND_VERSION = '2026.3.5-qa-participant';
+const HERAI_BACKEND_VERSION = '2026.3.6-participant-runtime-fix';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
 const PARTICIPANT_ACCOUNT_TYPE = 'participant';
 const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
@@ -2797,15 +2797,15 @@ function updateParticipantProfile(payload) {
     return String(row.nik || '').replace(/\D/g, '') === String(claims.sub || '');
   });
   if (!participant) return { status: 'error', message: 'NIK belum terdaftar.' };
-  const allowed = {
-    nama_lengkap: payload.nama_lengkap,
-    email: payload.email,
-    whatsapp: payload.whatsapp,
-    alamat: payload.alamat,
-    cv_link: payload.cv_link,
-    profile_updated_at: new Date().toISOString()
-  };
-  updateByKey(SHEETS.participants, 'rowId', participant.rowId, allowed);
+  const allowed = {};
+  ['nama_lengkap', 'email', 'whatsapp', 'alamat', 'cv_link'].forEach(function(field) {
+    if (Object.prototype.hasOwnProperty.call(payload, field)) allowed[field] = payload[field];
+  });
+  allowed.profile_updated_at = new Date().toISOString();
+  const updateResult = updateByKey(SHEETS.participants, 'rowId', participant.rowId, allowed);
+  if (!updateResult || updateResult.status !== 'success') {
+    return updateResult || { status: 'error', message: 'Profil peserta gagal diperbarui.' };
+  }
   const updated = getRows(SHEETS.participants).find(function(row) {
     return String(row.rowId || '') === String(participant.rowId || '');
   });

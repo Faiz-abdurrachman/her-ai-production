@@ -7,10 +7,10 @@ node_modules
 test-results
 playwright-report
 .playwright-mcp
-gas
-messaging
-signaling
-participant-portal
-render.yaml
-scripts
+/gas
+/messaging
+/signaling
+/participant-portal
+/render.yaml
+/scripts
 *.csv

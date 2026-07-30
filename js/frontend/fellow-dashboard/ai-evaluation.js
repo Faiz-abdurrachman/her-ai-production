@@ -2300,6 +2300,8 @@ var SOURCE_VISUALS = {
         if (previousButton) previousButton.addEventListener("click", () => showQuiz(currentQuiz - 1, true));
         if (nextButton) nextButton.addEventListener("click", () => showQuiz(currentQuiz + 1, true));
         showQuiz(0, false);
+        form.hidden = false;
+        form.setAttribute("aria-busy", "false");
 
         const savedDone = localStorage.getItem(STORAGE.quizDone) === "true";
         const savedAnswers = safeJsonParse(localStorage.getItem(STORAGE.quizAnswers), {}) || {};

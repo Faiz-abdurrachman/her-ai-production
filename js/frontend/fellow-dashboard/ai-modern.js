@@ -1091,6 +1091,8 @@
         });
 
         renderQuestion();
+        form.hidden = false;
+        form.setAttribute("aria-busy", "false");
         if (state.done) renderResult("Kuis ini single attempt. Jawaban dan pembahasan sudah dikunci.");
     };
 

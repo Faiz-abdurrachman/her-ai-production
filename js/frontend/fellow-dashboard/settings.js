@@ -21,7 +21,7 @@
             if (this._pending[name]) return this._pending[name];
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
-                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260729-dynamic-tracking';
+                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260730-participant-runtime-fix';
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
                 s.onerror = function() { delete window.__aiLabLoader._pending[name]; reject(new Error('Failed to load: ' + name)); };
                 document.head.appendChild(s);
@@ -69,9 +69,12 @@
     };
 
     function apiBase() {
-        return window.PARTICIPANT_PORTAL_API_URL
-            || localStorage.getItem(API_URL_KEY)
-            || 'http://127.0.0.1:8092';
+        const configured = window.PARTICIPANT_PORTAL_API_URL || localStorage.getItem(API_URL_KEY);
+        if (configured) return String(configured).trim().replace(/\/+$/, '');
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return 'http://127.0.0.1:8092';
+        }
+        return '';
     }
 
     function mergeSettings(settings = {}) {
@@ -95,8 +98,10 @@
 
     async function fetchSettings() {
         const fallback = localSettings();
+        const base = apiBase();
+        if (!base) return fallback;
         try {
-            const response = await fetch(`${apiBase()}/api/participant-portal/settings`, { cache: 'no-store' });
+            const response = await fetch(`${base}/api/participant-portal/settings`, { cache: 'no-store' });
             if (!response.ok) return fallback;
             const result = await response.json();
             const merged = mergeSettings(result.settings || {});
@@ -110,11 +115,13 @@
     async function saveSettings(settings) {
         const merged = mergeSettings(settings);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+        const base = apiBase();
+        if (!base) return merged;
         try {
             const headers = { 'Content-Type': 'application/json' };
             const adminKey = localStorage.getItem(ADMIN_KEY);
             if (adminKey) headers['X-HerAI-Admin-Key'] = adminKey;
-            const response = await fetch(`${apiBase()}/api/participant-portal/settings`, {
+            const response = await fetch(`${base}/api/participant-portal/settings`, {
                 method: 'PUT',
                 headers,
                 body: JSON.stringify({ settings: merged })
@@ -1714,10 +1721,11 @@
 
     function recordParticipantActivity(activity = {}) {
         const session = readParticipantSession();
-        if (!session?.nik) return;
+        if (!session?.nik || !session?.token) return;
         const payload = {
             action: 'recordParticipantActivity',
             nik: session.nik,
+            participantToken: session.token,
             nama_lengkap: session.name || '',
             page: currentPath(),
             session_id: participantSessionId(),
@@ -1846,10 +1854,11 @@
 
     async function fetchParticipantDashboardData() {
         var session = readParticipantSession();
+        if (!session?.nik || !session?.token) throw new Error('Sesi peserta tidak tersedia. Silakan login ulang.');
         var response = await fetch('/__gas', {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action: 'getParticipantDashboardData', nik: session && session.nik ? session.nik : '' })
+            body: JSON.stringify({ action: 'getParticipantDashboardData', nik: session.nik, participantToken: session.token })
         });
         if (!response.ok) throw new Error('Gagal terhubung ke server.');
         var result = await response.json();
@@ -2239,7 +2248,7 @@
         form.dataset.settingsReady = 'true';
 
         const session = readParticipantSession();
-        if (!session?.nik) return;
+        if (!session?.nik || !session?.token) return;
         const profile = session?.profile || {};
 
         document.getElementById('settingsName').value = profile.nama_lengkap || '';
@@ -2297,7 +2306,7 @@
                     var resp = await fetch('/__gas', {
                         method: 'POST',
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                        body: JSON.stringify({ action: 'removeParticipantPhoto' })
+                        body: JSON.stringify({ action: 'removeParticipantPhoto', nik: session.nik, participantToken: session.token })
                     });
                     var r = await resp.json();
                     if (r.status !== 'success') throw new Error(r.message || 'Gagal.');
@@ -2379,7 +2388,7 @@
                     var resp = await fetch('/__gas', {
                         method: 'POST',
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                        body: JSON.stringify({ action: 'uploadParticipantPhoto', photo_base64: pendingBase64 })
+                        body: JSON.stringify({ action: 'uploadParticipantPhoto', nik: session.nik, participantToken: session.token, photo_base64: pendingBase64 })
                     });
                     if (!resp.ok) throw new Error('Gagal terhubung.');
                     var result = await resp.json();
@@ -2424,6 +2433,7 @@
                     body: JSON.stringify({
                         action: 'updateParticipantProfile',
                         nik: session.nik,
+                        participantToken: session.token,
                         nama_lengkap: document.getElementById('settingsName').value,
                         email: document.getElementById('settingsEmail').value,
                         whatsapp: document.getElementById('settingsWhatsapp').value,
@@ -2556,7 +2566,7 @@
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             var session = readParticipantSession();
-            if (!session?.nik) {
+            if (!session?.nik || !session?.token) {
                 var errMsg = document.getElementById('passwordChangeMessage');
                 if (errMsg) { errMsg.style.display = 'block'; errMsg.className = 'settings-message error'; errMsg.textContent = 'Sesi tidak ditemukan. Silakan login ulang.'; }
                 return;
@@ -2607,6 +2617,7 @@
                     body: JSON.stringify({
                         action: 'changeParticipantPassword',
                         nik: session.nik,
+                        participantToken: session.token,
                         oldPassword: oldPassword,
                         newPassword: newPassword
                     })
@@ -2631,7 +2642,7 @@
 
     window.saveChapterProgress = async function(moduleId, chapterId, status, score) {
         var session = readParticipantSession();
-        if (!session?.nik) {
+        if (!session?.nik || !session?.token) {
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.' };
         }
         try {
@@ -2641,6 +2652,7 @@
                 body: JSON.stringify({
                     action: 'saveParticipantProgress',
                     nik: session.nik,
+                    participantToken: session.token,
                     module_id: moduleId,
                     chapter_id: chapterId,
                     status: status || 'completed',
@@ -2664,7 +2676,7 @@
 
     window.getParticipantProgress = async function(moduleId) {
         var session = readParticipantSession();
-        if (!session?.nik) {
+        if (!session?.nik || !session?.token) {
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.', data: [] };
         }
         try {
@@ -2674,6 +2686,7 @@
                 body: JSON.stringify({
                     action: 'getParticipantProgress',
                     nik: session.nik,
+                    participantToken: session.token,
                     module_id: moduleId || ''
                 })
             });
@@ -2692,7 +2705,7 @@
 
     window.saveParticipantDiscussion = async function(moduleId, discussion) {
         var session = readParticipantSession();
-        if (!session?.nik) {
+        if (!session?.nik || !session?.token) {
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.' };
         }
         try {
@@ -2702,6 +2715,7 @@
                 body: JSON.stringify({
                     action: 'saveParticipantDiscussion',
                     nik: session.nik,
+                    participantToken: session.token,
                     module_id: moduleId,
                     discussion_id: discussion?.id || '',
                     prompt: discussion?.prompt || 'Diskusi',
@@ -2725,7 +2739,7 @@
 
     window.getParticipantDiscussions = async function(moduleId) {
         var session = readParticipantSession();
-        if (!session?.nik) {
+        if (!session?.nik || !session?.token) {
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.', data: [] };
         }
         try {
@@ -2735,6 +2749,7 @@
                 body: JSON.stringify({
                     action: 'getParticipantDiscussions',
                     nik: session.nik,
+                    participantToken: session.token,
                     module_id: moduleId
                 })
             });

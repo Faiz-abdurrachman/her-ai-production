@@ -249,8 +249,17 @@ async function loadParticipantProfile(nik, password) {
 }
 
 async function updateParticipantProfile(updates) {
+    const session = readParticipantSession();
+    if (!session?.nik || !session?.token || isParticipantSessionExpired(session)) {
+        throw new Error('Sesi peserta tidak valid. Silakan login ulang.');
+    }
     try {
-        const result = await postProfileApi({ action: 'updateParticipantProfile', ...updates });
+        const result = await postProfileApi({
+            action: 'updateParticipantProfile',
+            ...updates,
+            nik: session.nik,
+            participantToken: session.token
+        });
         if (result.status === 'success') return hydrateProfileFromParticipantData(updates.nik, result.profile);
         throw new Error(result.message || 'Gagal memperbarui profil.');
     } catch (error) {
