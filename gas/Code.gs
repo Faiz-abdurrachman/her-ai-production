@@ -11,7 +11,18 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
+const HERAI_BACKEND_VERSION = '2026.3.5-qa-participant';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
+const PARTICIPANT_ACCOUNT_TYPE = 'participant';
+const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
+const QA_PARTICIPANT_PROPERTY_KEYS = {
+  nik: 'HERAI_QA_NIK',
+  name: 'HERAI_QA_NAME',
+  email: 'HERAI_QA_EMAIL',
+  password: 'HERAI_QA_PASSWORD',
+  resetConfirmation: 'HERAI_QA_RESET_CONFIRMATION'
+};
+const QA_PARTICIPANT_RESET_CONFIRMATION = 'RESET_QA_ONLY';
 const AUTH_TOKEN_TTL_SECONDS = {
   participant: 12 * 60 * 60,
   retest: 4 * 60 * 60
@@ -167,7 +178,7 @@ const SCHEMA = {
     'skor_logika', 'skor_motivasi', 'skor_teknis', 'skor_latar', 'skor_akhir',
     'is_scanned', 'ai_summary', 'ai_motivation', 'ai_skills', 'ai_score',
     'bootcamp_status', 'attendance_rate', 'final_project_status', 'certificate_status',
-    'participant_password', 'profile_updated_at', 'photo_url'
+    'participant_password', 'profile_updated_at', 'photo_url', 'account_type'
   ],
   [SHEETS.admins]: ['id_admin', 'password', 'peran_admin', 'nama_admin', 'permissions', 'status', 'created_at'],
   [SHEETS.audit]: ['timestamp', 'adminId', 'tindakan', 'perangkat', 'lokasi'],
@@ -189,7 +200,7 @@ const SCHEMA = {
   [SHEETS.participantDashboardJourney]: ['phase_id', 'title', 'subtitle', 'progress', 'icon', 'accent', 'source_type', 'locked_label', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardEvents]: ['day', 'month', 'title', 'time', 'url', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardLeaderboard]: ['rank', 'nik', 'name', 'points', 'is_active'],
-  [SHEETS.participantAccounts]: ['account_id', 'nik', 'username', 'generated_password', 'password_hash', 'password_status', 'access_status', 'nama_lengkap', 'email', 'whatsapp', 'participant_rowId', 'participant_stage', 'status_seleksi', 'created_at', 'updated_at', 'created_by', 'last_login_at', 'password_changed_at'],
+  [SHEETS.participantAccounts]: ['account_id', 'nik', 'username', 'generated_password', 'password_hash', 'password_status', 'access_status', 'nama_lengkap', 'email', 'whatsapp', 'participant_rowId', 'participant_stage', 'status_seleksi', 'created_at', 'updated_at', 'created_by', 'last_login_at', 'password_changed_at', 'account_type'],
   [SHEETS.participantActivity]: ['activity_id', 'timestamp', 'nik', 'nama_lengkap', 'activity_type', 'page', 'module_id', 'lesson_id', 'activity', 'score', 'total', 'payload_json', 'user_agent', 'session_id'],
   [SHEETS.participantProgress]: ['progress_id', 'participant_rowId', 'nik', 'module_id', 'chapter_id', 'status', 'score', 'started_at', 'completed_at', 'updated_at'],
   [SHEETS.participantDiscussions]: ['discussion_id', 'participant_rowId', 'nik', 'module_id', 'prompt', 'text', 'replies_json', 'created_at', 'updated_at']
@@ -269,7 +280,7 @@ function doPost(e) {
 }
 
 function doGet() {
-  return json({ status: 'success', service: 'HerAI GAS Backend', version: '2026.3.4-session-cohort-guard' });
+  return json({ status: 'success', service: 'HerAI GAS Backend', version: HERAI_BACKEND_VERSION });
 }
 
 function authorizeGasAction(action, payload) {
@@ -321,7 +332,7 @@ function requireParticipantToken(payload) {
   if (claims.scope === 'participant') {
     const account = findParticipantAccount(claims.sub);
     if (!account || !account.account_id
-      || !isTargetParticipantForPortal(account)
+      || !isParticipantPortalAccountAllowed(account)
       || !isParticipantAccountActive(account)) {
       throw new Error('Sesi peserta tidak valid atau akses sudah tidak aktif.');
     }
@@ -603,7 +614,16 @@ function getParticipantDashboardData(payload) {
  * Falls back to seed data if no progress exists yet.
  */
 function computeLiveLeaderboard(requesterNik) {
-  var progressRows = getRows(SHEETS.participantProgress);
+  var activeAccounts = getActiveParticipantPortalAccounts();
+  var activeNikSet = activeAccounts.reduce(function(result, account) {
+    const nik = String(account.nik || account.username || '').replace(/\D/g, '');
+    if (nik) result[nik] = true;
+    return result;
+  }, {});
+  var progressRows = getRows(SHEETS.participantProgress).filter(function(row) {
+    const nik = String(row.nik || '').replace(/\D/g, '');
+    return Boolean(nik && activeNikSet[nik]);
+  });
   
   if (!progressRows || progressRows.length === 0) {
     return getSeedLeaderboard(requesterNik);
@@ -648,9 +668,8 @@ function computeLiveLeaderboard(requesterNik) {
   const top10 = rankings.slice(0, 10);
   
   // Look up names from participant_accounts
-  const accounts = getRows(SHEETS.participantAccounts);
   const nameMap = {};
-  accounts.forEach(function(acc) {
+  activeAccounts.forEach(function(acc) {
     const nik = String(acc.nik || '').replace(/\D/g, '');
     if (nik) nameMap[nik] = acc.nama_lengkap || 'Peserta HerAI';
   });
@@ -673,8 +692,12 @@ function computeLiveLeaderboard(requesterNik) {
  */
 function getSeedLeaderboard(requesterNik) {
   var rows = getRows(SHEETS.participantDashboardLeaderboard);
+  var activeNikSet = getActiveParticipantPortalNikSet();
   if (rows && rows.length > 0) {
-    return rows.map(function(row) {
+    return rows.filter(function(row) {
+      const nik = String(row.nik || '').replace(/\D/g, '');
+      return !nik || activeNikSet[nik];
+    }).map(function(row) {
       const nik = String(row.nik || '').replace(/\D/g, '');
       const current = Boolean(requesterNik && nik === requesterNik);
       return {
@@ -799,9 +822,13 @@ function migrateExistingParticipantAccountCredentials() {
         skipped += 1;
         return;
       }
-      const expectedAccessStatus = isTargetParticipantForPortal({
-        email: row[accountIndex.email]
-      }) ? 'active' : 'inactive';
+      const currentAccessStatus = String(row[accountIndex.access_status] || '').trim().toLowerCase();
+      const accountType = accountIndex.account_type === undefined
+        ? PARTICIPANT_ACCOUNT_TYPE
+        : row[accountIndex.account_type];
+      const expectedAccessStatus = isQaParticipantAccount({ account_type: accountType })
+        ? (currentAccessStatus || 'active')
+        : (isTargetParticipantForPortal({ email: row[accountIndex.email] }) ? 'active' : 'inactive');
       if (String(row[accountIndex.access_status] || '').trim().toLowerCase() !== expectedAccessStatus) {
         accessStatusColumn[index][0] = expectedAccessStatus;
         if (expectedAccessStatus === 'active') activated += 1;
@@ -1095,9 +1122,7 @@ function seedDashboardDiscussions() {
 }
 
 function seedDashboardLeaderboard() {
-  var accounts = getRows(SHEETS.participantAccounts).filter(function(row) {
-    return !row.access_status || row.access_status !== 'inactive';
-  });
+  var accounts = getActiveParticipantPortalAccounts();
   var leaderboard = [];
 
   if (accounts.length > 0) {
@@ -1240,7 +1265,8 @@ function registerParticipant(payload) {
     status_final: 'pending',
     final_status: 'pending',
     is_scanned: false,
-    certificate_status: 'pending'
+    certificate_status: 'pending',
+    account_type: PARTICIPANT_ACCOUNT_TYPE
   });
   return { status: 'success', rowId };
 }
@@ -1289,7 +1315,7 @@ function participantLogin(payload) {
   if (!account || !account.account_id) {
     return { status: 'error', message: 'NIK atau password tidak valid.' };
   }
-  if (!isTargetParticipantForPortal(account)) {
+  if (!isParticipantPortalAccountAllowed(account)) {
     return { status: 'error', message: 'Akses akun peserta sedang tidak aktif.' };
   }
   if (!isParticipantAccountActive(account)) {
@@ -1312,7 +1338,8 @@ function participantLogin(payload) {
   clearAttemptLimit('participant-login:' + nik);
   const auth = issueAuthToken('participant', nik, {
     scope: 'participant',
-    rowId: String(account.participant_rowId || participant.rowId || '')
+    rowId: String(account.participant_rowId || participant.rowId || ''),
+    account_type: normalizeParticipantAccountType(account.account_type)
   }, AUTH_TOKEN_TTL_SECONDS.participant);
   recordParticipantActivity({
     nik: participant.nik,
@@ -1421,7 +1448,8 @@ function provisionParticipantAccounts(payload) {
       updated_at: now,
       created_by: createdBy,
       last_login_at: existing.last_login_at || '',
-      password_changed_at: shouldGenerate ? now : (existing.password_changed_at || '')
+      password_changed_at: shouldGenerate ? now : (existing.password_changed_at || ''),
+      account_type: normalizeParticipantAccountType(existing.account_type)
     };
     upsertByKey(SHEETS.participantAccounts, 'nik', nik, account);
     accounts.push(account);
@@ -1522,6 +1550,63 @@ function normalizeEmail(value) {
   return String(value || '').trim().toLowerCase();
 }
 
+function normalizeParticipantAccountType(value) {
+  return String(value || '').trim().toLowerCase() === QA_PARTICIPANT_ACCOUNT_TYPE
+    ? QA_PARTICIPANT_ACCOUNT_TYPE
+    : PARTICIPANT_ACCOUNT_TYPE;
+}
+
+function isQaParticipantAccount(account) {
+  return normalizeParticipantAccountType(account && account.account_type) === QA_PARTICIPANT_ACCOUNT_TYPE;
+}
+
+function isParticipantPortalAccountAllowed(account, targetEmailSet) {
+  return isQaParticipantAccount(account) || isTargetParticipantForPortal(account, targetEmailSet);
+}
+
+function getActiveParticipantPortalAccounts() {
+  return getRows(SHEETS.participantAccounts).filter(function(account) {
+    return account && account.account_id
+      && isParticipantPortalAccountAllowed(account)
+      && isParticipantAccountActive(account);
+  });
+}
+
+function getActiveParticipantPortalNikSet() {
+  return getActiveParticipantPortalAccounts().reduce(function(result, account) {
+    const nik = String(account.nik || account.username || '').replace(/\D/g, '');
+    if (nik) result[nik] = true;
+    return result;
+  }, {});
+}
+
+/**
+ * Preview internal untuk workflow email/credential. Fungsi ini sengaja tidak
+ * didaftarkan di doPost; jalankan hanya dari Apps Script editor.
+ */
+function getActiveParticipantCommunicationRecipients() {
+  const seenEmails = {};
+  const recipients = getActiveParticipantPortalAccounts().map(function(account) {
+    const email = normalizeEmail(account.email);
+    if (!email || seenEmails[email]) return null;
+    seenEmails[email] = true;
+    return {
+      account_id: String(account.account_id || ''),
+      nik: String(account.nik || account.username || '').replace(/\D/g, ''),
+      nama_lengkap: String(account.nama_lengkap || ''),
+      email: email,
+      account_type: normalizeParticipantAccountType(account.account_type),
+      access_status: 'active'
+    };
+  }).filter(Boolean);
+  return {
+    status: 'success',
+    total: recipients.length,
+    qa_total: recipients.filter(function(row) { return row.account_type === QA_PARTICIPANT_ACCOUNT_TYPE; }).length,
+    recipients: recipients
+  };
+}
+
 function getTargetParticipantPortalEmailSet() {
   const emailSet = {};
   TARGET_PARTICIPANT_PORTAL_EMAILS.forEach(function(email) {
@@ -1542,6 +1627,9 @@ function buildParticipantPortalAccessReconciliation(accounts) {
   let duplicateAccountEmailKeys = 0;
   let targetAccountRows = 0;
   let outsideTargetRows = 0;
+  let qaAccountRows = 0;
+  let activeQaRows = 0;
+  let disabledQaRows = 0;
   let toActivate = 0;
   let toDeactivate = 0;
   let unchanged = 0;
@@ -1555,20 +1643,26 @@ function buildParticipantPortalAccessReconciliation(accounts) {
       seenAccountEmails[email] = (seenAccountEmails[email] || 0) + 1;
       if (seenAccountEmails[email] === 2) duplicateAccountEmailKeys += 1;
     }
-    const isTarget = !!(email && targetEmailSet[email]);
-    if (isTarget) {
+    const isQa = isQaParticipantAccount(account);
+    const isTarget = !isQa && !!(email && targetEmailSet[email]);
+    if (isQa) {
+      qaAccountRows += 1;
+      if (isParticipantAccountActive(account)) activeQaRows += 1;
+      else disabledQaRows += 1;
+    } else if (isTarget) {
       matchedTargetEmails[email] = true;
       targetAccountRows += 1;
     } else {
       outsideTargetRows += 1;
     }
-    const expectedStatus = isTarget ? 'active' : 'inactive';
+    const expectedStatus = isQa ? (currentStatus || 'active') : (isTarget ? 'active' : 'inactive');
     if (currentStatus === expectedStatus) unchanged += 1;
-    else if (isTarget) toActivate += 1;
+    else if (isQa || isTarget) toActivate += 1;
     else toDeactivate += 1;
     decisions.push({
       source_index: account && account.__source_index !== undefined ? account.__source_index : index,
-      expected_status: expectedStatus
+      expected_status: expectedStatus,
+      account_type: isQa ? QA_PARTICIPANT_ACCOUNT_TYPE : PARTICIPANT_ACCOUNT_TYPE
     });
   });
 
@@ -1592,8 +1686,12 @@ function buildParticipantPortalAccessReconciliation(accounts) {
       matched_target_accounts: targetAccountRows,
       matched_target_emails: matchedTargetTotal,
       outside_target_accounts: outsideTargetRows,
-      expected_active: targetAccountRows,
-      expected_inactive: outsideTargetRows,
+      qa_accounts: qaAccountRows,
+      active_qa_accounts: activeQaRows,
+      disabled_qa_accounts: disabledQaRows,
+      expected_active: targetAccountRows + activeQaRows,
+      expected_inactive: outsideTargetRows + disabledQaRows,
+      expected_total_after_compaction: EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT + qaAccountRows,
       to_activate: toActivate,
       to_deactivate: toDeactivate,
       unchanged: unchanged,
@@ -1609,10 +1707,11 @@ function buildParticipantPortalAccessReconciliation(accounts) {
 
 function getParticipantPortalAccessSnapshot() {
   const sheet = getSheet(SHEETS.participantAccounts);
+  ensureSchemaHeaders(sheet, SCHEMA[SHEETS.participantAccounts]);
   const values = sheet.getDataRange().getValues();
   const headers = values[0] || [];
   const headerIndex = indexHeaders(headers);
-  ['email', 'access_status', 'updated_at'].forEach(function(header) {
+  ['nik', 'email', 'access_status', 'updated_at', 'account_type'].forEach(function(header) {
     if (headerIndex[header] === undefined) {
       throw new Error('Kolom wajib ParticipantAccounts tidak tersedia: ' + header);
     }
@@ -1622,8 +1721,10 @@ function getParticipantPortalAccessSnapshot() {
     const hasData = row.some(function(value) { return String(value || '').trim() !== ''; });
     if (!hasData) return;
     accounts.push({
+      nik: row[headerIndex.nik],
       email: row[headerIndex.email],
       access_status: row[headerIndex.access_status],
+      account_type: row[headerIndex.account_type],
       __source_index: index
     });
   });
@@ -1697,9 +1798,9 @@ function reconcileParticipantPortalAccess() {
 
 /**
  * Memadatkan ParticipantAccounts dari cohort lama 187 row menjadi tepat 100
- * peserta target tahap 2. Fungsi membuat backup sheet otomatis dan menjaga
- * seluruh nilai row target, termasuk credential existing. Tidak ada password
- * yang dibuat, dirotasi, atau dihapus.
+ * peserta target tahap 2, ditambah account QA yang sudah ada. Fungsi membuat
+ * backup sheet otomatis dan menjaga seluruh nilai row target/QA, termasuk
+ * credential existing. Tidak ada password yang dibuat, dirotasi, atau dihapus.
  */
 function compactParticipantAccountsToTargetCohort() {
   ensureParticipantBackendSchema();
@@ -1717,7 +1818,8 @@ function compactParticipantAccountsToTargetCohort() {
       Logger.log(JSON.stringify(rejected));
       return rejected;
     }
-    if (summary.total_accounts === EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+    const expectedCompactedTotal = EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT + summary.qa_accounts;
+    if (summary.total_accounts === expectedCompactedTotal
       && summary.matched_target_accounts === EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
       && summary.outside_target_accounts === 0) {
       const alreadyCompacted = Object.assign({
@@ -1728,14 +1830,14 @@ function compactParticipantAccountsToTargetCohort() {
       Logger.log(JSON.stringify(alreadyCompacted));
       return alreadyCompacted;
     }
-    if (summary.total_accounts !== EXPECTED_PARTICIPANT_ACCOUNT_TOTAL_BEFORE_COMPACTION
+    if (summary.total_accounts !== EXPECTED_PARTICIPANT_ACCOUNT_TOTAL_BEFORE_COMPACTION + summary.qa_accounts
       || summary.matched_target_accounts !== EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
       || summary.outside_target_accounts !== (
         EXPECTED_PARTICIPANT_ACCOUNT_TOTAL_BEFORE_COMPACTION - EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
       )) {
       const unexpectedTotal = Object.assign({
         status: 'error',
-        message: 'Compaction dibatalkan: expected 187 total, 100 target, dan 87 non-target.'
+        message: 'Compaction dibatalkan: expected 187 account cohort lama ditambah QA, 100 target, dan 87 non-target.'
       }, summary);
       Logger.log(JSON.stringify(unexpectedTotal));
       return unexpectedTotal;
@@ -1748,14 +1850,19 @@ function compactParticipantAccountsToTargetCohort() {
       const hasData = row.some(function(value) { return String(value || '').trim() !== ''; });
       if (!hasData) return;
       const email = normalizeEmail(row[snapshot.header_index.email]);
-      if (!targetEmailSet[email]) return;
+      const accountType = row[snapshot.header_index.account_type];
+      const isQa = isQaParticipantAccount({ account_type: accountType });
+      if (!targetEmailSet[email] && !isQa) return;
       const preservedRow = row.slice();
-      preservedRow[snapshot.header_index.access_status] = 'active';
+      if (!isQa) preservedRow[snapshot.header_index.access_status] = 'active';
+      else if (!String(preservedRow[snapshot.header_index.access_status] || '').trim()) {
+        preservedRow[snapshot.header_index.access_status] = 'active';
+      }
       preservedRow[snapshot.header_index.updated_at] = now;
       compactedRows.push(preservedRow);
     });
-    if (compactedRows.length !== EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT) {
-      throw new Error('Compaction dibatalkan: jumlah row target hasil filter bukan 100.');
+    if (compactedRows.length !== expectedCompactedTotal) {
+      throw new Error('Compaction dibatalkan: jumlah row target dan QA hasil filter tidak sesuai preflight.');
     }
 
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
@@ -1780,10 +1887,11 @@ function compactParticipantAccountsToTargetCohort() {
         getParticipantPortalAccessSnapshot().accounts
       ).summary;
       if (!verification.ready_to_apply
-        || verification.total_accounts !== EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+        || verification.total_accounts !== expectedCompactedTotal
         || verification.matched_target_accounts !== EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+        || verification.qa_accounts !== summary.qa_accounts
         || verification.outside_target_accounts !== 0) {
-        throw new Error('Read-back compaction tidak menghasilkan tepat 100 account target.');
+        throw new Error('Read-back compaction tidak menghasilkan tepat 100 account target ditambah QA.');
       }
     } catch (error) {
       snapshot.sheet.getDataRange().clearContent();
@@ -1797,8 +1905,9 @@ function compactParticipantAccountsToTargetCohort() {
       status: 'success',
       already_compacted: false,
       before: summary.total_accounts,
-      after: EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT,
+      after: expectedCompactedTotal,
       removed: summary.outside_target_accounts,
+      qa_accounts: summary.qa_accounts,
       backup_sheet: backupName,
       credentials_changed: 0
     };
@@ -1816,7 +1925,544 @@ function isTargetParticipantForPortal(participant, targetEmailSet) {
 }
 
 function isParticipantEligibleForPortal(participant) {
-  return isTargetParticipantForPortal(participant);
+  return isParticipantPortalAccountAllowed(participant);
+}
+
+function maskParticipantNik(nik) {
+  const cleanNik = String(nik || '').replace(/\D/g, '');
+  if (cleanNik.length < 8) return '****';
+  return cleanNik.slice(0, 4) + '********' + cleanNik.slice(-4);
+}
+
+function buildQaParticipantSetupCohortCheck(accounts) {
+  const summary = buildParticipantPortalAccessReconciliation(accounts).summary;
+  const expectedTotal = EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT + summary.qa_accounts;
+  const ready = summary.ready_to_apply
+    && summary.matched_target_accounts === EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT
+    && summary.outside_target_accounts === 0
+    && summary.qa_accounts <= 1
+    && summary.total_accounts === expectedTotal;
+  return {
+    ready: ready,
+    expected_total: expectedTotal,
+    summary: summary
+  };
+}
+
+function readQaParticipantConfig() {
+  const properties = PropertiesService.getScriptProperties();
+  const config = {
+    nik: String(properties.getProperty(QA_PARTICIPANT_PROPERTY_KEYS.nik) || '').replace(/\D/g, ''),
+    name: String(properties.getProperty(QA_PARTICIPANT_PROPERTY_KEYS.name) || '').trim(),
+    email: normalizeEmail(properties.getProperty(QA_PARTICIPANT_PROPERTY_KEYS.email)),
+    password: String(properties.getProperty(QA_PARTICIPANT_PROPERTY_KEYS.password) || '')
+  };
+  if (config.nik.length !== 16) {
+    throw new Error('HERAI_QA_NIK wajib berisi tepat 16 digit synthetic QA NIK.');
+  }
+  if (!config.name) throw new Error('HERAI_QA_NAME wajib diisi.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(config.email)) {
+    throw new Error('HERAI_QA_EMAIL wajib berupa email yang valid.');
+  }
+  if (isTargetParticipantForPortal({ email: config.email })) {
+    throw new Error('HERAI_QA_EMAIL tidak boleh memakai email cohort resmi 100 peserta.');
+  }
+  if (config.password && config.password.length < 12) {
+    throw new Error('HERAI_QA_PASSWORD minimal 12 karakter.');
+  }
+  return config;
+}
+
+function assertQaParticipantAccount(account, operation) {
+  if (!account || !account.account_id || !isQaParticipantAccount(account)) {
+    throw new Error((operation || 'Operasi QA') + ' ditolak: account bukan account_type=qa.');
+  }
+  return account;
+}
+
+function findConfiguredQaParticipantAccount(config) {
+  const qaConfig = config || readQaParticipantConfig();
+  const cleanNik = String(qaConfig.nik || '').replace(/\D/g, '');
+  const account = getRows(SHEETS.participantAccounts).find(function(row) {
+    return String(row.nik || row.username || '').replace(/\D/g, '') === cleanNik;
+  });
+  return assertQaParticipantAccount(account, 'Pencarian account QA');
+}
+
+/**
+ * Preflight tanpa perubahan data peserta. Jalankan dari editor sebelum
+ * setupQaParticipantAccount(). Schema header yang belum ada dapat ditambahkan.
+ */
+function previewQaParticipantAccount() {
+  let result;
+  try {
+    ensureParticipantBackendSchema();
+    const config = readQaParticipantConfig();
+    const accounts = getRows(SHEETS.participantAccounts);
+    const participants = getRows(SHEETS.participants);
+    const cohortCheck = buildQaParticipantSetupCohortCheck(accounts);
+    const accountByNik = accounts.find(function(row) {
+      return String(row.nik || row.username || '').replace(/\D/g, '') === config.nik;
+    });
+    const accountByEmail = accounts.find(function(row) {
+      return normalizeEmail(row.email) === config.email;
+    });
+    const participantByNik = participants.find(function(row) {
+      return String(row.nik || '').replace(/\D/g, '') === config.nik;
+    });
+    const participantByEmail = participants.find(function(row) {
+      return normalizeEmail(row.email) === config.email;
+    });
+    const otherQaAccounts = accounts.filter(function(row) {
+      return isQaParticipantAccount(row)
+        && String(row.nik || row.username || '').replace(/\D/g, '') !== config.nik;
+    });
+    const otherQaParticipants = participants.filter(function(row) {
+      return normalizeParticipantAccountType(row.account_type) === QA_PARTICIPANT_ACCOUNT_TYPE
+        && String(row.nik || '').replace(/\D/g, '') !== config.nik;
+    });
+    const accountCollision = [accountByNik, accountByEmail].filter(Boolean).some(function(row) {
+      return !isQaParticipantAccount(row);
+    }) || otherQaAccounts.length > 0;
+    const participantCollision = [participantByNik, participantByEmail].filter(Boolean).some(function(row) {
+      return normalizeParticipantAccountType(row.account_type) !== QA_PARTICIPANT_ACCOUNT_TYPE;
+    }) || otherQaParticipants.length > 0;
+    const existingQa = accountByNik && isQaParticipantAccount(accountByNik) ? accountByNik : null;
+    const hasCollision = accountCollision || participantCollision;
+    result = {
+      status: hasCollision || !cohortCheck.ready ? 'error' : 'success',
+      ready_to_setup: !hasCollision && cohortCheck.ready
+        && Boolean(config.password || (existingQa && existingQa.password_hash)),
+      masked_nik: maskParticipantNik(config.nik),
+      email: config.email,
+      name: config.name,
+      password_property_present: Boolean(config.password),
+      existing_qa_account: Boolean(existingQa),
+      existing_access_status: existingQa ? String(existingQa.access_status || 'active') : '',
+      qa_account_total: accounts.filter(isQaParticipantAccount).length,
+      account_collision: accountCollision,
+      participant_collision: participantCollision,
+      cohort_ready: cohortCheck.ready,
+      cohort_total: cohortCheck.summary.total_accounts,
+      cohort_outside_target: cohortCheck.summary.outside_target_accounts,
+      target_participant_count: EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT,
+      expected_total_after_setup: EXPECTED_TARGET_PARTICIPANT_PORTAL_COUNT + 1
+    };
+  } catch (error) {
+    result = { status: 'error', ready_to_setup: false, message: error.message };
+  }
+  Logger.log(JSON.stringify(result));
+  return result;
+}
+
+/**
+ * Membuat satu first-class QA participant dari Script Properties. Fungsi ini
+ * tidak didaftarkan di doPost dan hanya boleh dijalankan langsung dari editor.
+ */
+function setupQaParticipantAccount() {
+  ensureParticipantBackendSchema();
+  getPasswordPepper();
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const config = readQaParticipantConfig();
+    const accounts = getRows(SHEETS.participantAccounts);
+    const participants = getRows(SHEETS.participants);
+    const cohortCheck = buildQaParticipantSetupCohortCheck(accounts);
+    if (!cohortCheck.ready) {
+      throw new Error(
+        'Setup QA ditolak: ParticipantAccounts harus tepat 100 account resmi ditambah maksimal satu QA, tanpa account di luar cohort.'
+      );
+    }
+    const otherQaAccounts = accounts.filter(function(row) {
+      return isQaParticipantAccount(row)
+        && String(row.nik || row.username || '').replace(/\D/g, '') !== config.nik;
+    });
+    if (otherQaAccounts.length) {
+      throw new Error('Setup QA ditolak: sudah ada account QA lain. Hanya satu QA participant yang diizinkan.');
+    }
+    const otherQaParticipants = participants.filter(function(row) {
+      return normalizeParticipantAccountType(row.account_type) === QA_PARTICIPANT_ACCOUNT_TYPE
+        && String(row.nik || '').replace(/\D/g, '') !== config.nik;
+    });
+    if (otherQaParticipants.length) {
+      throw new Error('Setup QA ditolak: sudah ada record participant QA lain.');
+    }
+    const sameNikAccounts = accounts.filter(function(row) {
+      return String(row.nik || row.username || '').replace(/\D/g, '') === config.nik;
+    });
+    const sameEmailAccounts = accounts.filter(function(row) {
+      return normalizeEmail(row.email) === config.email;
+    });
+    const accountCollisions = sameNikAccounts.concat(sameEmailAccounts).filter(function(row, index, rows) {
+      return rows.indexOf(row) === index && !isQaParticipantAccount(row);
+    });
+    if (accountCollisions.length) {
+      throw new Error('Setup QA ditolak: NIK/email sudah dipakai account peserta non-QA.');
+    }
+
+    const sameNikParticipants = participants.filter(function(row) {
+      return String(row.nik || '').replace(/\D/g, '') === config.nik;
+    });
+    const sameEmailParticipants = participants.filter(function(row) {
+      return normalizeEmail(row.email) === config.email;
+    });
+    const participantCollisions = sameNikParticipants.concat(sameEmailParticipants).filter(function(row, index, rows) {
+      return rows.indexOf(row) === index
+        && normalizeParticipantAccountType(row.account_type) !== QA_PARTICIPANT_ACCOUNT_TYPE;
+    });
+    if (participantCollisions.length) {
+      throw new Error('Setup QA ditolak: NIK/email sudah dipakai record peserta non-QA.');
+    }
+
+    const existingAccount = sameNikAccounts.find(isQaParticipantAccount)
+      || sameEmailAccounts.find(isQaParticipantAccount)
+      || null;
+    const existingParticipant = sameNikParticipants.find(function(row) {
+      return normalizeParticipantAccountType(row.account_type) === QA_PARTICIPANT_ACCOUNT_TYPE;
+    }) || sameEmailParticipants.find(function(row) {
+      return normalizeParticipantAccountType(row.account_type) === QA_PARTICIPANT_ACCOUNT_TYPE;
+    }) || null;
+    const existingHash = String(existingAccount && existingAccount.password_hash
+      || existingParticipant && existingParticipant.participant_password
+      || '');
+    if (!config.password && !existingHash) {
+      throw new Error('HERAI_QA_PASSWORD wajib diisi untuk setup account QA pertama kali.');
+    }
+
+    const now = new Date().toISOString();
+    const participantRowId = String(existingParticipant && existingParticipant.rowId
+      || existingAccount && existingAccount.participant_rowId
+      || ('qa_' + Utilities.getUuid()));
+    const passwordHash = config.password ? hashPasswordValue(config.password) : existingHash;
+    const participantRecord = Object.assign({}, existingParticipant || {}, {
+      rowId: participantRowId,
+      created_at: existingParticipant && existingParticipant.created_at || now,
+      nama_lengkap: config.name,
+      nik: config.nik,
+      email: config.email,
+      status_seleksi: 'lolos',
+      participant_stage: 'fellowship',
+      status_tahap_2: 'lolos',
+      competency_status: 'passed',
+      status_final: 'lolos',
+      final_status: 'lolos',
+      participant_password: passwordHash,
+      profile_updated_at: now,
+      account_type: QA_PARTICIPANT_ACCOUNT_TYPE
+    });
+    upsertByKey(SHEETS.participants, 'rowId', participantRowId, participantRecord);
+
+    const accountId = String(existingAccount && existingAccount.account_id || ('pa_qa_' + Utilities.getUuid()));
+    const accountRecord = Object.assign({}, existingAccount || {}, {
+      account_id: accountId,
+      nik: config.nik,
+      username: config.nik,
+      generated_password: config.password
+        ? config.password
+        : String(existingAccount && existingAccount.generated_password || ''),
+      password_hash: passwordHash,
+      password_status: 'qa_managed',
+      access_status: existingAccount && existingAccount.access_status || 'active',
+      nama_lengkap: config.name,
+      email: config.email,
+      participant_rowId: participantRowId,
+      participant_stage: 'fellowship',
+      status_seleksi: 'lolos',
+      created_at: existingAccount && existingAccount.created_at || now,
+      updated_at: now,
+      created_by: existingAccount && existingAccount.created_by || 'setupQaParticipantAccount',
+      last_login_at: existingAccount && existingAccount.last_login_at || '',
+      password_changed_at: config.password ? now : (existingAccount && existingAccount.password_changed_at || ''),
+      account_type: QA_PARTICIPANT_ACCOUNT_TYPE
+    });
+    upsertByKey(SHEETS.participantAccounts, 'account_id', accountId, accountRecord);
+    SpreadsheetApp.flush();
+
+    const readBack = findConfiguredQaParticipantAccount(config);
+    if (String(readBack.participant_rowId || '') !== participantRowId
+      || !readBack.password_hash
+      || !isQaParticipantAccount(readBack)) {
+      throw new Error('Read-back setup QA tidak sesuai; password property dipertahankan untuk retry.');
+    }
+    if (config.password && !verifyPasswordValueCurrent(readBack.password_hash, config.password)) {
+      throw new Error('Read-back password hash QA gagal; password property dipertahankan untuk retry.');
+    }
+    if (config.password && String(readBack.generated_password || '') !== config.password) {
+      throw new Error('Read-back generated_password QA gagal; password property dipertahankan untuk retry.');
+    }
+
+    if (config.password) {
+      PropertiesService.getScriptProperties().deleteProperty(QA_PARTICIPANT_PROPERTY_KEYS.password);
+    }
+    const recipients = getActiveParticipantCommunicationRecipients();
+    const result = {
+      status: 'success',
+      account_id: accountId,
+      participant_rowId: participantRowId,
+      masked_nik: maskParticipantNik(config.nik),
+      email: config.email,
+      account_type: QA_PARTICIPANT_ACCOUNT_TYPE,
+      access_status: String(readBack.access_status || 'active'),
+      active_recipient_total: recipients.total,
+      active_qa_recipient_total: recipients.qa_total,
+      generated_password_stored: Boolean(readBack.generated_password),
+      password_property_cleared: !PropertiesService.getScriptProperties()
+        .getProperty(QA_PARTICIPANT_PROPERTY_KEYS.password)
+    };
+    Logger.log(JSON.stringify(result));
+    return result;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function setQaParticipantAccessStatus(nextStatus) {
+  const normalizedStatus = String(nextStatus || '').trim().toLowerCase();
+  if (['active', 'disabled'].indexOf(normalizedStatus) === -1) {
+    throw new Error('Status QA hanya boleh active atau disabled.');
+  }
+  ensureParticipantBackendSchema();
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const config = readQaParticipantConfig();
+    const account = findConfiguredQaParticipantAccount(config);
+    const now = new Date().toISOString();
+    const updated = updateByKey(SHEETS.participantAccounts, 'account_id', account.account_id, {
+      access_status: normalizedStatus,
+      updated_at: now,
+      account_type: QA_PARTICIPANT_ACCOUNT_TYPE
+    });
+    if (updated.status !== 'success') throw new Error('Gagal memperbarui access_status QA.');
+    if (account.participant_rowId) {
+      updateByKey(SHEETS.participants, 'rowId', account.participant_rowId, {
+        account_type: QA_PARTICIPANT_ACCOUNT_TYPE,
+        profile_updated_at: now
+      });
+    }
+    SpreadsheetApp.flush();
+    const readBack = findConfiguredQaParticipantAccount(config);
+    if (String(readBack.access_status || '').trim().toLowerCase() !== normalizedStatus) {
+      throw new Error('Read-back access_status QA tidak sesuai.');
+    }
+    const result = {
+      status: 'success',
+      account_id: account.account_id,
+      masked_nik: maskParticipantNik(config.nik),
+      access_status: normalizedStatus,
+      login_allowed: normalizedStatus === 'active',
+      leaderboard_allowed: normalizedStatus === 'active',
+      email_recipient_allowed: normalizedStatus === 'active'
+    };
+    Logger.log(JSON.stringify(result));
+    return result;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function enableQaParticipantAccount() {
+  return setQaParticipantAccessStatus('active');
+}
+
+function disableQaParticipantAccount() {
+  return setQaParticipantAccessStatus('disabled');
+}
+
+function getQaParticipantResetDescriptors(account) {
+  const nik = String(account.nik || account.username || '').replace(/\D/g, '');
+  const participantRowId = String(account.participant_rowId || '');
+  const byNik = function(row) { return String(row.nik || '').replace(/\D/g, '') === nik; };
+  const byParticipant = function(row) {
+    return (participantRowId && String(row.participant_rowId || '') === participantRowId) || byNik(row);
+  };
+  return [
+    { sheet_name: SHEETS.participantProgress, matches: byParticipant },
+    { sheet_name: SHEETS.participantActivity, matches: byNik },
+    { sheet_name: SHEETS.participantDiscussions, matches: byParticipant },
+    { sheet_name: SHEETS.competencySessions, matches: byNik },
+    { sheet_name: SHEETS.retestSessions, matches: byNik },
+    { sheet_name: SHEETS.retestAccess, matches: byNik },
+    { sheet_name: SHEETS.attendance, matches: byParticipant },
+    { sheet_name: SHEETS.certificates, matches: byParticipant },
+    { sheet_name: SHEETS.participantDashboardLeaderboard, matches: byNik }
+  ];
+}
+
+function collectQaParticipantResetRows(account) {
+  const entries = [];
+  const counts = {};
+  getQaParticipantResetDescriptors(account).forEach(function(descriptor) {
+    const sheet = getSheet(descriptor.sheet_name);
+    ensureSchemaHeaders(sheet, SCHEMA[descriptor.sheet_name] || []);
+    const values = sheet.getDataRange().getValues();
+    const headers = values[0] || [];
+    let count = 0;
+    values.slice(1).forEach(function(row, index) {
+      if (!row.some(function(value) { return String(value || '').trim() !== ''; })) return;
+      const object = {};
+      headers.forEach(function(header, column) { object[header] = row[column]; });
+      if (!descriptor.matches(object)) return;
+      entries.push({
+        sheet_name: descriptor.sheet_name,
+        row_number: index + 2,
+        payload: object
+      });
+      count += 1;
+    });
+    counts[descriptor.sheet_name] = count;
+  });
+  return { entries: entries, counts: counts };
+}
+
+function previewQaParticipantReset() {
+  let result;
+  try {
+    ensureParticipantBackendSchema();
+    const account = findConfiguredQaParticipantAccount();
+    const collected = collectQaParticipantResetRows(account);
+    const confirmation = PropertiesService.getScriptProperties()
+      .getProperty(QA_PARTICIPANT_PROPERTY_KEYS.resetConfirmation);
+    result = {
+      status: 'success',
+      account_id: account.account_id,
+      masked_nik: maskParticipantNik(account.nik),
+      account_type: QA_PARTICIPANT_ACCOUNT_TYPE,
+      access_status: String(account.access_status || 'active'),
+      total_rows_to_delete: collected.entries.length,
+      rows_by_sheet: collected.counts,
+      reset_armed: confirmation === QA_PARTICIPANT_RESET_CONFIRMATION,
+      credentials_changed: 0
+    };
+  } catch (error) {
+    result = { status: 'error', message: error.message };
+  }
+  Logger.log(JSON.stringify(result));
+  return result;
+}
+
+function createQaResetBackup(account, entries) {
+  if (!entries.length) return '';
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const backupName = ('QAResetBackup_' + new Date().toISOString().replace(/\D/g, '').slice(0, 14)
+    + '_' + Utilities.getUuid().slice(0, 8)).slice(0, 99);
+  const backupSheet = spreadsheet.insertSheet(backupName);
+  const headers = [
+    'backup_timestamp', 'source_sheet', 'source_row_number', 'account_id',
+    'participant_rowId', 'nik_masked', 'chunk_index', 'chunk_total', 'payload_json_chunk'
+  ];
+  const timestamp = new Date().toISOString();
+  const backupRows = [];
+  entries.forEach(function(entry) {
+    const payload = JSON.stringify(entry.payload || {});
+    const chunks = payload.match(/[\s\S]{1,40000}/g) || ['{}'];
+    chunks.forEach(function(chunk, index) {
+      backupRows.push([
+        timestamp,
+        entry.sheet_name,
+        entry.row_number,
+        account.account_id,
+        account.participant_rowId,
+        maskParticipantNik(account.nik),
+        index + 1,
+        chunks.length,
+        chunk
+      ]);
+    });
+  });
+  backupSheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+  backupSheet.getRange(2, 1, backupRows.length, headers.length).setValues(backupRows);
+  backupSheet.setFrozenRows(1);
+  if (typeof backupSheet.hideSheet === 'function') backupSheet.hideSheet();
+  SpreadsheetApp.flush();
+  return backupName;
+}
+
+function deleteQaResetRows(entries) {
+  const rowsBySheet = {};
+  entries.forEach(function(entry) {
+    if (!rowsBySheet[entry.sheet_name]) rowsBySheet[entry.sheet_name] = [];
+    rowsBySheet[entry.sheet_name].push(entry.row_number);
+  });
+  Object.keys(rowsBySheet).forEach(function(sheetName) {
+    const sheet = getSheet(sheetName);
+    rowsBySheet[sheetName].sort(function(a, b) { return b - a; }).forEach(function(rowNumber) {
+      sheet.deleteRow(rowNumber);
+    });
+  });
+}
+
+/**
+ * Reset destructive yang hanya berlaku untuk account_type=qa. Sebelum run,
+ * set HERAI_QA_RESET_CONFIRMATION=RESET_QA_ONLY di Script Properties. Property
+ * konfirmasi dihapus saat run dimulai agar setiap reset harus di-arm ulang.
+ */
+function resetQaParticipantData() {
+  ensureParticipantBackendSchema();
+  const properties = PropertiesService.getScriptProperties();
+  const confirmation = properties.getProperty(QA_PARTICIPANT_PROPERTY_KEYS.resetConfirmation);
+  if (confirmation !== QA_PARTICIPANT_RESET_CONFIRMATION) {
+    throw new Error('Reset QA belum di-arm. Set HERAI_QA_RESET_CONFIRMATION=RESET_QA_ONLY lalu preview ulang.');
+  }
+  properties.deleteProperty(QA_PARTICIPANT_PROPERTY_KEYS.resetConfirmation);
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  let account = null;
+  let previousStatus = '';
+  let backupName = '';
+  try {
+    account = findConfiguredQaParticipantAccount();
+    assertQaParticipantAccount(account, 'Reset QA');
+    previousStatus = String(account.access_status || 'active').trim().toLowerCase() || 'active';
+    updateByKey(SHEETS.participantAccounts, 'account_id', account.account_id, {
+      access_status: 'disabled',
+      updated_at: new Date().toISOString()
+    });
+    SpreadsheetApp.flush();
+
+    const collected = collectQaParticipantResetRows(account);
+    backupName = createQaResetBackup(account, collected.entries);
+    deleteQaResetRows(collected.entries);
+    updateByKey(SHEETS.participantAccounts, 'account_id', account.account_id, {
+      access_status: previousStatus,
+      last_login_at: '',
+      updated_at: new Date().toISOString(),
+      account_type: QA_PARTICIPANT_ACCOUNT_TYPE
+    });
+    clearAttemptLimit('participant-login:' + String(account.nik || '').replace(/\D/g, ''));
+    SpreadsheetApp.flush();
+
+    const verification = collectQaParticipantResetRows(account);
+    if (verification.entries.length !== 0) {
+      throw new Error('Read-back reset QA masih menemukan row terkait. Backup: ' + backupName);
+    }
+    const result = {
+      status: 'success',
+      account_id: account.account_id,
+      masked_nik: maskParticipantNik(account.nik),
+      deleted_rows: collected.entries.length,
+      deleted_by_sheet: collected.counts,
+      backup_sheet: backupName,
+      access_status_restored: previousStatus,
+      credentials_changed: 0,
+      local_storage_reset_required: true
+    };
+    Logger.log(JSON.stringify(result));
+    return result;
+  } catch (error) {
+    if (account && account.account_id && previousStatus) {
+      updateByKey(SHEETS.participantAccounts, 'account_id', account.account_id, {
+        access_status: previousStatus,
+        updated_at: new Date().toISOString()
+      });
+      SpreadsheetApp.flush();
+    }
+    throw new Error(error.message + (backupName ? ' Backup tersedia: ' + backupName : ''));
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function generateParticipantPassword(length) {
@@ -3023,6 +3669,7 @@ function normalizeParticipantRow(obj, rowNumber) {
   normalized.status_tahap_2 = normalized.status_tahap_2 || 'pending';
   normalized.competency_status = normalized.competency_status || normalized.status_tahap_2 || 'pending';
   normalized.final_status = normalized.final_status || normalized.status_final || 'pending';
+  normalized.account_type = normalizeParticipantAccountType(normalized.account_type);
   normalized.participant_stage = normalized.participant_stage || (
     String(normalized.status_seleksi).toLowerCase() === 'lolos' ? 'accepted_stage_1' :
     String(normalized.status_seleksi).toLowerCase() === 'gugur' ? 'rejected_stage_1' :
