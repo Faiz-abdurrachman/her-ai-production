@@ -2123,6 +2123,17 @@ var SOURCE_VISUALS = {
             saveButton.addEventListener("click", async function () {
                 const exerciseAnswers = collectPracticeAnswers(form);
                 savePracticePayload({ answers: exerciseAnswers, revealed: revealed });
+                const totalFields = Object.keys(exerciseAnswers).length;
+                const filledCount = Object.values(exerciseAnswers).filter(function(v) { return String(v || '').trim(); }).length;
+                if (filledCount < totalFields) {
+                    var emptyField;
+                    form.querySelectorAll("textarea").forEach(function(field) {
+                        if (!String(field.value || '').trim() && !emptyField) emptyField = field;
+                    });
+                    setStatus("#aiEvaluationPracticeStatus", "Isi seluruh " + totalFields + " jawaban sebelum mengirim. " + (totalFields - filledCount) + " jawaban masih kosong.", "warning");
+                    if (emptyField) emptyField.focus();
+                    return;
+                }
                 const originalLabel = saveButton.innerHTML;
                 saveButton.disabled = true;
                 saveButton.setAttribute("aria-busy", "true");

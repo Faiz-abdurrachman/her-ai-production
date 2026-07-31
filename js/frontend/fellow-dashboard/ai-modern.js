@@ -908,8 +908,8 @@
         if (saveButton) {
             saveButton.addEventListener("click", async function () {
                 captureCurrent();
-                if (!completedCount()) {
-                    setStatus("#aiModernPracticeStatus", "Isi minimal satu skenario sebelum menyimpan.", "warning");
+                if (completedCount() < PRACTICES.length) {
+                    setStatus("#aiModernPracticeStatus", "Isi seluruh " + PRACTICES.length + " skenario sebelum mengirim. " + (PRACTICES.length - completedCount()) + " skenario masih kosong.", "warning");
                     return;
                 }
                 saveJson(STORAGE.practice, { version: 3, updatedAt: new Date().toISOString(), answers: saved.answers, revealed: saved.revealed, current: saved.current });

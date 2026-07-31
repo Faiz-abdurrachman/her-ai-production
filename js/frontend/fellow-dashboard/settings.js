@@ -26,7 +26,7 @@
             if (this._pending[name]) return this._pending[name];
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
-                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260731-discussion-sync-ui';
+                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260731-exercise-completeness';
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
                 s.onerror = function() { delete window.__aiLabLoader._pending[name]; reject(new Error('Failed to load: ' + name)); };
                 document.head.appendChild(s);
@@ -1367,10 +1367,13 @@
         });
         saveButton?.addEventListener('click', async () => {
             const payload = collectAnswers();
-            if (!Object.values(payload).some(Boolean)) {
+            const answerKeys = Object.keys(payload);
+            const filledCount = answerKeys.filter(k => String(payload[k] || '').trim()).length;
+            if (filledCount < answerKeys.length) {
                 setReadonly(false);
-                setStatus('Isi minimal satu jawaban sebelum mengirim latihan.');
-                fields[0]?.focus();
+                const firstEmpty = fields.find(f => !String(f.value || '').trim());
+                setStatus('Isi seluruh ' + answerKeys.length + ' jawaban sebelum mengirim. ' + (answerKeys.length - filledCount) + ' jawaban masih kosong.');
+                if (firstEmpty) firstEmpty.focus();
                 return;
             }
             localStorage.setItem(key, JSON.stringify(payload));

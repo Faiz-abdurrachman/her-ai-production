@@ -11,7 +11,7 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
-const HERAI_BACKEND_VERSION = '2026.3.8-dashboard-read-cache';
+const HERAI_BACKEND_VERSION = '2026.3.9-exercise-completeness';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
 const PARTICIPANT_ACCOUNT_TYPE = 'participant';
 const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
@@ -38,6 +38,16 @@ const ACTIVE_FOUNDATION_MODULE_IDS = [
   'evaluation',
   'evolution'
 ];
+// Expected non-empty answer count per module for submitted exercises.
+// Draft boleh parsial, tetapi submit wajib seluruh jawaban terisi.
+const EXPECTED_EXERCISE_ANSWER_COUNTS = {
+  'ai-fundamentals': 4,
+  'python-untuk-ai': 12,
+  'reasoning': 17,
+  'konsep-ai-modern': 13,
+  'evaluation': 5,
+  'evolution': 7
+};
 const LEGACY_PASSWORD_PEPPERS = [
   '120NQtFqErJiIfITlPfVo8wV6G0_79qFKMTaptxNF-RA',
   '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w'
@@ -3326,6 +3336,13 @@ function saveParticipantExerciseSubmission(payload, requestedStatus) {
     }
     if (requestedStatus === 'draft' && existingStatus === 'submitted') {
       throw new Error('Latihan sudah dikirim. Gunakan Kirim Latihan untuk memperbarui submission.');
+    }
+    // Completeness check: submit wajib seluruh jawaban terisi sesuai module.
+    if (requestedStatus === 'submitted') {
+      var expectedCount = EXPECTED_EXERCISE_ANSWER_COUNTS[input.moduleId] || 0;
+      if (input.answerCount < expectedCount) {
+        throw new Error('Jawaban latihan belum lengkap. Isi seluruh ' + expectedCount + ' jawaban sebelum mengirim. Baru ' + input.answerCount + ' yang terisi.');
+      }
     }
     savedRow = {
       submission_id: existing && existing.submission_id || ('sub_' + Utilities.getUuid()),
