@@ -11,12 +11,15 @@
 
     const SOURCE_BASE = "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-fundamentals/02-python-untuk-ai/chapters/";
     const MODULE_ID = 'evolution';
+    const MATERIAL_LIST_ID = 'aiEvolutionList';
 
 
     var pyodideInstance = null;
     var pyodideReady = false;
     var pyodideLoading = false;
     var activeChapterRequest = 0;
+    var completedMaterialChapters = new Set();
+    var materialProgressRevision = 0;
 
     function startPyodide() {
         if (pyodideReady) { enableAllPlaygrounds(); return; }
@@ -1681,15 +1684,86 @@ var SOURCE_VISUALS = {
         });
     }
 
-    function updateProgress(chapterNumber, total) {
-        const completed = Math.max(0, chapterNumber - 1);
+    function renderMaterialProgress(chapterNumber, total) {
+        const completed = completedMaterialChapters.size;
         const percent = Math.round((completed / total) * 100);
         const progressB = document.querySelector(".lesson-progress-mini b");
         const progressStrong = document.querySelector(".lesson-progress-mini strong");
         const progressText = document.querySelector(".lesson-progress-card p");
-        if (progressB) progressB.style.setProperty("--value", percent + "%");
+        if (progressB) {
+            progressB.style.setProperty("--value", percent + "%");
+            progressB.setAttribute("role", "progressbar");
+            progressB.setAttribute("aria-valuemin", "0");
+            progressB.setAttribute("aria-valuemax", "100");
+            progressB.setAttribute("aria-valuenow", String(percent));
+            progressB.setAttribute("aria-label", percent + "% progres Evolution of AI");
+        }
         if (progressStrong) progressStrong.textContent = percent + "%";
         if (progressText) progressText.textContent = completed + " dari " + total + " materi selesai";
+
+        const list = document.getElementById(MATERIAL_LIST_ID);
+        if (!list) return;
+        list.querySelectorAll("li").forEach(function (li) {
+            const itemChapter = Number(li.dataset.chapter || "0");
+            const isActive = itemChapter === chapterNumber;
+            const isCompleted = completedMaterialChapters.has(String(itemChapter));
+            const link = li.querySelector("a");
+            const icon = li.querySelector("i");
+            const chapter = CHAPTERS[itemChapter - 1];
+
+            li.classList.toggle("active", isActive);
+            li.classList.toggle("completed", isCompleted);
+            if (link) {
+                if (isActive) link.setAttribute("aria-current", "page");
+                else link.removeAttribute("aria-current");
+                link.setAttribute("aria-label", (chapter?.title || link.textContent.trim()) + ": "
+                    + (isActive ? "sedang dibuka" : (isCompleted ? "selesai" : "belum selesai")));
+            }
+            if (icon) {
+                icon.className = isActive ? "far fa-circle-play" : (isCompleted ? "fas fa-circle-check" : "far fa-circle");
+                icon.setAttribute("aria-hidden", "true");
+            }
+        });
+    }
+
+    function readCompletedMaterialProgress(rows) {
+        const completedChapters = new Set();
+        (Array.isArray(rows) ? rows : []).forEach(function (row) {
+            const chapterId = String(row?.chapter_id || "");
+            const chapterNumber = Number(chapterId);
+            if (String(row?.module_id || "") === MODULE_ID
+                && row?.status === "completed"
+                && /^\d+$/.test(chapterId)
+                && chapterNumber >= 1
+                && chapterNumber <= CHAPTERS.length) {
+                completedChapters.add(chapterId);
+            }
+        });
+        return completedChapters;
+    }
+
+    async function persistAndRefreshMaterialProgress(chapterNumber) {
+        const revision = ++materialProgressRevision;
+        const saved = await window.saveChapterProgress(MODULE_ID, chapterNumber, "completed");
+        if (saved?.status === "success") {
+            completedMaterialChapters.add(String(chapterNumber));
+            const activeChapter = Math.min(Math.max(Number(localStorage.getItem(STORAGE.chapter)) || chapterNumber, 1), CHAPTERS.length);
+            renderMaterialProgress(activeChapter, CHAPTERS.length);
+        }
+
+        const progress = await window.getParticipantProgress(MODULE_ID);
+        if (progress?.status === "success" && revision === materialProgressRevision) {
+            completedMaterialChapters = readCompletedMaterialProgress(progress.data);
+        }
+
+        const activeChapter = Math.min(Math.max(Number(localStorage.getItem(STORAGE.chapter)) || chapterNumber, 1), CHAPTERS.length);
+        renderMaterialProgress(activeChapter, CHAPTERS.length);
+
+        if (saved?.status !== "success"
+            && activeChapter === chapterNumber
+            && typeof window.__aiLabToast === "function") {
+            window.__aiLabToast(saved?.message || "Progres bab belum tersimpan. Coba lagi.", "error", 3600);
+        }
     }
 
     function setupPythonReadinessChecklist(container) {
@@ -1847,33 +1921,22 @@ var SOURCE_VISUALS = {
         if (btnNext) btnNext.style.display = chapter < total ? "inline-block" : "none";
         if (btnFinish) btnFinish.style.display = chapter === total ? "inline-block" : "none";
 
-        document.querySelectorAll("#reasoning-sidebar-list li").forEach(function (li) {
-            var itemTopik = Number(li.dataset.chapter || "0");
-            var icon = li.querySelector("i");
-            li.classList.toggle("active", itemTopik === chapter);
-            li.classList.toggle("completed", itemTopik < chapter);
-            if (!icon) return;
-            if (itemTopik === chapter) icon.className = "far fa-circle-play";
-            else if (itemTopik < chapter) icon.className = "fas fa-circle-check";
-            else icon.className = "far fa-circle";
-        });
-
-        updateProgress(chapter, total);
-        window.saveChapterProgress(MODULE_ID, chapter, 'completed');
+        renderMaterialProgress(chapter, total);
+        persistAndRefreshMaterialProgress(chapter);
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     window.initAiEvolutionMateri = function () {
         const total = CHAPTERS.length;
         const initial = Math.min(Math.max(Number(localStorage.getItem(STORAGE.chapter)) || 1, 1), total);
-        const list = document.getElementById("reasoning-sidebar-list");
+        const list = document.getElementById(MATERIAL_LIST_ID);
         const btnPrev = document.getElementById("btn-prev-chapter");
         const btnNext = document.getElementById("btn-next-chapter");
 
         if (list) {
             list.innerHTML = CHAPTERS.map(function (chapter, index) {
                 const chapterNumber = index + 1;
-                return `<li data-chapter="${chapterNumber}"><span>${chapterNumber}</span><a href="javascript:void(0)" onclick="window.loadAiEvolutionChapter(${chapterNumber})">${escapeHtml(chapter.shortTitle)}</a><i class="far fa-circle"></i></li>`;
+                return `<li data-chapter="${chapterNumber}"><span>${chapterNumber}</span><a href="javascript:void(0)" title="${escapeHtml(chapter.title)}" onclick="window.loadAiEvolutionChapter(${chapterNumber})">${escapeHtml(chapter.shortTitle)}</a><i class="far fa-circle" aria-hidden="true"></i></li>`;
             }).join("");
         }
 
