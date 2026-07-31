@@ -7462,10 +7462,14 @@
 
 .practice-action-row button,
 .discussion-compose button {
+    align-items: center;
     border: 1px solid #ff9fca;
     border-radius: 11px;
     cursor: pointer;
+    display: inline-flex;
     font: 700 0.84rem 'Plus Jakarta Sans', sans-serif;
+    gap: 8px;
+    justify-content: center;
     min-height: 42px;
     padding: 0 16px;
 }
@@ -7491,6 +7495,42 @@
     display: grid;
     gap: 14px;
     margin-top: 22px;
+}
+
+.discussion-empty-state {
+    align-items: center;
+    background: #fffafd;
+    border: 1px dashed #efb6cf;
+    border-radius: 18px;
+    color: #697083;
+    display: grid;
+    gap: 14px;
+    grid-template-columns: 46px minmax(0, 1fr);
+    padding: 18px;
+}
+
+.discussion-empty-state > i {
+    align-items: center;
+    background: #ffe6f2;
+    border-radius: 50%;
+    color: var(--fellow-pink);
+    display: inline-flex;
+    height: 46px;
+    justify-content: center;
+    width: 46px;
+}
+
+.discussion-empty-state strong {
+    color: #171827;
+}
+
+.discussion-empty-state p {
+    line-height: 1.55;
+    margin: 3px 0 0;
+}
+
+.discussion-reply-validation [data-reply-message] {
+    font-style: normal;
 }
 
 .discussion-bubble {
@@ -7559,7 +7599,14 @@
     background: #fff;
     border: 1px solid var(--fellow-line);
     border-radius: 14px;
+    display: grid;
+    gap: 4px 10px;
+    grid-template-columns: minmax(0, 1fr) auto;
     padding: 12px;
+}
+
+.discussion-replies article p {
+    grid-column: 1 / -1;
 }
 
 @media (max-width: 1500px) {

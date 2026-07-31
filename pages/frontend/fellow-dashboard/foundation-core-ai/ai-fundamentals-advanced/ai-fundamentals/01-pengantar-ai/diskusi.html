@@ -45,7 +45,10 @@
                         <p>Pilih salah satu skenario: algoritma rekrutmen yang bias terhadap perempuan, chatbot hukum yang mengarang preseden, atau navigasi yang mengalihkan kemacetan ke jalan pemukiman. Bedah dengan alur tujuan, input, pola, output, dan pemeriksaan manusia.</p>
                         <form class="practice-response-form discussion-compose" id="aiIntroDiscussionForm">
                             <label><span>Tulis posting diskusi</span><textarea rows="5" placeholder="Contoh: Pada kasus rekrutmen, menurut saya masalah utamanya bukan bug kode murni, tetapi data historis yang sudah bias karena..."></textarea></label>
-                            <button type="submit">Posting Diskusi</button>
+                            <div class="practice-action-row">
+                                <button type="submit"><i class="fas fa-paper-plane" aria-hidden="true"></i> Posting Diskusi</button>
+                                <p id="aiIntroDiscussionStatus" class="practice-status" data-tone="info" aria-live="polite">Memuat diskusi tersimpan dari server...</p>
+                            </div>
                         </form>
                         <div class="discussion-thread" id="aiIntroDiscussionList"></div>
                     </article>
@@ -53,7 +56,7 @@
                 </section>
             </div>
             <aside class="lesson-right-panel">
-                <section class="module-side-card lesson-progress-card"><h2>Ruang Diskusi</h2><p>Diskusi terbuka untuk peserta lain. Gunakan bahasa yang jelas, sopan, dan fokus pada analisis sistem.</p><a href="#/participant-ai-intro">Buka Materi</a></section>
+                <section class="module-side-card lesson-progress-card"><h2>Ruang Diskusi</h2><p>Posting dan balasanmu tersimpan ke server agar progres diskusi dapat ditinjau. Gunakan bahasa yang jelas, sopan, dan fokus pada analisis sistem.</p><a href="#/participant-ai-intro">Buka Materi</a></section>
             </aside>
         </div>
     </main>

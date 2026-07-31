@@ -26,7 +26,7 @@
             if (this._pending[name]) return this._pending[name];
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
-                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260730-exercise-review';
+                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260731-discussion-sync-ui';
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
                 s.onerror = function() { delete window.__aiLabLoader._pending[name]; reject(new Error('Failed to load: ' + name)); };
                 document.head.appendChild(s);
@@ -1427,61 +1427,207 @@
         });
     }
 
-    function initLessonDiscussion() {
+    async function initLessonDiscussion() {
         const form = document.getElementById('aiIntroDiscussionForm');
         const list = document.getElementById('aiIntroDiscussionList');
         if (!form || !list || form.dataset.discussionReady) return;
         form.dataset.discussionReady = 'true';
         const key = 'heraiAiIntroDiscussionThread';
-        const fallback = [
-            { id: 'seed-1', name: 'Aisyah Putri', time: 'Hari ini, 09.15', text: 'Menurutku tahap Pemeriksaan Manusia paling penting saat AI dipakai untuk rekrutmen atau hukum. Kalau output terlihat rapi tetapi datanya bias atau fiktif, manusia tetap harus berani menghentikan keputusan.', replies: [{ name: 'Mentor Rani', time: 'Hari ini, 09.28', text: 'Setuju. Coba selalu mulai dari pertanyaan: apa tujuan sistem, data siapa yang dipakai, siapa yang terdampak, dan bagaimana koreksinya bisa dilakukan.' }] }
-        ];
+        const moduleId = 'ai-fundamentals';
+        const status = document.getElementById('aiIntroDiscussionStatus');
+        const submitButton = form.querySelector('[type="submit"]');
+        const participantName = getParticipantDisplayName();
         const escapeHtml = (value = '') => String(value)
             .replaceAll('&', '&amp;')
             .replaceAll('<', '&lt;')
             .replaceAll('>', '&gt;')
             .replaceAll('"', '&quot;')
             .replaceAll("'", '&#039;');
-        const load = () => JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
+        const normalizePost = (item = {}) => ({
+            id: String(item.id || `local-${Date.now()}`),
+            prompt: String(item.prompt || 'Analisis Kasus Pengantar AI'),
+            text: String(item.text || ''),
+            replies: Array.isArray(item.replies) ? item.replies.map(reply => ({
+                text: String(reply?.text || ''),
+                createdAt: String(reply?.createdAt || '')
+            })).filter(reply => reply.text) : [],
+            createdAt: String(item.createdAt || ''),
+            legacyTime: String(item.time || ''),
+            syncState: item.syncState || (String(item.id || '').startsWith('dsc_') ? 'server' : 'local')
+        });
+        const load = () => {
+            try {
+                const saved = JSON.parse(localStorage.getItem(key) || '[]');
+                return Array.isArray(saved) ? saved.map(normalizePost).filter(item => item.text) : [];
+            } catch {
+                return [];
+            }
+        };
         const save = (items) => localStorage.setItem(key, JSON.stringify(items));
-        const timestamp = () => new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date());
-        const render = () => {
-            const items = load();
+        const formatTimestamp = (value, fallback = '') => {
+            const parsed = new Date(value);
+            if (!value || Number.isNaN(parsed.getTime())) return fallback || 'Belum tersinkron';
+            return new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(parsed);
+        };
+        const setDiscussionStatus = (message, tone = 'info') => {
+            if (!status) return;
+            status.textContent = message;
+            status.dataset.tone = tone;
+        };
+        const render = (items = load()) => {
+            if (!items.length) {
+                list.innerHTML = `
+                    <div class="discussion-empty-state">
+                        <i class="far fa-comments" aria-hidden="true"></i>
+                        <div><strong>Belum ada diskusi</strong><p>Tulis analisis pertamamu. Posting yang berhasil akan tersimpan ke server.</p></div>
+                    </div>`;
+                return;
+            }
             list.innerHTML = items.map(item => `
-                <article class="discussion-bubble">
-                    <div><span>${escapeHtml(item.name.charAt(0))}</span><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.time)}</small></div>
+                <article class="discussion-bubble" data-discussion-id="${escapeHtml(item.id)}">
+                    <div><span>${escapeHtml(participantName.charAt(0) || 'P')}</span><strong>${escapeHtml(participantName)}</strong><small>${escapeHtml(formatTimestamp(item.createdAt, item.legacyTime))}${item.syncState === 'local' ? ' · Belum tersinkron' : ''}</small></div>
+                    <p><b>${escapeHtml(item.prompt)}</b></p>
                     <p>${escapeHtml(item.text)}</p>
-                    <button type="button" data-reply="${item.id}">Reply</button>
-                    <div class="discussion-replies">${(item.replies || []).map(reply => `<article><strong>${escapeHtml(reply.name)}</strong><small>${escapeHtml(reply.time)}</small><p>${escapeHtml(reply.text)}</p></article>`).join('')}</div>
+                    <button type="button" class="discussion-reply-btn" data-reply="${escapeHtml(item.id)}" aria-expanded="false"><i class="far fa-message" aria-hidden="true"></i> Balas</button>
+                    <div class="discussion-reply-composer" data-reply-composer="${escapeHtml(item.id)}" hidden>
+                        <textarea rows="3" placeholder="Tambahkan argumen atau pertanyaan..." aria-label="Tulis balasan"></textarea>
+                        <div class="discussion-reply-actions">
+                            <button type="button" class="btn-reply-send" data-reply-send="${escapeHtml(item.id)}"><i class="fas fa-paper-plane" aria-hidden="true"></i> Kirim Balasan</button>
+                            <button type="button" class="btn-reply-cancel" data-reply-cancel="${escapeHtml(item.id)}"><i class="fas fa-xmark" aria-hidden="true"></i> Batal</button>
+                        </div>
+                        <p class="discussion-reply-validation" hidden><i class="fas fa-triangle-exclamation" aria-hidden="true"></i> <em data-reply-message>Tulis balasan terlebih dahulu.</em></p>
+                    </div>
+                    <div class="discussion-replies">${item.replies.map(reply => `<article><strong>${escapeHtml(participantName)}</strong><small>${escapeHtml(formatTimestamp(reply.createdAt))}</small><p>${escapeHtml(reply.text)}</p></article>`).join('')}</div>
                 </article>
             `).join('');
             list.querySelectorAll('[data-reply]').forEach(button => {
                 button.addEventListener('click', () => {
-                    const text = prompt('Tulis balasan diskusi:');
-                    if (!text || !text.trim()) return;
-                    const updated = load();
-                    const target = updated.find(item => item.id === button.dataset.reply);
-                    if (target) {
-                        target.replies = target.replies || [];
-                        target.replies.push({ name: 'Aisyah Putri', time: timestamp(), text: text.trim() });
-                        save(updated);
-                        render();
+                    const composer = list.querySelector(`[data-reply-composer="${CSS.escape(button.dataset.reply)}"]`);
+                    if (!composer) return;
+                    const willOpen = composer.hidden;
+                    list.querySelectorAll('[data-reply-composer]').forEach(node => { node.hidden = true; });
+                    list.querySelectorAll('[data-reply]').forEach(node => node.setAttribute('aria-expanded', 'false'));
+                    composer.hidden = !willOpen;
+                    button.setAttribute('aria-expanded', String(willOpen));
+                    if (willOpen) composer.querySelector('textarea')?.focus();
+                });
+            });
+            list.querySelectorAll('[data-reply-send]').forEach(button => {
+                button.addEventListener('click', async () => {
+                    const postId = button.dataset.replySend;
+                    const composer = button.closest('.discussion-reply-composer');
+                    const textarea = composer?.querySelector('textarea');
+                    const validation = composer?.querySelector('.discussion-reply-validation');
+                    const replyText = textarea?.value.trim() || '';
+                    if (!replyText) {
+                        if (validation) validation.hidden = false;
+                        textarea?.focus();
+                        return;
                     }
+                    if (validation) validation.hidden = true;
+                    const updated = load();
+                    const target = updated.find(item => item.id === postId);
+                    if (!target) return;
+                    const candidate = {
+                        ...target,
+                        replies: [...target.replies, { text: replyText, createdAt: new Date().toISOString() }]
+                    };
+                    const originalLabel = button.innerHTML;
+                    button.disabled = true;
+                    button.setAttribute('aria-busy', 'true');
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Menyimpan...';
+                    setDiscussionStatus('Menyimpan balasan ke server...', 'info');
+                    const result = await window.saveParticipantDiscussion(moduleId, candidate);
+                    button.disabled = false;
+                    button.removeAttribute('aria-busy');
+                    button.innerHTML = originalLabel;
+                    if (!result || result.status !== 'success') {
+                        if (validation) {
+                            validation.hidden = false;
+                            validation.querySelector('[data-reply-message]').textContent = result?.message || 'Balasan belum tersimpan. Coba kembali.';
+                        }
+                        setDiscussionStatus('Balasan belum tersimpan. Periksa koneksi lalu coba lagi.', 'warning');
+                        return;
+                    }
+                    const targetIndex = updated.findIndex(item => item.id === postId);
+                    updated[targetIndex] = { ...normalizePost(result.discussion), syncState: 'server' };
+                    save(updated);
+                    render(updated);
+                    setDiscussionStatus('Balasan tersimpan ke server.', 'success');
+                });
+            });
+            list.querySelectorAll('[data-reply-cancel]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const composer = button.closest('.discussion-reply-composer');
+                    if (composer) {
+                        const textarea = composer.querySelector('textarea');
+                        if (textarea) textarea.value = '';
+                        composer.hidden = true;
+                    }
+                    list.querySelector(`[data-reply="${CSS.escape(button.dataset.replyCancel)}"]`)?.setAttribute('aria-expanded', 'false');
                 });
             });
         };
-        form.addEventListener('submit', (event) => {
+        form.addEventListener('submit', async (event) => {
             event.preventDefault();
             const textarea = form.querySelector('textarea');
             const text = textarea?.value.trim();
-            if (!text) return;
+            if (!text) {
+                setDiscussionStatus('Tulis isi diskusi terlebih dahulu.', 'warning');
+                textarea?.focus();
+                return;
+            }
+            const post = {
+                id: `post-${Date.now()}`,
+                prompt: 'Analisis Kasus Pengantar AI',
+                text,
+                replies: [],
+                createdAt: new Date().toISOString()
+            };
+            const originalLabel = submitButton?.innerHTML || '';
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.setAttribute('aria-busy', 'true');
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Menyimpan...';
+            }
+            form.setAttribute('aria-busy', 'true');
+            setDiscussionStatus('Menyimpan diskusi ke server...', 'info');
+            const result = await window.saveParticipantDiscussion(moduleId, post);
+            form.removeAttribute('aria-busy');
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.removeAttribute('aria-busy');
+                submitButton.innerHTML = originalLabel;
+            }
+            if (!result || result.status !== 'success') {
+                setDiscussionStatus(result?.message || 'Diskusi belum tersimpan. Isi tetap tersedia untuk dicoba lagi.', 'warning');
+                return;
+            }
             const updated = load();
-            updated.unshift({ id: `post-${Date.now()}`, name: 'Aisyah Putri', time: timestamp(), text, replies: [] });
+            updated.unshift({ ...normalizePost(result.discussion), syncState: 'server' });
             save(updated);
             textarea.value = '';
-            render();
+            setDiscussionStatus('Diskusi berhasil diposting dan tersimpan ke server.', 'success');
+            render(updated);
         });
-        render();
+        const localPosts = load();
+        render(localPosts);
+        setDiscussionStatus('Memuat diskusi tersimpan dari server...', 'info');
+        const remote = await window.getParticipantDiscussions(moduleId);
+        if (!remote || remote.status !== 'success') {
+            setDiscussionStatus(remote?.message || 'Diskusi server belum dapat dimuat. Data lokal tetap tersedia.', 'warning');
+            return;
+        }
+        const remotePosts = remote.data.map(item => ({ ...normalizePost(item), syncState: 'server' }));
+        // Read local storage again after the network wait so a post submitted while
+        // the initial read-back was in flight can never be overwritten by stale data.
+        const latestLocalPosts = load();
+        const merged = remotePosts.concat(latestLocalPosts.filter(local => !remotePosts.some(saved => saved.id === local.id)));
+        save(merged);
+        render(merged);
+        setDiscussionStatus(merged.length
+            ? 'Diskusi tersinkron dengan server.'
+            : 'Belum ada diskusi tersimpan. Mulai posting pertamamu.', 'success');
     }
 
     function initLessonControls() {

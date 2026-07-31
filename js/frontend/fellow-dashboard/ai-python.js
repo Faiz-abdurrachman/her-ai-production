@@ -2443,6 +2443,9 @@ var SOURCE_VISUALS = {
             }));
             saveDiscussionPosts(merged);
             renderDiscussion(merged);
+            setStatus("#aiPythonDiscussionStatus", merged.length ? "Diskusi tersinkron dengan server." : "Belum ada diskusi tersimpan. Mulai posting pertamamu.", "success");
+        } else {
+            setStatus("#aiPythonDiscussionStatus", remote?.message || "Diskusi server belum dapat dimuat. Data lokal tetap tersedia.", "warning");
         }
     };
 })();

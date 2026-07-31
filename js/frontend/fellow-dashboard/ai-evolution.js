@@ -2620,6 +2620,9 @@ var SOURCE_VISUALS = {
             }));
             saveDiscussionPosts(merged);
             renderDiscussion(merged);
+            setStatus("#aiEvolutionDiscussionStatus", merged.length ? "Diskusi tersinkron dengan server." : "Belum ada diskusi tersimpan. Mulai posting pertamamu.", "success");
+        } else {
+            setStatus("#aiEvolutionDiscussionStatus", remote?.message || "Diskusi server belum dapat dimuat. Data lokal tetap tersedia.", "warning");
         }
     };
 })();

@@ -1670,10 +1670,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 1. Load navbar & footer pertama kali
     await router.loadComponents();
 
-    // 2. Jalankan routing saat web pertama kali dibuka
-    router.handleRouting();
+    // 2. Resolve settings before the first route guard is evaluated. A brand-new
+    // browser has no cached settings, so routing first would briefly treat an open
+    // participant portal as closed until the user manually reloaded the page.
+    const appContent = document.getElementById("app-content");
+    if (typeof window.getGlobalSettingsAsync === "function") {
+        if (appContent && typeof window.renderPublicNotice === "function") {
+            appContent.setAttribute("aria-busy", "true");
+            appContent.innerHTML = window.renderPublicNotice({
+                icon: "fa-spinner fa-spin",
+                title: "Menyiapkan HerAI",
+                message: "Kami sedang memeriksa akses terbaru agar halaman yang kamu buka selalu sesuai.",
+                actionHref: "#/home",
+                actionLabel: "Kembali ke Beranda"
+            });
+        }
+        await window.getGlobalSettingsAsync();
+        if (appContent) appContent.removeAttribute("aria-busy");
+    }
 
-    // 3. TANGKAP SEMUA KLIK PADA LINK <a> (Event Delegation)
+    // 3. Jalankan routing pertama hanya setelah settings resolved (remote atau fallback).
+    await router.handleRouting();
+
+    // 4. TANGKAP SEMUA KLIK PADA LINK <a> (Event Delegation)
     document.body.addEventListener("click", e => {
         const link = e.target.closest("a");
         if (!link || !link.hasAttribute("href")) return;
@@ -1697,13 +1716,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    // 4. Deteksi saat URL Hash berubah
+    // 5. Deteksi saat URL Hash berubah
     window.addEventListener("hashchange", () => {
         router.handleRouting();
     });
-
-    // 5. Fetch settings in the background on initial load
-    if (typeof window.getGlobalSettingsAsync === "function") {
-        window.getGlobalSettingsAsync();
-    }
 });
