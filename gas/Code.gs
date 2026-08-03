@@ -4465,3 +4465,317 @@ function extractSkills(text) {
   const found = candidates.filter(skill => source.includes(skill));
   return found.length ? found : ['AI Enthusiasm', 'Learning Agility'];
 }
+
+function testSendCredentialEmail() {
+  var testNik = '9999000000000001';
+  var accounts = getRows(SHEETS.participantAccounts);
+  var target = null;
+  for (var i = 0; i < accounts.length; i++) {
+    if (String(accounts[i].nik || '').replace(/\D/g, '') === testNik) {
+      target = accounts[i];
+      break;
+    }
+  }
+  if (!target) { Logger.log('GAK KETEMU'); return; }
+  if (!target.email) { Logger.log('EMAIL KOSONG'); return; }
+  var email = String(target.email).trim();
+  var nama = String(target.nama_lengkap || 'Peserta');
+  var nik = String(target.nik || '').replace(/\D/g, '');
+  var password = String(target.generated_password || '');
+  var subject = 'Selamat Datang di HerAI Fellowship — Akses Portal Peserta Anda';
+  var body = [
+    'Yth. ' + nama + ',',
+    '',
+    'Selamat datang di HerAI Fellowship! Kami sangat senang menyambut Anda sebagai bagian dari program ini.',
+    '',
+    'Untuk mendukung perjalanan belajar Anda, kami telah menyiapkan portal peserta yang berisi materi pembelajaran, latihan, kuis, dan berbagai fitur pendukung lainnya. Berikut adalah detail akses Anda:',
+    '',
+    '══════════════════════════════════════',
+    '  LINK PORTAL  : https://her-ai.data-sorcerers.com/#/profile',
+    '  NIK          : ' + nik,
+    '  PASSWORD     : ' + password,
+    '══════════════════════════════════════',
+    '',
+    'LANGKAH AWAL YANG PERLU ANDA LAKUKAN:',
+    '',
+    '1. Buka link portal di atas melalui browser (disarankan Chrome).',
+    '2. Masukkan NIK dan password yang tertera.',
+    '3. Setelah berhasil masuk, segera ganti password Anda melalui menu Pengaturan di dalam portal.',
+    '',
+    '── PANDUAN MENGGANTI PASSWORD ──',
+    '',
+    'Keamanan akun adalah hal yang utama. Ikuti langkah berikut untuk mengganti password Anda:',
+    '',
+    '1. Setelah login, buka menu "Pengaturan" atau "Settings" di portal peserta.',
+    '2. Pilih opsi "Ganti Password" atau "Ubah Password".',
+    '3. Masukkan password saat ini (yang Anda terima melalui email ini).',
+    '4. Buat password baru dengan kriteria berikut:',
+    '   • Minimal 8 karakter',
+    '   • Mengandung huruf kapital (A-Z)',
+    '   • Mengandung huruf kecil (a-z)',
+    '   • Mengandung angka (0-9)',
+    '   • Disarankan juga menambahkan simbol (contoh: @, #, !)',
+    '   • Hindari penggunaan tanggal lahir, nama, atau informasi pribadi',
+    '5. Ketik ulang password baru pada kolom konfirmasi.',
+    '6. Klik "Simpan" dan password Anda akan diperbarui.',
+    '',
+    'Setelah berhasil mengganti password, gunakan password baru tersebut untuk login berikutnya.',
+    '',
+    'Apabila Anda mengalami kendala dalam mengakses portal atau mengganti password, jangan ragu untuk menghubungi kami. Kami siap membantu Anda.',
+    '',
+    'Selamat belajar dan semoga sukses dalam perjalanan HerAI Fellowship Anda!',
+    '',
+    'Salam hangat,',
+    'Tim HerAI Fellowship'
+  ].join('\n');
+  MailApp.sendEmail({
+    to: email,
+    subject: subject,
+    name: 'Data Sorcerers',
+    body: body
+  });
+  Logger.log('TERKIRIM ke: ' + email);
+}
+
+
+
+function broadcastCredentials() {
+  var accounts = getRows(SHEETS.participantAccounts);
+  var sent = 0;
+  var failed = 0;
+  for (var i = 0; i < accounts.length; i++) {
+    var a = accounts[i];
+    var nik = String(a.nik || '').replace(/\D/g, '');
+    var email = String(a.email || '').trim();
+    var status = String(a.access_status || 'active').toLowerCase();
+    var type = String(a.account_type || '');
+    if (nik.length >= 16 && email.indexOf('@') >= 0 && status === 'active' && type !== 'qa') {
+      try {
+        var nama = String(a.nama_lengkap || 'Peserta');
+        var password = String(a.generated_password || '');
+        var subject = 'Selamat Datang di HerAI Fellowship — Akses Portal Peserta Anda';
+        var body = [
+          'Yth. ' + nama + ',',
+          '',
+          'Selamat datang di HerAI Fellowship! Kami sangat senang menyambut Anda sebagai bagian dari program ini.',
+          '',
+          'Untuk mendukung perjalanan belajar Anda, kami telah menyiapkan portal peserta yang berisi materi pembelajaran, latihan, kuis, dan berbagai fitur pendukung lainnya. Berikut adalah detail akses Anda:',
+          '',
+          '══════════════════════════════════════',
+          '  LINK PORTAL  : https://her-ai.data-sorcerers.com/#/profile',
+          '  NIK          : ' + nik,
+          '  PASSWORD     : ' + password,
+          '══════════════════════════════════════',
+          '',
+          'LANGKAH AWAL YANG PERLU ANDA LAKUKAN:',
+          '',
+          '1. Buka link portal di atas melalui browser (disarankan Chrome).',
+          '2. Masukkan NIK dan password yang tertera.',
+          '3. Setelah berhasil masuk, segera ganti password Anda melalui menu Pengaturan di dalam portal.',
+          '',
+          '── PANDUAN MENGGANTI PASSWORD ──',
+          '',
+          'Keamanan akun adalah hal yang utama. Ikuti langkah berikut untuk mengganti password Anda:',
+          '',
+          '1. Setelah login, buka menu "Pengaturan" atau "Settings" di portal peserta.',
+          '2. Pilih opsi "Ganti Password" atau "Ubah Password".',
+          '3. Masukkan password saat ini (yang Anda terima melalui email ini).',
+          '4. Buat password baru dengan kriteria berikut:',
+          '   • Minimal 8 karakter',
+          '   • Mengandung huruf kapital (A-Z)',
+          '   • Mengandung huruf kecil (a-z)',
+          '   • Mengandung angka (0-9)',
+          '   • Disarankan juga menambahkan simbol (contoh: @, #, !)',
+          '   • Hindari penggunaan tanggal lahir, nama, atau informasi pribadi',
+          '5. Ketik ulang password baru pada kolom konfirmasi.',
+          '6. Klik "Simpan" dan password Anda akan diperbarui.',
+          '',
+          'Setelah berhasil mengganti password, gunakan password baru tersebut untuk login berikutnya.',
+          '',
+          'Apabila Anda mengalami kendala dalam mengakses portal atau mengganti password, jangan ragu untuk menghubungi kami. Kami siap membantu Anda.',
+          '',
+          'Selamat belajar dan semoga sukses dalam perjalanan HerAI Fellowship Anda!',
+          '',
+          'Salam hangat,',
+          'Tim HerAI Fellowship'
+        ].join('\n');
+        MailApp.sendEmail({
+          to: email,
+          subject: subject,
+          name: 'Data Sorcerers',
+          body: body
+        });
+        sent++;
+        Logger.log((sent + failed) + '/' + accounts.length + ' ' + email + ' OK');
+      } catch (e) {
+        failed++;
+        Logger.log('FAIL ' + email + ': ' + e.message);
+      }
+      Utilities.sleep(500);
+    }
+  }
+  Logger.log('SELESAI — Terkirim: ' + sent + ' | Gagal: ' + failed);
+}
+
+
+function debugGeneratedPassword() {
+  var accounts = getRows(SHEETS.participantAccounts);
+  var errorCount = 0;
+  var sample = [];
+  for (var i = 0; i < accounts.length; i++) {
+    var val = String(accounts[i].generated_password || '');
+    if (val.indexOf('#') === 0 || val === 'ERROR' || val.indexOf('ERROR') >= 0) {
+      errorCount++;
+      if (sample.length < 10) {
+        sample.push(String(accounts[i].nik || '').replace(/\D/g, '') + ' => ' + val.slice(0, 40));
+      }
+    }
+  }
+  Logger.log('Sel dengan nilai ERROR/#: ' + errorCount);
+  Logger.log('Contoh NIK: ' + JSON.stringify(sample));
+  Logger.log('Total akun: ' + accounts.length);
+}
+
+function fixCorruptedPassword() {
+  var fixList = [
+    '3275055902070004',
+    '3578176908040001',
+    '1502066606000001',
+    '3275036010070012'
+    // tambahin NIK lain yang kena #ERROR! di sini
+  ];
+  var newPassword = 'HerAI2026!';  // password baru sementara (ganti bebas)
+  if (String(newPassword).length < 8) { Logger.log('MINIMAL 8 KARAKTER'); return; }
+  var accounts = getRows(SHEETS.participantAccounts);
+  var fixed = 0;
+  var newHash = hashPasswordValue(newPassword);
+  for (var i = 0; i < accounts.length; i++) {
+    var a = accounts[i];
+    var nik = String(a.nik || '').replace(/\D/g, '');
+    var isInList = false;
+    for (var j = 0; j < fixList.length; j++) {
+      if (nik === fixList[j]) { isInList = true; break; }
+    }
+    if (!isInList) continue;
+    updateByKey(SHEETS.participantAccounts, 'account_id', a.account_id, {
+      password_hash: newHash,
+      password_status: 'generated',
+      generated_password: newPassword,   // ← timpa yang #ERROR! jadi string beneran
+      updated_at: new Date().toISOString()
+    });
+    // Sinkron ke sheet peserta juga
+    try {
+      var participants = getRows(SHEETS.participants);
+      for (var k = 0; k < participants.length; k++) {
+        if (String(participants[k].nik || '').replace(/\D/g, '') === nik && participants[k].rowId) {
+          updateByKey(SHEETS.participants, 'rowId', participants[k].rowId, {
+            participant_password: newHash,
+            profile_updated_at: new Date().toISOString()
+          });
+          break;
+        }
+      }
+    } catch (e) {
+      Logger.log('Sheet peserta skip: ' + e.message);
+    }
+    fixed++;
+    Logger.log('FIXED: ' + nik);
+  }
+  Logger.log('SELESAI — Diperbaiki: ' + fixed + ' dari ' + fixList.length);
+}
+
+
+function broadcastRetryFailedEmails() {
+  var failedEmails = [
+    'farahkirana08@gmail.com',
+    'hilmkmlh@gmail.com',
+    'shafiranurrr2005@gmail.com',
+    'ameliaamanatulislam22@gmail.com',
+    'jennyagustinar@gmail.com',
+    'ansyari.atikah@gmail.com',
+    'nailakesmas@gmail.com',
+    'salwa.adhani12@gmail.com',
+    'krinazzhra@gmail.com',
+    'muthmainnahzxc@gmail.com',
+    'tirtamahayogi@gmail.com'
+  ];
+  var accounts = getRows(SHEETS.participantAccounts);
+  var sent = 0;
+  var failed = 0;
+  for (var i = 0; i < accounts.length; i++) {
+    var a = accounts[i];
+    var email = String(a.email || '').trim().toLowerCase();
+    var nik = String(a.nik || '').replace(/\D/g, '');
+    var type = String(a.account_type || '');
+    // Cek apakah email ini ada di daftar yang gagal
+    var isTarget = false;
+    for (var j = 0; j < failedEmails.length; j++) {
+      if (email === failedEmails[j].toLowerCase()) { isTarget = true; break; }
+    }
+    if (!isTarget) continue;
+    if (nik.length < 16 || type === 'qa') { failed++; continue; }
+    try {
+      var nama = String(a.nama_lengkap || 'Peserta');
+      var password = String(a.generated_password || '');
+      var subject = 'Selamat Datang di HerAI Fellowship — Akses Portal Peserta Anda';
+      var body = [
+        'Yth. ' + nama + ',',
+        '',
+        'Selamat datang di HerAI Fellowship! Kami sangat senang menyambut Anda sebagai bagian dari program ini.',
+        '',
+        'Untuk mendukung perjalanan belajar Anda, kami telah menyiapkan portal peserta yang berisi materi pembelajaran, latihan, kuis, dan berbagai fitur pendukung lainnya. Berikut adalah detail akses Anda:',
+        '',
+        '══════════════════════════════════════',
+        '  LINK PORTAL  : https://her-ai.data-sorcerers.com/#/profile',
+        '  NIK          : ' + nik,
+        '  PASSWORD     : ' + password,
+        '══════════════════════════════════════',
+        '',
+        'LANGKAH AWAL YANG PERLU ANDA LAKUKAN:',
+        '',
+        '1. Buka link portal di atas melalui browser (disarankan Chrome).',
+        '2. Masukkan NIK dan password yang tertera.',
+        '3. Setelah berhasil masuk, segera ganti password Anda melalui menu Pengaturan di dalam portal.',
+        '',
+        '── PANDUAN MENGGANTI PASSWORD ──',
+        '',
+        'Keamanan akun adalah hal yang utama. Ikuti langkah berikut untuk mengganti password Anda:',
+        '',
+        '1. Setelah login, buka menu "Pengaturan" atau "Settings" di portal peserta.',
+        '2. Pilih opsi "Ganti Password" atau "Ubah Password".',
+        '3. Masukkan password saat ini (yang Anda terima melalui email ini).',
+        '4. Buat password baru dengan kriteria berikut:',
+        '   • Minimal 8 karakter',
+        '   • Mengandung huruf kapital (A-Z)',
+        '   • Mengandung huruf kecil (a-z)',
+        '   • Mengandung angka (0-9)',
+        '   • Disarankan juga menambahkan simbol (contoh: @, #, !)',
+        '   • Hindari penggunaan tanggal lahir, nama, atau informasi pribadi',
+        '5. Ketik ulang password baru pada kolom konfirmasi.',
+        '6. Klik "Simpan" dan password Anda akan diperbarui.',
+        '',
+        'Setelah berhasil mengganti password, gunakan password baru tersebut untuk login berikutnya.',
+        '',
+        'Apabila Anda mengalami kendala dalam mengakses portal atau mengganti password, jangan ragu untuk menghubungi kami. Kami siap membantu Anda.',
+        '',
+        'Selamat belajar dan semoga sukses dalam perjalanan HerAI Fellowship Anda!',
+        '',
+        'Salam hangat,',
+        'Tim HerAI Fellowship'
+      ].join('\n');
+      MailApp.sendEmail({
+        to: email,
+        subject: subject,
+        name: 'Data Sorcerers',
+        body: body
+      });
+      sent++;
+      Logger.log((sent + failed) + '/11 ' + email + ' OK');
+    } catch (e) {
+      failed++;
+      Logger.log('FAIL ' + email + ': ' + e.message);
+    }
+    Utilities.sleep(500);
+  }
+  Logger.log('SELESAI — Terkirim: ' + sent + ' | Gagal: ' + failed);
+}
