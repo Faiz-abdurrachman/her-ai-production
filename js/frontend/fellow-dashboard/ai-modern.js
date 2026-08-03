@@ -1145,12 +1145,12 @@
         list.innerHTML = posts.map(function (post) {
             var replies = Array.isArray(post.replies) ? post.replies : [];
             return "<article class=\"discussion-bubble\" data-discussion-id=\"" + escapeHtml(post.id) + "\">" +
-                "<div><span>A</span><strong>Aisyah Putri</strong><small>" + new Date(post.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" }) + "</small></div>" +
+                "<div><span>" + (window.getParticipantDisplayName ? (window.getParticipantDisplayName().charAt(0) || "P") : "P") + "</span><strong>" + (window.getParticipantDisplayName ? window.getParticipantDisplayName() : "Peserta") + "</strong><small>" + new Date(post.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" }) + "</small></div>" +
                 "<p><b>" + escapeHtml(post.prompt) + "</b></p><p>" + escapeHtml(post.text) + "</p>" +
                 "<button type=\"button\" data-reply=\"" + escapeHtml(post.id) + "\" aria-expanded=\"false\"><i class=\"far fa-message\"></i> Balas</button>" +
                 "<div class=\"ai-modern-reply-composer\" data-reply-composer=\"" + escapeHtml(post.id) + "\" hidden><label><span>Tulis balasan</span><textarea rows=\"3\" placeholder=\"Tambahkan argumen, pertanyaan, atau contoh yang relevan...\"></textarea></label><p class=\"practice-status\" aria-live=\"polite\"></p><div><button type=\"button\" data-reply-save=\"" + escapeHtml(post.id) + "\"><i class=\"fas fa-paper-plane\"></i> Kirim Balasan</button><button type=\"button\" data-reply-cancel=\"" + escapeHtml(post.id) + "\">Batal</button></div></div>" +
                 "<div class=\"discussion-replies\">" + replies.map(function (reply) {
-                    return "<article><strong>Aisyah Putri</strong><small>" + new Date(reply.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" }) + "</small><p>" + escapeHtml(reply.text) + "</p></article>";
+                    return "<article><strong>" + (window.getParticipantDisplayName ? window.getParticipantDisplayName() : "Peserta") + "</strong><small>" + new Date(reply.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" }) + "</small><p>" + escapeHtml(reply.text) + "</p></article>";
                 }).join("") + "</div></article>";
         }).join("");
 

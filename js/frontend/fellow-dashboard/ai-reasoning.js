@@ -2596,8 +2596,8 @@
             const replies = Array.isArray(post.replies) ? post.replies : [];
             return `<article class="discussion-bubble" data-discussion-id="${escapeHtml(post.id)}">
                 <div>
-                    <span>${post.id.indexOf("seed") === 0 ? "H" : "A"}</span>
-                    <strong>${post.id.indexOf("seed") === 0 ? "HerAI Prompt" : "Aisyah Putri"}</strong>
+                    <span>${post.id.indexOf("seed") === 0 ? "H" : (window.getParticipantDisplayName ? window.getParticipantDisplayName().charAt(0) || "P" : "P")}</span>
+                    <strong>${post.id.indexOf("seed") === 0 ? "HerAI Prompt" : (window.getParticipantDisplayName ? window.getParticipantDisplayName() : "Peserta")}</strong>
                     <small>${new Date(post.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })}</small>
                 </div>
                 <p><b>${escapeHtml(post.prompt)}</b></p>
@@ -2613,7 +2613,7 @@
                 </div>
                 <div class="discussion-replies">
                     ${replies.map(function (reply) {
-                        return `<article><strong>Aisyah Putri</strong><small>${new Date(reply.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })}</small><p>${escapeHtml(reply.text)}</p></article>`;
+                        return `<article><strong>${window.getParticipantDisplayName ? window.getParticipantDisplayName() : "Peserta"}</strong><small>${new Date(reply.createdAt).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })}</small><p>${escapeHtml(reply.text)}</p></article>`;
                     }).join("")}
                 </div>
             </article>`;

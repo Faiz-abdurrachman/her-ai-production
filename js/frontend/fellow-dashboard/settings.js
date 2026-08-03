@@ -26,7 +26,7 @@
             if (this._pending[name]) return this._pending[name];
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
-                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260731-material-sidebar-state';
+                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260803-discussion-name-fix';
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
                 s.onerror = function() { delete window.__aiLabLoader._pending[name]; reject(new Error('Failed to load: ' + name)); };
                 document.head.appendChild(s);
@@ -1987,6 +1987,7 @@
 
         return name || 'Peserta HerAI';
     }
+    window.getParticipantDisplayName = getParticipantDisplayName;
 
     function saveParticipantSession(session) {
         sessionStorage.setItem(PARTICIPANT_SESSION_KEY, JSON.stringify(session));
