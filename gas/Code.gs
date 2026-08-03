@@ -1437,7 +1437,8 @@ function participantLogin(payload) {
     status: 'success',
     profile: stripSensitiveParticipant(participant),
     token: auth.token,
-    expires_at: auth.expires_at
+    expires_at: auth.expires_at,
+    username: account.username || ''
   };
 }
 
@@ -3508,10 +3509,46 @@ function updateParticipantProfile(payload) {
   if (!updateResult || updateResult.status !== 'success') {
     return updateResult || { status: 'error', message: 'Profil peserta gagal diperbarui.' };
   }
-  const updated = getRows(SHEETS.participants).find(function(row) {
+
+  // Handle username separately — it lives on participantAccounts, not participants.
+  // This runs AFTER participant profile is confirmed saved, so we never have
+  // a half-committed state (username changed but profile update rejected).
+  var usernameResult = { status: 'success' };
+  if (Object.prototype.hasOwnProperty.call(payload, 'username')) {
+    var requestedUsername = String(payload.username || '').trim().toLowerCase();
+    if (requestedUsername) {
+      if (requestedUsername.length < 3) {
+        return { status: 'error', message: 'Username minimal 3 karakter.' };
+      }
+      if (!/^[a-z0-9_]+$/.test(requestedUsername)) {
+        return { status: 'error', message: 'Username hanya boleh huruf kecil, angka, dan underscore.' };
+      }
+      var allAccounts = getRows(SHEETS.participantAccounts);
+      var duplicate = allAccounts.find(function(acc) {
+        return String(acc.username || '').toLowerCase() === requestedUsername
+          && String(acc.nik || '').replace(/\D/g, '') !== String(participant.nik || '').replace(/\D/g, '');
+      });
+      if (duplicate) {
+        return { status: 'error', message: 'Username sudah digunakan peserta lain.' };
+      }
+      var account = findParticipantAccount(participant.nik);
+      if (account && account.account_id) {
+        usernameResult = updateByKey(SHEETS.participantAccounts, 'account_id', account.account_id, {
+          username: requestedUsername,
+          updated_at: new Date().toISOString()
+        });
+      }
+    }
+  }
+
+  var updated = getRows(SHEETS.participants).find(function(row) {
     return String(row.rowId || '') === String(participant.rowId || '');
   });
-  return { status: 'success', profile: stripSensitiveParticipant(updated) };
+  var profile = stripSensitiveParticipant(updated);
+  if (payload.username !== undefined) {
+    profile.username = requestedUsername || '';
+  }
+  return { status: 'success', profile: profile };
 }
 
 function uploadParticipantPhoto(payload) {

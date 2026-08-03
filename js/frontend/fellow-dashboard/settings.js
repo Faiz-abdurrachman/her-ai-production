@@ -2835,6 +2835,7 @@
         document.getElementById('settingsEmail').value = profile.email || '';
         document.getElementById('settingsWhatsapp').value = profile.whatsapp || '';
         document.getElementById('settingsCvLink').value = profile.cv_link || '';
+        document.getElementById('settingsUsername').value = profile.username || '';
 
         var name = getParticipantDisplayName();
         var avatar = document.querySelector('.settings-page .large-avatar');
@@ -3024,7 +3025,8 @@
                         nama_lengkap: document.getElementById('settingsName').value,
                         email: document.getElementById('settingsEmail').value,
                         whatsapp: document.getElementById('settingsWhatsapp').value,
-                        cv_link: document.getElementById('settingsCvLink').value
+                        cv_link: document.getElementById('settingsCvLink').value,
+                        username: document.getElementById('settingsUsername').value
                     })
                 });
 
@@ -3038,6 +3040,7 @@
                 updatedProfile.email = document.getElementById('settingsEmail').value;
                 updatedProfile.whatsapp = document.getElementById('settingsWhatsapp').value;
                 updatedProfile.cv_link = document.getElementById('settingsCvLink').value;
+                updatedProfile.username = document.getElementById('settingsUsername').value;
 
                 saveParticipantSession({
                     ...session,
@@ -3046,6 +3049,13 @@
                 });
 
                 updateTopbarAvatar(updatedProfile.photo_url || profile.photo_url);
+
+                // Update topbar name after profile save
+                var nameNode = document.querySelector('.fellow-user-button strong');
+                var greeting = document.querySelector('[data-fellow-greeting]');
+                var newName = updatedProfile.nama_lengkap;
+                if (nameNode) nameNode.textContent = newName || 'Peserta';
+                if (greeting) greeting.textContent = newName ? 'Halo, ' + newName + '!' : 'Halo, Peserta HerAI!';
 
                 if (msg) {
                     msg.style.display = 'block';
@@ -3071,6 +3081,7 @@
                 document.getElementById('settingsEmail').value = profile.email || '';
                 document.getElementById('settingsWhatsapp').value = profile.whatsapp || '';
                 document.getElementById('settingsCvLink').value = profile.cv_link || '';
+                document.getElementById('settingsUsername').value = profile.username || '';
                 var msg = document.getElementById('settingsProfileMessage');
                 if (msg) msg.style.display = 'none';
             });
