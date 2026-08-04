@@ -2713,7 +2713,7 @@
                 if (Array.isArray(fresh.modules) && fresh.modules.length > 3) {
                     _dashboardDataCache = fresh;
                     writeParticipantDashboardCache(fresh);
-                    renderParticipantDashboard(fresh);
+                    if (window.location.hash === '#/participant-dashboard') renderParticipantDashboard(fresh);
                 }
             } catch (_) { /* silent background refresh */ }
             return;
@@ -2729,7 +2729,7 @@
                 if (Array.isArray(bg.modules) && bg.modules.length > 3) {
                     _dashboardDataCache = bg;
                     writeParticipantDashboardCache(bg);
-                    renderParticipantDashboard(bg);
+                    if (window.location.hash === '#/participant-dashboard') renderParticipantDashboard(bg);
                 }
             } catch (_) {}
             return;
@@ -2747,7 +2747,7 @@
             if (isRealData) {
                 _dashboardDataCache = data;
                 writeParticipantDashboardCache(data);
-                renderParticipantDashboard(data);
+                if (window.location.hash === '#/participant-dashboard') renderParticipantDashboard(data);
             } else {
                 renderDashboardError(new Error('Data dashboard belum tersedia.'));
             }
