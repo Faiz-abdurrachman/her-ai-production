@@ -2605,7 +2605,7 @@
         if (events) {
             const eventItems = Array.isArray(data.events) ? data.events : [];
             events.innerHTML = eventItems.length ? eventItems.map((item) => `
-                <article class="dash-real"><time><strong>${escapeHtml(item.day)}</strong>${escapeHtml(item.month)}</time><div><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.time)}</p></div><a class="event-join-button" href="${escapeHtml(item.url || '#/participant-events')}">Gabung</a></article>
+                <article class="dash-real"><time><strong>${escapeHtml(item.day)}</strong>${escapeHtml(item.month)}</time><div><h3>${escapeHtml(item.title)}</h3><p>&#128338; ${escapeHtml(item.time)}</p></div><a class="event-join-button" href="${escapeHtml(item.url || '#/participant-events')}">Gabung</a></article>
             `).join('') : '<div class="dash-panel-empty"><i class="far fa-calendar-check"></i><div><strong>Belum ada event terjadwal</strong><span>Jadwal baru akan muncul setelah diumumkan panitia.</span></div></div>';
         }
 
