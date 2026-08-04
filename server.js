@@ -90,14 +90,35 @@ async function proxyGas(request, response) {
 
   try {
     const body = await readRequestBody(request);
-    const gasResponse = await fetch(GAS_WEB_APP_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body,
-      redirect: 'follow'
+    const https = require('node:https');
+    const text = await new Promise((resolve, reject) => {
+      const doRequest = (urlStr, method, bodyData, retries) => {
+        if (retries <= 0) return reject(new Error('GAS redirect loop'));
+        const url = new URL(urlStr);
+        const headers = {};
+        if (bodyData) {
+          headers['Content-Type'] = 'text/plain;charset=utf-8';
+          headers['Content-Length'] = Buffer.byteLength(bodyData);
+        }
+        const opts = { hostname: url.hostname, path: url.pathname + url.search, method, headers, timeout: 30000 };
+        const proxyReq = https.request(opts, gasRes => {
+          let data = '';
+          gasRes.on('data', chunk => data += chunk);
+          gasRes.on('end', () => {
+            if (gasRes.statusCode >= 300 && gasRes.statusCode < 400 && gasRes.headers.location) {
+              return doRequest(gasRes.headers.location, 'GET', null, retries - 1);
+            }
+            resolve(data);
+          });
+        });
+        proxyReq.on('error', reject);
+        proxyReq.on('timeout', () => { proxyReq.destroy(); reject(new Error('GAS request timeout')); });
+        if (bodyData) proxyReq.write(bodyData);
+        proxyReq.end();
+      };
+      doRequest(GAS_WEB_APP_URL, 'POST', body, 3);
     });
-    const text = await gasResponse.text();
-    response.writeHead(gasResponse.status, { 'Content-Type': MIME_TYPES['.json'] });
+    response.writeHead(200, { 'Content-Type': MIME_TYPES['.json'] });
     response.end(text);
   } catch (error) {
     sendJson(response, 502, {
