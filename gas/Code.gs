@@ -257,7 +257,7 @@ function doPost(e) {
       uploadParticipantPhoto: () => uploadParticipantPhoto(payload),
       removeParticipantPhoto: () => removeParticipantPhoto(payload),
       provisionParticipantAccounts: () => provisionParticipantAccounts(payload),
-      getParticipantAccounts: () => ({ status: 'success', accounts: getRows(SHEETS.participantAccounts) }),
+      getParticipantAccounts: () => ({ status: 'success', accounts: getRows(SHEETS.participantAccounts).map(normalizeParticipantAccountForAdmin) }),
       recordParticipantActivity: () => recordParticipantActivity(payload),
       getData: () => getParticipants(),
       getPublicParticipantResult: () => getPublicParticipantResult(payload),
@@ -267,7 +267,7 @@ function doPost(e) {
       login: () => login(payload),
       logActivity: () => logActivity(payload),
       getAuditData: () => getAuditData(),
-      getAdmins: () => ({ status: 'success', admins: getRows(SHEETS.admins) }),
+      getAdmins: () => ({ status: 'success', admins: getRows(SHEETS.admins).map(normalizeAdminForClient) }),
       addAdmin: () => addRowObject(SHEETS.admins, normalizeAdmin(payload)),
       updateAdmin: () => updateByKey(SHEETS.admins, 'id_admin', payload.id_admin || payload.adminId, normalizeAdmin(payload)),
       deleteAdmin: () => deleteByKey(SHEETS.admins, 'id_admin', payload.id_admin || payload.adminId),
@@ -319,6 +319,23 @@ function doGet() {
 }
 
 function authorizeGasAction(action, payload) {
+  // ============================================================
+  // PUBLIC: no authentication required
+  // ============================================================
+  const publicActions = [
+    'register',
+    'participantLogin',
+    'retestLogin',
+    'getPublicParticipantResult',
+    'getCompetencyQuestions',
+    'login',
+    'getSettings'
+  ];
+  if (publicActions.indexOf(action) >= 0) return;
+
+  // ============================================================
+  // PARTICIPANT: requires valid participant JWT token
+  // ============================================================
   const participantActions = [
     'updateParticipantProfile',
     'uploadParticipantPhoto',
@@ -340,12 +357,13 @@ function authorizeGasAction(action, payload) {
     'startReTestSession',
     'heartbeatReTestSession',
     'saveReTestAnswer',
-    'submitReTest'
+    'submitReTest',
+    'submitFinalProject'
   ];
   if (participantActions.indexOf(action) >= 0) {
     const claims = requireParticipantToken(payload);
     const retestActions = ['startReTestSession', 'heartbeatReTestSession', 'saveReTestAnswer', 'submitReTest'];
-    const normalActions = ['updateParticipantProfile', 'uploadParticipantPhoto', 'removeParticipantPhoto', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'saveParticipantExerciseDraft', 'submitParticipantExercise', 'getParticipantExerciseSubmissions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest'];
+    const normalActions = ['updateParticipantProfile', 'uploadParticipantPhoto', 'removeParticipantPhoto', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'saveParticipantExerciseDraft', 'submitParticipantExercise', 'getParticipantExerciseSubmissions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest', 'submitFinalProject'];
     if (retestActions.indexOf(action) >= 0 && claims.scope !== 'retest') {
       throw new Error('Sesi Re-Test tidak valid. Silakan login ulang.');
     }
@@ -360,8 +378,25 @@ function authorizeGasAction(action, payload) {
     payload.__auth = claims;
     return;
   }
-  if (['getExerciseSubmissions', 'reviewExerciseSubmission'].indexOf(action) >= 0) {
-    payload.__adminAuth = requireAdminToken(payload);
+
+  // ============================================================
+  // DANGEROUS: permanently disabled for security
+  // ============================================================
+  if (action === 'provisionParticipantAccounts') {
+    throw new Error('Action ini telah dinonaktifkan untuk alasan keamanan.');
+  }
+
+  // ============================================================
+  // ADMIN: all remaining actions require valid admin JWT token (default-deny)
+  // ============================================================
+  payload.__adminAuth = requireAdminToken(payload);
+
+  // EDITOR-ONLY: require superadmin role for sensitive mutations
+  var editorOnlyActions = ['addAdmin', 'updateAdmin', 'deleteAdmin', 'saveSettings', 'generateReTestAccess', 'generateCertificates'];
+  if (editorOnlyActions.indexOf(action) >= 0) {
+    if (payload.__adminAuth.role !== 'superadmin') {
+      throw new Error('Akses Super Admin diperlukan untuk tindakan ini.');
+    }
   }
 }
 
@@ -3656,6 +3691,14 @@ function stripSensitiveParticipant(participant) {
   const clone = { ...participant };
   delete clone.participant_password;
   return clone;
+}
+
+function normalizeParticipantAccountForAdmin(account) {
+  // Redact credential fields — never expose plain-text or hashed passwords to admin API
+  const safe = { ...account };
+  delete safe.generated_password;
+  delete safe.password_hash;
+  return safe;
 }
 
 function hashPasswordValue(password) {

@@ -357,12 +357,13 @@
            </tr>
        `;
    
-       try {
-           const payload = { action: 'getData' };
-           const response = await fetch(SCRIPT_URL, {
-               method: 'POST',
-               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-               body: JSON.stringify(payload)
+        try {
+            const payload = { action: 'getData' };
+            try { var profile = JSON.parse(localStorage.getItem('heraiAdminProfile') || '{}'); payload.adminToken = profile.token || ''; } catch (_) {}
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
            });
            
            const result = await response.json();
@@ -786,18 +787,19 @@
            filterData();
        }
    
-       try {
-           const payload = {
-               action: 'updateStatus',
-               rowId: rowId,
-               newStatus: newStatus
-           };
-   
-           const response = await fetch(SCRIPT_URL, {
-               method: 'POST',
-               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-               body: JSON.stringify(payload)
-           });
+        try {
+            const payload = {
+                action: 'updateStatus',
+                rowId: rowId,
+                newStatus: newStatus
+            };
+            try { var profile = JSON.parse(localStorage.getItem('heraiAdminProfile') || '{}'); payload.adminToken = profile.token || ''; } catch (_) {}
+
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            });
            
            const result = await response.json();
            if (result.status !== 'success') throw new Error("Gagal mengupdate ke database");

@@ -4,7 +4,28 @@
    + SISTEM MATA-MATA (LOG AKTIVITAS) FULL TRACKING & SIDEBAR GLOBAL
    ========================================================================== */
 
+   (function() {
+
    const API_URL = '/__gas';
+
+   function getAdminToken() {
+       try {
+           var p = JSON.parse(localStorage.getItem('heraiAdminProfile') || '{}');
+           if (p.expires_at && new Date(p.expires_at).getTime() < Date.now()) {
+               localStorage.removeItem('adminId');
+               localStorage.removeItem('heraiAdminProfile');
+               sessionStorage.clear();
+               window.location.hash = '#/dashboard';
+               setTimeout(function() { window.location.reload(true); }, 50);
+               return '';
+           }
+           return p.token || '';
+       } catch (_) { return ''; }
+   }
+
+   function withAdminToken(obj) {
+       return Object.assign({}, obj, { adminToken: getAdminToken() });
+   }
 
    function escapeHtml(value) {
        return String(value ?? '')
@@ -76,17 +97,17 @@
    
        const sys = await window.getAdminSystemContext();
    
-       try {
-           await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({
-                   action: 'logActivity', 
-                   adminId: adminId,
-                   tindakan: tindakan,
-                   perangkat: sys.device,
-                   lokasi: sys.lokasi
-               })
-           });
+        try {
+            await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify(withAdminToken({
+                    action: 'logActivity', 
+                    adminId: adminId,
+                    tindakan: tindakan,
+                    perangkat: sys.device,
+                    lokasi: sys.lokasi
+                }))
+            });
            console.log(`[Audit Logged] ${tindakan}`);
        } catch (e) {
            console.error("Gagal mencatat log aktivitas:", e);
@@ -505,14 +526,14 @@
        document.getElementById('btnLearningSync')?.addEventListener('click', async () => {
            setStatus('Menyinkronkan ke GAS...');
            try {
-               const response = await fetch(API_URL, {
-                   method: 'POST',
-                   body: JSON.stringify({
-                       action: 'saveLearningContent',
-                       adminId: localStorage.getItem('adminId') || 'unknown-admin',
-                       items
-                   })
-               });
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(withAdminToken({
+                        action: 'saveLearningContent',
+                        adminId: localStorage.getItem('adminId') || 'unknown-admin',
+                        items
+                    }))
+                });
                const result = await response.json().catch(() => ({}));
                if (!response.ok || result.status === 'error') throw new Error(result.message || 'GAS belum menerima action saveLearningContent');
                setStatus('Sinkron GAS berhasil.');
@@ -576,11 +597,11 @@
            try {
                if (!window.__HERAI_SIDEBAR_HTML__) {
                    const response = await fetch('/components/sidebar.html'); 
-                   if (response.ok) {
-                       window.__HERAI_SIDEBAR_HTML__ = await response.text();
-                   }
-               }
-               sidebarContainer.innerHTML = window.__HERAI_SIDEBAR_HTML__ || '';
+                if (response.ok) {
+                        window.__HERAI_SIDEBAR_HTML__ = await response.text();
+                    }
+                }
+                sidebarContainer.innerHTML = window.__HERAI_SIDEBAR_HTML__ || '';
            } catch (error) {
                console.error("Gagal memuat sidebar:", error);
                return;
@@ -683,10 +704,10 @@
            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-muted);"><i class="fas fa-circle-notch fa-spin"></i> Membaca database pendaftar...</td></tr>`;
        }
        try {
-           const response = await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({ action: 'getData' })
-           });
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify(withAdminToken({ action: 'getData' }))
+            });
            const result = await response.json();
            if (result.status !== 'success') throw new Error(result.message || 'Gagal mengambil data pendaftar');
            fraudFindings = buildDuplicateFindings(result.data || []);
@@ -1430,7 +1451,7 @@
        window.toggleModal('assetModal', 'close');
        window.logAdminActivity(`${editId ? 'Mengedit' : 'Menambahkan'} asset/link: ${name}`);
        try {
-           await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsset', asset: payload }) });
+            await fetch(API_URL, { method: 'POST', body: JSON.stringify(withAdminToken({ action: 'saveAsset', asset: payload })) });
        } catch (error) {
            console.warn('Asset tersimpan lokal, GAS belum merespons.', error);
        }
@@ -1554,9 +1575,18 @@
               if (participantPortalApiUrl) {
                   localStorage.setItem('heraiParticipantPortalApiUrl', participantPortalApiUrl.value.trim() || 'http://127.0.0.1:8092');
               }
-              const settings = typeof window.saveGlobalSettingsAsync === 'function'
-                   ? await window.saveGlobalSettingsAsync(readSettingsFromForm())
-                   : window.saveGlobalSettings(readSettingsFromForm());
+               const settings = readSettingsFromForm();
+               window.saveGlobalSettings(settings);
+               try {
+                   const resp = await fetch(API_URL, {
+                       method: 'POST',
+                       body: JSON.stringify(withAdminToken({ action: 'saveSettings', settings }))
+                   });
+                   const result = await resp.json().catch(() => ({}));
+                   if (result.status !== 'success') throw new Error(result.message || 'Gagal menyimpan');
+               } catch (e) {
+                   console.warn('Gagal menyimpan settings ke server:', e.message);
+               }
               if (typeof window.saveParticipantPortalSettings === 'function') {
                   await window.saveParticipantPortalSettings(readParticipantSettingsFromForm());
               }
@@ -1642,8 +1672,15 @@
                announcementStage1LaunchAt: '2026-05-25T19:00:00+07:00',
                announcementFinalLaunchAt: '2026-05-31T19:00:00+07:00'
            };
-           if (typeof window.saveGlobalSettingsAsync === 'function') await window.saveGlobalSettingsAsync(nextSettings);
-           else window.saveGlobalSettings(nextSettings);
+            window.saveGlobalSettings(nextSettings);
+            try {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(withAdminToken({ action: 'saveSettings', settings: nextSettings }))
+                });
+            } catch (e) {
+                console.warn('Gagal sinkron stage ke server:', e.message);
+            }
            window.logAdminActivity(`Mengubah stage acara menjadi ${nextSettings.currentStage}`);
            alert('Stage acara tersimpan dan sinkron ke pengaturan publik.');
            renderStageControlOverview(nextSettings, stageLabels);
@@ -1754,10 +1791,10 @@
 
        tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--text-muted);"><i class="fas fa-circle-notch fa-spin"></i> Sinkronisasi data...</td></tr>`;
        try {
-           const response = await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({ action })
-           });
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify(withAdminToken({ action }))
+            });
            const result = await response.json();
            if (result.status !== 'success') throw new Error(result.message || 'Gagal memuat data');
            const rows = result.data || result.sessions || result.projects || result.certificates || [];
@@ -1884,10 +1921,10 @@
        tableBody.innerHTML = '';
        
        try {
-           const response = await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({ action: 'getAdmins' })
-           });
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify(withAdminToken({ action: 'getAdmins' }))
+            });
            
            const result = await response.json();
            
@@ -1979,18 +2016,18 @@
        }
        
        try {
-           const response = await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({
-                   action: 'addAdmin',
-                   adminId,
-                   id_admin: adminId,
-                   name,
-                   password,
-                   role,
-                   peran_admin: role
-               })
-           });
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify(withAdminToken({
+                    action: 'addAdmin',
+                    adminId,
+                    id_admin: adminId,
+                    name,
+                    password,
+                    role,
+                    peran_admin: role
+                }))
+            });
            
            const result = await response.json();
            
@@ -2016,15 +2053,15 @@
        if (!newPassword) return;
        
        try {
-           const response = await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({
-                   action: 'updateAdmin',
-                   adminId,
-                   id_admin: adminId,
-                   password: newPassword
-               })
-           });
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify(withAdminToken({
+                    action: 'updateAdmin',
+                    adminId,
+                    id_admin: adminId,
+                    password: newPassword
+                }))
+            });
            
            const result = await response.json();
            
@@ -2044,14 +2081,14 @@
        if (!confirm(`Apakah Anda yakin ingin menghapus admin ${adminId}?`)) return;
        
        try {
-           const response = await fetch(API_URL, {
-               method: 'POST',
-               body: JSON.stringify({
-                   action: 'deleteAdmin',
-                   adminId,
-                   id_admin: adminId
-               })
-           });
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify(withAdminToken({
+                    action: 'deleteAdmin',
+                    adminId,
+                    id_admin: adminId
+                }))
+            });
            
            const result = await response.json();
            
@@ -2062,7 +2099,9 @@
                alert('Gagal menghapus admin: ' + result.message);
            }
        } catch (error) {
-           console.error('Error deleting admin:', error);
-           alert('Terjadi kesalahan saat menghapus data');
-       }
-   }
+        console.error('Error deleting admin:', error);
+            alert('Terjadi kesalahan saat menghapus data');
+        }
+    }
+
+})();
