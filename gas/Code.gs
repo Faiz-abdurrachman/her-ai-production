@@ -559,9 +559,14 @@ function getParticipantDashboardData(payload) {
     .filter(row => row.is_active === '' || isTruthy(row.is_active))
     .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
 
-  var allModuleRows = getRows(SHEETS.participantDashboardModules).slice();
-  if (!allModuleRows.some(function(row) { return String(row.module_id || '') === 'ai-fundamentals'; })) {
-    allModuleRows.push(defaultIntroTrackingModule());
+  // Shared static data — cached for 30 minutes
+  var allModuleRows = cacheGet('modules');
+  if (!allModuleRows) {
+    allModuleRows = getRows(SHEETS.participantDashboardModules).slice();
+    if (!allModuleRows.some(function(row) { return String(row.module_id || '') === 'ai-fundamentals'; })) {
+      allModuleRows.push(defaultIntroTrackingModule());
+    }
+    cachePut('modules', allModuleRows, 1800);
   }
   const moduleRows = allModuleRows
     .filter(function(row) {
@@ -569,10 +574,37 @@ function getParticipantDashboardData(payload) {
     })
     .sort(function(a, b) { return Number(a.sort_order || 0) - Number(b.sort_order || 0); });
 
-  const allProgressRows = getRows(SHEETS.participantProgress);
-  const progressRows = requesterNik ? allProgressRows.filter(function(row) {
-    return String(row.nik || '').replace(/\D/g, '') === requesterNik;
-  }) : [];
+  // Per-user progress — cache filtered rows for 5 minutes
+  const progressCacheKey = 'prog:' + requesterNik;
+  var progressRows = requesterNik ? cacheGet(progressCacheKey) : null;
+  var allProgressRows = null;
+  if (!progressRows) {
+    allProgressRows = getRows(SHEETS.participantProgress);
+    progressRows = requesterNik ? allProgressRows.filter(function(row) {
+      return String(row.nik || '').replace(/\D/g, '') === requesterNik;
+    }) : [];
+    if (requesterNik) cachePut(progressCacheKey, progressRows, 300);
+  }
+
+  // Leaderboard — cache computed result (needs full progress scan, expensive)
+  var leaderboard = cacheGet('leader');
+  if (!leaderboard) {
+    const targetEmailSet = getTargetParticipantPortalEmailSet();
+    var activeAccounts = cacheGet('accts');
+    if (!activeAccounts) {
+      activeAccounts = getRows(SHEETS.participantAccounts).filter(function(account) {
+        return account && account.account_id
+          && isParticipantPortalAccountAllowed(account, targetEmailSet)
+          && isParticipantAccountActive(account);
+      });
+      cachePut('accts', activeAccounts, 300);
+    }
+    leaderboard = computeLiveLeaderboard(requesterNik, {
+      activeAccounts: activeAccounts,
+      progressRows: allProgressRows || getRows(SHEETS.participantProgress)
+    });
+    cachePut('leader', leaderboard, 180);
+  }
 
   var completedByModule = {};
   progressRows.forEach(function(row) {
@@ -632,41 +664,65 @@ function getParticipantDashboardData(payload) {
     return module.phase_id === 'foundation';
   }));
 
-  const discussionTrails = activeRows(SHEETS.participantDashboardDiscussionTrails).map(row => ({
-    actor: row.actor || 'Panitia',
-    action: row.action || 'memperbarui diskusi',
-    topic: row.topic || 'Diskusi',
-    time: row.time_label || formatRelativeTime(row.created_at),
-    tone: row.tone || ''
-  }));
+  var discussionTrails = cacheGet('disc');
+  if (!discussionTrails) {
+    discussionTrails = activeRows(SHEETS.participantDashboardDiscussionTrails).map(row => ({
+      actor: row.actor || 'Panitia',
+      action: row.action || 'memperbarui diskusi',
+      topic: row.topic || 'Diskusi',
+      time: row.time_label || formatRelativeTime(row.created_at),
+      tone: row.tone || ''
+    }));
+    cachePut('disc', discussionTrails, 600);
+  }
 
-  const tracks = activeRows(SHEETS.participantDashboardTracks).map(row => ({
-    title: row.title || '',
-    subtitle: row.subtitle || '',
-    icon: row.icon || 'fas fa-layer-group'
-  }));
+  var tracks = cacheGet('tracks');
+  if (!tracks) {
+    tracks = activeRows(SHEETS.participantDashboardTracks).map(row => ({
+      title: row.title || '',
+      subtitle: row.subtitle || '',
+      icon: row.icon || 'fas fa-layer-group'
+    }));
+    cachePut('tracks', tracks, 1800);
+  }
 
-  const journey = computeParticipantJourney(activeRows(SHEETS.participantDashboardJourney), trackingModules);
+  var journey = cacheGet('journey');
+  if (!journey) {
+    journey = computeParticipantJourney(activeRows(SHEETS.participantDashboardJourney), trackingModules);
+    cachePut('journey', journey, 1800);
+  }
 
-  const events = activeRows(SHEETS.participantDashboardEvents).map(row => ({
-    day: row.day || '',
-    month: row.month || '',
-    title: row.title || '',
-    time: row.time || '',
-    url: row.url || '#/participant-events'
-  }));
+  var events = cacheGet('events');
+  if (!events) {
+    events = activeRows(SHEETS.participantDashboardEvents).map(row => ({
+      day: row.day || '',
+      month: row.month || '',
+      title: row.title || '',
+      time: row.time || '',
+      url: row.url || '#/participant-events'
+    }));
+    cachePut('events', events, 600);
+  }
 
-  // Live-computed leaderboard from participant progress
-  const targetEmailSet = getTargetParticipantPortalEmailSet();
-  const activeAccounts = getRows(SHEETS.participantAccounts).filter(function(account) {
-    return account && account.account_id
-      && isParticipantPortalAccountAllowed(account, targetEmailSet)
-      && isParticipantAccountActive(account);
-  });
-  const leaderboard = computeLiveLeaderboard(requesterNik, {
-    activeAccounts: activeAccounts,
-    progressRows: allProgressRows
-  });
+  // Leaderboard — cache computed result (needs full progress scan, expensive)
+  var leaderboard = cacheGet('leader');
+  if (!leaderboard) {
+    const targetEmailSet = getTargetParticipantPortalEmailSet();
+    var activeAccounts = cacheGet('accts');
+    if (!activeAccounts) {
+      activeAccounts = getRows(SHEETS.participantAccounts).filter(function(account) {
+        return account && account.account_id
+          && isParticipantPortalAccountAllowed(account, targetEmailSet)
+          && isParticipantAccountActive(account);
+      });
+      cachePut('accts', activeAccounts, 300);
+    }
+    leaderboard = computeLiveLeaderboard(requesterNik, {
+      activeAccounts: activeAccounts,
+      progressRows: allProgressRows || getRows(SHEETS.participantProgress)
+    });
+    cachePut('leader', leaderboard, 180);
+  }
 
   return {
     status: 'success',
@@ -1139,6 +1195,7 @@ function seedDashboardModules() {
   modules.forEach(function(m) {
     upsertByKey(SHEETS.participantDashboardModules, 'module_id', m.module_id, m);
   });
+  invalidateSharedCaches();
 }
 
 function seedDashboardJourney() {
@@ -1171,6 +1228,7 @@ function seedDashboardEvents() {
   events.forEach(function(e) {
     addRowObject(SHEETS.participantDashboardEvents, e);
   });
+  cacheRemove('events');
 }
 
 function seedDashboardTracks() {
@@ -3103,6 +3161,8 @@ function saveParticipantProgress(payload) {
     score: score
   });
 
+  invalidateUserCaches(participant.nik);
+  cacheRemove('leader');
   return { status: 'success' };
 }
 
@@ -3390,6 +3450,10 @@ function saveParticipantExerciseSubmission(payload, requestedStatus) {
     activity: requestedStatus === 'submitted' ? 'Mengirim latihan untuk review' : 'Menyimpan draft latihan',
     payload: { submission_id: savedRow.submission_id, answer_count: input.answerCount }
   });
+  if (requestedStatus === 'submitted') {
+    invalidateUserCaches(nik);
+    cacheRemove('leader');
+  }
   return { status: 'success', submission: participantExerciseForClient(savedRow) };
 }
 
@@ -3702,6 +3766,36 @@ function enforceAttemptLimit(key, maxAttempts, ttlSeconds) {
 
 function clearAttemptLimit(key) {
   CacheService.getScriptCache().remove('attempt:' + String(key || '').slice(0, 180));
+}
+
+// ── Dashboard read cache (CacheService, reduces SpreadsheetApp reads) ────────
+
+function cacheGet(key) {
+  try {
+    var raw = CacheService.getScriptCache().get('dash:' + String(key || '').slice(0, 200));
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+
+function cachePut(key, value, ttlSeconds) {
+  try {
+    CacheService.getScriptCache().put('dash:' + String(key || '').slice(0, 200),
+      JSON.stringify(value), Math.max(1, Number(ttlSeconds || 300)));
+  } catch (e) { /* silent — cache is optional acceleration */ }
+}
+
+function cacheRemove(key) {
+  try { CacheService.getScriptCache().remove('dash:' + String(key || '').slice(0, 200)); } catch (e) { /* silent */ }
+}
+
+function invalidateUserCaches(nik) {
+  var cleanNik = String(nik || '').replace(/\D/g, '');
+  if (!cleanNik) return;
+  cacheRemove('prog:' + cleanNik);
+}
+
+function invalidateSharedCaches() {
+  ['modules', 'events', 'tracks', 'journey', 'disc', 'leader'].forEach(function(k) { cacheRemove(k); });
 }
 
 function findParticipantByNik(nik) {
