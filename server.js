@@ -2,11 +2,10 @@
  * Lightweight local server for the HerAI SPA.
  *
  * Usage:
- *   node server.js
+ *   source .env && node server.js
  *
- * Live GAS proxying is intentionally disabled by default. Enable it only for
- * an explicitly authorised manual check:
- *   HERAI_ALLOW_LIVE_GAS_PROXY=true GAS_WEB_APP_URL="..." node server.js
+ * GAS proxy auto-enables when GAS_WEB_APP_URL is available (from .env or default).
+ * Disable with: HERAI_ALLOW_LIVE_GAS_PROXY=false node server.js
  */
 
 'use strict';
@@ -18,8 +17,9 @@ const path = require('node:path');
 const ROOT = path.resolve(__dirname);
 const HOST = process.env.HERAI_LOCAL_HOST || '127.0.0.1';
 const PORT = Number(process.env.PORT || 3000);
-const LIVE_PROXY_ENABLED = process.env.HERAI_ALLOW_LIVE_GAS_PROXY === 'true';
-const GAS_WEB_APP_URL = String(process.env.GAS_WEB_APP_URL || '').trim();
+const LIVE_PROXY_ENABLED = process.env.HERAI_ALLOW_LIVE_GAS_PROXY !== 'false';
+const GAS_WEB_APP_URL = String(process.env.GAS_WEB_APP_URL || '').trim()
+  || 'https://script.google.com/macros/s/AKfycbz1tT_VoZQYrCxsBUD5v1HJjDNyM_p9TZnXw9t3uJlLmFLA7KGD4FzxPQ1I1a3w5tRE/exec';
 
 const MIME_TYPES = Object.freeze({
   '.css': 'text/css; charset=utf-8',
