@@ -1157,19 +1157,19 @@ function seedDashboardJourney() {
 }
 
 function seedDashboardEvents() {
-  var now = new Date();
   var events = [
-    { day: String(now.getDate() + 3), month: monthAbbr(now), title: 'Live Session: Build RAG Chatbot', time: '10.00 - 12.00 WIB', url: '#/participant-events', quiz_total: 20, is_active: 'true', sort_order: 1 },
-    { day: String(now.getDate() + 7), month: monthAbbr(now), title: 'Mentor Clinic: Career in AI', time: '19.00 - 20.30 WIB', url: '#/participant-events', quiz_total: 20, is_active: 'true', sort_order: 2 },
-    { day: String(now.getDate() + 10), month: monthAbbr(now), title: 'Workshop: Data Visualization', time: '13.00 - 15.00 WIB', url: '#/participant-events', quiz_total: 20, is_active: 'true', sort_order: 3 },
-    { day: String(now.getDate() + 14), month: monthAbbr(nextMonth(now)), title: 'Guest Lecture: Ethics in AI', time: '14.00 - 16.00 WIB', url: '#/participant-events', quiz_total: 20, is_active: 'true', sort_order: 4 },
-    { day: String(now.getDate() + 18), month: monthAbbr(nextMonth(now)), title: 'Hackathon Kick-off', time: '09.00 - 17.00 WIB', url: '#/participant-events', quiz_total: 20, is_active: 'true', sort_order: 5 }
+    { day: '8',  month: 'AGU', title: 'Live Session: Business Understanding',         time: '19.00 - 21.00 WIB',   url: '#/participant-events', is_active: 'true', sort_order: 1 },
+    { day: '9',  month: 'AGU', title: 'Mentor Clinic: Research Methodology',          time: '19.00 - 21.00 WIB',   url: '#/participant-events', is_active: 'true', sort_order: 2 },
+    { day: '15', month: 'AGU', title: 'Workshop: Sustainability Finance (ESG)',       time: '19.00 - 21.00 WIB',   url: '#/participant-events', is_active: 'true', sort_order: 3 },
+    { day: '16', month: 'AGU', title: 'Technical Meeting: Mini Hackathon',            time: '19.00 - 21.00 WIB',   url: '#/participant-events', is_active: 'true', sort_order: 4 },
+    { day: '23', month: 'AGU', title: 'Pitching & Judging — Mini Hackathon',          time: '19.00 - Selesai WIB', url: '#/participant-events', is_active: 'true', sort_order: 5 }
   ];
 
   var sheet = getSheet(SHEETS.participantDashboardEvents);
   ensureSchemaHeaders(sheet, SCHEMA[SHEETS.participantDashboardEvents]);
+  if (sheet.getLastRow() > 1) sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clearContent();
   events.forEach(function(e) {
-    upsertByKey(SHEETS.participantDashboardEvents, 'title', e.title, e);
+    addRowObject(SHEETS.participantDashboardEvents, e);
   });
 }
 
