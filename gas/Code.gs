@@ -5016,9 +5016,10 @@ function getRecentActivity(payload) {
   var offset = Number(payload.offset) || 0;
   var filterNik = String(payload.nik || '').replace(/\D/g, '');
   var filterModule = String(payload.module_id || '');
+  var dateFrom = String(payload.dateFrom || '');
+  var dateTo = String(payload.dateTo || '');
 
   var rows = getRows(SHEETS.participantActivity);
-  // Sort by timestamp DESC (newest first)
   rows.sort(function (a, b) {
     var ta = a.timestamp || '';
     var tb = b.timestamp || '';
@@ -5036,6 +5037,14 @@ function getRecentActivity(payload) {
   if (filterModule) {
     filtered = filtered.filter(function (r) {
       return String(r.module_id || '') === filterModule;
+    });
+  }
+  if (dateFrom || dateTo) {
+    filtered = filtered.filter(function (r) {
+      var ts = String(r.timestamp || '');
+      if (dateFrom && ts < dateFrom) return false;
+      if (dateTo && ts > (dateTo + 'T23:59:59.999Z')) return false;
+      return true;
     });
   }
 

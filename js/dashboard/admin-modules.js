@@ -2108,6 +2108,7 @@
 
     window.initLiveMonitor = function () {
         var apiUrl = '/__gas';
+        var PAGE_SIZE = 30;
 
         if (typeof window.loadSidebar === 'function') {
             window.loadSidebar('nav-live-monitor');
@@ -2122,54 +2123,98 @@
         } catch (_) {}
 
         var pollTimer = null;
-        var onlineCache = [];
+        var activityOffset = 0;
+        var totalActivityCount = 0;
+        var dateFrom = '';
+        var dateTo = '';
+        var currentNik = '';
+        var isLoading = false;
+
+        function activeFilters() {
+            var o = {};
+            if (dateFrom) o.dateFrom = dateFrom;
+            if (dateTo) o.dateTo = dateTo;
+            return o;
+        }
+
+        function updateResultCount() {
+            var el = document.getElementById('live-result-count');
+            if (!el) return;
+            var n = totalActivityCount;
+            el.textContent = n + ' aktivitas';
+            el.classList.toggle('is-filtered', !!(dateFrom || dateTo || currentNik));
+        }
+
+        function updatePollStatus(busy) {
+            var s = document.getElementById('live-poll-status');
+            var dot = document.querySelector('.lmc-pulse-dot');
+            if (s) s.textContent = busy ? 'Memperbarui' : 'Live';
+            if (dot) dot.classList.toggle('is-busy', !!busy);
+        }
 
         function poll() {
             fetchOnlineParticipants();
             fetchRecentActivity();
         }
 
-        function fetchOnlineParticipants() {
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(withAdminToken({ action: 'getOnlineParticipants' }))
-            })
-                .then(function (r) { return r.json(); })
-                .then(function (data) {
-                    if (data.status !== 'success') return;
-                    onlineCache = data.participants || [];
-                    renderOnlinePresence(onlineCache, data.online_count || 0);
-                })
-                .catch(function () {});
-        }
+        function fetchRecentActivity(options) {
+            options = options || {};
+            var append = !!options.append;
+            var nikOverride = options.nik;
+            var limit = options.limit || PAGE_SIZE;
 
-        function fetchRecentActivity() {
+            if (options.reset) {
+                activityOffset = 0;
+                totalActivityCount = 0;
+                append = false;
+            }
+
+            if (nikOverride !== undefined) currentNik = nikOverride || '';
+
+            if (isLoading) return;
+            isLoading = true;
+            updatePollStatus(true);
+
+            var payload = withAdminToken(Object.assign(
+                { action: 'getRecentActivity', limit: limit, offset: append ? activityOffset : 0 },
+                activeFilters()
+            ));
+            if (currentNik) payload.nik = currentNik;
+
             fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(withAdminToken({ action: 'getRecentActivity', limit: 30 }))
+                body: JSON.stringify(payload)
             })
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     if (data.status !== 'success') return;
-                    renderActivityFeed(data.activities || []);
-                    populateNikFilter(data.activities || []);
+                    totalActivityCount = data.total || 0;
+                    updateResultCount();
+                    renderActivityFeed(data.activities || [], append);
+                    if (activityOffset === 0 && !append) populateNikFilter(data.activities || []);
                 })
-                .catch(function () {});
+                .catch(function () {})
+                .then(function () {
+                    isLoading = false;
+                    updatePollStatus(false);
+                });
         }
 
         function renderOnlinePresence(participants, count) {
             var badge = document.getElementById('live-online-badge');
             var list = document.getElementById('live-online-presence');
             var title = document.getElementById('live-online-title');
-            if (badge) badge.textContent = '\u25CF ' + count + ' online';
+            if (badge) {
+                badge.textContent = count + ' online';
+                badge.classList.toggle('is-empty', count === 0);
+            }
             if (title) title.innerHTML = '<i class="fas fa-dot-circle ' + (count > 0 ? 'icon-green' : 'icon-gray') + '"></i> Peserta Online';
 
             if (!list) return;
 
             if (participants.length === 0) {
-                list.innerHTML = '<div class="empty-presence">Tidak ada peserta online saat ini.</div>';
+                list.innerHTML = '<div class="empty-presence"><i class="fas fa-user-slash"></i><span>Tidak ada peserta online saat ini.</span></div>';
                 return;
             }
 
@@ -2177,34 +2222,42 @@
             for (var i = 0; i < participants.length; i++) {
                 var p = participants[i];
                 var name = p.nama_lengkap || 'Peserta';
+                var initials = (name.split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join('')) || '?';
                 var page = p.page ? p.page.replace(/^\/participant-/, '') : '';
                 var module = p.module_id || '';
+                var where = module || page || 'Dashboard';
+                var seen = getRelativeTime(p.last_seen || p.timestamp);
                 html += '<div class="presence-card">'
-                    + '<span class="presence-dot online"></span>'
+                    + '<div class="presence-avatar">' + escapeHtml(initials) + '<span class="presence-dot online"></span></div>'
+                    + '<div class="presence-meta">'
                     + '<span class="presence-name">' + escapeHtml(name) + '</span>'
-                    + '<span class="presence-page">' + escapeHtml(module || page || 'Dashboard') + '</span>'
+                    + '<span class="presence-page"><i class="fas fa-location-crosshairs"></i> ' + escapeHtml(where) + '</span>'
+                    + '</div>'
+                    + (seen ? '<span class="presence-seen">' + escapeHtml(seen) + '</span>' : '')
                     + '</div>';
             }
             list.innerHTML = html;
         }
 
-        function getActivityIcon(type) {
-            var icons = {
-                login: 'fas fa-sign-in-alt',
-                password_change: 'fas fa-key',
-                progress_update: 'fas fa-book-open',
-                discussion_post: 'fas fa-comment',
-                discussion_reply: 'fas fa-reply',
-                exercise_submitted: 'fas fa-pen',
-                exercise_draft_saved: 'fas fa-save',
-                page_view: 'fas fa-eye'
-            };
-            return icons[type] || 'fas fa-circle';
+        var ACTIVITY_META = {
+            login:               { icon: 'fas fa-right-to-bracket',   tone: 'tone-green' },
+            password_change:     { icon: 'fas fa-key',                tone: 'tone-amber' },
+            progress_update:     { icon: 'fas fa-book-open',          tone: 'tone-blue' },
+            discussion_post:     { icon: 'fas fa-comment-dots',       tone: 'tone-pink' },
+            discussion_reply:    { icon: 'fas fa-reply',              tone: 'tone-pink' },
+            exercise_submitted:  { icon: 'fas fa-pen-to-square',      tone: 'tone-violet' },
+            exercise_draft_saved:{ icon: 'fas fa-floppy-disk',        tone: 'tone-slate' },
+            page_view:           { icon: 'fas fa-eye',                tone: 'tone-slate' }
+        };
+
+        function getActivityMeta(type) {
+            return ACTIVITY_META[type] || { icon: 'fas fa-circle-dot', tone: 'tone-slate' };
         }
 
         function getRelativeTime(ts) {
             if (!ts) return '';
             var diff = Date.now() - new Date(ts).getTime();
+            if (diff < 0) return 'Baru saja';
             var sec = Math.floor(diff / 1000);
             if (sec < 60) return 'Baru saja';
             var min = Math.floor(sec / 60);
@@ -2214,30 +2267,57 @@
             return Math.floor(hr / 24) + ' hari lalu';
         }
 
-        function renderActivityFeed(activities) {
+        function renderActivityFeed(activities, append) {
             var feed = document.getElementById('live-activity-feed');
             if (!feed) return;
 
-            if (activities.length === 0) {
-                feed.innerHTML = '<div class="empty-feed">Belum ada aktivitas tercatat.</div>';
-                return;
+            if (!append) {
+                if (activities.length === 0) {
+                    feed.innerHTML = '<div class="empty-feed"><i class="fas fa-inbox"></i><span>Tidak ada aktivitas pada rentang ini.</span></div>';
+                    return;
+                }
+                feed.innerHTML = '';
+            } else {
+                var stale = feed.querySelector('.empty-feed');
+                if (stale) stale.remove();
             }
 
             var html = '';
             for (var i = 0; i < activities.length; i++) {
                 var a = activities[i];
-                var icon = getActivityIcon(a.activity_type);
+                var meta = getActivityMeta(a.activity_type);
                 var relTime = getRelativeTime(a.timestamp);
-                html += '<div class="activity-item">'
-                    + '<span class="activity-icon"><i class="' + icon + '"></i></span>'
+                var actor = escapeHtml(a.nama_lengkap || a.nik || '?');
+                var desc = escapeHtml(a.activity || '');
+                var ts = a.timestamp ? new Date(a.timestamp).toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+                html += '<div class="activity-item ' + meta.tone + '">'
+                    + '<div class="activity-rail"></div>'
+                    + '<span class="activity-icon"><i class="' + meta.icon + '"></i></span>'
                     + '<div class="activity-body">'
-                    + '<span class="activity-name">' + escapeHtml(a.nama_lengkap || a.nik || '?') + '</span>'
-                    + '<span class="activity-desc">' + escapeHtml(a.activity || '') + '</span>'
+                    + '<span class="activity-name">' + actor + '</span>'
+                    + '<span class="activity-desc">' + desc + '</span>'
+                    + (ts ? '<span class="activity-ts">' + escapeHtml(ts) + '</span>' : '')
                     + '</div>'
                     + '<span class="activity-time">' + escapeHtml(relTime) + '</span>'
                     + '</div>';
             }
-            feed.innerHTML = html;
+            feed.insertAdjacentHTML('beforeend', html);
+
+            if (append) activityOffset += activities.length;
+
+            var loadMore = feed.querySelector('.live-load-more');
+            if (loadMore) loadMore.remove();
+            if (activityOffset < totalActivityCount && activities.length > 0) {
+                feed.insertAdjacentHTML('beforeend',
+                    '<button class="live-load-more" id="live-load-more-btn">'
+                    + '<i class="fas fa-chevron-down"></i><span>Muat Lebih Banyak</span>'
+                    + '<em>' + (totalActivityCount - activityOffset) + ' aktivitas tersisa</em>'
+                    + '</button>');
+                var btn = document.getElementById('live-load-more-btn');
+                if (btn) btn.addEventListener('click', function () {
+                    fetchRecentActivity({ append: true });
+                });
+            }
         }
 
         function populateNikFilter(activities) {
@@ -2258,20 +2338,43 @@
             }
 
             select.addEventListener('change', function () {
-                var nik = this.value;
-                fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(withAdminToken({ action: 'getRecentActivity', limit: 50, nik: nik || undefined }))
-                })
-                    .then(function (r) { return r.json(); })
-                    .then(function (data) {
-                        if (data.status === 'success') renderActivityFeed(data.activities || []);
-                    })
-                    .catch(function () {});
+                currentNik = this.value || '';
+                fetchRecentActivity({ reset: true, nik: currentNik });
             });
         }
 
+        function applyDateFilter() {
+            var fEl = document.getElementById('live-filter-from');
+            var tEl = document.getElementById('live-filter-to');
+            dateFrom = (fEl && fEl.value) || '';
+            dateTo = (tEl && tEl.value) || '';
+            if (dateFrom && dateTo && dateFrom > dateTo) {
+                var tmp = dateFrom; dateFrom = dateTo; dateTo = tmp;
+                if (fEl) fEl.value = dateFrom;
+                if (tEl) tEl.value = dateTo;
+            }
+            fetchRecentActivity({ reset: true });
+        }
+
+        function resetDateFilter() {
+            dateFrom = ''; dateTo = '';
+            var fEl = document.getElementById('live-filter-from');
+            var tEl = document.getElementById('live-filter-to');
+            if (fEl) fEl.value = '';
+            if (tEl) tEl.value = '';
+            var nikSel = document.getElementById('live-feed-filter-nik');
+            if (nikSel) { nikSel.value = ''; currentNik = ''; }
+            fetchRecentActivity({ reset: true, nik: '' });
+        }
+
+        function bindControls() {
+            var apply = document.getElementById('live-filter-apply');
+            var reset = document.getElementById('live-filter-reset');
+            if (apply) apply.addEventListener('click', applyDateFilter);
+            if (reset) reset.addEventListener('click', resetDateFilter);
+        }
+
+        bindControls();
         poll();
         pollTimer = setInterval(poll, 30000);
 
