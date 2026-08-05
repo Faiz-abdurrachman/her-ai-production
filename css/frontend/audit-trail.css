@@ -76,6 +76,15 @@
     padding-bottom: 15px;
     margin-bottom: 20px;
 }
+.live-online-head.panel-header-border,
+.live-feed-head.panel-header-border {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: flex-start;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
 
 .panel-title {
     font-family: 'Space Grotesk', sans-serif;
