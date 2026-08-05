@@ -24,6 +24,14 @@
 
         <div class="live-monitor-shell">
 
+            <!-- Quick date presets -->
+            <div class="lm-presets" role="group" aria-label="Filter cepat tanggal">
+                <button type="button" class="lm-preset" data-preset="today"><i class="fas fa-bolt"></i> Hari Ini</button>
+                <button type="button" class="lm-preset" data-preset="7d"><i class="fas fa-calendar-week"></i> 7 Hari</button>
+                <button type="button" class="lm-preset" data-preset="30d"><i class="fas fa-calendar-days"></i> 30 Hari</button>
+                <button type="button" class="lm-preset" data-preset="month"><i class="fas fa-calendar"></i> Bulan Ini</button>
+            </div>
+
             <div class="live-monitor-controlbar">
                 <div class="lmc-section lmc-filters">
                     <div class="lmc-field">
@@ -55,6 +63,15 @@
                 </div>
             </div>
 
+            <!-- Active filter indicator (rendered by JS) -->
+            <div class="lm-active-filter" id="live-active-filter" hidden>
+                <span class="lm-active-filter-icon"><i class="fas fa-filter-circle-check"></i></span>
+                <span class="lm-active-filter-text" id="live-active-filter-text"></span>
+                <button type="button" class="lm-active-filter-clear" id="live-active-filter-clear" title="Hapus filter">
+                    <i class="fas fa-xmark"></i> Hapus Filter
+                </button>
+            </div>
+
             <div class="live-monitor-grid">
 
                 <section class="glass-panel live-online-panel">
@@ -65,7 +82,7 @@
                         <span class="live-badge" id="live-online-badge">0 online</span>
                     </div>
                     <div class="panel-body" id="live-online-presence">
-                        <div class="empty-presence">Menunggu data...</div>
+                        <!-- skeleton rendered by JS -->
                     </div>
                 </section>
 
@@ -75,13 +92,13 @@
                             <i class="fas fa-stream icon-blue"></i> Aktivitas Terbaru
                         </h3>
                         <div class="live-feed-filter">
-                            <select id="live-feed-filter-nik" class="live-filter-select">
+                            <select id="live-feed-filter-nik" class="live-filter-select" aria-label="Filter peserta">
                                 <option value="">Semua Peserta</option>
                             </select>
                         </div>
                     </div>
                     <div class="panel-body" id="live-activity-feed">
-                        <div class="empty-feed">Memuat aktivitas...</div>
+                        <!-- skeleton rendered by JS -->
                     </div>
                 </section>
 

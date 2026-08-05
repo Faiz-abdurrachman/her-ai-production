@@ -2109,6 +2109,7 @@
     window.initLiveMonitor = function () {
         var apiUrl = '/__gas';
         var PAGE_SIZE = 30;
+        var SKELETON_THRESHOLD_MS = 300;
 
         if (typeof window.loadSidebar === 'function') {
             window.loadSidebar('nav-live-monitor');
@@ -2129,6 +2130,65 @@
         var dateTo = '';
         var currentNik = '';
         var isLoading = false;
+        var skeletonTimer = null;
+        var skeletonShown = false;
+
+        function presenceSkeleton(n) {
+            n = n || 4;
+            var html = '';
+            for (var i = 0; i < n; i++) {
+                html += '<div class="sk-card">'
+                    + '<div class="sk sk-avatar"></div>'
+                    + '<div class="sk-lines">'
+                    + '<div class="sk sk-line sk-w60"></div>'
+                    + '<div class="sk sk-line sk-w40"></div>'
+                    + '</div></div>';
+            }
+            return '<div class="sk-list">' + html + '</div>';
+        }
+
+        function activitySkeleton(n) {
+            n = n || 4;
+            var html = '';
+            for (var i = 0; i < n; i++) {
+                html += '<div class="sk-card sk-row">'
+                    + '<div class="sk sk-icon"></div>'
+                    + '<div class="sk-lines">'
+                    + '<div class="sk sk-line sk-w70"></div>'
+                    + '<div class="sk sk-line sk-w90"></div>'
+                    + '<div class="sk sk-line sk-w30"></div>'
+                    + '</div></div>';
+            }
+            return '<div class="sk-list">' + html + '</div>';
+        }
+
+        function maybeShowPresenceSkeleton() {
+            if (skeletonTimer) clearTimeout(skeletonTimer);
+            skeletonTimer = setTimeout(function () {
+                var list = document.getElementById('live-online-presence');
+                if (list && list.children.length === 0) {
+                    list.innerHTML = presenceSkeleton(5);
+                    skeletonShown = true;
+                }
+            }, SKELETON_THRESHOLD_MS);
+        }
+
+        function maybeShowActivitySkeleton(append) {
+            if (append) return;
+            var feed = document.getElementById('live-activity-feed');
+            if (!feed) return;
+            if (skeletonTimer) clearTimeout(skeletonTimer);
+            skeletonTimer = setTimeout(function () {
+                if (feed.children.length === 0 || feed.querySelector('.empty-feed') || feed.querySelector('.sk-list')) {
+                    feed.innerHTML = activitySkeleton(5);
+                    skeletonShown = true;
+                }
+            }, SKELETON_THRESHOLD_MS);
+        }
+
+        function clearSkeletonTimer() {
+            if (skeletonTimer) { clearTimeout(skeletonTimer); skeletonTimer = null; }
+        }
 
         function activeFilters() {
             var o = {};
@@ -2145,6 +2205,40 @@
             el.classList.toggle('is-filtered', !!(dateFrom || dateTo || currentNik));
         }
 
+        function updateActiveFilterIndicator() {
+            var wrap = document.getElementById('live-active-filter');
+            var textEl = document.getElementById('live-active-filter-text');
+            if (!wrap || !textEl) return;
+            var active = !!(dateFrom || dateTo || currentNik);
+            if (!active) { wrap.hidden = true; return; }
+            var parts = [];
+            if (dateFrom && dateTo) {
+                parts.push(escapeHtml(formatDateRange(dateFrom, dateTo)));
+            } else if (dateFrom) {
+                parts.push('Dari ' + escapeHtml(formatDateShort(dateFrom)));
+            } else if (dateTo) {
+                parts.push('Sampai ' + escapeHtml(formatDateShort(dateTo)));
+            }
+            if (currentNik) {
+                var sel = document.getElementById('live-feed-filter-nik');
+                var label = (sel && sel.selectedIndex >= 0) ? sel.options[sel.selectedIndex].text : currentNik;
+                parts.push('Peserta: ' + escapeHtml(label));
+            }
+            textEl.innerHTML = 'Filter aktif — ' + parts.join(' · ');
+            wrap.hidden = false;
+        }
+
+        function formatDateShort(iso) {
+            try {
+                var d = new Date(iso + 'T00:00:00');
+                return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+            } catch (_) { return iso; }
+        }
+
+        function formatDateRange(a, b) {
+            return formatDateShort(a) + ' — ' + formatDateShort(b);
+        }
+
         function updatePollStatus(busy) {
             var s = document.getElementById('live-poll-status');
             var dot = document.querySelector('.lmc-pulse-dot');
@@ -2155,6 +2249,24 @@
         function poll() {
             fetchOnlineParticipants();
             fetchRecentActivity();
+        }
+
+        function fetchOnlineParticipants() {
+            maybeShowPresenceSkeleton();
+            try {
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(withAdminToken({ action: 'getOnlineParticipants' }))
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        clearSkeletonTimer();
+                        if (!data || data.status !== 'success') return;
+                        renderOnlinePresence(data.participants || [], data.count || (data.participants || []).length);
+                    })
+                    .catch(function () { clearSkeletonTimer(); });
+            } catch (_) { clearSkeletonTimer(); }
         }
 
         function fetchRecentActivity(options) {
@@ -2175,6 +2287,12 @@
             isLoading = true;
             updatePollStatus(true);
 
+            if (append) {
+                showLoadMoreLoader();
+            } else {
+                maybeShowActivitySkeleton(false);
+            }
+
             var payload = withAdminToken(Object.assign(
                 { action: 'getRecentActivity', limit: limit, offset: append ? activityOffset : 0 },
                 activeFilters()
@@ -2188,20 +2306,43 @@
             })
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
+                    clearSkeletonTimer();
                     if (data.status !== 'success') return;
                     totalActivityCount = data.total || 0;
                     updateResultCount();
+                    updateActiveFilterIndicator();
                     renderActivityFeed(data.activities || [], append);
                     if (activityOffset === 0 && !append) populateNikFilter(data.activities || []);
                 })
-                .catch(function () {})
+                .catch(function () { clearSkeletonTimer(); })
                 .then(function () {
                     isLoading = false;
+                    removeLoadMoreLoader();
                     updatePollStatus(false);
                 });
         }
 
+        function showLoadMoreLoader() {
+            var feed = document.getElementById('live-activity-feed');
+            if (!feed) return;
+            var existing = feed.querySelector('.live-load-more-loading');
+            if (existing) return;
+            feed.insertAdjacentHTML('beforeend',
+                '<div class="live-load-more-loading" aria-live="polite">'
+                + '<span class="lm-spin"><i class="fas fa-circle-notch"></i></span>'
+                + '<span>Memuat lebih banyak...</span>'
+                + '</div>');
+        }
+
+        function removeLoadMoreLoader() {
+            var feed = document.getElementById('live-activity-feed');
+            if (!feed) return;
+            var node = feed.querySelector('.live-load-more-loading');
+            if (node) node.remove();
+        }
+
         function renderOnlinePresence(participants, count) {
+            clearSkeletonTimer();
             var badge = document.getElementById('live-online-badge');
             var list = document.getElementById('live-online-presence');
             var title = document.getElementById('live-online-title');
@@ -2214,7 +2355,11 @@
             if (!list) return;
 
             if (participants.length === 0) {
-                list.innerHTML = '<div class="empty-presence"><i class="fas fa-user-slash"></i><span>Tidak ada peserta online saat ini.</span></div>';
+                list.innerHTML = '<div class="empty-presence">'
+                    + '<div class="empty-illust"><i class="fas fa-user-slash"></i></div>'
+                    + '<span class="empty-title">Belum ada peserta online</span>'
+                    + '<span class="empty-sub">Peserta yang sedang aktif akan tampil di sini secara langsung.</span>'
+                    + '</div>';
                 return;
             }
 
@@ -2227,16 +2372,30 @@
                 var module = p.module_id || '';
                 var where = module || page || 'Dashboard';
                 var seen = getRelativeTime(p.last_seen || p.timestamp);
-                html += '<div class="presence-card">'
+                var hb = p.last_seen ? formatHeartbeat(p.last_seen) : '';
+                html += '<div class="presence-card" style="animation-delay:' + (i * 40) + 'ms">'
                     + '<div class="presence-avatar">' + escapeHtml(initials) + '<span class="presence-dot online"></span></div>'
                     + '<div class="presence-meta">'
                     + '<span class="presence-name">' + escapeHtml(name) + '</span>'
                     + '<span class="presence-page"><i class="fas fa-location-crosshairs"></i> ' + escapeHtml(where) + '</span>'
+                    + (hb ? '<span class="presence-hb"><i class="fas fa-heart-pulse"></i> ' + escapeHtml(hb) + '</span>' : '')
                     + '</div>'
                     + (seen ? '<span class="presence-seen">' + escapeHtml(seen) + '</span>' : '')
                     + '</div>';
             }
             list.innerHTML = html;
+        }
+
+        function formatHeartbeat(ts) {
+            try {
+                var diff = Date.now() - new Date(ts).getTime();
+                var sec = Math.max(0, Math.floor(diff / 1000));
+                if (sec < 60) return sec + 'd lalu';
+                var min = Math.floor(sec / 60);
+                if (min < 60) return min + 'm lalu';
+                var hr = Math.floor(min / 60);
+                return hr + 'j lalu';
+            } catch (_) { return ''; }
         }
 
         var ACTIVITY_META = {
@@ -2273,13 +2432,23 @@
 
             if (!append) {
                 if (activities.length === 0) {
-                    feed.innerHTML = '<div class="empty-feed"><i class="fas fa-inbox"></i><span>Tidak ada aktivitas pada rentang ini.</span></div>';
+                    feed.innerHTML = '<div class="empty-feed">'
+                        + '<div class="empty-illust"><i class="fas fa-inbox"></i></div>'
+                        + '<span class="empty-title">Tidak ada aktivitas</span>'
+                        + '<span class="empty-sub">Coba ubah rentang tanggal atau hapus filter untuk melihat seluruh aktivitas.</span>'
+                        + '<button type="button" class="lm-empty-action" id="live-empty-clear">'
+                        + '<i class="fas fa-rotate-left"></i> Hapus Filter</button>'
+                        + '</div>';
+                    var ec = document.getElementById('live-empty-clear');
+                    if (ec) ec.addEventListener('click', resetDateFilter);
                     return;
                 }
                 feed.innerHTML = '';
             } else {
                 var stale = feed.querySelector('.empty-feed');
                 if (stale) stale.remove();
+                var sk = feed.querySelector('.sk-list');
+                if (sk) sk.remove();
             }
 
             var html = '';
@@ -2290,13 +2459,14 @@
                 var actor = escapeHtml(a.nama_lengkap || a.nik || '?');
                 var desc = escapeHtml(a.activity || '');
                 var ts = a.timestamp ? new Date(a.timestamp).toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
-                html += '<div class="activity-item ' + meta.tone + '">'
+                var delay = append ? (i * 30) + 'ms' : (i * 40) + 'ms';
+                html += '<div class="activity-item ' + meta.tone + '" style="animation-delay:' + delay + '">'
                     + '<div class="activity-rail"></div>'
                     + '<span class="activity-icon"><i class="' + meta.icon + '"></i></span>'
                     + '<div class="activity-body">'
                     + '<span class="activity-name">' + actor + '</span>'
                     + '<span class="activity-desc">' + desc + '</span>'
-                    + (ts ? '<span class="activity-ts">' + escapeHtml(ts) + '</span>' : '')
+                    + (ts ? '<span class="activity-ts"><i class="far fa-clock"></i> ' + escapeHtml(ts) + '</span>' : '')
                     + '</div>'
                     + '<span class="activity-time">' + escapeHtml(relTime) + '</span>'
                     + '</div>';
@@ -2340,10 +2510,12 @@
             select.addEventListener('change', function () {
                 currentNik = this.value || '';
                 fetchRecentActivity({ reset: true, nik: currentNik });
+                updateActiveFilterIndicator();
             });
         }
 
         function applyDateFilter() {
+            clearPresetActive();
             var fEl = document.getElementById('live-filter-from');
             var tEl = document.getElementById('live-filter-to');
             dateFrom = (fEl && fEl.value) || '';
@@ -2358,6 +2530,7 @@
 
         function resetDateFilter() {
             dateFrom = ''; dateTo = '';
+            clearPresetActive();
             var fEl = document.getElementById('live-filter-from');
             var tEl = document.getElementById('live-filter-to');
             if (fEl) fEl.value = '';
@@ -2365,14 +2538,72 @@
             var nikSel = document.getElementById('live-feed-filter-nik');
             if (nikSel) { nikSel.value = ''; currentNik = ''; }
             fetchRecentActivity({ reset: true, nik: '' });
+            updateActiveFilterIndicator();
+        }
+
+        function isoToday() {
+            var d = new Date();
+            return d.toISOString().slice(0, 10);
+        }
+        function isoDaysAgo(n) {
+            var d = new Date();
+            d.setDate(d.getDate() - n);
+            return d.toISOString().slice(0, 10);
+        }
+        function isoStartOfMonth() {
+            var d = new Date();
+            return new Date(d.getFullYear(), d.getMonth(), 1).toISOString().slice(0, 10);
+        }
+
+        function applyPreset(kind) {
+            var fEl = document.getElementById('live-filter-from');
+            var tEl = document.getElementById('live-filter-to');
+            var f = '', t = isoToday();
+            if (kind === 'today') { f = isoToday(); t = isoToday(); }
+            else if (kind === '7d') { f = isoDaysAgo(6); t = isoToday(); }
+            else if (kind === '30d') { f = isoDaysAgo(29); t = isoToday(); }
+            else if (kind === 'month') { f = isoStartOfMonth(); t = isoToday(); }
+            if (fEl) fEl.value = f;
+            if (tEl) tEl.value = t;
+            dateFrom = f; dateTo = t;
+            setPresetActive(kind);
+            fetchRecentActivity({ reset: true });
+        }
+
+        function setPresetActive(kind) {
+            document.querySelectorAll('.lm-preset').forEach(function (b) {
+                b.classList.toggle('is-active', b.getAttribute('data-preset') === kind);
+            });
+        }
+
+        function clearPresetActive() {
+            document.querySelectorAll('.lm-preset').forEach(function (b) {
+                b.classList.remove('is-active');
+            });
         }
 
         function bindControls() {
             var apply = document.getElementById('live-filter-apply');
             var reset = document.getElementById('live-filter-reset');
+            var clearActive = document.getElementById('live-active-filter-clear');
             if (apply) apply.addEventListener('click', applyDateFilter);
             if (reset) reset.addEventListener('click', resetDateFilter);
+            if (clearActive) clearActive.addEventListener('click', resetDateFilter);
+            document.querySelectorAll('.lm-preset').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    applyPreset(b.getAttribute('data-preset'));
+                });
+            });
+            var fEl = document.getElementById('live-filter-from');
+            var tEl = document.getElementById('live-filter-to');
+            if (fEl) fEl.addEventListener('input', clearPresetActive);
+            if (tEl) tEl.addEventListener('input', clearPresetActive);
         }
+
+        var initList = document.getElementById('live-online-presence');
+        var initFeed = document.getElementById('live-activity-feed');
+        if (initList) initList.innerHTML = presenceSkeleton(5);
+        if (initFeed) initFeed.innerHTML = activitySkeleton(5);
 
         bindControls();
         poll();
@@ -2381,6 +2612,7 @@
         window.addEventListener('hashchange', function cleanup() {
             if (!window.location.hash.startsWith('#/live-monitor')) {
                 if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+                clearSkeletonTimer();
                 window.removeEventListener('hashchange', cleanup);
             }
         });

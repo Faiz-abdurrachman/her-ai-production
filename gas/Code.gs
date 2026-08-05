@@ -5040,10 +5040,12 @@ function getRecentActivity(payload) {
     });
   }
   if (dateFrom || dateTo) {
+    var fromPrefix = dateFrom || '';
+    var toPrefix = dateTo ? (dateTo + 'T23:59:59.999Z') : '';
     filtered = filtered.filter(function (r) {
-      var ts = String(r.timestamp || '');
-      if (dateFrom && ts < dateFrom) return false;
-      if (dateTo && ts > (dateTo + 'T23:59:59.999Z')) return false;
+      var ts = normalizeActivityTimestamp(r.timestamp);
+      if (fromPrefix && ts < fromPrefix) return false;
+      if (toPrefix && ts > toPrefix) return false;
       return true;
     });
   }
@@ -5051,6 +5053,19 @@ function getRecentActivity(payload) {
   var total = filtered.length;
   var page = filtered.slice(offset, offset + limit);
   return { status: 'success', total: total, activities: page };
+}
+
+function normalizeActivityTimestamp(ts) {
+  var raw = String(ts || '').trim();
+  if (!raw) return '';
+  // Already ISO 8601
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(raw)) return raw;
+  // Try parsing as Date object
+  try {
+    var d = new Date(raw);
+    if (!isNaN(d.getTime())) return d.toISOString();
+  } catch (e) {}
+  return raw;
 }
 
 function cacheGetPresence(key) {
