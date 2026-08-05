@@ -1624,7 +1624,7 @@ if (path === "/participant-ai-evolution" && typeof window.initAiEvolutionMateri 
                 } else if (path === "/rbac" && typeof window.initRbac === "function") {
                     window.initRbac();
                 } else if (path === "/live-monitor" && typeof window.initLiveMonitor === "function") {
-                    window.initLiveMonitor();
+                    try { window.initLiveMonitor(); } catch(e) { console.error('initLiveMonitor error:', e.message, e.stack); }
                 }
 
                 // 6. Logika Pengumuman
