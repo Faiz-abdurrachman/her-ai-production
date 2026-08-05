@@ -2208,6 +2208,8 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    flex-shrink: 0;
+    white-space: nowrap;
     box-shadow: 0 6px 14px -4px var(--lm-glow);
     transition: all 0.2s ease;
 }
