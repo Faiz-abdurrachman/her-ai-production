@@ -2028,6 +2028,51 @@
         }
     }
 
+    var _heartbeatIntervalId = null;
+    function startHeartbeat() {
+        if (_heartbeatIntervalId) return;
+        _heartbeatIntervalId = setInterval(function () {
+            var session = readParticipantSession();
+            if (!session?.nik || !session?.token) return;
+            var path = currentPath();
+            // Extract module_id from path: /participant-ai-python-practice → python-untuk-ai
+            var moduleId = '';
+            var match = path.match(/^\/participant-([a-z0-9-]+?)(?:-(?:practice|quiz|discussion|overview))?$/);
+            if (match) {
+                moduleId = match[1];
+            }
+            fetch('/__gas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action: 'heartbeatPresence',
+                    nik: session.nik,
+                    participantToken: session.token,
+                    page: path,
+                    module_id: moduleId
+                }),
+                keepalive: true
+            }).catch(function () {});
+        }, 30000);
+    }
+
+    function stopHeartbeat() {
+        if (_heartbeatIntervalId) {
+            clearInterval(_heartbeatIntervalId);
+            _heartbeatIntervalId = null;
+        }
+    }
+
+    window.addEventListener('beforeunload', stopHeartbeat);
+    // Also stop on hash change (SPA navigation away from participant pages)
+    var _lastHeartbeatHash = '';
+    window.addEventListener('hashchange', function () {
+        var hash = window.location.hash;
+        if (!hash.startsWith('#/participant-')) {
+            stopHeartbeat();
+        }
+    });
+
     function initFellowUserMenu() {
         normalizeFellowUserMenu();
         const menu = document.querySelector('.fellow-user-menu');
@@ -3543,6 +3588,7 @@
 
         attachSidebarRail();
         initFellowUserMenu();
+        startHeartbeat();
         setActiveFellowNav(pageName);
         const settings = await fetchSettings();
         applySettings(settings, pageName);

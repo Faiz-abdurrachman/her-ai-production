@@ -2101,7 +2101,185 @@
        } catch (error) {
         console.error('Error deleting admin:', error);
             alert('Terjadi kesalahan saat menghapus data');
-        }
+         }
     }
+
+    // ── Live Monitor ──────────────────────────────────────────────────────
+
+    window.initLiveMonitor = function () {
+        var apiUrl = '/__gas';
+
+        if (typeof window.loadSidebar === 'function') {
+            window.loadSidebar('nav-live-monitor');
+        }
+
+        try {
+            var profile = JSON.parse(localStorage.getItem('heraiAdminProfile') || '{}');
+            var nameEl = document.getElementById('display-admin-name');
+            var idEl = document.getElementById('display-admin-id');
+            if (nameEl) nameEl.textContent = profile.name || 'Admin';
+            if (idEl) idEl.textContent = profile.role === 'superadmin' ? 'Super Admin Access' : 'Admin Access';
+        } catch (_) {}
+
+        var pollTimer = null;
+
+        function poll() {
+            fetchOnlineParticipants();
+            fetchRecentActivity();
+        }
+
+        function fetchOnlineParticipants() {
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(withAdminToken({ action: 'getOnlineParticipants' }))
+            })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.status !== 'success') return;
+                    onlineCache = data.participants || [];
+                    renderOnlinePresence(onlineCache, data.online_count || 0);
+                })
+                .catch(function () {});
+        }
+
+        function fetchRecentActivity() {
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(withAdminToken({ action: 'getRecentActivity', limit: 30 }))
+            })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.status !== 'success') return;
+                    renderActivityFeed(data.activities || []);
+                    populateNikFilter(data.activities || []);
+                })
+                .catch(function () {});
+        }
+
+        function renderOnlinePresence(participants, count) {
+            var badge = document.getElementById('live-online-badge');
+            var list = document.getElementById('live-online-presence');
+            var title = document.getElementById('live-online-title');
+            if (badge) badge.textContent = '\u25CF ' + count + ' online';
+            if (title) title.innerHTML = '<i class="fas fa-dot-circle ' + (count > 0 ? 'icon-green' : 'icon-gray') + '"></i> Peserta Online';
+
+            if (!list) return;
+
+            if (participants.length === 0) {
+                list.innerHTML = '<div class="empty-presence">Tidak ada peserta online saat ini.</div>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < participants.length; i++) {
+                var p = participants[i];
+                var name = p.nama_lengkap || 'Peserta';
+                var page = p.page ? p.page.replace(/^\/participant-/, '') : '';
+                var module = p.module_id || '';
+                html += '<div class="presence-card">'
+                    + '<span class="presence-dot online"></span>'
+                    + '<span class="presence-name">' + escapeHtml(name) + '</span>'
+                    + '<span class="presence-page">' + escapeHtml(module || page || 'Dashboard') + '</span>'
+                    + '</div>';
+            }
+            list.innerHTML = html;
+        }
+
+        function getActivityIcon(type) {
+            var icons = {
+                login: 'fas fa-sign-in-alt',
+                password_change: 'fas fa-key',
+                progress_update: 'fas fa-book-open',
+                discussion_post: 'fas fa-comment',
+                discussion_reply: 'fas fa-reply',
+                exercise_submitted: 'fas fa-pen',
+                exercise_draft_saved: 'fas fa-save',
+                page_view: 'fas fa-eye'
+            };
+            return icons[type] || 'fas fa-circle';
+        }
+
+        function getRelativeTime(ts) {
+            if (!ts) return '';
+            var diff = Date.now() - new Date(ts).getTime();
+            var sec = Math.floor(diff / 1000);
+            if (sec < 60) return 'Baru saja';
+            var min = Math.floor(sec / 60);
+            if (min < 60) return min + ' menit lalu';
+            var hr = Math.floor(min / 60);
+            if (hr < 24) return hr + ' jam lalu';
+            return Math.floor(hr / 24) + ' hari lalu';
+        }
+
+        function renderActivityFeed(activities) {
+            var feed = document.getElementById('live-activity-feed');
+            if (!feed) return;
+
+            if (activities.length === 0) {
+                feed.innerHTML = '<div class="empty-feed">Belum ada aktivitas tercatat.</div>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < activities.length; i++) {
+                var a = activities[i];
+                var icon = getActivityIcon(a.activity_type);
+                var relTime = getRelativeTime(a.timestamp);
+                html += '<div class="activity-item">'
+                    + '<span class="activity-icon"><i class="' + icon + '"></i></span>'
+                    + '<div class="activity-body">'
+                    + '<span class="activity-name">' + escapeHtml(a.nama_lengkap || a.nik || '?') + '</span>'
+                    + '<span class="activity-desc">' + escapeHtml(a.activity || '') + '</span>'
+                    + '</div>'
+                    + '<span class="activity-time">' + escapeHtml(relTime) + '</span>'
+                    + '</div>';
+            }
+            feed.innerHTML = html;
+        }
+
+        function populateNikFilter(activities) {
+            var select = document.getElementById('live-feed-filter-nik');
+            if (!select || select.dataset.filled) return;
+            select.dataset.filled = '1';
+
+            var seen = {};
+            for (var i = 0; i < activities.length; i++) {
+                var key = (activities[i].nik || '') + '|' + (activities[i].nama_lengkap || '');
+                if (!seen[key]) {
+                    seen[key] = true;
+                    var opt = document.createElement('option');
+                    opt.value = activities[i].nik || '';
+                    opt.textContent = (activities[i].nama_lengkap || activities[i].nik || '?');
+                    select.appendChild(opt);
+                }
+            }
+
+            select.addEventListener('change', function () {
+                var nik = this.value;
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(withAdminToken({ action: 'getRecentActivity', limit: 50, nik: nik || undefined }))
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        if (data.status === 'success') renderActivityFeed(data.activities || []);
+                    })
+                    .catch(function () {});
+            });
+        }
+
+        poll();
+        pollTimer = setInterval(poll, 30000);
+
+        window.addEventListener('hashchange', function cleanup() {
+            if (!window.location.hash.startsWith('#/live-monitor')) {
+                if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+                window.removeEventListener('hashchange', cleanup);
+            }
+        });
+    };
 
 })();

@@ -303,7 +303,10 @@ function doPost(e) {
       generateCertificates: () => generateCertificates(),
       getAssets: () => ({ status: 'success', data: getRows(SHEETS.assets) }),
       saveAsset: () => upsertByKey(SHEETS.assets, 'asset_id', payload.asset_id, payload),
-      getParticipantDashboardData: () => getParticipantDashboardData(payload)
+      getParticipantDashboardData: () => getParticipantDashboardData(payload),
+      heartbeatPresence: () => heartbeatPresence(payload),
+      getOnlineParticipants: () => getOnlineParticipants(),
+      getRecentActivity: () => getRecentActivity(payload)
     };
     const handler = routes[action];
     if (!handler) throw new Error('Unknown action: ' + action);
@@ -358,7 +361,8 @@ function authorizeGasAction(action, payload) {
     'heartbeatReTestSession',
     'saveReTestAnswer',
     'submitReTest',
-    'submitFinalProject'
+    'submitFinalProject',
+    'heartbeatPresence'
   ];
   if (participantActions.indexOf(action) >= 0) {
     const claims = requireParticipantToken(payload);
@@ -4952,4 +4956,107 @@ function broadcastRetryFailedEmails() {
     Utilities.sleep(500);
   }
   Logger.log('SELESAI — Terkirim: ' + sent + ' | Gagal: ' + failed);
+}
+
+// ── Live Activity Monitoring ──────────────────────────────────────────────
+
+function heartbeatPresence(payload) {
+  var nik = String(payload.nik || '').replace(/\D/g, '');
+  if (!nik) return { status: 'error', message: 'NIK wajib.' };
+  var participant = findParticipantByNik(nik);
+  var presence = {
+    nik: nik,
+    nama_lengkap: participant ? participant.nama_lengkap : '',
+    page: String(payload.page || ''),
+    module_id: String(payload.module_id || ''),
+    last_seen: new Date().toISOString()
+  };
+  try {
+    CacheService.getScriptCache().put(
+      'presence:' + nik,
+      JSON.stringify(presence),
+      120
+    );
+    // Update lobby: append this NIK to the rolling active-user list
+    // so getOnlineParticipants can discover who is online.
+    var lobby = cacheGetPresence('lobby') || [];
+    // Remove stale entries (same NIK), keep last 120
+    lobby = lobby.filter(function (e) { return String(e.nik || '') !== nik; });
+    lobby.push({ nik: nik, ts: Date.now() });
+    if (lobby.length > 120) lobby = lobby.slice(lobby.length - 120);
+    cachePutPresence('lobby', lobby, 180);
+  } catch (e) { /* silent — presence is best-effort */ }
+  return { status: 'success' };
+}
+
+function getOnlineParticipants() {
+  // CacheService has no listKeys(). Heartbeats also write a rolling
+  // "lobby" list in a separate key so we can discover active NIKs.
+  var lobby = cacheGetPresence('lobby');
+  if (!lobby || !Array.isArray(lobby)) {
+    return { status: 'success', online_count: 0, participants: [] };
+  }
+  var result = [];
+  var seen = {};
+  for (var i = 0; i < lobby.length; i++) {
+    var entry = lobby[i];
+    var key = String(entry.nik || '');
+    if (seen[key]) continue;
+    seen[key] = true;
+    var presence = cacheGetPresence(key);
+    if (presence) {
+      result.push(presence);
+    }
+  }
+  return { status: 'success', online_count: result.length, participants: result };
+}
+
+function getRecentActivity(payload) {
+  var limit = Math.min(Number(payload.limit) || 50, 200);
+  var offset = Number(payload.offset) || 0;
+  var filterNik = String(payload.nik || '').replace(/\D/g, '');
+  var filterModule = String(payload.module_id || '');
+
+  var rows = getRows(SHEETS.participantActivity);
+  // Sort by timestamp DESC (newest first)
+  rows.sort(function (a, b) {
+    var ta = a.timestamp || '';
+    var tb = b.timestamp || '';
+    if (ta > tb) return -1;
+    if (ta < tb) return 1;
+    return 0;
+  });
+
+  var filtered = rows;
+  if (filterNik) {
+    filtered = filtered.filter(function (r) {
+      return String(r.nik || '').replace(/\D/g, '') === filterNik;
+    });
+  }
+  if (filterModule) {
+    filtered = filtered.filter(function (r) {
+      return String(r.module_id || '') === filterModule;
+    });
+  }
+
+  var total = filtered.length;
+  var page = filtered.slice(offset, offset + limit);
+  return { status: 'success', total: total, activities: page };
+}
+
+function cacheGetPresence(key) {
+  try {
+    var raw = CacheService.getScriptCache().get('presence:' + String(key || '').slice(0, 200));
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+
+function cachePutPresence(key, value, ttlSeconds) {
+  try {
+    CacheService.getScriptCache().put(
+      'presence:' + String(key || '').slice(0, 200),
+      JSON.stringify(value),
+      Math.max(1, Number(ttlSeconds || 120))
+    );
+  } catch (e) { /* silent */ }
 }

@@ -1,0 +1,59 @@
+<div class="dashboard-layout">
+
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1 class="page-title" id="live-header-title">Live Monitor</h1>
+                <p class="page-subtitle" id="live-header-sub">Pemantauan aktivitas peserta secara real-time</p>
+            </div>
+            <div class="topbar-right">
+                <div class="admin-profile">
+                    <div class="admin-info">
+                        <h4 id="display-admin-name">Admin</h4>
+                        <p id="display-admin-id">Admin Access</p>
+                    </div>
+                    <div class="admin-avatar avatar-pink">
+                        <i class="fas fa-satellite-dish"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="live-monitor-grid">
+
+            <section class="glass-panel live-online-panel">
+                <div class="panel-header panel-header-border">
+                    <h3 class="panel-title" id="live-online-title">
+                        <i class="fas fa-dot-circle icon-green"></i> Peserta Online
+                    </h3>
+                    <span class="live-badge" id="live-online-badge">● 0 online</span>
+                </div>
+                <div class="panel-body" id="live-online-presence">
+                    <div class="empty-presence">Menunggu data...</div>
+                </div>
+            </section>
+
+            <section class="glass-panel live-feed-panel">
+                <div class="panel-header panel-header-border">
+                    <h3 class="panel-title">
+                        <i class="fas fa-stream icon-blue"></i> Aktivitas Terbaru
+                    </h3>
+                    <div class="live-feed-filter">
+                        <select id="live-feed-filter-nik" class="live-filter-select">
+                            <option value="">Semua Peserta</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="panel-body" id="live-activity-feed">
+                    <div class="empty-feed">Memuat aktivitas...</div>
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+</div>

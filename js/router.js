@@ -271,7 +271,8 @@ const router = {
         "/global-settings": "/pages/dashboard/global-settings.html",
         "/learning-content": "/pages/dashboard/learning-content.html",
         "/rbac": "/pages/dashboard/rbac.html",
-        "/assets": "/pages/dashboard/assets.html"
+        "/assets": "/pages/dashboard/assets.html",
+        "/live-monitor": "/pages/dashboard/live-monitor.html"
     },
 
     routeAliases: {
@@ -341,7 +342,8 @@ const router = {
         "/x/gs3n9": "/global-settings",
         "/x/lc2m4": "/learning-content",
         "/x/rb8a2": "/rbac",
-        "/x/as4e6": "/assets"
+        "/x/as4e6": "/assets",
+        "/x/lm9v1": "/live-monitor"
     },
 
     currentPath: null,
@@ -856,7 +858,8 @@ const router = {
             "/global-settings",
             "/learning-content",
             "/rbac",
-            "/assets"
+            "/assets",
+            "/live-monitor"
         ];
 
         try {
@@ -1620,6 +1623,8 @@ if (path === "/participant-ai-evolution" && typeof window.initAiEvolutionMateri 
                     window.initAuditTrail();
                 } else if (path === "/rbac" && typeof window.initRbac === "function") {
                     window.initRbac();
+                } else if (path === "/live-monitor" && typeof window.initLiveMonitor === "function") {
+                    window.initLiveMonitor();
                 }
 
                 // 6. Logika Pengumuman
