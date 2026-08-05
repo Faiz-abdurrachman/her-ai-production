@@ -2183,7 +2183,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    justify-content: flex-start;
+    justify-content: space-between;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(253, 242, 248, 0.92) 100%);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -2199,11 +2199,17 @@
     letter-spacing: 0.01em;
     flex: 1;
     min-width: 0;
+    display: block !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 6px;
+    margin: -6px 0 -6px -6px !important;
 }
 .live-online-head .panel-title i,
 .live-feed-head .panel-title i { margin-right: 8px; }
 
-.live-badge {
+.live-monitor-badge {
     font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 0.04em;
@@ -2213,6 +2219,7 @@
     padding: 5px 12px;
     border-radius: var(--lm-radius-pill);
     display: inline-flex;
+    position: static !important;
     align-items: center;
     gap: 6px;
     flex-shrink: 0;
@@ -2220,7 +2227,7 @@
     box-shadow: 0 6px 14px -4px var(--lm-glow);
     transition: all 0.2s ease;
 }
-.live-badge::before {
+.live-monitor-badge::before {
     content: "";
     width: 7px;
     height: 7px;
@@ -2229,13 +2236,13 @@
     box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
     animation: pulse-dot 1.8s ease-in-out infinite;
 }
-.live-badge.is-empty {
+.live-monitor-badge.is-empty {
     color: var(--lm-text-mute);
     background: var(--lm-soft-bg);
     border-color: var(--lm-border);
     box-shadow: none;
 }
-.live-badge.is-empty::before {
+.live-monitor-badge.is-empty::before {
     background: var(--lm-text-mute);
     box-shadow: none;
     animation: none;
@@ -2702,8 +2709,14 @@
 
 /* ── Icons + helpers ────────────────────────────────────────────────── */
 .icon-gray { color: var(--lm-text-mute); }
+.icon-green { color: var(--success); }
+.icon-blue { color: var(--icon-blue); }
+
 .live-online-head .icon-green,
-.live-feed-head .icon-blue { filter: drop-shadow(0 0 6px currentColor); }
+.live-feed-head .icon-blue { 
+    filter: drop-shadow(0 0 6px currentColor); 
+    margin-left: 6px;
+}
 
 /* ── Responsive ─────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
@@ -2739,7 +2752,7 @@
     .empty-illust,
     .lmc-pulse-dot,
     .presence-dot.online,
-    .live-badge::before {
+    .live-monitor-badge::before {
         animation: none !important;
         transition: none !important;
     }
