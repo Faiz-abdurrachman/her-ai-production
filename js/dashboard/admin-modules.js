@@ -2122,6 +2122,7 @@
         } catch (_) {}
 
         var pollTimer = null;
+        var onlineCache = [];
 
         function poll() {
             fetchOnlineParticipants();
