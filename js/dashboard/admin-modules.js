@@ -62,28 +62,34 @@
        let loc = "Unknown Location";
        let gps = "";
        try {
-           const res = await fetch('https://ipapi.co/json/');
+           const controller = new AbortController();
+           const timeoutId = setTimeout(() => controller.abort(), 3000);
+           const res = await fetch('https://ipapi.co/json/', { signal: controller.signal });
+           clearTimeout(timeoutId);
            if (res.ok) {
                const data = await res.json();
                loc = `IP ${data.ip || 'Unknown'} (${data.city || 'Unknown City'}, ${data.country_code || 'ID'})`;
            }
        } catch (e) {
-           console.warn("Tracker lokasi diblokir oleh browser.");
+           console.warn("Tracker lokasi timeout atau diblokir oleh browser.");
        }
 
        if (navigator.geolocation) {
            try {
-               const position = await new Promise((resolve, reject) => {
-                   navigator.geolocation.getCurrentPosition(resolve, reject, {
-                       enableHighAccuracy: true,
-                       timeout: 7000,
-                       maximumAge: 10 * 60 * 1000
-                   });
-               });
+               const position = await Promise.race([
+                   new Promise((resolve, reject) => {
+                       navigator.geolocation.getCurrentPosition(resolve, reject, {
+                           enableHighAccuracy: true,
+                           timeout: 3000,
+                           maximumAge: 10 * 60 * 1000
+                       });
+                   }),
+                   new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 3000))
+               ]);
                const { latitude, longitude, accuracy } = position.coords;
                gps = `GPS ${latitude.toFixed(5)}, ${longitude.toFixed(5)} ±${Math.round(accuracy || 0)}m`;
            } catch (error) {
-               gps = "GPS permission not granted";
+               gps = "GPS permission not granted or timeout";
            }
        }
    
@@ -625,6 +631,13 @@
        if (!dashboardLayout || !topbarLeft || !sidebar) return;
    
        if (!topbarLeft.querySelector('.admin-menu-toggle')) {
+           // Wrap the existing h1 and p into a div so flex layout doesn't break them
+           const textWrapper = document.createElement('div');
+           while (topbarLeft.firstChild) {
+               textWrapper.appendChild(topbarLeft.firstChild);
+           }
+           topbarLeft.appendChild(textWrapper);
+
            const toggleBtn = document.createElement('button');
            toggleBtn.className = 'admin-menu-toggle';
            toggleBtn.innerHTML = '<i class="fas fa-bars"></i>';
