@@ -1525,10 +1525,11 @@
            if (participantPortalApiUrl) {
                participantPortalApiUrl.value = localStorage.getItem('heraiParticipantPortalApiUrl') || participantPortalApiUrl.value || 'http://127.0.0.1:8092';
            }
-           const participantSettings = typeof window.getParticipantPortalSettings === 'function'
-               ? await window.getParticipantPortalSettings()
-               : JSON.parse(localStorage.getItem('heraiParticipantPortalSettings') || '{}');
-           const participantPages = participantSettings.pages || {};
+           const participantSettings = {
+                enabled: settings.enabled !== false,
+                pages: settings.pages || {}
+            };
+            const participantPages = participantSettings.pages || {};
            if (participantDashboardEnabled) participantDashboardEnabled.checked = participantSettings.enabled !== false;
            participantPageFields.forEach(input => {
                const key = input.getAttribute('data-participant-page-toggle');
@@ -1549,7 +1550,8 @@
                announcementLaunchAt: fields.announcementLaunchAt?.value || '',
                announcementStage1LaunchAt: '2026-05-25T19:00:00+07:00',
                announcementFinalLaunchAt: '2026-05-31T19:00:00+07:00',
-               passedInfoMessage: fields.passedInfoMessage?.value.trim() || 'Harap periksa email Anda untuk undangan grup Telegram.'
+               passedInfoMessage: fields.passedInfoMessage?.value.trim() || 'Harap periksa email Anda untuk undangan grup Telegram.',
+               ...readParticipantSettingsFromForm()
            };
        }
 
@@ -1587,9 +1589,6 @@
                } catch (e) {
                    console.warn('Gagal menyimpan settings ke server:', e.message);
                }
-              if (typeof window.saveParticipantPortalSettings === 'function') {
-                  await window.saveParticipantPortalSettings(readParticipantSettingsFromForm());
-              }
                setTimeout(() => {
                    btnSave.innerHTML = '<i class="fas fa-check"></i> Pengaturan Diterapkan';
                    btnSave.disabled = false;

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, height=400">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1600px;
+    height: 400px;
+    overflow: hidden;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    background: #0d0221; /* fallback */
+  }
+
+  .banner {
+    position: relative;
+    width: 1600px;
+    height: 400px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 120% 200% at 15% 50%, rgba(138, 43, 226, 0.35), transparent 55%),
+      radial-gradient(ellipse 100% 180% at 88% 30%, rgba(246, 51, 146, 0.30), transparent 50%),
+      radial-gradient(ellipse 80% 140% at 50% 100%, rgba(255, 105, 180, 0.15), transparent 45%),
+      linear-gradient(135deg, #120530 0%, #1a0b2e 40%, #2d0b3e 70%, #1a0830 100%);
+  }
+
+  /* Large floating blobs */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .blob-pink {
+    width: 420px; height: 420px;
+    background: rgba(246, 51, 146, 0.22);
+    top: -120px; right: -60px;
+  }
+  .blob-purple {
+    width: 360px; height: 360px;
+    background: rgba(138, 43, 226, 0.28);
+    bottom: -140px; left: -80px;
+  }
+  .blob-soft {
+    width: 280px; height: 280px;
+    background: rgba(255, 105, 180, 0.12);
+    top: 40%; left: 60%;
+  }
+
+  /* Micro dots pattern overlay */
+  .dot-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.06;
+    background-image: radial-gradient(circle, #ffffff 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  /* Glass panel for content */
+  .glass-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 100px;
+  }
+
+  .left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 750px;
+  }
+
+  /* Badge / tagline */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(246, 51, 146, 0.3);
+    border-radius: 999px;
+    padding: 8px 20px;
+    width: fit-content;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fbcfe8;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .badge-dot {
+    width: 8px; height: 8px;
+    background: #f63392;
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(246, 51, 146, 0.8);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 8px rgba(246,51,146,0.6); }
+    50% { box-shadow: 0 0 20px rgba(246,51,146,1); }
+  }
+
+  /* Headline */
+  .headline {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1.08;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+  }
+  .headline em {
+    font-style: normal;
+    background: linear-gradient(135deg, #f63392 0%, #ff69b4 35%, #c084fc 70%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Subtitle */
+  .subtitle {
+    font-size: 20px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.5;
+    max-width: 560px;
+  }
+
+  /* Right side - decorative ring + logo mark */
+  .right-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .logo-ring {
+    position: relative;
+    width: 180px;
+    height: 180px;
+  }
+
+  .ring-outer {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(246, 51, 146, 0.25);
+    box-shadow: 0 0 60px rgba(246, 51, 146, 0.08), inset 0 0 40px rgba(138, 43, 226, 0.06);
+  }
+  .ring-inner {
+    position: absolute;
+    inset: 16px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(138, 43, 226, 0.35);
+  }
+  .ring-core {
+    position: absolute;
+    inset: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(246,51,146,0.18) 0%, rgba(138,43,226,0.18) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .ring-core span {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(180deg, #fbcfe8 0%, #f63392 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Orbiting accent dots */
+  .orbit-dot {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #f63392;
+    box-shadow: 0 0 14px rgba(246,51,146,0.7);
+  }
+  .orbit-dot-1 { top: -4px; left: 50%; transform: translateX(-50%); }
+  .orbit-dot-2 { bottom: -4px; left: 50%; transform: translateX(-50%); background: #8b5cf6; box-shadow: 0 0 14px rgba(139,92,246,0.7); }
+  .orbit-dot-3 { top: 50%; right: -4px; transform: translateY(-50%); background: #c084fc; box-shadow: 0 0 14px rgba(192,132,252,0.7); }
+  .orbit-dot-4 { top: 50%; left: -4px; transform: translateY(-50%); }
+
+  /* Thin shimmer line across */
+  .shimmer {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(246,51,146,0.4), rgba(138,43,226,0.4), transparent);
+    z-index: 12;
+    animation: shimmer-sweep 4s ease-in-out infinite;
+  }
+  @keyframes shimmer-sweep {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+  }
+
+  /* Bottom gradient fade line */
+  .bottom-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #f63392, #8b5cf6, #f63392);
+    z-index: 20;
+  }
+
+  /* Subtle vignette */
+  .vignette {
+    position: absolute;
+    inset: 0;
+    z-index: 8;
+    pointer-events: none;
+    box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.25);
+  }
+</style>
+</head>
+<body>
+<div class="banner">
+  <div class="blob blob-pink"></div>
+  <div class="blob blob-purple"></div>
+  <div class="blob blob-soft"></div>
+  <div class="dot-grid"></div>
+  <div class="shimmer"></div>
+  <div class="vignette"></div>
+
+  <div class="glass-content">
+    <div class="left-col">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        HerAI Fellowship &bull; Cohort 2026
+      </div>
+      <h1 class="headline">
+        Empower Your Future<br>with <em>Artificial Intelligence</em>
+      </h1>
+      <p class="subtitle">
+        Program pemberdayaan talenta perempuan Indonesia melalui AI, data science, dan engineering — bersama Data Sorcerers &times; Womanhub.id
+      </p>
+    </div>
+
+    <div class="right-col">
+      <div class="logo-ring">
+        <div class="ring-outer">
+          <span class="orbit-dot orbit-dot-1"></span>
+          <span class="orbit-dot orbit-dot-2"></span>
+          <span class="orbit-dot orbit-dot-3"></span>
+          <span class="orbit-dot orbit-dot-4"></span>
+        </div>
+        <div class="ring-inner"></div>
+        <div class="ring-core">
+          <span>AI</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-line"></div>
+</div>
+</body>
+</html>

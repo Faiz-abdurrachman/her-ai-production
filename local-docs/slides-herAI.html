@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HerAI Fellowship — Portal Peserta</title>
+<style>
+  :root {
+    --pink: #f63392;
+    --purple: #8b5cf6;
+    --dark: #1a1225;
+    --dark2: #241a33;
+    --text: #f5eef8;
+    --muted: #b9a8c7;
+    --card: #2d2140;
+    --accent: #45c598;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--dark); color: var(--text); overflow: hidden; }
+  
+  /* Slide container */
+  .deck { position: relative; width: 100vw; height: 100vh; }
+  .slide {
+    position: absolute; inset: 0;
+    display: none; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 5vh 8vw;
+    text-align: center;
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .slide.active { display: flex; opacity: 1; }
+  
+  /* Typography */
+  h1 { font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.15; }
+  h2 { font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 700; }
+  h3 { font-size: clamp(1.1rem, 2.5vw, 1.6rem); font-weight: 600; color: var(--pink); margin-bottom: 1.5rem; }
+  p.sub { color: var(--muted); font-size: clamp(1rem, 2vw, 1.3rem); max-width: 60ch; margin-top: 1.2rem; line-height: 1.6; }
+  
+  /* Accent gradient text */
+  .gradient {
+    background: linear-gradient(90deg, var(--pink), var(--purple));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+  
+  /* Grid cards */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; width: 100%; max-width: 1000px; margin-top: 2rem; }
+  .card {
+    background: var(--card); border-radius: 16px; padding: 1.5rem 1rem;
+    border: 1px solid rgba(255,255,255,0.06); transition: transform 0.2s;
+  }
+  .card i { font-size: 2rem; display: block; margin-bottom: 0.6rem; }
+  .card strong { display: block; font-size: 1.05rem; margin-bottom: 0.3rem; }
+  .card span { color: var(--muted); font-size: 0.85rem; line-height: 1.4; }
+  
+  /* Steps */
+  .steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 2.5rem; max-width: 1000px; }
+  .step { flex: 1; min-width: 150px; max-width: 220px; text-align: center; }
+  .step .num {
+    width: 56px; height: 56px; margin: 0 auto 0.8rem;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    font-weight: 800; font-size: 1.4rem;
+  }
+  .step strong { display: block; margin-bottom: 0.3rem; }
+  .step span { color: var(--muted); font-size: 0.85rem; }
+  
+  /* Module list */
+  .modlist { list-style: none; margin-top: 2rem; max-width: 640px; width: 100%; text-align: left; }
+  .modlist li {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.9rem 1.2rem; margin-bottom: 0.6rem;
+    background: var(--card); border-radius: 12px;
+    border-left: 4px solid var(--pink);
+  }
+  .modlist li .tag { color: var(--muted); font-size: 0.8rem; margin-left: auto; white-space: nowrap; }
+  
+  /* Footer hint */
+  .hint { position: fixed; bottom: 2.5vh; left: 50%; transform: translateX(-50%); color: var(--muted); font-size: 0.85rem; opacity: 0.7; }
+  
+  /* Progress dots */
+  .dots { position: fixed; bottom: 2.5vh; right: 4vw; display: flex; gap: 8px; z-index: 10; }
+  .dots .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--card); transition: background 0.3s; }
+  .dots .dot.on { background: var(--pink); }
+  
+  @media (max-width: 768px) {
+    .slide { padding: 4vh 5vw; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .steps { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1 — COVER -->
+  <section class="slide active" data-title="Cover">
+    <h1>Her<span class="gradient">AI</span> Fellowship</h1>
+    <p class="sub">Portal Peserta — Belajar AI dari Nol Sampai Siap Berkarya</p>
+    <p class="sub" style="margin-top:0.5rem; font-size:0.95rem;">Batch 2026</p>
+  </section>
+
+  <!-- SLIDE 2 — PERKENALAN -->
+  <section class="slide" data-title="Perkenalan">
+    <h3>SIAPA KITA</h3>
+    <h2>HerAI Fellowship</h2>
+    <p class="sub">Program pelatihan AI yang membantu kamu yang punya potensi tapi belum punya akses — belajar dari nol, praktik langsung, sampai siap masuk industri.</p>
+    <div class="grid">
+      <div class="card"><i>🎯</i><strong>Misi</strong><span>Buka akses pendidikan AI berkualitas untuk semua</span></div>
+      <div class="card"><i>🧭</i><strong>Jalur</strong><span>Belajar → praktik → portofolio → siap kerja</span></div>
+      <div class="card"><i>🤝</i><strong>Komunitas</strong><span>Belajar bareng, diskusi, saling bantu</span></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3 — APA YANG ADA DI WEB -->
+  <section class="slide" data-title="Fitur Web">
+    <h3>PORTAL PESERTA</h3>
+    <h2>Apa Saja yang Ada di Web?</h2>
+    <div class="grid">
+      <div class="card"><i>📚</i><strong>6 Modul</strong><span>Materi Foundation lengkap dari dasar</span></div>
+      <div class="card"><i>✍️</i><strong>Latihan</strong><span>Praktik langsung + review mentor</span></div>
+      <div class="card"><i>📝</i><strong>Kuis</strong><span>Ukur pemahaman tiap modul</span></div>
+      <div class="card"><i>💬</i><strong>Diskusi</strong><span>Tanya & sharing antar peserta</span></div>
+      <div class="card"><i>📊</i><strong>Dashboard</strong><span>Pantau progres belajarmu</span></div>
+      <div class="card"><i>🏆</i><strong>Leaderboard</strong><span>Bersaing sehat sesama peserta</span></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4 — 6 MODUL -->
+  <section class="slide" data-title="6 Modul">
+    <h3>FASE FOUNDATION</h3>
+    <h2>6 Modul yang Akan Kamu Pelajari</h2>
+    <ul class="modlist">
+      <li><span>📘</span> <strong>Pengantar AI</strong> <span class="tag">Mulai dari sini</span></li>
+      <li><span>🐍</span> <strong>Python untuk AI</strong> <span class="tag">Bahasa pemrograman utama</span></li>
+      <li><span>🧠</span> <strong>Reasoning</strong> <span class="tag">Logika & penalaran mesin</span></li>
+      <li><span>⚙️</span> <strong>Konsep AI Modern</strong> <span class="tag">Foundation models, RAG, agentic</span></li>
+      <li><span>📊</span> <strong>Evaluation</strong> <span class="tag">Mengukur & validasi model</span></li>
+      <li><span>🌱</span> <strong>Evolution of AI</strong> <span class="tag">Sejarah & arah AI</span></li>
+    </ul>
+  </section>
+
+  <!-- SLIDE 5 — CARA BELAJAR -->
+  <section class="slide" data-title="Cara Belajar">
+    <h3>ALUR BELAJAR</h3>
+    <h2>Gampang Banget, 4 Langkah</h2>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><strong>Baca Materi</strong><span>Pahami pelan-pelan</span></div>
+      <div class="step"><div class="num">2</div><strong>Kerjakan Latihan</strong><span>Praktik langsung</span></div>
+      <div class="step"><div class="num">3</div><strong>Jawab Kuis</strong><span>Ukur pemahaman</span></div>
+      <div class="step"><div class="num">4</div><strong>Gabung Diskusi</strong><span>Tanya & sharing</span></div>
+    </div>
+    <p class="sub" style="font-size:1rem;">Tips: jalani urut dari modul 1 — semua nyambung</p>
+  </section>
+
+  <!-- SLIDE 6 — LIVE DEMO -->
+  <section class="slide" data-title="Live Demo">
+    <h3>SEKARANG GILIRAN DEMO</h3>
+    <h2>Yuk, Kita Lihat Langsung 👇</h2>
+    <p class="sub">Gue bakal tunjukin cara login & jalanin portalnya live.</p>
+    <div class="grid" style="max-width:720px;">
+      <div class="card"><i>🔑</i><strong>Login</strong><span>Pakai NIK & password dari email</span></div>
+      <div class="card"><i>🧭</i><strong>Navigasi</strong><span>Keliling dashboard & modul</span></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7 — PENUTUP -->
+  <section class="slide" data-title="Penutup">
+    <h3>AYO MULAI</h3>
+    <h2>Langkah Kecil Hari Ini 🚀</h2>
+    <p class="sub">Buka portal, login, dan mulai dari modul pertama. Cukup baca halaman pertamanya — itu sudah awal yang baik.</p>
+    <p class="sub" style="color: var(--accent); font-weight:600;">Potensi tanpa aksi cuma mimpi.</p>
+  </section>
+
+</div>
+
+<!-- Progress dots -->
+<div class="dots" id="dots"></div>
+<div class="hint">← → untuk navigasi · Esc untuk fullscreen</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dotsWrap = document.getElementById('dots');
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' on' : '');
+    dotsWrap.appendChild(d);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function show(index) {
+    current = Math.max(0, Math.min(slides.length - 1, index));
+    slides.forEach((s, i) => s.classList.toggle('active', i === current));
+    dots.forEach((d, i) => d.classList.toggle('on', i === current));
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(current + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(current - 1); }
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+  });
+
+  // Click zones (left/right half)
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.dots')) return;
+    if (e.clientX > window.innerWidth / 2) show(current + 1);
+    else show(current - 1);
+  });
+
+  // Touch swipe
+  let touchX = null;
+  document.addEventListener('touchstart', e => touchX = e.touches[0].clientX);
+  document.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (dx < -40) show(current + 1);
+    if (dx > 40) show(current - 1);
+    touchX = null;
+  });
+
+  show(0);
+</script>
+</body>
+</html>

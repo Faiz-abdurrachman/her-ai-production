@@ -93,6 +93,7 @@ async function proxyGas(request, response) {
     const https = require('node:https');
     const text = await new Promise((resolve, reject) => {
       const doRequest = (urlStr, method, bodyData, retries) => {
+        console.log(`[PROXY] ${method} ${urlStr} (retries: ${retries})`);
         if (retries <= 0) return reject(new Error('GAS redirect loop'));
         const url = new URL(urlStr);
         const headers = {};
@@ -106,8 +107,10 @@ async function proxyGas(request, response) {
           gasRes.on('data', chunk => data += chunk);
           gasRes.on('end', () => {
             if (gasRes.statusCode >= 300 && gasRes.statusCode < 400 && gasRes.headers.location) {
+              console.log(`[PROXY] Redirecting to ${gasRes.headers.location}`);
               return doRequest(gasRes.headers.location, 'GET', null, retries - 1);
             }
+            console.log(`[PROXY] Done. Status: ${gasRes.statusCode}, Length: ${data.length}`);
             resolve(data);
           });
         });

@@ -103,12 +103,15 @@
 
     async function fetchSettings() {
         const fallback = localSettings();
-        const base = apiBase();
-        if (!base) return fallback;
         try {
-            const response = await fetch(`${base}/api/participant-portal/settings`, { cache: 'no-store' });
+            const response = await fetch('/__gas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'getSettings' })
+            });
             if (!response.ok) return fallback;
             const result = await response.json();
+            if (result.status !== 'success') return fallback;
             const merged = mergeSettings(result.settings || {});
             localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
             return merged;
@@ -118,28 +121,11 @@
     }
 
     async function saveSettings(settings) {
+        // Saving settings from participant portal is no longer supported directly.
+        // It is managed by Admin Dashboard now.
         const merged = mergeSettings(settings);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
-        const base = apiBase();
-        if (!base) return merged;
-        try {
-            const headers = { 'Content-Type': 'application/json' };
-            const adminKey = localStorage.getItem(ADMIN_KEY);
-            if (adminKey) headers['X-HerAI-Admin-Key'] = adminKey;
-            const response = await fetch(`${base}/api/participant-portal/settings`, {
-                method: 'PUT',
-                headers,
-                body: JSON.stringify({ settings: merged })
-            });
-            if (!response.ok) throw new Error('Participant portal API rejected the update');
-            const result = await response.json();
-            const saved = mergeSettings(result.settings || merged);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-            return saved;
-        } catch (error) {
-            console.warn('Participant portal settings saved locally only:', error.message);
-            return merged;
-        }
+        return merged;
     }
 
     function applySettings(settings, pageName) {
