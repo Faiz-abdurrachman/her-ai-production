@@ -611,6 +611,61 @@
    
        // Update active state berdasarkan hash saat ini
        updateSidebarActiveState();
+
+       if (typeof window.initAdminMobileMenu === "function") {
+           window.initAdminMobileMenu();
+       }
+   };
+   
+   window.initAdminMobileMenu = function() {
+       const dashboardLayout = document.querySelector('.dashboard-layout');
+       const topbarLeft = document.querySelector('.topbar-left');
+       const sidebar = document.querySelector('.sidebar');
+   
+       if (!dashboardLayout || !topbarLeft || !sidebar) return;
+   
+       if (!topbarLeft.querySelector('.admin-menu-toggle')) {
+           const toggleBtn = document.createElement('button');
+           toggleBtn.className = 'admin-menu-toggle';
+           toggleBtn.innerHTML = '<i class="fas fa-bars"></i>';
+           toggleBtn.setAttribute('aria-label', 'Toggle Sidebar');
+           
+           topbarLeft.insertBefore(toggleBtn, topbarLeft.firstChild);
+   
+           toggleBtn.addEventListener('click', () => {
+               sidebar.classList.add('mobile-active');
+               let scrim = document.querySelector('.admin-sidebar-scrim');
+               if (scrim) scrim.classList.add('active');
+               document.body.style.overflow = 'hidden';
+           });
+       }
+   
+       let scrim = dashboardLayout.querySelector('.admin-sidebar-scrim');
+       if (!scrim) {
+           scrim = document.createElement('div');
+           scrim.className = 'admin-sidebar-scrim';
+           dashboardLayout.appendChild(scrim);
+   
+           scrim.addEventListener('click', () => {
+               sidebar.classList.remove('mobile-active');
+               scrim.classList.remove('active');
+               document.body.style.overflow = '';
+           });
+       }
+   
+       sidebar.querySelectorAll('.nav-link').forEach(link => {
+           if (!link.dataset.mobileListener) {
+               link.dataset.mobileListener = "true";
+               link.addEventListener('click', () => {
+                   if (window.innerWidth <= 1024) {
+                       sidebar.classList.remove('mobile-active');
+                       let s = document.querySelector('.admin-sidebar-scrim');
+                       if (s) s.classList.remove('active');
+                       document.body.style.overflow = '';
+                   }
+               });
+           }
+       });
    };
    
    // Fungsi terpisah untuk update active state (dipanggil saat hashchange)

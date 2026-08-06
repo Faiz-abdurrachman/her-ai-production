@@ -400,6 +400,10 @@ const router = {
             const activeLink = sidebarContainer.querySelector(`a[href="${currentHash}"]`);
             if (activeLink) activeLink.classList.add("active");
         }
+
+        if (typeof window.initAdminMobileMenu === "function") {
+            window.initAdminMobileMenu();
+        }
     },
 
     readParticipantSession() {
