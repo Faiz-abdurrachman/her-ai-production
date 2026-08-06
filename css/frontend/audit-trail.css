@@ -396,14 +396,4 @@
         padding: 30px;
         overflow-y: auto;
     }
-
-    /* Responsive: Kalau di HP sidebar biasanya disembunyikan/dijadikan overlay */
-    @media (max-width: 768px) {
-        #sidebar-container {
-            display: none; /* Atau buat logic sidebar mobile di sini */
-        }
-        .dashboard-layout {
-            flex-direction: column;
-        }
-    }
 }
