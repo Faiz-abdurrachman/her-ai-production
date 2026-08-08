@@ -1678,9 +1678,28 @@ function stripParticipantAccountSensitive(account) {
 
 function findParticipantAccount(nik) {
   const cleanNik = String(nik || '').replace(/\D/g, '');
-  return getRows(SHEETS.participantAccounts).find(function(account) {
-    return String(account.nik || account.username || '').replace(/\D/g, '') === cleanNik;
+  if (!cleanNik) return {};
+  
+  const cacheKey = 'account:' + cleanNik;
+  let cache;
+  try {
+    cache = CacheService.getScriptCache();
+    const cachedData = cache.get(cacheKey);
+    if (cachedData) {
+      const account = JSON.parse(cachedData);
+      if (account && (account.nik || account.username)) return account;
+    }
+  } catch (e) {}
+
+  const account = getRows(SHEETS.participantAccounts).find(function(acc) {
+    return String(acc.nik || acc.username || '').replace(/\D/g, '') === cleanNik;
   }) || {};
+  
+  if (account.nik || account.username) {
+    try { cache && cache.put(cacheKey, JSON.stringify(account), 600); } catch (e) {}
+  }
+  
+  return account;
 }
 
 function findParticipantForPortalLogin(nik, account) {
@@ -1716,12 +1735,14 @@ function synchronizeParticipantCredentials(participant, account, password) {
       throw new Error('Password akun valid, tetapi sinkronisasi profil peserta gagal.');
     }
   }
-  updateByKey(SHEETS.participantAccounts, 'nik', String(account.nik || account.username || ''), {
+  const accountNik = String(account.nik || account.username || '');
+  updateByKey(SHEETS.participantAccounts, 'nik', accountNik, {
     password_hash: verifyPasswordValueCurrent(account.password_hash, password) ? account.password_hash : stableHash,
     access_status: account.access_status || 'active',
     last_login_at: now,
     updated_at: now
   });
+  try { CacheService.getScriptCache().remove('account:' + accountNik.replace(/\D/g, '')); } catch(e) {}
 }
 
 function isParticipantAccountActive(account) {
@@ -3203,8 +3224,9 @@ function resetParticipantPasswordCore(nik, newPassword, actor) {
     }
   }
 
-  // 3) Bersihkan lockout percobaan login untuk NIK ini
+  // 3) Bersihkan lockout percobaan login dan invalidasi cache kredensial untuk NIK ini
   clearAttemptLimit('participant-login:' + cleanNik);
+  try { CacheService.getScriptCache().remove('account:' + cleanNik); } catch(e) {}
 
   // 4) Audit trail (aktif juga saat dijalankan langsung dari editor)
   recordParticipantActivity({
