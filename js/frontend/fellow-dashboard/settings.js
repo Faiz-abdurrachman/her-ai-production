@@ -67,7 +67,7 @@
             events: false,
             community: false,
             certificates: false,
-            leaderboard: false,
+            leaderboard: true,
             faq: false,
             settings: true
         }
@@ -2462,8 +2462,11 @@
         setModuleSummaryValue('[data-leaderboard-count]', state === 'error' ? '—' : entries.length);
         setModuleSummaryValue('[data-leaderboard-rank-copy]', current ? 'Dari peringkat yang ditampilkan' : 'Belum masuk peringkat');
 
+        var podium = document.querySelector('[data-leaderboard-podium]');
+
         if (state === 'error') {
             body.innerHTML = '';
+            if (podium) { podium.innerHTML = ''; podium.hidden = true; }
             if (status) status.textContent = 'Data leaderboard belum dapat dimuat.';
             if (empty) {
                 empty.hidden = false;
@@ -2478,7 +2481,33 @@
             return;
         }
 
-        body.innerHTML = entries.map(function(item, index) {
+        var top3 = entries.slice(0, 3);
+        var rest = entries;
+
+        if (podium) {
+            if (top3.length > 0) {
+                podium.hidden = false;
+                var podiumOrder = [top3[1], top3[0], top3[2]].filter(Boolean);
+                podium.innerHTML = podiumOrder.map(function(item) {
+                    var rank = Math.max(1, Number(item.rank));
+                    var isCurrent = item.current === true;
+                    var visibleName = isCurrent ? displayName + ' (Kamu)' : 'Peserta disamarkan';
+                    var icon = isCurrent ? 'fa-user' : 'fa-lock';
+                    if (rank === 1) icon = 'fa-crown';
+                    return '<div class="lb-podium-card rank-' + rank + (isCurrent ? ' is-current' : '') + '" data-leaderboard-search-row="' + escapeHtml((visibleName + ' ' + rank).toLowerCase()) + '">' +
+                        '<div class="lb-podium-avatar"><i class="fas ' + icon + '"></i><div class="lb-podium-badge">' + rank + '</div></div>' +
+                        '<h3 class="lb-podium-name">' + escapeHtml(visibleName) + '</h3>' +
+                        '<div class="lb-podium-points">' + Number(item.points || 0).toLocaleString('id-ID') + '</div>' +
+                        '<small style="color: #6b7280;">poin</small>' +
+                    '</div>';
+                }).join('');
+            } else {
+                podium.hidden = true;
+                podium.innerHTML = '';
+            }
+        }
+
+        body.innerHTML = rest.map(function(item, index) {
             var rank = Math.max(1, Number(item.rank || index + 1));
             var isCurrent = item.current === true;
             var visibleName = isCurrent ? displayName + ' (Kamu)' : 'Peserta disamarkan';
