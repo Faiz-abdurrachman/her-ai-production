@@ -378,22 +378,4 @@
         padding: 15px; /* Kurangi padding di HP biar luas */
     }
 
-    /* Pastikan Sidebar dan Main Content bersebelahan */
-    .dashboard-layout {
-        display: flex;
-        min-height: 100vh;
-        background-color: var(--bg-main, #f8fafc);
-    }
-
-    #sidebar-container {
-        width: 280px; /* Sesuaikan lebar sidebar lu */
-        flex-shrink: 0;
-        background: var(--dark-purple, #1a0b2e);
-    }
-
-    .main-content {
-        flex-grow: 1;
-        padding: 30px;
-        overflow-y: auto;
-    }
 }

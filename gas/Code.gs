@@ -244,6 +244,7 @@ function doPost(e) {
       register: () => registerParticipant(payload),
       participantLogin: () => participantLogin(payload),
       changeParticipantPassword: () => changeParticipantPassword(payload),
+      adminResetParticipantPassword: () => adminResetParticipantPassword(payload),
       saveParticipantProgress: () => saveParticipantProgress(payload),
       getParticipantProgress: () => getParticipantProgress(payload),
       saveParticipantDiscussion: () => saveParticipantDiscussion(payload),
@@ -396,7 +397,7 @@ function authorizeGasAction(action, payload) {
   payload.__adminAuth = requireAdminToken(payload);
 
   // EDITOR-ONLY: require superadmin role for sensitive mutations
-  var editorOnlyActions = ['addAdmin', 'updateAdmin', 'deleteAdmin', 'saveSettings', 'generateReTestAccess', 'generateCertificates'];
+  var editorOnlyActions = ['addAdmin', 'updateAdmin', 'deleteAdmin', 'saveSettings', 'generateReTestAccess', 'generateCertificates', 'adminResetParticipantPassword'];
   if (editorOnlyActions.indexOf(action) >= 0) {
     if (payload.__adminAuth.role !== 'superadmin') {
       throw new Error('Akses Super Admin diperlukan untuk tindakan ini.');
@@ -3135,6 +3136,101 @@ function changeParticipantPassword(payload) {
   });
 
   return { status: 'success', message: 'Password berhasil diganti.' };
+}
+
+/**
+ * CORE: reset password peserta (tanpa auth). Dipakai oleh adminResetParticipantPassword
+ * (via API dengan admin JWT) dan untuk eksekusi langsung dari Apps Script editor.
+ * Berbeda dari changeParticipantPassword: TIDAK perlu password lama, dan hasil
+ * setiap write dicek (bukan silent success).
+ */
+function resetParticipantPasswordCore(nik, newPassword, actor) {
+  const cleanNik = String(nik || '').replace(/\D/g, '');
+  if (cleanNik.length !== 16) {
+    return { status: 'error', message: 'NIK peserta tidak valid.' };
+  }
+  const password = String(newPassword || '');
+  if (password.length < 6) {
+    return { status: 'error', message: 'Password baru minimal 6 karakter.' };
+  }
+  if (password.length > 72) {
+    return { status: 'error', message: 'Password baru terlalu panjang (maksimal 72 karakter).' };
+  }
+  if (password.indexOf(PASSWORD_HASH_PREFIX) === 0) {
+    return { status: 'error', message: 'Password baru tidak boleh diawali dengan "' + PASSWORD_HASH_PREFIX + '".' };
+  }
+
+  const account = findParticipantAccount(cleanNik);
+  if (!account || !account.account_id) {
+    return { status: 'error', message: 'Akun peserta dengan NIK tersebut tidak ditemukan.' };
+  }
+
+  const newHash = hashPasswordValue(password);
+  const now = new Date().toISOString();
+
+  // 1) Update akun peserta (key: account_id UUID asli — reliable, dan cek hasilnya)
+  const accountResult = updateByKey(SHEETS.participantAccounts, 'account_id', account.account_id, {
+    password_hash: newHash,
+    password_status: 'changed',
+    password_changed_at: now,
+    updated_at: now
+  });
+  if (accountResult.status !== 'success') {
+    return { status: 'error', message: 'Gagal menyimpan password di akun peserta: ' + accountResult.message };
+  }
+
+  // 2) Sinkronisasi kolom participant_password di sheet participants.
+  //    Match by NIK ternormalisasi (robust terhadap rowId palsu/fabricated).
+  //    Ini opsional untuk login (login cek hash akun dulu), jadi kegagalan di sini
+  //    tidak menggagalkan reset — hanya ditandai lewat profile_synced.
+  const participantsSheet = getSheet(SHEETS.participants);
+  ensureSchemaHeaders(participantsSheet, SCHEMA[SHEETS.participants] || []);
+  const headers = getHeaders(participantsSheet);
+  const nikIndex = headers.indexOf('nik');
+  const pwIndex = headers.indexOf('participant_password');
+  const updatedAtIndex = headers.indexOf('profile_updated_at');
+  let profileSynced = false;
+  if (nikIndex >= 0 && pwIndex >= 0) {
+    const values = participantsSheet.getDataRange().getValues();
+    for (let i = 1; i < values.length; i++) {
+      if (String(values[i][nikIndex] || '').replace(/\D/g, '') !== cleanNik) continue;
+      const row = values[i].slice();
+      row[pwIndex] = newHash;
+      if (updatedAtIndex >= 0) row[updatedAtIndex] = now;
+      participantsSheet.getRange(i + 1, 1, 1, row.length).setValues([row]);
+      profileSynced = true;
+      break;
+    }
+  }
+
+  // 3) Bersihkan lockout percobaan login untuk NIK ini
+  clearAttemptLimit('participant-login:' + cleanNik);
+
+  // 4) Audit trail (aktif juga saat dijalankan langsung dari editor)
+  recordParticipantActivity({
+    nik: cleanNik,
+    nama_lengkap: account.nama_lengkap || '',
+    activity_type: 'admin_password_reset',
+    activity: 'Reset password peserta oleh ' + (actor || 'editor/manual'),
+    user_agent: ''
+  });
+
+  return {
+    status: 'success',
+    message: 'Password peserta berhasil direset.',
+    nik: cleanNik,
+    nama_lengkap: account.nama_lengkap || '',
+    profile_synced: profileSynced
+  };
+}
+
+function adminResetParticipantPassword(payload) {
+  const adminAuth = payload.__adminAuth || requireAdminToken(payload);
+  return resetParticipantPasswordCore(
+    String(payload.nik || ''),
+    String(payload.newPassword || ''),
+    'admin (' + String(adminAuth.sub || '') + ')'
+  );
 }
 
 function saveParticipantProgress(payload) {
