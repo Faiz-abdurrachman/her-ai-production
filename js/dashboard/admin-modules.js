@@ -2685,4 +2685,152 @@
         });
     };
 
+    // ==========================================
+    // RESET PASSWORD PESERTA (Superadmin Only)
+    // ==========================================
+
+    window.initResetPassword = async function() {
+        // 1. RBAC gate — superadmin only
+        if (!window.checkAdminAccess || (typeof window.checkAdminAccess === 'function' && !window.checkAdminAccess())) {
+            return;
+        }
+        const access = window.getCurrentAdminAccess ? window.getCurrentAdminAccess() : {};
+        if (access.role !== 'superadmin') {
+            var mc = document.querySelector('.main-content') || document.getElementById('admin-main-content');
+            if (mc) {
+                mc.innerHTML = '<div style="padding:60px 30px;text-align:center;">' +
+                    '<i class="fas fa-lock" style="font-size:3rem;color:var(--danger);margin-bottom:16px;"></i>' +
+                    '<h2 style="color:var(--dark-purple);margin:0 0 8px;">Akses Ditolak</h2>' +
+                    '<p style="color:var(--text-muted);">Hanya superadmin yang dapat mengakses fitur Reset Password.</p></div>';
+            }
+            return;
+        }
+
+        // 2. Load sidebar
+        if (typeof window.loadSidebar === 'function') await window.loadSidebar();
+
+        // 3. Log activity
+        if (typeof window.logAdminActivity === 'function') {
+            window.logAdminActivity('Membuka halaman Reset Password Peserta');
+        }
+
+        // 4. Bind events (idempotent)
+        var submitBtn = document.getElementById('admin-reset-pass-submit');
+        if (!submitBtn || submitBtn.dataset.ready === 'true') return;
+        submitBtn.dataset.ready = 'true';
+
+        // Toggle password visibility
+        function bindToggle(toggleId, inputId) {
+            var toggle = document.getElementById(toggleId);
+            var input = document.getElementById(inputId);
+            if (toggle && input) {
+                toggle.addEventListener('click', function() {
+                    var isPassword = input.type === 'password';
+                    input.type = isPassword ? 'text' : 'password';
+                    var icon = toggle.querySelector('i');
+                    if (icon) {
+                        icon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+                    }
+                });
+            }
+        }
+        bindToggle('admin-reset-pass-toggle-pw', 'admin-reset-pass-password');
+        bindToggle('admin-reset-pass-toggle-confirm', 'admin-reset-pass-confirm');
+
+        // Focus ring styling for inputs
+        ['admin-reset-pass-nik', 'admin-reset-pass-password', 'admin-reset-pass-confirm'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('focus', function() { el.style.borderColor = 'var(--primary-pink)'; el.style.boxShadow = '0 0 0 3px rgba(255,20,147,0.12)'; });
+                el.addEventListener('blur', function() { el.style.borderColor = 'var(--gray-border)'; el.style.boxShadow = 'none'; });
+            }
+        });
+
+        // NIK input: only allow digits
+        var nikInput = document.getElementById('admin-reset-pass-nik');
+        if (nikInput) {
+            nikInput.addEventListener('input', function() {
+                nikInput.value = nikInput.value.replace(/\D/g, '').slice(0, 16);
+            });
+        }
+
+        // Alert helper
+        function showAlert(message, type) {
+            var alertEl = document.getElementById('admin-reset-pass-alert');
+            if (!alertEl) return;
+            var isSuccess = type === 'success';
+            alertEl.style.display = 'flex';
+            alertEl.style.background = isSuccess ? 'rgba(5, 205, 153, 0.1)' : 'rgba(230, 57, 70, 0.1)';
+            alertEl.style.border = '1px solid ' + (isSuccess ? 'rgba(5, 205, 153, 0.3)' : 'rgba(230, 57, 70, 0.3)');
+            alertEl.style.color = isSuccess ? '#047857' : 'var(--danger)';
+            alertEl.innerHTML = '<i class="fas fa-' + (isSuccess ? 'check-circle' : 'times-circle') + '"></i> ' +
+                '<span>' + message + '</span>';
+            alertEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Submit handler
+        submitBtn.addEventListener('click', async function() {
+            var nik = (document.getElementById('admin-reset-pass-nik')?.value || '').trim();
+            var password = document.getElementById('admin-reset-pass-password')?.value || '';
+            var confirm = document.getElementById('admin-reset-pass-confirm')?.value || '';
+
+            // Client-side validation
+            if (!nik) { showAlert('NIK peserta wajib diisi.', 'error'); return; }
+            if (!/^\d{16}$/.test(nik)) { showAlert('NIK harus tepat 16 digit angka.', 'error'); return; }
+            if (!password) { showAlert('Password baru wajib diisi.', 'error'); return; }
+            if (password.length < 6) { showAlert('Password minimal 6 karakter.', 'error'); return; }
+            if (password.length > 72) { showAlert('Password maksimal 72 karakter.', 'error'); return; }
+            if (password.indexOf('pw$1$') === 0) { showAlert('Password tidak boleh diawali dengan "pw$1$".', 'error'); return; }
+            if (password !== confirm) { showAlert('Konfirmasi password tidak cocok.', 'error'); return; }
+
+            // Confirmation dialog
+            if (!window.confirm('Yakin reset password untuk NIK ' + nik + '?\n\nTindakan ini akan mengganti password peserta dan tercatat di audit trail.')) {
+                return;
+            }
+
+            // Disable button + loading state
+            submitBtn.disabled = true;
+            var originalHtml = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+
+            try {
+                var response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(withAdminToken({
+                        action: 'adminResetParticipantPassword',
+                        nik: nik,
+                        newPassword: password
+                    }))
+                });
+                var result = await response.json();
+
+                if (result.status === 'success') {
+                    var msg = escapeHtml(result.message || 'Password berhasil direset.');
+                    if (result.nama_lengkap) {
+                        msg += ' — Nama: <strong>' + escapeHtml(result.nama_lengkap) + '</strong>';
+                    }
+                    showAlert(msg, 'success');
+
+                    // Clear form
+                    if (document.getElementById('admin-reset-pass-nik')) document.getElementById('admin-reset-pass-nik').value = '';
+                    if (document.getElementById('admin-reset-pass-password')) document.getElementById('admin-reset-pass-password').value = '';
+                    if (document.getElementById('admin-reset-pass-confirm')) document.getElementById('admin-reset-pass-confirm').value = '';
+
+                    if (typeof window.logAdminActivity === 'function') {
+                        window.logAdminActivity('Reset password peserta NIK: ' + nik);
+                    }
+                } else {
+                    showAlert(escapeHtml(result.message || 'Terjadi kesalahan.'), 'error');
+                }
+            } catch (err) {
+                console.error('Reset password error:', err);
+                showAlert('Terjadi kesalahan jaringan. Coba lagi.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalHtml;
+            }
+        });
+    };
+
 })();
