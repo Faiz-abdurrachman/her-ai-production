@@ -1,4 +1,4 @@
-<section class="fellow-dashboard fellow-modules-page" data-fellow-page="modules">
+<section class="fellow-dashboard fellow-modules-page modules-v2-catalog" data-fellow-page="modules">
     <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
         <i class="fas fa-bars" aria-hidden="true"></i>
     </button>
@@ -54,90 +54,244 @@
 
         <div class="module-layout">
             <div class="module-content">
-                <div class="module-tabs" role="tablist" aria-label="Navigasi modul">
-                    <button type="button" class="active" role="tab" aria-selected="true" data-module-tab="all">Semua Modul</button>
-                    <button type="button" role="tab" aria-selected="false" data-module-tab="foundation">Foundation Phase</button>
-                    <button type="button" role="tab" aria-selected="false" data-module-tab="specialization">Specialization Track</button>
+                <div class="v2-modules-header">
+                    <div class="v2-pills-nav" role="tablist" aria-label="Navigasi Kategori Modul">
+                        <button type="button" class="active" role="tab" data-v2-tab="all">Semua</button>
+                        <button type="button" role="tab" data-v2-tab="foundation">Foundation</button>
+                        <button type="button" role="tab" data-v2-tab="generative">Generative</button>
+                        <button type="button" role="tab" data-v2-tab="engineering">Engineering</button>
+                        <button type="button" role="tab" data-v2-tab="business">Business</button>
+                    </div>
                 </div>
 
-                <section class="module-stat-grid" data-module-summary-state="loading" aria-label="Ringkasan modul" aria-busy="true">
-                    <article class="pink"><i class="fas fa-layer-group" aria-hidden="true"></i><span>Total Modul</span><strong data-module-summary-total>—</strong><small>Foundation aktif</small></article>
-                    <article class="green"><i class="fas fa-circle-check" aria-hidden="true"></i><span>Modul Selesai</span><strong data-module-summary-completed>—</strong><small>Progress 100%</small></article>
-                    <article class="orange"><i class="fas fa-bolt" aria-hidden="true"></i><span>Sedang Berjalan</span><strong data-module-summary-in-progress>—</strong><small>Sudah dimulai</small></article>
-                    <article class="purple"><i class="fas fa-chart-simple" aria-hidden="true"></i><span>Progres Belajar</span><strong data-module-summary-progress>—</strong><small>Keseluruhan</small></article>
+                <!-- 1. Foundation & Core AI -->
+                <section class="v2-module-section active" data-v2-section="foundation">
+                    <div class="v2-section-head">
+                        <h2>Foundation & Core AI</h2>
+                        <span>Fondasi teknis utama</span>
+                    </div>
+                    <div class="v2-card-grid">
+            <!-- AI Fundamentals -->
+            <a href="#/participant-ai-fundamentals" class="v2-course-card v2-theme-pink">
+                <div class="v2-icon-wrap"><i class="fas fa-brain"></i></div>
+                <span class="v2-badge">Core</span>
+                <h3>AI Fundamentals & Advanced</h3>
+                <p>Konsep AI modern, reasoning, model lifecycle, dan evaluasi sistem cerdas.</p>
+                <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+            </a>
+
+            <!-- Math for AI -->
+            <a href="#/participant-ai-lab-math" class="v2-course-card v2-theme-green">
+                <div class="v2-icon-wrap"><i class="fas fa-square-root-variable"></i></div>
+                <span class="v2-badge">Foundation</span>
+                <h3>Math for AI</h3>
+                <p>Linear algebra, calculus, probability, optimization, dan statistik untuk AI.</p>
+                <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+            </a>
+
+            <!-- Machine Learning -->
+            <a href="#/participant-ai-lab-machine-learning" class="v2-course-card v2-theme-purple">
+                <div class="v2-icon-wrap"><i class="fas fa-network-wired"></i></div>
+                <span class="v2-badge">Core</span>
+                <h3>Machine Learning</h3>
+                <p>Supervised learning, unsupervised learning, model tuning, dan evaluasi.</p>
+                <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+            </a>
+
+            <!-- Deep Learning -->
+            <a href="#/participant-ai-lab-deep-learning" class="v2-course-card v2-theme-blue">
+                <div class="v2-icon-wrap"><i class="fas fa-layer-group"></i></div>
+                <span class="v2-badge">Core</span>
+                <h3>Deep Learning</h3>
+                <p>Neural network, CNN, RNN, transformer basics, training, dan regularization.</p>
+                <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+            </a>
+
+            <!-- Reinforcement Learning -->
+            <a href="#/participant-ai-lab-reinforcement-learning" class="v2-course-card v2-theme-orange">
+                <div class="v2-icon-wrap"><i class="fas fa-gamepad"></i></div>
+                <span class="v2-badge">Advanced</span>
+                <h3>Reinforcement Learning</h3>
+                <p>Agent, reward, policy, value function, exploration, dan decision optimization.</p>
+                <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+            </a>
+        </div>
                 </section>
 
-                <section class="module-panel foundation-catalog" id="moduleCatalogPanel" data-module-section="foundation">
-                    <div class="module-panel-head">
-                        <div>
-                            <span class="panel-kicker"><i class="fas fa-signal" aria-hidden="true"></i> Aktif sekarang</span>
-                            <h2>Foundation Learning Path</h2>
-                            <p>Mulai dari konsep dasar, lanjutkan ke coding, reasoning, evaluasi, dan evolusi AI.</p>
-                        </div>
-                        <span class="module-count-badge">6 modul</span>
+                <!-- 2. Generative & Multimodal AI -->
+                <section class="v2-module-section active" data-v2-section="generative">
+                    <div class="v2-section-head">
+                        <h2>Generative & Multimodal AI</h2>
+                        <span>Model generatif dan interaksi multimodal</span>
                     </div>
-
-                    <div class="course-card-grid foundation-course-grid" data-course-group="foundation">
-                        <article class="course-card featured pink is-loading" data-module-id="ai-fundamentals">
-                            <span class="course-card-icon" aria-hidden="true"><i class="fas fa-brain"></i></span><span>01 · Foundation</span>
-                            <h3>Pengantar AI</h3><p>Dasar Artificial Intelligence, penerapan, risiko, dan penggunaan yang bertanggung jawab.</p>
-                            <div class="course-card-progress"><span data-module-progress-label>Menyiapkan progres…</span><b style="--value:0%" data-module-progress-bar></b></div>
-                            <a href="#/participant-ai-intro">Buka modul <i class="fas fa-arrow-right"></i></a>
-                        </article>
-                        <article class="course-card blue is-loading" data-module-id="python-untuk-ai">
-                            <span class="course-card-icon" aria-hidden="true"><i class="fab fa-python"></i></span><span>02 · Coding</span>
-                            <h3>Python untuk AI</h3><p>Dasar Python, NumPy, Pandas, dan workflow data untuk membangun sistem AI.</p>
-                            <div class="course-card-progress"><span data-module-progress-label>Menyiapkan progres…</span><b style="--value:0%" data-module-progress-bar></b></div>
-                            <a href="#/participant-ai-python">Buka modul <i class="fas fa-arrow-right"></i></a>
-                        </article>
-                        <article class="course-card purple is-loading" data-module-id="reasoning">
-                            <span class="course-card-icon" aria-hidden="true"><i class="fas fa-code-branch"></i></span><span>03 · Logic</span>
-                            <h3>Reasoning</h3><p>Penalaran, planning, chain-of-thought, dan cara AI menggunakan tools.</p>
-                            <div class="course-card-progress"><span data-module-progress-label>Menyiapkan progres…</span><b style="--value:0%" data-module-progress-bar></b></div>
-                            <a href="#/participant-ai-reasoning">Buka modul <i class="fas fa-arrow-right"></i></a>
-                        </article>
-                        <article class="course-card pink is-loading" data-module-id="konsep-ai-modern">
-                            <span class="course-card-icon" aria-hidden="true"><i class="fas fa-microchip"></i></span><span>04 · Modern AI</span>
-                            <h3>Konsep AI Modern</h3><p>Foundation model, transformer, agent, dan arsitektur sistem AI masa kini.</p>
-                            <div class="course-card-progress"><span data-module-progress-label>Menyiapkan progres…</span><b style="--value:0%" data-module-progress-bar></b></div>
-                            <a href="#/participant-ai-modern">Buka modul <i class="fas fa-arrow-right"></i></a>
-                        </article>
-                        <article class="course-card green is-loading" data-module-id="evaluation">
-                            <span class="course-card-icon" aria-hidden="true"><i class="fas fa-clipboard-check"></i></span><span>05 · Quality</span>
-                            <h3>Evaluation</h3><p>Evaluasi output, benchmark, reliability, bias, dan kualitas sistem AI.</p>
-                            <div class="course-card-progress"><span data-module-progress-label>Menyiapkan progres…</span><b style="--value:0%" data-module-progress-bar></b></div>
-                            <a href="#/participant-ai-evaluation">Buka modul <i class="fas fa-arrow-right"></i></a>
-                        </article>
-                        <article class="course-card orange is-loading" data-module-id="evolution">
-                            <span class="course-card-icon" aria-hidden="true"><i class="fas fa-timeline"></i></span><span>06 · Perspective</span>
-                            <h3>Evolution of AI</h3><p>Perjalanan AI dari symbolic AI dan machine learning hingga generative AI.</p>
-                            <div class="course-card-progress"><span data-module-progress-label>Menyiapkan progres…</span><b style="--value:0%" data-module-progress-bar></b></div>
-                            <a href="#/participant-ai-evolution">Buka modul <i class="fas fa-arrow-right"></i></a>
-                        </article>
-                    </div>
-                    <div class="module-search-empty" data-module-search-empty hidden>
-                        <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
-                        <strong>Modul tidak ditemukan</strong>
-                        <p>Coba kata kunci lain dari enam modul Foundation.</p>
+                    <div class="v2-card-grid">
+                        <a href="#/participant-ai-lab-gen" class="v2-course-card v2-theme-pink">
+                            <div class="v2-icon-wrap"><i class="fas fa-wand-magic-sparkles"></i></div>
+                            <span class="v2-badge">GenAI</span>
+                            <h3>Generative AI</h3>
+                            <p>Prompting, diffusion, generation pipeline, evaluation, dan creative AI workflow.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-large-language-model" class="v2-course-card v2-theme-purple">
+                            <div class="v2-icon-wrap"><i class="fas fa-message"></i></div>
+                            <span class="v2-badge">Language</span>
+                            <h3>LLM</h3>
+                            <p>Transformer, instruction tuning, RAG, fine-tuning, dan deployment LLM.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-vlm" class="v2-course-card v2-theme-blue">
+                            <div class="v2-icon-wrap"><i class="fas fa-eye"></i></div>
+                            <span class="v2-badge">Vision</span>
+                            <h3>VLM</h3>
+                            <p>Vision-language model, image-text alignment, captioning, dan visual reasoning.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-multimodal-llm" class="v2-course-card v2-theme-green">
+                            <div class="v2-icon-wrap"><i class="fas fa-cubes"></i></div>
+                            <span class="v2-badge">Multimodal</span>
+                            <h3>Multimodal LLM</h3>
+                            <p>Cross-modal learning untuk teks, gambar, audio, video, dan structured context.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-agentic-ai" class="v2-course-card v2-theme-orange">
+                            <div class="v2-icon-wrap"><i class="fas fa-robot"></i></div>
+                            <span class="v2-badge">Agent</span>
+                            <h3>Agentic AI</h3>
+                            <p>Tool use, planning, memory, workflow orchestration, dan evaluasi AI agents.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
                     </div>
                 </section>
 
-                <section class="module-panel specialization-panel is-preview" id="specializationTrackPanel" data-module-section="specialization">
-                    <div class="module-panel-head">
-                        <div>
-                            <span class="panel-kicker muted"><i class="fas fa-lock" aria-hidden="true"></i> Tahap berikutnya</span>
-                            <h2>Specialization Tracks</h2>
-                            <p>Track spesialisasi belum dibuka. Kamu tetap dapat melihat arah belajar berikutnya tanpa memulai materi yang belum dirilis.</p>
-                        </div>
-                        <span class="module-count-badge locked">Belum dibuka</span>
+                <!-- 3. Data & Engineering Domains -->
+                <section class="v2-module-section active" data-v2-section="engineering">
+                    <div class="v2-section-head">
+                        <h2>Data & Engineering Domains</h2>
+                        <span>Skill engineering untuk membangun produk AI</span>
                     </div>
-                    <div class="specialization-grid">
-                        <article class="pink"><i class="fas fa-eye" aria-hidden="true"></i><div><span>Vision</span><h3>Computer Vision</h3><p>Image processing, object detection, dan visual intelligence.</p><small>Under Development</small></div></article>
-                        <article class="orange"><i class="fas fa-wave-square" aria-hidden="true"></i><div><span>Speech</span><h3>Speech Recognition</h3><p>Voice processing, audio analysis, ASR, dan TTS.</p><small>Belum dibuka</small></div></article>
-                        <article class="purple"><i class="fas fa-message" aria-hidden="true"></i><div><span>Language</span><h3>NLP & LLM</h3><p>Text generation, semantic understanding, dan RAG.</p><small>Belum dibuka</small></div></article>
-                        <article class="blue"><i class="fas fa-server" aria-hidden="true"></i><div><span>Infrastructure</span><h3>MLOps & Deployment</h3><p>Cloud computing, model deployment, dan scalability.</p><small>Belum dibuka</small></div></article>
-                        <article class="green"><i class="fas fa-cubes" aria-hidden="true"></i><div><span>Multimodal</span><h3>Multimodal LLM</h3><p>VLM, cross-modal learning, dan world models.</p><small>Belum dibuka</small></div></article>
-                        <article class="pink"><i class="fas fa-dna" aria-hidden="true"></i><div><span>Bioinformatics</span><h3>Medical & Biology AI</h3><p>Genomics, protein analysis, dan computational biology.</p><small>Belum dibuka</small></div></article>
+                    <div class="v2-card-grid">
+                        <a href="#/participant-ai-lab-cv" class="v2-course-card v2-theme-pink">
+                            <div class="v2-icon-wrap"><i class="fas fa-eye"></i></div>
+                            <span class="v2-badge">Vision</span>
+                            <h3>Computer Vision</h3>
+                            <p>Image processing, object detection, recognition, dan visual intelligence.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-nlp" class="v2-course-card v2-theme-purple">
+                            <div class="v2-icon-wrap"><i class="fas fa-language"></i></div>
+                            <span class="v2-badge">Language</span>
+                            <h3>NLP</h3>
+                            <p>Text processing, semantic understanding, classification, retrieval, dan generation.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-bioinformatics" class="v2-course-card v2-theme-green">
+                            <div class="v2-icon-wrap"><i class="fas fa-dna"></i></div>
+                            <span class="v2-badge">Science</span>
+                            <h3>Bioinformatics</h3>
+                            <p>Genomics, protein analysis, computational biology, dan medical AI.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-data-engineering" class="v2-course-card v2-theme-blue">
+                            <div class="v2-icon-wrap"><i class="fas fa-database"></i></div>
+                            <span class="v2-badge">Data</span>
+                            <h3>Data Engineering</h3>
+                            <p>Pipeline, ETL, warehouse, lakehouse, orchestration, dan quality control.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-data-science" class="v2-course-card v2-theme-orange">
+                            <div class="v2-icon-wrap"><i class="fas fa-chart-line"></i></div>
+                            <span class="v2-badge">Data</span>
+                            <h3>Data Science</h3>
+                            <p>Analytics, experimentation, visualization, modeling, dan insight generation.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-infrastructure" class="v2-course-card v2-theme-purple">
+                            <div class="v2-icon-wrap"><i class="fas fa-server"></i></div>
+                            <span class="v2-badge">Infra</span>
+                            <h3>Infrastructure</h3>
+                            <p>Cloud, GPU environment, serving stack, observability, dan scaling.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-deployment" class="v2-course-card v2-theme-green">
+                            <div class="v2-icon-wrap"><i class="fas fa-cloud-arrow-up"></i></div>
+                            <span class="v2-badge">Ops</span>
+                            <h3>Deployment</h3>
+                            <p>Packaging, API serving, model release, monitoring, dan rollback strategy.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-front-end" class="v2-course-card v2-theme-blue">
+                            <div class="v2-icon-wrap"><i class="fas fa-code"></i></div>
+                            <span class="v2-badge">Product</span>
+                            <h3>Front-end</h3>
+                            <p>Interface, dashboard, visualization, accessibility, dan AI product UX.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-back-end" class="v2-course-card v2-theme-orange">
+                            <div class="v2-icon-wrap"><i class="fas fa-gears"></i></div>
+                            <span class="v2-badge">Product</span>
+                            <h3>Back-end</h3>
+                            <p>API, database, auth, queues, integration, dan scalable service design.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- 4. Business & Industry Applications -->
+                <section class="v2-module-section active" data-v2-section="business">
+                    <div class="v2-section-head">
+                        <h2>Business & Industry Applications</h2>
+                        <span>AI untuk dampak organisasi dan industri</span>
+                    </div>
+                    <div class="v2-card-grid">
+                        <a href="#/participant-ai-lab-business-insight" class="v2-course-card v2-theme-pink">
+                            <div class="v2-icon-wrap"><i class="fas fa-lightbulb"></i></div>
+                            <span class="v2-badge">Business</span>
+                            <h3>Business Insight</h3>
+                            <p>AI analytics, market insight, decision support, dan business intelligence.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-people-business-mgt" class="v2-course-card v2-theme-purple">
+                            <div class="v2-icon-wrap"><i class="fas fa-users-gear"></i></div>
+                            <span class="v2-badge">Management</span>
+                            <h3>People & Business Mgt</h3>
+                            <p>AI adoption, team process, change management, dan operational strategy.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-culture" class="v2-course-card v2-theme-orange">
+                            <div class="v2-icon-wrap"><i class="fas fa-palette"></i></div>
+                            <span class="v2-badge">Culture</span>
+                            <h3>AI for Culture</h3>
+                            <p>AI untuk arsip budaya, kreativitas, bahasa lokal, dan cultural preservation.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-healthcare" class="v2-course-card v2-theme-green">
+                            <div class="v2-icon-wrap"><i class="fas fa-heart-pulse"></i></div>
+                            <span class="v2-badge">Health</span>
+                            <h3>AI for Healthcare</h3>
+                            <p>Clinical decision support, imaging, patient analytics, dan ethical healthcare AI.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-ui-ux" class="v2-course-card v2-theme-blue">
+                            <div class="v2-icon-wrap"><i class="fas fa-pen-nib"></i></div>
+                            <span class="v2-badge">Design</span>
+                            <h3>UI/UX Design Thinking</h3>
+                            <p>Human-centered AI, prototyping, research, journey mapping, dan usability test.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-manufacturing" class="v2-course-card v2-theme-purple">
+                            <div class="v2-icon-wrap"><i class="fas fa-industry"></i></div>
+                            <span class="v2-badge">Industry</span>
+                            <h3>AI for Manufacturing</h3>
+                            <p>Predictive maintenance, quality inspection, robotics, dan process optimization.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="#/participant-ai-lab-geospatial" class="v2-course-card v2-theme-green">
+                            <div class="v2-icon-wrap"><i class="fas fa-map-location-dot"></i></div>
+                            <span class="v2-badge">Geospatial</span>
+                            <h3>AI for Geospatial</h3>
+                            <p>Remote sensing, GIS intelligence, spatial modeling, dan location analytics.</p>
+                            <span class="v2-card-link">Mulai <i class="fas fa-arrow-right"></i></span>
+                        </a>
                     </div>
                 </section>
             </div>
