@@ -123,16 +123,24 @@ const router = {
         "/participant-ai-lab-ml-neural-networks": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-ml-unsupervised": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math-intro": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-linear-algebra": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-statistics": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-probability": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-calculus": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-optimization": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-case-study": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/practice.html",
-        "/participant-ai-lab-math-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/quiz.html",
-        "/participant-ai-lab-math-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/discussion.html",
+        "/participant-ai-lab-math-linear-algebra": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math-statistics": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math-probability": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math-calculus": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math-optimization": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math-case-study": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/dunia-nyata-menjadi-representasi-komputasional": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/data-observation-feature-dan-target": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/pecahan-desimal-dan-persentase": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/variable-expression-dan-equation": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/function-dari-input-ke-output": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/coordinate-graph-dan-perubahan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/powers-logarithms-dan-sigma": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/latihan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -307,6 +315,22 @@ const router = {
         "/x/fd6p1/ai/ethics": "/participant-ai-ethics",
         "/x/fd6p1/ai/future": "/participant-ai-future",
         "/x/fd6p1/ai/summary": "/participant-ai-summary",
+        "/participant-ai-lab-math-intro": "/participant-ai-lab-math/kenapa-ai-butuh-matematika",
+        "/participant-ai-lab-math-practice": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/latihan",
+        "/participant-ai-lab-math-quiz": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/kuis",
+        "/participant-ai-lab-math-discussion": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/diskusi",
+        "/participant-ai-lab-math/submodule-01": "/participant-ai-lab-math/kenapa-ai-butuh-matematika",
+        "/participant-ai-lab-math/submodule-01/topic-01": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/dunia-nyata-menjadi-representasi-komputasional",
+        "/participant-ai-lab-math/submodule-01/topic-02": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/data-observation-feature-dan-target",
+        "/participant-ai-lab-math/submodule-01/topic-03": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/pecahan-desimal-dan-persentase",
+        "/participant-ai-lab-math/submodule-01/topic-04": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/variable-expression-dan-equation",
+        "/participant-ai-lab-math/submodule-01/topic-05": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/function-dari-input-ke-output",
+        "/participant-ai-lab-math/submodule-01/topic-06": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/coordinate-graph-dan-perubahan",
+        "/participant-ai-lab-math/submodule-01/topic-07": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/powers-logarithms-dan-sigma",
+        "/participant-ai-lab-math/submodule-01/practice": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/latihan",
+        "/participant-ai-lab-math/submodule-01/quiz": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/kuis",
+        "/participant-ai-lab-math/submodule-01/discussion": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/diskusi",
+        "/participant-ai-lab-math/submodule-01/references": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/referensi",
         "/x/fd6p1/mt": "/participant-mentor",
         "/x/fd6p1/t": "/participant-tasks",
         "/x/fd6p1/p": "/participant-projects",
@@ -434,6 +458,23 @@ const router = {
             || path.startsWith("/participant-cv-");
     },
 
+    getLocalMathPreviewRoute(path) {
+        const hostname = window.location.hostname;
+        const isLocalPreview = hostname === "localhost"
+            || hostname === "127.0.0.1"
+            || hostname === "[::1]";
+
+        if (!isLocalPreview) return null;
+        if (path === "/participant-ai-lab-math") {
+            return "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/overview.html";
+        }
+        const submoduleBase = "/participant-ai-lab-math/kenapa-ai-butuh-matematika";
+        if (path === submoduleBase || (path.startsWith(`${submoduleBase}/`) && this.routes[path])) {
+            return "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/01-kenapa-ai-butuh-matematika/materi.html";
+        }
+        return null;
+    },
+
     renderParticipantAccessNotice(appContent, navContainer, footerContainer, options = {}) {
         const title = options.title || "Akses Peserta Dibatasi";
         const message = options.message || "Sementara ini portal peserta hanya membuka Beranda, Modul, dan Pengaturan.";
@@ -505,9 +546,10 @@ const router = {
             return;
         }
 
-        const routeUrl = this.isComputerVisionLockedRoute(path)
+        const localMathPreviewRoute = this.getLocalMathPreviewRoute(path);
+        const routeUrl = localMathPreviewRoute || (this.isComputerVisionLockedRoute(path)
             ? "/pages/frontend/fellow-dashboard/under-development.html"
-            : this.routes[path];
+            : this.routes[path]);
         const appContent = document.getElementById("app-content");
         const navContainer = document.getElementById("navbar-container");
         const footerContainer = document.getElementById("footer-container");
@@ -596,16 +638,24 @@ const router = {
             "/participant-ai-lab-deep-learning-discussion",
             "/participant-ai-lab-reinforcement-learning",
             "/participant-ai-lab-math",
-            "/participant-ai-lab-math-intro",
             "/participant-ai-lab-math-linear-algebra",
             "/participant-ai-lab-math-statistics",
             "/participant-ai-lab-math-probability",
             "/participant-ai-lab-math-calculus",
             "/participant-ai-lab-math-optimization",
             "/participant-ai-lab-math-case-study",
-            "/participant-ai-lab-math-practice",
-            "/participant-ai-lab-math-quiz",
-            "/participant-ai-lab-math-discussion",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/dunia-nyata-menjadi-representasi-komputasional",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/data-observation-feature-dan-target",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/pecahan-desimal-dan-persentase",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/variable-expression-dan-equation",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/function-dari-input-ke-output",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/coordinate-graph-dan-perubahan",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/powers-logarithms-dan-sigma",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/latihan",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/kuis",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/diskusi",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/referensi",
             "/participant-ai-lab-gen",
             "/participant-ai-lab-llm",
             "/participant-ai-lab-vlm",
@@ -1451,23 +1501,20 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
 
                 } else if (path.startsWith("/participant-ai-lab-math") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    window.__aiLabLoader.load('ai-math-for-ai').then(function() {
-                    if (path === "/participant-ai-lab-math" && typeof window.initAiLabMathOverview === "function") {
-                        window.initAiLabMathOverview();
+                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika")) {
+                        window.__aiLabLoader.load('math-learning').then(function() {
+                            if (path === "/participant-ai-lab-math" && typeof window.initMathOverviewRoute === "function") {
+                                window.initMathOverviewRoute();
+                                return;
+                            }
+                            if (typeof window.initMathLearningRoute === "function") {
+                                window.initMathLearningRoute();
+                            }
+                        }).catch(function(error) {
+                            console.error('[Math Learning] Runtime gagal dimuat.', error);
+                        });
+                        return;
                     }
-                    if ((path === "/participant-ai-lab-math-intro" || path === "/participant-ai-lab-math-linear-algebra" || path === "/participant-ai-lab-math-statistics" || path === "/participant-ai-lab-math-probability" || path === "/participant-ai-lab-math-calculus" || path === "/participant-ai-lab-math-optimization" || path === "/participant-ai-lab-math-case-study") && typeof window.initAiLabMathLesson === "function") {
-                        window.initAiLabMathLesson();
-                    }
-                    if (path === "/participant-ai-lab-math-practice" && typeof window.initAiLabMathPractice === "function") {
-                        window.initAiLabMathPractice();
-                    }
-                    if (path === "/participant-ai-lab-math-quiz" && typeof window.initAiLabMathQuiz === "function") {
-                        window.initAiLabMathQuiz();
-                    }
-                    if (path === "/participant-ai-lab-math-discussion" && typeof window.initAiLabMathDiscussion === "function") {
-                        window.initAiLabMathDiscussion();
-                    }
-                    });
                 } else if (path.startsWith("/participant-ai-lab-") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
                     if (typeof window.initCoursePlaceholder === "function") {
