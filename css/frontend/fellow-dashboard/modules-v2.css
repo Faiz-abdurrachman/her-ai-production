@@ -1,0 +1,506 @@
+/* Modules V2 - Ultra Premium Architecture UI */
+.modules-v2-catalog .module-content {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.modules-v2-catalog :is(.v2-modules-header, .v2-module-section, .v2-card-grid) {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.v2-modules-header {
+    margin-bottom: 32px;
+}
+
+.v2-pills-nav {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 40px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    /* Hide scrollbar */
+    scrollbar-width: none;
+}
+.v2-pills-nav::-webkit-scrollbar { display: none; }
+
+.v2-pills-nav button {
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 100px;
+    color: #555b70;
+    cursor: pointer;
+    font: 700 0.95rem 'Plus Jakarta Sans', sans-serif;
+    padding: 10px 24px;
+    white-space: nowrap;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.v2-pills-nav button:hover {
+    border-color: rgba(246, 51, 146, 0.4);
+    background: rgba(246, 51, 146, 0.02);
+    color: #1a1d2d;
+    transform: translateY(-2px);
+}
+
+.v2-pills-nav button.active {
+    background: var(--fellow-pink);
+    border-color: var(--fellow-pink);
+    color: white;
+    box-shadow: 0 8px 16px rgba(246, 51, 146, 0.25), inset 0 2px 4px rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+.v2-module-section {
+    margin-bottom: 64px;
+    display: none;
+}
+
+.v2-module-section.active {
+    display: block;
+    animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.v2-section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+}
+
+.v2-section-head h2 {
+    color: #1a1d2d;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+
+.v2-section-head span {
+    color: #6e7387;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.v2-card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+}
+
+@media (max-width: 1024px) {
+    .v2-card-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+}
+
+@media (max-width: 768px) {
+    .v2-card-grid { grid-template-columns: 1fr; }
+    .v2-section-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* THE PREMIUM CARD */
+.v2-course-card {
+    text-decoration: none;
+    color: inherit;
+    background: #f4f5f7; /* Matching the screenshot's soft gray */
+    border: 1px solid rgba(255, 255, 255, 0.6); /* Edge lighting */
+    border-radius: 28px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.02),
+        inset 0 2px 0 rgba(255, 255, 255, 1); /* Inner glass rim */
+}
+
+/* Card Hover Effects - Pink Glassmorphism */
+.v2-course-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 235, 245, 0.95) 100%);
+    border-color: rgba(246, 51, 146, 0.4);
+    box-shadow: 
+        0 30px 60px rgba(246, 51, 146, 0.12),
+        0 12px 24px rgba(246, 51, 146, 0.08),
+        inset 0 2px 0 rgba(255, 255, 255, 1),
+        inset 0 0 40px rgba(246, 51, 146, 0.08); /* Stronger pink inner glow */
+}
+
+/* Full pink overlay sweep inside the card */
+.v2-course-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(246, 51, 146, 0.08) 0%, rgba(246, 51, 146, 0) 100%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    transition: opacity 0.5s ease;
+}
+
+.v2-course-card:hover::before {
+    opacity: 1;
+}
+
+.v2-course-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Make entire card clickable */
+.v2-card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+}
+
+/* ICON WRAPPER */
+.v2-icon-wrap {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px; /* Squircle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin-bottom: 24px;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+}
+
+.v2-course-card:hover .v2-icon-wrap {
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.08), inset 0 2px 4px rgba(255,255,255,0.8);
+}
+
+/* BADGE */
+.v2-badge {
+    border-radius: 100px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.v2-course-card:hover .v2-badge {
+    transform: translateX(6px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* TYPOGRAPHY */
+.v2-course-card h3 {
+    color: #1a1d2d;
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    line-height: 1.4;
+    transition: color 0.3s ease;
+}
+
+.v2-course-card:hover h3 {
+    color: #000000;
+}
+
+.v2-course-card p {
+    color: #6e7387;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0 0 24px 0;
+    flex-grow: 1;
+    font-weight: 500;
+}
+
+/* LINK ACTION */
+.v2-card-link {
+    color: var(--fellow-pink);
+    font-weight: 800;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.v2-course-card:hover .v2-card-link {
+    gap: 14px;
+    color: #d81b60; /* Darker pink on hover */
+}
+
+/* =========================================
+   THEMES (Matching the screenshot precisely)
+   ========================================= */
+
+/* Pink / Core / GenAI / Vision */
+.v2-theme-pink .v2-icon-wrap { background: #fce4ec; color: #e91e63; }
+.v2-theme-pink .v2-badge { background: #fce4ec; color: #e91e63; border: 1px solid rgba(233,30,99,0.15); }
+
+/* Green / Foundation / Multimodal / Health / Geo / Science / Ops */
+.v2-theme-green .v2-icon-wrap { background: #e8f5e9; color: #388e3c; }
+.v2-theme-green .v2-badge { background: #e8f5e9; color: #388e3c; border: 1px solid rgba(76,175,80,0.15); }
+
+/* Purple / Machine Learning / Language / Infra / Mgt / Industry */
+.v2-theme-purple .v2-icon-wrap { background: #f3e5f5; color: #8e24aa; }
+.v2-theme-purple .v2-badge { background: #f3e5f5; color: #8e24aa; border: 1px solid rgba(156,39,176,0.15); }
+
+/* Blue / Deep Learning / Data / Product / Design */
+.v2-theme-blue .v2-icon-wrap { background: #e3f2fd; color: #1976d2; }
+.v2-theme-blue .v2-badge { background: #e3f2fd; color: #1976d2; border: 1px solid rgba(33,150,243,0.15); }
+
+/* Orange / Advanced / Agent / Business / Culture */
+.v2-theme-orange .v2-icon-wrap { background: #fff3e0; color: #f57c00; }
+.v2-theme-orange .v2-badge { background: #fff3e0; color: #f57c00; border: 1px solid rgba(255,152,0,0.15); }
+
+/* V2 Detail Page Layout (Anti AI Slop) */
+.v2-detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 32px;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .v2-detail-layout { grid-template-columns: 1fr; }
+}
+
+/* Premium Glass Hero */
+.v2-glass-hero {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 12px 32px rgba(0, 0, 0, 0.04);
+    border-radius: 28px;
+    padding: 40px;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+
+.v2-glass-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle at center, rgba(246, 51, 146, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.v2-glass-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+.v2-glass-hero img {
+    width: 140px;
+    height: 140px;
+    border-radius: 24px;
+    object-fit: cover;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+    transform: perspective(800px) rotateY(10deg);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.v2-glass-hero:hover img {
+    transform: perspective(800px) rotateY(0deg) scale(1.05);
+}
+
+.v2-hero-content h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1a1d2d;
+    margin: 8px 0 16px 0;
+    letter-spacing: -0.5px;
+}
+
+.v2-hero-content span.category {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #e91e63;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.v2-hero-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #1a1d2d;
+    color: white;
+    padding: 14px 28px;
+    border-radius: 100px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 24px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.v2-hero-action:hover {
+    background: #d81b60;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(233, 30, 99, 0.25);
+}
+
+/* Premium Panel */
+.v2-premium-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 32px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 8px 24px rgba(0,0,0,0.03);
+}
+
+.v2-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding-bottom: 16px;
+}
+
+.v2-panel-head h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1a1d2d;
+    margin: 0 0 4px 0;
+}
+
+.v2-panel-head p {
+    color: #6e7387;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Glass Lesson Card */
+.v2-lesson-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 600px) {
+    .v2-lesson-grid { grid-template-columns: 1fr; }
+}
+
+.v2-lesson-card {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.v2-lesson-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+    border-color: rgba(233, 30, 99, 0.2);
+}
+
+.v2-lesson-card.is-done {
+    background: #f8fff9;
+    border-color: rgba(76, 175, 80, 0.2);
+}
+
+.v2-lesson-num {
+    position: absolute;
+    top: -12px; right: 24px;
+    font-size: 3rem;
+    font-weight: 900;
+    color: rgba(0,0,0,0.03);
+    z-index: 0;
+    transition: color 0.3s ease;
+}
+.v2-lesson-card:hover .v2-lesson-num {
+    color: rgba(233, 30, 99, 0.08);
+}
+
+.v2-lesson-card > * { position: relative; z-index: 1; }
+
+.v2-lesson-card h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin: 12px 0 8px 0;
+    color: #1a1d2d;
+}
+
+.v2-lesson-card p {
+    font-size: 0.85rem;
+    color: #6e7387;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    flex: 1;
+}
+
+.v2-lesson-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #e91e63;
+    text-decoration: none;
+    padding: 8px 16px;
+    background: rgba(233, 30, 99, 0.05);
+    border-radius: 100px;
+    align-self: flex-start;
+    transition: all 0.3s ease;
+}
+
+.v2-lesson-card:hover .v2-lesson-action {
+    background: #e91e63;
+    color: white;
+}
+
+.v2-lesson-card.is-done .v2-lesson-action {
+    color: #388e3c;
+    background: rgba(76, 175, 80, 0.1);
+}
+.v2-lesson-card.is-done:hover .v2-lesson-action {
+    background: #388e3c;
+    color: white;
+}
+
+/* Sidebar Progress Card V2 */
+.v2-side-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 8px 24px rgba(0,0,0,0.03);
+}
+
+.v2-side-card h2 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin: 0 0 24px 0;
+    color: #1a1d2d;
+}
