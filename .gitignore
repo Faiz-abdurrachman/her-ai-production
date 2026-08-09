@@ -28,6 +28,16 @@ docs-nazril/
 
 # Production branch hygiene
 *.md
+!/materi2/
+/materi2/*
+!/materi2/math for ai/
+/materi2/math for ai/*
+!/materi2/math for ai/kenapa ai butuh matematika/
+!/materi2/math for ai/kenapa ai butuh matematika/*.md
+/materi2/math for ai/kenapa ai butuh matematika/qa-report*.md
+/materi2/math for ai/kenapa ai butuh matematika/qa-manifest*.json
+*.bak
+*.zip
 /handover/
 /docs/
 /reports/
