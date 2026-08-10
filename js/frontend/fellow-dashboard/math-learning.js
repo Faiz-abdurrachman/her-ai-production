@@ -53,6 +53,28 @@
                 { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 02', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
                 { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 02', file: 'referensi.md', type: 'references', icon: 'fa-book-bookmark' }
             ]
+        }),
+        createSubmodule({
+            id: '03', slug: 'statistics-for-ai',
+            title: 'Statistics for AI: Membaca Pola dan Variasi Data',
+            sourceBase: '/materi2/math%20for%20ai/statistik/',
+            routeBase: '#/participant-ai-lab-math/statistics-for-ai',
+            storageKey: 'heraiMathLearningSubmodule03', topicCount: 8,
+            items: [
+                { id: 'info', slug: '', short: 'Ikhtisar', title: 'Statistics for AI: Membaca Pola dan Variasi Data', file: 'final/00-informasi-submodul.md', type: 'info', icon: 'fa-chart-pie' },
+                { id: 'topic-01', slug: 'dari-matrix-ke-dataset-statistik', short: 'Matrix ke dataset', title: 'Dari Matrix ke Dataset Statistik', file: '01-dari-matrix-ke-dataset-statistik.md', type: 'topic', icon: 'fa-table' },
+                { id: 'topic-02', slug: 'mean-median-mode', short: 'Mean, median, mode', title: 'Mean, Median, Mode: Membaca Pusat Data dengan Tepat', file: '02-mean-median-mode.md', type: 'topic', icon: 'fa-bullseye' },
+                { id: 'topic-03', slug: 'range-variance-standard-deviation', short: 'Range, variance, SD', title: 'Range, Variance, Standard Deviation: Membaca Seberapa Menyebar Data', file: '03-range-variance-standard-deviation.md', type: 'topic', icon: 'fa-arrows-left-right' },
+                { id: 'topic-04', slug: 'distribution-dan-histogram', short: 'Distribution & histogram', title: 'Distribution dan Histogram: Melihat Pola Seluruh Data', file: '04-distribution-dan-histogram.md', type: 'topic', icon: 'fa-chart-column' },
+                { id: 'topic-05', slug: 'percentile-quartile-iqr', short: 'Percentile, quartile, IQR', title: 'Percentile, Quartile, dan IQR', file: '05-percentile-quartile-iqr.md', type: 'topic', icon: 'fa-grip-lines' },
+                { id: 'topic-06', slug: 'outlier-sinyal-untuk-diperiksa', short: 'Outlier', title: 'Outlier: Sinyal untuk Diperiksa', file: '06-outlier-sinyal-untuk-diperiksa.md', type: 'topic', icon: 'fa-circle-exclamation' },
+                { id: 'topic-07', slug: 'covariance-correlation-association', short: 'Covariance, correlation', title: 'Covariance, Correlation, dan Association', file: '07-covariance-correlation-association.md', type: 'topic', icon: 'fa-chart-line' },
+                { id: 'topic-08', slug: 'data-quality-untuk-ai', short: 'Data quality', title: 'Data Quality untuk AI', file: '08-data-quality-untuk-ai.md', type: 'topic', icon: 'fa-broom' },
+                { id: 'practice', slug: 'latihan', short: 'Latihan', title: 'Latihan Submodul 03', file: 'final/latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
+                { id: 'quiz', slug: 'kuis', short: 'Kuis', title: 'Kuis Submodul 03', file: 'final/kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
+                { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 03', file: 'final/diskusi.md', type: 'discussion', icon: 'fa-comments' },
+                { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 03', file: 'final/referensi.md', type: 'references', icon: 'fa-book-bookmark' }
+            ]
         })
     ]);
     const CONTENT = Object.freeze(SUBMODULES.flatMap(submodule => submodule.items));
@@ -286,15 +308,16 @@
         const markerPattern = '(STATIC VISUAL|INTERACTIVE VISUAL|NUMBER MANIPULATOR|COMPARE VIEW|STEP-BY-STEP REVEAL)';
         for (let index = 0; index < lines.length;) {
             const directMarker = lines[index].match(new RegExp(`^(#{1,6})\\s+(?:\\d+\\.\\s+)?\\[${markerPattern}\\]\\s+(.+)$`));
-            const specHeading = lines[index].match(/^(#{1,6})\s+(?:\d+\.\s+)?(?:Visual\s*\/\s*Interactive Specification|Visualization Spec)(?:\s+\d+)?\s*[—-]\s*(.+)$/i);
+            const specHeading = lines[index].match(/^(#{1,6})\s+(?:\d+\.\s+)?(?:Visual\s*\/\s*Interactive Specification|Visualization Spec|Interactive Specification)(?:\s+\d+)?\s*(?:[—-]\s*(.*))?$/i);
             let markerType = directMarker?.[2] || '';
             let markerTitle = directMarker?.[3]?.trim() || specHeading?.[2]?.trim() || '';
             let markerLevel = (directMarker?.[1] || specHeading?.[1] || '').length;
             if (specHeading) {
                 for (let lookahead = index + 1; lookahead < Math.min(lines.length, index + 6); lookahead += 1) {
-                    const label = lines[lookahead].match(new RegExp(`\\[${markerPattern}\\]`, 'i'));
+                    const label = lines[lookahead].match(new RegExp(`\\[${markerPattern}\\](?:\\s+(.*))?`, 'i'));
                     if (label) {
                         markerType = label[1];
+                        if (!markerTitle && label[2]) markerTitle = label[2].trim();
                         break;
                     }
                 }
@@ -615,12 +638,69 @@
                 link.rel = 'noopener noreferrer';
             }
         });
+        transformPedagogicalMarkers(container);
         specs.forEach((spec, index) => {
             const placeholder = container.querySelector(`[data-math-interactive="${index}"]`);
             if (placeholder) placeholder.replaceWith(createInteractive(spec));
         });
         removeAuthoringSections(container);
         if (getCurrentContext()?.item.type === 'practice') collapseExerciseSupport(container);
+    }
+
+    function transformPedagogicalMarkers(container) {
+        const headings = [...container.querySelectorAll('h2, h3, h4')];
+        headings.forEach(heading => {
+            const text = heading.textContent.toLowerCase();
+            let cardType = null;
+            let icon = '';
+            let newTitle = '';
+
+            if (text.includes('prediksi')) {
+                cardType = 'prediction'; icon = 'fa-lightbulb';
+                newTitle = heading.textContent.replace(/^[\d\.\s]*Prediksi[\s—-]*(.*)$/i, 'Prediksi: $1').replace(/:\s*$/, '');
+            } else if (text.includes('miskonsepsi')) {
+                cardType = 'misconception'; icon = 'fa-triangle-exclamation';
+                newTitle = heading.textContent.replace(/^[\d\.\s]*Miskonsepsi[\s—-]*(.*)$/i, 'Miskonsepsi: $1').replace(/:\s*$/, '');
+            } else if (text.includes('math reading skill')) {
+                cardType = 'reading-skill'; icon = 'fa-book-open';
+                newTitle = heading.textContent.replace(/^[\d\.\s]*Math Reading Skill[\s—-]*(.*)$/i, 'Cara Membaca: $1').replace(/:\s*$/, '');
+            } else if (text.includes('change one thing')) {
+                cardType = 'reasoning'; icon = 'fa-sliders';
+                newTitle = heading.textContent.replace(/^[\d\.\s]*Change One Thing[\s—-]*(.*)$/i, 'Eksplorasi: $1').replace(/:\s*$/, '');
+            } else if (text.includes('mastery check')) {
+                cardType = 'mastery'; icon = 'fa-list-check';
+                newTitle = heading.textContent.replace(/^[\d\.\s]*Mastery Check[\s—-]*(.*)$/i, 'Mastery Check: $1').replace(/:\s*$/, '');
+            } else if (text.includes('intuisi')) {
+                cardType = 'intuition'; icon = 'fa-lightbulb';
+                newTitle = heading.textContent.replace(/^[\d\.\s]*Intuisi[\s—-]*(.*)$/i, 'Intuisi: $1').replace(/:\s*$/, '');
+            } else if (text.includes('try it yourself') || text.includes('coba sendiri')) {
+                cardType = 'activity'; icon = 'fa-pen-to-square';
+                newTitle = heading.textContent.replace(/^[\d\.\s]*(Try It Yourself|Coba Sendiri)[\s—-]*(.*)$/i, 'Coba Sendiri: $2').replace(/:\s*$/, '');
+            }
+
+            if (cardType) {
+                const level = parseInt(heading.tagName[1]);
+                const siblings = [];
+                let next = heading.nextElementSibling;
+                while (next) {
+                    if (/^H[1-6]$/.test(next.tagName)) {
+                        if (parseInt(next.tagName[1]) <= level) break;
+                    }
+                    siblings.push(next);
+                    next = next.nextElementSibling;
+                }
+                if (siblings.length === 0 && !newTitle.trim()) return;
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = `math-learning-interactive-card math-learning-card-${cardType}`;
+                wrapper.style.marginTop = '24px';
+                wrapper.style.marginBottom = '24px';
+                wrapper.innerHTML = `<h4 style="display:flex; align-items:center; gap:8px;"><i class="fas ${icon}" aria-hidden="true" style="color:var(--math-accent);"></i> ${newTitle}</h4>`;
+                
+                siblings.forEach(el => wrapper.appendChild(el));
+                heading.replaceWith(wrapper);
+            }
+        });
     }
 
     function removeAuthoringSections(container) {
@@ -774,7 +854,117 @@
             'sigma-calculator': sigmaTemplate(),
             'square-of-sum-vs-sum-of-squares': squareSumTemplate(),
             'read-a-future-ai-formula': stepTemplate([mathHtml('\\frac{1}{n}\\sum_{i=1}^{n}(y^{(i)}-\\hat{y}^{(i)})^2', true),'Baca selisih target dan prediction.','Square setiap selisih.','Sum across observations.','Divide by n.','Formula panjang dapat dibaca sebagai urutan operasi, bukan satu blok simbol.']),
-            ...linearAlgebraInteractiveTemplates(spec)
+            ...linearAlgebraInteractiveTemplates(spec),
+            ...statisticsInteractiveTemplates(spec)
+        };
+    }
+
+    function statisticsInteractiveTemplates(spec) {
+        return {
+            'matrix-semantic-table': stateToggleTemplate([
+                ['Matrix view', `${mathHtml('\\mathbf{X} = \\begin{bmatrix} 0.80 & 0.75 \\\\ 0.60 & 0.625 \\\\ 0.90 & 1.00 \\\\ 0.70 & 0.50 \\end{bmatrix}', true)}<p>Hanya angka dalam grid. Tidak memiliki makna tanpa konteks.</p>`, 'Angka murni.'],
+                ['Statistical dataset view', `<div style="overflow-x: auto;"><table class="math-learning-data-table"><thead><tr><th>Participant</th><th>Quiz Ratio (q)</th><th>Completion Ratio (c)</th></tr></thead><tbody><tr><td>Alya</td><td>0.80</td><td>0.75</td></tr><tr><td>Bima</td><td>0.60</td><td>0.625</td></tr><tr><td>Citra</td><td>0.90</td><td>1.00</td></tr><tr><td>Dewi</td><td>0.70</td><td>0.50</td></tr></tbody></table></div><p>n = 4 observations. Baris = observasi; Kolom = variabel.</p>`, 'Dataset dengan semantics dan label.']
+            ]),
+            'pilih-row-atau-column': `<div class="math-learning-compare"><div class="math-learning-interactive-card" style="flex: 2; overflow-x: auto;"><table class="math-learning-data-table" data-interactive-table><thead><tr><th data-col="participant" style="cursor: pointer;">Participant</th><th data-col="q" style="cursor: pointer;">Quiz Ratio (q)</th><th data-col="c" style="cursor: pointer;">Completion Ratio (c)</th><th data-col="t" style="cursor: pointer;">Study Duration (t)</th></tr></thead><tbody><tr data-row="1" style="cursor: pointer;"><td data-col="participant">Alya</td><td data-col="q">0.80</td><td data-col="c">0.75</td><td data-col="t">45</td></tr><tr data-row="2" style="cursor: pointer;"><td data-col="participant">Bima</td><td data-col="q">0.60</td><td data-col="c">0.625</td><td data-col="t">30</td></tr><tr data-row="3" style="cursor: pointer;"><td data-col="participant">Citra</td><td data-col="q">0.90</td><td data-col="c">1.00</td><td data-col="t">55</td></tr><tr data-row="4" style="cursor: pointer;"><td data-col="participant">Dewi</td><td data-col="q">0.70</td><td data-col="c">0.50</td><td data-col="t">40</td></tr></tbody></table></div><div class="math-learning-interactive-card" style="flex: 1;"><h4 data-table-selection-title>Pilih baris atau kolom</h4><p data-table-selection-desc>Klik salah satu baris untuk melihat observasi, atau salah satu judul kolom untuk melihat variabel.</p></div></div>`,
+            'numerical-vs-categorical-vs-identifier': roleSorter(['participant_id = 104', 'study_duration_min = 40', 'track = NLP', 'completion_ratio = 0.50'], ['Identifier', 'Numerical', 'Categorical']),
+            'change-the-observational-unit': stateToggleTemplate([
+                ['Participant view', `<div style="overflow-x: auto;"><table class="math-learning-data-table"><thead><tr><th>participant</th><th>study_duration_min</th></tr></thead><tbody><tr><td>Alya</td><td>45</td></tr><tr><td>Bima</td><td>30</td></tr><tr><td>Citra</td><td>55</td></tr><tr><td>Dewi</td><td>40</td></tr></tbody></table></div><p>Satu baris mewakili <strong>satu participant</strong>.</p>`, 'Unit observasi adalah participant.'],
+                ['Session view (Illustrative)', `<div style="overflow-x: auto;"><table class="math-learning-data-table"><thead><tr><th>participant</th><th>session</th><th>study_duration_min</th></tr></thead><tbody><tr><td>Alya</td><td>1</td><td>20</td></tr><tr><td>Alya</td><td>2</td><td>25</td></tr><tr><td>Bima</td><td>1</td><td>30</td></tr><tr><td>Citra</td><td>1</td><td>25</td></tr><tr><td>Citra</td><td>2</td><td>30</td></tr><tr><td>Dewi</td><td>1</td><td>40</td></tr></tbody></table></div><p>Satu baris mewakili <strong>satu session</strong>. Participant bisa muncul berkali-kali.</p>`, 'Unit observasi adalah session.']
+            ]),
+            'data-reading-skill': stepTemplate([
+                mathHtml('q_3=0.90', true),
+                mathHtml('q', true) + ' → variable quiz ratio',
+                'subscript 3 → observation ke-3',
+                'observation ke-3 → Citra',
+                '0.90 → nilai quiz ratio Citra',
+                'Makna → 9/10 quiz correct pada canonical data.<br><br><span class="math-learning-preview-note">Peringatan: 0.90 adalah ratio quiz, bukan otomatis probability.</span>'
+            ]),
+            
+            // Topic 02
+            'mean-median-mode-pada-number-line': `<div class="math-learning-interactive-card" style="text-align:center;"><h4>Pusat Data pada Number Line</h4><p>Tiga ukuran pusat (Mean, Median, Mode) tidak selalu berada di titik yang sama.</p><div style="position:relative; width:100%; height:60px; margin-top:20px; border-bottom:2px solid var(--math-border);"><div style="position:absolute; bottom:-10px; left:10%; width:80%; border-bottom:2px solid #ccc;"></div><div style="position:absolute; bottom:0; left:30%; width:20px; height:20px; background:var(--math-ink); border-radius:50%; transform:translateX(-50%);"></div><div style="position:absolute; bottom:0; left:30%; width:20px; height:20px; background:var(--math-ink); border-radius:50%; transform:translate(-50%, -25px);"></div><span style="position:absolute; bottom:55px; left:30%; transform:translateX(-50%); font-size:12px; font-weight:bold;">Mode (paling tinggi)</span><div style="position:absolute; bottom:0; left:45%; width:2px; height:45px; background:var(--math-accent);"></div><span style="position:absolute; bottom:50px; left:45%; transform:translateX(-50%); font-size:12px; font-weight:bold; color:var(--math-accent);">Median (tengah observasi)</span><div style="position:absolute; bottom:0; left:60%; width:2px; height:45px; background:#c9166c;"></div><span style="position:absolute; bottom:50px; left:60%; transform:translateX(-50%); font-size:12px; font-weight:bold; color:#c9166c;">Mean (titik seimbang)</span></div></div>`,
+            'change-one-extreme-value': `<div class="math-learning-interactive-card"><label class="math-learning-control">Ubah nilai observasi ke-4 (Eksperimen Sensitivitas)<input type="range" min="45" max="150" step="5" value="55" data-stat-extreme><output>55</output></label><div style="margin-top:20px; display:flex; gap:20px; text-align:center;"><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Mean</h4><strong data-stat-mean style="font-size:24px; color:#c9166c;">42.5</strong></div><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Median</h4><strong data-stat-median style="font-size:24px; color:var(--math-accent);">42.5</strong></div></div><p style="margin-top:15px; font-size:14px;"><strong>Data:</strong> 30, 40, 45, <span data-stat-extreme-val>55</span></p><div class="math-learning-feedback" style="display:block;">Mean memakai besar setiap nilai. Median terutama menggunakan posisi setelah data diurutkan.</div></div>`,
+            'build-the-median': stepTemplate([
+                'Initial state:<br>'+mathHtml('12,\\ 4,\\ 9,\\ 5,\\ 20', true),
+                'Urutkan data dari kecil ke besar:<br>'+mathHtml('4,\\ 5,\\ 9,\\ 12,\\ 20', true),
+                'Cari posisi tengah (n=5, ganjil, posisi ke-3):<br>'+mathHtml('4,\\ 5,\\ \\mathbf{9},\\ 12,\\ 20', true),
+                '<strong>Median = 9</strong><br><br><span class="math-learning-preview-note">Untuk jumlah genap, ambil rata-rata dari dua nilai tengah.</span>'
+            ]),
+            'which-statistic': `<div class="math-learning-compare"><div class="math-learning-interactive-card"><h4>Data numerik dengan nilai ekstrem</h4><p>Contoh: Gaji 99 karyawan 5 juta, 1 direktur 500 juta.</p><button type="button" class="math-learning-choice" style="width:100%; margin-top:10px;" data-choice-reveal="Median lebih tahan terhadap nilai ekstrem.">Gunakan Median</button></div><div class="math-learning-interactive-card"><h4>Data kategorikal dominan</h4><p>Contoh: Track terbanyak di HerAI adalah NLP.</p><button type="button" class="math-learning-choice" style="width:100%; margin-top:10px;" data-choice-reveal="Mode digunakan untuk melihat kategori yang paling sering muncul.">Gunakan Mode</button></div></div>`,
+            
+            // Topic 03
+            'center-vs-spread': compareReveal('Center Sama, Spread Beda', 'Contoh A: 4, 5, 5, 6 (Mean 5)<br>Range: 2', 'Center Beda, Spread Sama', 'Contoh B: 14, 15, 15, 16 (Mean 15)<br>Range: 2', 'Pusat (Center) lokasi data berbeda, tetapi tingkat penyebaran (Spread) bisa sama.'),
+            'dari-deviasi-ke-variance': stepTemplate([
+                'Data: 4, 6, 8 (Mean = 6)',
+                'Deviasi dari Mean: (4-6)=-2, (6-6)=0, (8-6)=2',
+                'Squared Deviasi: (-2)²=4, 0²=0, 2²=4',
+                'Variance = (4+0+4) / 3 = 2.67'
+            ]),
+            'change-one-observation': (!spec || !spec.source || spec.source.toLowerCase().includes('variance'))
+                ? `<div class="math-learning-interactive-card"><label class="math-learning-control">Ubah nilai durasi Citra (awalnya 55)<input type="range" min="20" max="100" step="5" value="55" data-stat-obs-var><output>55</output></label><div style="margin-top:20px; display:flex; gap:20px; text-align:center;"><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Mean</h4><strong data-stat-mean style="font-size:24px; color:var(--math-accent);">42.5</strong></div><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Variance (σ²)</h4><strong data-stat-variance style="font-size:24px; color:#c9166c;">78.13</strong></div><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Standard Deviation (σ)</h4><strong data-stat-sd style="font-size:24px; color:var(--math-accent);">8.84</strong></div></div><p style="margin-top:15px; font-size:14px;"><strong>Data:</strong> 45, 30, <span data-stat-obs-val>55</span>, 40</p><div class="math-learning-feedback" style="display:block;">Spread mengukur seberapa jauh data tersebar dari pusatnya. Perhatikan bagaimana nilai ekstrem meningkatkan variance!</div></div>`
+                : `<div class="math-learning-interactive-card"><label class="math-learning-control">Ubah quiz ratio (awalnya 0.60)<input type="range" min="0.10" max="0.90" step="0.10" value="0.60" data-stat-obs-perc><output>0.60</output></label><div style="margin-top:20px; display:flex; gap:20px; text-align:center;"><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Q1 (25th)</h4><strong data-stat-q1 style="font-size:24px; color:#c9166c;">0.65</strong></div><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Q2 / Median</h4><strong data-stat-q2 style="font-size:24px; color:#c9166c;">0.75</strong></div><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Q3 (75th)</h4><strong data-stat-q3 style="font-size:24px; color:#c9166c;">0.85</strong></div><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>IQR</h4><strong data-stat-iqr style="font-size:24px; color:var(--math-accent);">0.20</strong></div></div><p style="margin-top:15px; font-size:14px;"><strong>Data:</strong> <span data-stat-perc-val>0.60</span>, 0.70, 0.80, 0.90</p><div class="math-learning-feedback" style="display:block;">Percentile dan Quartile sangat robust terhadap data ekstrem.</div></div>`,
+            'variance-vs-standard-deviation-unit': compareReveal('Variance', 'Memiliki unit kuadrat (misal: menit² atau unit²). Berguna untuk perhitungan matematika lanjutan.', 'Standard Deviation', 'Dikembalikan ke unit asli (misal: menit). Sangat intuitif untuk interpretasi deviasi rata-rata dari mean.', 'SD = √Variance.'),
+            
+            // Topic 04
+            'dot-plot-histogram': stepTemplate([
+                'Setiap titik mewakili satu observation.',
+                'Titik-titik yang memiliki nilai berdekatan mulai bertumpuk.',
+                'Kita kelompokkan titik-titik tersebut ke dalam "bin" atau keranjang.',
+                'Tinggi bar pada Histogram = Jumlah titik dalam bin tersebut.'
+            ]),
+            'draggable-bin-boundaries': `<div class="math-learning-interactive-card"><label class="math-learning-control">Geser titik mulai bin (Bin Offset)<input type="range" min="15" max="25" step="1" value="20" data-stat-bin-offset><output>20</output></label><div style="margin-top:20px;"><p style="font-size:14px; margin-bottom:10px;"><strong>Data (n=24):</strong> 23..63</p><div style="display:flex; align-items:flex-end; gap:4px; height:120px; border-bottom:2px solid var(--math-ink); padding-bottom:5px;" data-stat-hist-bars></div></div><div class="math-learning-feedback" style="display:block;">Perhatikan bagaimana tinggi bar berubah secara drastis (bin sensitivity) meskipun data raw sama persis!</div></div>`,
+            'same-data-two-histograms': stateToggleTemplate([
+                ['Binning A [20-70]', '<div class="math-learning-stat-box"><strong>Bins:</strong> [20,30), [30,40), [40,50), [50,60), [60,70]<br><strong>Counts:</strong> 2, 7, 8, 5, 2</div>', 'Shape terlihat memusat di tengah (unimodal).'],
+                ['Binning B [15-65]', '<div class="math-learning-stat-box"><strong>Bins:</strong> [15,25), [25,35), [35,45), [45,55), [55,65]<br><strong>Counts:</strong> 1, 4, 7, 8, 4</div>', 'Peak (puncak) bergeser ke kanan. Shape terlihat berbeda!']
+            ]),
+            'center-spread-shape': compareReveal('Center & Spread', 'Menjawab: Di mana pusatnya? Berapa rentangnya?', 'Shape', 'Menjawab: Apakah simetris? Apakah ada ekor (skew) panjang ke kanan/kiri? Apakah ada lebih dari satu puncak (bimodal)?', 'Histogram menunjukkan ketiganya (Center, Spread, Shape) sekaligus.'),
+            
+            // Topic 05
+            'ordered-strip-quartiles': stepTemplate([
+                '10, 15, 20, 25, 30, 35, 40, 45, 50 (Terurut)',
+                'Potong di tengah (Q2/Median): 30',
+                'Potong paruh bawah (Q1): 20',
+                'Potong paruh atas (Q3): 40',
+                'Setiap potongan memuat 25% data observasi.'
+            ]),
+            'percentile-locator': `<div class="math-learning-interactive-card"><label class="math-learning-control">Pilih Percentile ke-<input type="range" min="0" max="100" step="10" value="50" data-stat-percentile><output>50th</output></label><div style="margin-top:20px; text-align:center;"><div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Makna</h4><strong data-stat-percentile-desc style="font-size:18px; color:var(--math-accent);">50% observation bernilai ≤ angka ini.</strong></div></div><div class="math-learning-feedback" style="display:block;">Percentile ke-50 persis sama dengan Median.</div></div>`,
+            'percentage-vs-percentile': compareReveal('Percentage (%)', 'Rasio atau proporsi. Contoh: "Kamu menjawab benar 80% dari kuis." (Skor mutlak)', 'Percentile (th)', 'Peringkat relatif. Contoh: "Skormu berada di 80th percentile." (Skormu lebih baik dari 80% peserta lain)', 'Nilai 80% tidak sama dengan 80th percentile.'),
+            
+            // Topic 06
+            'quartiles-iqr-fences': stepTemplate([
+                'Q1 = 20, Q3 = 40',
+                'IQR (Interquartile Range) = Q3 - Q1 = 20',
+                'Lower Fence = Q1 - 1.5×IQR = -10',
+                'Upper Fence = Q3 + 1.5×IQR = 70',
+                'Nilai di luar [-10, 70] di-flag sebagai potential outlier.'
+            ]),
+            'inspect-flagged-record': `<div class="math-learning-interactive-card"><label class="math-learning-control">Ubah observasi ke-24 (awalnya 63)<input type="range" min="63" max="100" step="1" value="63" data-stat-outlier><output>63</output></label><div style="margin-top:20px; display:flex; gap:20px; text-align:center;"><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Lower Fence</h4><strong style="font-size:24px; color:var(--text);">13.5</strong></div><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Upper Fence</h4><strong style="font-size:24px; color:var(--text);">73.5</strong></div><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#fff3f3; border-radius:8px;"><h4>Flag</h4><strong data-stat-flag style="font-size:24px; color:#c9166c;">0</strong></div></div><div data-stat-inspect-result style="margin-top:20px; padding:15px; background:#f5f5f5; border-radius:8px; border-left:4px solid #c9166c;"><strong>Interpretation:</strong> <span data-stat-interp>Valid data (≤ 73.5)</span></div></div>`,
+            'before-vs-after-extreme': stateToggleTemplate([
+                ['Termasuk Outlier (Dirty)', '<div class="math-learning-stat-box">Mean = 85. SD = 140.</div>', 'Satu outlier mengacaukan keseluruhan metrik.'],
+                ['Tanpa Outlier (Clean)', '<div class="math-learning-stat-box">Mean = 40. SD = 12.</div>', 'Distribusi kembali representatif untuk typical participants.']
+            ]),
+            'boxplotfence-preview': `<div class="math-learning-interactive-card" style="text-align:center;"><h4>Anatomi Boxplot</h4><p>Visualisasi ringkas dari Five-Number Summary dan Fences.</p><div style="position:relative; width:100%; height:60px; margin-top:20px;"><div style="position:absolute; top:28px; left:10%; right:10%; height:4px; background:#ccc;"></div><div style="position:absolute; top:20px; left:30%; right:30%; height:20px; background:var(--math-surface); border:2px solid var(--math-ink);"></div><div style="position:absolute; top:15px; left:50%; width:4px; height:30px; background:var(--math-accent);"></div><div style="position:absolute; top:15px; left:10%; width:4px; height:30px; background:#ccc;"></div><div style="position:absolute; top:15px; left:90%; width:4px; height:30px; background:#ccc;"></div><span style="position:absolute; top:50px; left:10%; transform:translateX(-50%); font-size:10px;">Lower Fence</span><span style="position:absolute; top:50px; left:30%; transform:translateX(-50%); font-size:10px;">Q1</span><span style="position:absolute; top:50px; left:50%; transform:translateX(-50%); font-size:10px; font-weight:bold; color:var(--math-accent);">Median</span><span style="position:absolute; top:50px; left:70%; transform:translateX(-50%); font-size:10px;">Q3</span><span style="position:absolute; top:50px; left:90%; transform:translateX(-50%); font-size:10px;">Upper Fence</span></div></div>`,
+            
+            // Topic 07
+            'labeled-herai-scatterplot': `<div class="math-learning-interactive-card" style="text-align:center;"><h4>Scatterplot: Study Duration vs Quiz Completion</h4><div style="margin:20px; padding:20px; border-left:2px solid #ccc; border-bottom:2px solid #ccc; position:relative; height:100px;"><span style="position:absolute; bottom:-25px; left:50%; transform:translateX(-50%); font-size:12px;">Study Duration (X)</span><span style="position:absolute; top:50%; left:-25px; transform:translateY(-50%) rotate(-90deg); font-size:12px;">Quiz Completion (Y)</span><div style="position:absolute; bottom:20%; left:20%; width:10px; height:10px; background:var(--math-accent); border-radius:50%;"></div><div style="position:absolute; bottom:40%; left:45%; width:10px; height:10px; background:var(--math-accent); border-radius:50%;"></div><div style="position:absolute; bottom:70%; left:80%; width:10px; height:10px; background:var(--math-accent); border-radius:50%;"></div></div><p style="font-size:14px; text-align:left;">Setiap titik mewakili <strong>satu participant</strong> dengan sepasang (X, Y).</p></div>`,
+            'deviation-quadrants': stepTemplate([
+                'Kita plot titik di (X, Y).',
+                'Kita potong scatterplot dengan garis vertikal (Mean X) dan horizontal (Mean Y).',
+                'Terbentuk 4 Kuadran. Jika dominan Kuadran Kanan Atas dan Kiri Bawah → Positive Association.',
+                'Jika dominan Kiri Atas dan Kanan Bawah → Negative Association.'
+            ]),
+            'move-one-participant': `<div class="math-learning-interactive-card"><label class="math-learning-control">Ubah quiz Citra (awalnya 0.90)<input type="range" min="0.65" max="0.90" step="0.05" value="0.90" data-stat-citra-quiz><output>0.90</output></label><div style="margin-top:20px; display:flex; gap:20px; text-align:center;"><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Covariance</h4><strong data-stat-covar-val style="font-size:24px; color:#c9166c;">0.0171875</strong></div><div class="math-learning-stat-box" style="flex:1; padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Correlation (r)</h4><strong data-stat-corr-val style="font-size:24px; color:var(--math-accent);">0.8315</strong></div></div><p style="margin-top:15px; font-size:14px;"><strong>Data Quiz:</strong> 0.80, 0.60, <span data-stat-citra-val>0.90</span>, 0.70<br><strong>Data Completion:</strong> 0.75, 0.625, 1.00, 0.50</p><div class="math-learning-feedback" style="display:block;">Satu data ekstrem dapat menghancurkan correlation (bahkan menjadi negatif)!</div></div>`,
+            'minutes-vs-seconds': compareReveal('Covariance (Menit)', 'Contoh: 12.5 (Sulit membandingkan kekuatan asosiasi)', 'Covariance (Detik)', 'Contoh: 750. (Angka sangat besar padahal data sama)', 'Karena covariance sensitif terhadap unit, kita menstandarisasinya menjadi Correlation.'),
+            
+            // Topic 08
+            'canonical-controlled-corruption': stepTemplate([
+                'Dataset bersih (Canonical): Tidak ada missing values, tipe data tepat.',
+                'Controlled Corruption (Injeksi Error): 1 participant nilainya NULL.',
+                'Observe: Model AI gagal train atau yield biased weights.',
+                'Solusi: Data cleaning (Imputation/Removal) sebelum training.'
+            ]),
+            'data-quality-audit-dashboard': `<div class="math-learning-interactive-card"><h4>Data Quality Audit Dashboard</h4><p style="font-size:14px; margin-bottom:15px;">Pilih audit check untuk melihat temuan di corrupted audit copy:</p><div style="display:flex; flex-direction:column; gap:10px;"><button type="button" class="math-learning-choice" data-choice-reveal="A02 Quiz = 60. Ini pelanggaran scale (canonical ratio adalah 0-1). Ingat: Normalization tidak bisa memperbaiki makna jika datanya memang berbeda dimensi.">1. Check Scale Mismatch</button><button type="button" class="math-learning-choice" data-choice-reveal="A03 Completion = NA. Ini missing value (unavailable), BUKAN observed zero (0). Jangan disamakan!">2. Check Missingness</button><button type="button" class="math-learning-choice" data-choice-reveal="A04 Duration = '1.5 hours'. Mixed unit (sebelumnya menit). Unit repair harus dilakukan secara semantic, bukan asal impute.">3. Check Mixed Unit</button><button type="button" class="math-learning-choice" data-choice-reveal="A01 dan A05 memiliki nama yang sama. Ini candidate duplicate, TAPI repeated entity ≠ automatic duplicate (bisa saja 2 sesi yang berbeda). Perlu cek Observational Unit!">4. Check Duplicate Candidate</button><button type="button" class="math-learning-choice" data-choice-reveal="Participant Code (misal 1001) bertipe numerik, TAPI semantics-nya categorical nominal. Menghitung rata-rata Participant ID tidak ada gunanya.">5. Check Numeric Semantics</button><button type="button" class="math-learning-choice" data-choice-reveal="Target (misal: Lulus/Gagal) memiliki perbandingan 90:10. Ini Class Imbalance! Perhatikan: Class imbalance BUKAN sekadar uneven numerical feature distribution.">6. Check Target Imbalance</button></div></div>`,
+            'missing-vs-zero': compareReveal('Missing (NULL)', 'Data tidak dicatat. Participant mungkin sakit, atau sistem gagal.', 'Zero (0)', 'Data valid dicatat sebagai nol. Participant menjawab semua quiz salah.', 'Menyamakan NULL dengan 0 adalah bahaya besar untuk AI.'),
+            'scale-vs-semantics': `<div class="math-learning-interactive-card"><label class="math-learning-control">Pilih variabel fitur untuk ML<select data-stat-semantic><option value="id">Participant ID (1001, 1002)</option><option value="duration">Duration (Menit)</option><option value="zipcode">Zip Code (90210)</option></select></label><div style="margin-top:20px;"><div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4 data-stat-semantic-title>...</h4><strong data-stat-semantic-desc style="font-size:16px; color:var(--math-accent); font-weight:normal;">Pilih fitur di atas.</strong></div></div></div>`
         };
     }
 
@@ -1117,6 +1307,225 @@
         bindNumericInteractive(section, key, say);
         bindGraphInteractive(section, key, say);
         bindLinearAlgebraInteractive(section, key, say);
+        bindStatisticsInteractive(section, key, say);
+    }
+
+    function bindStatisticsInteractive(section, key, say) {
+        if (key === 'pilih-row-atau-column') {
+            const table = section.querySelector('[data-interactive-table]');
+            const title = section.querySelector('[data-table-selection-title]');
+            const desc = section.querySelector('[data-table-selection-desc]');
+            if (table && title && desc) {
+                table.querySelectorAll('tr[data-row]').forEach(tr => {
+                    tr.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        table.querySelectorAll('.is-selected').forEach(el => el.classList.remove('is-selected'));
+                        tr.classList.add('is-selected');
+                        const participant = tr.querySelector('[data-col="participant"]').textContent;
+                        title.textContent = `Satu observation: ${participant}`;
+                        desc.textContent = `Baris ini mencatat seluruh nilai (observed values) untuk participant ${participant}.`;
+                        say('Kamu telah memilih satu OBSERVATION.', 'success');
+                    });
+                });
+
+                table.querySelectorAll('th[data-col]').forEach(th => {
+                    th.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        table.querySelectorAll('.is-selected').forEach(el => el.classList.remove('is-selected'));
+                        table.querySelectorAll(`td[data-col="${th.dataset.col}"]`).forEach(td => td.classList.add('is-selected'));
+                        th.classList.add('is-selected');
+                        const varName = th.textContent;
+                        title.textContent = `Satu variable: ${varName}`;
+                        desc.textContent = `Kolom ini mencatat seluruh nilai untuk variabel ${varName} pada semua participant.`;
+                        say('Kamu telah memilih satu VARIABLE.', 'success');
+                    });
+                });
+            }
+        } else if (key === 'change-one-extreme-value') {
+            const range = section.querySelector('[data-stat-extreme]');
+            const output = section.querySelector('output');
+            const meanText = section.querySelector('[data-stat-mean]');
+            const medianText = section.querySelector('[data-stat-median]');
+            const valText = section.querySelector('[data-stat-extreme-val]');
+            if (range && output && meanText && medianText && valText) {
+                range.addEventListener('input', () => {
+                    const val = Number(range.value);
+                    output.textContent = val;
+                    valText.textContent = val;
+                    const sum = 30 + 40 + 45 + val;
+                    meanText.textContent = (sum / 4).toFixed(1);
+                    medianText.textContent = "42.5";
+                });
+            }
+        } else if (key === 'change-one-observation') {
+            const rangeVar = section.querySelector('[data-stat-obs-var]');
+            if (rangeVar) {
+                const output = section.querySelector('output');
+                const varianceText = section.querySelector('[data-stat-variance]');
+                const sdText = section.querySelector('[data-stat-sd]');
+                const valText = section.querySelector('[data-stat-obs-val]');
+                const meanText = section.querySelector('[data-stat-mean]');
+                
+                rangeVar.addEventListener('input', () => {
+                    const val = Number(rangeVar.value);
+                    output.textContent = val;
+                    valText.textContent = val;
+                    const mean = (45 + 30 + val + 40) / 4;
+                    if (meanText) meanText.textContent = mean.toFixed(1);
+                    const variance = (Math.pow(45-mean, 2) + Math.pow(30-mean, 2) + Math.pow(val-mean, 2) + Math.pow(40-mean, 2)) / 4;
+                    varianceText.textContent = variance.toFixed(2);
+                    sdText.textContent = Math.sqrt(variance).toFixed(4);
+                });
+            }
+            
+            const rangePerc = section.querySelector('[data-stat-obs-perc]');
+            if (rangePerc) {
+                const output = section.querySelector('output');
+                const q1Text = section.querySelector('[data-stat-q1]');
+                const q2Text = section.querySelector('[data-stat-q2]');
+                const q3Text = section.querySelector('[data-stat-q3]');
+                const iqrText = section.querySelector('[data-stat-iqr]');
+                const valText = section.querySelector('[data-stat-perc-val]');
+                
+                rangePerc.addEventListener('input', () => {
+                    const val = Number(rangePerc.value);
+                    output.textContent = val.toFixed(2);
+                    valText.textContent = val.toFixed(2);
+                    const arr = [val, 0.70, 0.80, 0.90].sort((a,b)=>a-b);
+                    const q1 = (arr[0] + arr[1]) / 2;
+                    const q2 = (arr[1] + arr[2]) / 2;
+                    const q3 = (arr[2] + arr[3]) / 2;
+                    q1Text.textContent = q1.toFixed(2);
+                    q2Text.textContent = q2.toFixed(2);
+                    q3Text.textContent = q3.toFixed(2);
+                    iqrText.textContent = (q3 - q1).toFixed(2);
+                });
+            }
+        } else if (key === 'draggable-bin-boundaries') {
+            const range = section.querySelector('[data-stat-bin-offset]');
+            if (range) {
+                const output = section.querySelector('output');
+                const barsContainer = section.querySelector('[data-stat-hist-bars]');
+                
+                const data = [23, 27, 30, 32, 33, 35, 37, 38, 38, 40, 42, 42, 45, 45, 47, 48, 48, 50, 52, 53, 55, 57, 60, 63];
+                
+                const updateHistogram = () => {
+                    const offset = Number(range.value);
+                    output.textContent = offset;
+                    
+                    const width = 10;
+                    const bins = [];
+                    // Create bins
+                    for (let i = 0; i < 5; i++) {
+                        bins.push(0);
+                    }
+                    
+                    data.forEach(val => {
+                        if (val >= offset && val <= offset + (5 * width)) {
+                            let binIdx = Math.floor((val - offset) / width);
+                            // Edge case for the absolute max value 63 if offset is 15 (63 is < 15+50=65) -> idx 4
+                            // If offset is 15 and val is 65, it would be idx 5. The canonical says [60,70] is inclusive.
+                            if (binIdx >= 5) binIdx = 4;
+                            bins[binIdx]++;
+                        }
+                    });
+                    
+                    const maxCount = Math.max(...bins) || 1;
+                    barsContainer.innerHTML = bins.map(count => {
+                        const h = (count / maxCount) * 100;
+                        return `<div style="flex:1; background:var(--math-accent); height:${h}%; min-height:5px; position:relative;" class="math-interactive-hist-bar"><span style="position:absolute; top:-20px; left:50%; transform:translateX(-50%); font-size:12px; font-weight:bold;" class="math-interactive-hist-count">${count}</span></div>`;
+                    }).join('');
+                };
+                range.addEventListener('input', updateHistogram);
+                updateHistogram(); // Initial call
+            }
+        } else if (key === 'percentile-locator') {
+            const range = section.querySelector('[data-stat-percentile]');
+            if (range) {
+                const output = section.querySelector('output');
+                const desc = section.querySelector('[data-stat-percentile-desc]');
+                range.addEventListener('input', () => {
+                    const val = Number(range.value);
+                    output.textContent = val + 'th';
+                    desc.textContent = `${val}% observation bernilai ≤ angka ini.`;
+                });
+            }
+        } else if (key === 'inspect-flagged-record') {
+            const range = section.querySelector('[data-stat-outlier]');
+            if (range) {
+                const output = section.querySelector('output');
+                const flagCount = section.querySelector('[data-stat-flag]');
+                const interpText = section.querySelector('[data-stat-interp]');
+                
+                range.addEventListener('input', () => {
+                    const val = Number(range.value);
+                    output.textContent = val;
+                    if (val > 73.5) {
+                        flagCount.textContent = '1';
+                        interpText.textContent = `Potential outlier detected! Action: inspect`;
+                    } else {
+                        flagCount.textContent = '0';
+                        interpText.textContent = `Valid data (≤ 73.5)`;
+                    }
+                });
+            }
+        } else if (key === 'move-one-participant') {
+            const range = section.querySelector('[data-stat-citra-quiz]');
+            if (range) {
+                const output = section.querySelector('output');
+                const covarText = section.querySelector('[data-stat-covar-val]');
+                const corrText = section.querySelector('[data-stat-corr-val]');
+                const valText = section.querySelector('[data-stat-citra-val]');
+                
+                range.addEventListener('input', () => {
+                    const val = Number(range.value);
+                    output.textContent = val.toFixed(2);
+                    valText.textContent = val.toFixed(2);
+                    
+                    const q = [0.80, 0.60, val, 0.70];
+                    const s = [0.75, 0.625, 1.00, 0.50];
+                    const meanQ = q.reduce((a,b)=>a+b)/4;
+                    const meanS = s.reduce((a,b)=>a+b)/4;
+                    
+                    let covar = 0;
+                    let varQ = 0;
+                    let varS = 0;
+                    for (let i=0; i<4; i++) {
+                        const dq = q[i] - meanQ;
+                        const ds = s[i] - meanS;
+                        covar += (dq * ds);
+                        varQ += (dq * dq);
+                        varS += (ds * ds);
+                    }
+                    covar = covar / 4;
+                    varQ = varQ / 4;
+                    varS = varS / 4;
+                    
+                    const corr = covar / Math.sqrt(varQ * varS);
+                    
+                    covarText.textContent = covar.toFixed(7);
+                    corrText.textContent = corr.toFixed(7);
+                });
+            }
+        } else if (key === 'scale-vs-semantics') {
+            const select = section.querySelector('[data-stat-semantic]');
+            if (select) {
+                const title = section.querySelector('[data-stat-semantic-title]');
+                const desc = section.querySelector('[data-stat-semantic-desc]');
+                select.addEventListener('change', () => {
+                    if (select.value === 'id') {
+                        title.textContent = 'Nominal / Identifier';
+                        desc.textContent = 'Angka ini hanya label. Menghitung rata-rata Participant ID tidak ada maknanya!';
+                    } else if (select.value === 'duration') {
+                        title.textContent = 'Numerical (Ratio)';
+                        desc.textContent = 'Valid untuk diukur mean, median, dan variansinya. Angka 0 menit berarti benar-benar tidak ada durasi.';
+                    } else if (select.value === 'zipcode') {
+                        title.textContent = 'Categorical (Nominal)';
+                        desc.textContent = 'Angka ini lokasi. Rata-rata dari dua kode pos tidak menghasilkan kode pos tengah yang valid.';
+                    }
+                });
+            }
+        }
     }
 
     function bindCommonInteractive(section, key, say) {
@@ -1179,6 +1588,8 @@
                     ? 'Durasi dan jumlah benar adalah quantity. Postal code adalah identifier/kategori. Readiness code membutuhkan definisi scale sebelum jarak angkanya ditafsirkan.'
                     : key === 'meaning-tagger'
                         ? 'Hanya predicted_probability yang secara eksplisit boleh dibaca sebagai chance. Nilai 0.75 lain mengikuti semantics masing-masing.'
+                        : key === 'numerical-vs-categorical-vs-identifier'
+                            ? 'participant_id adalah identifier; duration dan ratio adalah numerical; track adalah categorical. Identifier yang berupa digit tidak otomatis bermakna kuantitatif.'
                         : 'Untuk task predict mastery: participant_id adalah identifier; mastery_after_material adalah target; metric lain hanya candidate feature/context sesuai definisi task.';
                 say(special, 'success');
             });
@@ -1676,15 +2087,15 @@
     }
 
     function renderQuiz(markdown, container) {
-        const chunks = String(markdown).split(/^# Soal\s+(\d+)\s*$/gm);
+        const chunks = String(markdown).split(/^# (?:Soal\s+)?(\d+)[^\n]*\n/gm);
         const questions = [];
         for (let i=1;i<chunks.length;i+=2) {
             const number=Number(chunks[i]),body=chunks[i+1].split(/^---\s*$/m)[0];
-            const answer=(body.match(/\*\*(?:Jawaban benar|Correct answer):\*\*\s*([A-D])/)||[])[1];
+            const answer=(body.match(/\*\*(?:Jawaban benar|Correct answer|Jawaban):\*\*\s*([A-D])/)||[])[1];
             const optionMatches=[...body.matchAll(/^([A-D])\.\s+(.+?)(?=\s{2}$|$)/gm)];
             const firstOption=optionMatches[0]?.index ?? body.length;
             const prompt=body.slice(0,firstOption).trim();
-            const rationaleStart=body.search(/^\*\*(?:Jawaban benar|Correct answer|Mengapa|Rationale|Perhitungan|A salah|A benar)/m);
+            const rationaleStart=body.search(/^\*\*(?:Jawaban benar|Correct answer|Jawaban|Mengapa|Rationale|Perhitungan|A salah|A benar)/m);
             const rationale=rationaleStart>=0?body.slice(rationaleStart):'';
             questions.push({number,prompt,options:optionMatches.map(match=>({letter:match[1],text:match[2].trim()})),answer,rationale});
         }

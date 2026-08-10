@@ -154,6 +154,19 @@ const router = {
         "/participant-ai-lab-math/linear-algebra/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math/linear-algebra/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math/linear-algebra/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/dari-matrix-ke-dataset-statistik": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/mean-median-mode": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/range-variance-standard-deviation": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/distribution-dan-histogram": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/percentile-quartile-iqr": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/outlier-sinyal-untuk-diperiksa": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/covariance-correlation-association": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/data-quality-untuk-ai": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/latihan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -358,6 +371,20 @@ const router = {
         "/participant-ai-lab-math/submodule-02/quiz": "/participant-ai-lab-math/linear-algebra/kuis",
         "/participant-ai-lab-math/submodule-02/discussion": "/participant-ai-lab-math/linear-algebra/diskusi",
         "/participant-ai-lab-math/submodule-02/references": "/participant-ai-lab-math/linear-algebra/referensi",
+        "/participant-ai-lab-math-statistics": "/participant-ai-lab-math/statistics-for-ai",
+        "/participant-ai-lab-math/submodule-03": "/participant-ai-lab-math/statistics-for-ai",
+        "/participant-ai-lab-math/submodule-03/topic-01": "/participant-ai-lab-math/statistics-for-ai/dari-matrix-ke-dataset-statistik",
+        "/participant-ai-lab-math/submodule-03/topic-02": "/participant-ai-lab-math/statistics-for-ai/mean-median-mode",
+        "/participant-ai-lab-math/submodule-03/topic-03": "/participant-ai-lab-math/statistics-for-ai/range-variance-standard-deviation",
+        "/participant-ai-lab-math/submodule-03/topic-04": "/participant-ai-lab-math/statistics-for-ai/distribution-dan-histogram",
+        "/participant-ai-lab-math/submodule-03/topic-05": "/participant-ai-lab-math/statistics-for-ai/percentile-quartile-iqr",
+        "/participant-ai-lab-math/submodule-03/topic-06": "/participant-ai-lab-math/statistics-for-ai/outlier-sinyal-untuk-diperiksa",
+        "/participant-ai-lab-math/submodule-03/topic-07": "/participant-ai-lab-math/statistics-for-ai/covariance-correlation-association",
+        "/participant-ai-lab-math/submodule-03/topic-08": "/participant-ai-lab-math/statistics-for-ai/data-quality-untuk-ai",
+        "/participant-ai-lab-math/submodule-03/practice": "/participant-ai-lab-math/statistics-for-ai/latihan",
+        "/participant-ai-lab-math/submodule-03/quiz": "/participant-ai-lab-math/statistics-for-ai/kuis",
+        "/participant-ai-lab-math/submodule-03/discussion": "/participant-ai-lab-math/statistics-for-ai/diskusi",
+        "/participant-ai-lab-math/submodule-03/references": "/participant-ai-lab-math/statistics-for-ai/referensi",
         "/x/fd6p1/mt": "/participant-mentor",
         "/x/fd6p1/t": "/participant-tasks",
         "/x/fd6p1/p": "/participant-projects",
@@ -497,7 +524,8 @@ const router = {
         }
         const submoduleBases = [
             "/participant-ai-lab-math/kenapa-ai-butuh-matematika",
-            "/participant-ai-lab-math/linear-algebra"
+            "/participant-ai-lab-math/linear-algebra",
+            "/participant-ai-lab-math/statistics-for-ai"
         ];
         const isRegisteredMathLesson = submoduleBases.some(submoduleBase => (
             path === submoduleBase || (path.startsWith(`${submoduleBase}/`) && this.routes[path])
@@ -702,6 +730,20 @@ const router = {
             "/participant-ai-lab-math/linear-algebra/kuis",
             "/participant-ai-lab-math/linear-algebra/diskusi",
             "/participant-ai-lab-math/linear-algebra/referensi",
+            "/participant-ai-lab-math-statistics",
+            "/participant-ai-lab-math/statistics-for-ai",
+            "/participant-ai-lab-math/statistics-for-ai/dari-matrix-ke-dataset-statistik",
+            "/participant-ai-lab-math/statistics-for-ai/mean-median-mode",
+            "/participant-ai-lab-math/statistics-for-ai/range-variance-standard-deviation",
+            "/participant-ai-lab-math/statistics-for-ai/distribution-dan-histogram",
+            "/participant-ai-lab-math/statistics-for-ai/percentile-quartile-iqr",
+            "/participant-ai-lab-math/statistics-for-ai/outlier-sinyal-untuk-diperiksa",
+            "/participant-ai-lab-math/statistics-for-ai/covariance-correlation-association",
+            "/participant-ai-lab-math/statistics-for-ai/data-quality-untuk-ai",
+            "/participant-ai-lab-math/statistics-for-ai/latihan",
+            "/participant-ai-lab-math/statistics-for-ai/kuis",
+            "/participant-ai-lab-math/statistics-for-ai/diskusi",
+            "/participant-ai-lab-math/statistics-for-ai/referensi",
             "/participant-ai-lab-gen",
             "/participant-ai-lab-llm",
             "/participant-ai-lab-vlm",
@@ -1547,7 +1589,7 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
 
                 } else if (path.startsWith("/participant-ai-lab-math") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra")) {
+                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra") || path.startsWith("/participant-ai-lab-math/statistics-for-ai")) {
                         window.__aiLabLoader.load('math-learning').then(function() {
                             if (path === "/participant-ai-lab-math" && typeof window.initMathOverviewRoute === "function") {
                                 window.initMathOverviewRoute();
