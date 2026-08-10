@@ -1004,55 +1004,124 @@
 
 .math-learning-quiz-list {
   display: grid;
-  gap: 22px;
+  gap: 18px;
 }
 
 .math-learning-quiz-card {
-  padding: 22px;
+  min-width: 0;
+  margin: 0;
+  padding: 24px 26px;
   border: 1px solid var(--math-border);
   border-radius: var(--math-radius);
-  background: #fff;
+  background: linear-gradient(145deg, #fff 72%, #fffafd 100%);
+  box-shadow: 0 8px 24px rgba(142, 48, 91, 0.04);
 }
 
 .math-learning-quiz-prompt {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   color: var(--math-ink);
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 8px;
-  font-weight: 800;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: start;
+  gap: 14px;
+  font-weight: 750;
 }
 
-.math-learning-quiz-prompt p,
-.math-learning-quiz-option p {
+.math-learning-quiz-number {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(231, 46, 135, 0.2);
+  border-radius: 13px;
+  background: var(--math-accent-soft);
+  color: var(--math-accent-strong);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+}
+
+.math-learning-quiz-question-copy,
+.math-learning-quiz-question-copy > .math-learning-markdown,
+.math-learning-quiz-option-copy,
+.math-learning-quiz-option-copy > .math-learning-markdown {
+  width: 100%;
+  min-width: 0;
+}
+
+.math-learning-markdown .math-learning-quiz-question-copy > p,
+.math-learning-markdown .math-learning-quiz-question-copy > .math-learning-markdown > p {
+  margin: 0 0 10px;
+  line-height: 1.62;
+}
+
+.math-learning-markdown .math-learning-quiz-question-copy > :last-child,
+.math-learning-markdown .math-learning-quiz-question-copy > .math-learning-markdown > :last-child,
+.math-learning-markdown .math-learning-quiz-option-copy > p,
+.math-learning-markdown .math-learning-quiz-option-copy > .math-learning-markdown > p {
   margin: 0;
   color: inherit;
 }
 
+.math-learning-markdown .math-learning-quiz-question-copy :is(ul, ol) {
+  margin: 8px 0 12px;
+}
+
+.math-learning-markdown .math-learning-quiz-question-copy li {
+  margin: 3px 0;
+  line-height: 1.55;
+}
+
+.math-learning-markdown .math-learning-quiz-question-copy .math-learning-math-display {
+  margin: 12px 0 14px;
+  padding: 13px 14px;
+}
+
 .math-learning-quiz-options {
   display: grid;
-  gap: 10px;
+  gap: 9px;
 }
 
 .math-learning-quiz-option {
-  min-height: 48px;
-  padding: 11px 13px;
+  min-width: 0;
+  min-height: 54px;
+  padding: 10px 13px;
   border: 1px solid var(--math-border);
   border-radius: var(--math-radius-sm);
+  background: #fff;
   color: var(--math-ink);
   cursor: pointer;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 18px 30px minmax(0, 1fr);
+  align-items: center;
+  gap: 11px;
+  transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
 }
 
-.math-learning-page label span,
-.math-learning-quiz-option > span {
+.math-learning-quiz-option:hover {
+  border-color: rgba(231, 46, 135, 0.36);
+  box-shadow: 0 5px 15px rgba(142, 48, 91, 0.05);
+}
+
+.math-learning-page .math-learning-quiz-option span {
   color: inherit;
 }
 
-.math-learning-quiz-option > span > strong {
+.math-learning-quiz-letter {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: #fff5fa;
   color: var(--math-accent-strong);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.math-learning-quiz-option-copy {
+  font-size: 14px;
+  line-height: 1.55;
 }
 
 .math-learning-quiz-option:has(input:checked) {
@@ -1060,19 +1129,101 @@
   background: var(--math-accent-soft);
 }
 
+.math-learning-quiz-option:has(input:checked) .math-learning-quiz-letter {
+  background: var(--math-accent);
+  color: #fff;
+}
+
+.math-learning-quiz-option.is-correct {
+  border-color: rgba(32, 122, 87, 0.46);
+  background: var(--math-success-soft);
+}
+
+.math-learning-quiz-option.is-correct .math-learning-quiz-letter {
+  background: var(--math-success);
+  color: #fff;
+}
+
+.math-learning-quiz-option.is-incorrect {
+  border-color: rgba(170, 52, 69, 0.46);
+  background: var(--math-danger-soft);
+}
+
+.math-learning-quiz-option.is-incorrect .math-learning-quiz-letter {
+  background: var(--math-danger);
+  color: #fff;
+}
+
 .math-learning-quiz-option input {
   width: 18px;
   height: 18px;
-  margin-top: 3px;
+  margin: 0;
   accent-color: var(--math-accent);
 }
 
 .math-learning-quiz-review {
-  margin-top: 14px;
-  padding: 14px;
+  margin-top: 16px;
+  padding: 15px 16px;
+  border-left: 4px solid var(--math-info);
   border-radius: var(--math-radius-sm);
   background: var(--math-info-soft);
   color: var(--math-info);
+}
+
+.math-learning-quiz-review > strong {
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.math-learning-quiz-review.is-correct {
+  border-left-color: var(--math-success);
+  background: var(--math-success-soft);
+  color: var(--math-success);
+}
+
+.math-learning-quiz-review.is-incorrect {
+  border-left-color: var(--math-danger);
+  background: var(--math-danger-soft);
+  color: var(--math-danger);
+}
+
+.math-learning-markdown .math-learning-quiz-review > .math-learning-markdown {
+  line-height: 1.6;
+}
+
+.math-learning-markdown .math-learning-quiz-review > .math-learning-markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.math-learning-quiz-actions {
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+.math-learning-quiz-card:focus {
+  outline: 3px solid rgba(231, 46, 135, 0.25);
+  outline-offset: 3px;
+}
+
+.math-learning-root[data-math-content-type="quiz"] .math-learning-lesson-hero {
+  grid-template-columns: minmax(0, 1.55fr) minmax(220px, 0.75fr);
+  min-height: 300px;
+}
+
+.math-learning-root[data-math-content-type="quiz"] .math-learning-lesson-hero .lesson-hero-copy {
+  gap: 13px;
+}
+
+.math-learning-root[data-math-content-type="quiz"] .math-learning-lesson-hero h1 {
+  max-width: 21ch;
+  font-size: clamp(2.15rem, 3.35vw, 3rem);
+  line-height: 1.04;
+}
+
+.math-learning-root[data-math-content-type="quiz"] .math-learning-lesson-hero img {
+  max-height: 250px;
 }
 
 .math-learning-status-card .module-side-head {
@@ -1137,6 +1288,11 @@
     padding: 24px 20px;
   }
 
+  .math-learning-root[data-math-content-type="quiz"] .math-learning-lesson-hero {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+
   .math-learning-lesson-hero .lesson-hero-copy {
     padding: 0;
   }
@@ -1147,6 +1303,16 @@
 
   .math-learning-lesson-hero h1 {
     font-size: clamp(1.7rem, 8vw, 2.45rem);
+  }
+
+  .math-learning-root[data-math-content-type="quiz"] .math-learning-lesson-hero h1 {
+    max-width: none;
+    font-size: clamp(1.8rem, 8vw, 2.15rem);
+    line-height: 1.05;
+  }
+
+  .math-learning-root[data-math-content-type="quiz"] .math-learning-lesson-hero p {
+    -webkit-line-clamp: 2;
   }
 
   .math-learning-article {
@@ -1178,6 +1344,35 @@
 
   .math-learning-diagnostic-result.is-complete {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .math-learning-quiz-card {
+    padding: 18px 16px;
+  }
+
+  .math-learning-quiz-prompt {
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 11px;
+  }
+
+  .math-learning-quiz-number {
+    width: 38px;
+    height: 38px;
+  }
+
+  .math-learning-quiz-option {
+    grid-template-columns: 18px 28px minmax(0, 1fr);
+    padding: 11px;
+    gap: 9px;
+  }
+
+  .math-learning-quiz-letter {
+    width: 28px;
+    height: 28px;
+  }
+
+  .math-learning-quiz-actions .math-learning-action {
+    flex: 1 1 150px;
   }
 
   .math-learning-diagnostic-score {
