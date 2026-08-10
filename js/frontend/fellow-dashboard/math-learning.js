@@ -1,24 +1,62 @@
 (function() {
     'use strict';
 
-    const BASE_PATH = '/materi2/math%20for%20ai/kenapa%20ai%20butuh%20matematika/';
-    const STORAGE_KEY = 'heraiMathLearningSubmodule01';
-    const RUNTIME_VERSION = '20260810-quiz-layout';
-    const SUBMODULE_ROUTE = '#/participant-ai-lab-math/kenapa-ai-butuh-matematika';
-    const CONTENT = Object.freeze([
-        { id: 'info', short: 'Ikhtisar', title: 'Kenapa AI Butuh Matematika? + Mathematical Readiness', route: SUBMODULE_ROUTE, file: '00-informasi-submodul.md', type: 'info', icon: 'fa-compass' },
-        { id: 'topic-01', short: 'Dunia nyata → representasi', title: 'Dunia Nyata Menjadi Representasi Komputasional', route: `${SUBMODULE_ROUTE}/dunia-nyata-menjadi-representasi-komputasional`, file: '01-dunia-nyata-menjadi-representasi.md', type: 'topic', icon: 'fa-shapes' },
-        { id: 'topic-02', short: 'Data, observation, feature, target', title: 'Data, Observation, Feature, dan Target', route: `${SUBMODULE_ROUTE}/data-observation-feature-dan-target`, file: '02-data-observation-feature-target.md', type: 'topic', icon: 'fa-table-columns' },
-        { id: 'topic-03', short: 'Pecahan, desimal, persentase', title: 'Pecahan, Desimal, dan Persentase', route: `${SUBMODULE_ROUTE}/pecahan-desimal-dan-persentase`, file: '03-refresh-angka-pecahan-desimal-persentase.md', type: 'topic', icon: 'fa-percent' },
-        { id: 'topic-04', short: 'Variable, expression, equation', title: 'Variable, Expression, dan Equation', route: `${SUBMODULE_ROUTE}/variable-expression-dan-equation`, file: '04-variable-expression-equation.md', type: 'topic', icon: 'fa-square-root-variable' },
-        { id: 'topic-05', short: 'Function: input → output', title: 'Function: Dari Input ke Output', route: `${SUBMODULE_ROUTE}/function-dari-input-ke-output`, file: '05-function-input-output.md', type: 'topic', icon: 'fa-arrow-right-arrow-left' },
-        { id: 'topic-06', short: 'Coordinate, graph, perubahan', title: 'Coordinate, Graph, dan Perubahan', route: `${SUBMODULE_ROUTE}/coordinate-graph-dan-perubahan`, file: '06-coordinate-graph-perubahan.md', type: 'topic', icon: 'fa-chart-line' },
-        { id: 'topic-07', short: 'Powers, logarithms, sigma', title: 'Powers, Logarithms, dan Sigma', route: `${SUBMODULE_ROUTE}/powers-logarithms-dan-sigma`, file: '07-powers-log-sigma.md', type: 'topic', icon: 'fa-superscript' },
-        { id: 'practice', short: 'Latihan', title: 'Latihan Submodul 01', route: `${SUBMODULE_ROUTE}/latihan`, file: 'latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
-        { id: 'quiz', short: 'Kuis', title: 'Kuis Submodul 01', route: `${SUBMODULE_ROUTE}/kuis`, file: 'kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
-        { id: 'discussion', short: 'Diskusi', title: 'Diskusi Submodul 01', route: `${SUBMODULE_ROUTE}/diskusi`, file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
-        { id: 'references', short: 'Referensi', title: 'Referensi Submodul 01', route: `${SUBMODULE_ROUTE}/referensi`, file: 'referensi.md', type: 'references', icon: 'fa-book-bookmark' }
+    const RUNTIME_VERSION = '20260810-learner-facing-v3';
+    const routeFor = (base, suffix) => suffix ? `${base}/${suffix}` : base;
+    const createSubmodule = config => Object.freeze({
+        ...config,
+        items: Object.freeze(config.items.map(item => Object.freeze({
+            ...item,
+            route: routeFor(config.routeBase, item.slug)
+        })))
+    });
+    const SUBMODULES = Object.freeze([
+        createSubmodule({
+            id: '01', slug: 'kenapa-ai-butuh-matematika',
+            title: 'Kenapa AI Butuh Matematika? + Mathematical Readiness',
+            sourceBase: '/materi2/math%20for%20ai/kenapa%20ai%20butuh%20matematika/',
+            routeBase: '#/participant-ai-lab-math/kenapa-ai-butuh-matematika',
+            storageKey: 'heraiMathLearningSubmodule01', topicCount: 7,
+            items: [
+                { id: 'info', slug: '', short: 'Ikhtisar', title: 'Kenapa AI Butuh Matematika? + Mathematical Readiness', file: '00-informasi-submodul.md', type: 'info', icon: 'fa-compass' },
+                { id: 'topic-01', slug: 'dunia-nyata-menjadi-representasi-komputasional', short: 'Dunia nyata → representasi', title: 'Dunia Nyata Menjadi Representasi Komputasional', file: '01-dunia-nyata-menjadi-representasi.md', type: 'topic', icon: 'fa-shapes' },
+                { id: 'topic-02', slug: 'data-observation-feature-dan-target', short: 'Data, observation, feature, target', title: 'Data, Observation, Feature, dan Target', file: '02-data-observation-feature-target.md', type: 'topic', icon: 'fa-table-columns' },
+                { id: 'topic-03', slug: 'pecahan-desimal-dan-persentase', short: 'Pecahan, desimal, persentase', title: 'Pecahan, Desimal, dan Persentase', file: '03-refresh-angka-pecahan-desimal-persentase.md', type: 'topic', icon: 'fa-percent' },
+                { id: 'topic-04', slug: 'variable-expression-dan-equation', short: 'Variable, expression, equation', title: 'Variable, Expression, dan Equation', file: '04-variable-expression-equation.md', type: 'topic', icon: 'fa-square-root-variable' },
+                { id: 'topic-05', slug: 'function-dari-input-ke-output', short: 'Function: input → output', title: 'Function: Dari Input ke Output', file: '05-function-input-output.md', type: 'topic', icon: 'fa-arrow-right-arrow-left' },
+                { id: 'topic-06', slug: 'coordinate-graph-dan-perubahan', short: 'Coordinate, graph, perubahan', title: 'Coordinate, Graph, dan Perubahan', file: '06-coordinate-graph-perubahan.md', type: 'topic', icon: 'fa-chart-line' },
+                { id: 'topic-07', slug: 'powers-logarithms-dan-sigma', short: 'Powers, logarithms, sigma', title: 'Powers, Logarithms, dan Sigma', file: '07-powers-log-sigma.md', type: 'topic', icon: 'fa-superscript' },
+                { id: 'practice', slug: 'latihan', short: 'Latihan', title: 'Latihan Submodul 01', file: 'latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
+                { id: 'quiz', slug: 'kuis', short: 'Kuis', title: 'Kuis Submodul 01', file: 'kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
+                { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 01', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
+                { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 01', file: 'referensi.md', type: 'references', icon: 'fa-book-bookmark' }
+            ]
+        }),
+        createSubmodule({
+            id: '02', slug: 'linear-algebra',
+            title: 'Linear Algebra: Representasi Data, Vektor, dan Matriks',
+            sourceBase: '/materi2/math%20for%20ai/02-linear-algebra/',
+            routeBase: '#/participant-ai-lab-math/linear-algebra',
+            storageKey: 'heraiMathLearningSubmodule02', topicCount: 8,
+            items: [
+                { id: 'info', slug: '', short: 'Ikhtisar', title: 'Linear Algebra: Representasi Data, Vektor, dan Matriks', file: '00-informasi-submodul.md', type: 'info', icon: 'fa-vector-square' },
+                { id: 'topic-01', slug: 'dari-scalar-ke-vector', short: 'Dari scalar ke vector', title: 'Dari Scalar ke Vector — Satu Peserta, Banyak Feature', file: '01-dari-scalar-ke-vector.md', type: 'topic', icon: 'fa-arrow-right-to-bracket' },
+                { id: 'topic-02', slug: 'membaca-vektor', short: 'Membaca vektor', title: 'Membaca Vektor — Komponen, Dimensi, Shape, dan Feature Order', file: '02-membaca-vektor.md', type: 'topic', icon: 'fa-list-ol' },
+                { id: 'topic-03', slug: 'operasi-vektor', short: 'Operasi vektor', title: 'Operasi Vektor — Penjumlahan, Pengurangan, dan Scalar Multiplication', file: '03-operasi-vektor.md', type: 'topic', icon: 'fa-plus-minus' },
+                { id: 'topic-04', slug: 'norm-dan-distance', short: 'Norm dan distance', title: 'Magnitude/Norm dan Distance — Mengukur Besar dan Kedekatan', file: '04-norm-dan-distance.md', type: 'topic', icon: 'fa-ruler-combined' },
+                { id: 'topic-05', slug: 'dot-product', short: 'Dot product', title: 'Dot Product — Menggabungkan Dua Vektor Secara Matematis', file: '05-dot-product.md', type: 'topic', icon: 'fa-circle-dot' },
+                { id: 'topic-06', slug: 'cosine-similarity', short: 'Cosine similarity', title: 'Cosine Similarity — Membandingkan Arah, Bukan Sekadar Besar', file: '06-cosine-similarity.md', type: 'topic', icon: 'fa-compass-drafting' },
+                { id: 'topic-07', slug: 'matrix', short: 'Matrix', title: 'Matrix — Banyak Observation dalam Satu Struktur', file: '07-matrix.md', type: 'topic', icon: 'fa-table-cells' },
+                { id: 'topic-08', slug: 'matrix-operations-multiplication', short: 'Matrix multiplication', title: 'Matrix Operations & Matrix Multiplication — Shape, Transformasi, dan AI Connection', file: '08-matrix-operations-multiplication.md', type: 'topic', icon: 'fa-table-cells-large' },
+                { id: 'practice', slug: 'latihan', short: 'Latihan', title: 'Latihan Submodul 02', file: 'latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
+                { id: 'quiz', slug: 'kuis', short: 'Kuis', title: 'Kuis Submodul 02', file: 'kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
+                { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 02', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
+                { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 02', file: 'referensi.md', type: 'references', icon: 'fa-book-bookmark' }
+            ]
+        })
     ]);
+    const CONTENT = Object.freeze(SUBMODULES.flatMap(submodule => submodule.items));
+    const SUBMODULE_ROUTE = SUBMODULES[0].routeBase;
 
     const LEGACY_ROUTES = Object.freeze({
         '/participant-ai-lab-math-intro': SUBMODULE_ROUTE.slice(1),
@@ -36,7 +74,21 @@
         '/participant-ai-lab-math/submodule-01/practice': CONTENT[8].route.slice(1),
         '/participant-ai-lab-math/submodule-01/quiz': CONTENT[9].route.slice(1),
         '/participant-ai-lab-math/submodule-01/discussion': CONTENT[10].route.slice(1),
-        '/participant-ai-lab-math/submodule-01/references': CONTENT[11].route.slice(1)
+        '/participant-ai-lab-math/submodule-01/references': CONTENT[11].route.slice(1),
+        '/participant-ai-lab-math-linear-algebra': SUBMODULES[1].routeBase.slice(1),
+        '/participant-ai-lab-math/submodule-02': SUBMODULES[1].routeBase.slice(1),
+        '/participant-ai-lab-math/submodule-02/topic-01': SUBMODULES[1].items[1].route.slice(1),
+        '/participant-ai-lab-math/submodule-02/topic-02': SUBMODULES[1].items[2].route.slice(1),
+        '/participant-ai-lab-math/submodule-02/topic-03': SUBMODULES[1].items[3].route.slice(1),
+        '/participant-ai-lab-math/submodule-02/topic-04': SUBMODULES[1].items[4].route.slice(1),
+        '/participant-ai-lab-math/submodule-02/topic-05': SUBMODULES[1].items[5].route.slice(1),
+        '/participant-ai-lab-math/submodule-02/topic-06': SUBMODULES[1].items[6].route.slice(1),
+        '/participant-ai-lab-math/submodule-02/topic-07': SUBMODULES[1].items[7].route.slice(1),
+        '/participant-ai-lab-math/submodule-02/topic-08': SUBMODULES[1].items[8].route.slice(1),
+        '/participant-ai-lab-math/submodule-02/practice': SUBMODULES[1].items[9].route.slice(1),
+        '/participant-ai-lab-math/submodule-02/quiz': SUBMODULES[1].items[10].route.slice(1),
+        '/participant-ai-lab-math/submodule-02/discussion': SUBMODULES[1].items[11].route.slice(1),
+        '/participant-ai-lab-math/submodule-02/references': SUBMODULES[1].items[12].route.slice(1)
     });
 
     let renderSequence = 0;
@@ -56,28 +108,30 @@
         return LEGACY_ROUTES[path] || path;
     }
 
-    function getCurrentItem() {
+    function getCurrentContext() {
         const path = currentPath();
-        return CONTENT.find(item => item.route.slice(1) === path) || CONTENT[0];
+        const submodule = SUBMODULES.find(entry => path === entry.routeBase.slice(1) || path.startsWith(`${entry.routeBase.slice(1)}/`));
+        const item = submodule?.items.find(entry => entry.route.slice(1) === path);
+        return submodule && item ? { submodule, item } : null;
     }
 
-    function readState() {
+    function readState(submodule) {
         try {
-            const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            const value = JSON.parse(localStorage.getItem(submodule.storageKey) || '{}');
             return { completed: Array.isArray(value.completed) ? value.completed : [] };
         } catch (error) {
             return { completed: [] };
         }
     }
 
-    function writeState(state) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ completed: [...new Set(state.completed)] }));
+    function writeState(submodule, state) {
+        localStorage.setItem(submodule.storageKey, JSON.stringify({ completed: [...new Set(state.completed)] }));
     }
 
-    function markComplete(id) {
-        const state = readState();
+    function markComplete(submodule, id) {
+        const state = readState(submodule);
         if (!state.completed.includes(id)) state.completed.push(id);
-        writeState(state);
+        writeState(submodule, state);
         return state;
     }
 
@@ -85,10 +139,16 @@
         const page = document.querySelector('.math-course-overview');
         if (!page) return;
 
-        const state = readState();
-        const completed = CONTENT.filter(item => state.completed.includes(item.id));
-        const progress = Math.round(completed.length / CONTENT.length * 100);
-        const firstIncomplete = CONTENT.find(item => !state.completed.includes(item.id));
+        const overview = SUBMODULES.map(submodule => {
+            const state = readState(submodule);
+            const completed = submodule.items.filter(item => state.completed.includes(item.id));
+            return { submodule, state, completed };
+        });
+        const completedCount = overview.reduce((total, entry) => total + entry.completed.length, 0);
+        const totalCount = overview.reduce((total, entry) => total + entry.submodule.items.length, 0);
+        const progress = Math.round(completedCount / totalCount * 100);
+        const firstIncomplete = overview.flatMap(entry => entry.submodule.items.map(item => ({ submodule: entry.submodule, item, state: entry.state })))
+            .find(entry => !entry.state.completed.includes(entry.item.id));
         const action = page.querySelector('[data-math-overview-action]');
         const progressCopy = page.querySelector('[data-math-overview-copy]');
         const donut = page.querySelector('[data-math-overview-donut]');
@@ -101,25 +161,24 @@
         if (donut) {
             donut.style.setProperty('--completed-end', `${progress}%`);
             donut.style.setProperty('--started-end', `${progress}%`);
-            donut.setAttribute('aria-label', `Progres preview Submodul 01: ${progress} persen`);
+            donut.setAttribute('aria-label', `Progres Math for AI: ${progress} persen`);
         }
 
         if (progressCopy) {
-            progressCopy.textContent = completed.length
-                ? `${completed.length} dari ${CONTENT.length} bagian selesai di perangkat ini.`
-                : `${CONTENT.length} bagian belajar siap dijelajahi di perangkat ini.`;
+            progressCopy.textContent = completedCount
+                ? `${completedCount} dari ${totalCount} bagian selesai di perangkat ini.`
+                : `${totalCount} bagian belajar dari dua submodul siap dijelajahi di perangkat ini.`;
         }
 
         if (action) {
-            action.href = firstIncomplete?.route || CONTENT[0].route;
+            action.href = firstIncomplete?.item.route || SUBMODULES[0].items[0].route;
             action.innerHTML = firstIncomplete
-                ? `Lanjutkan Submodul 01 <i class="fas fa-play" aria-hidden="true"></i>`
-                : `Buka Kembali Submodul 01 <i class="fas fa-rotate-right" aria-hidden="true"></i>`;
+                ? `Lanjutkan Submodul ${firstIncomplete.submodule.id} <i class="fas fa-play" aria-hidden="true"></i>`
+                : `Buka Kembali Math for AI <i class="fas fa-rotate-right" aria-hidden="true"></i>`;
         }
 
-        if (completed.length === CONTENT.length) {
-            page.querySelector('[data-math-submodule="01"]')?.classList.add('done');
-        }
+        overview.forEach(entry => page.querySelector(`[data-math-submodule="${entry.submodule.id}"]`)
+            ?.classList.toggle('done', entry.completed.length === entry.submodule.items.length));
     }
 
     function loadScriptOnce(src, key) {
@@ -170,6 +229,37 @@
         return meta;
     }
 
+    function stripLeadingAuthoringMetadata(markdown) {
+        const lines = String(markdown).split('\n');
+        const separatorIndex = lines.findIndex((line, index) => index < 24 && line.trim() === '---');
+        if (separatorIndex < 0) return String(markdown);
+        const header = lines.slice(0, separatorIndex);
+        const quoteStart = header.findIndex(line => /^>\s*/.test(line));
+        if (quoteStart < 0) return String(markdown);
+        const quoteBlock = header.slice(quoteStart);
+        const hasStructuredMetadata = quoteBlock.some(line => /^>\s*\*\*[^*]+:\*\*/.test(line));
+        if (!hasStructuredMetadata) return String(markdown);
+        return [...header.slice(0, quoteStart), ...lines.slice(separatorIndex + 1)].join('\n');
+    }
+
+    function cleanMetaValue(value) {
+        return String(value || '')
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+            .replace(/[*_`]/g, '')
+            .replace(/\s{2,}/g, ' ')
+            .trim();
+    }
+
+    function buildLearnerContext(meta) {
+        const entries = [
+            { key: 'prerequisite', label: 'Sebelum mulai', icon: 'fa-layer-group' },
+            { key: 'boundary', label: 'Batas pembahasan', icon: 'fa-shield-halved' },
+            { key: 'forward dependency', label: 'Lanjutan belajar', icon: 'fa-arrow-trend-up' }
+        ].filter(entry => meta[entry.key]);
+        if (!entries.length) return '';
+        return `<aside class="math-learning-context" aria-label="Konteks pembelajaran">${entries.map(entry => `<div class="math-learning-context-item"><i class="fas ${entry.icon}" aria-hidden="true"></i><div><strong>${entry.label}</strong><p>${escapeHtml(cleanMetaValue(meta[entry.key]))}</p></div></div>`).join('')}</aside>`;
+    }
+
     function extractLead(markdown, fallback) {
         const lines = String(markdown).split('\n');
         let pastMetadata = false;
@@ -193,20 +283,36 @@
         const lines = String(markdown).split('\n');
         const specs = [];
         const kept = [];
+        const markerPattern = '(STATIC VISUAL|INTERACTIVE VISUAL|NUMBER MANIPULATOR|COMPARE VIEW|STEP-BY-STEP REVEAL)';
         for (let index = 0; index < lines.length;) {
-            const marker = lines[index].match(/^##\s+\[(STATIC VISUAL|INTERACTIVE VISUAL|NUMBER MANIPULATOR|COMPARE VIEW|STEP-BY-STEP REVEAL)\]\s+(.+)$/);
-            if (!marker) {
+            const directMarker = lines[index].match(new RegExp(`^(#{1,6})\\s+(?:\\d+\\.\\s+)?\\[${markerPattern}\\]\\s+(.+)$`));
+            const specHeading = lines[index].match(/^(#{1,6})\s+(?:\d+\.\s+)?(?:Visual\s*\/\s*Interactive Specification|Visualization Spec)(?:\s+\d+)?\s*[—-]\s*(.+)$/i);
+            let markerType = directMarker?.[2] || '';
+            let markerTitle = directMarker?.[3]?.trim() || specHeading?.[2]?.trim() || '';
+            let markerLevel = (directMarker?.[1] || specHeading?.[1] || '').length;
+            if (specHeading) {
+                for (let lookahead = index + 1; lookahead < Math.min(lines.length, index + 6); lookahead += 1) {
+                    const label = lines[lookahead].match(new RegExp(`\\[${markerPattern}\\]`, 'i'));
+                    if (label) {
+                        markerType = label[1];
+                        break;
+                    }
+                }
+            }
+            if (!markerType) {
                 kept.push(lines[index]);
                 index += 1;
                 continue;
             }
             const specLines = [lines[index]];
             index += 1;
-            while (index < lines.length && !/^##\s+\[(STATIC VISUAL|INTERACTIVE VISUAL|NUMBER MANIPULATOR|COMPARE VIEW|STEP-BY-STEP REVEAL)\]/.test(lines[index]) && !/^#\s+/.test(lines[index])) {
+            while (index < lines.length) {
+                const heading = lines[index].match(/^(#{1,6})\s+/);
+                if (heading && heading[1].length <= markerLevel) break;
                 specLines.push(lines[index]);
                 index += 1;
             }
-            specs.push({ type: marker[1], title: marker[2].trim(), source: specLines.join('\n') });
+            specs.push({ type: markerType.toUpperCase(), title: markerTitle, source: specLines.join('\n') });
             kept.push('', `HERAI_INTERACTIVE_${specs.length - 1}`, '');
         }
         return { markdown: kept.join('\n'), specs };
@@ -513,26 +619,22 @@
             const placeholder = container.querySelector(`[data-math-interactive="${index}"]`);
             if (placeholder) placeholder.replaceWith(createInteractive(spec));
         });
-        collapseAuthoringSections(container);
-        if (getCurrentItem().type === 'practice') collapseExerciseSupport(container);
+        removeAuthoringSections(container);
+        if (getCurrentContext()?.item.type === 'practice') collapseExerciseSupport(container);
     }
 
-    function collapseAuthoringSections(container) {
-        const headings = [...container.querySelectorAll('h2')];
+    function removeAuthoringSections(container) {
+        const headings = [...container.querySelectorAll('h2, h3')];
         headings.forEach(heading => {
-            if (!/QA Notes|STOP CHECKPOINT/i.test(heading.textContent)) return;
-            const details = document.createElement('details');
-            details.className = 'math-learning-author-note';
-            const summary = document.createElement('summary');
-            summary.innerHTML = '<i class="fas fa-shield-check" aria-hidden="true"></i> Catatan QA sumber akademik';
-            const body = document.createElement('div');
-            body.className = 'math-learning-author-note-body';
-            heading.parentNode.insertBefore(details, heading);
-            details.append(summary, body);
+            if (!/QA Notes|STOP(?: CHECKPOINT| Gate)|Math Authoring Contract|Assessment Alignment|KaTeX\s*[—-]\s*(?:Supported Functions|Auto-render Extension)/i.test(heading.textContent)) return;
+            if (!heading.isConnected) return;
+            const level = Number(heading.tagName.slice(1));
             let node = heading;
-            while (node && (node === heading || node.tagName !== 'H2')) {
+            while (node) {
+                const nodeLevel = /^H[1-6]$/.test(node.tagName || '') ? Number(node.tagName.slice(1)) : 7;
+                if (node !== heading && nodeLevel <= level) break;
                 const next = node.nextSibling;
-                body.appendChild(node);
+                node.remove();
                 node = next;
             }
         });
@@ -600,7 +702,7 @@
 
     function createInteractive(spec) {
         const key = slugify(spec.title);
-        const section = interactiveShell(spec, interactiveTemplate(key));
+        const section = interactiveShell(spec, interactiveTemplate(key, spec));
         bindInteractive(section, key);
         return section;
     }
@@ -609,14 +711,23 @@
         return renderKatex(expression, Boolean(display));
     }
 
-    function interactiveTemplate(key) {
-        const templates = interactiveTemplates();
-        return templates[key] || `
-            <p>Gunakan panel ini untuk memprediksi hasil terlebih dahulu, lalu buka interpretasi yang disediakan.</p>
-            <div class="math-learning-button-row"><button class="math-learning-action is-primary" type="button" data-generic-reveal>Buka interpretasi</button></div>`;
+    function interactiveTemplate(key, spec) {
+        const templates = interactiveTemplates(spec);
+        if (templates[key]) return templates[key];
+        const initial = interactiveSpecFieldAny(spec.source, ['Initial state/data', 'Initial state', 'Initial vector', 'Initial data']);
+        const expected = interactiveSpecFieldAny(spec.source, ['Expected behavior', 'Expected message']);
+        const sourceFeedback = interactiveSpecFieldAny(spec.source, ['Feedback']);
+        const safety = interactiveSpecFieldAny(spec.source, ['Safety / interpretation note', 'Safety note', 'Safety']);
+        return `<div class="math-learning-spec-fallback">
+            ${initial ? `<div class="math-learning-interactive-card"><h4>Keadaan awal</h4>${renderMarkdown(initial, [])}</div>` : '<p>Prediksi hasil visual ini sebelum membuka urutan penjelasannya.</p>'}
+            <details class="math-learning-spec-details"><summary><i class="fas fa-layer-group" aria-hidden="true"></i> Buka visual langkah demi langkah</summary><div>
+                ${expected ? `<h4>Yang akan diamati</h4>${renderMarkdown(expected, [])}` : '<p>Bandingkan representasi, proses, dan interpretasinya secara berurutan.</p>'}
+                ${sourceFeedback ? `<h4>Feedback</h4>${renderMarkdown(sourceFeedback, [])}` : ''}
+                ${safety ? `<aside class="math-learning-spec-safety"><strong>Catatan interpretasi</strong>${renderMarkdown(safety, [])}</aside>` : ''}
+            </div></details></div>`;
     }
 
-    function interactiveTemplates() {
+    function interactiveTemplates(spec) {
         return {
             'real-world-representation': `<div class="math-learning-compare"><div class="math-learning-interactive-card"><h4>Alya di dunia nyata</h4><p>Seorang peserta dengan konteks, pengalaman, dan keadaan yang tidak sepenuhnya tertangkap sistem.</p></div><div class="math-learning-interactive-card"><h4>Yang direkam sistem</h4><ol data-representation-list></ol></div></div><div class="math-learning-button-row"><button class="math-learning-action is-primary" type="button" data-representation-next>Lihat apa yang direkam sistem</button></div>`,
             'rich-vs-compressed-representation': `<div class="math-learning-compare"><div class="math-learning-interactive-card"><h4>Representasi kaya</h4><strong>Quiz Score = 8/10</strong></div><div class="math-learning-interactive-card"><h4>Representasi ringkas</h4><strong>Quiz Result = Pass</strong></div></div><div class="math-learning-button-row">${['Berapa jawaban benar?','Apakah peserta lulus?','Bisakah membedakan 6/10 dan 10/10 jika keduanya Pass?'].map((q,i)=>`<button class="math-learning-choice" type="button" data-rich-question="${i}">${q}</button>`).join('')}</div>`,
@@ -662,8 +773,250 @@
             'anatomy-of-sigma': stepTemplate([mathHtml('\\sum_{i=1}^{4}x_i', true),'Σ adalah operation','i adalah index','1 dan 4 adalah lower/upper bounds',mathHtml('x_i', true) + '<p>adalah term</p>',mathHtml('x_1+x_2+x_3+x_4', true)]),
             'sigma-calculator': sigmaTemplate(),
             'square-of-sum-vs-sum-of-squares': squareSumTemplate(),
-            'read-a-future-ai-formula': stepTemplate([mathHtml('\\frac{1}{n}\\sum_{i=1}^{n}(y^{(i)}-\\hat{y}^{(i)})^2', true),'Baca selisih target dan prediction.','Square setiap selisih.','Sum across observations.','Divide by n.','Formula panjang dapat dibaca sebagai urutan operasi, bukan satu blok simbol.'])
+            'read-a-future-ai-formula': stepTemplate([mathHtml('\\frac{1}{n}\\sum_{i=1}^{n}(y^{(i)}-\\hat{y}^{(i)})^2', true),'Baca selisih target dan prediction.','Square setiap selisih.','Sum across observations.','Divide by n.','Formula panjang dapat dibaca sebagai urutan operasi, bukan satu blok simbol.']),
+            ...linearAlgebraInteractiveTemplates(spec)
         };
+    }
+
+    function interactiveSpecFieldAny(source, labels) {
+        for (const label of labels) {
+            const value = interactiveSpecField(source, label);
+            if (value) return value;
+        }
+        return '';
+    }
+
+    function linearAlgebraInteractiveTemplates(spec) {
+        return {
+            'scalar-cards-vector': stepTemplate([
+                '<div class="math-learning-scalar-pair"><span><small>quiz ratio</small><strong>q = 0.80</strong></span><span><small>completion ratio</small><strong>c = 0.75</strong></span></div>',
+                '<p><strong>Feature order:</strong> q → c</p>',
+                mathHtml('\\mathbf{x}^{(1)}=\\begin{bmatrix}0.80\\\\0.75\\end{bmatrix}', true),
+                '<p>Component 1 = quiz ratio; component 2 = completion ratio.</p><p class="math-learning-preview-note">Vector ini merepresentasikan selected participant features, bukan participant secara utuh.</p>'
+            ]),
+            'participant-switcher': participantVectorTemplate(),
+            'same-numbers-different-order': stateToggleTemplate([
+                ['Urutan benar', `${mathHtml('\\begin{bmatrix}0.80\\\\0.75\\end{bmatrix}', true)}<p><strong>[quiz ratio, completion ratio]</strong></p>`, 'Posisi pertama tetap quiz ratio; posisi kedua tetap completion ratio.'],
+                ['Urutan tertukar', `${mathHtml('\\begin{bmatrix}0.75\\\\0.80\\end{bmatrix}', true)}<p><strong>[quiz ratio, completion ratio]</strong></p>`, 'Angkanya sama, tetapi component positions berubah. Posisi pertama wajib tetap quiz ratio.']
+            ]),
+            'point-vs-vector-vs-participant': representationViewsTemplate(),
+            'add-one-feature-preview': stateToggleTemplate([
+                ['2 components', mathHtml('\\begin{bmatrix}0.80\\\\0.75\\end{bmatrix}\\in\\mathbb{R}^{2\\times1}', true), 'Dua ratio features memakai scale 0–1.'],
+                ['Tambah 45 menit', `${mathHtml('\\begin{bmatrix}0.80\\\\0.75\\\\45\\end{bmatrix}\\in\\mathbb{R}^{3\\times1}', true)}<p class="math-learning-preview-note">Feature ketiga memakai menit. Scale treatment perlu dipikirkan sebelum geometry atau distance digunakan.</p>`, '2 components → 3 components; dimension berubah, dan units kini mixed.']
+            ]),
+            'anatomy-of-a-vector': stateToggleTemplate([
+                ['Component 1', `${mathHtml('\\mathbf{v}=\\begin{bmatrix}\\color{#c9166c}{4}\\\\7\\\\2\\end{bmatrix}', true)}<p>v₁ = 4 · dimension tetap 3.</p>`, 'Kamu memilih component ke-1, bukan mengubah dimension.'],
+                ['Component 2', `${mathHtml('\\mathbf{v}=\\begin{bmatrix}4\\\\\\color{#c9166c}{7}\\\\2\\end{bmatrix}', true)}<p>v₂ = 7 · dimension tetap 3.</p>`, 'Kamu memilih component ke-2, bukan mengubah dimension.'],
+                ['Component 3', `${mathHtml('\\mathbf{v}=\\begin{bmatrix}4\\\\7\\\\\\color{#c9166c}{2}\\end{bmatrix}', true)}<p>v₃ = 2 · dimension tetap 3.</p>`, 'Kamu memilih component ke-3, bukan mengubah dimension.']
+            ]),
+            'observation-index-vs-feature-index': observationFeatureTemplate(),
+            'dimension-vs-numerical-values': compareReveal('Large values', '[1000, 2000] · dimension = 2', 'Small values', '[0.1, 0.2, 0.3] · dimension = 3', 'Dimension menghitung slots/components, bukan besar kecil values.'),
+            'shape-orientation-switch': shapeOrientationTemplate(),
+            'feature-order-bug-detector': stateToggleTemplate([
+                ['Schema aligned', `${mathHtml('\\mathbf{x}^{(2)}=\\begin{bmatrix}0.60\\\\0.625\\end{bmatrix}', true)}<p>quiz ratio → slot 1; completion ratio → slot 2.</p>`, 'Values dan feature order selaras.'],
+                ['Schema tertukar', `${mathHtml('\\begin{bmatrix}0.625\\\\0.60\\end{bmatrix}', true)}<p>completion ratio masuk slot quiz.</p>`, 'Numerically valid, semantically misaligned.']
+            ]),
+            'addremove-feature-slot': stateToggleTemplate([
+                ['2 slots', mathHtml('\\mathbb{R}^{2\\times1}', true), 'Dua components berarti dimension 2.'],
+                ['3 slots', `${mathHtml('\\mathbb{R}^{3\\times1}', true)}<p>Feature ketiga: study duration = 45 min.</p>`, 'Dimension 2→3; ratio dan minutes mempunyai units/scale berbeda.']
+            ]),
+            'component-wise-addition-builder': vectorOperationTemplate('add'),
+            'same-dimension-vs-same-schema': compareReveal('Aligned schemas', 'quiz ratio, completion ratio ↔ quiz ratio, completion ratio', 'Same dimension only', 'quiz ratio, completion ratio ↔ study minutes, age years', 'Arithmetic may be structurally possible, tetapi interpretation tidak valid tanpa aligned feature semantics.'),
+            'arrow-addition-head-to-tail': arrowAdditionTemplate(),
+            'scalar-multiplier': scalarMultiplierTemplate(),
+            'herai-difference-audit': stepTemplate([
+                '<p>Schema Alya dan Bima sama: [quiz ratio, completion ratio].</p>',
+                mathHtml('0.80-0.60=0.20', true),
+                '<p>Quiz ratio Alya lebih tinggi 0.20 pada signed difference ini.</p>',
+                mathHtml('0.75-0.625=0.125', true),
+                '<p>Completion ratio Alya lebih tinggi 0.125 pada signed difference ini.</p>',
+                mathHtml('\\mathbf{x}_{Alya}-\\mathbf{x}_{Bima}=\\begin{bmatrix}0.20\\\\0.125\\end{bmatrix}', true),
+                '<p class="math-learning-preview-note">Signed difference adalah vector—bukan distance dan bukan overall quality score.</p>'
+            ]),
+            'norm-sebagai-panjang-arrow': normStaticTemplate(),
+            'norm-component-sliders': normTemplate(),
+            'distance-builder': stepTemplate([
+                mathHtml('\\mathbf{u}=\\begin{bmatrix}1\\\\2\\end{bmatrix},\\quad\\mathbf{v}=\\begin{bmatrix}4\\\\6\\end{bmatrix}', true),
+                mathHtml('\\mathbf{u}-\\mathbf{v}=\\begin{bmatrix}-3\\\\-4\\end{bmatrix}', true),
+                mathHtml('(-3)^2+(-4)^2=9+16', true),
+                mathHtml('9+16=25', true),
+                mathHtml('d(\\mathbf{u},\\mathbf{v})=\\sqrt{25}=5', true),
+                '<p>Difference vector masih vector; Euclidean distance adalah scalar nonnegative.</p>'
+            ]),
+            'difference-vector-vs-distance': stateToggleTemplate([
+                ['x − y', `${mathHtml('\\mathbf{x}-\\mathbf{y}=\\begin{bmatrix}-3\\\\-4\\end{bmatrix}', true)}<p>Signed direction retained.</p>`, 'Difference vector menyimpan direction.'],
+                ['y − x', `${mathHtml('\\mathbf{y}-\\mathbf{x}=\\begin{bmatrix}3\\\\4\\end{bmatrix}', true)}${mathHtml('d(\\mathbf{x},\\mathbf{y})=d(\\mathbf{y},\\mathbf{x})=5', true)}`, 'Direction changed; separation did not.']
+            ]),
+            'herai-distance-explorer': distanceTemplate(true),
+            'scale-trap-2d-vs-3d-raw-features': stateToggleTemplate([
+                ['q + c', '<p>Distance memakai dua ratio features pada scale 0–1.</p>', 'Kontribusi q dan c dapat dibaca pada shared ratio scale.'],
+                ['q + c + minutes', '<p>Duration minutes dapat mendominasi squared contribution karena raw scale-nya jauh lebih besar.</p><p class="math-learning-preview-note">Dominance karena scale bukan bukti feature importance.</p>', 'Scaling/preprocessing perlu dipertimbangkan sebelum distance ditafsirkan.']
+            ]),
+            'dot-product-builder': stepTemplate([
+                mathHtml('\\mathbf{u}=\\begin{bmatrix}2\\\\3\\end{bmatrix},\\quad\\mathbf{v}=\\begin{bmatrix}4\\\\5\\end{bmatrix}', true),
+                '<p>Pair components: (2, 4) dan (3, 5).</p>',
+                `${mathHtml('2(4)=8', true)}${mathHtml('3(5)=15', true)}`,
+                mathHtml('8+15=23', true),
+                '<p><strong>Output 23 adalah scalar.</strong> Ia bukan similarity percentage.</p>'
+            ]),
+            'component-contribution-explorer': dotProductTemplate(),
+            'herai-weighted-score': weightedScoreTemplate(),
+            'geometric-dot-product-explorer': cosineTemplate('dot'),
+            'same-direction-different-magnitude': compareReveal('Candidate b', 'a=[1,1], b=[2,2] → aᵀb=4', 'Candidate c', 'a=[1,1], c=[10,10] → aᵀc=20', 'Directions sama, tetapi raw dot product sensitif terhadap magnitude.'),
+            'feature-order-audit': stateToggleTemplate([
+                ['Aligned', '<p>weight schema [quiz, completion] dipasangkan dengan feature schema [quiz, completion].</p>', 'Pairing semantics aligned.'],
+                ['Misaligned', '<p>weight schema [quiz, completion] dipasangkan dengan [completion, quiz].</p>', 'Math-valid result tidak berarti semantically valid result.']
+            ]),
+            'angle-vs-magnitude-explorer': cosineTemplate('both'),
+            'rotate-the-vector': cosineTemplate('cosine'),
+            'dot-vs-cosine-ranking': stateToggleTemplate([
+                ['Dot Product', `${mathHtml('\\mathbf{q}=[1,0],\\;\\mathbf{a}=[5,5],\\;\\mathbf{b}=[2,0.2]', true)}<p>Dot ranks A first.</p>`, 'Raw dot product mempertahankan sensitivity terhadap norm/magnitude.'],
+                ['Cosine Similarity', '<p>Cosine ranks B first karena direction B lebih dekat ke query.</p>', 'Ranking berubah ketika metric memisahkan direction dari magnitude.']
+            ]),
+            'herai-needsupport-matching': needSupportTemplate(),
+            'zero-vector-guard': zeroVectorTemplate(),
+            'feature-order-trap': featureOrderTrapTemplate(spec),
+            'stack-vectors-into-matrix': stackVectorsTemplate(),
+            'rowcolumn-highlighter': matrixExplorerTemplate(),
+            'shape-builder': matrixDatasetShapeTemplate(),
+            'entry-locator': matrixExplorerTemplate(),
+            'dataset-matrix-vs-material-matrix': compareReveal('Participant X ∈ R⁴ˣ²', 'Rows = participants; columns = quiz/completion ratios.', 'Material M ∈ R³ˣ²', 'Rows = materials; columns require separately defined material semantics.', 'Same number of columns does not guarantee identical meaning.'),
+            'transpose-animation': transposeTemplate(),
+            'matrix-multiplication-shape-gate': matrixShapeTemplate(),
+            'row-column-dot-product-reveal': matrixProductRevealTemplate(),
+            'elementwise-vs-matrix-product': stateToggleTemplate([
+                ['Elementwise', '<p>Same-position cells are multiplied; output keeps the same 2×2 layout.</p>', 'Elementwise multiplication pairs positions directly.'],
+                ['Matrix product', '<p>Each output cell comes from a row–column dot product.</p>', 'Matrix multiplication is not elementwise multiplication.']
+            ]),
+            'herai-batch-score-engine': batchScoreTemplate(),
+            'transformation-dimension-mapper': `${mathHtml('(4\\times2)(2\\times3)\\to(4\\times3)', true)}<div class="math-learning-compare"><div class="math-learning-interactive-card"><h4>Input</h4><p>4 participant rows × 2 input features</p></div><div class="math-learning-interactive-card"><h4>Output</h4><p>4 participant rows × 3 outputs</p></div></div><p class="math-learning-preview-note">Rows flow through; output semantics still must be defined.</p>`,
+            'order-matters': stateToggleTemplate([
+                ['A B', `${mathHtml('\\begin{bmatrix}1&2\\\\0&1\\end{bmatrix}\\begin{bmatrix}1&0\\\\3&1\\end{bmatrix}=\\begin{bmatrix}7&2\\\\3&1\\end{bmatrix}', true)}`, 'Row–column order A then B.'],
+                ['B A', `${mathHtml('\\begin{bmatrix}1&0\\\\3&1\\end{bmatrix}\\begin{bmatrix}1&2\\\\0&1\\end{bmatrix}=\\begin{bmatrix}1&2\\\\3&7\\end{bmatrix}', true)}`, 'Matrix multiplication is generally non-commutative.']
+            ]),
+            'participant-material-score-matrix': participantMaterialTemplate()
+        };
+    }
+
+    function participantVectorTemplate() {
+        return `<label class="math-learning-control">Participant<select data-la-participant>${['Alya','Bima','Citra','Dewi'].map(name => `<option>${name}</option>`).join('')}</select></label><div class="math-learning-la-result" data-la-participant-result></div>`;
+    }
+
+    function representationViewsTemplate() {
+        return `<div class="math-learning-button-row">${['Participant','Data','Vector','2D view'].map((label, index) => `<button class="math-learning-choice" type="button" data-la-view="${index}">${label}</button>`).join('')}</div><div class="math-learning-la-result" data-la-view-result></div>`;
+    }
+
+    function shapeOrientationTemplate() {
+        return `<div class="math-learning-button-row"><button class="math-learning-choice is-selected" type="button" data-la-orientation="column">Column vector</button><button class="math-learning-choice" type="button" data-la-orientation="row">Row vector</button></div><div class="math-learning-la-result" data-la-orientation-result></div>`;
+    }
+
+    function vectorOperationTemplate(operation) {
+        return `<div class="math-learning-control-grid"><label class="math-learning-control">u₁<input type="number" step="0.1" value="2" data-la-x1></label><label class="math-learning-control">u₂<input type="number" step="0.1" value="5" data-la-x2></label><label class="math-learning-control">v₁<input type="number" step="0.1" value="3" data-la-y1></label><label class="math-learning-control">v₂<input type="number" step="0.1" value="-1" data-la-y2></label></div><label class="math-learning-control">Operasi<select data-la-vector-operation><option value="add"${operation === 'add' ? ' selected' : ''}>Addition</option><option value="subtract">Subtraction</option></select></label><div class="math-learning-la-result" data-la-vector-result></div>`;
+    }
+
+    function scalarMultiplierTemplate() {
+        return `<label class="math-learning-control">Scalar k <input type="range" min="-3" max="3" step="0.25" value="1" data-la-scalar data-vector="2,-1"><output data-la-scalar-value>1</output></label><div class="math-learning-la-result" data-la-scalar-result></div>`;
+    }
+
+    function normTemplate() {
+        return `<div class="math-learning-control-grid"><label class="math-learning-control">v₁<input type="range" min="-6" max="6" step="0.25" value="3" data-la-norm-x></label><label class="math-learning-control">v₂<input type="range" min="-6" max="6" step="0.25" value="4" data-la-norm-y></label></div><div class="math-learning-la-result" data-la-norm-result></div>`;
+    }
+
+    function distanceTemplate(withParticipants) {
+        const participantControls = withParticipants ? `<div class="math-learning-control-grid"><label class="math-learning-control">Participant A<select data-la-distance-a>${['Alya','Bima','Citra','Dewi'].map(name => `<option>${name}</option>`).join('')}</select></label><label class="math-learning-control">Participant B<select data-la-distance-b>${['Bima','Alya','Citra','Dewi'].map(name => `<option>${name}</option>`).join('')}</select></label></div>` : '';
+        return `${participantControls}<div class="math-learning-la-result" data-la-distance-result data-participants="${withParticipants ? 'true' : 'false'}"></div>`;
+    }
+
+    function dotProductTemplate() {
+        return `<div class="math-learning-control-grid"><label class="math-learning-control">x₁<input type="number" step="0.1" value="0.8" data-la-dot-x1></label><label class="math-learning-control">x₂<input type="number" step="0.1" value="0.75" data-la-dot-x2></label><label class="math-learning-control">y₁<input type="number" step="0.1" value="0.6" data-la-dot-y1></label><label class="math-learning-control">y₂<input type="number" step="0.1" value="0.4" data-la-dot-y2></label></div><div class="math-learning-la-result" data-la-dot-result></div>`;
+    }
+
+    function weightedScoreTemplate() {
+        return `<div class="math-learning-control-grid"><label class="math-learning-control">Quiz weight<input type="range" min="0" max="1" step="0.05" value="0.6" data-la-weight-q><output>0.60</output></label><label class="math-learning-control">Completion weight<input type="range" min="0" max="1" step="0.05" value="0.4" data-la-weight-c><output>0.40</output></label></div><div class="math-learning-la-result" data-la-weight-result></div><p class="math-learning-preview-note">Output adalah toy instructional score—bukan probability, confidence, atau production recommendation.</p>`;
+    }
+
+    function cosineTemplate(mode) {
+        return `<div class="math-learning-control-grid"><label class="math-learning-control">Angle y<input type="range" min="0" max="180" step="5" value="45" data-la-angle><output>45°</output></label><label class="math-learning-control">Magnitude y<input type="range" min="0.5" max="5" step="0.1" value="1" data-la-magnitude><output>1.0</output></label></div><svg class="math-learning-la-geometry" viewBox="0 0 420 260" role="img" aria-label="Dua vektor dengan angle dan magnitude yang dapat diubah" data-la-cosine-svg></svg><div class="math-learning-la-result" data-la-cosine-result data-mode="${mode}"></div>`;
+    }
+
+    function zeroVectorTemplate() {
+        return `${stepTemplate([mathHtml('\\mathbf{x}=\\begin{bmatrix}0\\\\0\\end{bmatrix}', true), mathHtml('\\|\\mathbf{x}\\|_2=0', true), '<p>Denominator cosine menjadi 0.</p>', '<p><strong>Stop:</strong> undefined under standard cosine formula.</p>'])}<p class="math-learning-preview-note">Nilai tidak diubah menjadi probability atau angka buatan.</p>`;
+    }
+
+    function matrixExplorerTemplate() {
+        return `<div class="math-learning-button-row"><button class="math-learning-choice is-selected" type="button" data-la-matrix-mode="row">Highlight row</button><button class="math-learning-choice" type="button" data-la-matrix-mode="column">Highlight column</button><button class="math-learning-choice" type="button" data-la-matrix-mode="entry">Locate entry</button></div><div class="math-learning-matrix-stage" data-la-matrix-stage></div>`;
+    }
+
+    function transposeTemplate() {
+        return `<div class="math-learning-button-row"><button class="math-learning-action is-primary" type="button" data-la-transpose>Transpose matrix</button></div><div class="math-learning-matrix-stage" data-la-transpose-stage></div>`;
+    }
+
+    function matrixShapeTemplate() {
+        return `<div class="math-learning-control-grid">${['m','n','r','p'].map((label, index) => `<label class="math-learning-control">${label}<input type="number" min="1" max="6" value="${[4,2,2,3][index]}" data-la-shape="${label}"></label>`).join('')}</div><div class="math-learning-la-result" data-la-shape-result></div>`;
+    }
+
+    function matrixProductRevealTemplate() {
+        return stepTemplate([
+            '<div class="math-learning-matrix-expression"><span class="is-active">row 1: [1, 2]</span><span>×</span><span class="is-active">column 2: [6, 8]</span></div>',
+            mathHtml('C_{12}=1(6)+2(8)', true),
+            mathHtml('C_{12}=6+16=22', true),
+            '<p>Output cell terisi dari satu row–column dot product.</p>'
+        ]);
+    }
+
+    function batchScoreTemplate() {
+        return `<label class="math-learning-control">Quiz weight<input type="range" min="0" max="1" step="0.05" value="0.6" data-la-batch-weight><output>0.60</output></label><div class="math-learning-matrix-stage" data-la-batch-result></div><p class="math-learning-preview-note">Semua output adalah toy instructional scores, bukan probabilities.</p>`;
+    }
+
+    function participantMaterialTemplate() {
+        return `<div class="math-learning-matrix-stage" data-la-material-matrix></div><div class="math-learning-la-result" data-la-material-result>Pilih satu output cell untuk melihat pairwise dot product.</div>`;
+    }
+
+    function stateToggleTemplate(states) {
+        const normalized = states.map(([label, body, message]) => ({ label, body, message }));
+        return `<div data-la-state-toggle data-states="${escapeHtml(JSON.stringify(normalized))}"><div class="math-learning-button-row">${normalized.map((state, index) => `<button class="math-learning-choice${index === 0 ? ' is-selected' : ''}" type="button" data-la-state-index="${index}">${escapeHtml(state.label)}</button>`).join('')}</div><div class="math-learning-la-result" data-la-state-result>${normalized[0]?.body || ''}</div></div>`;
+    }
+
+    function observationFeatureTemplate() {
+        return `<div class="math-learning-control-grid"><label class="math-learning-control">Observation i<select data-la-observation>${['Alya','Bima','Citra','Dewi'].map((name, index) => `<option value="${index}">${index + 1} · ${name}</option>`).join('')}</select></label><label class="math-learning-control">Feature j<select data-la-feature><option value="0">1 · quiz ratio</option><option value="1">2 · completion ratio</option></select></label></div><div class="math-learning-la-result" data-la-observation-result></div>`;
+    }
+
+    function arrowAdditionTemplate() {
+        return `<div class="math-learning-control-grid"><label class="math-learning-control">u₁<input type="range" min="-3" max="3" step="1" value="2" data-la-arrow-u1></label><label class="math-learning-control">u₂<input type="range" min="-3" max="3" step="1" value="1" data-la-arrow-u2></label><label class="math-learning-control">v₁<input type="range" min="-3" max="3" step="1" value="1" data-la-arrow-v1></label><label class="math-learning-control">v₂<input type="range" min="-3" max="3" step="1" value="2" data-la-arrow-v2></label></div><svg class="math-learning-la-geometry" viewBox="0 0 420 300" role="img" aria-label="Vector addition head-to-tail" data-la-arrow-svg></svg><div class="math-learning-la-result" data-la-arrow-result></div><p class="math-learning-preview-note">Arrow adalah mathematical visualization, bukan participant physical movement.</p>`;
+    }
+
+    function normStaticTemplate() {
+        return `${mathHtml('\\mathbf{v}=\\begin{bmatrix}3\\\\4\\end{bmatrix},\\quad\\|\\mathbf{v}\\|_2=5', true)}<svg class="math-learning-la-geometry" viewBox="0 0 420 280" role="img" aria-label="Segitiga siku-siku dengan legs 3 dan 4 serta norm 5"><line class="axis" x1="55" y1="230" x2="370" y2="230"/><line class="axis" x1="55" y1="230" x2="55" y2="25"/><line class="guide" x1="55" y1="230" x2="265" y2="230"/><line class="guide" x1="265" y1="230" x2="265" y2="70"/><line class="vector" x1="55" y1="230" x2="265" y2="70"/><text x="150" y="250">component 1 = 3</text><text x="275" y="155">component 2 = 4</text><text x="135" y="130">norm = 5</text></svg><p class="math-learning-preview-note">Arrow geometry merepresentasikan vector, bukan lokasi fisik real-world object.</p>`;
+    }
+
+    function needSupportTemplate() {
+        return `<label class="math-learning-control">Participant<select data-la-need-participant>${['Alya','Bima','Citra','Dewi'].map(name => `<option>${name}</option>`).join('')}</select></label><div class="math-learning-la-result" data-la-need-result></div><p class="math-learning-preview-note">Cosine di sini adalah toy directional alignment—bukan probability atau bukti causal suitability.</p>`;
+    }
+
+    function stackVectorsTemplate() {
+        return stepTemplate([
+            '<div class="math-learning-score-list"><span><strong>Alya</strong><output>[0.80, 0.75]</output></span><span><strong>Bima</strong><output>[0.60, 0.625]</output></span><span><strong>Citra</strong><output>[0.90, 1.00]</output></span><span><strong>Dewi</strong><output>[0.70, 0.50]</output></span></div>',
+            '<p>Setiap compatible participant vector diorientasikan sebagai satu dataset row.</p>',
+            mathHtml('\\mathbf{X}=\\begin{bmatrix}0.80&0.75\\\\0.60&0.625\\\\0.90&1.00\\\\0.70&0.50\\end{bmatrix}\\in\\mathbb{R}^{4\\times2}', true),
+            '<p>Observation → row; feature → column. Orientation berubah, feature meaning tidak.</p>'
+        ]);
+    }
+
+    function matrixDatasetShapeTemplate() {
+        return `<div class="math-learning-control-grid"><label class="math-learning-control">Observations n<input type="range" min="1" max="6" step="1" value="4" data-la-dataset-rows><output>4</output></label><label class="math-learning-control">Features d<input type="range" min="1" max="5" step="1" value="2" data-la-dataset-columns><output>2</output></label></div><div class="math-learning-matrix-stage" data-la-dataset-shape></div>`;
+    }
+
+    function featureOrderTrapTemplate(spec) {
+        if (/Bima row swapped|same shape|rectangular structure/i.test(spec?.source || '')) {
+            return stateToggleTemplate([
+                ['Hide headers', '<p>Dua rectangular 4×2 structures tampak shape-valid.</p>', 'Shape check alone cannot verify semantics.'],
+                ['Show headers', '<p>Correct schema: [quiz ratio, completion ratio]. Pada matrix bermasalah, Bima row tertukar.</p>', 'Headers memperlihatkan Bima semantic mismatch yang tidak tertangkap shape.']
+            ]);
+        }
+        return stateToggleTemplate([
+            ['Correct order', '<p>[quiz_gap, completion_gap] ↔ [quiz_support, completion_support]</p>', 'Component semantics correspond.'],
+            ['Wrong order', '<p>[quiz_gap, completion_gap] ↔ [completion_support, quiz_support]</p>', 'Numerical computation succeeded, but component pairing changed.']
+        ]);
     }
 
     function roleSorter(cards, roles) {
@@ -763,6 +1116,7 @@
         bindCommonInteractive(section, key, say);
         bindNumericInteractive(section, key, say);
         bindGraphInteractive(section, key, say);
+        bindLinearAlgebraInteractive(section, key, say);
     }
 
     function bindCommonInteractive(section, key, say) {
@@ -779,6 +1133,16 @@
             section.querySelectorAll('[data-choice-reveal]').forEach(item => item.classList.toggle('is-selected', item === button));
             say(button.dataset.message, 'success');
         }));
+        const stateToggle = section.querySelector('[data-la-state-toggle]');
+        if (stateToggle) {
+            const states = JSON.parse(stateToggle.dataset.states || '[]');
+            stateToggle.querySelectorAll('[data-la-state-index]').forEach(button => button.addEventListener('click', () => {
+                const state = states[Number(button.dataset.laStateIndex)];
+                stateToggle.querySelectorAll('[data-la-state-index]').forEach(item => item.classList.toggle('is-selected', item === button));
+                stateToggle.querySelector('[data-la-state-result]').innerHTML = state?.body || '';
+                say(state?.message || 'State diperbarui.', Number(button.dataset.laStateIndex) ? 'warning' : 'success');
+            }));
+        }
         const stepButton = section.querySelector('[data-step-next]');
         if (stepButton) {
             const steps = JSON.parse(stepButton.dataset.steps || '[]');
@@ -966,6 +1330,337 @@
         section.querySelectorAll('[data-square-value]').forEach(input=>input.addEventListener('input',updateSquares));updateSquares();
     }
 
+    function bindLinearAlgebraInteractive(section, _key, say) {
+        const participants = {
+            Alya: [0.80, 0.75],
+            Bima: [0.60, 0.625],
+            Citra: [0.90, 1.00],
+            Dewi: [0.70, 0.50]
+        };
+        const numericValue = input => {
+            const value = Number(input?.value);
+            return Number.isFinite(value) ? value : 0;
+        };
+        const vectorLatex = values => `\\begin{bmatrix}${values.map(value => Number(value).toFixed(3).replace(/0+$/, '').replace(/\\.$/, '')).join('\\\\')}\\end{bmatrix}`;
+
+        const participantSelect = section.querySelector('[data-la-participant]');
+        if (participantSelect) {
+            const update = () => {
+                const name = participantSelect.value;
+                const values = participants[name];
+                section.querySelector('[data-la-participant-result]').innerHTML = `<h4>${name}</h4>${mathHtml(`\\mathbf{x}^{(${Object.keys(participants).indexOf(name) + 1})}=${vectorLatex(values)}`, true)}<p>Component order tetap: quiz ratio q, lalu completion ratio c.</p>`;
+                say('Values berubah antar-observation; feature order dan semantics tetap.', 'success');
+            };
+            participantSelect.addEventListener('change', update);
+            update();
+        }
+
+        const observationResult = section.querySelector('[data-la-observation-result]');
+        if (observationResult) {
+            const names = Object.keys(participants);
+            const features = ['quiz ratio', 'completion ratio'];
+            const update = () => {
+                const observationIndex = Number(section.querySelector('[data-la-observation]').value);
+                const featureIndex = Number(section.querySelector('[data-la-feature]').value);
+                const value = participants[names[observationIndex]][featureIndex];
+                observationResult.innerHTML = `${mathHtml(`x_{${featureIndex + 1}}^{(${observationIndex + 1})}=${value.toFixed(featureIndex ? 3 : 2)}`, true)}<p>Feature ke-${featureIndex + 1} observation ke-${observationIndex + 1} = ${features[featureIndex]} ${names[observationIndex]}.</p>`;
+                say('i memilih observation/row; j memilih feature/component.', 'success');
+            };
+            section.querySelectorAll('[data-la-observation], [data-la-feature]').forEach(select => select.addEventListener('change', update));
+            update();
+        }
+
+        const viewResult = section.querySelector('[data-la-view-result]');
+        if (viewResult) {
+            const views = [
+                '<h4>Participant</h4><p>Alya adalah manusia dengan konteks yang jauh lebih kaya daripada record sistem.</p>',
+                '<h4>Selected data</h4><p>quiz ratio q = 0.80; completion ratio c = 0.75.</p>',
+                `<h4>Vector representation</h4>${mathHtml('\\mathbf{x}^{(1)}=\\begin{bmatrix}0.80\\\\0.75\\end{bmatrix}', true)}`,
+                '<h4>2D mathematical view</h4><svg class="math-learning-la-geometry" viewBox="0 0 320 220" role="img" aria-label="Vektor dari origin menuju titik 0.80, 0.75"><line class="axis" x1="36" y1="184" x2="292" y2="184"/><line class="axis" x1="36" y1="184" x2="36" y2="24"/><line class="vector" x1="36" y1="184" x2="240" y2="64"/><circle class="plot-point" cx="240" cy="64" r="7"/><text x="214" y="52">(0.80, 0.75)</text></svg>'
+            ];
+            section.querySelectorAll('[data-la-view]').forEach(button => button.addEventListener('click', () => {
+                section.querySelectorAll('[data-la-view]').forEach(item => item.classList.toggle('is-selected', item === button));
+                viewResult.innerHTML = views[Number(button.dataset.laView)];
+                say('Keempat view berkaitan, tetapi bukan object yang identik.', 'warning');
+            }));
+            section.querySelector('[data-la-view="0"]')?.click();
+        }
+
+        const orientationResult = section.querySelector('[data-la-orientation-result]');
+        if (orientationResult) {
+            const update = button => {
+                const row = button.dataset.laOrientation === 'row';
+                orientationResult.innerHTML = row
+                    ? mathHtml('\\mathbf{x}^{\\top}=\\begin{bmatrix}0.80 & 0.75\\end{bmatrix}\\in\\mathbb{R}^{1\\times2}', true)
+                    : mathHtml('\\mathbf{x}=\\begin{bmatrix}0.80\\\\0.75\\end{bmatrix}\\in\\mathbb{R}^{2\\times1}', true);
+                section.querySelectorAll('[data-la-orientation]').forEach(item => item.classList.toggle('is-selected', item === button));
+                say(`Orientation berubah menjadi ${row ? 'row 1×2' : 'column 2×1'}; jumlah components tetap dua.`, 'success');
+            };
+            section.querySelectorAll('[data-la-orientation]').forEach(button => button.addEventListener('click', () => update(button)));
+            update(section.querySelector('[data-la-orientation="column"]'));
+        }
+
+        const vectorResult = section.querySelector('[data-la-vector-result]');
+        if (vectorResult) {
+            const update = () => {
+                const fields = [...section.querySelectorAll('[data-la-x1], [data-la-x2], [data-la-y1], [data-la-y2]')];
+                if (fields.some(input => input.value === '' || !Number.isFinite(Number(input.value)))) {
+                    vectorResult.className = 'math-learning-la-result is-invalid';
+                    vectorResult.textContent = 'Masukkan empat component values yang valid.';
+                    return say('Vector operation memerlukan component numerik pada kedua vector.', 'error');
+                }
+                vectorResult.className = 'math-learning-la-result';
+                const x = fields.slice(0, 2).map(input => Number(input.value));
+                const y = fields.slice(2).map(input => Number(input.value));
+                const operation = section.querySelector('[data-la-vector-operation]').value;
+                const result = x.map((value, index) => operation === 'add' ? value + y[index] : value - y[index]);
+                const symbol = operation === 'add' ? '+' : '-';
+                vectorResult.innerHTML = mathHtml(`${vectorLatex(x)}${symbol}${vectorLatex(y)}=${vectorLatex(result)}`, true);
+                say('Operasi dilakukan component-wise setelah dimension dan feature schema cocok.', 'success');
+            };
+            section.querySelectorAll('[data-la-x1], [data-la-x2], [data-la-y1], [data-la-y2], [data-la-vector-operation]').forEach(input => input.addEventListener('input', update));
+            update();
+        }
+
+        const scalarInput = section.querySelector('[data-la-scalar]');
+        if (scalarInput) {
+            const update = () => {
+                const scalar = numericValue(scalarInput);
+                const sourceVector = String(scalarInput.dataset.vector || '0.8,0.75').split(',').map(Number);
+                section.querySelector('[data-la-scalar-value]').textContent = scalar.toFixed(2);
+                section.querySelector('[data-la-scalar-result]').innerHTML = `${mathHtml(`${scalar.toFixed(2)}${vectorLatex(sourceVector)}=${vectorLatex(sourceVector.map(value => scalar * value))}`, true)}<p>Values changed. Number of components tetap d = 2.</p>`;
+                say('Scalar multiplication mengubah component values, bukan dimension vector.', 'success');
+            };
+            scalarInput.addEventListener('input', update);
+            update();
+        }
+
+        const arrowResult = section.querySelector('[data-la-arrow-result]');
+        if (arrowResult) {
+            const update = () => {
+                const u = [numericValue(section.querySelector('[data-la-arrow-u1]')), numericValue(section.querySelector('[data-la-arrow-u2]'))];
+                const v = [numericValue(section.querySelector('[data-la-arrow-v1]')), numericValue(section.querySelector('[data-la-arrow-v2]'))];
+                const result = [u[0] + v[0], u[1] + v[1]];
+                const origin = [210, 150];
+                const scale = 20;
+                const first = [origin[0] + u[0] * scale, origin[1] - u[1] * scale];
+                const end = [first[0] + v[0] * scale, first[1] - v[1] * scale];
+                section.querySelector('[data-la-arrow-svg]').innerHTML = `<line class="axis" x1="20" y1="150" x2="400" y2="150"/><line class="axis" x1="210" y1="280" x2="210" y2="20"/><line class="vector is-fixed" x1="${origin[0]}" y1="${origin[1]}" x2="${first[0]}" y2="${first[1]}"/><line class="vector" x1="${first[0]}" y1="${first[1]}" x2="${end[0]}" y2="${end[1]}"/><line class="guide" x1="${origin[0]}" y1="${origin[1]}" x2="${end[0]}" y2="${end[1]}"/><text x="${first[0] + 6}" y="${first[1] - 6}">u</text><text x="${end[0] + 6}" y="${end[1] - 6}">u+v</text>`;
+                arrowResult.innerHTML = mathHtml(`${vectorLatex(u)}+${vectorLatex(v)}=${vectorLatex(result)}`, true);
+                say('Second arrow ditempatkan head-to-tail; resultant tetap component-wise sum.', 'success');
+            };
+            section.querySelectorAll('[data-la-arrow-u1], [data-la-arrow-u2], [data-la-arrow-v1], [data-la-arrow-v2]').forEach(input => input.addEventListener('input', update));
+            update();
+        }
+
+        const normResult = section.querySelector('[data-la-norm-result]');
+        if (normResult) {
+            const update = () => {
+                const x = numericValue(section.querySelector('[data-la-norm-x]'));
+                const y = numericValue(section.querySelector('[data-la-norm-y]'));
+                const norm = Math.hypot(x, y);
+                normResult.innerHTML = `${mathHtml(`\\|\\mathbf{x}\\|_2=\\sqrt{(${x.toFixed(2)})^2+(${y.toFixed(2)})^2}=\\sqrt{${(x*x).toFixed(2)}+${(y*y).toFixed(2)}}=${norm.toFixed(3)}`, true)}<svg class="math-learning-la-geometry" viewBox="0 0 320 220" role="img" aria-label="Panjang vektor dari origin"><line class="axis" x1="20" y1="110" x2="300" y2="110"/><line class="axis" x1="160" y1="205" x2="160" y2="15"/><line class="vector" x1="160" y1="110" x2="${160 + x * 15}" y2="${110 - y * 15}"/></svg>`;
+                say('Norm mengukur magnitude satu vector; ia bukan distance antara dua vector.', 'success');
+            };
+            section.querySelectorAll('[data-la-norm-x], [data-la-norm-y]').forEach(input => input.addEventListener('input', update));
+            update();
+        }
+
+        const distanceResult = section.querySelector('[data-la-distance-result]');
+        if (distanceResult) {
+            const update = () => {
+                const nameA = section.querySelector('[data-la-distance-a]')?.value || 'Alya';
+                const nameB = section.querySelector('[data-la-distance-b]')?.value || 'Bima';
+                const a = participants[nameA];
+                const b = participants[nameB];
+                const difference = a.map((value, index) => value - b[index]);
+                const distance = Math.hypot(...difference);
+                distanceResult.innerHTML = `<h4>${nameA} ↔ ${nameB}</h4>${mathHtml(`\\mathbf{x}-\\mathbf{y}=${vectorLatex(difference)}`, true)}${mathHtml(`d(\\mathbf{x},\\mathbf{y})=\\sqrt{(${difference[0].toFixed(3)})^2+(${difference[1].toFixed(3)})^2}=${distance.toFixed(3)}`, true)}`;
+                say('Difference adalah vector; Euclidean distance adalah scalar nonnegative. Scale dan unit tetap memengaruhi hasil.', 'warning');
+            };
+            section.querySelectorAll('[data-la-distance-a], [data-la-distance-b]').forEach(input => input.addEventListener('change', update));
+            update();
+        }
+
+        const dotResult = section.querySelector('[data-la-dot-result]');
+        if (dotResult) {
+            const update = () => {
+                const fields = [...section.querySelectorAll('[data-la-dot-x1], [data-la-dot-x2], [data-la-dot-y1], [data-la-dot-y2]')];
+                if (fields.some(input => input.value === '' || !Number.isFinite(Number(input.value)))) {
+                    dotResult.className = 'math-learning-la-result is-invalid';
+                    dotResult.textContent = 'Masukkan empat component values yang valid.';
+                    return say('Dot product memerlukan pair component numerik.', 'error');
+                }
+                dotResult.className = 'math-learning-la-result';
+                const x = fields.slice(0, 2).map(input => Number(input.value));
+                const y = fields.slice(2).map(input => Number(input.value));
+                const contributions = x.map((value, index) => value * y[index]);
+                const total = contributions[0] + contributions[1];
+                dotResult.innerHTML = `<div class="math-learning-contribution-row"><span>${x[0]} × ${y[0]} = <strong>${contributions[0].toFixed(3)}</strong></span><span>${x[1]} × ${y[1]} = <strong>${contributions[1].toFixed(3)}</strong></span></div>${mathHtml(`\\mathbf{x}^{\\top}\\mathbf{y}=${contributions[0].toFixed(3)}+${contributions[1].toFixed(3)}=${total.toFixed(3)}`, true)}`;
+                say('Pair corresponding components, multiply, lalu sum. Output dot product adalah scalar.', 'success');
+            };
+            section.querySelectorAll('[data-la-dot-x1], [data-la-dot-x2], [data-la-dot-y1], [data-la-dot-y2]').forEach(input => input.addEventListener('input', update));
+            update();
+        }
+
+        const weightResult = section.querySelector('[data-la-weight-result]');
+        if (weightResult) {
+            const qInput = section.querySelector('[data-la-weight-q]');
+            const cInput = section.querySelector('[data-la-weight-c]');
+            const update = event => {
+                if (event?.target === qInput) cInput.value = (1 - numericValue(qInput)).toFixed(2);
+                if (event?.target === cInput) qInput.value = (1 - numericValue(cInput)).toFixed(2);
+                qInput.nextElementSibling.textContent = numericValue(qInput).toFixed(2);
+                cInput.nextElementSibling.textContent = numericValue(cInput).toFixed(2);
+                const score = 0.8 * numericValue(qInput) + 0.75 * numericValue(cInput);
+                weightResult.innerHTML = mathHtml(`h(q,c)=${numericValue(qInput).toFixed(2)}(0.80)+${numericValue(cInput).toFixed(2)}(0.75)=${score.toFixed(3)}`, true);
+                say('Weights mengubah contribution pada toy instructional score; bukan confidence atau probability.', 'warning');
+            };
+            [qInput, cInput].forEach(input => input.addEventListener('input', update));
+            update();
+        }
+
+        const cosineResult = section.querySelector('[data-la-cosine-result]');
+        if (cosineResult) {
+            const angleInput = section.querySelector('[data-la-angle]');
+            const magnitudeInput = section.querySelector('[data-la-magnitude]');
+            const update = () => {
+                const angle = numericValue(angleInput);
+                const magnitude = numericValue(magnitudeInput);
+                const cosine = Math.cos(angle * Math.PI / 180);
+                const dot = magnitude * cosine;
+                angleInput.nextElementSibling.textContent = `${angle.toFixed(0)}°`;
+                magnitudeInput.nextElementSibling.textContent = magnitude.toFixed(1);
+                const endX = 75 + Math.cos(angle * Math.PI / 180) * magnitude * 45;
+                const endY = 190 - Math.sin(angle * Math.PI / 180) * magnitude * 45;
+                section.querySelector('[data-la-cosine-svg]').innerHTML = `<line class="axis" x1="40" y1="190" x2="380" y2="190"/><line class="axis" x1="75" y1="225" x2="75" y2="28"/><line class="vector is-fixed" x1="75" y1="190" x2="255" y2="190"/><line class="vector" x1="75" y1="190" x2="${endX}" y2="${endY}"/><text x="258" y="180">x</text><text x="${endX + 8}" y="${endY - 8}">y</text>`;
+                cosineResult.innerHTML = `${mathHtml(`\\mathbf{x}^{\\top}\\mathbf{y}=${dot.toFixed(3)}`, true)}${mathHtml(`\\operatorname{cos\\_sim}(\\mathbf{x},\\mathbf{y})=\\cos(${angle.toFixed(0)}^\\circ)=${cosine.toFixed(3)}`, true)}`;
+                say('Magnitude mengubah raw dot product; cosine tetap ditentukan oleh direction selama norms nonzero.', 'warning');
+            };
+            [angleInput, magnitudeInput].forEach(input => input.addEventListener('input', update));
+            update();
+        }
+
+        const needResult = section.querySelector('[data-la-need-result]');
+        if (needResult) {
+            const needs = { Alya:[0.20,0.25], Bima:[0.40,0.375], Citra:[0.10,0.00], Dewi:[0.30,0.50] };
+            const supports = { A:[0.90,0.30], B:[0.35,0.90], C:[0.75,0.75] };
+            const auditedCosines = {
+                Alya:[0.8396,0.9542,0.9939], Bima:[0.9084,0.9019,0.9995],
+                Citra:[0.9487,0.3624,0.7071], Dewi:[0.7593,0.9857,0.9701]
+            };
+            const update = () => {
+                const name = section.querySelector('[data-la-need-participant]').value;
+                const need = needs[name];
+                const cosines = auditedCosines[name];
+                const ranked = ['A','B','C'].map((material, index) => ({ material, value: cosines[index] })).sort((a,b) => b.value - a.value);
+                needResult.innerHTML = `${mathHtml(`\\mathbf{n}_{\\text{${name}}}=${vectorLatex(need)}`, true)}<div class="math-learning-score-list">${ranked.map(item => `<span><strong>Materi ${item.material}</strong><output>${item.value.toFixed(4)}</output></span>`).join('')}</div><p>Support profiles: A ${JSON.stringify(supports.A)}, B ${JSON.stringify(supports.B)}, C ${JSON.stringify(supports.C)}. Highest directional alignment: <strong>Materi ${ranked[0].material}</strong>.</p>`;
+                say('Ranking memakai audited cosine values pada shared quiz-need/completion-need axes.', 'warning');
+            };
+            section.querySelector('[data-la-need-participant]').addEventListener('change', update);
+            update();
+        }
+
+        const matrixStage = section.querySelector('[data-la-matrix-stage]');
+        if (matrixStage) {
+            const values = [[0.80,0.75],[0.60,0.625],[0.90,1.00],[0.70,0.50]];
+            const render = mode => {
+                matrixStage.innerHTML = `<div class="math-learning-matrix-grid" role="grid" aria-label="HerAI feature matrix">${values.flatMap((row, rowIndex) => row.map((value, columnIndex) => `<button type="button" role="gridcell" class="${mode === 'row' && rowIndex === 1 ? 'is-highlighted' : ''}${mode === 'column' && columnIndex === 0 ? 'is-highlighted' : ''}${mode === 'entry' && rowIndex === 2 && columnIndex === 1 ? 'is-highlighted' : ''}" data-row="${rowIndex + 1}" data-column="${columnIndex + 1}">${value.toFixed(columnIndex ? 3 : 2)}</button>`)).join('')}</div><p>${mode === 'row' ? 'Row 2 = observation Bima.' : mode === 'column' ? 'Column 1 = quiz ratio q untuk semua observations.' : 'Entry X₃₂ = completion ratio Citra = 1.00.'}</p>`;
+                matrixStage.querySelectorAll('button').forEach(button => button.addEventListener('click', () => say(`Entry X${button.dataset.row}${button.dataset.column} dipilih. Row adalah observation; column adalah feature.`, 'success')));
+            };
+            section.querySelectorAll('[data-la-matrix-mode]').forEach(button => button.addEventListener('click', () => {
+                section.querySelectorAll('[data-la-matrix-mode]').forEach(item => item.classList.toggle('is-selected', item === button));
+                render(button.dataset.laMatrixMode);
+            }));
+            render('row');
+        }
+
+        const transposeButton = section.querySelector('[data-la-transpose]');
+        if (transposeButton) {
+            let transposed = false;
+            const render = () => {
+                section.querySelector('[data-la-transpose-stage]').innerHTML = transposed
+                    ? mathHtml('\\mathbf{A}^{\\top}=\\begin{bmatrix}1&4\\\\2&5\\\\3&6\\end{bmatrix}\\in\\mathbb{R}^{3\\times2}', true)
+                    : mathHtml('\\mathbf{A}=\\begin{bmatrix}1&2&3\\\\4&5&6\\end{bmatrix}\\in\\mathbb{R}^{2\\times3}', true);
+                transposeButton.textContent = transposed ? 'Kembalikan orientation' : 'Transpose matrix';
+            };
+            transposeButton.addEventListener('click', () => { transposed = !transposed; render(); say('Transpose menukar row dan column serta shape; ia tidak memperbaiki semantic mismatch.', 'warning'); });
+            render();
+        }
+
+        const datasetShape = section.querySelector('[data-la-dataset-shape]');
+        if (datasetShape) {
+            const update = () => {
+                const rowInput = section.querySelector('[data-la-dataset-rows]');
+                const columnInput = section.querySelector('[data-la-dataset-columns]');
+                const rows = Math.round(numericValue(rowInput));
+                const columns = Math.round(numericValue(columnInput));
+                rowInput.nextElementSibling.textContent = String(rows);
+                columnInput.nextElementSibling.textContent = String(columns);
+                datasetShape.innerHTML = `<div class="math-learning-shape-grid" style="--shape-columns:${columns}" aria-label="${rows} rows dan ${columns} columns">${Array.from({length: rows * columns}, (_, index) => `<span>${index + 1}</span>`).join('')}</div>${mathHtml(`\\mathbf{X}\\in\\mathbb{R}^{${rows}\\times${columns}}`, true)}<p>${rows} rows · ${columns} columns · ${rows * columns} total entries.</p>`;
+                say('Rows menghitung observations; columns menghitung features.', 'success');
+            };
+            section.querySelectorAll('[data-la-dataset-rows], [data-la-dataset-columns]').forEach(input => input.addEventListener('input', update));
+            update();
+        }
+
+        const shapeResult = section.querySelector('[data-la-shape-result]');
+        if (shapeResult) {
+            const update = () => {
+                const inputs = [...section.querySelectorAll('[data-la-shape]')];
+                if (inputs.some(input => input.value === '' || !Number.isInteger(Number(input.value)) || Number(input.value) < 1 || Number(input.value) > 6)) {
+                    shapeResult.className = 'math-learning-la-result is-invalid';
+                    shapeResult.textContent = 'Gunakan integer 1–6 untuk setiap matrix dimension.';
+                    return say('Matrix shape harus berupa positive integer pada rentang kontrol.', 'error');
+                }
+                const values = Object.fromEntries(inputs.map(input => [input.dataset.laShape, Number(input.value)]));
+                const valid = values.n === values.r;
+                shapeResult.className = `math-learning-la-result ${valid ? 'is-valid' : 'is-invalid'}`;
+                shapeResult.innerHTML = valid
+                    ? `${mathHtml(`(${values.m}\\times${values.n})(${values.r}\\times${values.p})\\to(${values.m}\\times${values.p})`, true)}<strong>Inner dimensions match.</strong>`
+                    : `${mathHtml(`(${values.m}\\times${values.n})(${values.r}\\times${values.p})`, true)}<strong>Cannot multiply: columns of A must equal rows of B.</strong>`;
+                say(valid ? 'Product structurally valid; semantic compatibility still needs review.' : 'Inner dimensions do not match, so the product is undefined.', valid ? 'success' : 'error');
+            };
+            section.querySelectorAll('[data-la-shape]').forEach(input => input.addEventListener('input', update));
+            update();
+        }
+
+        const batchResult = section.querySelector('[data-la-batch-result]');
+        if (batchResult) {
+            const input = section.querySelector('[data-la-batch-weight]');
+            const update = () => {
+                const quizWeight = numericValue(input);
+                const completionWeight = 1 - quizWeight;
+                input.nextElementSibling.textContent = quizWeight.toFixed(2);
+                const rows = Object.entries(participants).map(([name, values]) => [name, quizWeight * values[0] + completionWeight * values[1]]);
+                batchResult.innerHTML = `<div class="math-learning-score-list">${rows.map(([name, score]) => `<span><strong>${name}</strong><output>${score.toFixed(3)}</output></span>`).join('')}</div>${mathHtml(`\\boldsymbol{\\theta}=\\begin{bmatrix}${quizWeight.toFixed(2)}\\\\${completionWeight.toFixed(2)}\\end{bmatrix}`, true)}`;
+                say('Satu weight vector memproses empat observation rows secara konsisten.', 'warning');
+            };
+            input.addEventListener('input', update);
+            update();
+        }
+
+        const materialMatrix = section.querySelector('[data-la-material-matrix]');
+        if (materialMatrix) {
+            const needs = [[0.20,0.25],[0.40,0.375],[0.10,0.00],[0.30,0.50]];
+            const supports = [[0.90,0.20],[0.20,0.90],[0.70,0.70]];
+            const scores = [[0.2300,0.2650,0.3150],[0.4350,0.4175,0.5425],[0.0900,0.0200,0.0700],[0.3700,0.5100,0.5600]];
+            materialMatrix.innerHTML = `<div class="math-learning-score-matrix" role="grid" aria-label="Raw participant need by material support dot score matrix">${scores.flatMap((row, rowIndex) => row.map((value, columnIndex) => `<button type="button" role="gridcell" data-score-row="${rowIndex}" data-score-column="${columnIndex}" aria-label="Pilih row ${rowIndex + 1}, column ${columnIndex + 1}">${value.toFixed(4)}</button>`)).join('')}</div>`;
+            materialMatrix.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
+                const names = Object.keys(participants);
+                const materials = ['A','B','C'];
+                const rowIndex = Number(button.dataset.scoreRow);
+                const columnIndex = Number(button.dataset.scoreColumn);
+                const need = needs[rowIndex];
+                const support = supports[columnIndex];
+                const score = scores[rowIndex][columnIndex];
+                section.querySelector('[data-la-material-result]').innerHTML = `<strong>${names[rowIndex]} × Material ${materials[columnIndex]}</strong>${mathHtml(`${need[0].toFixed(2)}(${support[0].toFixed(2)})+${need[1].toFixed(3)}(${support[1].toFixed(2)})=${score.toFixed(4)}`, true)}<p>Cell ini adalah raw dot-product alignment score, bukan cosine similarity, probability, atau causal suitability.</p>`;
+                materialMatrix.querySelectorAll('button').forEach(item => item.classList.toggle('is-highlighted', item === button));
+                say('Selected cell diuraikan sebagai participant row × material column.', 'warning');
+            }));
+        }
+    }
+
     function bindGraphInteractive(section, key, say) {
         if (key === 'coordinate-plane-basics') {
             const svg=section.querySelector('svg'),point=section.querySelector('[data-drag-point]'),gx=section.querySelector('[data-guide-x]'),gy=section.querySelector('[data-guide-y]'),output=section.querySelector('[data-coordinate-output]');
@@ -985,16 +1680,19 @@
         const questions = [];
         for (let i=1;i<chunks.length;i+=2) {
             const number=Number(chunks[i]),body=chunks[i+1].split(/^---\s*$/m)[0];
-            const answer=(body.match(/\*\*Jawaban benar:\*\*\s*([A-D])/)||[])[1];
+            const answer=(body.match(/\*\*(?:Jawaban benar|Correct answer):\*\*\s*([A-D])/)||[])[1];
             const optionMatches=[...body.matchAll(/^([A-D])\.\s+(.+?)(?=\s{2}$|$)/gm)];
             const firstOption=optionMatches[0]?.index ?? body.length;
             const prompt=body.slice(0,firstOption).trim();
-            const rationaleStart=body.search(/^\*\*(?:Jawaban benar|Mengapa|Rationale|Perhitungan|A salah|A benar)/m);
+            const rationaleStart=body.search(/^\*\*(?:Jawaban benar|Correct answer|Mengapa|Rationale|Perhitungan|A salah|A benar)/m);
             const rationale=rationaleStart>=0?body.slice(rationaleStart):'';
             questions.push({number,prompt,options:optionMatches.map(match=>({letter:match[1],text:match[2].trim()})),answer,rationale});
         }
         const intro = removeAndShiftTitle(chunks[0]);
-        container.innerHTML=`<div class="math-learning-quiz-intro">${renderMarkdown(intro,[])}</div><p class="math-learning-preview-note"><strong>Preview integrasi:</strong> hasil kuis ini belum dikirim ke backend progress karena Math for AI belum released.</p><form class="math-learning-quiz-list" data-quiz-form>${questions.map(question=>`<fieldset class="math-learning-quiz-card" data-quiz-question="${question.number}" tabindex="-1" aria-labelledby="mathQuizQuestion${question.number}"><legend class="math-learning-visually-hidden">Soal ${question.number}</legend><div class="math-learning-quiz-prompt" id="mathQuizQuestion${question.number}"><span class="math-learning-quiz-number" aria-hidden="true">${String(question.number).padStart(2,'0')}</span><div class="math-learning-quiz-question-copy">${renderMarkdown(removeAndShiftTitle(question.prompt),[])}</div></div><div class="math-learning-quiz-options">${question.options.map(option=>`<label class="math-learning-quiz-option"><input type="radio" name="quiz-${question.number}" value="${option.letter}"><span class="math-learning-quiz-letter" aria-hidden="true">${option.letter}</span><span class="math-learning-quiz-option-copy">${renderMarkdown(option.text,[])}</span></label>`).join('')}</div><div data-quiz-review aria-live="polite"></div></fieldset>`).join('')}<div class="math-learning-button-row math-learning-quiz-actions"><button class="math-learning-action is-primary" type="submit">Periksa jawaban</button><button class="math-learning-action" type="reset">Ulangi kuis</button></div></form>`;
+        if (!questions.length || questions.some(question => !question.answer || question.options.length !== 4)) {
+            throw new Error('Source kuis tidak memiliki question, empat opsi, atau canonical answer key yang lengkap.');
+        }
+        container.innerHTML=`<div class="math-learning-quiz-intro">${renderMarkdown(intro,[])}</div><p class="math-learning-preview-note"><strong>Penyimpanan hasil:</strong> hasil pemeriksaan pada halaman ini belum tersinkron ke akun peserta.</p><form class="math-learning-quiz-list" data-quiz-form>${questions.map(question=>`<fieldset class="math-learning-quiz-card" data-quiz-question="${question.number}" tabindex="-1" aria-labelledby="mathQuizQuestion${question.number}"><legend class="math-learning-visually-hidden">Soal ${question.number}</legend><div class="math-learning-quiz-prompt" id="mathQuizQuestion${question.number}"><span class="math-learning-quiz-number" aria-hidden="true">${String(question.number).padStart(2,'0')}</span><div class="math-learning-quiz-question-copy">${renderMarkdown(removeAndShiftTitle(question.prompt),[])}</div></div><div class="math-learning-quiz-options">${question.options.map(option=>`<label class="math-learning-quiz-option"><input type="radio" name="quiz-${question.number}" value="${option.letter}"><span class="math-learning-quiz-letter" aria-hidden="true">${option.letter}</span><span class="math-learning-quiz-option-copy">${renderMarkdown(option.text,[])}</span></label>`).join('')}</div><div data-quiz-review aria-live="polite"></div></fieldset>`).join('')}<div class="math-learning-button-row math-learning-quiz-actions"><button class="math-learning-action is-primary" type="submit">Periksa jawaban</button><button class="math-learning-action" type="reset">Ulangi kuis</button></div></form>`;
         const form=container.querySelector('[data-quiz-form]');
         form.addEventListener('submit',event=>{
             event.preventDefault();
@@ -1023,7 +1721,7 @@
                 review.innerHTML=`<strong><i class="fas ${isCorrect?'fa-circle-check':'fa-circle-info'}" aria-hidden="true"></i>${isCorrect?'Benar':'Jawaban terbaik: '+question.answer}</strong>${renderMarkdown(removeAndShiftTitle(question.rationale),[])}`;
             });
             form.classList.add('is-reviewed');
-            window.__aiLabToast?.(`Skor preview: ${correct}/${questions.length} (${Math.round(correct/questions.length*100)}%).`,correct/questions.length>=.75?'success':'info');
+            window.__aiLabToast?.(`Skor kuis: ${correct}/${questions.length} (${Math.round(correct/questions.length*100)}%).`,correct/questions.length>=.75?'success':'info');
             const submit=form.querySelector('button[type="submit"]');
             submit.textContent=`Skor ${correct}/${questions.length}`;
             submit.disabled=true;
@@ -1039,19 +1737,20 @@
         },0));
     }
 
-    function buildTabs(active) {
+    function buildTabs(submodule, active) {
+        const items = submodule.items;
         const tabs = [
-            { label: 'Materi', icon: 'fas fa-book-open', route: CONTENT[0].route, types: ['info', 'topic'] },
-            { label: 'Latihan', icon: 'fas fa-pen-to-square', route: CONTENT.find(item => item.type === 'practice').route, types: ['practice'] },
-            { label: 'Kuis', icon: 'far fa-clipboard', route: CONTENT.find(item => item.type === 'quiz').route, types: ['quiz'] },
-            { label: 'Diskusi', icon: 'far fa-message', route: CONTENT.find(item => item.type === 'discussion').route, types: ['discussion'] },
-            { label: 'Referensi', icon: 'fas fa-book-bookmark', route: CONTENT.find(item => item.type === 'references').route, types: ['references'] }
+            { label: 'Materi', icon: 'fas fa-book-open', route: items[0].route, types: ['info', 'topic'] },
+            { label: 'Latihan', icon: 'fas fa-pen-to-square', route: items.find(item => item.type === 'practice').route, types: ['practice'] },
+            { label: 'Kuis', icon: 'far fa-clipboard', route: items.find(item => item.type === 'quiz').route, types: ['quiz'] },
+            { label: 'Diskusi', icon: 'far fa-message', route: items.find(item => item.type === 'discussion').route, types: ['discussion'] },
+            { label: 'Referensi', icon: 'fas fa-book-bookmark', route: items.find(item => item.type === 'references').route, types: ['references'] }
         ];
-        return `<div class="lesson-tabs" role="tablist" aria-label="Jenis materi Submodul 01">${tabs.map(tab => `<a href="${tab.route}" class="${tab.types.includes(active.type) ? 'active' : ''}" ${tab.types.includes(active.type) ? 'aria-current="page"' : ''}><i class="${tab.icon}" aria-hidden="true"></i>${tab.label}</a>`).join('')}</div>`;
+        return `<div class="lesson-tabs" role="navigation" aria-label="Jenis materi Submodul ${submodule.id}">${tabs.map(tab => `<a href="${tab.route}" class="${tab.types.includes(active.type) ? 'active' : ''}" ${tab.types.includes(active.type) ? 'aria-current="page"' : ''}><i class="${tab.icon}" aria-hidden="true"></i>${tab.label}</a>`).join('')}</div>`;
     }
 
-    function buildLessonList(active, state) {
-        const materials = CONTENT.filter(item => item.type === 'info' || item.type === 'topic');
+    function buildLessonList(submodule, active, state) {
+        const materials = submodule.items.filter(item => item.type === 'info' || item.type === 'topic');
         return `<ol>${materials.map((item, index) => {
             const current = item.id === active.id;
             const complete = state.completed.includes(item.id);
@@ -1060,40 +1759,39 @@
         }).join('')}</ol>`;
     }
 
-    function buildRightPanel(active, state, progress) {
+    function buildRightPanel(submodule, active, state, progress) {
         const complete = state.completed.includes(active.id);
         return `<section class="module-side-card lesson-progress-card">
             <h2>Progres Submodul</h2>
             <div class="lesson-progress-mini"><b style="--value:${progress}%" data-math-progress-bar></b><strong data-math-progress-text>${progress}%</strong></div>
-            <p>Preview progres hanya tersimpan di perangkat sampai Math for AI resmi dirilis.</p>
+            <p>Progres tersimpan di perangkat ini dan belum tersinkron ke akun peserta.</p>
             <button type="button" class="math-learning-complete-button ${complete ? 'is-complete' : ''}" data-mark-complete><i class="fas ${complete ? 'fa-circle-check' : 'fa-check'}" aria-hidden="true"></i>${complete ? 'Selesai di perangkat' : 'Tandai selesai'}</button>
         </section>
-        <section class="module-side-card lesson-list-card"><h2>Daftar Materi</h2>${buildLessonList(active, state)}</section>
-        <section class="module-side-card lesson-note-card math-learning-status-card"><div class="module-side-head"><h2>Status Integrasi</h2><i class="fas fa-flask" aria-hidden="true"></i></div><p>Submodul 01 adalah preview frontend. Progress, latihan, dan kuis belum dikirim ke backend produksi.</p></section>`;
+        <section class="module-side-card lesson-list-card"><h2>Daftar Materi</h2>${buildLessonList(submodule, active, state)}</section>`;
     }
 
-    function footerNav(item) {
-        const index = CONTENT.findIndex(entry => entry.id === item.id);
-        const prev = CONTENT[index - 1];
-        const next = CONTENT[index + 1];
+    function footerNav(submodule, item) {
+        const index = submodule.items.findIndex(entry => entry.id === item.id);
+        const prev = submodule.items[index - 1];
+        const next = submodule.items[index + 1];
         return `<footer class="lesson-nav-footer">${prev ? `<a href="${prev.route}"><i class="fas fa-chevron-left" aria-hidden="true"></i>${escapeHtml(prev.short)}</a>` : '<span></span>'}${next ? `<a href="${next.route}">${escapeHtml(next.short)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>` : '<span></span>'}</footer>`;
     }
 
-    function bindShell(item) {
+    function bindShell(submodule, item) {
         const page = document.querySelector('.math-learning-page');
         page?.querySelector('[data-mark-complete]')?.addEventListener('click', event => {
-            const state = markComplete(item.id);
+            const state = markComplete(submodule, item.id);
             const button = event.currentTarget;
             button.classList.add('is-complete');
             button.innerHTML = '<i class="fas fa-circle-check" aria-hidden="true"></i>Selesai di perangkat';
-            const percent = Math.round(state.completed.length / CONTENT.length * 100);
+            const percent = Math.round(state.completed.length / submodule.items.length * 100);
             const percentText = page.querySelector('[data-math-progress-text]');
             const percentBar = page.querySelector('[data-math-progress-bar]');
             if (percentText) percentText.textContent = `${percent}%`;
             if (percentBar) percentBar.style.setProperty('--value', `${percent}%`);
             const itemRow = page.querySelector(`.lesson-list-card a[href="${item.route}"]`)?.closest('li');
             itemRow?.classList.add('completed');
-            window.__aiLabToast?.('Status tersimpan di perangkat. Backend Math belum diaktifkan.', 'success');
+            window.__aiLabToast?.('Status tersimpan di perangkat ini dan belum tersinkron ke akun peserta.', 'success');
         }, { once: true, signal: pageAbort.signal });
     }
 
@@ -1103,33 +1801,58 @@
     }
 
     async function renderCurrentRoute() {
-        const sequence=++renderSequence,item=getCurrentItem(),root=document.getElementById('mathLearningRoot');
-        if(!root)return;
-        root.dataset.mathContentType=item.type;
-        if(pageAbort)pageAbort.abort();pageAbort=new AbortController();
-        root.innerHTML='<div class="math-learning-loading" role="status"><i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i><strong>Menyiapkan materi…</strong><span>Markdown dan formula matematika sedang dirender.</span></div>';
+        const sequence = ++renderSequence;
+        const context = getCurrentContext();
+        const root = document.getElementById('mathLearningRoot');
+        if (!root) return;
+        if (!context) {
+            renderError(root, 'Route Math tidak terdaftar. Kembali ke overview dan pilih materi yang tersedia.');
+            return;
+        }
+        const { submodule, item } = context;
+        root.dataset.mathContentType = item.type;
+        document.querySelector('.math-learning-page')?.setAttribute('data-math-submodule', submodule.slug);
+        document.querySelector('[data-math-submodule-label]')?.replaceChildren(document.createTextNode(`Submodul ${submodule.id}`));
+        if (pageAbort) pageAbort.abort();
+        pageAbort = new AbortController();
+        root.innerHTML = '<div class="math-learning-loading" role="status"><i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i><strong>Menyiapkan materi…</strong><span>Markdown dan formula matematika sedang dirender.</span></div>';
         try {
             await ensureRuntime();
-            const response=await fetch(BASE_PATH+encodeURIComponent(item.file),{cache:'no-store',signal:pageAbort.signal});
-            if(!response.ok)throw new Error(`Source ${item.file} mengembalikan HTTP ${response.status}.`);
-            const source=await response.text();
-            if(sequence!==renderSequence)return;
-            const title=extractTitle(source,item.title),meta=extractMeta(source),lead=extractLead(source,item.title),extracted=extractInteractiveSpecs(source),diagnostic=extractDiagnostic(extracted.markdown),bodySource=removeAndShiftTitle(diagnostic.markdown),state=readState(),progress=Math.round(state.completed.length/CONTENT.length*100);
+            const response = await fetch(submodule.sourceBase + encodeURIComponent(item.file), { cache: 'no-store', signal: pageAbort.signal });
+            if (!response.ok) throw new Error(`Source ${item.file} mengembalikan HTTP ${response.status}.`);
+            const source = await response.text();
+            if (sequence !== renderSequence) return;
+            const title = extractTitle(source, item.title);
+            const meta = extractMeta(source);
+            const lead = extractLead(source, item.title);
+            const learnerSource = stripLeadingAuthoringMetadata(source);
+            const extracted = extractInteractiveSpecs(learnerSource);
+            const diagnostic = extractDiagnostic(extracted.markdown);
+            const bodySource = removeAndShiftTitle(diagnostic.markdown);
+            const state = readState(submodule);
+            const progress = Math.round(state.completed.length / submodule.items.length * 100);
             document.querySelector('[data-math-learning-breadcrumb]')?.replaceChildren(document.createTextNode(item.short));
-            const topicPosition = item.type === 'topic' ? `Topik ${Number(item.id.slice(-2))} dari 7` : item.short;
-            root.innerHTML=`<div class="lesson-layout math-learning-layout"><div class="lesson-main-content"><section class="lesson-hero compact math-learning-lesson-hero"><div class="lesson-hero-copy"><span class="math-learning-kicker"><i class="fas ${item.icon}" aria-hidden="true"></i>Foundation &amp; Core AI · Math for AI · Submodul 01</span><h1>${escapeHtml(title)}</h1><p>${escapeHtml(lead)}</p><div class="lesson-meta-row"><span><i class="far fa-clock" aria-hidden="true"></i>${escapeHtml(meta['estimasi belajar']||'Belajar sesuai ritme')}</span><span><i class="fas fa-book-open" aria-hidden="true"></i>${escapeHtml(topicPosition)}</span><b>${escapeHtml(meta.level||'Beginner')}</b></div></div><img src="/assets/messaging/herai-chat-persona.png" alt="HerAI fellow belajar Math for AI"></section><section class="lesson-material-panel math-learning-material-panel">${buildTabs(item)}<article class="lesson-article math-learning-article" id="mathLearningContent" tabindex="-1"><div class="math-learning-markdown" data-markdown-content></div></article>${footerNav(item)}</section></div><aside class="lesson-right-panel">${buildRightPanel(item,state,progress)}</aside></div>`;
-            const content=root.querySelector('[data-markdown-content]');
-            if(item.type==='quiz'){renderQuiz(source,content);enhanceMarkdown(content,[]);}else{content.innerHTML=renderMarkdown(bodySource,extracted.specs);enhanceMarkdown(content,extracted.specs);mountDiagnostic(content,diagnostic.data);}
-            bindShell(item);
+            const topicPosition = item.type === 'topic' ? `Topik ${Number(item.id.slice(-2))} dari ${submodule.topicCount}` : item.short;
+            root.innerHTML = `<div class="lesson-layout math-learning-layout"><div class="lesson-main-content"><section class="lesson-hero compact math-learning-lesson-hero"><div class="lesson-hero-copy"><span class="math-learning-kicker"><i class="fas ${item.icon}" aria-hidden="true"></i>Foundation &amp; Core AI · Math for AI · Submodul ${submodule.id}</span><h1>${escapeHtml(title)}</h1><p>${escapeHtml(lead)}</p><div class="lesson-meta-row"><span><i class="far fa-clock" aria-hidden="true"></i>${escapeHtml(meta['estimasi belajar'] || 'Belajar sesuai ritme')}</span><span><i class="fas fa-book-open" aria-hidden="true"></i>${escapeHtml(topicPosition)}</span><b>${escapeHtml(meta.level || 'Beginner')}</b></div></div><img src="/assets/messaging/herai-chat-persona.png" alt="HerAI fellow belajar Math for AI"></section><section class="lesson-material-panel math-learning-material-panel">${buildTabs(submodule, item)}<article class="lesson-article math-learning-article" id="mathLearningContent" tabindex="-1">${buildLearnerContext(meta)}<div class="math-learning-markdown" data-markdown-content></div></article>${footerNav(submodule, item)}</section></div><aside class="lesson-right-panel">${buildRightPanel(submodule, item, state, progress)}</aside></div>`;
+            const content = root.querySelector('[data-markdown-content]');
+            if (item.type === 'quiz') {
+                renderQuiz(learnerSource, content);
+                enhanceMarkdown(content, []);
+            } else {
+                content.innerHTML = renderMarkdown(bodySource, extracted.specs);
+                enhanceMarkdown(content, extracted.specs);
+                mountDiagnostic(content, diagnostic.data);
+            }
+            bindShell(submodule, item);
             root.querySelector('#mathLearningContent')?.focus({preventScroll:true});
-        } catch(error) {
-            if(error.name==='AbortError')return;
-            console.error('[Math Learning] Render failed:',error);
-            renderError(root,error.message||'Terjadi kesalahan yang tidak diketahui.');
+        } catch (error) {
+            if (error.name === 'AbortError') return;
+            console.error('[Math Learning] Render failed:', error);
+            renderError(root, error.message || 'Terjadi kesalahan yang tidak diketahui.');
         }
     }
 
-    window.HerAiMathLearning=Object.freeze({content:CONTENT,renderCurrentRoute,renderOverviewProgress,version:RUNTIME_VERSION});
+    window.HerAiMathLearning=Object.freeze({submodules:SUBMODULES,content:CONTENT,renderCurrentRoute,renderOverviewProgress,version:RUNTIME_VERSION});
     window.initMathOverviewRoute=renderOverviewProgress;
     window.initMathLearningRoute=renderCurrentRoute;
 })();

@@ -141,6 +141,19 @@ const router = {
         "/participant-ai-lab-math/kenapa-ai-butuh-matematika/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math/kenapa-ai-butuh-matematika/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math/kenapa-ai-butuh-matematika/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/dari-scalar-ke-vector": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/membaca-vektor": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/operasi-vektor": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/norm-dan-distance": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/dot-product": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/cosine-similarity": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/matrix": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/matrix-operations-multiplication": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/latihan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -331,6 +344,20 @@ const router = {
         "/participant-ai-lab-math/submodule-01/quiz": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/kuis",
         "/participant-ai-lab-math/submodule-01/discussion": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/diskusi",
         "/participant-ai-lab-math/submodule-01/references": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/referensi",
+        "/participant-ai-lab-math-linear-algebra": "/participant-ai-lab-math/linear-algebra",
+        "/participant-ai-lab-math/submodule-02": "/participant-ai-lab-math/linear-algebra",
+        "/participant-ai-lab-math/submodule-02/topic-01": "/participant-ai-lab-math/linear-algebra/dari-scalar-ke-vector",
+        "/participant-ai-lab-math/submodule-02/topic-02": "/participant-ai-lab-math/linear-algebra/membaca-vektor",
+        "/participant-ai-lab-math/submodule-02/topic-03": "/participant-ai-lab-math/linear-algebra/operasi-vektor",
+        "/participant-ai-lab-math/submodule-02/topic-04": "/participant-ai-lab-math/linear-algebra/norm-dan-distance",
+        "/participant-ai-lab-math/submodule-02/topic-05": "/participant-ai-lab-math/linear-algebra/dot-product",
+        "/participant-ai-lab-math/submodule-02/topic-06": "/participant-ai-lab-math/linear-algebra/cosine-similarity",
+        "/participant-ai-lab-math/submodule-02/topic-07": "/participant-ai-lab-math/linear-algebra/matrix",
+        "/participant-ai-lab-math/submodule-02/topic-08": "/participant-ai-lab-math/linear-algebra/matrix-operations-multiplication",
+        "/participant-ai-lab-math/submodule-02/practice": "/participant-ai-lab-math/linear-algebra/latihan",
+        "/participant-ai-lab-math/submodule-02/quiz": "/participant-ai-lab-math/linear-algebra/kuis",
+        "/participant-ai-lab-math/submodule-02/discussion": "/participant-ai-lab-math/linear-algebra/diskusi",
+        "/participant-ai-lab-math/submodule-02/references": "/participant-ai-lab-math/linear-algebra/referensi",
         "/x/fd6p1/mt": "/participant-mentor",
         "/x/fd6p1/t": "/participant-tasks",
         "/x/fd6p1/p": "/participant-projects",
@@ -468,8 +495,14 @@ const router = {
         if (path === "/participant-ai-lab-math") {
             return "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/overview.html";
         }
-        const submoduleBase = "/participant-ai-lab-math/kenapa-ai-butuh-matematika";
-        if (path === submoduleBase || (path.startsWith(`${submoduleBase}/`) && this.routes[path])) {
+        const submoduleBases = [
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika",
+            "/participant-ai-lab-math/linear-algebra"
+        ];
+        const isRegisteredMathLesson = submoduleBases.some(submoduleBase => (
+            path === submoduleBase || (path.startsWith(`${submoduleBase}/`) && this.routes[path])
+        ));
+        if (isRegisteredMathLesson) {
             return "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/01-kenapa-ai-butuh-matematika/materi.html";
         }
         return null;
@@ -656,6 +689,19 @@ const router = {
             "/participant-ai-lab-math/kenapa-ai-butuh-matematika/kuis",
             "/participant-ai-lab-math/kenapa-ai-butuh-matematika/diskusi",
             "/participant-ai-lab-math/kenapa-ai-butuh-matematika/referensi",
+            "/participant-ai-lab-math/linear-algebra",
+            "/participant-ai-lab-math/linear-algebra/dari-scalar-ke-vector",
+            "/participant-ai-lab-math/linear-algebra/membaca-vektor",
+            "/participant-ai-lab-math/linear-algebra/operasi-vektor",
+            "/participant-ai-lab-math/linear-algebra/norm-dan-distance",
+            "/participant-ai-lab-math/linear-algebra/dot-product",
+            "/participant-ai-lab-math/linear-algebra/cosine-similarity",
+            "/participant-ai-lab-math/linear-algebra/matrix",
+            "/participant-ai-lab-math/linear-algebra/matrix-operations-multiplication",
+            "/participant-ai-lab-math/linear-algebra/latihan",
+            "/participant-ai-lab-math/linear-algebra/kuis",
+            "/participant-ai-lab-math/linear-algebra/diskusi",
+            "/participant-ai-lab-math/linear-algebra/referensi",
             "/participant-ai-lab-gen",
             "/participant-ai-lab-llm",
             "/participant-ai-lab-vlm",
@@ -1501,7 +1547,7 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
 
                 } else if (path.startsWith("/participant-ai-lab-math") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika")) {
+                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra")) {
                         window.__aiLabLoader.load('math-learning').then(function() {
                             if (path === "/participant-ai-lab-math" && typeof window.initMathOverviewRoute === "function") {
                                 window.initMathOverviewRoute();
