@@ -3,7 +3,7 @@
 
     const BASE_PATH = '/materi2/math%20for%20ai/kenapa%20ai%20butuh%20matematika/';
     const STORAGE_KEY = 'heraiMathLearningSubmodule01';
-    const RUNTIME_VERSION = '20260809-submodule-01';
+    const RUNTIME_VERSION = '20260810-quiz-layout';
     const SUBMODULE_ROUTE = '#/participant-ai-lab-math/kenapa-ai-butuh-matematika';
     const CONTENT = Object.freeze([
         { id: 'info', short: 'Ikhtisar', title: 'Kenapa AI Butuh Matematika? + Mathematical Readiness', route: SUBMODULE_ROUTE, file: '00-informasi-submodul.md', type: 'info', icon: 'fa-compass' },
@@ -994,10 +994,49 @@
             questions.push({number,prompt,options:optionMatches.map(match=>({letter:match[1],text:match[2].trim()})),answer,rationale});
         }
         const intro = removeAndShiftTitle(chunks[0]);
-        container.innerHTML=`<div class="math-learning-quiz-intro">${renderMarkdown(intro,[])}</div><p class="math-learning-preview-note"><strong>Preview integrasi:</strong> hasil kuis ini belum dikirim ke backend progress karena Math for AI belum released.</p><form class="math-learning-quiz-list" data-quiz-form>${questions.map(question=>`<fieldset class="math-learning-quiz-card" data-quiz-question="${question.number}"><legend class="math-learning-visually-hidden">Soal ${question.number}</legend><div class="math-learning-quiz-prompt"><span aria-hidden="true">${question.number}.</span><div>${renderMarkdown(removeAndShiftTitle(question.prompt),[])}</div></div><div class="math-learning-quiz-options">${question.options.map(option=>`<label class="math-learning-quiz-option"><input type="radio" name="quiz-${question.number}" value="${option.letter}"><span><strong>${option.letter}.</strong> ${renderMarkdown(option.text,[])}</span></label>`).join('')}</div><div data-quiz-review></div></fieldset>`).join('')}<div class="math-learning-button-row"><button class="math-learning-action is-primary" type="submit">Periksa jawaban</button><button class="math-learning-action" type="reset">Ulangi kuis</button></div></form>`;
+        container.innerHTML=`<div class="math-learning-quiz-intro">${renderMarkdown(intro,[])}</div><p class="math-learning-preview-note"><strong>Preview integrasi:</strong> hasil kuis ini belum dikirim ke backend progress karena Math for AI belum released.</p><form class="math-learning-quiz-list" data-quiz-form>${questions.map(question=>`<fieldset class="math-learning-quiz-card" data-quiz-question="${question.number}" tabindex="-1" aria-labelledby="mathQuizQuestion${question.number}"><legend class="math-learning-visually-hidden">Soal ${question.number}</legend><div class="math-learning-quiz-prompt" id="mathQuizQuestion${question.number}"><span class="math-learning-quiz-number" aria-hidden="true">${String(question.number).padStart(2,'0')}</span><div class="math-learning-quiz-question-copy">${renderMarkdown(removeAndShiftTitle(question.prompt),[])}</div></div><div class="math-learning-quiz-options">${question.options.map(option=>`<label class="math-learning-quiz-option"><input type="radio" name="quiz-${question.number}" value="${option.letter}"><span class="math-learning-quiz-letter" aria-hidden="true">${option.letter}</span><span class="math-learning-quiz-option-copy">${renderMarkdown(option.text,[])}</span></label>`).join('')}</div><div data-quiz-review aria-live="polite"></div></fieldset>`).join('')}<div class="math-learning-button-row math-learning-quiz-actions"><button class="math-learning-action is-primary" type="submit">Periksa jawaban</button><button class="math-learning-action" type="reset">Ulangi kuis</button></div></form>`;
         const form=container.querySelector('[data-quiz-form]');
-        form.addEventListener('submit',event=>{event.preventDefault();let correct=0,answered=0;questions.forEach(question=>{const selected=form.querySelector(`input[name="quiz-${question.number}"]:checked`);if(selected)answered+=1;if(selected?.value===question.answer)correct+=1;const review=form.querySelector(`[data-quiz-question="${question.number}"] [data-quiz-review]`);review.className='math-learning-quiz-review';review.innerHTML=`<strong>${selected?.value===question.answer?'Benar':'Jawaban terbaik: '+question.answer}</strong>${renderMarkdown(removeAndShiftTitle(question.rationale),[])}`;});if(answered<questions.length){window.__aiLabToast?.(`Jawab seluruh ${questions.length} soal sebelum final review.`, 'error');return;}window.__aiLabToast?.(`Skor preview: ${correct}/${questions.length} (${Math.round(correct/questions.length*100)}%).`,correct/questions.length>=.75?'success':'info');form.querySelector('button[type="submit"]').textContent=`Skor ${correct}/${questions.length}`;});
-        form.addEventListener('reset',()=>setTimeout(()=>{container.querySelectorAll('[data-quiz-review]').forEach(node=>{node.className='';node.innerHTML='';});form.querySelector('button[type="submit"]').textContent='Periksa jawaban';},0));
+        form.addEventListener('submit',event=>{
+            event.preventDefault();
+            const unanswered=questions.find(question=>!form.querySelector(`input[name="quiz-${question.number}"]:checked`));
+            if(unanswered){
+                const fieldset=form.querySelector(`[data-quiz-question="${unanswered.number}"]`);
+                fieldset?.focus({preventScroll:true});
+                fieldset?.scrollIntoView({behavior:'smooth',block:'center'});
+                window.__aiLabToast?.(`Jawab seluruh ${questions.length} soal sebelum final review.`, 'error');
+                return;
+            }
+            let correct=0;
+            questions.forEach(question=>{
+                const fieldset=form.querySelector(`[data-quiz-question="${question.number}"]`);
+                const selected=fieldset.querySelector('input:checked');
+                const isCorrect=selected.value===question.answer;
+                if(isCorrect)correct+=1;
+                fieldset.querySelectorAll('.math-learning-quiz-option').forEach(label=>{
+                    const input=label.querySelector('input');
+                    label.classList.toggle('is-correct',input.value===question.answer);
+                    label.classList.toggle('is-incorrect',input.checked&&!isCorrect);
+                    input.disabled=true;
+                });
+                const review=fieldset.querySelector('[data-quiz-review]');
+                review.className=`math-learning-quiz-review ${isCorrect?'is-correct':'is-incorrect'}`;
+                review.innerHTML=`<strong><i class="fas ${isCorrect?'fa-circle-check':'fa-circle-info'}" aria-hidden="true"></i>${isCorrect?'Benar':'Jawaban terbaik: '+question.answer}</strong>${renderMarkdown(removeAndShiftTitle(question.rationale),[])}`;
+            });
+            form.classList.add('is-reviewed');
+            window.__aiLabToast?.(`Skor preview: ${correct}/${questions.length} (${Math.round(correct/questions.length*100)}%).`,correct/questions.length>=.75?'success':'info');
+            const submit=form.querySelector('button[type="submit"]');
+            submit.textContent=`Skor ${correct}/${questions.length}`;
+            submit.disabled=true;
+        });
+        form.addEventListener('reset',()=>setTimeout(()=>{
+            form.classList.remove('is-reviewed');
+            container.querySelectorAll('.math-learning-quiz-option').forEach(label=>label.classList.remove('is-correct','is-incorrect'));
+            container.querySelectorAll('.math-learning-quiz-option input').forEach(input=>{input.disabled=false;});
+            container.querySelectorAll('[data-quiz-review]').forEach(node=>{node.className='';node.innerHTML='';});
+            const submit=form.querySelector('button[type="submit"]');
+            submit.textContent='Periksa jawaban';
+            submit.disabled=false;
+        },0));
     }
 
     function buildTabs(active) {
@@ -1066,6 +1105,7 @@
     async function renderCurrentRoute() {
         const sequence=++renderSequence,item=getCurrentItem(),root=document.getElementById('mathLearningRoot');
         if(!root)return;
+        root.dataset.mathContentType=item.type;
         if(pageAbort)pageAbort.abort();pageAbort=new AbortController();
         root.innerHTML='<div class="math-learning-loading" role="status"><i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i><strong>Menyiapkan materi…</strong><span>Markdown dan formula matematika sedang dirender.</span></div>';
         try {
