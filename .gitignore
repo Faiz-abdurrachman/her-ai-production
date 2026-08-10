@@ -36,6 +36,20 @@ docs-nazril/
 !/materi2/math for ai/kenapa ai butuh matematika/*.md
 /materi2/math for ai/kenapa ai butuh matematika/qa-report*.md
 /materi2/math for ai/kenapa ai butuh matematika/qa-manifest*.json
+!/materi2/math for ai/02-linear-algebra/
+!/materi2/math for ai/02-linear-algebra/00-informasi-submodul.md
+!/materi2/math for ai/02-linear-algebra/01-dari-scalar-ke-vector.md
+!/materi2/math for ai/02-linear-algebra/02-membaca-vektor.md
+!/materi2/math for ai/02-linear-algebra/03-operasi-vektor.md
+!/materi2/math for ai/02-linear-algebra/04-norm-dan-distance.md
+!/materi2/math for ai/02-linear-algebra/05-dot-product.md
+!/materi2/math for ai/02-linear-algebra/06-cosine-similarity.md
+!/materi2/math for ai/02-linear-algebra/07-matrix.md
+!/materi2/math for ai/02-linear-algebra/08-matrix-operations-multiplication.md
+!/materi2/math for ai/02-linear-algebra/latihan.md
+!/materi2/math for ai/02-linear-algebra/kuis.md
+!/materi2/math for ai/02-linear-algebra/diskusi.md
+!/materi2/math for ai/02-linear-algebra/referensi.md
 *.bak
 *.zip
 /handover/
