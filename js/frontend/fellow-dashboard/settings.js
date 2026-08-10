@@ -27,7 +27,7 @@
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
                 var version = name === 'math-learning'
-                    ? '20260809-interactive-diagnostic'
+                    ? '20260810-quiz-layout'
                     : '20260803-discussion-name-fix';
                 s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=' + version;
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
