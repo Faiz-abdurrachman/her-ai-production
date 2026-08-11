@@ -2154,8 +2154,8 @@
             { label: 'Materi', icon: 'fas fa-book-open', route: items[0].route, types: ['info', 'topic'] },
             { label: 'Latihan', icon: 'fas fa-pen-to-square', route: items.find(item => item.type === 'practice').route, types: ['practice'] },
             { label: 'Kuis', icon: 'far fa-clipboard', route: items.find(item => item.type === 'quiz').route, types: ['quiz'] },
-            { label: 'Diskusi', icon: 'far fa-message', route: items.find(item => item.type === 'discussion').route, types: ['discussion'] },
-            { label: 'Referensi', icon: 'fas fa-book-bookmark', route: items.find(item => item.type === 'references').route, types: ['references'] }
+            { label: 'Diskusi', icon: 'far fa-message', route: items.find(item => item.type === 'discussion').route, types: ['discussion'] }
+            // { label: 'Referensi', icon: 'fas fa-book-bookmark', route: items.find(item => item.type === 'references').route, types: ['references'] }
         ];
         return `<div class="lesson-tabs" role="navigation" aria-label="Jenis materi Submodul ${submodule.id}">${tabs.map(tab => `<a href="${tab.route}" class="${tab.types.includes(active.type) ? 'active' : ''}" ${tab.types.includes(active.type) ? 'aria-current="page"' : ''}><i class="${tab.icon}" aria-hidden="true"></i>${tab.label}</a>`).join('')}</div>`;
     }
