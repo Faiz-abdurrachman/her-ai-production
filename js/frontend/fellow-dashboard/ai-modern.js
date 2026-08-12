@@ -398,6 +398,7 @@
     }
 
     function finalRenderQuickCheckSection(check) {
+        if (check && check.options && check.options[0] && check.options[0].includes("Pilihan A")) return "";
         return '<section class="reasoning-quick-check reasoning-qc-enhanced" data-modern-injected data-section="check" data-check-answer="' + check.answer + '" data-check-correct="' + escapeHtml(check.explanationCorrect) + '" data-check-wrong="' + escapeHtml(check.explanationWrong) + '"><div class="reasoning-quick-head"><i class="fas fa-circle-question" aria-hidden="true"></i><div><span>Quick Check</span><h3>' + escapeHtml(check.question) + '</h3></div></div><div class="reasoning-check-options">' + check.options.map(function (option, index) { return '<button type="button" data-check-option="' + index + '"><b>' + String.fromCharCode(65 + index) + '</b><span>' + escapeHtml(option) + '</span></button>'; }).join("") + '</div><div class="reasoning-check-actions"><button type="button" class="reasoning-scaffold-check-button" data-check-submit><i class="fas fa-check"></i> Periksa Jawaban</button><button type="button" class="reasoning-scaffold-reveal-button reasoning-check-retry" data-check-retry hidden><i class="fas fa-rotate-left"></i> Coba Lagi</button></div><p class="reasoning-check-feedback" aria-live="polite" hidden></p></section>';
     }
 

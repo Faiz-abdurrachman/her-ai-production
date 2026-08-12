@@ -1169,7 +1169,7 @@ var SOURCE_VISUALS = {
                         <div class="reasoning-visual-head"><i class="fas fa-route" aria-hidden="true"></i><div><span>Visual reasoning flow</span><h3>Alur pikir yang bisa dilacak</h3></div></div>
                         ${renderFlow(chapter.flow)}
                     </section>`;
-                } else if (text.includes("quick check") && chapter.quickCheck) {
+                } else if (text.includes("quick check") && chapter.quickCheck && !chapter.quickCheck.options[0].includes("Pilihan A")) {
                     replacement = `<section class="reasoning-quick-check" data-check-answer="${chapter.quickCheck.answer}">
                         <div class="reasoning-quick-head"><i class="fas fa-circle-question" aria-hidden="true"></i><div><span>Quick Check</span><h3>${escapeHtml(chapter.quickCheck.question)}</h3></div></div>
                         <div class="reasoning-check-options">
@@ -1480,6 +1480,7 @@ var SOURCE_VISUALS = {
     }
 
     function finalRenderQuickCheckSection(qc) {
+        if (qc && qc.options && qc.options[0] && qc.options[0].includes("Pilihan A")) return "";
         return '<section class="reasoning-quick-check" data-section="check" data-check-answer="' + qc.answer + '">\n                <div class="reasoning-quick-head"><i class="fas fa-circle-question" aria-hidden="true"></i><div><span>Quick Check</span><h3>' + escapeHtml(qc.question) + '</h3></div></div>\n                <div class="reasoning-check-options">\n                    ' + qc.options.map(function (option, index) {
                         return '<button type="button" data-check-option="' + index + '"><b>' + String.fromCharCode(65 + index) + '</b><span>' + escapeHtml(option) + '</span></button>';
                     }).join("") + '\n                </div>\n                <div class="reasoning-check-actions">\n                    <button type="button" class="reasoning-check-submit" data-check-submit><i class="fas fa-check" aria-hidden="true"></i> Periksa Jawaban</button>\n                    <button type="button" class="reasoning-check-retry" data-check-retry hidden><i class="fas fa-rotate-left" aria-hidden="true"></i> Coba Lagi</button>\n                </div>\n                <p class="reasoning-check-feedback" hidden></p>\n            </section>';
