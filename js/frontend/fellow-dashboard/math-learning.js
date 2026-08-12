@@ -75,6 +75,28 @@
                 { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 03', file: 'final/diskusi.md', type: 'discussion', icon: 'fa-comments' },
                 { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 03', file: 'final/referensi.md', type: 'references', icon: 'fa-book-bookmark' }
             ]
+        }),
+        createSubmodule({
+            id: '04', slug: 'probability',
+            title: 'Probability: Menalar Ketidakpastian dalam AI',
+            sourceBase: '/materi2/math%20for%20ai/04-probability/',
+            routeBase: '#/participant-ai-lab-math/probability',
+            storageKey: 'heraiMathLearningSubmodule04', topicCount: 8,
+            items: [
+                { id: 'info', slug: '', short: 'Ikhtisar', title: 'Probability: Menalar Ketidakpastian dalam AI', file: '00-informasi-submodul.md', type: 'info', icon: 'fa-dice' },
+                { id: 'topic-01', slug: 'event-outcome-sample-space', short: 'Sample space', title: 'Event, Outcome, dan Sample Space', file: '01-event-outcome-sample-space.md', type: 'topic', icon: 'fa-list-ul' },
+                { id: 'topic-02', slug: 'probability-complement', short: 'Probability & complement', title: 'Probability dan Complement', file: '02-probability-complement.md', type: 'topic', icon: 'fa-circle-half-stroke' },
+                { id: 'topic-03', slug: 'joint-union-probability-table', short: 'Joint, union, table', title: 'Joint, Union, dan Probability Table', file: '03-joint-union-probability-table.md', type: 'topic', icon: 'fa-table-cells' },
+                { id: 'topic-04', slug: 'conditional-probability', short: 'Conditional probability', title: 'Conditional Probability', file: '04-conditional-probability.md', type: 'topic', icon: 'fa-filter' },
+                { id: 'topic-05', slug: 'independence-dependence', short: 'Independence & dependence', title: 'Independence dan Dependence', file: '05-independence-dependence.md', type: 'topic', icon: 'fa-code-branch' },
+                { id: 'topic-06', slug: 'bayes-sebagai-update-keyakinan', short: 'Bayes', title: 'Bayes sebagai Update Keyakinan', file: '06-bayes-sebagai-update-keyakinan.md', type: 'topic', icon: 'fa-scale-balanced' },
+                { id: 'topic-07', slug: 'random-variable-distribution-expected-value', short: 'Random variable, expected value', title: 'Random Variable, Distribution, dan Expected Value', file: '07-random-variable-distribution-expected-value.md', type: 'topic', icon: 'fa-chart-area' },
+                { id: 'topic-08', slug: 'score-probability-calibration-probabilistic-loss', short: 'Score, probability, calibration', title: 'Score, Probability, Calibration, dan Probabilistic Loss', file: '08-score-probability-calibration-probabilistic-loss.md', type: 'topic', icon: 'fa-bullseye' },
+                { id: 'practice', slug: 'latihan', short: 'Latihan', title: 'Latihan Submodul 04', file: 'latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
+                { id: 'quiz', slug: 'kuis', short: 'Kuis', title: 'Kuis Submodul 04', file: 'kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
+                { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 04', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
+                { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 04', file: 'referensi.md', type: 'references', icon: 'fa-book-bookmark' }
+            ]
         })
     ]);
     const CONTENT = Object.freeze(SUBMODULES.flatMap(submodule => submodule.items));
@@ -308,7 +330,7 @@
         const markerPattern = '(STATIC VISUAL|INTERACTIVE VISUAL|NUMBER MANIPULATOR|COMPARE VIEW|STEP-BY-STEP REVEAL)';
         for (let index = 0; index < lines.length;) {
             const directMarker = lines[index].match(new RegExp(`^(#{1,6})\\s+(?:\\d+\\.\\s+)?\\[${markerPattern}\\]\\s+(.+)$`));
-            const specHeading = lines[index].match(/^(#{1,6})\s+(?:\d+\.\s+)?(?:Visual\s*\/\s*Interactive Specification|Visualization Spec|Interactive Specification)(?:\s+\d+)?\s*(?:[—-]\s*(.*))?$/i);
+            const specHeading = lines[index].match(/^(#{1,6})\s+(?:\d+\.\s+)?(?:Visual\s*\/\s*Interactive Spec(?:ification)?|Visualization Spec(?:ification)?|Interactive Spec(?:ification)?)(?:\s+\d+)?\s*(?:[—-]\s*(.*))?$/i);
             let markerType = directMarker?.[2] || '';
             let markerTitle = directMarker?.[3]?.trim() || specHeading?.[2]?.trim() || '';
             let markerLevel = (directMarker?.[1] || specHeading?.[1] || '').length;
@@ -855,7 +877,8 @@
             'square-of-sum-vs-sum-of-squares': squareSumTemplate(),
             'read-a-future-ai-formula': stepTemplate([mathHtml('\\frac{1}{n}\\sum_{i=1}^{n}(y^{(i)}-\\hat{y}^{(i)})^2', true),'Baca selisih target dan prediction.','Square setiap selisih.','Sum across observations.','Divide by n.','Formula panjang dapat dibaca sebagai urutan operasi, bukan satu blok simbol.']),
             ...linearAlgebraInteractiveTemplates(spec),
-            ...statisticsInteractiveTemplates(spec)
+            ...statisticsInteractiveTemplates(spec),
+            ...probabilityInteractiveTemplates(spec)
         };
     }
 
@@ -974,6 +997,50 @@
             if (value) return value;
         }
         return '';
+    }
+
+    function probabilityInteractiveTemplates(spec) {
+        return {
+            'outcomesample-spaceevent-selector': stateToggleTemplate([
+                ['Process', '<p>Process: Session dimulai. Possible outcomes: selesai_mandiri, selesai_dengan_bantuan, belum_selesai.</p>', 'Pilih Process'],
+                ['Sample Space Ω', '<p>Ω = { selesai_mandiri, selesai_dengan_bantuan, belum_selesai }</p>', 'Pilih Sample Space'],
+                ['Event A', '<p>Event A (selesai dalam 30 menit) = { selesai_mandiri, selesai_dengan_bantuan }</p>', 'Pilih Event A']
+            ]),
+            'probability-complement': stateToggleTemplate([
+                ['Probability', '<p>P(A) = 0.40</p>', 'Pilih Probability'],
+                ['Complement', '<p>P(A^c) = 0.60</p>', 'Pilih Complement']
+            ]),
+            'overlap-two-way-probability-table': stateToggleTemplate([
+                ['Two-Way Table', '<p>Menunjukkan joint probabilities (overlap) di dalam grid.</p>', 'Table'],
+                ['Venn Regions', '<p>Menunjukkan area yang tumpang tindih secara visual.</p>', 'Regions']
+            ]),
+            'filter-the-universe': stateToggleTemplate([
+                ['No condition', '<p>Total probability space = 1.00</p>', 'No condition'],
+                ['Given B', '<p>Denominator menjadi P(B) = 0.40</p>', 'Condition B'],
+                ['Given A', '<p>Denominator menjadi P(A) = 0.30</p>', 'Condition A']
+            ]),
+            'independent-vs-dependent-vs-mutually-exclusive': stateToggleTemplate([
+                ['Independent', '<p>P(A | B) = P(A)</p>', 'Independent'],
+                ['Dependent', '<p>P(A | B) ≠ P(A)</p>', 'Dependent'],
+                ['Mutually Exclusive', '<p>P(A ∩ B) = 0</p>', 'Mutually Exclusive']
+            ]),
+            'prior-evidence-posterior': stepTemplate([
+                'Prior: Keyakinan awal P(H).',
+                'Evidence: Data baru E muncul.',
+                'Posterior: Keyakinan di-update menjadi P(H|E).'
+            ]),
+            'outcome-x-distribution-expected-value': stepTemplate([
+                'Outcome: H, T',
+                'Random Variable X: Map H ke 1, T ke 0',
+                'Distribution: P(X=1) = 0.5, P(X=0) = 0.5',
+                'Expected Value: E[X] = (1 × 0.5) + (0 × 0.5) = 0.5'
+            ]),
+            'score-vs-probability-vs-calibration-reliability-diagram': stateToggleTemplate([
+                ['Instructional Score', '<p>h(q,c) = 0.6q + 0.4c. Angka kinerja historis.</p>', 'Score'],
+                ['Predicted Probability', '<p>Estimasi model tentang future outcome.</p>', 'Probability'],
+                ['Calibration', '<p>Proporsi aktual = probabilitas prediksi.</p>', 'Calibration']
+            ])
+        };
     }
 
     function linearAlgebraInteractiveTemplates(spec) {
@@ -1308,6 +1375,10 @@
         bindGraphInteractive(section, key, say);
         bindLinearAlgebraInteractive(section, key, say);
         bindStatisticsInteractive(section, key, say);
+        bindProbabilityInteractive(section, key, say);
+    }
+
+    function bindProbabilityInteractive(section, key, say) {
     }
 
     function bindStatisticsInteractive(section, key, say) {
@@ -2086,12 +2157,23 @@
         }
     }
 
-    function renderQuiz(markdown, container) {
-        const chunks = String(markdown).split(/^# (?:Soal\s+)?(\d+)[^\n]*\n/gm);
+    async function renderQuiz(markdown, container, submodule) {
+        let externalKey = {};
+        if (submodule && submodule.id === '04') {
+            try {
+                const res = await fetch(submodule.sourceBase + 'kunci-jawaban-rubrik.md', { cache: 'no-store' });
+                if (res.ok) {
+                    const text = await res.text();
+                    const matches = [...text.matchAll(/^\|\s*(\d+)\s*\|\s*([A-D])\s*\|/gm)];
+                    for (const m of matches) externalKey[m[1]] = m[2];
+                }
+            } catch(e) {}
+        }
+        const chunks = String(markdown).split(/^#{1,2}\s+(?:Soal\s+|Q)?(\d+)[^\n]*\n/gm);
         const questions = [];
         for (let i=1;i<chunks.length;i+=2) {
             const number=Number(chunks[i]),body=chunks[i+1].split(/^---\s*$/m)[0];
-            const answer=(body.match(/\*\*(?:Jawaban benar|Correct answer|Jawaban):\*\*\s*([A-D])/)||[])[1];
+            const answer=externalKey[number] || (body.match(/\*\*(?:Jawaban benar|Correct answer|Jawaban):\*\*\s*([A-D])/)||[])[1];
             const optionMatches=[...body.matchAll(/^([A-D])\.\s+(.+?)(?=\s{2}$|$)/gm)];
             const firstOption=optionMatches[0]?.index ?? body.length;
             const prompt=body.slice(0,firstOption).trim();
@@ -2247,7 +2329,7 @@
             root.innerHTML = `<div class="lesson-layout math-learning-layout"><div class="lesson-main-content"><section class="lesson-hero compact math-learning-lesson-hero"><div class="lesson-hero-copy"><span class="math-learning-kicker"><i class="fas ${item.icon}" aria-hidden="true"></i>Foundation &amp; Core AI · Math for AI · Submodul ${submodule.id}</span><h1>${escapeHtml(title)}</h1><p>${escapeHtml(lead)}</p><div class="lesson-meta-row"><span><i class="far fa-clock" aria-hidden="true"></i>${escapeHtml(meta['estimasi belajar'] || 'Belajar sesuai ritme')}</span><span><i class="fas fa-book-open" aria-hidden="true"></i>${escapeHtml(topicPosition)}</span><b>${escapeHtml(meta.level || 'Beginner')}</b></div></div><img src="/assets/messaging/herai-chat-persona.png" alt="HerAI fellow belajar Math for AI"></section><section class="lesson-material-panel math-learning-material-panel">${buildTabs(submodule, item)}<article class="lesson-article math-learning-article" id="mathLearningContent" tabindex="-1">${buildLearnerContext(meta)}<div class="math-learning-markdown" data-markdown-content></div></article>${footerNav(submodule, item)}</section></div><aside class="lesson-right-panel">${buildRightPanel(submodule, item, state, progress)}</aside></div>`;
             const content = root.querySelector('[data-markdown-content]');
             if (item.type === 'quiz') {
-                renderQuiz(learnerSource, content);
+                await renderQuiz(learnerSource, content, submodule);
                 enhanceMarkdown(content, []);
             } else {
                 content.innerHTML = renderMarkdown(bodySource, extracted.specs);

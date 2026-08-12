@@ -167,6 +167,19 @@ const router = {
         "/participant-ai-lab-math/statistics-for-ai/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math/statistics-for-ai/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math/statistics-for-ai/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/event-outcome-sample-space": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/probability-complement": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/joint-union-probability-table": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/conditional-probability": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/independence-dependence": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/bayes-sebagai-update-keyakinan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/random-variable-distribution-expected-value": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/score-probability-calibration-probabilistic-loss": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/latihan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -385,6 +398,20 @@ const router = {
         "/participant-ai-lab-math/submodule-03/quiz": "/participant-ai-lab-math/statistics-for-ai/kuis",
         "/participant-ai-lab-math/submodule-03/discussion": "/participant-ai-lab-math/statistics-for-ai/diskusi",
         "/participant-ai-lab-math/submodule-03/references": "/participant-ai-lab-math/statistics-for-ai/referensi",
+        "/participant-ai-lab-math-probability": "/participant-ai-lab-math/probability",
+        "/participant-ai-lab-math/submodule-04": "/participant-ai-lab-math/probability",
+        "/participant-ai-lab-math/submodule-04/topic-01": "/participant-ai-lab-math/probability/event-outcome-sample-space",
+        "/participant-ai-lab-math/submodule-04/topic-02": "/participant-ai-lab-math/probability/probability-complement",
+        "/participant-ai-lab-math/submodule-04/topic-03": "/participant-ai-lab-math/probability/joint-union-probability-table",
+        "/participant-ai-lab-math/submodule-04/topic-04": "/participant-ai-lab-math/probability/conditional-probability",
+        "/participant-ai-lab-math/submodule-04/topic-05": "/participant-ai-lab-math/probability/independence-dependence",
+        "/participant-ai-lab-math/submodule-04/topic-06": "/participant-ai-lab-math/probability/bayes-sebagai-update-keyakinan",
+        "/participant-ai-lab-math/submodule-04/topic-07": "/participant-ai-lab-math/probability/random-variable-distribution-expected-value",
+        "/participant-ai-lab-math/submodule-04/topic-08": "/participant-ai-lab-math/probability/score-probability-calibration-probabilistic-loss",
+        "/participant-ai-lab-math/submodule-04/practice": "/participant-ai-lab-math/probability/latihan",
+        "/participant-ai-lab-math/submodule-04/quiz": "/participant-ai-lab-math/probability/kuis",
+        "/participant-ai-lab-math/submodule-04/discussion": "/participant-ai-lab-math/probability/diskusi",
+        "/participant-ai-lab-math/submodule-04/references": "/participant-ai-lab-math/probability/referensi",
         "/x/fd6p1/mt": "/participant-mentor",
         "/x/fd6p1/t": "/participant-tasks",
         "/x/fd6p1/p": "/participant-projects",
@@ -525,7 +552,8 @@ const router = {
         const submoduleBases = [
             "/participant-ai-lab-math/kenapa-ai-butuh-matematika",
             "/participant-ai-lab-math/linear-algebra",
-            "/participant-ai-lab-math/statistics-for-ai"
+            "/participant-ai-lab-math/statistics-for-ai",
+            "/participant-ai-lab-math/probability"
         ];
         const isRegisteredMathLesson = submoduleBases.some(submoduleBase => (
             path === submoduleBase || (path.startsWith(`${submoduleBase}/`) && this.routes[path])
@@ -744,6 +772,19 @@ const router = {
             "/participant-ai-lab-math/statistics-for-ai/kuis",
             "/participant-ai-lab-math/statistics-for-ai/diskusi",
             "/participant-ai-lab-math/statistics-for-ai/referensi",
+            "/participant-ai-lab-math/probability",
+            "/participant-ai-lab-math/probability/event-outcome-sample-space",
+            "/participant-ai-lab-math/probability/probability-complement",
+            "/participant-ai-lab-math/probability/joint-union-probability-table",
+            "/participant-ai-lab-math/probability/conditional-probability",
+            "/participant-ai-lab-math/probability/independence-dependence",
+            "/participant-ai-lab-math/probability/bayes-sebagai-update-keyakinan",
+            "/participant-ai-lab-math/probability/random-variable-distribution-expected-value",
+            "/participant-ai-lab-math/probability/score-probability-calibration-probabilistic-loss",
+            "/participant-ai-lab-math/probability/latihan",
+            "/participant-ai-lab-math/probability/kuis",
+            "/participant-ai-lab-math/probability/diskusi",
+            "/participant-ai-lab-math/probability/referensi",
             "/participant-ai-lab-gen",
             "/participant-ai-lab-llm",
             "/participant-ai-lab-vlm",
@@ -1589,7 +1630,7 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
 
                 } else if (path.startsWith("/participant-ai-lab-math") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra") || path.startsWith("/participant-ai-lab-math/statistics-for-ai")) {
+                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra") || path.startsWith("/participant-ai-lab-math/statistics-for-ai") || path.startsWith("/participant-ai-lab-math/probability")) {
                         window.__aiLabLoader.load('math-learning').then(function() {
                             if (path === "/participant-ai-lab-math" && typeof window.initMathOverviewRoute === "function") {
                                 window.initMathOverviewRoute();
