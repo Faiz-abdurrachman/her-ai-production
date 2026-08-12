@@ -267,7 +267,7 @@
         const meta = {};
         const block = String(markdown).split('\n').slice(0, 16);
         block.forEach(line => {
-            const match = line.match(/^>\s*\*\*([^*]+):\*\*\s*(.+?)\s{0,2}$/);
+            const match = line.match(/^>?\s*\*\*([^*]+):\*\*\s*(.+?)\s{0,2}$/);
             if (match) meta[match[1].trim().toLowerCase()] = match[2].replace(/\s{2,}$/, '').trim();
         });
         return meta;
@@ -278,12 +278,12 @@
         const separatorIndex = lines.findIndex((line, index) => index < 24 && line.trim() === '---');
         if (separatorIndex < 0) return String(markdown);
         const header = lines.slice(0, separatorIndex);
-        const quoteStart = header.findIndex(line => /^>\s*/.test(line));
-        if (quoteStart < 0) return String(markdown);
-        const quoteBlock = header.slice(quoteStart);
-        const hasStructuredMetadata = quoteBlock.some(line => /^>\s*\*\*[^*]+:\*\*/.test(line));
+        const metaStart = header.findIndex(line => /^>\s*/.test(line) || /^\*\*[^*]+:\*\*/.test(line));
+        if (metaStart < 0) return String(markdown);
+        const metaBlock = header.slice(metaStart);
+        const hasStructuredMetadata = metaBlock.some(line => /^>?\s*\*\*[^*]+:\*\*/.test(line) || /^>?\s*(?:\*\*|)Final Consolidation/.test(line));
         if (!hasStructuredMetadata) return String(markdown);
-        return [...header.slice(0, quoteStart), ...lines.slice(separatorIndex + 1)].join('\n');
+        return [...header.slice(0, metaStart), ...lines.slice(separatorIndex + 1)].join('\n');
     }
 
     function cleanMetaValue(value) {
