@@ -50,10 +50,14 @@
                 </button>
                 <div class="fellow-user-menu">
                     <button type="button" class="fellow-user-button" data-fellow-user-toggle aria-expanded="false">
-                        <img src="/assets/persona-her-ai.png" alt="Aisyah Putri" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865'">
-                        <span><strong>Aisyah Putri</strong><small>Fellow</small></span>
-                        <i class="fas fa-chevron-down"></i>
+                        <span class="avatar-img" aria-hidden="true"></span>
+                        <span><strong>Peserta</strong><small>Fellow</small></span>
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
                     </button>
+                    <div class="fellow-user-dropdown" data-fellow-user-dropdown>
+                        <a href="#/participant-settings"><i class="fas fa-user-gear"></i><span>Setting Akun</span></a>
+                        <button type="button" data-fellow-logout><i class="fas fa-right-from-bracket"></i><span>Log Out</span></button>
+                    </div>
                 </div>
             </div>
         </header>

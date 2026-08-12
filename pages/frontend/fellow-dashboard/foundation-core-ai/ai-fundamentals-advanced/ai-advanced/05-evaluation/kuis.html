@@ -24,7 +24,17 @@
             <div class="fellow-actions">
                 <label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul, topik, atau materi..."></label>
                 <button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
-                <a href="#/participant-profile" class="fellow-user-button"><span class="avatar-img"></span><span><strong>Aisyah Putri</strong><small>Peserta</small></span><i class="fas fa-chevron-down"></i></a>
+                <div class="fellow-user-menu">
+                    <button type="button" class="fellow-user-button" data-fellow-user-toggle aria-expanded="false">
+                        <span class="avatar-img" aria-hidden="true"></span>
+                        <span><strong>Peserta</strong><small>Fellow</small></span>
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="fellow-user-dropdown" data-fellow-user-dropdown>
+                        <a href="#/participant-settings"><i class="fas fa-user-gear"></i><span>Setting Akun</span></a>
+                        <button type="button" data-fellow-logout><i class="fas fa-right-from-bracket"></i><span>Log Out</span></button>
+                    </div>
+                </div>
             </div>
         </header>
         <div class="lesson-layout">
