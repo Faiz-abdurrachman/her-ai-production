@@ -180,6 +180,18 @@ const router = {
         "/participant-ai-lab-math/probability/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math/probability/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math/probability/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/calculus/function-dan-graph-aktivasi-kembali": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/calculus/slope-dan-rate-of-change": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/calculus/derivative-sebagai-local-change": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/calculus/menghitung-derivative-sederhana": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/calculus/partial-derivative": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/calculus/gradient-sebagai-vector-partial-derivatives": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/calculus/chain-rule-dan-computational-graph": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/calculus/loss-landscape-dan-bridge-ke-optimization": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/calculus/latihan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/calculus/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/calculus/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/calculus/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -412,6 +424,20 @@ const router = {
         "/participant-ai-lab-math/submodule-04/quiz": "/participant-ai-lab-math/probability/kuis",
         "/participant-ai-lab-math/submodule-04/discussion": "/participant-ai-lab-math/probability/diskusi",
         "/participant-ai-lab-math/submodule-04/references": "/participant-ai-lab-math/probability/referensi",
+        "/participant-ai-lab-math-calculus": "/participant-ai-lab-math/calculus",
+        "/participant-ai-lab-math/submodule-05": "/participant-ai-lab-math/calculus",
+        "/participant-ai-lab-math/submodule-05/topic-01": "/participant-ai-lab-math/calculus/function-dan-graph-aktivasi-kembali",
+        "/participant-ai-lab-math/submodule-05/topic-02": "/participant-ai-lab-math/calculus/slope-dan-rate-of-change",
+        "/participant-ai-lab-math/submodule-05/topic-03": "/participant-ai-lab-math/calculus/derivative-sebagai-local-change",
+        "/participant-ai-lab-math/submodule-05/topic-04": "/participant-ai-lab-math/calculus/menghitung-derivative-sederhana",
+        "/participant-ai-lab-math/submodule-05/topic-05": "/participant-ai-lab-math/calculus/partial-derivative",
+        "/participant-ai-lab-math/submodule-05/topic-06": "/participant-ai-lab-math/calculus/gradient-sebagai-vector-partial-derivatives",
+        "/participant-ai-lab-math/submodule-05/topic-07": "/participant-ai-lab-math/calculus/chain-rule-dan-computational-graph",
+        "/participant-ai-lab-math/submodule-05/topic-08": "/participant-ai-lab-math/calculus/loss-landscape-dan-bridge-ke-optimization",
+        "/participant-ai-lab-math/submodule-05/practice": "/participant-ai-lab-math/calculus/latihan",
+        "/participant-ai-lab-math/submodule-05/quiz": "/participant-ai-lab-math/calculus/kuis",
+        "/participant-ai-lab-math/submodule-05/discussion": "/participant-ai-lab-math/calculus/diskusi",
+        "/participant-ai-lab-math/submodule-05/references": "/participant-ai-lab-math/calculus/referensi",
         "/x/fd6p1/mt": "/participant-mentor",
         "/x/fd6p1/t": "/participant-tasks",
         "/x/fd6p1/p": "/participant-projects",
@@ -553,7 +579,8 @@ const router = {
             "/participant-ai-lab-math/kenapa-ai-butuh-matematika",
             "/participant-ai-lab-math/linear-algebra",
             "/participant-ai-lab-math/statistics-for-ai",
-            "/participant-ai-lab-math/probability"
+            "/participant-ai-lab-math/probability",
+            "/participant-ai-lab-math/calculus"
         ];
         const isRegisteredMathLesson = submoduleBases.some(submoduleBase => (
             path === submoduleBase || (path.startsWith(`${submoduleBase}/`) && this.routes[path])
@@ -785,6 +812,19 @@ const router = {
             "/participant-ai-lab-math/probability/kuis",
             "/participant-ai-lab-math/probability/diskusi",
             "/participant-ai-lab-math/probability/referensi",
+            "/participant-ai-lab-math/calculus",
+            "/participant-ai-lab-math/calculus/function-dan-graph-aktivasi-kembali",
+            "/participant-ai-lab-math/calculus/slope-dan-rate-of-change",
+            "/participant-ai-lab-math/calculus/derivative-sebagai-local-change",
+            "/participant-ai-lab-math/calculus/menghitung-derivative-sederhana",
+            "/participant-ai-lab-math/calculus/partial-derivative",
+            "/participant-ai-lab-math/calculus/gradient-sebagai-vector-partial-derivatives",
+            "/participant-ai-lab-math/calculus/chain-rule-dan-computational-graph",
+            "/participant-ai-lab-math/calculus/loss-landscape-dan-bridge-ke-optimization",
+            "/participant-ai-lab-math/calculus/latihan",
+            "/participant-ai-lab-math/calculus/kuis",
+            "/participant-ai-lab-math/calculus/diskusi",
+            "/participant-ai-lab-math/calculus/referensi",
             "/participant-ai-lab-gen",
             "/participant-ai-lab-llm",
             "/participant-ai-lab-vlm",
@@ -1630,7 +1670,7 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
 
                 } else if (path.startsWith("/participant-ai-lab-math") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra") || path.startsWith("/participant-ai-lab-math/statistics-for-ai") || path.startsWith("/participant-ai-lab-math/probability")) {
+                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra") || path.startsWith("/participant-ai-lab-math/statistics-for-ai") || path.startsWith("/participant-ai-lab-math/probability") || path.startsWith("/participant-ai-lab-math/calculus")) {
                         window.__aiLabLoader.load('math-learning').then(function() {
                             if (path === "/participant-ai-lab-math" && typeof window.initMathOverviewRoute === "function") {
                                 window.initMathOverviewRoute();

@@ -97,6 +97,28 @@
                 { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 04', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
                 { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 04', file: 'referensi.md', type: 'references', icon: 'fa-book-bookmark' }
             ]
+        }),
+        createSubmodule({
+            id: '05', slug: 'calculus',
+            title: 'Calculus: Perubahan, Turunan, dan Gradient',
+            sourceBase: '/materi2/math%20for%20ai/calculus/final/',
+            routeBase: '#/participant-ai-lab-math/calculus',
+            storageKey: 'heraiMathLearningSubmodule05', topicCount: 8,
+            items: [
+                { id: 'info', slug: '', short: 'Ikhtisar', title: 'Calculus: Perubahan, Turunan, dan Gradient', file: '00-informasi-submodul.md', type: 'info', icon: 'fa-compass' },
+                { id: 'topic-01', slug: 'function-dan-graph-aktivasi-kembali', short: 'Function & graph', title: 'Function dan Graph: Aktivasi Kembali', file: 'materi/01-function-dan-graph-aktivasi-kembali.md', type: 'topic', icon: 'fa-arrow-right-arrow-left' },
+                { id: 'topic-02', slug: 'slope-dan-rate-of-change', short: 'Slope & rate change', title: 'Slope dan Rate of Change', file: 'materi/02-slope-dan-rate-of-change.md', type: 'topic', icon: 'fa-chart-area' },
+                { id: 'topic-03', slug: 'derivative-sebagai-local-change', short: 'Local change', title: 'Derivative sebagai Local Change', file: 'materi/03-derivative-sebagai-local-change.md', type: 'topic', icon: 'fa-microscope' },
+                { id: 'topic-04', slug: 'menghitung-derivative-sederhana', short: 'Simple derivative', title: 'Menghitung Derivative Sederhana', file: 'materi/04-menghitung-derivative-sederhana.md', type: 'topic', icon: 'fa-calculator' },
+                { id: 'topic-05', slug: 'partial-derivative', short: 'Partial derivative', title: 'Partial Derivative', file: 'materi/05-partial-derivative.md', type: 'topic', icon: 'fa-layer-group' },
+                { id: 'topic-06', slug: 'gradient-sebagai-vector-partial-derivatives', short: 'Gradient vector', title: 'Gradient sebagai Vector Partial Derivatives', file: 'materi/06-gradient-sebagai-vector-partial-derivatives.md', type: 'topic', icon: 'fa-arrows-to-circle' },
+                { id: 'topic-07', slug: 'chain-rule-dan-computational-graph', short: 'Chain rule', title: 'Chain Rule dan Computational Graph', file: 'materi/07-chain-rule-dan-computational-graph.md', type: 'topic', icon: 'fa-diagram-project' },
+                { id: 'topic-08', slug: 'loss-landscape-dan-bridge-ke-optimization', short: 'Loss landscape', title: 'Loss Landscape dan Bridge ke Optimization', file: 'materi/08-loss-landscape-dan-bridge-ke-optimization.md', type: 'topic', icon: 'fa-mountain' },
+                { id: 'practice', slug: 'latihan', short: 'Latihan', title: 'Latihan Submodul 05', file: 'latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
+                { id: 'quiz', slug: 'kuis', short: 'Kuis', title: 'Kuis Submodul 05', file: 'kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
+                { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 05', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
+                { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 05', file: 'referensi.md', type: 'references', icon: 'fa-book-bookmark' }
+            ]
         })
     ]);
     const CONTENT = Object.freeze(SUBMODULES.flatMap(submodule => submodule.items));
@@ -132,7 +154,46 @@
         '/participant-ai-lab-math/submodule-02/practice': SUBMODULES[1].items[9].route.slice(1),
         '/participant-ai-lab-math/submodule-02/quiz': SUBMODULES[1].items[10].route.slice(1),
         '/participant-ai-lab-math/submodule-02/discussion': SUBMODULES[1].items[11].route.slice(1),
-        '/participant-ai-lab-math/submodule-02/references': SUBMODULES[1].items[12].route.slice(1)
+        '/participant-ai-lab-math/submodule-02/references': SUBMODULES[1].items[12].route.slice(1),
+        
+        '/participant-ai-lab-math/submodule-03/topic-01': SUBMODULES[2].items[1].route.slice(1),
+        '/participant-ai-lab-math/submodule-03/topic-02': SUBMODULES[2].items[2].route.slice(1),
+        '/participant-ai-lab-math/submodule-03/topic-03': SUBMODULES[2].items[3].route.slice(1),
+        '/participant-ai-lab-math/submodule-03/topic-04': SUBMODULES[2].items[4].route.slice(1),
+        '/participant-ai-lab-math/submodule-03/topic-05': SUBMODULES[2].items[5].route.slice(1),
+        '/participant-ai-lab-math/submodule-03/topic-06': SUBMODULES[2].items[6].route.slice(1),
+        '/participant-ai-lab-math/submodule-03/topic-07': SUBMODULES[2].items[7].route.slice(1),
+        '/participant-ai-lab-math/submodule-03/topic-08': SUBMODULES[2].items[8].route.slice(1),
+        '/participant-ai-lab-math/submodule-03/practice': SUBMODULES[2].items[9].route.slice(1),
+        '/participant-ai-lab-math/submodule-03/quiz': SUBMODULES[2].items[10].route.slice(1),
+        '/participant-ai-lab-math/submodule-03/discussion': SUBMODULES[2].items[11].route.slice(1),
+        '/participant-ai-lab-math/submodule-03/references': SUBMODULES[2].items[12].route.slice(1),
+        
+        '/participant-ai-lab-math/submodule-04/topic-01': SUBMODULES[3].items[1].route.slice(1),
+        '/participant-ai-lab-math/submodule-04/topic-02': SUBMODULES[3].items[2].route.slice(1),
+        '/participant-ai-lab-math/submodule-04/topic-03': SUBMODULES[3].items[3].route.slice(1),
+        '/participant-ai-lab-math/submodule-04/topic-04': SUBMODULES[3].items[4].route.slice(1),
+        '/participant-ai-lab-math/submodule-04/topic-05': SUBMODULES[3].items[5].route.slice(1),
+        '/participant-ai-lab-math/submodule-04/topic-06': SUBMODULES[3].items[6].route.slice(1),
+        '/participant-ai-lab-math/submodule-04/topic-07': SUBMODULES[3].items[7].route.slice(1),
+        '/participant-ai-lab-math/submodule-04/topic-08': SUBMODULES[3].items[8].route.slice(1),
+        '/participant-ai-lab-math/submodule-04/practice': SUBMODULES[3].items[9].route.slice(1),
+        '/participant-ai-lab-math/submodule-04/quiz': SUBMODULES[3].items[10].route.slice(1),
+        '/participant-ai-lab-math/submodule-04/discussion': SUBMODULES[3].items[11].route.slice(1),
+        '/participant-ai-lab-math/submodule-04/references': SUBMODULES[3].items[12].route.slice(1),
+
+        '/participant-ai-lab-math/submodule-05/topic-01': SUBMODULES[4].items[1].route.slice(1),
+        '/participant-ai-lab-math/submodule-05/topic-02': SUBMODULES[4].items[2].route.slice(1),
+        '/participant-ai-lab-math/submodule-05/topic-03': SUBMODULES[4].items[3].route.slice(1),
+        '/participant-ai-lab-math/submodule-05/topic-04': SUBMODULES[4].items[4].route.slice(1),
+        '/participant-ai-lab-math/submodule-05/topic-05': SUBMODULES[4].items[5].route.slice(1),
+        '/participant-ai-lab-math/submodule-05/topic-06': SUBMODULES[4].items[6].route.slice(1),
+        '/participant-ai-lab-math/submodule-05/topic-07': SUBMODULES[4].items[7].route.slice(1),
+        '/participant-ai-lab-math/submodule-05/topic-08': SUBMODULES[4].items[8].route.slice(1),
+        '/participant-ai-lab-math/submodule-05/practice': SUBMODULES[4].items[9].route.slice(1),
+        '/participant-ai-lab-math/submodule-05/quiz': SUBMODULES[4].items[10].route.slice(1),
+        '/participant-ai-lab-math/submodule-05/discussion': SUBMODULES[4].items[11].route.slice(1),
+        '/participant-ai-lab-math/submodule-05/references': SUBMODULES[4].items[12].route.slice(1)
     });
 
     let renderSequence = 0;
@@ -519,6 +580,69 @@
     }
 
     function renderMarkdown(markdown, interactiveSpecs) {
+        if (markdown.includes('VISUAL / INTERACTIVE SPEC')) {
+            const keyMap = {
+                'Input → Function → Output': 'input-function-output',
+                'Function Value Explorer': 'function-value-explorer',
+                'Linear vs Quadratic': 'linear-vs-quadratic',
+                'HerAI Instructional Score Reader': 'herai-instructional-score-reader',
+                'Rise, Run, dan Dua Titik': 'rise-run-dan-dua-titik',
+                'Geser Endpoint': 'geser-endpoint',
+                'Linear vs Nonlinear': 'linear-vs-nonlinear',
+                'HerAI Instructional Rate': 'herai-instructional-rate',
+                'Secant → Tangent': 'secant-tangent',
+                'Ubah $h$': 'ubah-h',
+                'Average vs Local': 'average-vs-local',
+                'Corner yang Tidak Differentiable': 'corner-yang-tidak-differentiable',
+                'Derivative Function sebagai “Peta Slope”': 'derivative-function-sebagai-peta-slope',
+                'Power Rule Manipulator': 'power-rule-manipulator',
+                'Differentiate Term by Term': 'differentiate-term-by-term',
+                'Surface dan Dua Slice': 'surface-dan-dua-slice',
+                'Hold One Variable Fixed': 'hold-one-variable-fixed',
+                'HerAI Sensitivity': 'herai-sensitivity',
+                'Partial Components → Gradient Vector': 'partial-components-gradient-vector',
+                'Contour + Gradient Arrow': 'contour-gradient-arrow',
+                'Gradient vs Negative Gradient': 'gradient-vs-negative-gradient',
+                'Canonical HerAI Gradient': 'canonical-herai-gradient',
+                'Serial Computational Graph': 'serial-computational-graph',
+                'Ubah Inner Sensitivity': 'ubah-inner-sensitivity',
+                'Direct Formula vs Composed View': 'direct-formula-vs-composed-view',
+                'Chain Rule vs Optimization Boundary': 'chain-rule-vs-optimization-boundary',
+                '— 1D Loss Curve + Local Tangent': '1d-loss-curve-local-tangent',
+                '— Move One Parameter on a Loss Curve': 'move-one-parameter-on-a-loss-curve',
+                '— 2D Contour + Gradient Arrow': '2d-contour-gradient-arrow',
+                '— Explore 2D Landscape': 'explore-2d-landscape',
+                '— Score vs Loss': 'score-vs-loss',
+                '— Calculus → Optimization Boundary': 'calculus-optimization-boundary'
+            };
+
+            const replaceBlock = (regex, formatType) => {
+                let match;
+                while ((match = regex.exec(markdown)) !== null) {
+                    const fullMatch = match[0];
+                    const title = formatType === 1 ? match[2].trim() : match[1].trim();
+                    const key = keyMap[title];
+                    if (key) {
+                        const startIndex = match.index;
+                        const searchStr = markdown.substring(startIndex + fullMatch.length);
+                        const nextSectionMatch = searchStr.match(/\n(#|---)/);
+                        let endIndex = markdown.length;
+                        if (nextSectionMatch) {
+                            endIndex = startIndex + fullMatch.length + nextSectionMatch.index;
+                        }
+                        const replacement = `<div data-math-interactive="${key}"></div>\n`;
+                        markdown = markdown.substring(0, startIndex) + replacement + markdown.substring(endIndex);
+                        regex.lastIndex = 0;
+                    }
+                }
+            };
+            replaceBlock(/##\s+\[(.*?)\]\s+(.*?)\n/g, 1);
+            replaceBlock(/#\s+\d+\.\s+VISUAL\s+\/\s+INTERACTIVE\s+SPEC\s+—\s+(.*?)\n/g, 2);
+            markdown = markdown.replace(/#\s+\d+\.\s+VISUAL\s+\/\s+INTERACTIVE\s+SPEC\s*\n+/g, '');
+        }
+        
+        markdown = markdown.replace(/>\s*Browser-level target HerAI Markdown parser \+ KaTeX runtime:\s*\*\*NOT TESTED \/ NOT CLAIMED\*\*\./g, '');
+
         const math = protectMath(markdown);
         let html = window.marked.parse(math.markdown, { gfm: true, breaks: false, pedantic: false });
         math.tokens.forEach(item => {
@@ -878,7 +1002,8 @@
             'read-a-future-ai-formula': stepTemplate([mathHtml('\\frac{1}{n}\\sum_{i=1}^{n}(y^{(i)}-\\hat{y}^{(i)})^2', true),'Baca selisih target dan prediction.','Square setiap selisih.','Sum across observations.','Divide by n.','Formula panjang dapat dibaca sebagai urutan operasi, bukan satu blok simbol.']),
             ...linearAlgebraInteractiveTemplates(spec),
             ...statisticsInteractiveTemplates(spec),
-            ...probabilityInteractiveTemplates(spec)
+            ...probabilityInteractiveTemplates(spec),
+            ...calculusInteractiveTemplates(spec)
         };
     }
 
@@ -1039,6 +1164,118 @@
                 ['Instructional Score', '<p>h(q,c) = 0.6q + 0.4c. Angka kinerja historis.</p>', 'Score'],
                 ['Predicted Probability', '<p>Estimasi model tentang future outcome.</p>', 'Probability'],
                 ['Calibration', '<p>Proporsi aktual = probabilitas prediksi.</p>', 'Calibration']
+            ])
+        };
+    }
+
+    function calculusInteractiveTemplates(spec) {
+        return {
+            'input-function-output': stepTemplate([
+                'Nilai masuk ke dalam kotak fungsi.',
+                'Kotak fungsi menerapkan aturan operasi.',
+                'Satu input menghasilkan tepat satu output.',
+                'Proses ini deterministik.'
+            ]),
+            'function-value-explorer': `<div class="math-learning-control-grid"><label class="math-learning-control">Input x<input type="range" min="-10" max="10" step="1" value="0" data-calc-func-x><output>0</output></label></div><div class="math-learning-equation-result" data-calc-func-output></div>`,
+            'linear-vs-quadratic': compareReveal('Linear', 'f(x) = 2x + 3. Perubahan x menghasilkan perubahan konstan pada f(x). Graph berbentuk garis lurus.', 'Quadratic', 'f(x) = x². Perubahan f(x) bergantung pada nilai x saat ini. Graph berbentuk kurva parabola.', 'Tingkat kesulitan optimasi berbeda untuk jenis fungsi yang berbeda.'),
+            'herai-instructional-score-reader': `<div class="math-learning-control-grid"><label class="math-learning-control">Quiz Score<input type="range" min="0" max="100" step="5" value="80" data-calc-score-q><output>80</output></label><label class="math-learning-control">Completion<input type="range" min="0" max="100" step="5" value="60" data-calc-score-c><output>60</output></label></div><div class="math-learning-equation-result" data-calc-score-output></div>`,
+            'rise-run-dan-dua-titik': stepTemplate([
+                'Pilih titik A dan titik B di grafik.',
+                'Hitung perubahan vertikal (Rise = y2 - y1).',
+                'Hitung perubahan horizontal (Run = x2 - x1).',
+                'Slope = Rise / Run.'
+            ]),
+            'geser-endpoint': `<div class="math-learning-control-grid"><label class="math-learning-control">Titik Akhir x<input type="range" min="1" max="10" step="0.5" value="5" data-calc-slope-x><output>5</output></label></div><div class="math-learning-equation-result" data-calc-slope-output></div>`,
+            'linear-vs-nonlinear': compareReveal('Linear Rate', 'Slope sama di mana pun kita mengukurnya.', 'Nonlinear Rate', 'Slope berubah-ubah tergantung di titik mana kita berada.', 'Fungsi non-linear membutuhkan Calculus untuk mendeskripsikan rate of change di satu titik.'),
+            'herai-instructional-rate': stepTemplate([
+                'Jika quiz naik 10 poin, skor total naik 6 poin (0.6 * 10).',
+                'Jika completion naik 10 poin, skor total naik 4 poin (0.4 * 10).',
+                'Setiap komponen memiliki constant rate of change.'
+            ]),
+            'secant-tangent': stepTemplate([
+                'Garis secant memotong dua titik (x dan x+h).',
+                'Titik kedua digeser mendekati titik pertama (h mendekati 0).',
+                'Garis secant perlahan berubah menjadi garis singgung (tangent).',
+                'Slope garis tangent adalah derivative di titik tersebut.'
+            ]),
+            'ubah-h': `<div class="math-learning-control-grid"><label class="math-learning-control">Jarak h<input type="range" min="0.01" max="2" step="0.01" value="2" data-calc-h><output>2.00</output></label></div><div class="math-learning-equation-result" data-calc-h-output></div>`,
+            'average-vs-local': compareReveal('Average Change', 'Slope garis secant antara dua waktu berbeda.', 'Local Change (Instantaneous)', 'Slope garis tangent pada satu momen tepat.', 'Calculus memberikan local change.'),
+            'corner-yang-tidak-differentiable': stepTemplate([
+                'Fungsi nilai mutlak f(x) = |x| memiliki sudut tajam di x = 0.',
+                'Pendekatan dari kiri memberikan slope -1.',
+                'Pendekatan dari kanan memberikan slope 1.',
+                'Karena limit kiri dan kanan berbeda, derivative tidak ada di x=0 (non-differentiable).'
+            ]),
+            'derivative-function-sebagai-peta-slope': stepTemplate([
+                'Fungsi asli f(x) memetakan lokasi x ke ketinggian y.',
+                'Derivative f\\\'(x) memetakan lokasi x ke kemiringan di sana.',
+                'Jika f\\\'(x) positif, kurva asli sedang menanjak.',
+                'Jika f\\\'(x) negatif, kurva asli sedang menurun.'
+            ]),
+            'power-rule-manipulator': `<div class="math-learning-control-grid"><label class="math-learning-control">Exponent n<input type="range" min="1" max="5" step="1" value="2" data-calc-power-n><output>2</output></label></div><div class="math-learning-equation-result" data-calc-power-output></div>`,
+            'differentiate-term-by-term': stepTemplate([
+                'Fungsi: f(x) = 3x² + 5x - 2',
+                'Ambil turunan term pertama: d/dx(3x²) = 6x',
+                'Ambil turunan term kedua: d/dx(5x) = 5',
+                'Ambil turunan term ketiga (konstanta): d/dx(-2) = 0',
+                'Gabungkan: f\\\'(x) = 6x + 5'
+            ]),
+            'surface-dan-dua-slice': stepTemplate([
+                'Fungsi 2 variabel f(x,y) membentuk permukaan 3D.',
+                'Iris sejajar sumbu x (y konstan): slope adalah partial derivative thd x.',
+                'Iris sejajar sumbu y (x konstan): slope adalah partial derivative thd y.',
+                'Partial derivative hanya melihat satu arah sumbu pada satu waktu.'
+            ]),
+            'hold-one-variable-fixed': `<div class="math-learning-control-grid"><label class="math-learning-control">Variabel yang ditahan<select data-calc-partial-hold><option value="y">Tahan Y, Ubah X</option><option value="x">Tahan X, Ubah Y</option></select></label></div><div class="math-learning-equation-result" data-calc-partial-output></div>`,
+            'herai-sensitivity': compareReveal('Sensitivity terhadap Q', 'Turunan skor terhadap Q adalah 0.6. Kenaikan 1 unit Q menambah 0.6 skor.', 'Sensitivity terhadap C', 'Turunan skor terhadap C adalah 0.4. Kenaikan 1 unit C menambah 0.4 skor.', 'Score lebih sensitif terhadap komponen Quiz.'),
+            'partial-components-gradient-vector': stepTemplate([
+                'Hitung partial derivative terhadap x (kemiringan arah timur-barat).',
+                'Hitung partial derivative terhadap y (kemiringan arah utara-selatan).',
+                'Gabungkan menjadi vektor: [∂f/∂x, ∂f/∂y].',
+                'Vektor ini (Gradient) menunjuk ke arah tanjakan paling curam.'
+            ]),
+            'contour-gradient-arrow': `<div class="math-learning-control-grid"><label class="math-learning-control">Posisi X<input type="range" min="-3" max="3" step="0.5" value="1" data-calc-grad-x><output>1</output></label><label class="math-learning-control">Posisi Y<input type="range" min="-3" max="3" step="0.5" value="2" data-calc-grad-y><output>2</output></label></div><div class="math-learning-equation-result" data-calc-grad-output></div>`,
+            'gradient-vs-negative-gradient': compareReveal('Gradient (+)', 'Vektor yang menunjuk ke arah kenaikan tercepat (steepest ascent).', 'Negative Gradient (-)', 'Vektor yang menunjuk ke arah penurunan tercepat (steepest descent).', 'Dalam optimasi loss, kita mengikuti Negative Gradient.'),
+            'canonical-herai-gradient': stepTemplate([
+                'Fungsi skor linier: h(q,c) = 0.6q + 0.4c',
+                '∂h/∂q = 0.6',
+                '∂h/∂c = 0.4',
+                'Gradient ∇h = [0.6, 0.4]. Konstan di setiap titik!'
+            ]),
+            'serial-computational-graph': stepTemplate([
+                'Input awal x masuk ke fungsi f: y = f(x)',
+                'Hasil y menjadi input ke fungsi g: z = g(y)',
+                'Hasil z menjadi input ke fungsi h: Loss = h(z)',
+                'Untuk mencari efek x pada Loss, kalikan pengaruh lokal di tiap langkah (Chain Rule).'
+            ]),
+            'ubah-inner-sensitivity': `<div class="math-learning-control-grid"><label class="math-learning-control">Local Sensitivity 1 (Inner)<input type="range" min="-2" max="2" step="0.5" value="1" data-calc-chain-inner><output>1</output></label><label class="math-learning-control">Local Sensitivity 2 (Outer)<input type="range" min="-2" max="2" step="0.5" value="2" data-calc-chain-outer><output>2</output></label></div><div class="math-learning-equation-result" data-calc-chain-output></div>`,
+            'direct-formula-vs-composed-view': compareReveal('Direct Formula', 'Substitusi semua fungsi menjadi satu persamaan raksasa. Menghitung turunan menjadi rumit dan mudah salah.', 'Composed View (Chain Rule)', 'Hitung turunan setiap modul sederhana secara lokal, lalu kalikan semuanya.', 'Sistem AI memakai Composed View melalui Backpropagation.'),
+            'chain-rule-vs-optimization-boundary': stepTemplate([
+                'Chain Rule memberitahu KEMANA dan SEBERAPA TAJAM fungsi berubah.',
+                'Ini hanyalah pengukur/alat baca (diagnostic).',
+                'Berapa langkah kita harus berjalan? Apakah kita harus melambat? Itu urusan Optimization.',
+                'Calculus menyediakan sinyal; Optimization memakai sinyal.'
+            ]),
+            '1d-loss-curve-local-tangent': stepTemplate([
+                'Visual ini menunjukkan profil Loss jika kita mengubah satu parameter (W).',
+                'Loss Curve melengkung ke bawah membentuk sebuah lembah.',
+                'Garis tangent di suatu titik menunjukkan kemiringan di titik tersebut.',
+                'Target AI adalah titik terendah dari lembah ini (minimum loss).'
+            ]),
+            'move-one-parameter-on-a-loss-curve': `<div class="math-learning-control-grid"><label class="math-learning-control">Parameter W<input type="range" min="-5" max="5" step="0.5" value="3" data-calc-loss-w><output>3.0</output></label></div><div class="math-learning-equation-result" data-calc-loss-output></div>`,
+            '2d-contour-gradient-arrow': stepTemplate([
+                'Setiap cincin contour menghubungkan titik-titik dengan nilai Loss yang sama.',
+                'Lingkaran terdalam adalah titik dengan Loss paling kecil (global minimum untuk loss sederhana).',
+                'Panah Gradient selalu tegak lurus terhadap garis contour.',
+                'Negative gradient selalu menunjuk masuk ke dalam lembah.'
+            ]),
+            'explore-2d-landscape': `<div class="math-learning-control-grid"><label class="math-learning-control">W1<input type="range" min="-3" max="3" step="0.5" value="2" data-calc-land-w1><output>2.0</output></label><label class="math-learning-control">W2<input type="range" min="-3" max="3" step="0.5" value="2" data-calc-land-w2><output>2.0</output></label></div><div class="math-learning-equation-result" data-calc-land-output></div>`,
+            'score-vs-loss': compareReveal('Score / Reward', 'Semakin tinggi semakin baik. Gradient digunakan untuk memanjat naik (Ascent).', 'Loss / Error', 'Semakin rendah semakin baik. Gradient digunakan untuk turun (Descent).', 'Dalam AI Training, kita hampir selalu melakukan Gradient Descent pada Loss.'),
+            'calculus-optimization-boundary': stepTemplate([
+                'Selamat! Kamu telah memahami fungsi, slope, derivative, dan gradient (Calculus).',
+                'Calculus memberikan sinyal lokal untuk memperbaiki model.',
+                'Submodul berikutnya (Optimization) akan membahas bagaimana cara terbaik menggunakan sinyal tersebut.',
+                'End of Calculus Submodule.'
             ])
         };
     }
@@ -1376,9 +1613,156 @@
         bindLinearAlgebraInteractive(section, key, say);
         bindStatisticsInteractive(section, key, say);
         bindProbabilityInteractive(section, key, say);
+        bindCalculusInteractive(section, key, say);
     }
 
     function bindProbabilityInteractive(section, key, say) {
+    }
+
+    function bindCalculusInteractive(section, key, say) {
+        if (key === 'function-value-explorer') {
+            const input = section.querySelector('[data-calc-func-x]');
+            const output = section.querySelector('[data-calc-func-output]');
+            const update = () => {
+                const x = Number(input.value);
+                input.nextElementSibling.textContent = x;
+                const y = 2 * x + 5;
+                output.innerHTML = `<div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4>f(x) = 2x + 5</h4><strong style="font-size:24px; color:var(--math-accent);">f(${x}) = ${y}</strong></div>`;
+                say('Satu nilai input menghasilkan tepat satu nilai output.', 'success');
+            };
+            if (input) { input.addEventListener('input', update); update(); }
+        }
+        if (key === 'herai-instructional-score-reader') {
+            const qInput = section.querySelector('[data-calc-score-q]');
+            const cInput = section.querySelector('[data-calc-score-c]');
+            const output = section.querySelector('[data-calc-score-output]');
+            const update = () => {
+                const q = Number(qInput.value);
+                const c = Number(cInput.value);
+                qInput.nextElementSibling.textContent = q;
+                cInput.nextElementSibling.textContent = c;
+                const score = 0.6 * (q / 100) + 0.4 * (c / 100);
+                output.innerHTML = `<div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Score</h4><strong style="font-size:24px; color:#c9166c;">${score.toFixed(3)}</strong></div>`;
+            };
+            if (qInput) { qInput.addEventListener('input', update); cInput.addEventListener('input', update); update(); }
+        }
+        if (key === 'geser-endpoint') {
+            const input = section.querySelector('[data-calc-slope-x]');
+            const output = section.querySelector('[data-calc-slope-output]');
+            const update = () => {
+                const x2 = Number(input.value);
+                input.nextElementSibling.textContent = x2;
+                const x1 = 0, y1 = 0;
+                const y2 = x2 * 2; // linear f(x)=2x
+                const slope = x2 !== 0 ? (y2 - y1) / (x2 - x1) : 2;
+                output.innerHTML = `<div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Slope</h4><strong style="font-size:24px; color:var(--math-accent);">${slope}</strong><p style="margin-top:10px;">Rise: ${y2}, Run: ${x2}</p></div>`;
+            };
+            if (input) { input.addEventListener('input', update); update(); }
+        }
+        if (key === 'ubah-h') {
+            const input = section.querySelector('[data-calc-h]');
+            const output = section.querySelector('[data-calc-h-output]');
+            const update = () => {
+                const h = Number(input.value);
+                input.nextElementSibling.textContent = h.toFixed(2);
+                const x = 1;
+                const fx = x * x; // x^2
+                const fxh = (x + h) * (x + h);
+                const slope = (fxh - fx) / h;
+                output.innerHTML = `<div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Average Rate of Change (Secant Slope)</h4><strong style="font-size:24px; color:#c9166c;">${slope.toFixed(3)}</strong></div>`;
+                if (h <= 0.05) {
+                    say('h sangat kecil! Secant slope hampir sama dengan Tangent slope (Derivative = 2.0).', 'success');
+                } else {
+                    say('Geser h mendekati 0 untuk melihat limit derivative.', 'warning');
+                }
+            };
+            if (input) { input.addEventListener('input', update); update(); }
+        }
+        if (key === 'power-rule-manipulator') {
+            const input = section.querySelector('[data-calc-power-n]');
+            const output = section.querySelector('[data-calc-power-output]');
+            const update = () => {
+                const n = Number(input.value);
+                input.nextElementSibling.textContent = n;
+                const newExp = n - 1;
+                output.innerHTML = `<div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4>f(x) = x<sup style="font-size:0.6em">${n}</sup></h4><strong style="font-size:24px; color:var(--math-accent);">f'(x) = ${n}x<sup style="font-size:0.6em">${newExp !== 1 ? newExp : ''}</sup>${newExp === 0 ? ' = ' + n : ''}</strong></div>`;
+            };
+            if (input) { input.addEventListener('input', update); update(); }
+        }
+        if (key === 'hold-one-variable-fixed') {
+            const select = section.querySelector('[data-calc-partial-hold]');
+            const output = section.querySelector('[data-calc-partial-output]');
+            const update = () => {
+                const hold = select.value;
+                if (hold === 'y') {
+                    output.innerHTML = `<div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Partial thd x (y konstan)</h4><strong style="font-size:20px; color:#c9166c;">Slice sepanjang sumbu X. Slope dihitung dengan aturan biasa thd X.</strong></div>`;
+                } else {
+                    output.innerHTML = `<div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Partial thd y (x konstan)</h4><strong style="font-size:20px; color:var(--math-accent);">Slice sepanjang sumbu Y. Slope dihitung dengan aturan biasa thd Y.</strong></div>`;
+                }
+            };
+            if (select) { select.addEventListener('change', update); update(); }
+        }
+        if (key === 'contour-gradient-arrow') {
+            const xInput = section.querySelector('[data-calc-grad-x]');
+            const yInput = section.querySelector('[data-calc-grad-y]');
+            const output = section.querySelector('[data-calc-grad-output]');
+            const update = () => {
+                const x = Number(xInput.value);
+                const y = Number(yInput.value);
+                xInput.nextElementSibling.textContent = x.toFixed(1);
+                yInput.nextElementSibling.textContent = y.toFixed(1);
+                // f(x,y) = x^2 + y^2 => grad = [2x, 2y]
+                const gx = 2 * x;
+                const gy = 2 * y;
+                output.innerHTML = `<div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Gradient Vector ∇f</h4><strong style="font-size:24px; color:var(--math-accent);">[${gx.toFixed(1)}, ${gy.toFixed(1)}]</strong><p style="margin-top:10px;">Menunjuk menjauh dari pusat (0,0) menuju nilai yang lebih besar.</p></div>`;
+            };
+            if (xInput) { xInput.addEventListener('input', update); yInput.addEventListener('input', update); update(); }
+        }
+        if (key === 'ubah-inner-sensitivity') {
+            const iInput = section.querySelector('[data-calc-chain-inner]');
+            const oInput = section.querySelector('[data-calc-chain-outer]');
+            const output = section.querySelector('[data-calc-chain-output]');
+            const update = () => {
+                const inner = Number(iInput.value);
+                const outer = Number(oInput.value);
+                iInput.nextElementSibling.textContent = inner.toFixed(1);
+                oInput.nextElementSibling.textContent = outer.toFixed(1);
+                const total = inner * outer;
+                output.innerHTML = `<div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Total Derivative</h4><strong style="font-size:24px; color:#c9166c;">${inner.toFixed(1)} × ${outer.toFixed(1)} = ${total.toFixed(2)}</strong></div>`;
+                say('Chain rule: kalikan seluruh turunan lokal.', 'success');
+            };
+            if (iInput) { iInput.addEventListener('input', update); oInput.addEventListener('input', update); update(); }
+        }
+        if (key === 'move-one-parameter-on-a-loss-curve') {
+            const wInput = section.querySelector('[data-calc-loss-w]');
+            const output = section.querySelector('[data-calc-loss-output]');
+            const update = () => {
+                const w = Number(wInput.value);
+                wInput.nextElementSibling.textContent = w.toFixed(1);
+                const loss = w * w; // W^2
+                const grad = 2 * w;
+                let dir = grad > 0 ? "Kurangi W" : (grad < 0 ? "Tambah W" : "Sudah Minimum");
+                output.innerHTML = `<div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Loss</h4><strong style="font-size:24px; color:var(--text);">${loss.toFixed(2)}</strong><div style="margin-top:10px;"><strong>Gradient:</strong> ${grad.toFixed(1)}</div><div style="margin-top:10px; color:var(--math-accent);"><strong>Rekomendasi Update:</strong> ${dir}</div></div>`;
+            };
+            if (wInput) { wInput.addEventListener('input', update); update(); }
+        }
+        if (key === 'explore-2d-landscape') {
+            const w1Input = section.querySelector('[data-calc-land-w1]');
+            const w2Input = section.querySelector('[data-calc-land-w2]');
+            const output = section.querySelector('[data-calc-land-output]');
+            const update = () => {
+                const w1 = Number(w1Input.value);
+                const w2 = Number(w2Input.value);
+                w1Input.nextElementSibling.textContent = w1.toFixed(1);
+                w2Input.nextElementSibling.textContent = w2.toFixed(1);
+                const loss = (w1 * w1) + (w2 * w2);
+                const grad = [2 * w1, 2 * w2];
+                output.innerHTML = `<div class="math-learning-stat-box" style="padding:15px; background:#f9f9f9; border-radius:8px;"><h4>Loss</h4><strong style="font-size:24px; color:var(--text);">${loss.toFixed(2)}</strong><div style="margin-top:10px;"><strong>Gradient:</strong> [${grad[0].toFixed(1)}, ${grad[1].toFixed(1)}]</div><div style="margin-top:10px; color:var(--math-accent);">Titik Minimum Global ada di [0, 0].</div></div>`;
+                if (loss === 0) say('Global Minimum Tercapai!', 'success');
+                else say('Gradient memberitahu arah pendakian terdalam. Untuk loss, kita turun melawan arah gradient.', 'warning');
+            };
+            if (w1Input) { w1Input.addEventListener('input', update); w2Input.addEventListener('input', update); update(); }
+        }
     }
 
     function bindStatisticsInteractive(section, key, say) {
@@ -2159,12 +2543,12 @@
 
     async function renderQuiz(markdown, container, submodule) {
         let externalKey = {};
-        if (submodule && submodule.id === '04') {
+        if (submodule && (submodule.id === '04' || submodule.id === '05')) {
             try {
                 const res = await fetch(submodule.sourceBase + 'kunci-jawaban-rubrik.md', { cache: 'no-store' });
                 if (res.ok) {
                     const text = await res.text();
-                    const matches = [...text.matchAll(/^\|\s*(\d+)\s*\|\s*([A-D])\s*\|/gm)];
+                    const matches = [...text.matchAll(/^\|\s*(\d+)\s*\|(?:\s*[^\|]+\s*\|)?\s*([A-D])\s*\|/gm)];
                     for (const m of matches) externalKey[m[1]] = m[2];
                 }
             } catch(e) {}
