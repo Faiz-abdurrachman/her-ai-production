@@ -6875,15 +6875,35 @@
 
 .participant-route-guard a {
     align-items: center;
-    background: var(--fellow-pink);
+    background: var(--fellow-pink, #f63392);
     border-radius: 13px;
+    box-shadow: 0 8px 18px rgba(246, 51, 146, .2);
     color: #fff;
     display: inline-flex;
     font-size: .88rem;
     font-weight: 800;
+    justify-content: center;
     min-height: 44px;
     padding: 0 18px;
     text-decoration: none;
+    transition: background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.participant-route-guard a:hover {
+    background: #d91f7b;
+    box-shadow: 0 10px 22px rgba(217, 31, 123, .24);
+    transform: translateY(-1px);
+}
+
+.participant-route-guard a:focus-visible {
+    outline: 3px solid rgba(246, 51, 146, .28);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .participant-route-guard a {
+        transition: none;
+    }
 }
 
 .ai-intro-learning-map,

@@ -123,16 +123,63 @@ const router = {
         "/participant-ai-lab-ml-neural-networks": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-ml-unsupervised": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math": "/pages/frontend/fellow-dashboard/under-development.html",
-        "/participant-ai-lab-math-intro": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-linear-algebra": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-statistics": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-probability": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-calculus": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-optimization": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-case-study": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/lesson.html",
-        "/participant-ai-lab-math-practice": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/practice.html",
-        "/participant-ai-lab-math-quiz": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/quiz.html",
-        "/participant-ai-lab-math-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/discussion.html",
+        "/participant-ai-lab-math-linear-algebra": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math-statistics": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math-probability": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math-calculus": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math-optimization": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math-case-study": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/dunia-nyata-menjadi-representasi-komputasional": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/data-observation-feature-dan-target": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/pecahan-desimal-dan-persentase": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/variable-expression-dan-equation": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/function-dari-input-ke-output": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/coordinate-graph-dan-perubahan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/powers-logarithms-dan-sigma": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/latihan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/kenapa-ai-butuh-matematika/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/dari-scalar-ke-vector": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/membaca-vektor": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/operasi-vektor": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/norm-dan-distance": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/dot-product": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/cosine-similarity": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/matrix": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/matrix-operations-multiplication": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/latihan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/linear-algebra/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/dari-matrix-ke-dataset-statistik": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/mean-median-mode": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/range-variance-standard-deviation": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/distribution-dan-histogram": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/percentile-quartile-iqr": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/outlier-sinyal-untuk-diperiksa": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/covariance-correlation-association": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/data-quality-untuk-ai": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/latihan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/statistics-for-ai/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/event-outcome-sample-space": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/probability-complement": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/joint-union-probability-table": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/conditional-probability": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/independence-dependence": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/bayes-sebagai-update-keyakinan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/random-variable-distribution-expected-value": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/score-probability-calibration-probabilistic-loss": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/latihan": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/probability/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -307,6 +354,64 @@ const router = {
         "/x/fd6p1/ai/ethics": "/participant-ai-ethics",
         "/x/fd6p1/ai/future": "/participant-ai-future",
         "/x/fd6p1/ai/summary": "/participant-ai-summary",
+        "/participant-ai-lab-math-intro": "/participant-ai-lab-math/kenapa-ai-butuh-matematika",
+        "/participant-ai-lab-math-practice": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/latihan",
+        "/participant-ai-lab-math-quiz": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/kuis",
+        "/participant-ai-lab-math-discussion": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/diskusi",
+        "/participant-ai-lab-math/submodule-01": "/participant-ai-lab-math/kenapa-ai-butuh-matematika",
+        "/participant-ai-lab-math/submodule-01/topic-01": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/dunia-nyata-menjadi-representasi-komputasional",
+        "/participant-ai-lab-math/submodule-01/topic-02": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/data-observation-feature-dan-target",
+        "/participant-ai-lab-math/submodule-01/topic-03": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/pecahan-desimal-dan-persentase",
+        "/participant-ai-lab-math/submodule-01/topic-04": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/variable-expression-dan-equation",
+        "/participant-ai-lab-math/submodule-01/topic-05": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/function-dari-input-ke-output",
+        "/participant-ai-lab-math/submodule-01/topic-06": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/coordinate-graph-dan-perubahan",
+        "/participant-ai-lab-math/submodule-01/topic-07": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/powers-logarithms-dan-sigma",
+        "/participant-ai-lab-math/submodule-01/practice": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/latihan",
+        "/participant-ai-lab-math/submodule-01/quiz": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/kuis",
+        "/participant-ai-lab-math/submodule-01/discussion": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/diskusi",
+        "/participant-ai-lab-math/submodule-01/references": "/participant-ai-lab-math/kenapa-ai-butuh-matematika/referensi",
+        "/participant-ai-lab-math-linear-algebra": "/participant-ai-lab-math/linear-algebra",
+        "/participant-ai-lab-math/submodule-02": "/participant-ai-lab-math/linear-algebra",
+        "/participant-ai-lab-math/submodule-02/topic-01": "/participant-ai-lab-math/linear-algebra/dari-scalar-ke-vector",
+        "/participant-ai-lab-math/submodule-02/topic-02": "/participant-ai-lab-math/linear-algebra/membaca-vektor",
+        "/participant-ai-lab-math/submodule-02/topic-03": "/participant-ai-lab-math/linear-algebra/operasi-vektor",
+        "/participant-ai-lab-math/submodule-02/topic-04": "/participant-ai-lab-math/linear-algebra/norm-dan-distance",
+        "/participant-ai-lab-math/submodule-02/topic-05": "/participant-ai-lab-math/linear-algebra/dot-product",
+        "/participant-ai-lab-math/submodule-02/topic-06": "/participant-ai-lab-math/linear-algebra/cosine-similarity",
+        "/participant-ai-lab-math/submodule-02/topic-07": "/participant-ai-lab-math/linear-algebra/matrix",
+        "/participant-ai-lab-math/submodule-02/topic-08": "/participant-ai-lab-math/linear-algebra/matrix-operations-multiplication",
+        "/participant-ai-lab-math/submodule-02/practice": "/participant-ai-lab-math/linear-algebra/latihan",
+        "/participant-ai-lab-math/submodule-02/quiz": "/participant-ai-lab-math/linear-algebra/kuis",
+        "/participant-ai-lab-math/submodule-02/discussion": "/participant-ai-lab-math/linear-algebra/diskusi",
+        "/participant-ai-lab-math/submodule-02/references": "/participant-ai-lab-math/linear-algebra/referensi",
+        "/participant-ai-lab-math-statistics": "/participant-ai-lab-math/statistics-for-ai",
+        "/participant-ai-lab-math/submodule-03": "/participant-ai-lab-math/statistics-for-ai",
+        "/participant-ai-lab-math/submodule-03/topic-01": "/participant-ai-lab-math/statistics-for-ai/dari-matrix-ke-dataset-statistik",
+        "/participant-ai-lab-math/submodule-03/topic-02": "/participant-ai-lab-math/statistics-for-ai/mean-median-mode",
+        "/participant-ai-lab-math/submodule-03/topic-03": "/participant-ai-lab-math/statistics-for-ai/range-variance-standard-deviation",
+        "/participant-ai-lab-math/submodule-03/topic-04": "/participant-ai-lab-math/statistics-for-ai/distribution-dan-histogram",
+        "/participant-ai-lab-math/submodule-03/topic-05": "/participant-ai-lab-math/statistics-for-ai/percentile-quartile-iqr",
+        "/participant-ai-lab-math/submodule-03/topic-06": "/participant-ai-lab-math/statistics-for-ai/outlier-sinyal-untuk-diperiksa",
+        "/participant-ai-lab-math/submodule-03/topic-07": "/participant-ai-lab-math/statistics-for-ai/covariance-correlation-association",
+        "/participant-ai-lab-math/submodule-03/topic-08": "/participant-ai-lab-math/statistics-for-ai/data-quality-untuk-ai",
+        "/participant-ai-lab-math/submodule-03/practice": "/participant-ai-lab-math/statistics-for-ai/latihan",
+        "/participant-ai-lab-math/submodule-03/quiz": "/participant-ai-lab-math/statistics-for-ai/kuis",
+        "/participant-ai-lab-math/submodule-03/discussion": "/participant-ai-lab-math/statistics-for-ai/diskusi",
+        "/participant-ai-lab-math/submodule-03/references": "/participant-ai-lab-math/statistics-for-ai/referensi",
+        "/participant-ai-lab-math-probability": "/participant-ai-lab-math/probability",
+        "/participant-ai-lab-math/submodule-04": "/participant-ai-lab-math/probability",
+        "/participant-ai-lab-math/submodule-04/topic-01": "/participant-ai-lab-math/probability/event-outcome-sample-space",
+        "/participant-ai-lab-math/submodule-04/topic-02": "/participant-ai-lab-math/probability/probability-complement",
+        "/participant-ai-lab-math/submodule-04/topic-03": "/participant-ai-lab-math/probability/joint-union-probability-table",
+        "/participant-ai-lab-math/submodule-04/topic-04": "/participant-ai-lab-math/probability/conditional-probability",
+        "/participant-ai-lab-math/submodule-04/topic-05": "/participant-ai-lab-math/probability/independence-dependence",
+        "/participant-ai-lab-math/submodule-04/topic-06": "/participant-ai-lab-math/probability/bayes-sebagai-update-keyakinan",
+        "/participant-ai-lab-math/submodule-04/topic-07": "/participant-ai-lab-math/probability/random-variable-distribution-expected-value",
+        "/participant-ai-lab-math/submodule-04/topic-08": "/participant-ai-lab-math/probability/score-probability-calibration-probabilistic-loss",
+        "/participant-ai-lab-math/submodule-04/practice": "/participant-ai-lab-math/probability/latihan",
+        "/participant-ai-lab-math/submodule-04/quiz": "/participant-ai-lab-math/probability/kuis",
+        "/participant-ai-lab-math/submodule-04/discussion": "/participant-ai-lab-math/probability/diskusi",
+        "/participant-ai-lab-math/submodule-04/references": "/participant-ai-lab-math/probability/referensi",
         "/x/fd6p1/mt": "/participant-mentor",
         "/x/fd6p1/t": "/participant-tasks",
         "/x/fd6p1/p": "/participant-projects",
@@ -434,6 +539,31 @@ const router = {
             || path.startsWith("/participant-cv-");
     },
 
+    getLocalMathPreviewRoute(path) {
+        const hostname = window.location.hostname;
+        const isLocalPreview = hostname === "localhost"
+            || hostname === "127.0.0.1"
+            || hostname === "[::1]";
+
+        if (!isLocalPreview) return null;
+        if (path === "/participant-ai-lab-math") {
+            return "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/overview.html";
+        }
+        const submoduleBases = [
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika",
+            "/participant-ai-lab-math/linear-algebra",
+            "/participant-ai-lab-math/statistics-for-ai",
+            "/participant-ai-lab-math/probability"
+        ];
+        const isRegisteredMathLesson = submoduleBases.some(submoduleBase => (
+            path === submoduleBase || (path.startsWith(`${submoduleBase}/`) && this.routes[path])
+        ));
+        if (isRegisteredMathLesson) {
+            return "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/01-kenapa-ai-butuh-matematika/materi.html";
+        }
+        return null;
+    },
+
     renderParticipantAccessNotice(appContent, navContainer, footerContainer, options = {}) {
         const title = options.title || "Akses Peserta Dibatasi";
         const message = options.message || "Sementara ini portal peserta hanya membuka Beranda, Modul, dan Pengaturan.";
@@ -505,9 +635,10 @@ const router = {
             return;
         }
 
-        const routeUrl = this.isComputerVisionLockedRoute(path)
+        const localMathPreviewRoute = this.getLocalMathPreviewRoute(path);
+        const routeUrl = localMathPreviewRoute || (this.isComputerVisionLockedRoute(path)
             ? "/pages/frontend/fellow-dashboard/under-development.html"
-            : this.routes[path];
+            : this.routes[path]);
         const appContent = document.getElementById("app-content");
         const navContainer = document.getElementById("navbar-container");
         const footerContainer = document.getElementById("footer-container");
@@ -596,16 +727,64 @@ const router = {
             "/participant-ai-lab-deep-learning-discussion",
             "/participant-ai-lab-reinforcement-learning",
             "/participant-ai-lab-math",
-            "/participant-ai-lab-math-intro",
             "/participant-ai-lab-math-linear-algebra",
             "/participant-ai-lab-math-statistics",
             "/participant-ai-lab-math-probability",
             "/participant-ai-lab-math-calculus",
             "/participant-ai-lab-math-optimization",
             "/participant-ai-lab-math-case-study",
-            "/participant-ai-lab-math-practice",
-            "/participant-ai-lab-math-quiz",
-            "/participant-ai-lab-math-discussion",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/dunia-nyata-menjadi-representasi-komputasional",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/data-observation-feature-dan-target",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/pecahan-desimal-dan-persentase",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/variable-expression-dan-equation",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/function-dari-input-ke-output",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/coordinate-graph-dan-perubahan",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/powers-logarithms-dan-sigma",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/latihan",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/kuis",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/diskusi",
+            "/participant-ai-lab-math/kenapa-ai-butuh-matematika/referensi",
+            "/participant-ai-lab-math/linear-algebra",
+            "/participant-ai-lab-math/linear-algebra/dari-scalar-ke-vector",
+            "/participant-ai-lab-math/linear-algebra/membaca-vektor",
+            "/participant-ai-lab-math/linear-algebra/operasi-vektor",
+            "/participant-ai-lab-math/linear-algebra/norm-dan-distance",
+            "/participant-ai-lab-math/linear-algebra/dot-product",
+            "/participant-ai-lab-math/linear-algebra/cosine-similarity",
+            "/participant-ai-lab-math/linear-algebra/matrix",
+            "/participant-ai-lab-math/linear-algebra/matrix-operations-multiplication",
+            "/participant-ai-lab-math/linear-algebra/latihan",
+            "/participant-ai-lab-math/linear-algebra/kuis",
+            "/participant-ai-lab-math/linear-algebra/diskusi",
+            "/participant-ai-lab-math/linear-algebra/referensi",
+            "/participant-ai-lab-math-statistics",
+            "/participant-ai-lab-math/statistics-for-ai",
+            "/participant-ai-lab-math/statistics-for-ai/dari-matrix-ke-dataset-statistik",
+            "/participant-ai-lab-math/statistics-for-ai/mean-median-mode",
+            "/participant-ai-lab-math/statistics-for-ai/range-variance-standard-deviation",
+            "/participant-ai-lab-math/statistics-for-ai/distribution-dan-histogram",
+            "/participant-ai-lab-math/statistics-for-ai/percentile-quartile-iqr",
+            "/participant-ai-lab-math/statistics-for-ai/outlier-sinyal-untuk-diperiksa",
+            "/participant-ai-lab-math/statistics-for-ai/covariance-correlation-association",
+            "/participant-ai-lab-math/statistics-for-ai/data-quality-untuk-ai",
+            "/participant-ai-lab-math/statistics-for-ai/latihan",
+            "/participant-ai-lab-math/statistics-for-ai/kuis",
+            "/participant-ai-lab-math/statistics-for-ai/diskusi",
+            "/participant-ai-lab-math/statistics-for-ai/referensi",
+            "/participant-ai-lab-math/probability",
+            "/participant-ai-lab-math/probability/event-outcome-sample-space",
+            "/participant-ai-lab-math/probability/probability-complement",
+            "/participant-ai-lab-math/probability/joint-union-probability-table",
+            "/participant-ai-lab-math/probability/conditional-probability",
+            "/participant-ai-lab-math/probability/independence-dependence",
+            "/participant-ai-lab-math/probability/bayes-sebagai-update-keyakinan",
+            "/participant-ai-lab-math/probability/random-variable-distribution-expected-value",
+            "/participant-ai-lab-math/probability/score-probability-calibration-probabilistic-loss",
+            "/participant-ai-lab-math/probability/latihan",
+            "/participant-ai-lab-math/probability/kuis",
+            "/participant-ai-lab-math/probability/diskusi",
+            "/participant-ai-lab-math/probability/referensi",
             "/participant-ai-lab-gen",
             "/participant-ai-lab-llm",
             "/participant-ai-lab-vlm",
@@ -1451,23 +1630,20 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
 
                 } else if (path.startsWith("/participant-ai-lab-math") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    window.__aiLabLoader.load('ai-math-for-ai').then(function() {
-                    if (path === "/participant-ai-lab-math" && typeof window.initAiLabMathOverview === "function") {
-                        window.initAiLabMathOverview();
+                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra") || path.startsWith("/participant-ai-lab-math/statistics-for-ai") || path.startsWith("/participant-ai-lab-math/probability")) {
+                        window.__aiLabLoader.load('math-learning').then(function() {
+                            if (path === "/participant-ai-lab-math" && typeof window.initMathOverviewRoute === "function") {
+                                window.initMathOverviewRoute();
+                                return;
+                            }
+                            if (typeof window.initMathLearningRoute === "function") {
+                                window.initMathLearningRoute();
+                            }
+                        }).catch(function(error) {
+                            console.error('[Math Learning] Runtime gagal dimuat.', error);
+                        });
+                        return;
                     }
-                    if ((path === "/participant-ai-lab-math-intro" || path === "/participant-ai-lab-math-linear-algebra" || path === "/participant-ai-lab-math-statistics" || path === "/participant-ai-lab-math-probability" || path === "/participant-ai-lab-math-calculus" || path === "/participant-ai-lab-math-optimization" || path === "/participant-ai-lab-math-case-study") && typeof window.initAiLabMathLesson === "function") {
-                        window.initAiLabMathLesson();
-                    }
-                    if (path === "/participant-ai-lab-math-practice" && typeof window.initAiLabMathPractice === "function") {
-                        window.initAiLabMathPractice();
-                    }
-                    if (path === "/participant-ai-lab-math-quiz" && typeof window.initAiLabMathQuiz === "function") {
-                        window.initAiLabMathQuiz();
-                    }
-                    if (path === "/participant-ai-lab-math-discussion" && typeof window.initAiLabMathDiscussion === "function") {
-                        window.initAiLabMathDiscussion();
-                    }
-                    });
                 } else if (path.startsWith("/participant-ai-lab-") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
                     if (typeof window.initCoursePlaceholder === "function") {

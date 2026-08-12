@@ -26,7 +26,10 @@
             if (this._pending[name]) return this._pending[name];
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
-                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260803-discussion-name-fix';
+                var version = name === 'math-learning'
+                    ? '20260812-probability-integrated-fix8'
+                    : '20260803-discussion-name-fix';
+                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=' + version;
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
                 s.onerror = function() { delete window.__aiLabLoader._pending[name]; reject(new Error('Failed to load: ' + name)); };
                 document.head.appendChild(s);
@@ -277,21 +280,23 @@
             });
         });
 
-        modulePage.querySelectorAll('[data-module-tab]').forEach((button) => {
+        modulePage.querySelectorAll('[data-v2-tab]').forEach((button) => {
             button.addEventListener('click', () => {
-                modulePage.querySelectorAll('[data-module-tab]').forEach(item => {
-                    const selected = item === button;
-                    item.classList.toggle('active', selected);
-                    item.setAttribute('aria-selected', String(selected));
+                const target = button.dataset.v2Tab;
+
+                // Update active state on buttons
+                modulePage.querySelectorAll('[data-v2-tab]').forEach(item => {
+                    item.classList.toggle('active', item === button);
                 });
-                const target = button.dataset.moduleTab;
-                if (target === 'foundation') {
-                    document.getElementById('moduleCatalogPanel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else if (target === 'specialization') {
-                    document.getElementById('specializationTrackPanel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else {
-                    modulePage.querySelector('.module-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+
+                // Filter sections
+                modulePage.querySelectorAll('[data-v2-section]').forEach(section => {
+                    if (target === 'all') {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.toggle('active', section.dataset.v2Section === target);
+                    }
+                });
             });
         });
 
@@ -323,9 +328,9 @@
             search.addEventListener('input', () => {
                 const query = String(search.value || '').trim().toLocaleLowerCase('id-ID');
                 let visible = 0;
-                modulePage.querySelectorAll('.foundation-course-grid .course-card').forEach(card => {
+                modulePage.querySelectorAll('.v2-course-card').forEach(card => {
                     const matches = !query || card.textContent.toLocaleLowerCase('id-ID').includes(query);
-                    card.hidden = !matches;
+                    card.style.display = matches ? '' : 'none';
                     if (matches) visible += 1;
                 });
                 if (empty) empty.hidden = visible !== 0;
@@ -2414,7 +2419,7 @@
     }
 
     async function initParticipantModulesData() {
-        if (!document.querySelector('.fellow-modules-page [data-module-summary-state]')) return;
+        if (!document.querySelector('.fellow-modules-page [data-module-summary-state]') && !document.querySelector('.fellow-modules-page [data-module-side-summary-state]')) return;
         var cached = _dashboardDataCache ? { data: _dashboardDataCache, fresh: true } : readParticipantDashboardCache();
         if (cached?.data) {
             _dashboardDataCache = cached.data;
