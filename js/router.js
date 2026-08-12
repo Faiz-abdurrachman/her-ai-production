@@ -192,6 +192,18 @@ const router = {
         "/participant-ai-lab-math/calculus/kuis": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math/calculus/diskusi": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-math/calculus/referensi": "/pages/frontend/fellow-dashboard/under-development.html",
+        "/participant-ai-lab-math/optimization/loss-objective-evaluation-metric": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/optimization/minimization-dan-landscape": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/optimization/gradient-descent-update-rule": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/optimization/learning-rate": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/optimization/beberapa-iterasi-sampai-loss-berubah": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/optimization/batch-minibatch-stochastic-gradient": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/optimization/momentum-dan-adam-peta-konsep": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/optimization/regularization-generalization-boundary": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/optimization/latihan": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/optimization/kuis": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/optimization/diskusi": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/optimization/referensi": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
         "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -438,6 +450,20 @@ const router = {
         "/participant-ai-lab-math/submodule-05/quiz": "/participant-ai-lab-math/calculus/kuis",
         "/participant-ai-lab-math/submodule-05/discussion": "/participant-ai-lab-math/calculus/diskusi",
         "/participant-ai-lab-math/submodule-05/references": "/participant-ai-lab-math/calculus/referensi",
+        "/participant-ai-lab-math-optimization": "/participant-ai-lab-math/optimization",
+        "/participant-ai-lab-math/submodule-06": "/participant-ai-lab-math/optimization",
+        "/participant-ai-lab-math/submodule-06/topic-01": "/participant-ai-lab-math/optimization/loss-objective-evaluation-metric",
+        "/participant-ai-lab-math/submodule-06/topic-02": "/participant-ai-lab-math/optimization/minimization-dan-landscape",
+        "/participant-ai-lab-math/submodule-06/topic-03": "/participant-ai-lab-math/optimization/gradient-descent-update-rule",
+        "/participant-ai-lab-math/submodule-06/topic-04": "/participant-ai-lab-math/optimization/learning-rate",
+        "/participant-ai-lab-math/submodule-06/topic-05": "/participant-ai-lab-math/optimization/beberapa-iterasi-sampai-loss-berubah",
+        "/participant-ai-lab-math/submodule-06/topic-06": "/participant-ai-lab-math/optimization/batch-minibatch-stochastic-gradient",
+        "/participant-ai-lab-math/submodule-06/topic-07": "/participant-ai-lab-math/optimization/momentum-dan-adam-peta-konsep",
+        "/participant-ai-lab-math/submodule-06/topic-08": "/participant-ai-lab-math/optimization/regularization-generalization-boundary",
+        "/participant-ai-lab-math/submodule-06/practice": "/participant-ai-lab-math/optimization/latihan",
+        "/participant-ai-lab-math/submodule-06/quiz": "/participant-ai-lab-math/optimization/kuis",
+        "/participant-ai-lab-math/submodule-06/discussion": "/participant-ai-lab-math/optimization/diskusi",
+        "/participant-ai-lab-math/submodule-06/references": "/participant-ai-lab-math/optimization/referensi",
         "/x/fd6p1/mt": "/participant-mentor",
         "/x/fd6p1/t": "/participant-tasks",
         "/x/fd6p1/p": "/participant-projects",
@@ -580,7 +606,8 @@ const router = {
             "/participant-ai-lab-math/linear-algebra",
             "/participant-ai-lab-math/statistics-for-ai",
             "/participant-ai-lab-math/probability",
-            "/participant-ai-lab-math/calculus"
+            "/participant-ai-lab-math/calculus",
+            "/participant-ai-lab-math/optimization"
         ];
         const isRegisteredMathLesson = submoduleBases.some(submoduleBase => (
             path === submoduleBase || (path.startsWith(`${submoduleBase}/`) && this.routes[path])
@@ -825,6 +852,19 @@ const router = {
             "/participant-ai-lab-math/calculus/kuis",
             "/participant-ai-lab-math/calculus/diskusi",
             "/participant-ai-lab-math/calculus/referensi",
+            "/participant-ai-lab-math/optimization",
+            "/participant-ai-lab-math/optimization/loss-objective-evaluation-metric",
+            "/participant-ai-lab-math/optimization/minimization-dan-landscape",
+            "/participant-ai-lab-math/optimization/gradient-descent-update-rule",
+            "/participant-ai-lab-math/optimization/learning-rate",
+            "/participant-ai-lab-math/optimization/beberapa-iterasi-sampai-loss-berubah",
+            "/participant-ai-lab-math/optimization/batch-minibatch-stochastic-gradient",
+            "/participant-ai-lab-math/optimization/momentum-dan-adam-peta-konsep",
+            "/participant-ai-lab-math/optimization/regularization-generalization-boundary",
+            "/participant-ai-lab-math/optimization/latihan",
+            "/participant-ai-lab-math/optimization/kuis",
+            "/participant-ai-lab-math/optimization/diskusi",
+            "/participant-ai-lab-math/optimization/referensi",
             "/participant-ai-lab-gen",
             "/participant-ai-lab-llm",
             "/participant-ai-lab-vlm",
@@ -1670,7 +1710,7 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
 
                 } else if (path.startsWith("/participant-ai-lab-math") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra") || path.startsWith("/participant-ai-lab-math/statistics-for-ai") || path.startsWith("/participant-ai-lab-math/probability") || path.startsWith("/participant-ai-lab-math/calculus")) {
+                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra") || path.startsWith("/participant-ai-lab-math/statistics-for-ai") || path.startsWith("/participant-ai-lab-math/probability") || path.startsWith("/participant-ai-lab-math/calculus") || path.startsWith("/participant-ai-lab-math/optimization")) {
                         window.__aiLabLoader.load('math-learning').then(function() {
                             if (path === "/participant-ai-lab-math" && typeof window.initMathOverviewRoute === "function") {
                                 window.initMathOverviewRoute();

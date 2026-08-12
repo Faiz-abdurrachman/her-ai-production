@@ -119,6 +119,28 @@
                 { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 05', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
                 { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 05', file: 'referensi.md', type: 'references', icon: 'fa-book-bookmark' }
             ]
+        }),
+        createSubmodule({
+            id: '06', slug: 'optimization',
+            title: 'Optimization: Dari Loss ke Parameter yang Lebih Baik',
+            sourceBase: '/materi2/math%20for%20ai/optimization/final/',
+            routeBase: '#/participant-ai-lab-math/optimization',
+            storageKey: 'heraiMathLearningSubmodule06', topicCount: 8,
+            items: [
+                { id: 'info', slug: '', short: 'Ikhtisar', title: 'Optimization: Dari Loss ke Parameter yang Lebih Baik', file: '00-informasi-submodul.md', type: 'info', icon: 'fa-bullseye' },
+                { id: 'topic-01', slug: 'loss-objective-evaluation-metric', short: 'Loss & metric', title: 'Loss, Objective, dan Evaluation Metric', file: 'materi/01-loss-objective-evaluation-metric.md', type: 'topic', icon: 'fa-scale-balanced' },
+                { id: 'topic-02', slug: 'minimization-dan-landscape', short: 'Minimization & landscape', title: 'Minimization dan Landscape', file: 'materi/02-minimization-dan-landscape.md', type: 'topic', icon: 'fa-mountain' },
+                { id: 'topic-03', slug: 'gradient-descent-update-rule', short: 'Gradient Descent', title: 'Gradient Descent Update Rule', file: 'materi/03-gradient-descent-update-rule.md', type: 'topic', icon: 'fa-arrow-turn-down' },
+                { id: 'topic-04', slug: 'learning-rate', short: 'Learning rate', title: 'Learning Rate', file: 'materi/04-learning-rate.md', type: 'topic', icon: 'fa-gauge-high' },
+                { id: 'topic-05', slug: 'beberapa-iterasi-sampai-loss-berubah', short: 'Iteration trace', title: 'Beberapa Iterasi Sampai Loss Berubah', file: 'materi/05-beberapa-iterasi-sampai-loss-berubah.md', type: 'topic', icon: 'fa-rotate-right' },
+                { id: 'topic-06', slug: 'batch-minibatch-stochastic-gradient', short: 'Batch & stochastic', title: 'Batch, Minibatch, dan Stochastic Gradient', file: 'materi/06-batch-minibatch-stochastic-gradient.md', type: 'topic', icon: 'fa-layer-group' },
+                { id: 'topic-07', slug: 'momentum-dan-adam-peta-konsep', short: 'Momentum & Adam', title: 'Momentum dan Adam: Peta Konsep', file: 'materi/07-momentum-dan-adam-peta-konsep.md', type: 'topic', icon: 'fa-forward-fast' },
+                { id: 'topic-08', slug: 'regularization-generalization-boundary', short: 'Regularization', title: 'Regularization, Generalization, dan Boundary Modul', file: 'materi/08-regularization-generalization-boundary-modul.md', type: 'topic', icon: 'fa-shield-halved' },
+                { id: 'practice', slug: 'latihan', short: 'Latihan', title: 'Latihan Submodul 06', file: 'latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
+                { id: 'quiz', slug: 'kuis', short: 'Kuis', title: 'Kuis Submodul 06', file: 'kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
+                { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 06', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
+                { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 06', file: 'referensi.md', type: 'references', icon: 'fa-book-bookmark' }
+            ]
         })
     ]);
     const CONTENT = Object.freeze(SUBMODULES.flatMap(submodule => submodule.items));
@@ -193,7 +215,19 @@
         '/participant-ai-lab-math/submodule-05/practice': SUBMODULES[4].items[9].route.slice(1),
         '/participant-ai-lab-math/submodule-05/quiz': SUBMODULES[4].items[10].route.slice(1),
         '/participant-ai-lab-math/submodule-05/discussion': SUBMODULES[4].items[11].route.slice(1),
-        '/participant-ai-lab-math/submodule-05/references': SUBMODULES[4].items[12].route.slice(1)
+        '/participant-ai-lab-math/submodule-05/references': SUBMODULES[4].items[12].route.slice(1),
+        '/participant-ai-lab-math/submodule-06/topic-01': SUBMODULES[5].items[1].route.slice(1),
+        '/participant-ai-lab-math/submodule-06/topic-02': SUBMODULES[5].items[2].route.slice(1),
+        '/participant-ai-lab-math/submodule-06/topic-03': SUBMODULES[5].items[3].route.slice(1),
+        '/participant-ai-lab-math/submodule-06/topic-04': SUBMODULES[5].items[4].route.slice(1),
+        '/participant-ai-lab-math/submodule-06/topic-05': SUBMODULES[5].items[5].route.slice(1),
+        '/participant-ai-lab-math/submodule-06/topic-06': SUBMODULES[5].items[6].route.slice(1),
+        '/participant-ai-lab-math/submodule-06/topic-07': SUBMODULES[5].items[7].route.slice(1),
+        '/participant-ai-lab-math/submodule-06/topic-08': SUBMODULES[5].items[8].route.slice(1),
+        '/participant-ai-lab-math/submodule-06/practice': SUBMODULES[5].items[9].route.slice(1),
+        '/participant-ai-lab-math/submodule-06/quiz': SUBMODULES[5].items[10].route.slice(1),
+        '/participant-ai-lab-math/submodule-06/discussion': SUBMODULES[5].items[11].route.slice(1),
+        '/participant-ai-lab-math/submodule-06/references': SUBMODULES[5].items[12].route.slice(1)
     });
 
     let renderSequence = 0;
