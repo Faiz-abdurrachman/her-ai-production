@@ -843,7 +843,7 @@ function computeLiveLeaderboard(requesterNik, context) {
   });
   
   // Build final leaderboard with masking
-  return top10.map(function(entry, index) {
+  var result = top10.map(function(entry, index) {
     const current = Boolean(requesterNik && entry.nik === requesterNik);
     return {
       rank: index + 1,
@@ -853,6 +853,33 @@ function computeLiveLeaderboard(requesterNik, context) {
       current: current
     };
   });
+  
+  if (requesterNik) {
+    var isUserInTop10 = result.some(function(r) { return r.current === true; });
+    if (!isUserInTop10) {
+      var userIndex = rankings.findIndex(function(r) { return r.nik === requesterNik; });
+      if (userIndex !== -1) {
+        var userEntry = rankings[userIndex];
+        result.push({
+          rank: userIndex + 1,
+          nik: requesterNik,
+          name: nameMap[requesterNik] || 'Kamu',
+          points: userEntry.points,
+          current: true
+        });
+      } else {
+        result.push({
+          rank: null,
+          nik: requesterNik,
+          name: nameMap[requesterNik] || 'Kamu',
+          points: 0,
+          current: true
+        });
+      }
+    }
+  }
+  
+  return result;
 }
 
 /**

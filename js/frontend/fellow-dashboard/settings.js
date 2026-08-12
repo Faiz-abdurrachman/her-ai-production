@@ -2457,10 +2457,12 @@
         var retry = document.querySelector('[data-leaderboard-retry]');
         var displayName = getParticipantDisplayName() || 'Kamu';
 
-        setModuleSummaryValue('[data-leaderboard-rank]', current ? '#' + Number(current.rank || 0) : '—');
+        var hasRank = current && current.rank !== null;
+        setModuleSummaryValue('[data-leaderboard-rank]', hasRank ? '#' + Number(current.rank) : '—');
         setModuleSummaryValue('[data-leaderboard-points]', current ? Number(current.points || 0).toLocaleString('id-ID') : '—');
-        setModuleSummaryValue('[data-leaderboard-count]', state === 'error' ? '—' : entries.length);
-        setModuleSummaryValue('[data-leaderboard-rank-copy]', current ? 'Dari peringkat yang ditampilkan' : 'Belum masuk peringkat');
+        var displayEntries = entries.filter(function(e) { return e.rank !== null && e.rank <= 10; });
+        setModuleSummaryValue('[data-leaderboard-count]', state === 'error' ? '—' : displayEntries.length);
+        setModuleSummaryValue('[data-leaderboard-rank-copy]', hasRank ? 'Berdasarkan poin yang berhasil disinkronisasi' : 'Belum masuk peringkat');
 
         var podium = document.querySelector('[data-leaderboard-podium]');
 
@@ -2481,8 +2483,9 @@
             return;
         }
 
-        var top3 = entries.slice(0, 3);
-        var rest = entries;
+        var tableEntries = entries.filter(function(e) { return e.rank !== null && e.rank <= 10; });
+        var top3 = tableEntries.slice(0, 3);
+        var rest = tableEntries;
 
         if (podium) {
             if (top3.length > 0) {
