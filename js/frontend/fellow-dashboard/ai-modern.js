@@ -838,8 +838,8 @@
             '<div class="reasoning-practice-copy"><span>' + escapeHtml(item.topic) + '</span><h3>' + escapeHtml(item.title) + '</h3><div class="reasoning-formatted-text"><blockquote>' + escapeHtml(item.caseText) + '</blockquote>' + renderFormattedText(item.prompt) + '</div>' +
             '<div class="ai-modern-rubric"><strong><i class="fas fa-list-check"></i> Checklist jawaban</strong><ul>' + renderChecklist(item.rubric) + '</ul></div>' +
             '<label class="reasoning-practice-field"><span>Jawabanmu</span><textarea name="' + escapeHtml(fieldName) + '" rows="7" placeholder="' + escapeHtml(item.fields[0][1]) + '"' + (readonly ? " disabled" : "") + '>' + escapeHtml(value) + '</textarea></label>' +
-            '<div class="reasoning-practice-actions"><button type="button" data-practice-guide aria-expanded="' + String(revealed) + '"><i class="fas fa-lightbulb"></i> ' + (revealed ? "Sembunyikan panduan" : "Buka panduan") + '</button></div>' +
-            '<div class="reasoning-practice-guide"' + (revealed ? "" : " hidden") + '><strong>Panduan evaluasi diri</strong><p>' + escapeHtml(item.guide) + '</p></div></div></article>';
+            ' + ((item.guide && item.guide.indexOf("sedang disusun") === -1) ? ('<div class="reasoning-practice-actions"><button type="button" data-practice-guide aria-expanded="' + String(revealed) + '"><i class="fas fa-lightbulb"></i> ' + (revealed ? "Sembunyikan panduan" : "Buka panduan") + '</button></div>' +
+            '<div class="reasoning-practice-guide"' + (revealed ? "" : " hidden") + '><strong>Panduan evaluasi diri</strong><p>' + escapeHtml(item.guide) + '</p></div>') : '') + '</div></article>';
     }
 
     window.initAiModernPractice = function () {

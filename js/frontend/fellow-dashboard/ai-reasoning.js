@@ -2164,8 +2164,10 @@
                     return `<label><span>${escapeHtml(field[1])}</span><textarea name="${escapeHtml(name)}" rows="4" placeholder="Tulis jawabanmu di sini..."></textarea></label>`;
                 }).join("")}
             </div>
-            <button type="button" class="reasoning-scaffold-reveal-button" data-reasoning-reveal="${escapeHtml(item.id)}" aria-expanded="false"><i class="fas fa-lightbulb" aria-hidden="true"></i> Lihat pembahasan</button>
-            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><div class="reasoning-guide-content" style="margin-top: 10px;">${renderFormattedText(item.guide)}</div></div>
+            ${(item.guide && !item.guide.includes("sedang disusun")) ? 
+            `<button type="button" class="reasoning-scaffold-reveal-button" data-reasoning-reveal="${escapeHtml(item.id)}" aria-expanded="false"><i class="fas fa-lightbulb" aria-hidden="true"></i> Lihat pembahasan</button>
+            <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><div class="reasoning-guide-content" style="margin-top: 10px;">${renderFormattedText(item.guide)}</div></div>` 
+            : ''}
         </article>`;
     }
 
