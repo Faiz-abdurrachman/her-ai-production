@@ -903,11 +903,18 @@ var SOURCE_VISUALS = {
         });
     }
 
+    function _isPlaceholderText(text) {
+        if (!text) return true;
+        var markers = ['dalam pengembangan', 'sedang dikurasi', 'sedang disiapkan', 'Konten sedang', 'Konsep dalam ', 'Contoh kasus sedang', 'sedang dikembangkan'];
+        for (var i = 0; i < markers.length; i++) { if (text.indexOf(markers[i]) !== -1) return true; }
+        return false;
+    }
+
     function renderPythonDeepDive(module) {
         if (!module) return "";
         var parts = [];
 
-        if (module.deepDive && module.deepDive.length) {
+        if (module.deepDive && module.deepDive.length && !module.deepDive.some(function(s) { return _isPlaceholderText(s[1]); })) {
             var roadmapHtml = '<section class="ai-modern-beginner-roadmap" data-python-injected data-section="konsep">' +
                 '<div class="ai-modern-roadmap-head"><i class="fas fa-compass" aria-hidden="true"></i><div><span>Evolusi AI</span><h3>Perkembangan paradigma AI</h3><p>Gunakan penjelasan berikut untuk menghubungkan kode, data, failure case, dan keputusan dalam workflow AI.</p></div></div>' +
                 '<div class="ai-modern-roadmap-strip" aria-hidden="true">' + module.deepDive.map(function (step, index) { return '<div><span>' + (index + 1) + '</span><i class="fas fa-book-open-reader"></i><strong>' + escapeHtml(step[0]) + '</strong></div>'; }).join("") + '</div>' +
@@ -918,14 +925,14 @@ var SOURCE_VISUALS = {
             parts.push(roadmapHtml);
         }
 
-        if (module.workedExample && module.workedExample.length) {
+        if (module.workedExample && module.workedExample.length && !module.workedExample.slice(1).some(function(s) { return _isPlaceholderText(s[1]); })) {
             var title = module.workedExample[0];
             var steps = module.workedExample.slice(1);
             var exampleHtml = '<section class="ai-modern-worked-example" data-python-injected data-section="contoh"><div class="ai-modern-worked-head"><i class="fas fa-magnifying-glass-chart" aria-hidden="true"></i><div><span>Contoh Terurai</span><h3>' + escapeHtml(title) + '</h3></div></div><div class="ai-modern-worked-steps">' + steps.map(function (step, index) { return '<article><span>' + (index + 1) + '</span><div><strong>' + escapeHtml(step[0]) + '</strong><p>' + escapeHtml(step[1]) + '</p></div></article>'; }).join("") + '</div></section>';
             parts.push(exampleHtml);
         }
 
-        if (module.glossary && module.glossary.length) {
+        if (module.glossary && module.glossary.length && !module.glossary.some(function(g) { return _isPlaceholderText(g[1]); })) {
             var glossaryHtml = '<section class="ai-modern-beginner-glossary" data-python-injected data-section="ringkasan"><div class="ai-modern-glossary-head"><i class="fas fa-language" aria-hidden="true"></i><div><span>Glossary Pemula</span><h3>Istilah yang perlu kamu kuasai</h3><p>Buka setiap istilah untuk mengulang definisinya sebelum lanjut.</p></div></div><div class="ai-modern-glossary-grid">' + module.glossary.map(function (item, index) { return '<details' + (index === 0 ? " open" : "") + '><summary><span>' + String(index + 1).padStart(2, "0") + '</span><strong>' + escapeHtml(item[0]) + '</strong><i class="fas fa-chevron-down" aria-hidden="true"></i></summary><p>' + escapeHtml(item[1]) + '</p></details>'; }).join("") + '</div></section>';
             parts.push(glossaryHtml);
         }
