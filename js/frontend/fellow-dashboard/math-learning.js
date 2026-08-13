@@ -288,6 +288,32 @@
         return submodule && item ? { submodule, item } : null;
     }
 
+    let _serverSyncDone = false;
+    async function syncServerProgress() {
+        if (_serverSyncDone || !window.getParticipantProgress) return;
+        try {
+            const res = await window.getParticipantProgress('math-for-ai');
+            if (res.status === 'success' && Array.isArray(res.data)) {
+                const serverCompleted = res.data.filter(row => row.status === 'completed').map(row => String(row.chapter_id));
+                SUBMODULES.forEach(sub => {
+                    const state = readState(sub);
+                    let changed = false;
+                    sub.items.forEach(item => {
+                        const chId = `${item.type}-${sub.id}-${item.id}`;
+                        if (serverCompleted.includes(chId) && !state.completed.includes(item.id)) {
+                            state.completed.push(item.id);
+                            changed = true;
+                        }
+                    });
+                    if (changed) writeState(sub, state);
+                });
+                _serverSyncDone = true;
+            }
+        } catch (e) {
+            console.error('[Math Learning] Sync failed:', e);
+        }
+    }
+
     function readState(submodule) {
         try {
             const value = JSON.parse(localStorage.getItem(submodule.storageKey) || '{}');
@@ -301,16 +327,33 @@
         localStorage.setItem(submodule.storageKey, JSON.stringify({ completed: [...new Set(state.completed)] }));
     }
 
-    function markComplete(submodule, id) {
+    async function markComplete(submodule, id) {
         const state = readState(submodule);
-        if (!state.completed.includes(id)) state.completed.push(id);
-        writeState(submodule, state);
+        if (!state.completed.includes(id)) {
+            state.completed.push(id);
+            writeState(submodule, state);
+            
+            if (window.saveChapterProgress) {
+                const item = submodule.items.find(i => i.id === id);
+                if (item) {
+                    const chapterId = `${item.type}-${submodule.id}-${item.id}`;
+                    await window.saveChapterProgress('math-for-ai', chapterId, 'completed');
+                    
+                    const normalItems = submodule.items.filter(i => i.type !== 'info' && i.type !== 'references');
+                    const allDone = normalItems.every(i => state.completed.includes(i.id));
+                    if (allDone) {
+                        await window.saveChapterProgress('math-for-ai', parseInt(submodule.id, 10), 'completed');
+                    }
+                }
+            }
+        }
         return state;
     }
 
-    function renderOverviewProgress() {
+    async function renderOverviewProgress() {
         const page = document.querySelector('.math-course-overview');
         if (!page) return;
+        await syncServerProgress();
 
         const overview = SUBMODULES.map(submodule => {
             const state = readState(submodule);
@@ -2639,7 +2682,7 @@
         }
         container.innerHTML=`<div class="math-learning-quiz-intro">${renderMarkdown(intro,[])}</div><p class="math-learning-preview-note"><strong>Penyimpanan hasil:</strong> hasil pemeriksaan pada halaman ini belum tersinkron ke akun peserta.</p><form class="math-learning-quiz-list" data-quiz-form>${questions.map(question=>`<fieldset class="math-learning-quiz-card" data-quiz-question="${question.number}" tabindex="-1" aria-labelledby="mathQuizQuestion${question.number}"><legend class="math-learning-visually-hidden">Soal ${question.number}</legend><div class="math-learning-quiz-prompt" id="mathQuizQuestion${question.number}"><span class="math-learning-quiz-number" aria-hidden="true">${String(question.number).padStart(2,'0')}</span><div class="math-learning-quiz-question-copy">${renderMarkdown(removeAndShiftTitle(question.prompt),[])}</div></div><div class="math-learning-quiz-options">${question.options.map(option=>`<label class="math-learning-quiz-option"><input type="radio" name="quiz-${question.number}" value="${option.letter}"><span class="math-learning-quiz-letter" aria-hidden="true">${option.letter}</span><span class="math-learning-quiz-option-copy">${renderMarkdown(option.text,[])}</span></label>`).join('')}</div><div data-quiz-review aria-live="polite"></div></fieldset>`).join('')}<div class="math-learning-button-row math-learning-quiz-actions"><button class="math-learning-action is-primary" type="submit">Periksa jawaban</button><button class="math-learning-action" type="reset">Ulangi kuis</button></div></form>`;
         const form=container.querySelector('[data-quiz-form]');
-        form.addEventListener('submit',event=>{
+        form.addEventListener('submit', async event => {
             event.preventDefault();
             const unanswered=questions.find(question=>!form.querySelector(`input[name="quiz-${question.number}"]:checked`));
             if(unanswered){
@@ -2666,10 +2709,31 @@
                 review.innerHTML=`<strong><i class="fas ${isCorrect?'fa-circle-check':'fa-circle-info'}" aria-hidden="true"></i>${isCorrect?'Benar':'Jawaban terbaik: '+question.answer}</strong>${renderMarkdown(removeAndShiftTitle(question.rationale),[])}`;
             });
             form.classList.add('is-reviewed');
-            window.__aiLabToast?.(`Skor kuis: ${correct}/${questions.length} (${Math.round(correct/questions.length*100)}%).`,correct/questions.length>=.75?'success':'info');
             const submit=form.querySelector('button[type="submit"]');
-            submit.textContent=`Skor ${correct}/${questions.length}`;
+            submit.textContent='Menyimpan...';
             submit.disabled=true;
+            
+            const scorePercent = Math.round(correct/questions.length*100);
+            if (window.saveChapterProgress) {
+                await window.saveChapterProgress('math-for-ai', `quiz-${submodule.id}`, 'completed', scorePercent);
+                if (submodule.id === '07' && window.getParticipantProgress) {
+                    const progResult = await window.getParticipantProgress('math-for-ai');
+                    if (progResult.status === 'success' && Array.isArray(progResult.data)) {
+                        let totalScore = scorePercent;
+                        for (let i = 1; i <= 6; i++) {
+                            const row = progResult.data.find(r => String(r.chapter_id) === `quiz-0${i}`);
+                            if (row && row.score !== undefined && row.score !== null) {
+                                totalScore += Number(row.score);
+                            }
+                        }
+                        const averageScore = Math.round(totalScore / 7);
+                        await window.saveChapterProgress('math-for-ai', 'quiz', 'completed', averageScore);
+                    }
+                }
+            }
+            
+            window.__aiLabToast?.(`Skor kuis: ${correct}/${questions.length} (${scorePercent}%). Tersimpan ke akun.`, scorePercent>=75?'success':'info');
+            submit.textContent=`Skor ${correct}/${questions.length}`;
         });
         form.addEventListener('reset',()=>setTimeout(()=>{
             form.classList.remove('is-reviewed');
@@ -2709,8 +2773,8 @@
         return `<section class="module-side-card lesson-progress-card">
             <h2>Progres Submodul</h2>
             <div class="lesson-progress-mini"><b style="--value:${progress}%" data-math-progress-bar></b><strong data-math-progress-text>${progress}%</strong></div>
-            <p>Progres tersimpan di perangkat ini dan belum tersinkron ke akun peserta.</p>
-            <button type="button" class="math-learning-complete-button ${complete ? 'is-complete' : ''}" data-mark-complete><i class="fas ${complete ? 'fa-circle-check' : 'fa-check'}" aria-hidden="true"></i>${complete ? 'Selesai di perangkat' : 'Tandai selesai'}</button>
+            <p>Progres otomatis tersimpan dan tersinkron ke akun peserta.</p>
+            <button type="button" class="math-learning-complete-button ${complete ? 'is-complete' : ''}" data-mark-complete><i class="fas ${complete ? 'fa-circle-check' : 'fa-check'}" aria-hidden="true"></i>${complete ? 'Selesai' : 'Tandai selesai'}</button>
         </section>
         <section class="module-side-card lesson-list-card"><h2>Daftar Materi</h2>${buildLessonList(submodule, active, state)}</section>`;
     }
@@ -2719,16 +2783,24 @@
         const index = submodule.items.findIndex(entry => entry.id === item.id);
         const prev = submodule.items[index - 1];
         const next = submodule.items[index + 1];
-        return `<footer class="lesson-nav-footer">${prev ? `<a href="${prev.route}"><i class="fas fa-chevron-left" aria-hidden="true"></i>${escapeHtml(prev.short)}</a>` : '<span></span>'}${next ? `<a href="${next.route}">${escapeHtml(next.short)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>` : '<span></span>'}</footer>`;
+        return `<footer class="lesson-nav-footer">${prev ? `<a href="${prev.route}"><i class="fas fa-chevron-left" aria-hidden="true"></i>${escapeHtml(prev.short)}</a>` : '<span></span>'}${next ? `<a class="math-learning-next-link" href="${next.route}">${escapeHtml(next.short)}<i class="fas fa-arrow-right" aria-hidden="true"></i></a>` : '<span></span>'}</footer>`;
     }
 
     function bindShell(submodule, item) {
         const page = document.querySelector('.math-learning-page');
-        page?.querySelector('[data-mark-complete]')?.addEventListener('click', event => {
-            const state = markComplete(submodule, item.id);
+        
+        // Manual mark complete button
+        page?.querySelector('[data-mark-complete]')?.addEventListener('click', async event => {
             const button = event.currentTarget;
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i>Menyimpan...';
+            
+            const state = await markComplete(submodule, item.id);
+            
             button.classList.add('is-complete');
-            button.innerHTML = '<i class="fas fa-circle-check" aria-hidden="true"></i>Selesai di perangkat';
+            button.innerHTML = '<i class="fas fa-circle-check" aria-hidden="true"></i>Selesai';
+            button.disabled = false;
+            
             const percent = Math.round(state.completed.length / submodule.items.length * 100);
             const percentText = page.querySelector('[data-math-progress-text]');
             const percentBar = page.querySelector('[data-math-progress-bar]');
@@ -2736,8 +2808,17 @@
             if (percentBar) percentBar.style.setProperty('--value', `${percent}%`);
             const itemRow = page.querySelector(`.lesson-list-card a[href="${item.route}"]`)?.closest('li');
             itemRow?.classList.add('completed');
-            window.__aiLabToast?.('Status tersimpan di perangkat ini dan belum tersinkron ke akun peserta.', 'success');
+            window.__aiLabToast?.('Status tersimpan dan tersinkron ke akun peserta.', 'success');
         }, { once: true, signal: pageAbort.signal });
+
+        // Auto-complete when clicking "Next Topic"
+        page?.querySelector('.math-learning-next-link')?.addEventListener('click', () => {
+            const state = readState(submodule);
+            if (!state.completed.includes(item.id)) {
+                // Background execution. No await needed because localStorage writes synchronously.
+                markComplete(submodule, item.id).catch(console.error);
+            }
+        });
     }
 
     function renderError(root, message) {
@@ -2762,7 +2843,7 @@
         pageAbort = new AbortController();
         root.innerHTML = '<div class="math-learning-loading" role="status"><i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i><strong>Menyiapkan materi…</strong><span>Markdown dan formula matematika sedang dirender.</span></div>';
         try {
-            await ensureRuntime();
+            await Promise.all([ensureRuntime(), syncServerProgress()]);
             const response = await fetch(submodule.sourceBase + encodeURIComponent(item.file), { cache: 'no-store', signal: pageAbort.signal });
             if (!response.ok) throw new Error(`Source ${item.file} mengembalikan HTTP ${response.status}.`);
             const source = await response.text();
