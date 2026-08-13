@@ -204,6 +204,17 @@ const router = {
         "/participant-ai-lab-math/optimization/kuis": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
         "/participant-ai-lab-math/optimization/diskusi": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
         "/participant-ai-lab-math/optimization/referensi": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/integrated-case-study/problem-definition-data-contract": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/integrated-case-study/representation-dan-matching": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/integrated-case-study/data-diagnostics": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/integrated-case-study/uncertainty": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/integrated-case-study/prediction-score-dan-loss": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/integrated-case-study/gradient-dan-parameter-update": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/integrated-case-study/evaluation-failure-modes-dan-what-comes-next": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/integrated-case-study/latihan": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/integrated-case-study/kuis": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/integrated-case-study/diskusi": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+        "/participant-ai-lab-math/integrated-case-study/referensi": "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
         "/participant-ai-lab-cv": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-gen": "/pages/frontend/fellow-dashboard/under-development.html",
         "/participant-ai-lab-deep-learning": "/pages/frontend/fellow-dashboard/under-development.html",
@@ -464,6 +475,19 @@ const router = {
         "/participant-ai-lab-math/submodule-06/quiz": "/participant-ai-lab-math/optimization/kuis",
         "/participant-ai-lab-math/submodule-06/discussion": "/participant-ai-lab-math/optimization/diskusi",
         "/participant-ai-lab-math/submodule-06/references": "/participant-ai-lab-math/optimization/referensi",
+        "/participant-ai-lab-math-integrated-case-study": "/participant-ai-lab-math/integrated-case-study",
+        "/participant-ai-lab-math/submodule-07": "/participant-ai-lab-math/integrated-case-study",
+        "/participant-ai-lab-math/submodule-07/topic-01": "/participant-ai-lab-math/integrated-case-study/problem-definition-data-contract",
+        "/participant-ai-lab-math/submodule-07/topic-02": "/participant-ai-lab-math/integrated-case-study/representation-dan-matching",
+        "/participant-ai-lab-math/submodule-07/topic-03": "/participant-ai-lab-math/integrated-case-study/data-diagnostics",
+        "/participant-ai-lab-math/submodule-07/topic-04": "/participant-ai-lab-math/integrated-case-study/uncertainty",
+        "/participant-ai-lab-math/submodule-07/topic-05": "/participant-ai-lab-math/integrated-case-study/prediction-score-dan-loss",
+        "/participant-ai-lab-math/submodule-07/topic-06": "/participant-ai-lab-math/integrated-case-study/gradient-dan-parameter-update",
+        "/participant-ai-lab-math/submodule-07/topic-07": "/participant-ai-lab-math/integrated-case-study/evaluation-failure-modes-dan-what-comes-next",
+        "/participant-ai-lab-math/submodule-07/practice": "/participant-ai-lab-math/integrated-case-study/latihan",
+        "/participant-ai-lab-math/submodule-07/quiz": "/participant-ai-lab-math/integrated-case-study/kuis",
+        "/participant-ai-lab-math/submodule-07/discussion": "/participant-ai-lab-math/integrated-case-study/diskusi",
+        "/participant-ai-lab-math/submodule-07/references": "/participant-ai-lab-math/integrated-case-study/referensi",
         "/x/fd6p1/mt": "/participant-mentor",
         "/x/fd6p1/t": "/participant-tasks",
         "/x/fd6p1/p": "/participant-projects",
@@ -607,7 +631,8 @@ const router = {
             "/participant-ai-lab-math/statistics-for-ai",
             "/participant-ai-lab-math/probability",
             "/participant-ai-lab-math/calculus",
-            "/participant-ai-lab-math/optimization"
+            "/participant-ai-lab-math/optimization",
+            "/participant-ai-lab-math/integrated-case-study"
         ];
         const isRegisteredMathLesson = submoduleBases.some(submoduleBase => (
             path === submoduleBase || (path.startsWith(`${submoduleBase}/`) && this.routes[path])
@@ -865,6 +890,18 @@ const router = {
             "/participant-ai-lab-math/optimization/kuis",
             "/participant-ai-lab-math/optimization/diskusi",
             "/participant-ai-lab-math/optimization/referensi",
+            "/participant-ai-lab-math/integrated-case-study",
+            "/participant-ai-lab-math/integrated-case-study/problem-definition-data-contract",
+            "/participant-ai-lab-math/integrated-case-study/representation-dan-matching",
+            "/participant-ai-lab-math/integrated-case-study/data-diagnostics",
+            "/participant-ai-lab-math/integrated-case-study/uncertainty",
+            "/participant-ai-lab-math/integrated-case-study/prediction-score-dan-loss",
+            "/participant-ai-lab-math/integrated-case-study/gradient-dan-parameter-update",
+            "/participant-ai-lab-math/integrated-case-study/evaluation-failure-modes-dan-what-comes-next",
+            "/participant-ai-lab-math/integrated-case-study/latihan",
+            "/participant-ai-lab-math/integrated-case-study/kuis",
+            "/participant-ai-lab-math/integrated-case-study/diskusi",
+            "/participant-ai-lab-math/integrated-case-study/referensi",
             "/participant-ai-lab-gen",
             "/participant-ai-lab-llm",
             "/participant-ai-lab-vlm",
@@ -1710,7 +1747,7 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
 
                 } else if (path.startsWith("/participant-ai-lab-math") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("modules");
-                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra") || path.startsWith("/participant-ai-lab-math/statistics-for-ai") || path.startsWith("/participant-ai-lab-math/probability") || path.startsWith("/participant-ai-lab-math/calculus") || path.startsWith("/participant-ai-lab-math/optimization")) {
+                    if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra") || path.startsWith("/participant-ai-lab-math/statistics-for-ai") || path.startsWith("/participant-ai-lab-math/probability") || path.startsWith("/participant-ai-lab-math/calculus") || path.startsWith("/participant-ai-lab-math/optimization") || path.startsWith("/participant-ai-lab-math/integrated-case-study")) {
                         window.__aiLabLoader.load('math-learning').then(function() {
                             if (path === "/participant-ai-lab-math" && typeof window.initMathOverviewRoute === "function") {
                                 window.initMathOverviewRoute();

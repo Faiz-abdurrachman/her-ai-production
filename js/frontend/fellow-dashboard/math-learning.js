@@ -141,6 +141,27 @@
                 { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 06', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
                 { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 06', file: 'referensi.md', type: 'references', icon: 'fa-book-bookmark' }
             ]
+        }),
+        createSubmodule({
+            id: '07', slug: 'integrated-case-study',
+            title: 'Integrated Case Study: Math for AI di HerAI',
+            sourceBase: '/materi2/math%20for%20ai/integral/herai-submodule-07-integrated-case-study-final/',
+            routeBase: '#/participant-ai-lab-math/integrated-case-study',
+            storageKey: 'heraiMathLearningSubmodule07', topicCount: 7,
+            items: [
+                { id: 'info', slug: '', short: 'Ikhtisar', title: 'Integrated Case Study: Math for AI di HerAI', file: '00-informasi-submodul.md', type: 'info', icon: 'fa-diagram-project' },
+                { id: 'topic-01', slug: 'problem-definition-data-contract', short: 'Problem & contract', title: 'Problem Definition dan Data Contract', file: 'materi/01-problem-definition-data-contract.md', type: 'topic', icon: 'fa-file-contract' },
+                { id: 'topic-02', slug: 'representation-dan-matching', short: 'Representation & matching', title: 'Representation dan Matching', file: 'materi/02-representation-dan-matching.md', type: 'topic', icon: 'fa-vector-square' },
+                { id: 'topic-03', slug: 'data-diagnostics', short: 'Data diagnostics', title: 'Data Diagnostics', file: 'materi/03-data-diagnostics.md', type: 'topic', icon: 'fa-stethoscope' },
+                { id: 'topic-04', slug: 'uncertainty', short: 'Uncertainty', title: 'Uncertainty', file: 'materi/04-uncertainty.md', type: 'topic', icon: 'fa-dice-d20' },
+                { id: 'topic-05', slug: 'prediction-score-dan-loss', short: 'Score & loss', title: 'Prediction Score dan Loss', file: 'materi/05-prediction-score-dan-loss.md', type: 'topic', icon: 'fa-scale-balanced' },
+                { id: 'topic-06', slug: 'gradient-dan-parameter-update', short: 'Gradient & update', title: 'Gradient dan Parameter Update', file: 'materi/06-gradient-dan-parameter-update.md', type: 'topic', icon: 'fa-arrow-turn-down' },
+                { id: 'topic-07', slug: 'evaluation-failure-modes-dan-what-comes-next', short: 'Evaluation & future', title: 'Evaluation, Failure Modes, dan What Comes Next', file: 'materi/07-evaluation-failure-modes-dan-what-comes-next.md', type: 'topic', icon: 'fa-clipboard-list' },
+                { id: 'practice', slug: 'latihan', short: 'Latihan', title: 'Latihan Submodul 07', file: 'latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
+                { id: 'quiz', slug: 'kuis', short: 'Kuis', title: 'Kuis Submodul 07', file: 'kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
+                { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 07', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
+                { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 07', file: 'referensi.md', type: 'references', icon: 'fa-book-bookmark' }
+            ]
         })
     ]);
     const CONTENT = Object.freeze(SUBMODULES.flatMap(submodule => submodule.items));
@@ -227,7 +248,20 @@
         '/participant-ai-lab-math/submodule-06/practice': SUBMODULES[5].items[9].route.slice(1),
         '/participant-ai-lab-math/submodule-06/quiz': SUBMODULES[5].items[10].route.slice(1),
         '/participant-ai-lab-math/submodule-06/discussion': SUBMODULES[5].items[11].route.slice(1),
-        '/participant-ai-lab-math/submodule-06/references': SUBMODULES[5].items[12].route.slice(1)
+        '/participant-ai-lab-math/submodule-06/references': SUBMODULES[5].items[12].route.slice(1),
+        '/participant-ai-lab-math-integrated-case-study': SUBMODULES[6].routeBase.slice(1),
+        '/participant-ai-lab-math/submodule-07': SUBMODULES[6].routeBase.slice(1),
+        '/participant-ai-lab-math/submodule-07/topic-01': SUBMODULES[6].items[1].route.slice(1),
+        '/participant-ai-lab-math/submodule-07/topic-02': SUBMODULES[6].items[2].route.slice(1),
+        '/participant-ai-lab-math/submodule-07/topic-03': SUBMODULES[6].items[3].route.slice(1),
+        '/participant-ai-lab-math/submodule-07/topic-04': SUBMODULES[6].items[4].route.slice(1),
+        '/participant-ai-lab-math/submodule-07/topic-05': SUBMODULES[6].items[5].route.slice(1),
+        '/participant-ai-lab-math/submodule-07/topic-06': SUBMODULES[6].items[6].route.slice(1),
+        '/participant-ai-lab-math/submodule-07/topic-07': SUBMODULES[6].items[7].route.slice(1),
+        '/participant-ai-lab-math/submodule-07/practice': SUBMODULES[6].items[8].route.slice(1),
+        '/participant-ai-lab-math/submodule-07/quiz': SUBMODULES[6].items[9].route.slice(1),
+        '/participant-ai-lab-math/submodule-07/discussion': SUBMODULES[6].items[10].route.slice(1),
+        '/participant-ai-lab-math/submodule-07/references': SUBMODULES[6].items[11].route.slice(1)
     });
 
     let renderSequence = 0;
@@ -2577,7 +2611,7 @@
 
     async function renderQuiz(markdown, container, submodule) {
         let externalKey = {};
-        if (submodule && (submodule.id === '04' || submodule.id === '05')) {
+        if (submodule && (submodule.id === '04' || submodule.id === '05' || submodule.id === '07')) {
             try {
                 const res = await fetch(submodule.sourceBase + 'kunci-jawaban-rubrik.md', { cache: 'no-store' });
                 if (res.ok) {
