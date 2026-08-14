@@ -288,6 +288,12 @@
         return submodule && item ? { submodule, item } : null;
     }
 
+    function getNumericChapterId(submodule, item) {
+        const subNum = parseInt(submodule.id, 10) || 0;
+        const itemIndex = submodule.items.findIndex(i => i.id === item.id);
+        return (subNum * 100) + itemIndex + 1;
+    }
+
     let _serverSyncDone = false;
     async function syncServerProgress() {
         if (_serverSyncDone || !window.getParticipantProgress) return;
@@ -299,7 +305,7 @@
                     const state = readState(sub);
                     let changed = false;
                     sub.items.forEach(item => {
-                        const chId = `${item.type}-${sub.id}-${item.id}`;
+                        const chId = String(getNumericChapterId(sub, item));
                         if (serverCompleted.includes(chId) && !state.completed.includes(item.id)) {
                             state.completed.push(item.id);
                             changed = true;
@@ -336,14 +342,8 @@
             if (window.saveChapterProgress) {
                 const item = submodule.items.find(i => i.id === id);
                 if (item) {
-                    const chapterId = `${item.type}-${submodule.id}-${item.id}`;
+                    const chapterId = getNumericChapterId(submodule, item);
                     await window.saveChapterProgress('math-for-ai', chapterId, 'completed');
-                    
-                    const normalItems = submodule.items.filter(i => i.type !== 'info' && i.type !== 'references');
-                    const allDone = normalItems.every(i => state.completed.includes(i.id));
-                    if (allDone) {
-                        await window.saveChapterProgress('math-for-ai', parseInt(submodule.id, 10), 'completed');
-                    }
                 }
             }
         }
