@@ -753,6 +753,8 @@
         }
         
         markdown = markdown.replace(/>\s*Browser-level target HerAI Markdown parser \+ KaTeX runtime:\s*\*\*NOT TESTED \/ NOT CLAIMED\*\*\./g, '');
+        markdown = markdown.replace(/##\s*Program\s*\n[\s\S]*?(?=\n##\s)/gi, '');
+        markdown = markdown.replace(/##\s*Status\s*\n[\s\S]*?(?=\n##\s)/gi, '');
 
         const math = protectMath(markdown);
         let html = window.marked.parse(math.markdown, { gfm: true, breaks: false, pedantic: false });
