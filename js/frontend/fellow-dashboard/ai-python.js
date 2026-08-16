@@ -1993,7 +1993,17 @@ var SOURCE_VISUALS = {
                         if (!String(field.value || '').trim() && !emptyField) emptyField = field;
                     });
                     setStatus("#aiPythonPracticeStatus", "Isi seluruh " + totalFields + " jawaban sebelum mengirim. " + (totalFields - filledCount) + " jawaban masih kosong.", "warning");
-                    if (emptyField) emptyField.focus();
+                    if (emptyField) {
+                        const card = emptyField.closest("[data-practice-id]");
+                        if (card) {
+                            const cards = Array.from(practiceList.querySelectorAll("[data-practice-id]"));
+                            const cardIndex = cards.indexOf(card);
+                            if (cardIndex >= 0) {
+                                showPractice(cardIndex, true);
+                            }
+                        }
+                        emptyField.focus();
+                    }
                     return;
                 }
                 const originalLabel = saveButton.innerHTML;
