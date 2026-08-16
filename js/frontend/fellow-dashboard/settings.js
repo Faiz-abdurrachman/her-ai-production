@@ -11,6 +11,7 @@
     const DASHBOARD_CACHE_MAX_STALE_MS = 30 * 60 * 1000;
     const DASHBOARD_REQUEST_TIMEOUT_MS = 20000;
     const PROGRESS_SAVE_TIMEOUT_MS = 10000;
+    const RESPONSE_SYNC_TIMEOUT_MS = 30000;
 
     var _dashboardDataCache = null;
     var _dashboardDataPromise = null;
@@ -28,7 +29,7 @@
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
                 var version = name === 'math-learning'
-                    ? '20260816-response-persistence-v1'
+                    ? '20260816-response-persistence-v2'
                     : '20260803-discussion-name-fix';
                 s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=' + version;
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
@@ -3405,7 +3406,7 @@
         };
         if (answers !== undefined) payload.answers = answers;
         var controller = new AbortController();
-        var timeoutId = setTimeout(function() { controller.abort(); }, PROGRESS_SAVE_TIMEOUT_MS);
+        var timeoutId = setTimeout(function() { controller.abort(); }, RESPONSE_SYNC_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',
@@ -3574,7 +3575,7 @@
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.' };
         }
         var controller = new AbortController();
-        var timeoutId = setTimeout(function() { controller.abort(); }, PROGRESS_SAVE_TIMEOUT_MS);
+        var timeoutId = setTimeout(function() { controller.abort(); }, RESPONSE_SYNC_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',
@@ -3618,7 +3619,7 @@
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.', data: [] };
         }
         var controller = new AbortController();
-        var timeoutId = setTimeout(function() { controller.abort(); }, PROGRESS_SAVE_TIMEOUT_MS);
+        var timeoutId = setTimeout(function() { controller.abort(); }, RESPONSE_SYNC_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',

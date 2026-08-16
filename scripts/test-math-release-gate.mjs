@@ -71,4 +71,26 @@ assert.equal(
     'Released submodules must resolve to a tracked HTML shell that exists.'
 );
 
-console.log('Math release gate valid: localhost previews 01–07; non-local locks unreleased content; simulated 01–02 release resolves to an existing shared lesson shell.');
+const fullReleaseSource = source.replace(
+    'releasedSubmodules: Object.freeze([])',
+    "releasedSubmodules: Object.freeze(['01', '02', '03', '04', '05', '06', '07'])"
+);
+assert.notEqual(fullReleaseSource, source, 'Full release fixture must patch the current router source.');
+const fullReleaseContext = {
+    ...context,
+    window: {
+        ...context.window,
+        location: { hostname: 'her-ai.data-sorcerers.com' }
+    }
+};
+fullReleaseContext.window.window = fullReleaseContext.window;
+vm.createContext(fullReleaseContext);
+vm.runInContext(`${fullReleaseSource}\n;globalThis.__testedRouter = router;`, fullReleaseContext, { filename: 'js/router.js' });
+assert.equal(fullReleaseContext.__testedRouter.getMathRoute('/participant-ai-lab-math'), overviewPage);
+for (const route of canonicalRoutes) {
+    const resolved = fullReleaseContext.__testedRouter.getMathRoute(route);
+    assert.equal(resolved, previewLessonPage, `${route} must resolve after full release activation`);
+    assert.equal(existsSync(resolve(repositoryRoot, resolved.slice(1))), true, `${route} release shell must exist`);
+}
+
+console.log('Math release gate valid: localhost previews 01–07; non-local locks unreleased content; partial release isolates 01–02; simulated full 01–07 activation resolves every canonical route to the shared lesson shell.');

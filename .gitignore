@@ -99,6 +99,7 @@ docs-nazril/
 /scripts/*
 !/scripts/harden-public.mjs
 !/scripts/test-math-local-smoke.mjs
+!/scripts/test-math-live-readiness.mjs
 !/scripts/test-math-progress-ids.mjs
 !/scripts/test-math-release-gate.mjs
 !/scripts/test-math-response-persistence.mjs

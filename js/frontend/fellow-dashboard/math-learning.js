@@ -590,7 +590,14 @@
                 continue;
             }
             const directMarker = lines[index].match(new RegExp(`^(#{1,6})\\s+(?:\\d+\\.\\s+)?\\[${markerPattern}\\]\\s+(.+)$`));
-            const specHeading = lines[index].match(/^(#{1,6})\s+(?:\d+\.\s+)?(?:Visual\s*\/\s*Interactive Spec(?:ification)?|Visualization Spec(?:ification)?|Interactive Spec(?:ification)?)(?:\s+\d+)?\s*(?:[—-]\s*(.*))?$/i);
+            const specHeading = lines[index].match(/^(#{1,6})\s+(?:(?:\d+\.|BAGIAN\s+[A-Z0-9]+)\s*(?:[—-]\s*)?)?(?:Visual\s*\/\s*Interactive\s+Spec(?:ification)?s?|Visualization\s+Spec(?:ification)?s?|Interactive\s+Spec(?:ification)?s?)(?:\s+\d+)?\s*(?:[—-]\s*(.*))?$/i);
+            const nestedMarkerAhead = specHeading && lines.slice(index + 1, index + 7).some(line => (
+                new RegExp(`^#{1,6}\\s+(?:\\d+\\.\\s+)?\\[${markerPattern}\\]\\s+.+$`).test(line)
+            ));
+            if (nestedMarkerAhead) {
+                index += 1;
+                continue;
+            }
             let markerType = directMarker?.[2] || '';
             let markerTitle = directMarker?.[3]?.trim() || specHeading?.[2]?.trim() || '';
             let markerLevel = (directMarker?.[1] || specHeading?.[1] || '').length;
@@ -843,7 +850,7 @@
             );
         }
         
-        markdown = markdown.replace(/>\s*Browser-level target HerAI Markdown parser \+ KaTeX runtime:\s*\*\*NOT TESTED \/ NOT CLAIMED\*\*\./g, '');
+        markdown = markdown.replace(/^.*Browser-level.*NOT TESTED\s*\/\s*NOT CLAIMED(?:\s+PASS)?.*$/gim, '');
         markdown = markdown.replace(/##\s*Program\s*\n[\s\S]*?(?=\n##\s)/gi, '');
         markdown = markdown.replace(/##\s*Status\s*\n[\s\S]*?(?=\n##\s)/gi, '');
 
@@ -971,16 +978,6 @@
         container.querySelectorAll('h2, h3, h4').forEach((heading, index) => {
             if (!heading.id) heading.id = `${slugify(heading.textContent) || 'bagian'}-${index + 1}`;
         });
-        container.querySelectorAll('table').forEach(table => {
-            if (table.parentElement?.classList.contains('math-learning-table-wrap')) return;
-            const wrapper = document.createElement('div');
-            wrapper.className = 'math-learning-table-wrap';
-            wrapper.tabIndex = 0;
-            wrapper.setAttribute('role', 'region');
-            wrapper.setAttribute('aria-label', 'Tabel materi, dapat digulir horizontal');
-            table.parentNode.insertBefore(wrapper, table);
-            wrapper.appendChild(table);
-        });
         container.querySelectorAll('a[href]').forEach(link => {
             const href = link.getAttribute('href') || '';
             if (/^https?:\/\//i.test(href)) {
@@ -992,6 +989,16 @@
         specs.forEach((spec, index) => {
             const placeholder = container.querySelector(`[data-math-interactive="${index}"]`);
             if (placeholder) placeholder.replaceWith(createInteractive(spec));
+        });
+        container.querySelectorAll('table').forEach(table => {
+            if (table.parentElement?.classList.contains('math-learning-table-wrap')) return;
+            const wrapper = document.createElement('div');
+            wrapper.className = 'math-learning-table-wrap';
+            wrapper.tabIndex = 0;
+            wrapper.setAttribute('role', 'region');
+            wrapper.setAttribute('aria-label', 'Tabel materi, dapat digulir horizontal');
+            table.parentNode.insertBefore(wrapper, table);
+            wrapper.appendChild(table);
         });
         removeAuthoringSections(container);
         if (getCurrentContext()?.item.type === 'practice') collapseExerciseSupport(container);

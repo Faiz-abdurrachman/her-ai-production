@@ -1,7 +1,8 @@
 # Hierarki Kurikulum dan Persistensi HerAI
 
 > **Diperbarui:** 16 Agustus 2026
-> Dokumen ini menjelaskan identity/scoring source lokal. Backend source belum deployed.
+> Dokumen ini menjelaskan identity/scoring source lokal. Existing GAS deployment sudah
+> diverifikasi pada version `2026.3.11-math-response-persistence`.
 
 ## Model hierarki
 
@@ -96,6 +97,10 @@ tidak memberi poin.
 ## Release boundary
 
 Generic progress marker tetap bukan pengganti persistence body. Kontrak khusus latihan
-dan diskusi sudah committed lokal pada `5a8998c`, tetapi belum pushed, deployed, atau
-diuji terhadap backend terotorisasi. Semua route Math tetap locked pada hostname
-non-local sampai activation eksplisit.
+dan diskusi committed lokal pada `5a8998c`; existing GAS deployment sudah exact
+`2026.3.11-math-response-persistence`. Full authorized QA membuktikan invalid-ID
+rejection, 90 canonical progress IDs completed, 7 exact 8-answer practice read-back,
+14 unique discussion prompts, serta tujuh score kuis dan aggregate 100. Satu invalid
+`topic-01` row dari stale-backend preflight tetap menjadi residue QA non-canonical.
+Readiness browser 01–07 lulus untuk 89 route dan 210 blok visual/interaktif. Semua
+route Math tetap locked pada hostname non-local sampai activation eksplisit.
