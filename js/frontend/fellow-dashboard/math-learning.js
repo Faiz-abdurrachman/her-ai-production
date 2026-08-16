@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    const RUNTIME_VERSION = '20260816-release-safety-v1';
+    const RUNTIME_VERSION = '20260816-response-persistence-v1';
     const routeFor = (base, suffix) => suffix ? `${base}/${suffix}` : base;
     const createSubmodule = config => Object.freeze({
         ...config,
@@ -344,6 +344,60 @@
             completed: [...new Set(state.completed)],
             pending: [...new Set(state.pending || [])]
         }));
+    }
+
+    function responseStorageKey(submodule, type) {
+        return `${submodule.storageKey}:${type}-responses`;
+    }
+
+    function readResponseState(submodule, type) {
+        try {
+            const value = JSON.parse(localStorage.getItem(responseStorageKey(submodule, type)) || '{}');
+            return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+        } catch (error) {
+            return {};
+        }
+    }
+
+    function writeResponseState(submodule, type, value) {
+        localStorage.setItem(responseStorageKey(submodule, type), JSON.stringify(value || {}));
+    }
+
+    function updateCompletionUi(submodule, item, state, synced) {
+        const page = document.querySelector('.math-learning-page');
+        if (!page) return;
+        const percent = Math.round(state.completed.length / submodule.items.length * 100);
+        const percentText = page.querySelector('[data-math-progress-text]');
+        const percentBar = page.querySelector('[data-math-progress-bar]');
+        const syncCopy = page.querySelector('[data-math-sync-copy]');
+        const completionButton = page.querySelector('[data-assessment-completion]');
+        if (percentText) percentText.textContent = `${percent}%`;
+        if (percentBar) percentBar.style.setProperty('--value', `${percent}%`);
+        if (syncCopy) {
+            syncCopy.textContent = synced
+                ? 'Status akun sudah dikonfirmasi oleh server.'
+                : 'Respons tersimpan, tetapi sinkronisasi progres akun masih tertunda.';
+        }
+        if (completionButton) {
+            completionButton.classList.add('is-complete');
+            completionButton.innerHTML = synced
+                ? '<i class="fas fa-circle-check" aria-hidden="true"></i>Selesai'
+                : '<i class="fas fa-cloud-arrow-up" aria-hidden="true"></i>Sinkronisasi tertunda';
+        }
+        page.querySelector(`.lesson-list-card a[href="${item.route}"]`)?.closest('li')?.classList.add('completed');
+    }
+
+    function recordPersistedCompletion(submodule, item, progressSynced) {
+        const state = readState(submodule);
+        if (!state.completed.includes(item.id)) state.completed.push(item.id);
+        if (progressSynced) {
+            state.pending = state.pending.filter(id => id !== item.id);
+        } else if (!state.pending.includes(item.id)) {
+            state.pending.push(item.id);
+        }
+        writeState(submodule, state);
+        updateCompletionUi(submodule, item, state, progressSynced);
+        return state;
     }
 
     async function markComplete(submodule, id) {
@@ -2683,6 +2737,335 @@
         }
     }
 
+    function responseMessage(node, message, tone = 'neutral') {
+        if (!node) return;
+        node.className = `math-learning-response-status is-${tone}`;
+        node.textContent = message;
+    }
+
+    async function renderPractice(markdown, container, submodule, item, specs) {
+        container.innerHTML = `
+            <form class="math-learning-practice-form" data-math-practice-form novalidate>
+                <div data-math-practice-source>${renderMarkdown(markdown, specs)}</div>
+                <div class="math-learning-response-actions">
+                    <button class="math-learning-action" type="button" data-practice-draft>
+                        <i class="far fa-floppy-disk" aria-hidden="true"></i>Simpan draft
+                    </button>
+                    <button class="math-learning-action is-primary" type="submit">
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i>Kirim latihan
+                    </button>
+                </div>
+                <p class="math-learning-response-status is-neutral" data-practice-status role="status" aria-live="polite">Jawaban disimpan lokal saat kamu mengetik. Status server akan muncul di sini.</p>
+            </form>`;
+        const form = container.querySelector('[data-math-practice-form]');
+        const source = form.querySelector('[data-math-practice-source]');
+        enhanceMarkdown(source, specs);
+        const headings = [...source.querySelectorAll('h2, h3')].filter(heading => /^(?:Latihan|Soal)\s+\d+\b/i.test(heading.textContent.trim()));
+        if (headings.length !== 8) {
+            throw new Error(`Source latihan Submodule ${submodule.id} harus memiliki tepat 8 latihan; ditemukan ${headings.length}.`);
+        }
+
+        headings.forEach((heading, index) => {
+            const number = String(index + 1).padStart(2, '0');
+            const field = document.createElement('section');
+            field.className = 'math-learning-response-field';
+            field.innerHTML = `
+                <label for="mathPractice${submodule.id}${number}">
+                    <span>Jawaban Latihan ${index + 1}</span>
+                    <small>Tulis proses berpikir, perhitungan, dan batas kesimpulan yang diminta.</small>
+                </label>
+                <textarea id="mathPractice${submodule.id}${number}" name="answer-${number}" rows="7" maxlength="10000" aria-describedby="${heading.id}"></textarea>`;
+            const nextHeading = headings[index + 1];
+            if (nextHeading?.parentNode) nextHeading.parentNode.insertBefore(field, nextHeading);
+            else source.appendChild(field);
+        });
+
+        const fields = [...form.querySelectorAll('.math-learning-response-field textarea')];
+        const draftButton = form.querySelector('[data-practice-draft]');
+        const submitButton = form.querySelector('button[type="submit"]');
+        const statusNode = form.querySelector('[data-practice-status]');
+        const localRecord = readResponseState(submodule, 'practice');
+        const collectAnswers = () => Object.fromEntries(fields.map(field => [field.name, field.value.trim()]));
+        const applyAnswers = answers => fields.forEach(field => {
+            field.value = String(answers?.[field.name] || '');
+        });
+        const saveLocal = (status = localRecord.status || 'draft', serverId = localRecord.serverId || '') => {
+            const record = {
+                answers: collectAnswers(),
+                status,
+                serverId,
+                updatedAt: new Date().toISOString()
+            };
+            writeResponseState(submodule, 'practice', record);
+            Object.assign(localRecord, record);
+        };
+        const setLocked = (submission, allowProgressRetry = false) => {
+            const locked = submission?.status === 'submitted' || submission?.status === 'reviewed';
+            fields.forEach(field => { field.readOnly = locked; });
+            draftButton.disabled = locked;
+            submitButton.disabled = locked && !allowProgressRetry;
+            if (locked) {
+                submitButton.innerHTML = allowProgressRetry
+                    ? '<i class="fas fa-cloud-arrow-up" aria-hidden="true"></i>Coba sinkronkan progres'
+                    : (submission.status === 'reviewed'
+                        ? '<i class="fas fa-circle-check" aria-hidden="true"></i>Sudah direview'
+                        : '<i class="fas fa-circle-check" aria-hidden="true"></i>Sudah dikirim');
+            }
+        };
+
+        applyAnswers(localRecord.answers || {});
+        if (localRecord.status === 'submitted' || localRecord.status === 'reviewed') {
+            const localProgressState = readState(submodule);
+            const needsProgressRetry = !localProgressState.completed.includes(item.id)
+                || localProgressState.pending.includes(item.id);
+            setLocked(localRecord, needsProgressRetry);
+            responseMessage(
+                statusNode,
+                needsProgressRetry
+                    ? 'Submission tersedia di perangkat, tetapi progres belum dikonfirmasi. Gunakan tombol retry setelah server tersedia.'
+                    : (localRecord.status === 'reviewed'
+                        ? 'Review mentor terakhir tersedia di perangkat; server sedang diverifikasi.'
+                        : 'Submission terakhir tersedia di perangkat; server sedang diverifikasi.'),
+                needsProgressRetry ? 'warning' : 'neutral'
+            );
+        }
+        fields.forEach(field => field.addEventListener('input', () => {
+            saveLocal('draft', localRecord.serverId || '');
+            responseMessage(statusNode, 'Perubahan tersimpan di perangkat; simpan draft untuk menyinkronkan ke akun.', 'neutral');
+        }, { signal: pageAbort.signal }));
+
+        draftButton.addEventListener('click', async () => {
+            const answers = collectAnswers();
+            if (!Object.values(answers).some(Boolean)) {
+                responseMessage(statusNode, 'Isi minimal satu jawaban sebelum menyimpan draft.', 'warning');
+                fields[0]?.focus();
+                return;
+            }
+            saveLocal('draft', localRecord.serverId || '');
+            draftButton.disabled = true;
+            responseMessage(statusNode, 'Menyimpan draft ke akun…', 'neutral');
+            const result = window.saveParticipantExerciseDraft
+                ? await window.saveParticipantExerciseDraft('math-for-ai', `practice-${submodule.id}`, answers)
+                : { status: 'error', message: 'Penyimpanan akun belum tersedia.' };
+            if (result?.status !== 'success' || !result.submission) {
+                draftButton.disabled = false;
+                responseMessage(statusNode, `Draft aman di perangkat, tetapi belum tersinkron: ${result?.message || 'server tidak mengonfirmasi penyimpanan.'}`, 'error');
+                return;
+            }
+            saveLocal(result.submission.status || 'draft', result.submission.submission_id || '');
+            responseMessage(statusNode, 'Draft latihan sudah dikonfirmasi oleh server.', 'success');
+        }, { signal: pageAbort.signal });
+
+        form.addEventListener('submit', async event => {
+            event.preventDefault();
+            const answers = collectAnswers();
+            const firstEmpty = fields.find(field => !answers[field.name]);
+            if (firstEmpty) {
+                responseMessage(statusNode, `Jawaban belum lengkap. Isi seluruh ${fields.length} latihan sebelum mengirim.`, 'warning');
+                firstEmpty.focus();
+                firstEmpty.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+            saveLocal('draft', localRecord.serverId || '');
+            draftButton.disabled = true;
+            submitButton.disabled = true;
+            responseMessage(statusNode, 'Mengirim latihan ke server…', 'neutral');
+            const result = window.submitParticipantExercise
+                ? await window.submitParticipantExercise('math-for-ai', `practice-${submodule.id}`, answers)
+                : { status: 'error', message: 'Penyimpanan akun belum tersedia.' };
+            if (result?.status !== 'success' || !result.submission) {
+                draftButton.disabled = false;
+                submitButton.disabled = false;
+                responseMessage(statusNode, `Jawaban tetap aman di perangkat, tetapi belum terkirim: ${result?.message || 'server tidak mengonfirmasi submission.'}`, 'error');
+                return;
+            }
+            saveLocal(result.submission.status || 'submitted', result.submission.submission_id || '');
+            recordPersistedCompletion(submodule, item, result.progress_synced === true);
+            setLocked(result.submission, result.progress_synced !== true);
+            responseMessage(
+                statusNode,
+                result.progress_synced === true
+                    ? 'Latihan sudah dikirim dan progres akun dikonfirmasi oleh server.'
+                    : 'Latihan sudah tersimpan di server, tetapi sinkronisasi progres akun masih tertunda.',
+                result.progress_synced === true ? 'success' : 'warning'
+            );
+        }, { signal: pageAbort.signal });
+
+        if (window.getParticipantExerciseSubmissions) {
+            const remote = await window.getParticipantExerciseSubmissions('math-for-ai', `practice-${submodule.id}`);
+            if (remote?.status === 'success' && Array.isArray(remote.data) && remote.data.length) {
+                const submission = remote.data[0];
+                const localTime = Date.parse(localRecord.updatedAt || '') || 0;
+                const remoteTime = Date.parse(submission.updated_at || '') || 0;
+                const remoteIsFinal = submission.status === 'submitted' || submission.status === 'reviewed';
+                if (remoteIsFinal || remoteTime >= localTime) {
+                    applyAnswers(submission.answers || {});
+                    saveLocal(submission.status || 'draft', submission.submission_id || '');
+                }
+                const progressState = readState(submodule);
+                const needsProgressRetry = remoteIsFinal && (
+                    !progressState.completed.includes(item.id)
+                    || progressState.pending.includes(item.id)
+                );
+                setLocked(submission, needsProgressRetry);
+                responseMessage(
+                    statusNode,
+                    needsProgressRetry
+                        ? 'Submission dipulihkan, tetapi progres belum dikonfirmasi. Gunakan tombol retry.'
+                        : (remoteIsFinal
+                        ? (submission.status === 'reviewed' ? 'Latihan dan review mentor dipulihkan dari server.' : 'Submission latihan dipulihkan dari server.')
+                        : (remoteTime >= localTime ? 'Draft latihan dipulihkan dari server.' : 'Draft perangkat lebih baru; simpan draft untuk menyinkronkannya.')),
+                    needsProgressRetry ? 'warning' : (remoteIsFinal || remoteTime >= localTime ? 'success' : 'warning')
+                );
+            } else if (remote?.status === 'error') {
+                responseMessage(statusNode, `Jawaban lokal tersedia; server belum dapat memuat draft: ${remote.message || 'coba lagi nanti.'}`, 'warning');
+            }
+        }
+    }
+
+    async function renderDiscussion(markdown, container, submodule, item, specs) {
+        container.innerHTML = `<div data-math-discussion-source>${renderMarkdown(markdown, specs)}</div><p class="math-learning-response-status is-neutral" data-discussion-overall role="status" aria-live="polite">Setiap respons disimpan terpisah dan baru disebut tersinkron setelah server mengonfirmasi.</p>`;
+        const source = container.querySelector('[data-math-discussion-source]');
+        const overallStatus = container.querySelector('[data-discussion-overall]');
+        enhanceMarkdown(source, specs);
+        const headings = [...source.querySelectorAll('h2, h3')].filter(heading => /^Diskusi\s+\d+\b/i.test(heading.textContent.trim()));
+        if (headings.length !== 2) {
+            throw new Error(`Source diskusi Submodule ${submodule.id} harus memiliki tepat 2 prompt; ditemukan ${headings.length}.`);
+        }
+
+        const localRecord = readResponseState(submodule, 'discussion');
+        if (!localRecord.responses || typeof localRecord.responses !== 'object') localRecord.responses = {};
+        const forms = [];
+        headings.forEach((heading, index) => {
+            const promptNumber = String(index + 1).padStart(2, '0');
+            const promptId = `discussion-${submodule.id}-${promptNumber}`;
+            const form = document.createElement('form');
+            form.className = 'math-learning-discussion-form';
+            form.dataset.discussionPrompt = promptId;
+            form.innerHTML = `
+                <label for="mathDiscussion${submodule.id}${promptNumber}">
+                    <span>Respons Diskusi ${index + 1}</span>
+                    <small>Gunakan bukti dari skenario, jelaskan reasoning, dan jaga batas klaim.</small>
+                </label>
+                <textarea id="mathDiscussion${submodule.id}${promptNumber}" rows="7" maxlength="5000" aria-describedby="${heading.id}"></textarea>
+                <div class="math-learning-response-actions">
+                    <button class="math-learning-action is-primary" type="submit"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i>Simpan respons</button>
+                </div>
+                <p class="math-learning-response-status is-neutral" data-discussion-status role="status" aria-live="polite">Belum disinkronkan.</p>`;
+            const nextHeading = headings[index + 1];
+            if (nextHeading?.parentNode) nextHeading.parentNode.insertBefore(form, nextHeading);
+            else source.appendChild(form);
+            forms.push(form);
+
+            const textarea = form.querySelector('textarea');
+            const saved = localRecord.responses[promptId] || {};
+            textarea.value = String(saved.text || '');
+            textarea.addEventListener('input', () => {
+                localRecord.responses[promptId] = {
+                    ...localRecord.responses[promptId],
+                    text: textarea.value,
+                    updatedAt: new Date().toISOString(),
+                    synced: false
+                };
+                writeResponseState(submodule, 'discussion', localRecord);
+                responseMessage(form.querySelector('[data-discussion-status]'), 'Respons tersimpan di perangkat; tekan Simpan respons untuk sinkronisasi.', 'neutral');
+            }, { signal: pageAbort.signal });
+
+            form.addEventListener('submit', async event => {
+                event.preventDefault();
+                const text = textarea.value.trim();
+                const statusNode = form.querySelector('[data-discussion-status]');
+                const button = form.querySelector('button[type="submit"]');
+                if (!text) {
+                    responseMessage(statusNode, 'Isi respons sebelum menyimpan.', 'warning');
+                    textarea.focus();
+                    return;
+                }
+                const savedResponse = localRecord.responses[promptId] || {};
+                localRecord.responses[promptId] = { ...savedResponse, text, updatedAt: new Date().toISOString(), synced: false };
+                writeResponseState(submodule, 'discussion', localRecord);
+                button.disabled = true;
+                responseMessage(statusNode, 'Menyimpan respons ke server…', 'neutral');
+                const result = window.saveParticipantDiscussion
+                    ? await window.saveParticipantDiscussion('math-for-ai', {
+                        id: savedResponse.serverId || '',
+                        prompt: promptId,
+                        text,
+                        replies: []
+                    })
+                    : { status: 'error', message: 'Penyimpanan akun belum tersedia.' };
+                button.disabled = false;
+                if (result?.status !== 'success' || !result.discussion) {
+                    responseMessage(statusNode, `Respons aman di perangkat, tetapi belum tersinkron: ${result?.message || 'server tidak mengonfirmasi penyimpanan.'}`, 'error');
+                    return;
+                }
+                localRecord.responses[promptId] = {
+                    text: result.discussion.text || text,
+                    serverId: result.discussion.id || '',
+                    updatedAt: result.discussion.updatedAt || new Date().toISOString(),
+                    synced: true
+                };
+                writeResponseState(submodule, 'discussion', localRecord);
+                responseMessage(statusNode, 'Respons diskusi sudah dikonfirmasi oleh server.', 'success');
+                if (result.discussion_complete) {
+                    recordPersistedCompletion(submodule, item, result.progress_synced === true);
+                    responseMessage(
+                        overallStatus,
+                        result.progress_synced === true
+                            ? 'Kedua respons tersimpan dan progres akun sudah dikonfirmasi.'
+                            : 'Kedua respons tersimpan, tetapi sinkronisasi progres akun masih tertunda.',
+                        result.progress_synced === true ? 'success' : 'warning'
+                    );
+                } else {
+                    responseMessage(overallStatus, 'Satu respons tersimpan. Simpan respons kedua untuk menyelesaikan halaman diskusi.', 'neutral');
+                }
+            }, { signal: pageAbort.signal });
+        });
+
+        if (window.getParticipantDiscussions) {
+            const remote = await window.getParticipantDiscussions('math-for-ai');
+            if (remote?.status === 'success' && Array.isArray(remote.data)) {
+                let restored = 0;
+                forms.forEach(form => {
+                    const promptId = form.dataset.discussionPrompt;
+                    const row = remote.data.find(entry => entry.prompt === promptId);
+                    if (!row) return;
+                    const local = localRecord.responses[promptId] || {};
+                    const localTime = Date.parse(local.updatedAt || '') || 0;
+                    const remoteTime = Date.parse(row.updatedAt || '') || 0;
+                    if (remoteTime >= localTime) {
+                        form.querySelector('textarea').value = String(row.text || '');
+                        localRecord.responses[promptId] = {
+                            text: String(row.text || ''),
+                            serverId: row.id || '',
+                            updatedAt: row.updatedAt || row.createdAt || '',
+                            synced: true
+                        };
+                        responseMessage(form.querySelector('[data-discussion-status]'), 'Respons dipulihkan dari server.', 'success');
+                        restored += 1;
+                    } else {
+                        responseMessage(form.querySelector('[data-discussion-status]'), 'Respons perangkat lebih baru; simpan untuk menyinkronkannya.', 'warning');
+                    }
+                });
+                writeResponseState(submodule, 'discussion', localRecord);
+                if (restored === headings.length) {
+                    const progressState = readState(submodule);
+                    const needsProgressRetry = !progressState.completed.includes(item.id)
+                        || progressState.pending.includes(item.id);
+                    responseMessage(
+                        overallStatus,
+                        needsProgressRetry
+                            ? 'Kedua respons tersedia di server, tetapi progres belum dikonfirmasi. Simpan ulang salah satu respons untuk mencoba lagi.'
+                            : 'Kedua respons diskusi tersedia dari server.',
+                        needsProgressRetry ? 'warning' : 'success'
+                    );
+                }
+            } else if (remote?.status === 'error') {
+                responseMessage(overallStatus, `Respons lokal tersedia; server belum dapat memuat diskusi: ${remote.message || 'coba lagi nanti.'}`, 'warning');
+            }
+        }
+    }
+
     async function renderQuiz(markdown, container, submodule) {
         let externalKey = {};
         if (submodule && ['04', '05', '06', '07'].includes(submodule.id)) {
@@ -2779,6 +3162,8 @@
             }
 
             if (saveResult?.status === 'success') {
+                const quizItem = submodule.items.find(item => item.type === 'quiz');
+                if (quizItem) recordPersistedCompletion(submodule, quizItem, true);
                 window.__aiLabToast?.(
                     `Skor kuis: ${correct}/${questions.length} (${scorePercent}%). Tersimpan ke akun.${aggregateMessage}`,
                     aggregateMessage ? 'info' : (scorePercent>=75?'success':'info')
@@ -2831,11 +3216,15 @@
     function buildRightPanel(submodule, active, state, progress) {
         const complete = state.completed.includes(active.id);
         const pending = state.pending.includes(active.id);
+        const requiresPersistedResponse = ['practice', 'quiz', 'discussion'].includes(active.type);
+        const responseLabel = active.type === 'practice'
+            ? 'Kirim latihan untuk selesai'
+            : (active.type === 'quiz' ? 'Selesaikan kuis untuk selesai' : 'Simpan 2 respons untuk selesai');
         return `<section class="module-side-card lesson-progress-card">
             <h2>Progres Submodul</h2>
             <div class="lesson-progress-mini"><b style="--value:${progress}%" data-math-progress-bar></b><strong data-math-progress-text>${progress}%</strong></div>
-            <p data-math-sync-copy>${pending ? 'Tersimpan di perangkat; sinkronisasi akun masih tertunda.' : 'Status akun diperbarui setelah server mengonfirmasi penyimpanan.'}</p>
-            <button type="button" class="math-learning-complete-button ${complete ? 'is-complete' : ''}" data-mark-complete><i class="fas ${complete ? 'fa-circle-check' : 'fa-check'}" aria-hidden="true"></i>${pending ? 'Coba sinkronkan' : (complete ? 'Selesai' : 'Tandai selesai')}</button>
+            <p data-math-sync-copy>${pending ? 'Tersimpan di perangkat; sinkronisasi akun masih tertunda.' : (requiresPersistedResponse && !complete ? 'Status selesai mengikuti submission yang dikonfirmasi server.' : 'Status akun diperbarui setelah server mengonfirmasi penyimpanan.')}</p>
+            <button type="button" class="math-learning-complete-button ${complete ? 'is-complete' : ''}" ${requiresPersistedResponse ? 'data-assessment-completion disabled aria-disabled="true"' : 'data-mark-complete'}><i class="fas ${complete ? 'fa-circle-check' : (requiresPersistedResponse ? 'fa-cloud-arrow-up' : 'fa-check')}" aria-hidden="true"></i>${pending ? 'Sinkronisasi tertunda' : (complete ? 'Selesai' : (requiresPersistedResponse ? responseLabel : 'Tandai selesai'))}</button>
         </section>
         <section class="module-side-card lesson-list-card"><h2>Daftar Materi</h2>${buildLessonList(submodule, active, state)}</section>`;
     }
@@ -2849,9 +3238,10 @@
 
     function bindShell(submodule, item) {
         const page = document.querySelector('.math-learning-page');
+        const requiresPersistedResponse = ['practice', 'quiz', 'discussion'].includes(item.type);
         
         // Manual mark complete button
-        page?.querySelector('[data-mark-complete]')?.addEventListener('click', async event => {
+        if (!requiresPersistedResponse) page?.querySelector('[data-mark-complete]')?.addEventListener('click', async event => {
             const button = event.currentTarget;
             button.disabled = true;
             button.innerHTML = '<i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i>Menyimpan...';
@@ -2890,7 +3280,7 @@
         }, { signal: pageAbort.signal });
 
         // Auto-complete when clicking "Next Topic"
-        page?.querySelector('.math-learning-next-link')?.addEventListener('click', async event => {
+        if (!requiresPersistedResponse) page?.querySelector('.math-learning-next-link')?.addEventListener('click', async event => {
             event.preventDefault();
             event.stopPropagation();
             const destination = event.currentTarget.getAttribute('href');
@@ -2955,6 +3345,10 @@
             if (item.type === 'quiz') {
                 await renderQuiz(learnerSource, content, submodule);
                 enhanceMarkdown(content, []);
+            } else if (item.type === 'practice') {
+                await renderPractice(bodySource, content, submodule, item, extracted.specs);
+            } else if (item.type === 'discussion') {
+                await renderDiscussion(bodySource, content, submodule, item, extracted.specs);
             } else {
                 content.innerHTML = renderMarkdown(bodySource, extracted.specs);
                 enhanceMarkdown(content, extracted.specs);

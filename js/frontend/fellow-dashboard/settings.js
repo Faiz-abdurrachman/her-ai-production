@@ -28,7 +28,7 @@
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
                 var version = name === 'math-learning'
-                    ? '20260816-release-safety-v1'
+                    ? '20260816-response-persistence-v1'
                     : '20260803-discussion-name-fix';
                 s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=' + version;
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
@@ -3404,10 +3404,13 @@
             exercise_id: exerciseId || 'practice'
         };
         if (answers !== undefined) payload.answers = answers;
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, PROGRESS_SAVE_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                signal: controller.signal,
                 body: JSON.stringify(payload)
             });
             var result = await response.json().catch(function() { return {}; });
@@ -3419,7 +3422,14 @@
             }
             return result;
         } catch (error) {
-            return { status: 'error', message: 'Koneksi terputus. Jawaban lokal tetap aman.' };
+            return {
+                status: 'error',
+                message: error?.name === 'AbortError'
+                    ? 'Penyimpanan latihan terlalu lama. Jawaban lokal tetap aman.'
+                    : 'Koneksi terputus. Jawaban lokal tetap aman.'
+            };
+        } finally {
+            clearTimeout(timeoutId);
         }
     }
 
@@ -3563,10 +3573,13 @@
         if (!session?.nik || !session?.token) {
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.' };
         }
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, PROGRESS_SAVE_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                signal: controller.signal,
                 body: JSON.stringify({
                     action: 'saveParticipantDiscussion',
                     nik: session.nik,
@@ -3588,7 +3601,14 @@
             }
             return result;
         } catch (e) {
-            return { status: 'error', message: 'Koneksi terputus. Coba kirim kembali.' };
+            return {
+                status: 'error',
+                message: e?.name === 'AbortError'
+                    ? 'Penyimpanan diskusi terlalu lama. Respons lokal tetap aman.'
+                    : 'Koneksi terputus. Coba kirim kembali.'
+            };
+        } finally {
+            clearTimeout(timeoutId);
         }
     };
 
@@ -3597,10 +3617,13 @@
         if (!session?.nik || !session?.token) {
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.', data: [] };
         }
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, PROGRESS_SAVE_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                signal: controller.signal,
                 body: JSON.stringify({
                     action: 'getParticipantDiscussions',
                     nik: session.nik,
@@ -3617,7 +3640,15 @@
             }
             return { status: 'success', data: Array.isArray(result.data) ? result.data : [] };
         } catch (e) {
-            return { status: 'error', message: 'Koneksi terputus. Diskusi lokal tetap tersedia.', data: [] };
+            return {
+                status: 'error',
+                message: e?.name === 'AbortError'
+                    ? 'Memuat diskusi terlalu lama. Respons lokal tetap tersedia.'
+                    : 'Koneksi terputus. Diskusi lokal tetap tersedia.',
+                data: []
+            };
+        } finally {
+            clearTimeout(timeoutId);
         }
     };
 

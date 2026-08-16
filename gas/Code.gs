@@ -11,7 +11,7 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
-const HERAI_BACKEND_VERSION = '2026.3.10-math-progress-contract';
+const HERAI_BACKEND_VERSION = '2026.3.11-math-response-persistence';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
 const PARTICIPANT_ACCOUNT_TYPE = 'participant';
 const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
@@ -88,6 +88,16 @@ const EXPECTED_EXERCISE_ANSWER_COUNTS = {
   'evaluation': 5,
   'evolution': 7
 };
+const MATH_EXERCISE_ANSWER_COUNTS = {
+  'practice-01': 8,
+  'practice-02': 8,
+  'practice-03': 8,
+  'practice-04': 8,
+  'practice-05': 8,
+  'practice-06': 8,
+  'practice-07': 8
+};
+const MATH_DISCUSSION_PROMPTS_PER_SUBMODULE = 2;
 const LEGACY_PASSWORD_PEPPERS = [
   '120NQtFqErJiIfITlPfVo8wV6G0_79qFKMTaptxNF-RA',
   '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w'
@@ -3476,6 +3486,17 @@ function saveParticipantDiscussion(payload) {
   if (!moduleId || !text) {
     return { status: 'error', message: 'module_id dan isi diskusi wajib diisi.' };
   }
+  if (PARTICIPANT_PROGRESS_MODULE_IDS.indexOf(moduleId) < 0) {
+    return { status: 'error', message: 'Module diskusi tidak dikenali.' };
+  }
+
+  var prompt = String(payload.prompt || 'Diskusi').trim().slice(0, 300);
+  var mathPromptMatch = moduleId === 'math-for-ai'
+    ? prompt.match(/^discussion-(0[1-7])-(0[1-2])$/)
+    : null;
+  if (moduleId === 'math-for-ai' && !mathPromptMatch) {
+    return { status: 'error', message: 'Prompt diskusi Math for AI tidak dikenali.' };
+  }
 
   var participants = getRows(SHEETS.participants);
   var participant = participants.find(function(row) {
@@ -3487,9 +3508,20 @@ function saveParticipantDiscussion(payload) {
 
   var participantRowId = String(participant.rowId || '');
   var discussionId = String(payload.discussion_id || '').trim() || ('dsc_' + Utilities.getUuid());
-  var existing = getRows(SHEETS.participantDiscussions).find(function(row) {
+  var discussionRows = getRows(SHEETS.participantDiscussions);
+  var existing = discussionRows.find(function(row) {
     return String(row.discussion_id || '') === discussionId;
   });
+  if (mathPromptMatch) {
+    existing = discussionRows.find(function(row) {
+      return String(row.participant_rowId || '') === participantRowId
+        && String(row.module_id || '') === moduleId
+        && String(row.prompt || '') === prompt;
+    }) || null;
+    discussionId = existing && existing.discussion_id
+      ? String(existing.discussion_id)
+      : ('dsc_' + Utilities.getUuid());
+  }
   if (existing && String(existing.participant_rowId || '') !== participantRowId) {
     return { status: 'error', message: 'Diskusi tidak dapat diubah oleh peserta ini.' };
   }
@@ -3506,7 +3538,7 @@ function saveParticipantDiscussion(payload) {
     participant_rowId: participantRowId,
     nik: String(participant.nik || '').replace(/\D/g, ''),
     module_id: moduleId,
-    prompt: String(payload.prompt || 'Diskusi').trim().slice(0, 300),
+    prompt: prompt,
     text: text,
     replies_json: JSON.stringify(replies),
     created_at: existing && existing.created_at ? existing.created_at : String(payload.created_at || now),
@@ -3528,8 +3560,40 @@ function saveParticipantDiscussion(payload) {
     activity: existing ? 'Memperbarui diskusi module' : 'Membuat diskusi module'
   });
 
+  var discussionComplete = false;
+  var progressSynced = null;
+  if (mathPromptMatch) {
+    var promptPrefix = 'discussion-' + mathPromptMatch[1] + '-';
+    var savedPromptIds = {};
+    discussionRows.forEach(function(row) {
+      if (String(row.participant_rowId || '') !== participantRowId) return;
+      if (String(row.module_id || '') !== moduleId) return;
+      var rowPrompt = String(row.prompt || '');
+      if (new RegExp('^' + promptPrefix + '0[1-2]$').test(rowPrompt)) savedPromptIds[rowPrompt] = true;
+    });
+    savedPromptIds[prompt] = true;
+    discussionComplete = Object.keys(savedPromptIds).length >= MATH_DISCUSSION_PROMPTS_PER_SUBMODULE;
+    if (discussionComplete) {
+      try {
+        var discussionProgress = saveParticipantProgress(Object.assign({}, payload, {
+          __auth: claims,
+          module_id: moduleId,
+          chapter_id: 'discussion-' + mathPromptMatch[1],
+          status: 'completed',
+          score: undefined
+        }));
+        progressSynced = Boolean(discussionProgress && discussionProgress.status === 'success');
+      } catch (progressError) {
+        progressSynced = false;
+        console.error('Math discussion saved but progress sync failed:', progressError);
+      }
+    }
+  }
+
   return {
     status: 'success',
+    discussion_complete: discussionComplete,
+    progress_synced: progressSynced,
     discussion: {
       id: discussionId,
       module_id: moduleId,
@@ -3554,6 +3618,9 @@ function getParticipantDiscussions(payload) {
 
   var participantRowId = String(participant.rowId || '');
   var moduleId = String(payload.module_id || '').trim();
+  if (moduleId && PARTICIPANT_PROGRESS_MODULE_IDS.indexOf(moduleId) < 0) {
+    return { status: 'error', message: 'Module diskusi tidak dikenali.', data: [] };
+  }
   var rows = getRows(SHEETS.participantDiscussions).filter(function(row) {
     return String(row.participant_rowId || '') === participantRowId
       && (!moduleId || String(row.module_id || '') === moduleId);
@@ -3582,11 +3649,14 @@ function getParticipantDiscussions(payload) {
 function normalizeParticipantExerciseInput(payload) {
   var moduleId = String(payload.module_id || payload.moduleId || '').trim();
   var exerciseId = String(payload.exercise_id || payload.exerciseId || 'practice').trim();
-  if (ACTIVE_FOUNDATION_MODULE_IDS.indexOf(moduleId) < 0) {
+  if (ACTIVE_FOUNDATION_MODULE_IDS.indexOf(moduleId) < 0 && moduleId !== 'math-for-ai') {
     throw new Error('Module latihan tidak aktif atau tidak dikenali.');
   }
   if (!/^[a-z0-9][a-z0-9_-]{0,79}$/i.test(exerciseId)) {
     throw new Error('exercise_id tidak valid.');
+  }
+  if (moduleId === 'math-for-ai' && !Object.prototype.hasOwnProperty.call(MATH_EXERCISE_ANSWER_COUNTS, exerciseId)) {
+    throw new Error('Latihan Math for AI tidak dikenali.');
   }
   var source = payload.answers;
   if (!source || typeof source !== 'object' || Array.isArray(source)) {
@@ -3596,6 +3666,9 @@ function normalizeParticipantExerciseInput(payload) {
   Object.keys(source).slice(0, 100).forEach(function(key) {
     var cleanKey = String(key || '').trim().slice(0, 120);
     if (!cleanKey) return;
+    if (moduleId === 'math-for-ai' && !/^answer-0[1-8]$/.test(cleanKey)) {
+      throw new Error('ID jawaban latihan Math for AI tidak valid.');
+    }
     answers[cleanKey] = String(source[key] == null ? '' : source[key]).trim().slice(0, 10000);
   });
   var answerCount = Object.keys(answers).filter(function(key) { return Boolean(answers[key]); }).length;
@@ -3652,6 +3725,7 @@ function saveParticipantExerciseSubmission(payload, requestedStatus) {
   var lock = LockService.getScriptLock();
   lock.waitLock(30000);
   var savedRow;
+  var progressSynced = null;
   try {
     var existing = getRows(SHEETS.participantExerciseSubmissions).find(function(row) {
       return String(row.submission_key || '') === submissionKey;
@@ -3665,7 +3739,9 @@ function saveParticipantExerciseSubmission(payload, requestedStatus) {
     }
     // Completeness check: submit wajib seluruh jawaban terisi sesuai module.
     if (requestedStatus === 'submitted') {
-      var expectedCount = EXPECTED_EXERCISE_ANSWER_COUNTS[input.moduleId] || 0;
+      var expectedCount = input.moduleId === 'math-for-ai'
+        ? MATH_EXERCISE_ANSWER_COUNTS[input.exerciseId]
+        : (EXPECTED_EXERCISE_ANSWER_COUNTS[input.moduleId] || 0);
       if (input.answerCount < expectedCount) {
         throw new Error('Jawaban latihan belum lengkap. Isi seluruh ' + expectedCount + ' jawaban sebelum mengirim. Baru ' + input.answerCount + ' yang terisi.');
       }
@@ -3698,13 +3774,19 @@ function saveParticipantExerciseSubmission(payload, requestedStatus) {
   }
 
   if (requestedStatus === 'submitted') {
-    saveParticipantProgress(Object.assign({}, payload, {
-      __auth: claims,
-      module_id: input.moduleId,
-      chapter_id: 'practice',
-      status: 'completed',
-      score: undefined
-    }));
+    try {
+      var progressResult = saveParticipantProgress(Object.assign({}, payload, {
+        __auth: claims,
+        module_id: input.moduleId,
+        chapter_id: input.moduleId === 'math-for-ai' ? input.exerciseId : 'practice',
+        status: 'completed',
+        score: undefined
+      }));
+      progressSynced = Boolean(progressResult && progressResult.status === 'success');
+    } catch (progressError) {
+      progressSynced = false;
+      console.error('Exercise submission saved but progress sync failed:', progressError);
+    }
   }
   recordParticipantActivity({
     nik: nik,
@@ -3719,7 +3801,11 @@ function saveParticipantExerciseSubmission(payload, requestedStatus) {
     invalidateUserCaches(nik);
     cacheRemove('leader');
   }
-  return { status: 'success', submission: participantExerciseForClient(savedRow) };
+  return {
+    status: 'success',
+    progress_synced: progressSynced,
+    submission: participantExerciseForClient(savedRow)
+  };
 }
 
 function saveParticipantExerciseDraft(payload) {

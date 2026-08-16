@@ -76,8 +76,26 @@ tidak memberi poin.
   menyediakan retry.
 - Aggregate quiz hanya ditulis setelah ketujuh `quiz-01..quiz-07` memiliki score.
 
+## Persistence jawaban Math — local implementation 16 Agustus 2026
+
+- Setiap submodule memakai `exercise_id` stabil `practice-01..practice-07`.
+- Setiap latihan mempunyai delapan key exact `answer-01..answer-08`.
+- Draft boleh parsial; submit ditolak backend sampai seluruh delapan jawaban terisi.
+- Submission di-upsert berdasarkan participant + module + exercise, lalu progress
+  memakai chapter `practice-SS` hanya setelah body submission berhasil disimpan.
+- Dua respons diskusi per submodule memakai prompt stabil
+  `discussion-SS-01` dan `discussion-SS-02`.
+- Diskusi di-upsert berdasarkan participant + module + prompt. Progress
+  `discussion-SS` baru selesai setelah kedua prompt tersimpan.
+- Acknowledgment penyimpanan body dan acknowledgment progress dipisahkan. Jika body
+  berhasil tetapi progress gagal, UI wajib mengatakan body tersimpan dan progress
+  masih pending.
+- Draft/respons lokal dipertahankan saat server gagal dan remote read-back dapat
+  memulihkan submission setelah reload.
+
 ## Release boundary
 
-Generic progress marker tidak sama dengan persistence jawaban practice atau isi
-discussion. Kedua kontrak tersebut masih release gate terpisah. Semua route Math tetap
-locked pada hostname non-local sampai activation eksplisit.
+Generic progress marker tetap bukan pengganti persistence body. Kontrak khusus latihan
+dan diskusi sekarang diimplementasikan pada source lokal, tetapi belum committed,
+deployed, atau diuji terhadap backend terotorisasi. Semua route Math tetap locked pada
+hostname non-local sampai activation eksplisit.

@@ -1538,6 +1538,109 @@
 .math-learning-svg .plot-line { fill: none; stroke: var(--math-accent); stroke-width: 3; }
 .math-learning-svg .plot-point { fill: #fff; stroke: var(--math-accent); stroke-width: 3; }
 
+.math-learning-response-field,
+.math-learning-discussion-form {
+  margin: 24px 0 42px;
+  padding: 22px;
+  border: 1px solid rgba(231, 46, 135, 0.2);
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 244, 250, 0.92));
+  box-shadow: 0 14px 32px rgba(105, 42, 79, 0.07);
+}
+
+.math-learning-response-field label,
+.math-learning-discussion-form label {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 12px;
+  color: #43263a;
+}
+
+.math-learning-response-field label span,
+.math-learning-discussion-form label span {
+  font-weight: 800;
+}
+
+.math-learning-response-field label small,
+.math-learning-discussion-form label small {
+  color: #756374;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.math-learning-response-field textarea,
+.math-learning-discussion-form textarea {
+  width: 100%;
+  min-height: 150px;
+  resize: vertical;
+  padding: 14px 15px;
+  border: 1px solid rgba(105, 65, 91, 0.25);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #352231;
+  font: inherit;
+  line-height: 1.6;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.math-learning-response-field textarea:hover,
+.math-learning-discussion-form textarea:hover {
+  border-color: rgba(231, 46, 135, 0.42);
+}
+
+.math-learning-response-field textarea:focus,
+.math-learning-discussion-form textarea:focus {
+  border-color: var(--math-accent);
+  box-shadow: 0 0 0 4px rgba(231, 46, 135, 0.12);
+  outline: none;
+}
+
+.math-learning-response-field textarea[readonly] {
+  background: rgba(247, 242, 246, 0.9);
+  color: #6b5a67;
+}
+
+.math-learning-response-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.math-learning-response-status {
+  margin: 14px 0 0;
+  padding: 11px 13px;
+  border: 1px solid rgba(105, 65, 91, 0.14);
+  border-radius: 11px;
+  background: rgba(248, 245, 248, 0.9);
+  color: #665560;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.math-learning-response-status.is-success {
+  border-color: rgba(31, 145, 94, 0.24);
+  background: rgba(232, 249, 240, 0.9);
+  color: #176b48;
+}
+
+.math-learning-response-status.is-warning {
+  border-color: rgba(190, 125, 15, 0.25);
+  background: rgba(255, 248, 226, 0.94);
+  color: #805b13;
+}
+
+.math-learning-response-status.is-error {
+  border-color: rgba(193, 52, 75, 0.24);
+  background: rgba(255, 237, 241, 0.94);
+  color: #983047;
+}
+
+.math-learning-practice-form > .math-learning-response-status,
+[data-discussion-overall] {
+  margin-top: 18px;
+}
+
 .math-learning-visually-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -1550,7 +1653,7 @@
   border: 0 !important;
 }
 
-.math-learning-page :where(a, button, input, select, summary):focus-visible {
+.math-learning-page :where(a, button, input, select, textarea, summary):focus-visible {
   outline: 3px solid rgba(231, 46, 135, 0.35);
   outline-offset: 3px;
 }
@@ -1659,6 +1762,16 @@
   }
 
   .math-learning-quiz-actions .math-learning-action {
+    flex: 1 1 150px;
+  }
+
+  .math-learning-response-field,
+  .math-learning-discussion-form {
+    padding: 17px;
+    margin-bottom: 32px;
+  }
+
+  .math-learning-response-actions .math-learning-action {
     flex: 1 1 150px;
   }
 
