@@ -172,363 +172,33 @@ const CHAPTERS = [
     }
 ];
 
-    const PYTHON_GUIDES = [
-        {
-hook: {
-                question: "AI Klasik — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi AI Klasik sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["AI Klasik", "Materi AI Klasik dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "AI Klasik",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["AI Klasik", "Konsep dalam AI Klasik."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang AI Klasik?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan AI Klasik dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "1"
-        },
-        {
-hook: {
-                question: "Machine Learning — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Machine Learning sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Machine Learning", "Materi Machine Learning dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Machine Learning",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Machine Learning", "Konsep dalam Machine Learning."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Machine Learning?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Machine Learning dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "2"
-        },
-        {
-hook: {
-                question: "Deep Learning Era — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Deep Learning Era sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Deep Learning Era", "Materi Deep Learning Era dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Deep Learning Era",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Deep Learning Era", "Konsep dalam Deep Learning Era."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Deep Learning Era?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Deep Learning Era dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "3"
-        },
-        {
-hook: {
-                question: "Transformer Revolution — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Transformer Revolution sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Transformer Revolution", "Materi Transformer Revolution dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Transformer Revolution",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Transformer Revolution", "Konsep dalam Transformer Revolution."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Transformer Revolution?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Transformer Revolution dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "4"
-        },
-        {
-hook: {
-                question: "Multimodal AI — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Multimodal AI sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Multimodal AI", "Materi Multimodal AI dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Multimodal AI",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Multimodal AI", "Konsep dalam Multimodal AI."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Multimodal AI?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Multimodal AI dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "5"
-        },
-        {
-hook: {
-                question: "Agentic Systems — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Agentic Systems sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Agentic Systems", "Materi Agentic Systems dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Agentic Systems",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Agentic Systems", "Konsep dalam Agentic Systems."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Agentic Systems?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Agentic Systems dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "6"
-        },
-        {
-hook: {
-                question: "AI Safety — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi AI Safety sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["AI Safety", "Materi AI Safety dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "AI Safety",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["AI Safety", "Konsep dalam AI Safety."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang AI Safety?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan AI Safety dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "7"
-        },
-        {
-hook: {
-                question: "Future Trends — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Future Trends sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Future Trends", "Materi Future Trends dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Future Trends",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Future Trends", "Konsep dalam Future Trends."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Future Trends?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Future Trends dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "8"
-        }
-    ];;;
 
-    CHAPTERS.forEach(function (chapter, index) {
-        Object.assign(chapter, PYTHON_GUIDES[index]);
+    CHAPTERS.forEach(function (chapter) {
+        chapter.hook = {
+            question: "Bagaimana membandingkan pendekatan AI secara adil?",
+            answerA: {
+                label: "Ikuti tren",
+                text: "Pilih teknologi terbaru tanpa memeriksa kebutuhan dan batasannya.",
+                icon: "fas fa-arrow-trend-up"
+            },
+            answerB: {
+                label: "Uji kesesuaian",
+                text: "Bandingkan kemampuan, kebutuhan data, risiko, biaya, dan bukti evaluasinya.",
+                icon: "fas fa-scale-balanced"
+            },
+            message: "Pendekatan AI dinilai dari kecocokannya terhadap masalah dan bukti hasilnya, bukan hanya dari usia, ukuran, atau popularitas teknologinya."
+        };
+        chapter.flow = [
+            ["Definisikan masalah", "Tentukan kebutuhan pengguna, konteks, dan batas sistem."],
+            ["Pilih pendekatan", "Cocokkan paradigma AI dengan data, knowledge, tools, dan constraint."],
+            ["Evaluasi trade-off", "Uji kualitas, risiko, biaya, monitoring, dan kebutuhan human review."]
+        ];
+        chapter.challenge = {
+            instruction: "Pilih satu pendekatan pada " + chapter.title + ". Jelaskan masalah yang cocok diselesaikan, batas utamanya, dan cara menguji keberhasilannya.",
+            placeholder: "Masalah, batas pendekatan, dan cara evaluasi...",
+            example: "Contoh: gunakan retrieval untuk jawaban berbasis dokumen, ukur ketepatan sumber dan abstention, lalu eskalasi kasus tanpa bukti ke human review."
+        };
+        chapter.learningOutcomes = (chapter.objectives || []).slice();
     });
 
 
@@ -544,7 +214,7 @@ roadmapRef: "8"
                 "Langkah Pengerjaan"
             ]
         ],
-        "guide": "<em>Pembahasan latihan ini sedang disusun oleh tim kurikulum HerAI.</em>"
+        "guide": "Gunakan struktur: masalah pengguna → pendekatan AI → data atau knowledge yang dibutuhkan → risiko dan batasan → evaluasi serta human review."
     },
     {
         "id": "PRACTICE-2",
@@ -556,7 +226,7 @@ roadmapRef: "8"
                 "Langkah Pengerjaan"
             ]
         ],
-        "guide": "<em>Pembahasan latihan ini sedang disusun oleh tim kurikulum HerAI.</em>"
+        "guide": "Gunakan struktur: masalah pengguna → pendekatan AI → data atau knowledge yang dibutuhkan → risiko dan batasan → evaluasi serta human review."
     },
     {
         "id": "PRACTICE-3",
@@ -568,7 +238,7 @@ roadmapRef: "8"
                 "Langkah Pengerjaan"
             ]
         ],
-        "guide": "<em>Pembahasan latihan ini sedang disusun oleh tim kurikulum HerAI.</em>"
+        "guide": "Gunakan struktur: masalah pengguna → pendekatan AI → data atau knowledge yang dibutuhkan → risiko dan batasan → evaluasi serta human review."
     },
     {
         "id": "PRACTICE-4",
@@ -580,7 +250,7 @@ roadmapRef: "8"
                 "Langkah Pengerjaan"
             ]
         ],
-        "guide": "<em>Pembahasan latihan ini sedang disusun oleh tim kurikulum HerAI.</em>"
+        "guide": "Gunakan struktur: masalah pengguna → pendekatan AI → data atau knowledge yang dibutuhkan → risiko dan batasan → evaluasi serta human review."
     },
     {
         "id": "PRACTICE-5",
@@ -592,7 +262,7 @@ roadmapRef: "8"
                 "Langkah Pengerjaan"
             ]
         ],
-        "guide": "<em>Pembahasan latihan ini sedang disusun oleh tim kurikulum HerAI.</em>"
+        "guide": "Gunakan struktur: masalah pengguna → pendekatan AI → data atau knowledge yang dibutuhkan → risiko dan batasan → evaluasi serta human review."
     },
     {
         "id": "PRACTICE-6",
@@ -604,7 +274,7 @@ roadmapRef: "8"
                 "Langkah Pengerjaan"
             ]
         ],
-        "guide": "<em>Pembahasan latihan ini sedang disusun oleh tim kurikulum HerAI.</em>"
+        "guide": "Gunakan struktur: masalah pengguna → pendekatan AI → data atau knowledge yang dibutuhkan → risiko dan batasan → evaluasi serta human review."
     },
     {
         "id": "PRACTICE-7",
@@ -616,7 +286,7 @@ roadmapRef: "8"
                 "Langkah Pengerjaan"
             ]
         ],
-        "guide": "<em>Pembahasan latihan ini sedang disusun oleh tim kurikulum HerAI.</em>"
+        "guide": "Gunakan struktur: masalah pengguna → pendekatan AI → data atau knowledge yang dibutuhkan → risiko dan batasan → evaluasi serta human review."
     }
 ];
 
@@ -903,43 +573,6 @@ var SOURCE_VISUALS = {
         });
     }
 
-    function _isPlaceholderText(text) {
-        if (!text) return true;
-        var markers = ['dalam pengembangan', 'sedang dikurasi', 'sedang disiapkan', 'Konten sedang', 'Konsep dalam ', 'Contoh kasus sedang', 'sedang dikembangkan'];
-        for (var i = 0; i < markers.length; i++) { if (text.indexOf(markers[i]) !== -1) return true; }
-        return false;
-    }
-
-    function renderPythonDeepDive(module) {
-        if (!module) return "";
-        var parts = [];
-
-        if (module.deepDive && module.deepDive.length && !module.deepDive.some(function(s) { return _isPlaceholderText(s[1]); })) {
-            var roadmapHtml = '<section class="ai-modern-beginner-roadmap" data-python-injected data-section="konsep">' +
-                '<div class="ai-modern-roadmap-head"><i class="fas fa-compass" aria-hidden="true"></i><div><span>Evolusi AI</span><h3>Perkembangan paradigma AI</h3><p>Gunakan penjelasan berikut untuk menghubungkan kode, data, failure case, dan keputusan dalam workflow AI.</p></div></div>' +
-                '<div class="ai-modern-roadmap-strip" aria-hidden="true">' + module.deepDive.map(function (step, index) { return '<div><span>' + (index + 1) + '</span><i class="fas fa-book-open-reader"></i><strong>' + escapeHtml(step[0]) + '</strong></div>'; }).join("") + '</div>' +
-                '<div class="ai-modern-roadmap-progress"><span data-roadmap-progress>Langkah 1 dari ' + module.deepDive.length + '</span><b><i data-roadmap-bar></i></b></div>' +
-                '<div class="ai-modern-roadmap-steps">' + module.deepDive.map(function (step, index) {
-                    return '<details data-roadmap-step="' + index + '"' + (index === 0 ? " open" : "") + '><summary><span>' + String(index + 1).padStart(2, "0") + '</span><i class="fas fa-book-open-reader" aria-hidden="true"></i><div><strong>' + escapeHtml(step[0]) + '</strong></div><i class="fas fa-chevron-down" aria-hidden="true"></i></summary><div class="ai-modern-roadmap-body"><p>' + escapeHtml(step[1]) + '</p>' + (step[2] ? '<p>' + escapeHtml(step[2]) + '</p>' : '') + '</div></details>';
-                }).join("") + '</div></section>';
-            parts.push(roadmapHtml);
-        }
-
-        if (module.workedExample && module.workedExample.length && !module.workedExample.slice(1).some(function(s) { return _isPlaceholderText(s[1]); })) {
-            var title = module.workedExample[0];
-            var steps = module.workedExample.slice(1);
-            var exampleHtml = '<section class="ai-modern-worked-example" data-python-injected data-section="contoh"><div class="ai-modern-worked-head"><i class="fas fa-magnifying-glass-chart" aria-hidden="true"></i><div><span>Contoh Terurai</span><h3>' + escapeHtml(title) + '</h3></div></div><div class="ai-modern-worked-steps">' + steps.map(function (step, index) { return '<article><span>' + (index + 1) + '</span><div><strong>' + escapeHtml(step[0]) + '</strong><p>' + escapeHtml(step[1]) + '</p></div></article>'; }).join("") + '</div></section>';
-            parts.push(exampleHtml);
-        }
-
-        if (module.glossary && module.glossary.length && !module.glossary.some(function(g) { return _isPlaceholderText(g[1]); })) {
-            var glossaryHtml = '<section class="ai-modern-beginner-glossary" data-python-injected data-section="ringkasan"><div class="ai-modern-glossary-head"><i class="fas fa-language" aria-hidden="true"></i><div><span>Glossary Pemula</span><h3>Istilah yang perlu kamu kuasai</h3><p>Buka setiap istilah untuk mengulang definisinya sebelum lanjut.</p></div></div><div class="ai-modern-glossary-grid">' + module.glossary.map(function (item, index) { return '<details' + (index === 0 ? " open" : "") + '><summary><span>' + String(index + 1).padStart(2, "0") + '</span><strong>' + escapeHtml(item[0]) + '</strong><i class="fas fa-chevron-down" aria-hidden="true"></i></summary><p>' + escapeHtml(item[1]) + '</p></details>'; }).join("") + '</div></section>';
-            parts.push(glossaryHtml);
-        }
-
-        return parts.join("\n");
-    }
-
     function initSourceVisualLab(container, config) {
         if (!config) return;
         const stage = container.querySelector(".reasoning-concept-stage");
@@ -1053,7 +686,7 @@ var SOURCE_VISUALS = {
                         <div class="reasoning-visual-head"><i class="fas fa-route" aria-hidden="true"></i><div><span>Visual reasoning flow</span><h3>Alur pikir yang bisa dilacak</h3></div></div>
                         ${renderFlow(chapter.flow)}
                     </section>`;
-                } else if (text.includes("quick check") && chapter.quickCheck && !chapter.quickCheck.options[0].includes("Pilihan A")) {
+                } else if (text.includes("quick check") && chapter.quickCheck) {
                     replacement = `<section class="reasoning-quick-check" data-check-answer="${chapter.quickCheck.answer}">
                         <div class="reasoning-quick-head"><i class="fas fa-circle-question" aria-hidden="true"></i><div><span>Quick Check</span><h3>${escapeHtml(chapter.quickCheck.question)}</h3></div></div>
                         <div class="reasoning-check-options">
@@ -1364,7 +997,6 @@ var SOURCE_VISUALS = {
     }
 
     function finalRenderQuickCheckSection(qc) {
-        if (qc && qc.options && qc.options[0] && qc.options[0].includes("Pilihan A")) return "";
         return '<section class="reasoning-quick-check" data-section="check" data-check-answer="' + qc.answer + '">\n                <div class="reasoning-quick-head"><i class="fas fa-circle-question" aria-hidden="true"></i><div><span>Quick Check</span><h3>' + escapeHtml(qc.question) + '</h3></div></div>\n                <div class="reasoning-check-options">\n                    ' + qc.options.map(function (option, index) {
                         return '<button type="button" data-check-option="' + index + '"><b>' + String.fromCharCode(65 + index) + '</b><span>' + escapeHtml(option) + '</span></button>';
                     }).join("") + '\n                </div>\n                <div class="reasoning-check-actions">\n                    <button type="button" class="reasoning-check-submit" data-check-submit><i class="fas fa-check" aria-hidden="true"></i> Periksa Jawaban</button>\n                    <button type="button" class="reasoning-check-retry" data-check-retry hidden><i class="fas fa-rotate-left" aria-hidden="true"></i> Coba Lagi</button>\n                </div>\n                <p class="reasoning-check-feedback" hidden></p>\n            </section>';
@@ -1548,9 +1180,11 @@ var SOURCE_VISUALS = {
 
     function setupVisualNav(container) {
         container.querySelectorAll("[data-jump]").forEach(function (button) {
+            var section = container.querySelector('[data-section="' + button.dataset.jump + '"]');
+            button.hidden = !section;
+            if (!section) return;
             button.addEventListener("click", function () {
-                var section = container.querySelector('[data-section="' + button.dataset.jump + '"]');
-                if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+                section.scrollIntoView({ behavior: "smooth", block: "start" });
             });
         });
     }
@@ -1891,9 +1525,6 @@ var SOURCE_VISUALS = {
                 container.innerHTML = html;
                 container.classList.add("is-source-view");
 
-                var firstSourceHeading = container.querySelector("h1");
-                if (firstSourceHeading) firstSourceHeading.insertAdjacentHTML("beforebegin", renderPythonDeepDive(module));
-
                 // 4. Enhance source visuals
                 enhanceSourceMaterialForCanvas(container, module);
 
@@ -2087,7 +1718,7 @@ var SOURCE_VISUALS = {
                     return `<label><span>${escapeHtml(field[1])}</span><textarea name="${escapeHtml(name)}" rows="4" placeholder="Tulis jawabanmu di sini..."></textarea></label>`;
                 }).join("")}
             </div>
-            ${(item.guide && !item.guide.includes("sedang disusun")) ? 
+            ${item.guide ?
             `<button type="button" class="reasoning-scaffold-reveal-button" data-reasoning-reveal="${escapeHtml(item.id)}" aria-expanded="false"><i class="fas fa-lightbulb" aria-hidden="true"></i> Lihat pembahasan</button>
             <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><div class="reasoning-guide-content" style="margin-top: 10px;">${renderFormattedText(item.guide)}</div></div>` 
             : ''}

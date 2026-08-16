@@ -33,12 +33,12 @@
             <div>
                 <span class="module-eyebrow"><i class="fas fa-sparkles" aria-hidden="true"></i> Foundation Journey</span>
                 <h1>Modul Pembelajaran</h1>
-                <p>Enam modul Foundation aktif untuk membangun fondasi AI secara bertahap dan terukur.</p>
+                <p>Dua course Foundation aktif untuk membangun fondasi AI secara bertahap dan terukur.</p>
             </div>
             <div class="fellow-actions">
                 <label class="fellow-search">
                     <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
-                    <input type="search" data-module-search placeholder="Cari dari 6 modul aktif..." aria-label="Cari modul Foundation">
+                    <input type="search" data-module-search placeholder="Cari course, topik, atau materi..." aria-label="Cari course atau materi pembelajaran">
                 </label>
                 <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
                     <i class="far fa-bell" aria-hidden="true"></i>
@@ -304,13 +304,13 @@
 
             <aside class="module-right">
                 <section class="module-side-card progress-card module-live-summary" data-module-side-summary-state="loading" aria-busy="true">
-                    <div class="module-side-head"><h2>Ringkasan Progres</h2><span class="live-data-badge"><i></i> Live</span></div>
-                    <div class="progress-donut" data-module-summary-donut aria-label="Memuat progres belajar"><strong data-module-side-progress>—</strong><span>Progres total</span></div>
-                    <ul>
-                        <li><i class="green"></i><span><strong>Selesai</strong><b data-module-side-completed>—</b> Modul</span></li>
-                        <li><i class="pink"></i><span><strong>Sedang Berlangsung</strong><b data-module-side-in-progress>—</b> Modul</span></li>
-                        <li><i class="soft"></i><span><strong>Belum Dimulai</strong><b data-module-side-not-started>—</b> Modul</span></li>
+                    <div class="module-side-head"><h2>Progres Keseluruhan</h2><span class="live-data-badge"><i></i> Live</span></div>
+                    <div class="progress-donut" data-module-summary-donut aria-label="Memuat progres dua course aktif"><strong data-module-side-progress>—</strong><span data-module-summary-scope-label>2 course aktif</span></div>
+                    <ul class="course-progress-breakdown" aria-label="Rincian progres tiap course">
+                        <li><i class="pink"></i><span><strong>AI Fundamentals</strong><b data-course-progress="ai-fundamentals-advanced">—</b><small>6 modul</small></span></li>
+                        <li><i class="green"></i><span><strong>Math for AI</strong><b data-course-progress="math-for-ai">—</b><small>89 aktivitas</small></span></li>
                     </ul>
+                    <p class="module-summary-scope" data-module-summary-scope><strong>Rumus:</strong> rata-rata dua course aktif; masing-masing course berbobot sama.</p>
                     <p class="summary-sync-state" data-module-summary-status aria-live="polite">Menghubungkan progres tersimpan…</p>
                     <button type="button" class="module-summary-retry" data-module-summary-retry hidden><i class="fas fa-rotate-right"></i> Coba lagi</button>
                 </section>

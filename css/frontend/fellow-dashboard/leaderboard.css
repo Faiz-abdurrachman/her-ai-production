@@ -807,6 +807,58 @@
     margin: 4px 0;
 }
 
+.lb-summary-grid[data-leaderboard-state="loading"] article {
+    isolation: isolate;
+    overflow: hidden;
+    position: relative;
+}
+
+.lb-summary-grid[data-leaderboard-state="loading"] article::after {
+    animation: lb-summary-loading-sweep 1.55s ease-in-out infinite;
+    background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.72) 46%, transparent 72%);
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    transform: translateX(-115%);
+    z-index: 0;
+}
+
+.lb-summary-grid[data-leaderboard-state="loading"] article > * {
+    position: relative;
+    z-index: 1;
+}
+
+.lb-summary-grid[data-leaderboard-state="loading"] article:nth-child(2)::after {
+    animation-delay: 120ms;
+}
+
+.lb-summary-grid[data-leaderboard-state="loading"] article:nth-child(3)::after {
+    animation-delay: 240ms;
+}
+
+.lb-summary-grid .lb-metric-loader {
+    animation: lb-metric-spin 780ms linear infinite;
+    border: 3px solid var(--lb-line);
+    border-right-color: var(--lb-accent);
+    border-top-color: var(--lb-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.72);
+    display: inline-block;
+    height: 21px;
+    vertical-align: middle;
+    width: 21px;
+}
+
+@keyframes lb-metric-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes lb-summary-loading-sweep {
+    0% { transform: translateX(-115%); }
+    55%, 100% { transform: translateX(115%); }
+}
+
 @media (hover: hover) and (pointer: fine) {
     .lb-summary-grid article:hover {
         border-color: var(--lb-accent);
@@ -1170,6 +1222,17 @@
 @keyframes lb-skeleton-pulse {
     0% { background-position: 100% 0; }
     100% { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lb-summary-grid .lb-metric-loader,
+    .lb-summary-grid[data-leaderboard-state="loading"] article::after {
+        animation: none;
+    }
+
+    .lb-summary-grid .lb-metric-loader {
+        border-bottom-color: var(--lb-accent);
+    }
 }
 
 @media (max-width: 1080px) {

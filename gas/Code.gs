@@ -11,7 +11,7 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
-const HERAI_BACKEND_VERSION = '2026.3.11-math-response-persistence';
+const HERAI_BACKEND_VERSION = '2026.3.12-overall-course-progress';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
 const PARTICIPANT_ACCOUNT_TYPE = 'participant';
 const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
@@ -47,6 +47,11 @@ const MATH_PROGRESS_TOPIC_COUNTS = {
   '06': 8,
   '07': 7
 };
+const MATH_PROGRESS_ITEM_TOTAL = Object.keys(MATH_PROGRESS_TOPIC_COUNTS).reduce(function(total, submoduleId) {
+  // Every submodule has an info page, practice, quiz, discussion, references,
+  // plus its own topic pages.
+  return total + Number(MATH_PROGRESS_TOPIC_COUNTS[submoduleId] || 0) + 5;
+}, 0);
 const PARTICIPANT_PROGRESS_MODULE_IDS = [
   'ai-fundamentals',
   'python-untuk-ai',
@@ -544,7 +549,7 @@ var FOUNDATION_TRACKING_MODULE_IDS = [
   'evolution'
 ];
 
-var DEFAULT_RELEASED_TRACKING_MODULE_IDS = FOUNDATION_TRACKING_MODULE_IDS.slice();
+var DEFAULT_RELEASED_TRACKING_MODULE_IDS = FOUNDATION_TRACKING_MODULE_IDS.concat(['math-for-ai']);
 var DEFAULT_DASHBOARD_MODULE_IDS = ['python-untuk-ai', 'reasoning', 'konsep-ai-modern', 'evaluation', 'evolution'];
 
 function moduleFlag(value, fallback) {
@@ -602,6 +607,52 @@ function summarizeTrackedModules(moduleStates) {
       ? Math.round(progressValues.reduce(function(total, progress) { return total + progress; }, 0) / progressValues.length)
       : 0
   };
+}
+
+function computeMathCourseProgress(progressRows) {
+  var completedItems = {};
+  (progressRows || []).forEach(function(row) {
+    if (String(row.module_id || '') !== 'math-for-ai' || String(row.status || '') !== 'completed') return;
+    var chapterId = String(row.chapter_id || '');
+    // Bare `quiz` is a legacy aggregate score row, not one of the 89 canonical
+    // learning activities shown by the Math runtime.
+    if (chapterId !== 'quiz' && isValidMathProgressChapterId(chapterId)) {
+      completedItems[chapterId] = true;
+    }
+  });
+  var completed = Object.keys(completedItems).length;
+  return {
+    completed_items: completed,
+    total_items: MATH_PROGRESS_ITEM_TOTAL,
+    progress: MATH_PROGRESS_ITEM_TOTAL
+      ? Math.min(100, Math.round((completed / MATH_PROGRESS_ITEM_TOTAL) * 100))
+      : 0
+  };
+}
+
+function buildActiveLearningCourses(learningSummary, progressRows) {
+  var aiSummary = learningSummary || summarizeTrackedModules([]);
+  var mathSummary = computeMathCourseProgress(progressRows);
+  return [
+    {
+      course_id: 'ai-fundamentals-advanced',
+      title: 'AI Fundamentals & Advanced',
+      href: '#/participant-ai-fundamentals',
+      progress: Number(aiSummary.progress || 0),
+      completed_items: Number(aiSummary.completed || 0),
+      total_items: Number(aiSummary.total || FOUNDATION_TRACKING_MODULE_IDS.length),
+      item_label: 'modul'
+    },
+    {
+      course_id: 'math-for-ai',
+      title: 'Math for AI',
+      href: '#/participant-ai-lab-math',
+      progress: mathSummary.progress,
+      completed_items: mathSummary.completed_items,
+      total_items: mathSummary.total_items,
+      item_label: 'aktivitas'
+    }
+  ];
 }
 
 function journeyPhaseId(row) {
@@ -718,10 +769,14 @@ function getParticipantDashboardData(payload) {
     }
   });
 
+  const mathCourseProgress = computeMathCourseProgress(progressRows);
   const trackingModules = moduleRows.map(function(row) {
     var totalChapters = Number(row.total_chapters || 0);
     var computedProgress = row.progress !== undefined ? Number(row.progress) : 0;
-    if (totalChapters > 0) {
+    if (String(row.module_id || '') === 'math-for-ai') {
+      totalChapters = mathCourseProgress.total_items;
+      computedProgress = mathCourseProgress.progress;
+    } else if (totalChapters > 0) {
       var completed = Object.keys(completedByModule[row.module_id] || {}).filter(function(chapterId) {
         var chapterNumber = Number(chapterId);
         return chapterNumber >= 1 && chapterNumber <= totalChapters;
@@ -751,8 +806,10 @@ function getParticipantDashboardData(payload) {
   });
   const modules = trackingModules.filter(function(module) { return module.dashboard_visible; });
   const learningSummary = summarizeTrackedModules(trackingModules.filter(function(module) {
-    return module.phase_id === 'foundation';
+    return FOUNDATION_TRACKING_MODULE_IDS.indexOf(String(module.module_id || '')) >= 0;
   }));
+  const activeCourses = buildActiveLearningCourses(learningSummary, progressRows);
+  const overallLearningSummary = summarizeTrackedModules(activeCourses);
 
   var discussionTrails = cacheGet('disc');
   if (!discussionTrails) {
@@ -816,7 +873,7 @@ function getParticipantDashboardData(payload) {
 
   return {
     status: 'success',
-    data: { modules, trackingModules, learningSummary, discussionTrails, tracks, journey, events, leaderboard }
+    data: { modules, trackingModules, learningSummary, activeCourses, overallLearningSummary, discussionTrails, tracks, journey, events, leaderboard }
   };
 }
 
@@ -1310,7 +1367,7 @@ function seedDashboardModules() {
     { module_id: 'business-insight', title: 'Business Insight', subtitle: 'Data-driven decision, KPI, strategy', progress: 0, icon: 'fas fa-chart-line', tone: 'blue', href: '#/participant-ai-lab-business-insight', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 25 },
     { module_id: 'people-business-mgt', title: 'People & Business Mgmt', subtitle: 'AI product management, stakeholder alignment', progress: 0, icon: 'fas fa-users-gear', tone: 'pink', href: '#/participant-ai-lab-people-business-mgt', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 26 },
     { module_id: 'ui-ux', title: 'UI/UX Design Thinking', subtitle: 'Human-centered AI, prototyping, usability', progress: 0, icon: 'fas fa-palette', tone: 'purple', href: '#/participant-ai-lab-ui-ux', total_chapters: 15, quiz_total: 20, is_active: 'true', sort_order: 27 },
-    { module_id: 'math-for-ai', title: 'Math for AI', subtitle: 'Vektor, matriks, statistik, dan kalkulus untuk AI', progress: 0, icon: 'fas fa-calculator', tone: 'pink', href: '#/participant-ai-lab-math-for-ai', total_chapters: 7, quiz_total: 100, is_active: 'true', sort_order: 28 }
+    { module_id: 'math-for-ai', title: 'Math for AI', subtitle: 'Vektor, matriks, statistik, dan kalkulus untuk AI', progress: 0, icon: 'fas fa-calculator', tone: 'pink', href: '#/participant-ai-lab-math', total_chapters: MATH_PROGRESS_ITEM_TOTAL, quiz_total: 100, is_active: 'true', sort_order: 28 }
   ];
 
   // Release controls are deliberately separate from route availability. A module

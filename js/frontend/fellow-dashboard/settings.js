@@ -29,7 +29,7 @@
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
                 var version = name === 'math-learning'
-                    ? '20260816-response-persistence-v2'
+                    ? '20260817-progress-loading-v1'
                     : '20260803-discussion-name-fix';
                 s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=' + version;
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
@@ -2230,13 +2230,9 @@
         var card = document.querySelector('.course-summary-card[data-learning-summary-state]');
         if (!card) return;
         var summary = normalizeLearningSummary(data || defaultParticipantDashboardData());
-        var total = Math.max(1, summary.total);
-        var completedEnd = Math.round((summary.completed / total) * 100);
-        var startedEnd = Math.round(((summary.completed + summary.in_progress) / total) * 100);
         var donut = card.querySelector('[data-learning-summary-donut]');
         if (donut) {
-            donut.style.setProperty('--completed-end', completedEnd + '%');
-            donut.style.setProperty('--started-end', startedEnd + '%');
+            donut.style.setProperty('--course-progress', summary.progress + '%');
             donut.setAttribute('aria-label', summary.progress + ' persen progres; ' + summary.completed + ' modul tuntas, ' + summary.in_progress + ' dalam proses, ' + summary.not_started + ' belum dimulai');
         }
         var progress = card.querySelector('[data-learning-summary-progress]');
@@ -2305,6 +2301,73 @@
         { module_id: 'evolution', title: 'Evolution of AI', href: '#/participant-ai-evolution' }
     ];
 
+    const ACTIVE_COURSE_UI = [
+        { course_id: 'ai-fundamentals-advanced', title: 'AI Fundamentals & Advanced', href: '#/participant-ai-fundamentals', total_items: 6, item_label: 'modul' },
+        { course_id: 'math-for-ai', title: 'Math for AI', href: '#/participant-ai-lab-math', total_items: 89, item_label: 'aktivitas' }
+    ];
+
+    const MATH_COURSE_TOPIC_COUNTS = { '01': 7, '02': 8, '03': 8, '04': 8, '05': 8, '06': 8, '07': 7 };
+
+    function isMathCourseProgressId(chapterId) {
+        var value = String(chapterId || '');
+        if (/^\d{3}$/.test(value)) {
+            var numericId = Number(value);
+            var submoduleId = String(Math.floor(numericId / 100)).padStart(2, '0');
+            var topicId = numericId % 100;
+            return Boolean(MATH_COURSE_TOPIC_COUNTS[submoduleId]
+                && topicId >= 1
+                && topicId <= MATH_COURSE_TOPIC_COUNTS[submoduleId]);
+        }
+        var semanticMatch = value.match(/^(info|practice|quiz|discussion|references)-(0[1-7])$/);
+        return Boolean(semanticMatch && MATH_COURSE_TOPIC_COUNTS[semanticMatch[2]]);
+    }
+
+    function mathCourseProgressFromRows(rows) {
+        var completedIds = new Set((Array.isArray(rows) ? rows : []).filter(function(row) {
+            return String(row.module_id || '') === 'math-for-ai'
+                && String(row.status || '') === 'completed'
+                && isMathCourseProgressId(row.chapter_id);
+        }).map(function(row) { return String(row.chapter_id); }));
+        return Math.min(100, Math.round((completedIds.size / 89) * 100));
+    }
+
+    function normalizeActiveCourses(data) {
+        var supplied = Array.isArray(data?.activeCourses) ? data.activeCourses : [];
+        var hasEveryActiveCourse = ACTIVE_COURSE_UI.every(function(meta) {
+            return supplied.some(function(item) { return String(item.course_id || '') === meta.course_id; });
+        });
+        if (hasEveryActiveCourse) {
+            return ACTIVE_COURSE_UI.map(function(meta) {
+                var live = supplied.find(function(item) { return String(item.course_id || '') === meta.course_id; });
+                var rawProgress = Number(live?.progress);
+                return Object.assign({}, meta, live || {}, {
+                    course_id: meta.course_id,
+                    title: live?.title || meta.title,
+                    href: live?.href || meta.href,
+                    progress: Number.isFinite(rawProgress) ? Math.max(0, Math.min(100, Math.round(rawProgress))) : 0,
+                    total_items: Math.max(0, Number(live?.total_items || meta.total_items)),
+                    item_label: live?.item_label || meta.item_label
+                });
+            });
+        }
+        if (!Array.isArray(data?.mathProgressRows)) return [];
+        return [
+            Object.assign({}, ACTIVE_COURSE_UI[0], { progress: normalizeLearningSummary(data || {}).progress }),
+            Object.assign({}, ACTIVE_COURSE_UI[1], { progress: mathCourseProgressFromRows(data.mathProgressRows) })
+        ];
+    }
+
+    async function hydrateActiveCourseProgress(data) {
+        if (normalizeActiveCourses(data).length === ACTIVE_COURSE_UI.length) return data;
+        if (typeof window.getParticipantProgress !== 'function') throw new Error('Pemuat progres Math belum tersedia.');
+        var mathResult = await window.getParticipantProgress('math-for-ai');
+        if (mathResult?.status !== 'success') throw new Error(mathResult?.message || 'Progres Math belum dapat dimuat.');
+        var hydrated = Object.assign({}, data, { mathProgressRows: mathResult.data || [] });
+        hydrated.activeCourses = normalizeActiveCourses(hydrated);
+        hydrated.overallLearningSummary = summarizeFoundationModules(hydrated.activeCourses);
+        return hydrated;
+    }
+
     function participantFoundationModules(data) {
         var source = Array.isArray(data?.trackingModules) && data.trackingModules.length
             ? data.trackingModules
@@ -2347,30 +2410,38 @@
         var sideCard = document.querySelector('[data-module-side-summary-state]');
         if (!summaryGrid && !sideCard) return;
 
-        var hasData = data && (Array.isArray(data.trackingModules) || Array.isArray(data.modules));
         var modules = participantFoundationModules(data || {});
-        var summary = summarizeFoundationModules(modules);
-        var failedWithoutData = state === 'error' && !hasData;
+        var courses = normalizeActiveCourses(data || {});
+        var hasData = courses.length === ACTIVE_COURSE_UI.length;
+        var summary = summarizeFoundationModules(courses);
+        var failedWithoutData = !hasData;
 
         setModuleSummaryValue('[data-module-summary-total]', failedWithoutData ? '—' : summary.total);
         setModuleSummaryValue('[data-module-summary-completed]', failedWithoutData ? '—' : summary.completed);
         setModuleSummaryValue('[data-module-summary-in-progress]', failedWithoutData ? '—' : summary.in_progress);
         setModuleSummaryValue('[data-module-summary-progress]', failedWithoutData ? '—' : summary.progress + '%');
         setModuleSummaryValue('[data-module-side-progress]', failedWithoutData ? '—' : summary.progress + '%');
-        setModuleSummaryValue('[data-module-side-completed]', failedWithoutData ? '—' : summary.completed);
-        setModuleSummaryValue('[data-module-side-in-progress]', failedWithoutData ? '—' : summary.in_progress);
-        setModuleSummaryValue('[data-module-side-not-started]', failedWithoutData ? '—' : summary.not_started);
+        setModuleSummaryValue('[data-module-summary-scope-label]', summary.total + ' course aktif');
+
+        courses.forEach(function(course) {
+            setModuleSummaryValue('[data-course-progress="' + course.course_id + '"]', course.progress + '%');
+        });
+
+        var scope = document.querySelector('[data-module-summary-scope]');
+        if (scope) {
+            var aiProgress = courses.find(function(course) { return course.course_id === 'ai-fundamentals-advanced'; })?.progress;
+            var mathProgress = courses.find(function(course) { return course.course_id === 'math-for-ai'; })?.progress;
+            scope.innerHTML = failedWithoutData
+                ? '<strong>Rumus:</strong> progres dua course aktif belum lengkap.'
+                : '<strong>Rumus:</strong> (' + aiProgress + '% AI Fundamentals + ' + mathProgress + '% Math for AI) ÷ 2 = ' + summary.progress + '%.';
+        }
 
         var donut = document.querySelector('[data-module-summary-donut]');
         if (donut) {
-            var total = Math.max(1, summary.total);
-            var completedEnd = Math.round((summary.completed / total) * 100);
-            var startedEnd = Math.round(((summary.completed + summary.in_progress) / total) * 100);
-            donut.style.setProperty('--completed-end', completedEnd + '%');
-            donut.style.setProperty('--started-end', startedEnd + '%');
+            donut.style.setProperty('--overall-progress', (failedWithoutData ? 0 : summary.progress) + '%');
             donut.setAttribute('aria-label', failedWithoutData
                 ? 'Progres belajar belum dapat dimuat'
-                : summary.progress + ' persen progres; ' + summary.completed + ' modul selesai, ' + summary.in_progress + ' sedang berjalan, ' + summary.not_started + ' belum dimulai');
+                : summary.progress + ' persen progres keseluruhan; rata-rata AI Fundamentals ' + aiProgress + ' persen dan Math for AI ' + mathProgress + ' persen');
         }
 
         modules.forEach(function(module) {
@@ -2407,7 +2478,7 @@
         var status = document.querySelector('[data-module-summary-status]');
         var retry = document.querySelector('[data-module-summary-retry]');
         if (status) status.textContent = state === 'error'
-            ? (hasData ? 'Menampilkan cache terakhir. Sinkronisasi server gagal.' : 'Progres belum dapat dimuat. Periksa koneksi lalu coba lagi.')
+            ? (hasData ? 'Menampilkan cache terakhir. Sinkronisasi server gagal.' : 'Progres dua course belum dapat dimuat. Periksa koneksi lalu coba lagi.')
             : (state === 'cache' ? 'Progres tersimpan tampil. Menyinkronkan data terbaru…' : 'Sinkron dengan progres server.');
         if (retry) retry.hidden = state !== 'error';
         if (summaryGrid) {
@@ -2434,6 +2505,7 @@
         }, 1200);
         try {
             var data = await fetchParticipantDashboardData();
+            data = await hydrateActiveCourseProgress(data);
             _dashboardDataCache = data;
             writeParticipantDashboardCache(data);
             renderParticipantModules(data, 'ready');
@@ -2700,10 +2772,37 @@
         }
     }
 
-    function renderParticipantRestricted() {
-        var restrictedHTML = '<section class="fellow-restricted-state"><div><i class="fas fa-lock fa-shield-halved"></i><h1>Akses Peserta Dibatasi</h1><p>Sementara ini portal peserta hanya membuka <strong>Beranda</strong>, <strong>Modul</strong>, dan <strong>Pengaturan</strong>.</p><a href="#/participant-dashboard"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a></div></section>';
+    function participantAccessStateMarkup(options = {}) {
+        var hasCustomAction = Boolean(options.actionHref || options.actionLabel);
+        var actions = Array.isArray(options.actions) && options.actions.length
+            ? options.actions
+            : (hasCustomAction
+                ? [{
+                    href: options.actionHref || '#/participant-dashboard',
+                    label: options.actionLabel || 'Kembali ke Beranda',
+                    icon: options.actionIcon || 'fa-arrow-left',
+                    primary: true
+                }]
+                : [
+                    { href: '#/participant-dashboard', label: 'Beranda', icon: 'fa-house', primary: true },
+                    { href: '#/participant-modules', label: 'Modul Pembelajaran', icon: 'fa-book-open' },
+                    { href: '#/participant-leaderboard', label: 'Leaderboard', icon: 'fa-ranking-star' },
+                    { href: '#/participant-settings', label: 'Pengaturan', icon: 'fa-gear' }
+                ]);
+        var title = escapeHtml(options.title || 'Akses Peserta Dibatasi');
+        var message = options.message
+            ? escapeHtml(options.message)
+            : 'Saat ini portal peserta membuka <strong>Beranda</strong>, <strong>Modul Pembelajaran</strong>, <strong>Leaderboard</strong>, dan <strong>Pengaturan</strong>.';
+        var links = actions.map(function(action) {
+            return '<a class="' + (action.primary ? 'is-primary' : 'is-secondary') + '" href="' + escapeHtml(action.href) + '"><i class="fas ' + escapeHtml(action.icon || 'fa-arrow-right') + '" aria-hidden="true"></i><span>' + escapeHtml(action.label) + '</span></a>';
+        }).join('');
+        return '<section class="fellow-restricted-state" aria-labelledby="participantAccessTitle"><div><i class="fas fa-shield-halved" aria-hidden="true"></i><h1 id="participantAccessTitle">' + title + '</h1><p>' + message + '</p><nav class="fellow-restricted-actions" aria-label="Menu peserta yang tersedia">' + links + '</nav></div></section>';
+    }
 
-        var root = document.querySelector('.fellow-dashboard');
+    function renderParticipantRestricted(target) {
+        var restrictedHTML = participantAccessStateMarkup();
+
+        var root = target || document.querySelector('.fellow-dashboard');
         if (root) {
             root.innerHTML = restrictedHTML;
             return;
@@ -2717,6 +2816,8 @@
 
         document.body.innerHTML = restrictedHTML;
     }
+
+    window.renderParticipantAccessState = participantAccessStateMarkup;
 
     function renderDashboardSkeletons() {
         var moduleGrid = document.getElementById('dashboardModuleGrid');
@@ -3711,7 +3812,7 @@
                     await new Promise(function(r) { setTimeout(r, 0); });
                     var main = document.querySelector('#app-content');
                     if (main) {
-                        main.innerHTML = '<section class="fellow-restricted-state"><div><i class="fas fa-shield-halved"></i><h1>Akses Peserta Dibatasi</h1><p>Sementara ini portal peserta hanya membuka <strong>Beranda</strong>, <strong>Modul</strong>, dan <strong>Pengaturan</strong>.</p><a href="#/participant-dashboard"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a></div></section>';
+                        renderParticipantRestricted(main);
                     }
                     return;
                 }

@@ -537,6 +537,7 @@ const router = {
     },
 
     currentPath: null,
+    routingSequence: 0,
     sidebarHtml: "",
 
     // ==========================================
@@ -692,20 +693,24 @@ const router = {
     },
 
     renderParticipantAccessNotice(appContent, navContainer, footerContainer, options = {}) {
-        const title = options.title || "Akses Peserta Dibatasi";
-        const message = options.message || "Sementara ini portal peserta hanya membuka Beranda, Modul, dan Pengaturan.";
-        const actionHref = options.actionHref || "#/participant-dashboard";
-        const actionLabel = options.actionLabel || "Kembali ke Beranda";
-        appContent.innerHTML = `
-            <section class="participant-route-guard">
-                <div>
-                    <i class="fas fa-lock"></i>
-                    <h1>${title}</h1>
-                    <p>${message}</p>
-                    <a href="${actionHref}">${actionLabel}</a>
-                </div>
-            </section>
-        `;
+        if (typeof window.renderParticipantAccessState === "function") {
+            appContent.innerHTML = window.renderParticipantAccessState(options);
+        } else {
+            const title = options.title || "Akses Peserta Dibatasi";
+            const message = options.message || "Saat ini portal peserta membuka Beranda, Modul Pembelajaran, Leaderboard, dan Pengaturan.";
+            const actionHref = options.actionHref || "#/participant-dashboard";
+            const actionLabel = options.actionLabel || "Kembali ke Beranda";
+            appContent.innerHTML = `
+                <section class="participant-route-guard">
+                    <div>
+                        <i class="fas fa-lock"></i>
+                        <h1>${title}</h1>
+                        <p>${message}</p>
+                        <a href="${actionHref}">${actionLabel}</a>
+                    </div>
+                </section>
+            `;
+        }
         if (navContainer) navContainer.style.display = "none";
         if (footerContainer) footerContainer.style.display = "none";
     },
@@ -728,6 +733,7 @@ const router = {
     // 4. Fungsi Utama Routing (Memuat Halaman)
     // ==========================================
     async handleRouting() {
+        const routingSequence = ++this.routingSequence;
         // Ambil path dari hash (Contoh: dari URL "http://web.com/#/dashboard" diambil "#/dashboard")
         let hash = window.location.hash;
 
@@ -1310,11 +1316,28 @@ const router = {
 
             // Cek apakah perlu reload konten (hanya jika path berubah)
             if (this.currentPath !== path) {
+                let routeLoading = null;
+                if (isParticipantDashboardPage && appContent) {
+                    appContent.setAttribute("aria-busy", "true");
+                    routeLoading = document.createElement("div");
+                    routeLoading.className = "herai-route-loading";
+                    routeLoading.dataset.routeLoading = "";
+                    routeLoading.setAttribute("role", "status");
+                    routeLoading.setAttribute("aria-live", "polite");
+                    routeLoading.innerHTML = `<div class="herai-route-loading-card"><i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i><div><strong>${path.startsWith('/participant-ai-lab-math') ? 'Menyiapkan Math for AI' : 'Menyiapkan halaman'}</strong><span>${path.startsWith('/participant-ai-lab-math') ? 'Memuat topik, formula, dan progres terbaru…' : 'Memuat data dan tampilan terbaru…'}</span></div></div>`;
+                    appContent.appendChild(routeLoading);
+                    requestAnimationFrame(() => routeLoading?.isConnected && routeLoading.classList.add("is-visible"));
+                }
                 // Fetch file HTML-nya
                 const response = await fetch(routeUrl);
                 if (!response.ok) throw new Error("Gagal fetch file HTML");
-
-                appContent.innerHTML = await response.text();
+                const routeHtml = await response.text();
+                if (routingSequence !== this.routingSequence) {
+                    routeLoading?.remove();
+                    return;
+                }
+                appContent.innerHTML = routeHtml;
+                appContent.removeAttribute("aria-busy");
                 this.currentPath = path;
 
                 // ==========================================
@@ -1798,7 +1821,7 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
                     if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra") || path.startsWith("/participant-ai-lab-math/statistics-for-ai") || path.startsWith("/participant-ai-lab-math/probability") || path.startsWith("/participant-ai-lab-math/calculus") || path.startsWith("/participant-ai-lab-math/optimization") || path.startsWith("/participant-ai-lab-math/integrated-case-study")) {
                         window.__aiLabLoader.load('math-learning').then(function() {
                             if (path === "/participant-ai-lab-math" && typeof window.initMathOverviewRoute === "function") {
-                                window.initMathOverviewRoute();
+                                window.initMathOverviewRoute({ forceSync: true });
                                 return;
                             }
                             if (typeof window.initMathLearningRoute === "function") {
@@ -1992,16 +2015,25 @@ if (path === "/participant-ai-evolution" && typeof window.initAiEvolutionMateri 
                 window.initCoursePlaceholder();
             }
 
+            // Every participant route is a new learning context. Reset both the
+            // document and its internal main scroller so a previous catalog/topic
+            // position never hides the next page's heading or progress summary.
+            if (isParticipantDashboardPage) {
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                var participantMain = appContent?.querySelector('.fellow-main');
+                if (participantMain) participantMain.scrollTop = 0;
             // Halaman publik tetap mulai dari atas; halaman admin menjaga konteks panel samping.
-            if (!adminPages.includes(path) && !isMessagingPage && !isParticipantDashboardPage) {
+            } else if (!adminPages.includes(path) && !isMessagingPage) {
                 window.scrollTo({ top: 0, behavior: 'instant' });
             }
 
         } catch (error) {
+            if (routingSequence !== this.routingSequence) return;
             document.body.classList.remove("messaging-page-active");
             document.body.classList.remove("participant-login-active");
             document.body.classList.remove("participant-dashboard-active");
             console.error("Router Error:", error);
+            appContent?.removeAttribute("aria-busy");
             // Tampilan Halaman 404 Fallback
             appContent.innerHTML = `
                 <section style="min-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background-color: #fcfcfd;">

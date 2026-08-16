@@ -86,7 +86,7 @@
                         <div class="course-progress-line">
                             <div><small>Progres Math for AI</small><strong data-math-overview-progress>0%</strong></div>
                             <b style="--value:0%" data-math-overview-bar></b>
-                            <p data-math-overview-copy>25 bagian belajar dari dua submodul siap dijelajahi di perangkat ini.</p>
+                            <p data-math-overview-copy>Menyiapkan progres 89 bagian belajar dari 7 submodul.</p>
                         </div>
                         <a href="#/participant-ai-lab-math/kenapa-ai-butuh-matematika" data-math-overview-action>Mulai Submodul 01 <i class="fas fa-play" aria-hidden="true"></i></a>
                     </div>
@@ -163,14 +163,16 @@
             </div>
 
             <aside class="module-right course-detail-right">
-                <section class="module-side-card progress-card course-summary-card">
-                    <h2>Struktur Belajar</h2>
-                    <div class="progress-donut" data-math-overview-donut aria-label="Progres Math for AI: 0 persen"><strong data-math-overview-side-progress>0%</strong><span>Progres</span></div>
+                <section class="module-side-card progress-card course-summary-card" data-math-overview-state="loading" aria-busy="true">
+                    <h2>Progres Belajar</h2>
+                    <div class="progress-donut" data-math-overview-donut aria-label="Progres Math for AI sedang dimuat"><strong data-math-overview-side-progress>—</strong><span>Memuat</span></div>
                     <ul>
-                        <li><i class="green"></i><span><strong>Tersedia</strong><b>2</b> Submodul</span></li>
-                        <li><i class="soft"></i><span><strong>Total topik</strong><b>15</b> Topik</span></li>
+                        <li><i class="green"></i><span><strong>Selesai</strong><b data-math-overview-completed>—</b> dari <b data-math-overview-total>89</b> bagian</span></li>
+                        <li><i class="pink"></i><span><strong>Submodul</strong><b data-math-overview-submodules>7</b> total</span></li>
+                        <li><i class="soft"></i><span><strong>Topik materi</strong><b data-math-overview-topics>54</b> topik</span></li>
                     </ul>
-                    <p class="summary-sync-state" data-math-overview-status aria-live="polite">Progres tersimpan di perangkat ini dan belum tersinkron ke akun peserta.</p>
+                    <p class="summary-sync-state" data-math-overview-status role="status" aria-live="polite">Menyinkronkan progres akun…</p>
+                    <button class="math-overview-retry" type="button" data-math-overview-retry hidden><i class="fas fa-rotate-right" aria-hidden="true"></i>Coba muat lagi</button>
                 </section>
 
                 <section class="module-side-card resource-card">
