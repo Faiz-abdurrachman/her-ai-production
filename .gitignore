@@ -50,6 +50,40 @@ docs-nazril/
 !/materi2/math for ai/02-linear-algebra/kuis.md
 !/materi2/math for ai/02-linear-algebra/diskusi.md
 !/materi2/math for ai/02-linear-algebra/referensi.md
+!/materi2/math for ai/03-statistics-for-ai/
+!/materi2/math for ai/03-statistics-for-ai/0[0-8]-*.md
+!/materi2/math for ai/03-statistics-for-ai/latihan.md
+!/materi2/math for ai/03-statistics-for-ai/kuis.md
+!/materi2/math for ai/03-statistics-for-ai/diskusi.md
+!/materi2/math for ai/03-statistics-for-ai/referensi.md
+!/materi2/math for ai/04-probability/
+!/materi2/math for ai/04-probability/0[0-8]-*.md
+!/materi2/math for ai/04-probability/latihan.md
+!/materi2/math for ai/04-probability/kuis.md
+!/materi2/math for ai/04-probability/diskusi.md
+!/materi2/math for ai/04-probability/referensi.md
+!/materi2/math for ai/04-probability/kunci-jawaban-rubrik.md
+!/materi2/math for ai/05-calculus/
+!/materi2/math for ai/05-calculus/0[0-8]-*.md
+!/materi2/math for ai/05-calculus/latihan.md
+!/materi2/math for ai/05-calculus/kuis.md
+!/materi2/math for ai/05-calculus/diskusi.md
+!/materi2/math for ai/05-calculus/referensi.md
+!/materi2/math for ai/05-calculus/kunci-jawaban-rubrik.md
+!/materi2/math for ai/06-optimization/
+!/materi2/math for ai/06-optimization/0[0-8]-*.md
+!/materi2/math for ai/06-optimization/latihan.md
+!/materi2/math for ai/06-optimization/kuis.md
+!/materi2/math for ai/06-optimization/diskusi.md
+!/materi2/math for ai/06-optimization/referensi.md
+!/materi2/math for ai/06-optimization/kunci-jawaban-rubrik.md
+!/materi2/math for ai/07-case-study-herai/
+!/materi2/math for ai/07-case-study-herai/0[0-7]-*.md
+!/materi2/math for ai/07-case-study-herai/latihan.md
+!/materi2/math for ai/07-case-study-herai/kuis.md
+!/materi2/math for ai/07-case-study-herai/diskusi.md
+!/materi2/math for ai/07-case-study-herai/referensi.md
+!/materi2/math for ai/07-case-study-herai/kunci-jawaban-rubrik.md
 *.bak
 *.zip
 /handover/
@@ -64,6 +98,11 @@ docs-nazril/
 /assets/referensi/
 /scripts/*
 !/scripts/harden-public.mjs
+!/scripts/test-math-local-smoke.mjs
+!/scripts/test-math-progress-ids.mjs
+!/scripts/test-math-release-gate.mjs
+!/scripts/test-progress-scoring.mjs
+!/scripts/validate-math-runtime.mjs
 /gas/*
 !/gas/Code.gs
 /append_css.js
