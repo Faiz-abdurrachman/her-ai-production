@@ -11,7 +11,7 @@ const context = {
 };
 vm.createContext(context);
 vm.runInContext(
-    `${source}\n;globalThis.__progressApi = { computeLiveLeaderboard, isValidMathProgressChapterId, isValidMathTopicProgressId, saveParticipantProgress, progressModuleIds: PARTICIPANT_PROGRESS_MODULE_IDS };`,
+    `${source}\n;globalThis.__progressApi = { computeLiveLeaderboard, computeMathCourseProgress, buildActiveLearningCourses, summarizeTrackedModules, isValidMathProgressChapterId, isValidMathTopicProgressId, saveParticipantProgress, mathProgressItemTotal: MATH_PROGRESS_ITEM_TOTAL, releasedTrackingModuleIds: DEFAULT_RELEASED_TRACKING_MODULE_IDS, progressModuleIds: PARTICIPANT_PROGRESS_MODULE_IDS };`,
     context,
     { filename: 'gas/Code.gs' }
 );
@@ -27,6 +27,30 @@ assert.equal(api.isValidMathProgressChapterId('quiz-07'), true);
 assert.equal(api.isValidMathProgressChapterId('references-08'), false);
 assert.equal(api.progressModuleIds.includes('math-for-ai'), true);
 assert.equal(api.progressModuleIds.includes('arbitrary-module'), false);
+assert.equal(api.mathProgressItemTotal, 89);
+assert.equal(api.releasedTrackingModuleIds.includes('math-for-ai'), true);
+
+const canonicalMathRows = Object.entries({ '01': 7, '02': 8, '03': 8, '04': 8, '05': 8, '06': 8, '07': 7 }).flatMap(([submoduleId, topicCount]) => [
+    ...Array.from({ length: topicCount }, (_, index) => String((Number(submoduleId) * 100) + index + 1)),
+    `info-${submoduleId}`,
+    `practice-${submoduleId}`,
+    `quiz-${submoduleId}`,
+    `discussion-${submoduleId}`,
+    `references-${submoduleId}`
+].map(chapterId => ({ module_id: 'math-for-ai', chapter_id: chapterId, status: 'completed' })));
+const completedMath = api.computeMathCourseProgress([
+    ...canonicalMathRows,
+    canonicalMathRows[0],
+    { module_id: 'math-for-ai', chapter_id: 'quiz', status: 'completed' },
+    { module_id: 'math-for-ai', chapter_id: '108', status: 'completed' }
+]);
+assert.equal(completedMath.completed_items, 89);
+assert.equal(completedMath.progress, 100);
+const activeCourses = api.buildActiveLearningCourses({ total: 6, completed: 3, in_progress: 3, not_started: 0, progress: 72 }, canonicalMathRows);
+assert.deepEqual(Array.from(activeCourses, course => course.course_id), ['ai-fundamentals-advanced', 'math-for-ai']);
+assert.equal(activeCourses[0].progress, 72);
+assert.equal(activeCourses[1].progress, 100);
+assert.equal(api.summarizeTrackedModules(activeCourses).progress, 86);
 
 let addedProgressRow = null;
 function preparePersistenceStubs() {
@@ -87,4 +111,4 @@ const leaderboard = api.computeLiveLeaderboard('0001', { activeAccounts, progres
 assert.equal(leaderboard.length, 1);
 assert.equal(leaderboard[0].points, 100);
 
-console.log('Progress contract valid: module/item validation passes; completed Math topics=15, practice=5, aggregate quiz only; invalid/non-topic IDs add zero.');
+console.log('Progress contract valid: 89 canonical Math activities, two active courses, and equal-weight overall progress all pass.');
