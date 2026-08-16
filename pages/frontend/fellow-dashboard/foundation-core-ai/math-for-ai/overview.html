@@ -1,36 +1,62 @@
-<section class="fellow-dashboard fellow-modules-page lesson-detail-page math-ai-course-page" data-fellow-page="modules">
-<button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false"><i class="fas fa-bars"></i></button>
-<div class="fellow-sidebar-scrim" aria-hidden="true"></div>
-<aside class="fellow-sidebar" aria-label="Navigasi peserta">
-<a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta"><img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship"></a>
-<nav class="fellow-menu">
-<a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
-<a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
-<a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
-<a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
-<a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
-<a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
-<a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
-<a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
-</nav>
-<nav class="fellow-menu secondary">
-<a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
-<a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
-<a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ &amp; Bantuan</span></a>
-<a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
-</nav>
-</aside>
-<main class="fellow-main">
-<header class="lesson-topbar">
-<nav class="lesson-breadcrumb" aria-label="Breadcrumb">
-<a href="#/participant-modules"><i class="fas fa-arrow-left"></i><span>Modul</span></a>
-<span class="lesson-breadcrumb-separator"><i class="fas fa-arrow-right"></i></span>
-<span>Math for AI</span>
-</nav>
-<div class="fellow-actions">
-<label class="fellow-search"><i class="fas fa-magnifying-glass"></i><input type="search" placeholder="Cari modul, topik, atau materi..."></label>
-<button type="button" class="fellow-icon-button" aria-label="Notifikasi"><i class="far fa-bell"></i><span>5</span></button>
-<div class="fellow-user-menu">
+<section class="fellow-dashboard fellow-modules-page course-detail-page math-course-overview" data-fellow-page="modules">
+    <button class="fellow-menu-toggle" type="button" aria-label="Buka navigasi peserta" aria-expanded="false">
+        <i class="fas fa-bars" aria-hidden="true"></i>
+    </button>
+    <div class="fellow-sidebar-scrim" aria-hidden="true"></div>
+    <aside class="fellow-sidebar" aria-label="Navigasi peserta">
+        <a href="#/participant-dashboard" class="fellow-logo" aria-label="Buka sidebar peserta">
+            <img src="/assets/branding/logo-her-ai-transparent.png" alt="HerAI Fellowship">
+        </a>
+
+        <nav class="fellow-menu">
+            <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house" aria-hidden="true"></i><span>Beranda</span></a>
+            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots" aria-hidden="true"></i><span>Chatroom</span><strong>3</strong></a>
+            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group" aria-hidden="true"></i><span>Mentor</span></a>
+            <a class="active" href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open" aria-hidden="true"></i><span>Modul</span></a>
+            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check" aria-hidden="true"></i><span>Tugas</span></a>
+            <a href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open" aria-hidden="true"></i><span>Proyek</span></a>
+            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days" aria-hidden="true"></i><span>Events</span></a>
+            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users" aria-hidden="true"></i><span>Komunitas</span></a>
+        </nav>
+
+        <div class="fellow-menu-label">Lainnya</div>
+        <nav class="fellow-menu secondary">
+            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate" aria-hidden="true"></i><span>Sertifikat</span></a>
+            <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star" aria-hidden="true"></i><span>Leaderboard</span></a>
+            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question" aria-hidden="true"></i><span>FAQ &amp; Bantuan</span></a>
+            <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear" aria-hidden="true"></i><span>Pengaturan</span></a>
+        </nav>
+
+        <div class="invite-card course-help-mini">
+            <div>
+                <strong>Butuh bantuan?</strong>
+                <p>Tanya HerAI Assistant tentang modul dan pembelajaran.</p>
+            </div>
+            <button type="button">Chat Sekarang</button>
+        </div>
+    </aside>
+
+    <main class="fellow-main">
+        <header class="fellow-topbar module-topbar">
+            <div class="math-overview-heading">
+                <a href="#/participant-modules" class="v2-back-btn" aria-label="Kembali ke katalog modul">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                </a>
+                <div>
+                    <p class="math-overview-eyebrow">Foundation &amp; Core AI</p>
+                    <h1>Math for AI</h1>
+                    <p>Matematika sebagai bahasa untuk merepresentasikan data, membaca pola, menalar ketidakpastian, dan memahami perubahan dalam AI.</p>
+                </div>
+            </div>
+            <div class="fellow-actions">
+                <label class="fellow-search">
+                    <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                    <input type="search" placeholder="Cari modul, topik, atau materi...">
+                </label>
+                <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
+                    <i class="far fa-bell" aria-hidden="true"></i><span>5</span>
+                </button>
+                <div class="fellow-user-menu">
                     <button type="button" class="fellow-user-button" data-fellow-user-toggle aria-expanded="false">
                         <span class="avatar-img" aria-hidden="true"></span>
                         <span><strong>Peserta</strong><small>Fellow</small></span>
@@ -41,15 +67,123 @@
                         <button type="button" data-fellow-logout><i class="fas fa-right-from-bracket"></i><span>Log Out</span></button>
                     </div>
                 </div>
-</div>
-</header>
-<div class="lesson-layout">
-<article class="lesson-main-content">
-<div id="mathAiOverview"></div>
-</article>
-<aside class="lesson-right-panel">
-<div id="mathAiProgressPanel"></div>
-</aside>
-</div>
-</main>
+            </div>
+        </header>
+
+        <nav class="lesson-breadcrumb math-overview-breadcrumb" aria-label="Breadcrumb modul">
+            <a href="#/participant-modules"><i class="fas fa-arrow-left" aria-hidden="true"></i><span>Foundation &amp; Core AI</span></a>
+            <span class="lesson-breadcrumb-separator" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+            <span>Math for AI</span>
+        </nav>
+
+        <div class="module-layout course-detail-layout">
+            <div class="module-content">
+                <section class="course-hero math-course-hero">
+                    <img src="/assets/messaging/herai-chat-persona.png" alt="HerAI fellow belajar Math for AI">
+                    <div>
+                        <span><i class="fas fa-square-root-variable" aria-hidden="true"></i> Mathematical Readiness → Linear Algebra</span>
+                        <h2>Bangun bahasa matematika yang akan dipakai sepanjang perjalanan AI.</h2>
+                        <div class="course-progress-line">
+                            <div><small>Progres Math for AI</small><strong data-math-overview-progress>0%</strong></div>
+                            <b style="--value:0%" data-math-overview-bar></b>
+                            <p data-math-overview-copy>25 bagian belajar dari dua submodul siap dijelajahi di perangkat ini.</p>
+                        </div>
+                        <a href="#/participant-ai-lab-math/kenapa-ai-butuh-matematika" data-math-overview-action>Mulai Submodul 01 <i class="fas fa-play" aria-hidden="true"></i></a>
+                    </div>
+                </section>
+
+                <section class="module-panel course-section">
+                    <div class="module-panel-head">
+                        <div>
+                            <span class="math-hierarchy-label">Module → Submodule</span>
+                            <h2>Math for AI</h2>
+                            <p>Setiap submodul berisi beberapa topik materi, latihan, kuis, diskusi, dan referensi yang terhubung dalam satu learning flow.</p>
+                        </div>
+                        <span>7 Submodul</span>
+                    </div>
+
+                    <div class="course-lesson-grid math-submodule-grid">
+                        <article data-math-submodule="01">
+                            <span>1</span>
+                            <i class="fas fa-compass purple" aria-hidden="true"></i>
+                            <h3>Kenapa AI Butuh Matematika? + Mathematical Readiness</h3>
+                            <p>Jembatan antara pengalaman sehari-hari peserta dan bahasa matematika yang akan digunakan sepanjang Math for AI.</p>
+                            <a class="lesson-action" href="#/participant-ai-lab-math/kenapa-ai-butuh-matematika">Mulai</a>
+                        </article>
+
+                        <article data-math-submodule="02">
+                            <span>2</span>
+                            <i class="fas fa-vector-square blue" aria-hidden="true"></i>
+                            <h3>Linear Algebra: Representasi Data, Vektor, dan Matriks</h3>
+                            <p>Representasikan participant sebagai vector, ukur kedekatan, dan proses banyak observation melalui matrix.</p>
+                            <a class="lesson-action" href="#/participant-ai-lab-math/linear-algebra">Mulai</a>
+                        </article>
+
+                        <article data-math-submodule="03">
+                            <span>3</span>
+                            <i class="fas fa-chart-column pink" aria-hidden="true"></i>
+                            <h3>Statistics for AI: Membaca Pola dan Variasi Data</h3>
+                            <p>Pelajari cara meringkas, menganalisis, dan menemukan pola dari sekumpulan observasi AI.</p>
+                            <a class="lesson-action" href="#/participant-ai-lab-math/statistics-for-ai">Mulai</a>
+                        </article>
+
+                        <article data-math-submodule="04">
+                            <span>4</span>
+                            <i class="fas fa-dice orange" aria-hidden="true"></i>
+                            <h3>Probability: Menalar Ketidakpastian dalam AI</h3>
+                            <p>Pahami cara memodelkan ketidakpastian dan update keyakinan sistem berdasarkan bukti baru menggunakan probability.</p>
+                            <a class="lesson-action" href="#/participant-ai-lab-math/probability">Mulai</a>
+                        </article>
+
+                        <article data-math-submodule="05">
+                            <span>5</span>
+                            <i class="fas fa-wave-square green" aria-hidden="true"></i>
+                            <h3>Calculus: Perubahan, Turunan, dan Gradient</h3>
+                            <p>Pelajari cara membaca perubahan pada model, menghitung turunan lokal, dan mencari gradient untuk memperbaiki parameter AI.</p>
+                            <a class="lesson-action" href="#/participant-ai-lab-math/calculus">Mulai</a>
+                        </article>
+
+                        <article data-math-submodule="06">
+                            <span>6</span>
+                            <i class="fas fa-bullseye orange" aria-hidden="true"></i>
+                            <h3>Optimization: Dari Loss ke Parameter yang Lebih Baik</h3>
+                            <p>Pelajari cara AI meminimalkan loss, memperbarui parameter dengan Gradient Descent, dan menyeimbangkan proses training menuju generalisasi.</p>
+                            <a class="lesson-action" href="#/participant-ai-lab-math/optimization">Mulai</a>
+                        </article>
+
+                        <article data-math-submodule="07">
+                            <span>7</span>
+                            <i class="fas fa-diagram-project purple" aria-hidden="true"></i>
+                            <h3>Integrated Case Study: Math for AI di HerAI</h3>
+                            <p>Terapkan seluruh konsep matematika sebelumnya ke dalam satu sistem AI rekomendasi end-to-end secara terpadu.</p>
+                            <a class="lesson-action" href="#/participant-ai-lab-math/integrated-case-study">Mulai</a>
+                        </article>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="module-right course-detail-right">
+                <section class="module-side-card progress-card course-summary-card">
+                    <h2>Struktur Belajar</h2>
+                    <div class="progress-donut" data-math-overview-donut aria-label="Progres Math for AI: 0 persen"><strong data-math-overview-side-progress>0%</strong><span>Progres</span></div>
+                    <ul>
+                        <li><i class="green"></i><span><strong>Tersedia</strong><b>2</b> Submodul</span></li>
+                        <li><i class="soft"></i><span><strong>Total topik</strong><b>15</b> Topik</span></li>
+                    </ul>
+                    <p class="summary-sync-state" data-math-overview-status aria-live="polite">Progres tersimpan di perangkat ini dan belum tersinkron ke akun peserta.</p>
+                </section>
+
+                <section class="module-side-card resource-card">
+                    <h2>Akses Cepat</h2>
+                    <a href="#/participant-ai-lab-math/kenapa-ai-butuh-matematika"><i class="fas fa-compass" aria-hidden="true"></i><span>Ikhtisar Submodul</span><b class="fas fa-arrow-right" aria-hidden="true"></b></a>
+                    <a href="#/participant-ai-lab-math/kenapa-ai-butuh-matematika/dunia-nyata-menjadi-representasi-komputasional"><i class="fas fa-book-open" aria-hidden="true"></i><span>7 Topik Materi</span><b class="fas fa-arrow-right" aria-hidden="true"></b></a>
+                    <a href="#/participant-ai-lab-math/kenapa-ai-butuh-matematika/latihan"><i class="fas fa-pen-ruler" aria-hidden="true"></i><span>Latihan</span><b class="fas fa-arrow-right" aria-hidden="true"></b></a>
+                    <a href="#/participant-ai-lab-math/kenapa-ai-butuh-matematika/kuis"><i class="fas fa-clipboard-check" aria-hidden="true"></i><span>Kuis</span><b class="fas fa-arrow-right" aria-hidden="true"></b></a>
+                    <a href="#/participant-ai-lab-math/kenapa-ai-butuh-matematika/diskusi"><i class="fas fa-comments" aria-hidden="true"></i><span>Diskusi</span><b class="fas fa-arrow-right" aria-hidden="true"></b></a>
+                    <a href="#/participant-ai-lab-math/linear-algebra"><i class="fas fa-vector-square" aria-hidden="true"></i><span>Linear Algebra</span><b class="fas fa-arrow-right" aria-hidden="true"></b></a>
+                </section>
+
+            </aside>
+        </div>
+    </main>
 </section>

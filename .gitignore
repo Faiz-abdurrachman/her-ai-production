@@ -28,6 +28,64 @@ docs-nazril/
 
 # Production branch hygiene
 *.md
+!/materi2/
+/materi2/*
+!/materi2/math for ai/
+/materi2/math for ai/*
+!/materi2/math for ai/kenapa ai butuh matematika/
+!/materi2/math for ai/kenapa ai butuh matematika/*.md
+/materi2/math for ai/kenapa ai butuh matematika/qa-report*.md
+/materi2/math for ai/kenapa ai butuh matematika/qa-manifest*.json
+!/materi2/math for ai/02-linear-algebra/
+!/materi2/math for ai/02-linear-algebra/00-informasi-submodul.md
+!/materi2/math for ai/02-linear-algebra/01-dari-scalar-ke-vector.md
+!/materi2/math for ai/02-linear-algebra/02-membaca-vektor.md
+!/materi2/math for ai/02-linear-algebra/03-operasi-vektor.md
+!/materi2/math for ai/02-linear-algebra/04-norm-dan-distance.md
+!/materi2/math for ai/02-linear-algebra/05-dot-product.md
+!/materi2/math for ai/02-linear-algebra/06-cosine-similarity.md
+!/materi2/math for ai/02-linear-algebra/07-matrix.md
+!/materi2/math for ai/02-linear-algebra/08-matrix-operations-multiplication.md
+!/materi2/math for ai/02-linear-algebra/latihan.md
+!/materi2/math for ai/02-linear-algebra/kuis.md
+!/materi2/math for ai/02-linear-algebra/diskusi.md
+!/materi2/math for ai/02-linear-algebra/referensi.md
+!/materi2/math for ai/03-statistics-for-ai/
+!/materi2/math for ai/03-statistics-for-ai/0[0-8]-*.md
+!/materi2/math for ai/03-statistics-for-ai/latihan.md
+!/materi2/math for ai/03-statistics-for-ai/kuis.md
+!/materi2/math for ai/03-statistics-for-ai/diskusi.md
+!/materi2/math for ai/03-statistics-for-ai/referensi.md
+!/materi2/math for ai/04-probability/
+!/materi2/math for ai/04-probability/0[0-8]-*.md
+!/materi2/math for ai/04-probability/latihan.md
+!/materi2/math for ai/04-probability/kuis.md
+!/materi2/math for ai/04-probability/diskusi.md
+!/materi2/math for ai/04-probability/referensi.md
+!/materi2/math for ai/04-probability/kunci-jawaban-rubrik.md
+!/materi2/math for ai/05-calculus/
+!/materi2/math for ai/05-calculus/0[0-8]-*.md
+!/materi2/math for ai/05-calculus/latihan.md
+!/materi2/math for ai/05-calculus/kuis.md
+!/materi2/math for ai/05-calculus/diskusi.md
+!/materi2/math for ai/05-calculus/referensi.md
+!/materi2/math for ai/05-calculus/kunci-jawaban-rubrik.md
+!/materi2/math for ai/06-optimization/
+!/materi2/math for ai/06-optimization/0[0-8]-*.md
+!/materi2/math for ai/06-optimization/latihan.md
+!/materi2/math for ai/06-optimization/kuis.md
+!/materi2/math for ai/06-optimization/diskusi.md
+!/materi2/math for ai/06-optimization/referensi.md
+!/materi2/math for ai/06-optimization/kunci-jawaban-rubrik.md
+!/materi2/math for ai/07-case-study-herai/
+!/materi2/math for ai/07-case-study-herai/0[0-7]-*.md
+!/materi2/math for ai/07-case-study-herai/latihan.md
+!/materi2/math for ai/07-case-study-herai/kuis.md
+!/materi2/math for ai/07-case-study-herai/diskusi.md
+!/materi2/math for ai/07-case-study-herai/referensi.md
+!/materi2/math for ai/07-case-study-herai/kunci-jawaban-rubrik.md
+*.bak
+*.zip
 /handover/
 /docs/
 /reports/
@@ -40,6 +98,13 @@ docs-nazril/
 /assets/referensi/
 /scripts/*
 !/scripts/harden-public.mjs
+!/scripts/test-math-local-smoke.mjs
+!/scripts/test-math-live-readiness.mjs
+!/scripts/test-math-progress-ids.mjs
+!/scripts/test-math-release-gate.mjs
+!/scripts/test-math-response-persistence.mjs
+!/scripts/test-progress-scoring.mjs
+!/scripts/validate-math-runtime.mjs
 /gas/*
 !/gas/Code.gs
 /append_css.js

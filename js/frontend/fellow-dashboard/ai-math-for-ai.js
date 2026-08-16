@@ -35,12 +35,12 @@
     const mathForAiLessons = [
         {
             id: 'intro',
-            route: '#/participant-ai-lab-math-intro',
+            route: '#/participant-ai-lab-math/submodule-01',
             title: 'Kenapa AI Butuh Matematika?',
             icon: 'fas fa-brain',
-            duration: '15 menit',
+            duration: '10.75–15.2 jam',
             level: 'Foundation',
-            objective: 'Peserta memahami bahwa AI tidak membaca dunia seperti manusia, tetapi memproses data dalam bentuk angka.',
+            objective: 'Jembatan antara pengalaman sehari-hari peserta dan bahasa matematika yang akan digunakan sepanjang Math for AI.',
             opening: 'Saat manusia melihat gambar, kita langsung mengenali wajah, warna, dan ekspresi. Namun komputer tidak melihat gambar seperti itu. Komputer hanya membaca angka. Teks, gambar, suara, nilai quiz, durasi belajar, dan aktivitas user semuanya harus diterjemahkan menjadi data numerik agar bisa diproses oleh AI.',
             coreConcept: 'Matematika adalah bahasa internal AI. Dengan matematika, AI dapat menyimpan data, menghitung kemiripan, membaca pola, memperkirakan peluang, mengukur kesalahan, dan memperbaiki model agar hasil prediksinya semakin baik.',
             keyPoints: [
@@ -412,65 +412,110 @@
     }
 
     window.initAiLabMathOverview = function() {
-        const container = document.getElementById('mathAiOverview');
+        const container = document.getElementById('mathAiOverviewContainer');
         if (!container || container.dataset.ready) return;
         container.dataset.ready = 'true';
         const state = calculateMathAiProgress();
         container.innerHTML = `
-            <section class="lesson-hero compact math-ai-hero">
-                <div class="lesson-hero-copy">
-                    <span class="math-ai-eyebrow"><i class="fas fa-square-root-variable"></i> ${escapeHtml(mathForAiCourse.category)}</span>
-                    <h1>${escapeHtml(mathForAiCourse.title)}</h1>
-                    <p>${escapeHtml(mathForAiCourse.subtitle)}</p>
-                    <div class="lesson-meta-row">
-                        <span><i class="far fa-clock"></i> ${escapeHtml(mathForAiCourse.estimatedDuration)}</span>
-                        <span><i class="fas fa-layer-group"></i> ${mathForAiCourse.totalLessons} Lesson</span>
-                        <b><i class="fas fa-user-graduate"></i> ${escapeHtml(mathForAiCourse.level)}</b>
-                    </div>
-                </div>
-                <img src="/assets/messaging/herai-chat-persona.png" alt="HerAI Math for AI learning">
-            </section>
-            <section class="lesson-material-panel">
-                ${renderMathAiTabs('overview')}
-                <article class="lesson-article math-ai-content">
-                    <div class="math-ai-card">
-                        <h2>Math for AI bukan tentang menghafal rumus</h2>
-                        <p>${escapeHtml(mathForAiCourse.description)}</p>
-                    </div>
-                    <div class="math-ai-grid">
-                        ${mathForAiCourse.outcomes.map((item, index) => `<article class="math-ai-card"><span>${index + 1}</span><p>${escapeHtml(item)}</p></article>`).join('')}
-                    </div>
-                    <div class="math-ai-simulation" data-math-sim>
-                        <div>
-                            <span class="math-ai-eyebrow"><i class="fas fa-diagram-project"></i> Simulasi Profil Vektor</span>
-                            <h2>Seberapa cocok profil peserta dengan Math for AI?</h2>
-                            <p>Ubah nilai profil peserta dan lihat estimasi kecocokan sederhana berbasis cosine similarity.</p>
+        <div class="v2-detail-layout">
+            <div class="v2-detail-main">
+                <section class="v2-glass-hero">
+                    <img src="/assets/messaging/herai-chat-persona.png" alt="HerAI fellow belajar Math for AI">
+                    <div class="v2-hero-content">
+                        <span class="category"><i class="fas fa-square-root-variable"></i> ${escapeHtml(mathForAiCourse.category)}</span>
+                        <h2>${escapeHtml(mathForAiCourse.title)}</h2>
+                        <div class="course-progress-line" style="margin-top:16px;">
+                            <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><small style="font-weight:700;color:#6e7387;">Total Progress</small><strong data-learning-hero-progress style="color:#1a1d2d;font-weight:900;">0%</strong></div>
+                            <b style="--value:0%; display:block; height:8px; background:rgba(0,0,0,0.05); border-radius:100px; overflow:hidden; position:relative;" data-learning-hero-bar><i style="position:absolute;top:0;left:0;bottom:0;width:var(--value);background:#e91e63;border-radius:100px;transition:width 0.5s ease;"></i></b>
+                            <p data-learning-hero-copy style="margin-top:12px;font-size:0.9rem;color:#6e7387;font-weight:600;">Mulai perjalanan belajarmu hari ini!</p>
                         </div>
-                        ${['AI', 'Python', 'Statistik', 'UI/UX'].map((label, index) => `
-                            <label><span>${label}</span><b data-range-value>${[5, 2, 1, 3][index]}</b><input type="range" min="1" max="5" value="${[5, 2, 1, 3][index]}"></label>
-                        `).join('')}
-                        <div class="math-ai-sim-result" data-sim-output></div>
+                        <a href="#/participant-ai-lab-math/submodule-01" class="v2-hero-action" data-learning-hero-action>Mulai Belajar <i class="fas fa-play"></i></a>
                     </div>
-                    <div class="math-ai-lesson-grid">
+                </section>
+
+                <section class="v2-premium-panel">
+                    <div class="v2-panel-head">
+                        <div>
+                            <h2>${escapeHtml(mathForAiCourse.title)}</h2>
+                            <p>${escapeHtml(mathForAiCourse.subtitle)}</p>
+                        </div>
+                        <span style="font-weight:700; color:#e91e63; background:rgba(233,30,99,0.1); padding:6px 16px; border-radius:100px; font-size:0.85rem;">${mathForAiCourse.totalLessons} Submodul</span>
+                    </div>
+                    <div class="v2-lesson-grid">
                         ${mathForAiLessons.map((lesson, index) => {
                             const done = state.progress.completedLessons.includes(lesson.id);
-                            return `<a href="${lesson.route}" class="math-ai-lesson-card ${done ? 'is-done' : ''}">
-                                <i class="${lesson.icon}"></i>
-                                <span>${String(index + 1).padStart(2, '0')}</span>
+                            return `<article class="v2-lesson-card ${done ? 'is-done' : ''}">
+                                <span class="v2-lesson-num">${index + 1}</span>
+                                <div style="width:40px;height:40px;border-radius:12px;background:rgba(233,30,99,0.1);color:#e91e63;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:12px;">
+                                    <i class="${lesson.icon}"></i>
+                                </div>
                                 <h3>${escapeHtml(lesson.title)}</h3>
                                 <p>${escapeHtml(lesson.objective)}</p>
-                                <small>${escapeHtml(lesson.duration)} | ${escapeHtml(lesson.level)}</small>
-                            </a>`;
+                                <a class="v2-lesson-action" href="${lesson.route}">${done ? 'Ulas Submodul <i class="fas fa-check"></i>' : 'Mulai <i class="fas fa-arrow-right"></i>'}</a>
+                            </article>`;
                         }).join('')}
                     </div>
-                    <footer class="lesson-nav-footer">
-                        <a href="#/participant-modules"><i class="fas fa-chevron-left"></i> Kembali ke Modul</a>
-                        <a href="#/participant-ai-lab-math-intro">Mulai Lesson Pertama <i class="fas fa-arrow-right"></i></a>
-                    </footer>
-                </article>
-            </section>
+                </section>
+
+                <section class="v2-premium-panel">
+                    <div class="v2-panel-head">
+                        <div>
+                            <h2>Simulasi Profil Vektor</h2>
+                            <p>Seberapa cocok profil peserta dengan Math for AI?</p>
+                        </div>
+                    </div>
+                    <div class="math-ai-simulation" data-math-sim style="background:rgba(0,0,0,0.02); border:1px solid rgba(0,0,0,0.05); border-radius:16px; padding:24px;">
+                        ${['AI', 'Python', 'Statistik', 'UI/UX'].map((label, index) => `
+                            <label style="display:flex; align-items:center; margin-bottom:16px; gap:16px;">
+                                <span style="flex:1; font-weight:700; color:#555b70;">${label}</span>
+                                <b data-range-value style="width:24px; text-align:right; font-weight:900; color:#1a1d2d;">${[5, 2, 1, 3][index]}</b>
+                                <input style="flex:3; accent-color:#e91e63;" type="range" min="1" max="5" value="${[5, 2, 1, 3][index]}">
+                            </label>
+                        `).join('')}
+                        <div class="math-ai-sim-result" data-sim-output style="margin-top:24px; padding:16px; background:rgba(76,175,80,0.1); color:#388e3c; border-radius:12px; border:1px solid rgba(76,175,80,0.2); font-weight:600;"></div>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="v2-detail-right">
+                <section class="v2-side-card">
+                    <h2>Ringkasan Belajar</h2>
+                    <div style="display:flex; align-items:center; gap:20px; margin-bottom:32px;">
+                        <div style="width:80px; height:80px; border-radius:50%; border:6px solid #e91e63; display:flex; align-items:center; justify-content:center; flex-direction:column;">
+                            <strong id="mathSideProgressTxt" style="font-size:1.4rem; font-weight:900; color:#1a1d2d; line-height:1;">0%</strong>
+                        </div>
+                        <span style="font-weight:700; color:#6e7387;">Total<br>Progress</span>
+                    </div>
+                    <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:16px;">
+                        <li style="display:flex; align-items:center; gap:12px; background:rgba(76,175,80,0.05); padding:12px; border-radius:12px;"><i class="fas fa-check-circle" style="color:#388e3c; font-size:1.2rem;"></i><span style="flex:1; font-weight:600; color:#388e3c;">Tuntas</span><b id="mathSideCompleted" style="font-weight:800; color:#388e3c;">0</b></li>
+                        <li style="display:flex; align-items:center; gap:12px; background:rgba(255,152,0,0.05); padding:12px; border-radius:12px;"><i class="fas fa-clock" style="color:#f57c00; font-size:1.2rem;"></i><span style="flex:1; font-weight:600; color:#f57c00;">Dalam Proses</span><b id="mathSideInProgress" style="font-weight:800; color:#f57c00;">0</b></li>
+                        <li style="display:flex; align-items:center; gap:12px; background:rgba(0,0,0,0.03); padding:12px; border-radius:12px;"><i class="fas fa-lock" style="color:#9e9e9e; font-size:1.2rem;"></i><span style="flex:1; font-weight:600; color:#6e7387;">Belum Dimulai</span><b id="mathSideNotStarted" style="font-weight:800; color:#6e7387;">${mathForAiCourse.totalLessons}</b></li>
+                    </ul>
+                </section>
+            </aside>
+        </div>
         `;
-        renderMathAiProgressPanel('mathAiProgressPanel');
+
+        // Simple manual DOM updates for side panel
+        setTimeout(() => {
+            const completed = state.progress.completedLessons.length;
+            const inProgress = Object.keys(state.progress.lessonScores || {}).length - completed;
+            const notStarted = mathForAiCourse.totalLessons - completed - inProgress;
+            const progPercent = Math.round((completed / mathForAiCourse.totalLessons) * 100);
+
+            if(document.getElementById('mathSideProgressTxt')) document.getElementById('mathSideProgressTxt').innerText = progPercent + '%';
+            if(document.getElementById('mathSideCompleted')) document.getElementById('mathSideCompleted').innerText = completed;
+            if(document.getElementById('mathSideInProgress')) document.getElementById('mathSideInProgress').innerText = inProgress > 0 ? inProgress : 0;
+            if(document.getElementById('mathSideNotStarted')) document.getElementById('mathSideNotStarted').innerText = notStarted;
+
+            const heroProg = document.querySelector('[data-learning-hero-progress]');
+            const heroBar = document.querySelector('[data-learning-hero-bar]');
+            const heroCopy = document.querySelector('[data-learning-hero-copy]');
+            if(heroProg) heroProg.innerText = progPercent + '%';
+            if(heroBar) heroBar.style.setProperty('--value', progPercent + '%');
+            if(heroCopy) heroCopy.innerText = progPercent > 0 ? 'Lanjutkan perjalanan belajarmu!' : 'Mulai perjalanan belajarmu hari ini!';
+        }, 100);
+
         setupSimilaritySimulation(container);
     };
 

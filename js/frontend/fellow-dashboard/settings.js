@@ -10,6 +10,8 @@
     const DASHBOARD_CACHE_TTL_MS = 5 * 60 * 1000;
     const DASHBOARD_CACHE_MAX_STALE_MS = 30 * 60 * 1000;
     const DASHBOARD_REQUEST_TIMEOUT_MS = 20000;
+    const PROGRESS_SAVE_TIMEOUT_MS = 10000;
+    const RESPONSE_SYNC_TIMEOUT_MS = 30000;
 
     var _dashboardDataCache = null;
     var _dashboardDataPromise = null;
@@ -26,7 +28,10 @@
             if (this._pending[name]) return this._pending[name];
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
-                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=20260803-discussion-name-fix';
+                var version = name === 'math-learning'
+                    ? '20260816-response-persistence-v2'
+                    : '20260803-discussion-name-fix';
+                s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=' + version;
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
                 s.onerror = function() { delete window.__aiLabLoader._pending[name]; reject(new Error('Failed to load: ' + name)); };
                 document.head.appendChild(s);
@@ -277,21 +282,23 @@
             });
         });
 
-        modulePage.querySelectorAll('[data-module-tab]').forEach((button) => {
+        modulePage.querySelectorAll('[data-v2-tab]').forEach((button) => {
             button.addEventListener('click', () => {
-                modulePage.querySelectorAll('[data-module-tab]').forEach(item => {
-                    const selected = item === button;
-                    item.classList.toggle('active', selected);
-                    item.setAttribute('aria-selected', String(selected));
+                const target = button.dataset.v2Tab;
+
+                // Update active state on buttons
+                modulePage.querySelectorAll('[data-v2-tab]').forEach(item => {
+                    item.classList.toggle('active', item === button);
                 });
-                const target = button.dataset.moduleTab;
-                if (target === 'foundation') {
-                    document.getElementById('moduleCatalogPanel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else if (target === 'specialization') {
-                    document.getElementById('specializationTrackPanel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else {
-                    modulePage.querySelector('.module-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+
+                // Filter sections
+                modulePage.querySelectorAll('[data-v2-section]').forEach(section => {
+                    if (target === 'all') {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.toggle('active', section.dataset.v2Section === target);
+                    }
+                });
             });
         });
 
@@ -323,9 +330,9 @@
             search.addEventListener('input', () => {
                 const query = String(search.value || '').trim().toLocaleLowerCase('id-ID');
                 let visible = 0;
-                modulePage.querySelectorAll('.foundation-course-grid .course-card').forEach(card => {
+                modulePage.querySelectorAll('.v2-course-card').forEach(card => {
                     const matches = !query || card.textContent.toLocaleLowerCase('id-ID').includes(query);
-                    card.hidden = !matches;
+                    card.style.display = matches ? '' : 'none';
                     if (matches) visible += 1;
                 });
                 if (empty) empty.hidden = visible !== 0;
@@ -2414,7 +2421,7 @@
     }
 
     async function initParticipantModulesData() {
-        if (!document.querySelector('.fellow-modules-page [data-module-summary-state]')) return;
+        if (!document.querySelector('.fellow-modules-page [data-module-summary-state]') && !document.querySelector('.fellow-modules-page [data-module-side-summary-state]')) return;
         var cached = _dashboardDataCache ? { data: _dashboardDataCache, fresh: true } : readParticipantDashboardCache();
         if (cached?.data) {
             _dashboardDataCache = cached.data;
@@ -3307,10 +3314,13 @@
         if (!session?.nik || !session?.token) {
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.' };
         }
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, PROGRESS_SAVE_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                signal: controller.signal,
                 body: JSON.stringify({
                     action: 'saveParticipantProgress',
                     nik: session.nik,
@@ -3331,7 +3341,14 @@
             clearParticipantDashboardCache();
             return result;
         } catch (e) {
-            return { status: 'error', message: 'Koneksi terputus. Coba simpan kembali.' };
+            return {
+                status: 'error',
+                message: e?.name === 'AbortError'
+                    ? 'Penyimpanan terlalu lama. Coba sinkronkan kembali.'
+                    : 'Koneksi terputus. Coba simpan kembali.'
+            };
+        } finally {
+            clearTimeout(timeoutId);
         }
     };
 
@@ -3340,10 +3357,13 @@
         if (!session?.nik || !session?.token) {
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.', data: [] };
         }
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, PROGRESS_SAVE_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                signal: controller.signal,
                 body: JSON.stringify({
                     action: 'getParticipantProgress',
                     nik: session.nik,
@@ -3360,7 +3380,15 @@
             }
             return { status: 'success', data: Array.isArray(result.data) ? result.data : [] };
         } catch (e) {
-            return { status: 'error', message: 'Koneksi terputus. Progres belum dapat dimuat.', data: [] };
+            return {
+                status: 'error',
+                message: e?.name === 'AbortError'
+                    ? 'Memuat progres terlalu lama. Coba lagi.'
+                    : 'Koneksi terputus. Progres belum dapat dimuat.',
+                data: []
+            };
+        } finally {
+            clearTimeout(timeoutId);
         }
     };
 
@@ -3377,10 +3405,13 @@
             exercise_id: exerciseId || 'practice'
         };
         if (answers !== undefined) payload.answers = answers;
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, RESPONSE_SYNC_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                signal: controller.signal,
                 body: JSON.stringify(payload)
             });
             var result = await response.json().catch(function() { return {}; });
@@ -3392,7 +3423,14 @@
             }
             return result;
         } catch (error) {
-            return { status: 'error', message: 'Koneksi terputus. Jawaban lokal tetap aman.' };
+            return {
+                status: 'error',
+                message: error?.name === 'AbortError'
+                    ? 'Penyimpanan latihan terlalu lama. Jawaban lokal tetap aman.'
+                    : 'Koneksi terputus. Jawaban lokal tetap aman.'
+            };
+        } finally {
+            clearTimeout(timeoutId);
         }
     }
 
@@ -3536,10 +3574,13 @@
         if (!session?.nik || !session?.token) {
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.' };
         }
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, RESPONSE_SYNC_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                signal: controller.signal,
                 body: JSON.stringify({
                     action: 'saveParticipantDiscussion',
                     nik: session.nik,
@@ -3561,7 +3602,14 @@
             }
             return result;
         } catch (e) {
-            return { status: 'error', message: 'Koneksi terputus. Coba kirim kembali.' };
+            return {
+                status: 'error',
+                message: e?.name === 'AbortError'
+                    ? 'Penyimpanan diskusi terlalu lama. Respons lokal tetap aman.'
+                    : 'Koneksi terputus. Coba kirim kembali.'
+            };
+        } finally {
+            clearTimeout(timeoutId);
         }
     };
 
@@ -3570,10 +3618,13 @@
         if (!session?.nik || !session?.token) {
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.', data: [] };
         }
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, RESPONSE_SYNC_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                signal: controller.signal,
                 body: JSON.stringify({
                     action: 'getParticipantDiscussions',
                     nik: session.nik,
@@ -3590,7 +3641,15 @@
             }
             return { status: 'success', data: Array.isArray(result.data) ? result.data : [] };
         } catch (e) {
-            return { status: 'error', message: 'Koneksi terputus. Diskusi lokal tetap tersedia.', data: [] };
+            return {
+                status: 'error',
+                message: e?.name === 'AbortError'
+                    ? 'Memuat diskusi terlalu lama. Respons lokal tetap tersedia.'
+                    : 'Koneksi terputus. Diskusi lokal tetap tersedia.',
+                data: []
+            };
+        } finally {
+            clearTimeout(timeoutId);
         }
     };
 
