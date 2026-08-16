@@ -101,6 +101,7 @@ docs-nazril/
 !/scripts/test-math-local-smoke.mjs
 !/scripts/test-math-progress-ids.mjs
 !/scripts/test-math-release-gate.mjs
+!/scripts/test-math-response-persistence.mjs
 !/scripts/test-progress-scoring.mjs
 !/scripts/validate-math-runtime.mjs
 /gas/*
