@@ -1798,7 +1798,7 @@ if (path === "/participant-ai-lab-reinforcement-learning" && typeof window.initA
                     if (path === "/participant-ai-lab-math" || path.startsWith("/participant-ai-lab-math/kenapa-ai-butuh-matematika") || path.startsWith("/participant-ai-lab-math/linear-algebra") || path.startsWith("/participant-ai-lab-math/statistics-for-ai") || path.startsWith("/participant-ai-lab-math/probability") || path.startsWith("/participant-ai-lab-math/calculus") || path.startsWith("/participant-ai-lab-math/optimization") || path.startsWith("/participant-ai-lab-math/integrated-case-study")) {
                         window.__aiLabLoader.load('math-learning').then(function() {
                             if (path === "/participant-ai-lab-math" && typeof window.initMathOverviewRoute === "function") {
-                                window.initMathOverviewRoute();
+                                window.initMathOverviewRoute({ forceSync: true });
                                 return;
                             }
                             if (typeof window.initMathLearningRoute === "function") {

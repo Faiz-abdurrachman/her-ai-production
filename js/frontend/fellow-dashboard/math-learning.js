@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    const RUNTIME_VERSION = '20260816-response-persistence-v1';
+    const RUNTIME_VERSION = '20260817-progress-loading-v1';
     const routeFor = (base, suffix) => suffix ? `${base}/${suffix}` : base;
     const createSubmodule = config => Object.freeze({
         ...config,
@@ -298,33 +298,58 @@
     }
 
     let _serverSyncDone = false;
-    async function syncServerProgress() {
-        if (_serverSyncDone || !window.getParticipantProgress) return;
-        try {
-            const res = await window.getParticipantProgress('math-for-ai');
-            if (res.status === 'success' && Array.isArray(res.data)) {
-                const serverCompleted = res.data.filter(row => row.status === 'completed').map(row => String(row.chapter_id));
+    let _serverSyncPromise = null;
+    let _serverCompletedCount = 0;
+    async function syncServerProgress(options = {}) {
+        const force = options.force === true;
+        if (force) _serverSyncDone = false;
+        if (_serverSyncDone) return { status: 'ready', serverCompleted: _serverCompletedCount };
+        if (_serverSyncPromise) return _serverSyncPromise;
+        if (!window.getParticipantProgress) {
+            return { status: 'local', message: 'Layanan progres akun belum tersedia.' };
+        }
+        _serverSyncPromise = (async () => {
+            try {
+                const res = await window.getParticipantProgress('math-for-ai');
+                if (res.status !== 'success' || !Array.isArray(res.data)) {
+                    return { status: 'error', message: res?.message || 'Server tidak mengembalikan progres yang valid.' };
+                }
+                const serverCompleted = new Set(
+                    res.data
+                        .filter(row => row.status === 'completed')
+                        .map(row => String(row.chapter_id))
+                );
                 SUBMODULES.forEach(sub => {
                     const state = readState(sub);
                     let changed = false;
                     sub.items.forEach(item => {
                         const chId = String(getProgressRecordId(sub, item));
-                        if (serverCompleted.includes(chId) && !state.completed.includes(item.id)) {
+                        if (serverCompleted.has(chId) && !state.completed.includes(item.id)) {
                             state.completed.push(item.id);
                             changed = true;
                         }
-                        if (serverCompleted.includes(chId) && state.pending.includes(item.id)) {
+                        if (serverCompleted.has(chId) && state.pending.includes(item.id)) {
                             state.pending = state.pending.filter(id => id !== item.id);
+                            changed = true;
+                        } else if (!serverCompleted.has(chId)
+                            && state.completed.includes(item.id)
+                            && !state.pending.includes(item.id)) {
+                            state.pending.push(item.id);
                             changed = true;
                         }
                     });
                     if (changed) writeState(sub, state);
                 });
+                _serverCompletedCount = serverCompleted.size;
                 _serverSyncDone = true;
+                return { status: 'ready', serverCompleted: _serverCompletedCount };
+            } catch (error) {
+                return { status: 'error', message: error?.message || 'Progres akun gagal dimuat.' };
+            } finally {
+                _serverSyncPromise = null;
             }
-        } catch (e) {
-            console.error('[Math Learning] Sync failed:', e);
-        }
+        })();
+        return _serverSyncPromise;
     }
 
     function readState(submodule) {
@@ -433,10 +458,19 @@
         };
     }
 
-    async function renderOverviewProgress() {
+    async function renderOverviewProgress(options = {}) {
         const page = document.querySelector('.math-course-overview');
         if (!page) return;
-        await syncServerProgress();
+        const summaryCard = page.querySelector('[data-math-overview-state]');
+        const statusNode = page.querySelector('[data-math-overview-status]');
+        const retryButton = page.querySelector('[data-math-overview-retry]');
+        if (summaryCard) {
+            summaryCard.dataset.mathOverviewState = 'loading';
+            summaryCard.setAttribute('aria-busy', 'true');
+        }
+        if (statusNode) statusNode.textContent = 'Menyinkronkan progres akun…';
+        if (retryButton) retryButton.hidden = true;
+        const syncResult = await syncServerProgress({ force: options.forceSync === true });
 
         const overview = SUBMODULES.map(submodule => {
             const state = readState(submodule);
@@ -445,12 +479,15 @@
         });
         const completedCount = overview.reduce((total, entry) => total + entry.completed.length, 0);
         const totalCount = overview.reduce((total, entry) => total + entry.submodule.items.length, 0);
+        const topicCount = overview.reduce((total, entry) => total + entry.submodule.topicCount, 0);
+        const pendingCount = overview.reduce((total, entry) => total + entry.state.pending.length, 0);
         const progress = Math.round(completedCount / totalCount * 100);
         const firstIncomplete = overview.flatMap(entry => entry.submodule.items.map(item => ({ submodule: entry.submodule, item, state: entry.state })))
             .find(entry => !entry.state.completed.includes(entry.item.id));
         const action = page.querySelector('[data-math-overview-action]');
         const progressCopy = page.querySelector('[data-math-overview-copy]');
         const donut = page.querySelector('[data-math-overview-donut]');
+        const donutLabel = donut?.querySelector('span');
 
         page.querySelectorAll('[data-math-overview-progress], [data-math-overview-side-progress]').forEach(node => {
             node.textContent = `${progress}%`;
@@ -462,11 +499,16 @@
             donut.style.setProperty('--started-end', `${progress}%`);
             donut.setAttribute('aria-label', `Progres Math for AI: ${progress} persen`);
         }
+        if (donutLabel) donutLabel.textContent = 'Selesai';
+        page.querySelector('[data-math-overview-completed]')?.replaceChildren(document.createTextNode(String(completedCount)));
+        page.querySelector('[data-math-overview-total]')?.replaceChildren(document.createTextNode(String(totalCount)));
+        page.querySelector('[data-math-overview-submodules]')?.replaceChildren(document.createTextNode(String(SUBMODULES.length)));
+        page.querySelector('[data-math-overview-topics]')?.replaceChildren(document.createTextNode(String(topicCount)));
 
         if (progressCopy) {
             progressCopy.textContent = completedCount
-                ? `${completedCount} dari ${totalCount} bagian selesai di perangkat ini.`
-                : `${totalCount} bagian belajar dari dua submodul siap dijelajahi di perangkat ini.`;
+                ? `${completedCount} dari ${totalCount} bagian selesai di ${SUBMODULES.length} submodul.`
+                : `${totalCount} bagian belajar dari ${SUBMODULES.length} submodul siap dijelajahi.`;
         }
 
         if (action) {
@@ -476,8 +518,44 @@
                 : `Buka Kembali Math for AI <i class="fas fa-rotate-right" aria-hidden="true"></i>`;
         }
 
-        overview.forEach(entry => page.querySelector(`[data-math-submodule="${entry.submodule.id}"]`)
-            ?.classList.toggle('done', entry.completed.length === entry.submodule.items.length));
+        overview.forEach(entry => {
+            const card = page.querySelector(`[data-math-submodule="${entry.submodule.id}"]`);
+            if (!card) return;
+            const subProgress = Math.round(entry.completed.length / entry.submodule.items.length * 100);
+            const done = entry.completed.length === entry.submodule.items.length;
+            card.classList.toggle('done', done);
+            card.classList.toggle('in-progress', subProgress > 0 && !done);
+            let badge = card.querySelector('[data-math-submodule-progress]');
+            if (!badge) {
+                badge = document.createElement('p');
+                badge.className = 'math-submodule-progress';
+                badge.dataset.mathSubmoduleProgress = '';
+                card.querySelector('.lesson-action')?.before(badge);
+            }
+            badge.innerHTML = `<i class="fas ${done ? 'fa-circle-check' : (subProgress > 0 ? 'fa-chart-line' : 'fa-circle')}" aria-hidden="true"></i>${entry.completed.length}/${entry.submodule.items.length} bagian · ${subProgress}%`;
+            const cardAction = card.querySelector('.lesson-action');
+            if (cardAction) cardAction.textContent = done ? 'Buka lagi' : (subProgress > 0 ? 'Lanjutkan' : 'Mulai');
+        });
+
+        let overviewState = syncResult.status;
+        if (pendingCount > 0) overviewState = 'pending';
+        if (statusNode) {
+            statusNode.textContent = pendingCount > 0
+                ? `${pendingCount} bagian tersimpan di perangkat dan masih menunggu sinkronisasi akun.`
+                : (syncResult.status === 'ready'
+                    ? 'Progres terbaru sudah tersinkron dengan akun peserta.'
+                    : (syncResult.status === 'local'
+                        ? 'Menampilkan progres perangkat. Login peserta diperlukan untuk sinkronisasi akun.'
+                        : 'Progres akun belum dapat diperbarui. Menampilkan data perangkat terakhir.'));
+        }
+        if (summaryCard) {
+            summaryCard.dataset.mathOverviewState = overviewState;
+            summaryCard.setAttribute('aria-busy', 'false');
+        }
+        if (retryButton) {
+            retryButton.hidden = !['error', 'pending'].includes(overviewState);
+            retryButton.onclick = () => renderOverviewProgress({ forceSync: true });
+        }
     }
 
     function loadScriptOnce(src, key) {
@@ -3298,7 +3376,15 @@
         if (!requiresPersistedResponse) page?.querySelector('.math-learning-next-link')?.addEventListener('click', async event => {
             event.preventDefault();
             event.stopPropagation();
-            const destination = event.currentTarget.getAttribute('href');
+            const nextLink = event.currentTarget;
+            if (nextLink.dataset.loading === 'true') return;
+            const destination = nextLink.getAttribute('href');
+            const originalLabel = nextLink.innerHTML;
+            nextLink.dataset.loading = 'true';
+            nextLink.classList.add('is-loading');
+            nextLink.setAttribute('aria-disabled', 'true');
+            nextLink.setAttribute('aria-busy', 'true');
+            nextLink.innerHTML = '<i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i><span>Menyimpan &amp; membuka…</span>';
             const state = readState(submodule);
             if (!state.completed.includes(item.id) || state.pending.includes(item.id)) {
                 try {
@@ -3313,8 +3399,16 @@
                     );
                 }
             }
-            if (destination) window.location.hash = destination;
-        });
+            if (destination) {
+                window.location.hash = destination;
+                return;
+            }
+            nextLink.dataset.loading = 'false';
+            nextLink.classList.remove('is-loading');
+            nextLink.removeAttribute('aria-disabled');
+            nextLink.removeAttribute('aria-busy');
+            nextLink.innerHTML = originalLabel;
+        }, { signal: pageAbort.signal });
     }
 
     function renderError(root, message) {
