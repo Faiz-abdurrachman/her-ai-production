@@ -584,6 +584,11 @@
         const kept = [];
         const markerPattern = '(STATIC VISUAL|INTERACTIVE VISUAL|NUMBER MANIPULATOR|COMPARE VIEW|STEP-BY-STEP REVEAL)';
         for (let index = 0; index < lines.length;) {
+            const isAuthoringContainerHeading = /^#\s+\d+\.\s+Visual\s*\/\s*Interactive\s+Spec(?:ification)?(?:\s+untuk\s+Web)?\s*$/i.test(lines[index]);
+            if (isAuthoringContainerHeading) {
+                index += 1;
+                continue;
+            }
             const directMarker = lines[index].match(new RegExp(`^(#{1,6})\\s+(?:\\d+\\.\\s+)?\\[${markerPattern}\\]\\s+(.+)$`));
             const specHeading = lines[index].match(/^(#{1,6})\s+(?:\d+\.\s+)?(?:Visual\s*\/\s*Interactive Spec(?:ification)?|Visualization Spec(?:ification)?|Interactive Spec(?:ification)?)(?:\s+\d+)?\s*(?:[—-]\s*(.*))?$/i);
             let markerType = directMarker?.[2] || '';
@@ -774,7 +779,7 @@
     }
 
     function renderMarkdown(markdown, interactiveSpecs) {
-        if (markdown.includes('VISUAL / INTERACTIVE SPEC')) {
+        if (/VISUAL\s*\/\s*INTERACTIVE\s+SPEC/i.test(markdown)) {
             const keyMap = {
                 'Input → Function → Output': 'input-function-output',
                 'Function Value Explorer': 'function-value-explorer',
@@ -832,7 +837,10 @@
             };
             replaceBlock(/##\s+\[(.*?)\]\s+(.*?)\n/g, 1);
             replaceBlock(/#\s+\d+\.\s+VISUAL\s+\/\s+INTERACTIVE\s+SPEC\s+—\s+(.*?)\n/g, 2);
-            markdown = markdown.replace(/#\s+\d+\.\s+VISUAL\s+\/\s+INTERACTIVE\s+SPEC\s*\n+/g, '');
+            markdown = markdown.replace(
+                /^#\s+\d+\.\s+VISUAL\s*\/\s*INTERACTIVE\s+SPEC(?:IFICATION)?(?:\s+UNTUK\s+WEB)?\s*$\n*/gim,
+                ''
+            );
         }
         
         markdown = markdown.replace(/>\s*Browser-level target HerAI Markdown parser \+ KaTeX runtime:\s*\*\*NOT TESTED \/ NOT CLAIMED\*\*\./g, '');

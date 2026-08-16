@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import vm from 'node:vm';
 
@@ -45,4 +45,30 @@ assert.equal(router.getMathRoute('/participant-ai-lab-math'), lockedPage);
 for (const route of canonicalRoutes) assert.equal(router.getMathRoute(route), lockedPage);
 assert.equal(router.getMathRoute('/participant-dashboard'), null);
 
-console.log('Math release gate valid: localhost previews 01–07; non-local locks overview and every submodule.');
+const releaseSource = source.replace(
+    'releasedSubmodules: Object.freeze([])',
+    "releasedSubmodules: Object.freeze(['01', '02'])"
+);
+assert.notEqual(releaseSource, source, 'Release config fixture must patch the current router source.');
+const releaseContext = {
+    ...context,
+    window: {
+        ...context.window,
+        location: { hostname: 'her-ai.data-sorcerers.com' }
+    }
+};
+releaseContext.window.window = releaseContext.window;
+vm.createContext(releaseContext);
+vm.runInContext(`${releaseSource}\n;globalThis.__testedRouter = router;`, releaseContext, { filename: 'js/router.js' });
+const releaseRouter = releaseContext.__testedRouter;
+assert.equal(releaseRouter.getMathRoute('/participant-ai-lab-math'), overviewPage);
+assert.equal(releaseRouter.getMathRoute(canonicalRoutes[0]), previewLessonPage);
+assert.equal(releaseRouter.getMathRoute(canonicalRoutes[1]), previewLessonPage);
+assert.equal(releaseRouter.getMathRoute(canonicalRoutes[2]), lockedPage);
+assert.equal(
+    existsSync(resolve(repositoryRoot, releaseRouter.getMathRoute(canonicalRoutes[0]).slice(1))),
+    true,
+    'Released submodules must resolve to a tracked HTML shell that exists.'
+);
+
+console.log('Math release gate valid: localhost previews 01–07; non-local locks unreleased content; simulated 01–02 release resolves to an existing shared lesson shell.');
