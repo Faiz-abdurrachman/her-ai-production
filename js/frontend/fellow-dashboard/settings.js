@@ -2700,10 +2700,37 @@
         }
     }
 
-    function renderParticipantRestricted() {
-        var restrictedHTML = '<section class="fellow-restricted-state"><div><i class="fas fa-lock fa-shield-halved"></i><h1>Akses Peserta Dibatasi</h1><p>Sementara ini portal peserta hanya membuka <strong>Beranda</strong>, <strong>Modul</strong>, dan <strong>Pengaturan</strong>.</p><a href="#/participant-dashboard"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a></div></section>';
+    function participantAccessStateMarkup(options = {}) {
+        var hasCustomAction = Boolean(options.actionHref || options.actionLabel);
+        var actions = Array.isArray(options.actions) && options.actions.length
+            ? options.actions
+            : (hasCustomAction
+                ? [{
+                    href: options.actionHref || '#/participant-dashboard',
+                    label: options.actionLabel || 'Kembali ke Beranda',
+                    icon: options.actionIcon || 'fa-arrow-left',
+                    primary: true
+                }]
+                : [
+                    { href: '#/participant-dashboard', label: 'Beranda', icon: 'fa-house', primary: true },
+                    { href: '#/participant-modules', label: 'Modul Pembelajaran', icon: 'fa-book-open' },
+                    { href: '#/participant-leaderboard', label: 'Leaderboard', icon: 'fa-ranking-star' },
+                    { href: '#/participant-settings', label: 'Pengaturan', icon: 'fa-gear' }
+                ]);
+        var title = escapeHtml(options.title || 'Akses Peserta Dibatasi');
+        var message = options.message
+            ? escapeHtml(options.message)
+            : 'Saat ini portal peserta membuka <strong>Beranda</strong>, <strong>Modul Pembelajaran</strong>, <strong>Leaderboard</strong>, dan <strong>Pengaturan</strong>.';
+        var links = actions.map(function(action) {
+            return '<a class="' + (action.primary ? 'is-primary' : 'is-secondary') + '" href="' + escapeHtml(action.href) + '"><i class="fas ' + escapeHtml(action.icon || 'fa-arrow-right') + '" aria-hidden="true"></i><span>' + escapeHtml(action.label) + '</span></a>';
+        }).join('');
+        return '<section class="fellow-restricted-state" aria-labelledby="participantAccessTitle"><div><i class="fas fa-shield-halved" aria-hidden="true"></i><h1 id="participantAccessTitle">' + title + '</h1><p>' + message + '</p><nav class="fellow-restricted-actions" aria-label="Menu peserta yang tersedia">' + links + '</nav></div></section>';
+    }
 
-        var root = document.querySelector('.fellow-dashboard');
+    function renderParticipantRestricted(target) {
+        var restrictedHTML = participantAccessStateMarkup();
+
+        var root = target || document.querySelector('.fellow-dashboard');
         if (root) {
             root.innerHTML = restrictedHTML;
             return;
@@ -2717,6 +2744,8 @@
 
         document.body.innerHTML = restrictedHTML;
     }
+
+    window.renderParticipantAccessState = participantAccessStateMarkup;
 
     function renderDashboardSkeletons() {
         var moduleGrid = document.getElementById('dashboardModuleGrid');
@@ -3711,7 +3740,7 @@
                     await new Promise(function(r) { setTimeout(r, 0); });
                     var main = document.querySelector('#app-content');
                     if (main) {
-                        main.innerHTML = '<section class="fellow-restricted-state"><div><i class="fas fa-shield-halved"></i><h1>Akses Peserta Dibatasi</h1><p>Sementara ini portal peserta hanya membuka <strong>Beranda</strong>, <strong>Modul</strong>, dan <strong>Pengaturan</strong>.</p><a href="#/participant-dashboard"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</a></div></section>';
+                        renderParticipantRestricted(main);
                     }
                     return;
                 }
