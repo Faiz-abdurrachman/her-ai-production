@@ -127,6 +127,18 @@ try {
             expiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString()
         }));
     });
+    await page.setRequestInterception(true);
+    page.on('request', async request => {
+        if (request.url() === `${baseUrl}/__gas` && request.method() === 'POST') {
+            await request.respond({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ status: 'error', message: 'Simulasi offline lokal.' })
+            });
+            return;
+        }
+        await request.continue();
+    });
 
     for (const route of routes) {
         await page.goto(`${baseUrl}/#${route}`);
@@ -167,6 +179,9 @@ try {
     const discussionPayloads = [];
     const savedExercises = new Map();
     const savedDiscussions = new Map();
+    let mockedProgressRows = [];
+    let delayNextMathShell = false;
+    let delayNextProgressSave = false;
     let exerciseProgressFailuresRemaining = 1;
     let discussionProgressFailuresRemaining = 1;
     const syncedPageErrors = [];
@@ -179,7 +194,11 @@ try {
     });
     syncedPage.on('requestfailed', request => {
         if (request.url().startsWith(baseUrl)) {
-            failedLocalRequests.push(`${request.method()} ${request.url()} ${request.failure()?.errorText || ''}`);
+            const errorText = request.failure()?.errorText || '';
+            // Chromium cancels an in-flight image when the SPA intentionally
+            // replaces the current route. HTTP failures remain covered below.
+            if (request.resourceType() === 'image' && errorText === 'net::ERR_ABORTED') return;
+            failedLocalRequests.push(`${request.method()} ${request.url()} ${errorText}`);
         }
     });
     syncedPage.on('response', response => {
@@ -196,11 +215,35 @@ try {
     });
     await syncedPage.setRequestInterception(true);
     syncedPage.on('request', async request => {
+        if (delayNextMathShell && request.url().endsWith('/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/01-kenapa-ai-butuh-matematika/materi.html')) {
+            delayNextMathShell = false;
+            await new Promise(resolveWait => setTimeout(resolveWait, 450));
+            await request.continue();
+            return;
+        }
         if (request.url() === `${baseUrl}/__gas` && request.method() === 'POST') {
             const payload = JSON.parse(request.postData() || '{}');
+            if (delayNextProgressSave && payload.action === 'saveParticipantProgress') {
+                delayNextProgressSave = false;
+                await new Promise(resolveWait => setTimeout(resolveWait, 450));
+            }
             if (payload.action === 'saveParticipantProgress') savedPayloads.push(payload);
             let responseBody = { status: 'success', data: [] };
-            if (payload.action === 'getParticipantExerciseSubmissions') {
+            if (payload.action === 'getParticipantDashboardData') {
+                responseBody = {
+                    status: 'success',
+                    data: {
+                        learningSummary: { total: 6, completed: 3, in_progress: 3, not_started: 0, progress: 72 },
+                        activeCourses: [
+                            { course_id: 'ai-fundamentals-advanced', title: 'AI Fundamentals & Advanced', progress: 72, total_items: 6, item_label: 'modul' },
+                            { course_id: 'math-for-ai', title: 'Math for AI', progress: 100, total_items: 89, item_label: 'aktivitas' }
+                        ],
+                        overallLearningSummary: { total: 2, completed: 1, in_progress: 1, not_started: 0, progress: 86 }
+                    }
+                };
+            } else if (payload.action === 'getParticipantProgress') {
+                responseBody = { status: 'success', data: mockedProgressRows };
+            } else if (payload.action === 'getParticipantExerciseSubmissions') {
                 const savedExercise = savedExercises.get(payload.exercise_id);
                 responseBody = { status: 'success', data: savedExercise ? [savedExercise] : [] };
             } else if (payload.action === 'saveParticipantExerciseDraft' || payload.action === 'submitParticipantExercise') {
@@ -280,7 +323,15 @@ try {
             type: item.type
         })))
     ));
+    const canonicalProgressRows = await syncedPage.evaluate(() => (
+        window.HerAiMathLearning.submodules.flatMap(submodule => submodule.items.map(item => ({
+            module_id: 'math-for-ai',
+            chapter_id: window.HerAiMathLearning.progressRecordIdFor(submodule, item),
+            status: 'completed'
+        })))
+    ));
     assert.equal(registeredRoutes.length, 89);
+    assert.equal(canonicalProgressRows.length, 89);
     for (const entry of registeredRoutes) {
         await syncedPage.evaluate(route => { window.location.hash = route; }, entry.route);
         await syncedPage.waitForFunction(expected => {
@@ -573,7 +624,7 @@ try {
             for (const promptNumber of ['01', '02']) {
                 const promptId = `discussion-${candidate.id}-${promptNumber}`;
                 await syncedPage.type(`[data-discussion-prompt="${promptId}"] textarea`, `Respons kandidat ${promptId}`);
-                await syncedPage.click(`[data-discussion-prompt="${promptId}"] button[type="submit"]`);
+                await syncedPage.$eval(`[data-discussion-prompt="${promptId}"] button[type="submit"]`, button => button.click());
                 try {
                     await syncedPage.waitForFunction(id => /dikonfirmasi oleh server/i.test(
                         document.querySelector(`[data-discussion-prompt="${id}"] [data-discussion-status]`)?.textContent || ''
@@ -699,6 +750,160 @@ try {
             `${route}: 375px horizontal overflow`
         );
     }
+
+    await syncedPage.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
+    await syncedPage.goto(`${baseUrl}/#/participant-modules`);
+    await syncedPage.waitForFunction(() => (
+        document.querySelector('[data-module-side-summary-state]')?.dataset.moduleSideSummaryState === 'ready'
+    ), { timeout: 15000 });
+    const foundationSummaryAudit = await syncedPage.evaluate(() => ({
+        heading: document.querySelector('[data-module-side-summary-state] h2')?.textContent.trim(),
+        donutLabel: document.querySelector('[data-module-summary-scope-label]')?.textContent.trim(),
+        overall: document.querySelector('[data-module-side-progress]')?.textContent.trim(),
+        aiProgress: document.querySelector('[data-course-progress="ai-fundamentals-advanced"]')?.textContent.trim(),
+        mathProgress: document.querySelector('[data-course-progress="math-for-ai"]')?.textContent.trim(),
+        scope: document.querySelector('[data-module-summary-scope]')?.textContent.trim()
+    }));
+    assert.equal(foundationSummaryAudit.heading, 'Progres Keseluruhan');
+    assert.equal(foundationSummaryAudit.donutLabel, '2 course aktif');
+    assert.equal(foundationSummaryAudit.overall, '86%');
+    assert.equal(foundationSummaryAudit.aiProgress, '72%');
+    assert.equal(foundationSummaryAudit.mathProgress, '100%');
+    assert.match(foundationSummaryAudit.scope, /72% AI Fundamentals.*100% Math for AI.*86%/);
+
+    await syncedPage.evaluate(() => {
+        window.scrollTo(0, 700);
+        var main = document.querySelector('.fellow-main');
+        if (main) main.scrollTop = 700;
+    });
+    await syncedPage.goto(`${baseUrl}/#/participant-ai-fundamentals`);
+    await syncedPage.waitForFunction(() => (
+        document.querySelector('[data-learning-summary-state]')?.dataset.learningSummaryState === 'ready'
+    ), { timeout: 15000 });
+    const aiCourseSummaryAudit = await syncedPage.evaluate(() => ({
+        heading: document.querySelector('[data-learning-summary-state] h2')?.textContent.trim(),
+        progress: document.querySelector('[data-learning-summary-progress]')?.textContent.trim(),
+        completed: document.querySelector('[data-learning-summary-completed]')?.textContent.trim(),
+        inProgress: document.querySelector('[data-learning-summary-in-progress]')?.textContent.trim(),
+        notStarted: document.querySelector('[data-learning-summary-not-started]')?.textContent.trim(),
+        scope: document.querySelector('.course-summary-scope')?.textContent.trim(),
+        ringValue: document.querySelector('[data-learning-summary-donut]')?.style.getPropertyValue('--course-progress').trim(),
+        windowScroll: Math.round(window.scrollY),
+        mainScroll: Math.round(document.querySelector('.fellow-main')?.scrollTop || 0)
+    }));
+    assert.equal(aiCourseSummaryAudit.heading, 'Progres AI Fundamentals');
+    assert.equal(aiCourseSummaryAudit.progress, '72%');
+    assert.deepEqual([aiCourseSummaryAudit.completed, aiCourseSummaryAudit.inProgress, aiCourseSummaryAudit.notStarted], ['3', '3', '0']);
+    assert.match(aiCourseSummaryAudit.scope, /Pengantar AI.*Evolution of AI/);
+    assert.equal(aiCourseSummaryAudit.ringValue, '72%');
+    assert.deepEqual([aiCourseSummaryAudit.windowScroll, aiCourseSummaryAudit.mainScroll], [0, 0]);
+    await syncedPage.waitForNetworkIdle({ idleTime: 250, timeout: 5000 });
+
+    await syncedPage.click('[data-fellow-nav="mentor"]');
+    await syncedPage.waitForSelector('.fellow-restricted-state .fellow-restricted-actions');
+    const restrictedAudit = await syncedPage.evaluate(() => ({
+        copy: document.querySelector('.fellow-restricted-state p')?.textContent.trim(),
+        links: [...document.querySelectorAll('.fellow-restricted-actions a')].map(link => ({
+            label: link.textContent.trim(),
+            href: link.getAttribute('href'),
+            height: Math.round(link.getBoundingClientRect().height)
+        })),
+        overflow: document.documentElement.scrollWidth > window.innerWidth
+    }));
+    assert.match(restrictedAudit.copy, /Beranda.*Modul Pembelajaran.*Leaderboard.*Pengaturan/);
+    assert.deepEqual(restrictedAudit.links.map(link => ({ label: link.label, href: link.href })), [
+        { label: 'Beranda', href: '#/participant-dashboard' },
+        { label: 'Modul Pembelajaran', href: '#/participant-modules' },
+        { label: 'Leaderboard', href: '#/participant-leaderboard' },
+        { label: 'Pengaturan', href: '#/participant-settings' }
+    ]);
+    assert.equal(restrictedAudit.links.every(link => link.height >= 44), true, 'restricted navigation touch targets');
+    assert.equal(restrictedAudit.overflow, false, 'restricted navigation desktop overflow');
+    const restrictedTargets = [
+        { href: '#/participant-dashboard', selector: '#dashboardModuleGrid' },
+        { href: '#/participant-modules', selector: '.fellow-dashboard[data-fellow-page="modules"]' },
+        { href: '#/participant-leaderboard', selector: '.participant-leaderboard-page' },
+        { href: '#/participant-settings', selector: '.fellow-dashboard .settings-page' }
+    ];
+    for (const [index, target] of restrictedTargets.entries()) {
+        await syncedPage.click(`.fellow-restricted-actions a[href="${target.href}"]`);
+        await syncedPage.waitForSelector(target.selector, { timeout: 15000 });
+        if (index < restrictedTargets.length - 1) {
+            await syncedPage.evaluate(() => { window.location.hash = '/participant-mentor'; });
+            await syncedPage.waitForSelector('.fellow-restricted-actions', { timeout: 15000 });
+        }
+    }
+
+    await syncedPage.setViewport({ width: 375, height: 812, deviceScaleFactor: 1 });
+
+    mockedProgressRows = canonicalProgressRows;
+    await syncedPage.evaluate(() => {
+        Object.keys(localStorage)
+            .filter(key => key.startsWith('heraiMathLearningSubmodule'))
+            .forEach(key => localStorage.removeItem(key));
+    });
+    await syncedPage.goto(`${baseUrl}/#/participant-ai-lab-math`);
+    await syncedPage.waitForFunction(() => (
+        document.querySelector('[data-math-overview-state]')?.dataset.mathOverviewState === 'ready'
+        && document.querySelector('[data-math-overview-side-progress]')?.textContent.trim() === '100%'
+    ), { timeout: 15000 });
+    const overviewAudit = await syncedPage.evaluate(() => ({
+        progress: document.querySelector('[data-math-overview-progress]')?.textContent.trim(),
+        sideProgress: document.querySelector('[data-math-overview-side-progress]')?.textContent.trim(),
+        completed: document.querySelector('[data-math-overview-completed]')?.textContent.trim(),
+        total: document.querySelector('[data-math-overview-total]')?.textContent.trim(),
+        submodules: document.querySelector('[data-math-overview-submodules]')?.textContent.trim(),
+        topics: document.querySelector('[data-math-overview-topics]')?.textContent.trim(),
+        status: document.querySelector('[data-math-overview-status]')?.textContent.trim(),
+        ariaBusy: document.querySelector('[data-math-overview-state]')?.getAttribute('aria-busy'),
+        retryHidden: document.querySelector('[data-math-overview-retry]')?.hidden,
+        completedCards: document.querySelectorAll('[data-math-submodule].done').length,
+        progressBadges: document.querySelectorAll('[data-math-submodule-progress]').length,
+        mobileHeaderPosition: getComputedStyle(document.querySelector('.module-topbar')).position,
+        overflow: document.documentElement.scrollWidth > window.innerWidth
+    }));
+    assert.deepEqual(overviewAudit, {
+        progress: '100%',
+        sideProgress: '100%',
+        completed: '89',
+        total: '89',
+        submodules: '7',
+        topics: '54',
+        status: 'Progres terbaru sudah tersinkron dengan akun peserta.',
+        ariaBusy: 'false',
+        retryHidden: true,
+        completedCards: 7,
+        progressBadges: 7,
+        mobileHeaderPosition: 'relative',
+        overflow: false
+    });
+
+    await syncedPage.evaluate(() => {
+        const key = 'heraiMathLearningSubmodule01';
+        const state = JSON.parse(localStorage.getItem(key) || '{}');
+        state.completed = (state.completed || []).filter(id => id !== 'info');
+        localStorage.setItem(key, JSON.stringify(state));
+    });
+    delayNextMathShell = true;
+    await syncedPage.evaluate(route => { window.location.hash = route; }, registeredRoutes[0].route);
+    await syncedPage.waitForSelector('[data-route-loading].is-visible', { timeout: 5000 });
+    assert.equal(await syncedPage.$eval('[data-route-loading]', loader => loader.getAttribute('role')), 'status');
+    await syncedPage.waitForFunction(expected => (
+        document.querySelector('[data-math-learning-breadcrumb]')?.textContent.trim() === expected.short
+        && document.querySelector('#mathLearningRoot')?.dataset.mathContentType === expected.type
+        && Boolean(document.querySelector('.math-learning-next-link'))
+    ), { timeout: 15000 }, registeredRoutes[0]);
+    assert.equal(await syncedPage.$('[data-route-loading]'), null);
+
+    delayNextProgressSave = true;
+    await syncedPage.click('.math-learning-next-link');
+    await syncedPage.waitForFunction(() => (
+        document.querySelector('.math-learning-next-link')?.classList.contains('is-loading')
+        && document.querySelector('.math-learning-next-link')?.getAttribute('aria-busy') === 'true'
+    ));
+    await syncedPage.waitForFunction(expected => (
+        document.querySelector('[data-math-learning-breadcrumb]')?.textContent.trim() === expected.short
+    ), { timeout: 15000 }, registeredRoutes[1]);
 
     await syncedPage.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
     await syncedPage.evaluate(route => { window.location.hash = route; }, practiceRoute);
