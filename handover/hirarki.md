@@ -102,5 +102,6 @@ dan diskusi committed lokal pada `5a8998c`; existing GAS deployment sudah exact
 rejection, 90 canonical progress IDs completed, 7 exact 8-answer practice read-back,
 14 unique discussion prompts, serta tujuh score kuis dan aggregate 100. Satu invalid
 `topic-01` row dari stale-backend preflight tetap menjadi residue QA non-canonical.
-Readiness browser 01–07 lulus untuk 89 route dan 210 blok visual/interaktif. Semua
-route Math tetap locked pada hostname non-local sampai activation eksplisit.
+Readiness browser 01–07 lulus untuk 89 route dan 210 blok visual/interaktif. Source
+lokal sekarang mengaktifkan `releasedSubmodules` 01–07 untuk release frontend penuh;
+production tetap locked sampai commit aktivasi tersebut benar-benar di-push/deploy.

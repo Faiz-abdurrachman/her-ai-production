@@ -133,6 +133,10 @@ try {
         await page.waitForSelector('#mathLearningRoot .math-learning-lesson-hero h1', { timeout: 15000 });
         assert.equal(await page.$('#mathLearningRoot .math-learning-error'), null, route);
     }
+    await page.waitForFunction(() => (
+        document.querySelector('[data-math-learning-breadcrumb]')?.textContent.trim() === 'Uncertainty'
+        && Boolean(document.querySelector('[data-mark-complete]'))
+    ), { timeout: 15000 });
     await page.click('[data-mark-complete]');
     await page.waitForFunction(() => document.querySelector('[data-mark-complete]')?.textContent.includes('Coba sinkronkan'));
     const offlineState = await page.evaluate(() => JSON.parse(
@@ -191,7 +195,7 @@ try {
         }));
     });
     await syncedPage.setRequestInterception(true);
-    syncedPage.on('request', request => {
+    syncedPage.on('request', async request => {
         if (request.url() === `${baseUrl}/__gas` && request.method() === 'POST') {
             const payload = JSON.parse(request.postData() || '{}');
             if (payload.action === 'saveParticipantProgress') savedPayloads.push(payload);
@@ -248,14 +252,14 @@ try {
                     discussion
                 };
             }
-            request.respond({
+            await request.respond({
                 status: 200,
                 contentType: 'application/json',
                 body: JSON.stringify(responseBody)
             });
             return;
         }
-        request.continue();
+        await request.continue();
     });
     await syncedPage.goto(`${baseUrl}/#${routes.at(-1)}`);
     try {
@@ -570,9 +574,18 @@ try {
                 const promptId = `discussion-${candidate.id}-${promptNumber}`;
                 await syncedPage.type(`[data-discussion-prompt="${promptId}"] textarea`, `Respons kandidat ${promptId}`);
                 await syncedPage.click(`[data-discussion-prompt="${promptId}"] button[type="submit"]`);
-                await syncedPage.waitForFunction(id => /dikonfirmasi oleh server/i.test(
-                    document.querySelector(`[data-discussion-prompt="${id}"] [data-discussion-status]`)?.textContent || ''
-                ), {}, promptId);
+                try {
+                    await syncedPage.waitForFunction(id => /dikonfirmasi oleh server/i.test(
+                        document.querySelector(`[data-discussion-prompt="${id}"] [data-discussion-status]`)?.textContent || ''
+                    ), { timeout: 45000 }, promptId);
+                } catch (error) {
+                    const diagnostic = await syncedPage.evaluate(id => ({
+                        status: document.querySelector(`[data-discussion-prompt="${id}"] [data-discussion-status]`)?.textContent || '',
+                        buttonDisabled: document.querySelector(`[data-discussion-prompt="${id}"] button[type="submit"]`)?.disabled,
+                        hash: window.location.hash
+                    }), promptId);
+                    throw new Error(`Discussion acknowledgment timeout for ${promptId}: ${JSON.stringify({ diagnostic, failedLocalRequests, badLocalResponses })}`, { cause: error });
+                }
             }
             await syncedPage.waitForFunction(() => /progres akun sudah dikonfirmasi/i.test(document.querySelector('[data-discussion-overall]')?.textContent || ''));
             assert.deepEqual(discussionPayloads.slice(-2).map(payload => payload.prompt), [
@@ -628,6 +641,12 @@ try {
         assert.equal(await syncedPage.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${entry.route}: 200% text overflow`);
         await syncedPage.evaluate(() => { document.documentElement.style.fontSize = ''; });
     }
+    await syncedPage.waitForFunction(() => {
+        const button = document.querySelector('.fellow-menu-toggle');
+        if (!button) return false;
+        const rect = button.getBoundingClientRect();
+        return rect.width >= 44 && rect.height >= 44;
+    }, { timeout: 15000 });
     const mobileMenuSize = await syncedPage.$eval('.fellow-menu-toggle', button => {
         const rect = button.getBoundingClientRect();
         return { width: rect.width, height: rect.height };

@@ -23,7 +23,7 @@ window.switchCvLocalTab = function(el, mode) {
 
 const MATH_RELEASE_CONFIG = Object.freeze({
     localPreviewEnabled: true,
-    releasedSubmodules: Object.freeze([]),
+    releasedSubmodules: Object.freeze(['01', '02', '03', '04', '05', '06', '07']),
     overviewPage: "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/overview.html",
     lessonPage: "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/01-kenapa-ai-butuh-matematika/materi.html",
     lockedPage: "/pages/frontend/fellow-dashboard/under-development.html"

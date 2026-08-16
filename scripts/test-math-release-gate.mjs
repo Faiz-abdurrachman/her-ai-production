@@ -41,12 +41,35 @@ assert.equal(router.getMathRoute('/participant-ai-lab-math'), overviewPage);
 for (const route of canonicalRoutes) assert.equal(router.getMathRoute(route), previewLessonPage);
 
 context.window.location.hostname = 'her-ai.data-sorcerers.com';
-assert.equal(router.getMathRoute('/participant-ai-lab-math'), lockedPage);
-for (const route of canonicalRoutes) assert.equal(router.getMathRoute(route), lockedPage);
+assert.equal(router.getMathRoute('/participant-ai-lab-math'), overviewPage);
+for (const route of canonicalRoutes) {
+    const resolved = router.getMathRoute(route);
+    assert.equal(resolved, previewLessonPage, `${route} must resolve in the full release source.`);
+    assert.equal(existsSync(resolve(repositoryRoot, resolved.slice(1))), true, `${route} release shell must exist.`);
+}
 assert.equal(router.getMathRoute('/participant-dashboard'), null);
 
+const fullReleaseLiteral = "releasedSubmodules: Object.freeze(['01', '02', '03', '04', '05', '06', '07'])";
+const lockedSource = source.replace(
+    fullReleaseLiteral,
+    'releasedSubmodules: Object.freeze([])'
+);
+assert.notEqual(lockedSource, source, 'Locked rollback fixture must patch the current full-release source.');
+const lockedContext = {
+    ...context,
+    window: {
+        ...context.window,
+        location: { hostname: 'her-ai.data-sorcerers.com' }
+    }
+};
+lockedContext.window.window = lockedContext.window;
+vm.createContext(lockedContext);
+vm.runInContext(`${lockedSource}\n;globalThis.__testedRouter = router;`, lockedContext, { filename: 'js/router.js' });
+assert.equal(lockedContext.__testedRouter.getMathRoute('/participant-ai-lab-math'), lockedPage);
+for (const route of canonicalRoutes) assert.equal(lockedContext.__testedRouter.getMathRoute(route), lockedPage);
+
 const releaseSource = source.replace(
-    'releasedSubmodules: Object.freeze([])',
+    fullReleaseLiteral,
     "releasedSubmodules: Object.freeze(['01', '02'])"
 );
 assert.notEqual(releaseSource, source, 'Release config fixture must patch the current router source.');
@@ -71,26 +94,4 @@ assert.equal(
     'Released submodules must resolve to a tracked HTML shell that exists.'
 );
 
-const fullReleaseSource = source.replace(
-    'releasedSubmodules: Object.freeze([])',
-    "releasedSubmodules: Object.freeze(['01', '02', '03', '04', '05', '06', '07'])"
-);
-assert.notEqual(fullReleaseSource, source, 'Full release fixture must patch the current router source.');
-const fullReleaseContext = {
-    ...context,
-    window: {
-        ...context.window,
-        location: { hostname: 'her-ai.data-sorcerers.com' }
-    }
-};
-fullReleaseContext.window.window = fullReleaseContext.window;
-vm.createContext(fullReleaseContext);
-vm.runInContext(`${fullReleaseSource}\n;globalThis.__testedRouter = router;`, fullReleaseContext, { filename: 'js/router.js' });
-assert.equal(fullReleaseContext.__testedRouter.getMathRoute('/participant-ai-lab-math'), overviewPage);
-for (const route of canonicalRoutes) {
-    const resolved = fullReleaseContext.__testedRouter.getMathRoute(route);
-    assert.equal(resolved, previewLessonPage, `${route} must resolve after full release activation`);
-    assert.equal(existsSync(resolve(repositoryRoot, resolved.slice(1))), true, `${route} release shell must exist`);
-}
-
-console.log('Math release gate valid: localhost previews 01–07; non-local locks unreleased content; partial release isolates 01–02; simulated full 01–07 activation resolves every canonical route to the shared lesson shell.');
+console.log('Math release gate valid: source activates 01–07 on localhost and production host; locked rollback closes all Math routes; partial rollback isolates 01–02; every released canonical route resolves to the tracked shared lesson shell.');
