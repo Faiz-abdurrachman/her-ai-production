@@ -96,6 +96,6 @@ tidak memberi poin.
 ## Release boundary
 
 Generic progress marker tetap bukan pengganti persistence body. Kontrak khusus latihan
-dan diskusi sekarang diimplementasikan pada source lokal, tetapi belum committed,
-deployed, atau diuji terhadap backend terotorisasi. Semua route Math tetap locked pada
-hostname non-local sampai activation eksplisit.
+dan diskusi sudah committed lokal pada `5a8998c`, tetapi belum pushed, deployed, atau
+diuji terhadap backend terotorisasi. Semua route Math tetap locked pada hostname
+non-local sampai activation eksplisit.
