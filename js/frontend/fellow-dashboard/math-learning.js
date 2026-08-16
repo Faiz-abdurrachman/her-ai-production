@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    const RUNTIME_VERSION = '20260810-learner-facing-v3';
+    const RUNTIME_VERSION = '20260816-release-safety-v1';
     const routeFor = (base, suffix) => suffix ? `${base}/${suffix}` : base;
     const createSubmodule = config => Object.freeze({
         ...config,
@@ -57,11 +57,11 @@
         createSubmodule({
             id: '03', slug: 'statistics-for-ai',
             title: 'Statistics for AI: Membaca Pola dan Variasi Data',
-            sourceBase: '/materi2/math%20for%20ai/statistik/',
+            sourceBase: '/materi2/math%20for%20ai/03-statistics-for-ai/',
             routeBase: '#/participant-ai-lab-math/statistics-for-ai',
             storageKey: 'heraiMathLearningSubmodule03', topicCount: 8,
             items: [
-                { id: 'info', slug: '', short: 'Ikhtisar', title: 'Statistics for AI: Membaca Pola dan Variasi Data', file: 'final/00-informasi-submodul.md', type: 'info', icon: 'fa-chart-pie' },
+                { id: 'info', slug: '', short: 'Ikhtisar', title: 'Statistics for AI: Membaca Pola dan Variasi Data', file: '00-informasi-submodul.md', type: 'info', icon: 'fa-chart-pie' },
                 { id: 'topic-01', slug: 'dari-matrix-ke-dataset-statistik', short: 'Matrix ke dataset', title: 'Dari Matrix ke Dataset Statistik', file: '01-dari-matrix-ke-dataset-statistik.md', type: 'topic', icon: 'fa-table' },
                 { id: 'topic-02', slug: 'mean-median-mode', short: 'Mean, median, mode', title: 'Mean, Median, Mode: Membaca Pusat Data dengan Tepat', file: '02-mean-median-mode.md', type: 'topic', icon: 'fa-bullseye' },
                 { id: 'topic-03', slug: 'range-variance-standard-deviation', short: 'Range, variance, SD', title: 'Range, Variance, Standard Deviation: Membaca Seberapa Menyebar Data', file: '03-range-variance-standard-deviation.md', type: 'topic', icon: 'fa-arrows-left-right' },
@@ -70,10 +70,10 @@
                 { id: 'topic-06', slug: 'outlier-sinyal-untuk-diperiksa', short: 'Outlier', title: 'Outlier: Sinyal untuk Diperiksa', file: '06-outlier-sinyal-untuk-diperiksa.md', type: 'topic', icon: 'fa-circle-exclamation' },
                 { id: 'topic-07', slug: 'covariance-correlation-association', short: 'Covariance, correlation', title: 'Covariance, Correlation, dan Association', file: '07-covariance-correlation-association.md', type: 'topic', icon: 'fa-chart-line' },
                 { id: 'topic-08', slug: 'data-quality-untuk-ai', short: 'Data quality', title: 'Data Quality untuk AI', file: '08-data-quality-untuk-ai.md', type: 'topic', icon: 'fa-broom' },
-                { id: 'practice', slug: 'latihan', short: 'Latihan', title: 'Latihan Submodul 03', file: 'final/latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
-                { id: 'quiz', slug: 'kuis', short: 'Kuis', title: 'Kuis Submodul 03', file: 'final/kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
-                { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 03', file: 'final/diskusi.md', type: 'discussion', icon: 'fa-comments' },
-                { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 03', file: 'final/referensi.md', type: 'references', icon: 'fa-book-bookmark' }
+                { id: 'practice', slug: 'latihan', short: 'Latihan', title: 'Latihan Submodul 03', file: 'latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
+                { id: 'quiz', slug: 'kuis', short: 'Kuis', title: 'Kuis Submodul 03', file: 'kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
+                { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 03', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
+                { id: 'references', slug: 'referensi', short: 'Referensi', title: 'Referensi Submodul 03', file: 'referensi.md', type: 'references', icon: 'fa-book-bookmark' }
             ]
         }),
         createSubmodule({
@@ -101,19 +101,19 @@
         createSubmodule({
             id: '05', slug: 'calculus',
             title: 'Calculus: Perubahan, Turunan, dan Gradient',
-            sourceBase: '/materi2/math%20for%20ai/calculus/final/',
+            sourceBase: '/materi2/math%20for%20ai/05-calculus/',
             routeBase: '#/participant-ai-lab-math/calculus',
             storageKey: 'heraiMathLearningSubmodule05', topicCount: 8,
             items: [
                 { id: 'info', slug: '', short: 'Ikhtisar', title: 'Calculus: Perubahan, Turunan, dan Gradient', file: '00-informasi-submodul.md', type: 'info', icon: 'fa-compass' },
-                { id: 'topic-01', slug: 'function-dan-graph-aktivasi-kembali', short: 'Function & graph', title: 'Function dan Graph: Aktivasi Kembali', file: 'materi/01-function-dan-graph-aktivasi-kembali.md', type: 'topic', icon: 'fa-arrow-right-arrow-left' },
-                { id: 'topic-02', slug: 'slope-dan-rate-of-change', short: 'Slope & rate change', title: 'Slope dan Rate of Change', file: 'materi/02-slope-dan-rate-of-change.md', type: 'topic', icon: 'fa-chart-area' },
-                { id: 'topic-03', slug: 'derivative-sebagai-local-change', short: 'Local change', title: 'Derivative sebagai Local Change', file: 'materi/03-derivative-sebagai-local-change.md', type: 'topic', icon: 'fa-microscope' },
-                { id: 'topic-04', slug: 'menghitung-derivative-sederhana', short: 'Simple derivative', title: 'Menghitung Derivative Sederhana', file: 'materi/04-menghitung-derivative-sederhana.md', type: 'topic', icon: 'fa-calculator' },
-                { id: 'topic-05', slug: 'partial-derivative', short: 'Partial derivative', title: 'Partial Derivative', file: 'materi/05-partial-derivative.md', type: 'topic', icon: 'fa-layer-group' },
-                { id: 'topic-06', slug: 'gradient-sebagai-vector-partial-derivatives', short: 'Gradient vector', title: 'Gradient sebagai Vector Partial Derivatives', file: 'materi/06-gradient-sebagai-vector-partial-derivatives.md', type: 'topic', icon: 'fa-arrows-to-circle' },
-                { id: 'topic-07', slug: 'chain-rule-dan-computational-graph', short: 'Chain rule', title: 'Chain Rule dan Computational Graph', file: 'materi/07-chain-rule-dan-computational-graph.md', type: 'topic', icon: 'fa-diagram-project' },
-                { id: 'topic-08', slug: 'loss-landscape-dan-bridge-ke-optimization', short: 'Loss landscape', title: 'Loss Landscape dan Bridge ke Optimization', file: 'materi/08-loss-landscape-dan-bridge-ke-optimization.md', type: 'topic', icon: 'fa-mountain' },
+                { id: 'topic-01', slug: 'function-dan-graph-aktivasi-kembali', short: 'Function & graph', title: 'Function dan Graph: Aktivasi Kembali', file: '01-function-dan-graph-aktivasi-kembali.md', type: 'topic', icon: 'fa-arrow-right-arrow-left' },
+                { id: 'topic-02', slug: 'slope-dan-rate-of-change', short: 'Slope & rate change', title: 'Slope dan Rate of Change', file: '02-slope-dan-rate-of-change.md', type: 'topic', icon: 'fa-chart-area' },
+                { id: 'topic-03', slug: 'derivative-sebagai-local-change', short: 'Local change', title: 'Derivative sebagai Local Change', file: '03-derivative-sebagai-local-change.md', type: 'topic', icon: 'fa-microscope' },
+                { id: 'topic-04', slug: 'menghitung-derivative-sederhana', short: 'Simple derivative', title: 'Menghitung Derivative Sederhana', file: '04-menghitung-derivative-sederhana.md', type: 'topic', icon: 'fa-calculator' },
+                { id: 'topic-05', slug: 'partial-derivative', short: 'Partial derivative', title: 'Partial Derivative', file: '05-partial-derivative.md', type: 'topic', icon: 'fa-layer-group' },
+                { id: 'topic-06', slug: 'gradient-sebagai-vector-partial-derivatives', short: 'Gradient vector', title: 'Gradient sebagai Vector Partial Derivatives', file: '06-gradient-sebagai-vector-partial-derivatives.md', type: 'topic', icon: 'fa-arrows-to-circle' },
+                { id: 'topic-07', slug: 'chain-rule-dan-computational-graph', short: 'Chain rule', title: 'Chain Rule dan Computational Graph', file: '07-chain-rule-dan-computational-graph.md', type: 'topic', icon: 'fa-diagram-project' },
+                { id: 'topic-08', slug: 'loss-landscape-dan-bridge-ke-optimization', short: 'Loss landscape', title: 'Loss Landscape dan Bridge ke Optimization', file: '08-loss-landscape-dan-bridge-ke-optimization.md', type: 'topic', icon: 'fa-mountain' },
                 { id: 'practice', slug: 'latihan', short: 'Latihan', title: 'Latihan Submodul 05', file: 'latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
                 { id: 'quiz', slug: 'kuis', short: 'Kuis', title: 'Kuis Submodul 05', file: 'kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
                 { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 05', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
@@ -123,19 +123,19 @@
         createSubmodule({
             id: '06', slug: 'optimization',
             title: 'Optimization: Dari Loss ke Parameter yang Lebih Baik',
-            sourceBase: '/materi2/math%20for%20ai/optimization/final/',
+            sourceBase: '/materi2/math%20for%20ai/06-optimization/',
             routeBase: '#/participant-ai-lab-math/optimization',
             storageKey: 'heraiMathLearningSubmodule06', topicCount: 8,
             items: [
                 { id: 'info', slug: '', short: 'Ikhtisar', title: 'Optimization: Dari Loss ke Parameter yang Lebih Baik', file: '00-informasi-submodul.md', type: 'info', icon: 'fa-bullseye' },
-                { id: 'topic-01', slug: 'loss-objective-evaluation-metric', short: 'Loss & metric', title: 'Loss, Objective, dan Evaluation Metric', file: 'materi/01-loss-objective-evaluation-metric.md', type: 'topic', icon: 'fa-scale-balanced' },
-                { id: 'topic-02', slug: 'minimization-dan-landscape', short: 'Minimization & landscape', title: 'Minimization dan Landscape', file: 'materi/02-minimization-dan-landscape.md', type: 'topic', icon: 'fa-mountain' },
-                { id: 'topic-03', slug: 'gradient-descent-update-rule', short: 'Gradient Descent', title: 'Gradient Descent Update Rule', file: 'materi/03-gradient-descent-update-rule.md', type: 'topic', icon: 'fa-arrow-turn-down' },
-                { id: 'topic-04', slug: 'learning-rate', short: 'Learning rate', title: 'Learning Rate', file: 'materi/04-learning-rate.md', type: 'topic', icon: 'fa-gauge-high' },
-                { id: 'topic-05', slug: 'beberapa-iterasi-sampai-loss-berubah', short: 'Iteration trace', title: 'Beberapa Iterasi Sampai Loss Berubah', file: 'materi/05-beberapa-iterasi-sampai-loss-berubah.md', type: 'topic', icon: 'fa-rotate-right' },
-                { id: 'topic-06', slug: 'batch-minibatch-stochastic-gradient', short: 'Batch & stochastic', title: 'Batch, Minibatch, dan Stochastic Gradient', file: 'materi/06-batch-minibatch-stochastic-gradient.md', type: 'topic', icon: 'fa-layer-group' },
-                { id: 'topic-07', slug: 'momentum-dan-adam-peta-konsep', short: 'Momentum & Adam', title: 'Momentum dan Adam: Peta Konsep', file: 'materi/07-momentum-dan-adam-peta-konsep.md', type: 'topic', icon: 'fa-forward-fast' },
-                { id: 'topic-08', slug: 'regularization-generalization-boundary', short: 'Regularization', title: 'Regularization, Generalization, dan Boundary Modul', file: 'materi/08-regularization-generalization-boundary-modul.md', type: 'topic', icon: 'fa-shield-halved' },
+                { id: 'topic-01', slug: 'loss-objective-evaluation-metric', short: 'Loss & metric', title: 'Loss, Objective, dan Evaluation Metric', file: '01-loss-objective-evaluation-metric.md', type: 'topic', icon: 'fa-scale-balanced' },
+                { id: 'topic-02', slug: 'minimization-dan-landscape', short: 'Minimization & landscape', title: 'Minimization dan Landscape', file: '02-minimization-dan-landscape.md', type: 'topic', icon: 'fa-mountain' },
+                { id: 'topic-03', slug: 'gradient-descent-update-rule', short: 'Gradient Descent', title: 'Gradient Descent Update Rule', file: '03-gradient-descent-update-rule.md', type: 'topic', icon: 'fa-arrow-turn-down' },
+                { id: 'topic-04', slug: 'learning-rate', short: 'Learning rate', title: 'Learning Rate', file: '04-learning-rate.md', type: 'topic', icon: 'fa-gauge-high' },
+                { id: 'topic-05', slug: 'beberapa-iterasi-sampai-loss-berubah', short: 'Iteration trace', title: 'Beberapa Iterasi Sampai Loss Berubah', file: '05-beberapa-iterasi-sampai-loss-berubah.md', type: 'topic', icon: 'fa-rotate-right' },
+                { id: 'topic-06', slug: 'batch-minibatch-stochastic-gradient', short: 'Batch & stochastic', title: 'Batch, Minibatch, dan Stochastic Gradient', file: '06-batch-minibatch-stochastic-gradient.md', type: 'topic', icon: 'fa-layer-group' },
+                { id: 'topic-07', slug: 'momentum-dan-adam-peta-konsep', short: 'Momentum & Adam', title: 'Momentum dan Adam: Peta Konsep', file: '07-momentum-dan-adam-peta-konsep.md', type: 'topic', icon: 'fa-forward-fast' },
+                { id: 'topic-08', slug: 'regularization-generalization-boundary', short: 'Regularization', title: 'Regularization, Generalization, dan Boundary Modul', file: '08-regularization-generalization-boundary-modul.md', type: 'topic', icon: 'fa-shield-halved' },
                 { id: 'practice', slug: 'latihan', short: 'Latihan', title: 'Latihan Submodul 06', file: 'latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
                 { id: 'quiz', slug: 'kuis', short: 'Kuis', title: 'Kuis Submodul 06', file: 'kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
                 { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 06', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
@@ -145,18 +145,18 @@
         createSubmodule({
             id: '07', slug: 'integrated-case-study',
             title: 'Integrated Case Study: Math for AI di HerAI',
-            sourceBase: '/materi2/math%20for%20ai/integral/herai-submodule-07-integrated-case-study-final/',
+            sourceBase: '/materi2/math%20for%20ai/07-case-study-herai/',
             routeBase: '#/participant-ai-lab-math/integrated-case-study',
             storageKey: 'heraiMathLearningSubmodule07', topicCount: 7,
             items: [
                 { id: 'info', slug: '', short: 'Ikhtisar', title: 'Integrated Case Study: Math for AI di HerAI', file: '00-informasi-submodul.md', type: 'info', icon: 'fa-diagram-project' },
-                { id: 'topic-01', slug: 'problem-definition-data-contract', short: 'Problem & contract', title: 'Problem Definition dan Data Contract', file: 'materi/01-problem-definition-data-contract.md', type: 'topic', icon: 'fa-file-contract' },
-                { id: 'topic-02', slug: 'representation-dan-matching', short: 'Representation & matching', title: 'Representation dan Matching', file: 'materi/02-representation-dan-matching.md', type: 'topic', icon: 'fa-vector-square' },
-                { id: 'topic-03', slug: 'data-diagnostics', short: 'Data diagnostics', title: 'Data Diagnostics', file: 'materi/03-data-diagnostics.md', type: 'topic', icon: 'fa-stethoscope' },
-                { id: 'topic-04', slug: 'uncertainty', short: 'Uncertainty', title: 'Uncertainty', file: 'materi/04-uncertainty.md', type: 'topic', icon: 'fa-dice-d20' },
-                { id: 'topic-05', slug: 'prediction-score-dan-loss', short: 'Score & loss', title: 'Prediction Score dan Loss', file: 'materi/05-prediction-score-dan-loss.md', type: 'topic', icon: 'fa-scale-balanced' },
-                { id: 'topic-06', slug: 'gradient-dan-parameter-update', short: 'Gradient & update', title: 'Gradient dan Parameter Update', file: 'materi/06-gradient-dan-parameter-update.md', type: 'topic', icon: 'fa-arrow-turn-down' },
-                { id: 'topic-07', slug: 'evaluation-failure-modes-dan-what-comes-next', short: 'Evaluation & future', title: 'Evaluation, Failure Modes, dan What Comes Next', file: 'materi/07-evaluation-failure-modes-dan-what-comes-next.md', type: 'topic', icon: 'fa-clipboard-list' },
+                { id: 'topic-01', slug: 'problem-definition-data-contract', short: 'Problem & contract', title: 'Problem Definition dan Data Contract', file: '01-problem-definition-data-contract.md', type: 'topic', icon: 'fa-file-contract' },
+                { id: 'topic-02', slug: 'representation-dan-matching', short: 'Representation & matching', title: 'Representation dan Matching', file: '02-representation-dan-matching.md', type: 'topic', icon: 'fa-vector-square' },
+                { id: 'topic-03', slug: 'data-diagnostics', short: 'Data diagnostics', title: 'Data Diagnostics', file: '03-data-diagnostics.md', type: 'topic', icon: 'fa-stethoscope' },
+                { id: 'topic-04', slug: 'uncertainty', short: 'Uncertainty', title: 'Uncertainty', file: '04-uncertainty.md', type: 'topic', icon: 'fa-dice-d20' },
+                { id: 'topic-05', slug: 'prediction-score-dan-loss', short: 'Score & loss', title: 'Prediction Score dan Loss', file: '05-prediction-score-dan-loss.md', type: 'topic', icon: 'fa-scale-balanced' },
+                { id: 'topic-06', slug: 'gradient-dan-parameter-update', short: 'Gradient & update', title: 'Gradient dan Parameter Update', file: '06-gradient-dan-parameter-update.md', type: 'topic', icon: 'fa-arrow-turn-down' },
+                { id: 'topic-07', slug: 'evaluation-failure-modes-dan-what-comes-next', short: 'Evaluation & future', title: 'Evaluation, Failure Modes, dan What Comes Next', file: '07-evaluation-failure-modes-dan-what-comes-next.md', type: 'topic', icon: 'fa-clipboard-list' },
                 { id: 'practice', slug: 'latihan', short: 'Latihan', title: 'Latihan Submodul 07', file: 'latihan.md', type: 'practice', icon: 'fa-pen-ruler' },
                 { id: 'quiz', slug: 'kuis', short: 'Kuis', title: 'Kuis Submodul 07', file: 'kuis.md', type: 'quiz', icon: 'fa-clipboard-check' },
                 { id: 'discussion', slug: 'diskusi', short: 'Diskusi', title: 'Diskusi Submodul 07', file: 'diskusi.md', type: 'discussion', icon: 'fa-comments' },
@@ -288,10 +288,13 @@
         return submodule && item ? { submodule, item } : null;
     }
 
-    function getNumericChapterId(submodule, item) {
-        const subNum = parseInt(submodule.id, 10) || 0;
-        const itemIndex = submodule.items.findIndex(i => i.id === item.id);
-        return (subNum * 100) + itemIndex + 1;
+    function getProgressRecordId(submodule, item) {
+        if (item.type === 'topic') {
+            const subNum = parseInt(submodule.id, 10) || 0;
+            const topicNum = parseInt(String(item.id).replace('topic-', ''), 10) || 0;
+            return (subNum * 100) + topicNum;
+        }
+        return `${item.type}-${submodule.id}`;
     }
 
     let _serverSyncDone = false;
@@ -305,9 +308,13 @@
                     const state = readState(sub);
                     let changed = false;
                     sub.items.forEach(item => {
-                        const chId = String(getNumericChapterId(sub, item));
+                        const chId = String(getProgressRecordId(sub, item));
                         if (serverCompleted.includes(chId) && !state.completed.includes(item.id)) {
                             state.completed.push(item.id);
+                            changed = true;
+                        }
+                        if (serverCompleted.includes(chId) && state.pending.includes(item.id)) {
+                            state.pending = state.pending.filter(id => id !== item.id);
                             changed = true;
                         }
                     });
@@ -323,31 +330,53 @@
     function readState(submodule) {
         try {
             const value = JSON.parse(localStorage.getItem(submodule.storageKey) || '{}');
-            return { completed: Array.isArray(value.completed) ? value.completed : [] };
+            return {
+                completed: Array.isArray(value.completed) ? value.completed : [],
+                pending: Array.isArray(value.pending) ? value.pending : []
+            };
         } catch (error) {
-            return { completed: [] };
+            return { completed: [], pending: [] };
         }
     }
 
     function writeState(submodule, state) {
-        localStorage.setItem(submodule.storageKey, JSON.stringify({ completed: [...new Set(state.completed)] }));
+        localStorage.setItem(submodule.storageKey, JSON.stringify({
+            completed: [...new Set(state.completed)],
+            pending: [...new Set(state.pending || [])]
+        }));
     }
 
     async function markComplete(submodule, id) {
         const state = readState(submodule);
         if (!state.completed.includes(id)) {
             state.completed.push(id);
-            writeState(submodule, state);
-            
-            if (window.saveChapterProgress) {
-                const item = submodule.items.find(i => i.id === id);
-                if (item) {
-                    const chapterId = getNumericChapterId(submodule, item);
-                    await window.saveChapterProgress('math-for-ai', chapterId, 'completed');
-                }
-            }
         }
-        return state;
+        const item = submodule.items.find(entry => entry.id === id);
+        if (!item || !window.saveChapterProgress) {
+            if (!state.pending.includes(id)) state.pending.push(id);
+            writeState(submodule, state);
+            return { state, synced: false, message: 'Status tersimpan di perangkat, tetapi belum tersinkron ke akun.' };
+        }
+
+        if (!state.pending.includes(id)) state.pending.push(id);
+        writeState(submodule, state);
+        const result = await window.saveChapterProgress(
+            'math-for-ai',
+            getProgressRecordId(submodule, item),
+            'completed'
+        );
+        if (result?.status === 'success') {
+            state.pending = state.pending.filter(pendingId => pendingId !== id);
+            writeState(submodule, state);
+            return { state, synced: true, message: 'Status tersimpan dan tersinkron ke akun peserta.' };
+        }
+        return {
+            state,
+            synced: false,
+            message: result?.message
+                ? `Status tersimpan di perangkat, tetapi belum tersinkron: ${result.message}`
+                : 'Status tersimpan di perangkat, tetapi belum tersinkron ke akun.'
+        };
     }
 
     async function renderOverviewProgress() {
@@ -2656,7 +2685,7 @@
 
     async function renderQuiz(markdown, container, submodule) {
         let externalKey = {};
-        if (submodule && (submodule.id === '04' || submodule.id === '05' || submodule.id === '07')) {
+        if (submodule && ['04', '05', '06', '07'].includes(submodule.id)) {
             try {
                 const res = await fetch(submodule.sourceBase + 'kunci-jawaban-rubrik.md', { cache: 'no-store' });
                 if (res.ok) {
@@ -2682,7 +2711,7 @@
         if (!questions.length || questions.some(question => !question.answer || question.options.length !== 4)) {
             throw new Error('Source kuis tidak memiliki question, empat opsi, atau canonical answer key yang lengkap.');
         }
-        container.innerHTML=`<div class="math-learning-quiz-intro">${renderMarkdown(intro,[])}</div><p class="math-learning-preview-note"><strong>Penyimpanan hasil:</strong> hasil pemeriksaan pada halaman ini belum tersinkron ke akun peserta.</p><form class="math-learning-quiz-list" data-quiz-form>${questions.map(question=>`<fieldset class="math-learning-quiz-card" data-quiz-question="${question.number}" tabindex="-1" aria-labelledby="mathQuizQuestion${question.number}"><legend class="math-learning-visually-hidden">Soal ${question.number}</legend><div class="math-learning-quiz-prompt" id="mathQuizQuestion${question.number}"><span class="math-learning-quiz-number" aria-hidden="true">${String(question.number).padStart(2,'0')}</span><div class="math-learning-quiz-question-copy">${renderMarkdown(removeAndShiftTitle(question.prompt),[])}</div></div><div class="math-learning-quiz-options">${question.options.map(option=>`<label class="math-learning-quiz-option"><input type="radio" name="quiz-${question.number}" value="${option.letter}"><span class="math-learning-quiz-letter" aria-hidden="true">${option.letter}</span><span class="math-learning-quiz-option-copy">${renderMarkdown(option.text,[])}</span></label>`).join('')}</div><div data-quiz-review aria-live="polite"></div></fieldset>`).join('')}<div class="math-learning-button-row math-learning-quiz-actions"><button class="math-learning-action is-primary" type="submit">Periksa jawaban</button><button class="math-learning-action" type="reset">Ulangi kuis</button></div></form>`;
+        container.innerHTML=`<div class="math-learning-quiz-intro">${renderMarkdown(intro,[])}</div><p class="math-learning-preview-note"><strong>Penyimpanan hasil:</strong> skor akan dinyatakan tersinkron hanya setelah server mengonfirmasi penyimpanan.</p><form class="math-learning-quiz-list" data-quiz-form>${questions.map(question=>`<fieldset class="math-learning-quiz-card" data-quiz-question="${question.number}" tabindex="-1" aria-labelledby="mathQuizQuestion${question.number}"><legend class="math-learning-visually-hidden">Soal ${question.number}</legend><div class="math-learning-quiz-prompt" id="mathQuizQuestion${question.number}"><span class="math-learning-quiz-number" aria-hidden="true">${String(question.number).padStart(2,'0')}</span><div class="math-learning-quiz-question-copy">${renderMarkdown(removeAndShiftTitle(question.prompt),[])}</div></div><div class="math-learning-quiz-options">${question.options.map(option=>`<label class="math-learning-quiz-option"><input type="radio" name="quiz-${question.number}" value="${option.letter}"><span class="math-learning-quiz-letter" aria-hidden="true">${option.letter}</span><span class="math-learning-quiz-option-copy">${renderMarkdown(option.text,[])}</span></label>`).join('')}</div><div data-quiz-review aria-live="polite"></div></fieldset>`).join('')}<div class="math-learning-button-row math-learning-quiz-actions"><button class="math-learning-action is-primary" type="submit">Periksa jawaban</button><button class="math-learning-action" type="reset">Ulangi kuis</button></div></form>`;
         const form=container.querySelector('[data-quiz-form]');
         form.addEventListener('submit', async event => {
             event.preventDefault();
@@ -2716,26 +2745,55 @@
             submit.disabled=true;
             
             const scorePercent = Math.round(correct/questions.length*100);
+            let saveResult = { status: 'error', message: 'Penyimpanan akun belum tersedia.' };
+            let aggregateMessage = '';
+            let aggregateNeedsRetry = false;
             if (window.saveChapterProgress) {
-                await window.saveChapterProgress('math-for-ai', `quiz-${submodule.id}`, 'completed', scorePercent);
-                if (submodule.id === '07' && window.getParticipantProgress) {
+                saveResult = await window.saveChapterProgress('math-for-ai', `quiz-${submodule.id}`, 'completed', scorePercent);
+                if (saveResult?.status === 'success' && window.getParticipantProgress) {
                     const progResult = await window.getParticipantProgress('math-for-ai');
                     if (progResult.status === 'success' && Array.isArray(progResult.data)) {
-                        let totalScore = scorePercent;
-                        for (let i = 1; i <= 6; i++) {
-                            const row = progResult.data.find(r => String(r.chapter_id) === `quiz-0${i}`);
-                            if (row && row.score !== undefined && row.score !== null) {
-                                totalScore += Number(row.score);
+                        const quizRows = Array.from({ length: 7 }, (_, index) => {
+                            const quizId = `quiz-${String(index + 1).padStart(2, '0')}`;
+                            return progResult.data.find(row => String(row.chapter_id) === quizId);
+                        });
+                        const allQuizScoresAvailable = quizRows.every(row => (
+                            row && row.score !== undefined && row.score !== null && row.score !== ''
+                        ));
+                        if (allQuizScoresAvailable) {
+                            const totalScore = quizRows.reduce((total, row) => total + Number(row.score), 0);
+                            const averageScore = Math.round(totalScore / quizRows.length);
+                            const aggregateResult = await window.saveChapterProgress('math-for-ai', 'quiz', 'completed', averageScore);
+                            if (aggregateResult?.status !== 'success') {
+                                aggregateMessage = ' Skor submodul tersimpan, tetapi agregat akhir belum tersinkron.';
+                                aggregateNeedsRetry = true;
                             }
+                        } else {
+                            aggregateMessage = ' Rata-rata akhir akan dibuat setelah ketujuh kuis selesai.';
                         }
-                        const averageScore = Math.round(totalScore / 7);
-                        await window.saveChapterProgress('math-for-ai', 'quiz', 'completed', averageScore);
+                    } else {
+                        aggregateMessage = ' Skor submodul tersimpan, tetapi agregat akhir belum dapat diperiksa.';
+                        aggregateNeedsRetry = true;
                     }
                 }
             }
-            
-            window.__aiLabToast?.(`Skor kuis: ${correct}/${questions.length} (${scorePercent}%). Tersimpan ke akun.`, scorePercent>=75?'success':'info');
-            submit.textContent=`Skor ${correct}/${questions.length}`;
+
+            if (saveResult?.status === 'success') {
+                window.__aiLabToast?.(
+                    `Skor kuis: ${correct}/${questions.length} (${scorePercent}%). Tersimpan ke akun.${aggregateMessage}`,
+                    aggregateMessage ? 'info' : (scorePercent>=75?'success':'info')
+                );
+            } else {
+                window.__aiLabToast?.(
+                    `Skor kuis: ${correct}/${questions.length} (${scorePercent}%). Belum tersinkron: ${saveResult?.message || 'server tidak mengonfirmasi penyimpanan.'}`,
+                    'error'
+                );
+            }
+            const persistenceNeedsRetry = saveResult?.status !== 'success' || aggregateNeedsRetry;
+            submit.textContent = persistenceNeedsRetry
+                ? 'Coba sinkronkan lagi'
+                : `Skor ${correct}/${questions.length}`;
+            submit.disabled = !persistenceNeedsRetry;
         });
         form.addEventListener('reset',()=>setTimeout(()=>{
             form.classList.remove('is-reviewed');
@@ -2772,11 +2830,12 @@
 
     function buildRightPanel(submodule, active, state, progress) {
         const complete = state.completed.includes(active.id);
+        const pending = state.pending.includes(active.id);
         return `<section class="module-side-card lesson-progress-card">
             <h2>Progres Submodul</h2>
             <div class="lesson-progress-mini"><b style="--value:${progress}%" data-math-progress-bar></b><strong data-math-progress-text>${progress}%</strong></div>
-            <p>Progres otomatis tersimpan dan tersinkron ke akun peserta.</p>
-            <button type="button" class="math-learning-complete-button ${complete ? 'is-complete' : ''}" data-mark-complete><i class="fas ${complete ? 'fa-circle-check' : 'fa-check'}" aria-hidden="true"></i>${complete ? 'Selesai' : 'Tandai selesai'}</button>
+            <p data-math-sync-copy>${pending ? 'Tersimpan di perangkat; sinkronisasi akun masih tertunda.' : 'Status akun diperbarui setelah server mengonfirmasi penyimpanan.'}</p>
+            <button type="button" class="math-learning-complete-button ${complete ? 'is-complete' : ''}" data-mark-complete><i class="fas ${complete ? 'fa-circle-check' : 'fa-check'}" aria-hidden="true"></i>${pending ? 'Coba sinkronkan' : (complete ? 'Selesai' : 'Tandai selesai')}</button>
         </section>
         <section class="module-side-card lesson-list-card"><h2>Daftar Materi</h2>${buildLessonList(submodule, active, state)}</section>`;
     }
@@ -2797,29 +2856,59 @@
             button.disabled = true;
             button.innerHTML = '<i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i>Menyimpan...';
             
-            const state = await markComplete(submodule, item.id);
-            
+            let completion;
+            try {
+                completion = await markComplete(submodule, item.id);
+            } catch (error) {
+                completion = {
+                    state: readState(submodule),
+                    synced: false,
+                    message: error?.message || 'Status tersimpan di perangkat, tetapi sinkronisasi gagal.'
+                };
+            }
+
             button.classList.add('is-complete');
-            button.innerHTML = '<i class="fas fa-circle-check" aria-hidden="true"></i>Selesai';
+            button.innerHTML = completion.synced
+                ? '<i class="fas fa-circle-check" aria-hidden="true"></i>Selesai'
+                : '<i class="fas fa-cloud-arrow-up" aria-hidden="true"></i>Coba sinkronkan';
             button.disabled = false;
-            
-            const percent = Math.round(state.completed.length / submodule.items.length * 100);
+
+            const percent = Math.round(completion.state.completed.length / submodule.items.length * 100);
             const percentText = page.querySelector('[data-math-progress-text]');
             const percentBar = page.querySelector('[data-math-progress-bar]');
+            const syncCopy = page.querySelector('[data-math-sync-copy]');
             if (percentText) percentText.textContent = `${percent}%`;
             if (percentBar) percentBar.style.setProperty('--value', `${percent}%`);
+            if (syncCopy) {
+                syncCopy.textContent = completion.synced
+                    ? 'Status akun sudah dikonfirmasi oleh server.'
+                    : 'Tersimpan di perangkat; sinkronisasi akun masih tertunda.';
+            }
             const itemRow = page.querySelector(`.lesson-list-card a[href="${item.route}"]`)?.closest('li');
             itemRow?.classList.add('completed');
-            window.__aiLabToast?.('Status tersimpan dan tersinkron ke akun peserta.', 'success');
-        }, { once: true, signal: pageAbort.signal });
+            window.__aiLabToast?.(completion.message, completion.synced ? 'success' : 'error');
+        }, { signal: pageAbort.signal });
 
         // Auto-complete when clicking "Next Topic"
-        page?.querySelector('.math-learning-next-link')?.addEventListener('click', () => {
+        page?.querySelector('.math-learning-next-link')?.addEventListener('click', async event => {
+            event.preventDefault();
+            event.stopPropagation();
+            const destination = event.currentTarget.getAttribute('href');
             const state = readState(submodule);
-            if (!state.completed.includes(item.id)) {
-                // Background execution. No await needed because localStorage writes synchronously.
-                markComplete(submodule, item.id).catch(console.error);
+            if (!state.completed.includes(item.id) || state.pending.includes(item.id)) {
+                try {
+                    const completion = await markComplete(submodule, item.id);
+                    if (!completion.synced) {
+                        window.__aiLabToast?.(completion.message, 'error');
+                    }
+                } catch (error) {
+                    window.__aiLabToast?.(
+                        error?.message || 'Status tersimpan di perangkat, tetapi sinkronisasi gagal.',
+                        'error'
+                    );
+                }
             }
+            if (destination) window.location.hash = destination;
         });
     }
 
@@ -2880,7 +2969,14 @@
         }
     }
 
-    window.HerAiMathLearning=Object.freeze({submodules:SUBMODULES,content:CONTENT,renderCurrentRoute,renderOverviewProgress,version:RUNTIME_VERSION});
+    window.HerAiMathLearning=Object.freeze({
+        submodules: SUBMODULES,
+        content: CONTENT,
+        progressRecordIdFor: getProgressRecordId,
+        renderCurrentRoute,
+        renderOverviewProgress,
+        version: RUNTIME_VERSION
+    });
     window.initMathOverviewRoute=renderOverviewProgress;
     window.initMathLearningRoute=renderCurrentRoute;
 })();

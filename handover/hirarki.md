@@ -1,49 +1,83 @@
-# Hierarki Kurikulum dan Persistensi Database HerAI
+# Hierarki Kurikulum dan Persistensi HerAI
 
-Dokumen ini memetakan **Hierarki Kurikulum (Pemahaman Peserta/Bisnis)** dengan **Hierarki Database (Realita Google Sheets & Code.gs)**. 
-*Diperbarui: Menggunakan sistem Numeric ID Injection agar Math for AI setara dengan AI Fundamentals (1 Topik = 15 Poin).*
+> **Diperbarui:** 16 Agustus 2026
+> Dokumen ini menjelaskan identity/scoring source lokal. Backend source belum deployed.
 
-## 1. Pemetaan Hierarki
+## Model hierarki
 
-### A. Modul Lama (Contoh: AI Fundamentals)
-Pada modul lama, struktur di mata peserta (Kurikulum) dan struktur di database sangat berdekatan:
+```text
+Category: Foundation & Core AI
+└── Module: Math for AI (`math-for-ai`)
+    ├── Submodule 01..07
+    │   ├── Info
+    │   ├── Topic 01..n
+    │   ├── Practice
+    │   ├── Quiz
+    │   ├── Discussion
+    │   └── References
+    └── Aggregate quiz (`chapter_id: quiz`)
+```
 
-*   **Kategori:** Foundation & Core AI
-*   **Module:** AI Fundamentals (`module_id: 'ai-fundamentals'`)
-    *   **Submodule:** Pengantar AI *(Di DB tidak ada ID khusus, hanya label UI)*
-        *   **Topik 1:** Kecerdasan Buatan di Sekitar Kita ➔ **Terkirim sbg `chapter_id: 1` (15 Poin)**
-        *   **Topik 2:** Definisi, Software Biasa ➔ **Terkirim sbg `chapter_id: 2` (15 Poin)**
-        *   *(Tiap 1 Topik dihargai 15 poin)*
+## Progress identity
 
-### B. Modul Baru (Math for AI - Micro-Progress / 15 Poin per Topik)
-Math for AI memiliki hierarki yang **satu tingkat lebih dalam** karena topiknya dipecah menjadi *micro-topics*. Agar setara dengan AI Fundamentals, kita men-generate ID Angka unik per topik: `(ID Submodul × 100) + Urutan Topik`.
+Hanya topik memakai numeric ID dan memperoleh chapter points:
 
-*   **Kategori:** Foundation & Core AI
-*   **Module:** Math for AI (`module_id: 'math-for-ai'`)
-    *   **Submodule 01:** Kenapa AI Butuh Matematika?
-        *   **Topik Mikro ke-1:** Dunia nyata representasi ➔ **Terkirim sbg `chapter_id: 101` (15 Poin)**
-        *   **Topik Mikro ke-2:** Data, observation, feature, target ➔ **Terkirim sbg `chapter_id: 102` (15 Poin)**
-    *   **Submodule 02:** Linear Algebra
-        *   **Topik Mikro ke-1:** Dari scalar ke vector ➔ **Terkirim sbg `chapter_id: 201` (15 Poin)**
-        *   *(Setiap klik Materi Selanjutnya / Tandai Selesai, peserta langsung dapat 15 Poin!)*
+```text
+chapter_id = (nomor submodule × 100) + nomor topik
+```
 
----
+Contoh:
 
-## 2. Rincian Eksekusi Poin per Aksi (Berdasarkan `Code.gs`)
+| Item | `chapter_id` | Leaderboard |
+|---|---:|---:|
+| Submodule 01 Topic 01 | `101` | 15 |
+| Submodule 01 Topic 07 | `107` | 15 |
+| Submodule 02 Topic 01 | `201` | 15 |
+| Submodule 07 Topic 07 | `707` | 15 |
+| Submodule 01 Info | `info-01` | 0 |
+| Submodule 01 Practice | `practice-01` | 5 |
+| Submodule 01 Quiz | `quiz-01` | 0 langsung; bahan aggregate |
+| Submodule 01 Discussion | `discussion-01` | 0 |
+| Submodule 01 References | `references-01` | 0 |
+| Aggregate tujuh quiz | `quiz` | score rata-rata |
 
-Sistem poin diatur oleh fungsi `computeLiveLeaderboard` di backend, dengan rumus baku: 
-`Poin = (Jumlah Chapter × 15) + (Jumlah Practice × 5) + Total Skor Kuis`
+Topic ranges:
 
-### Math for AI (Sistem Baru Ter-Update)
-| Aksi Peserta (di Submodul 1) | Payload Database (`chapter_id`) | Poin |
-| :--- | :--- | :---: |
-| ✅ Membaca Topik Mikro 1 | `101` (Angka Unik) | **15** |
-| ✅ Membaca Topik Mikro 2 | `102` (Angka Unik) | **15** |
-| ✅ Membaca Topik Mikro 3 | `103` (Angka Unik) | **15** |
-| ✅ Mensubmit Kuis Akhir | `'quiz'` | **Rata-rata Skor Kuis** |
+- Submodule 01: `101–107`
+- Submodule 02: `201–208`
+- Submodule 03: `301–308`
+- Submodule 04: `401–408`
+- Submodule 05: `501–508`
+- Submodule 06: `601–608`
+- Submodule 07: `701–707`
 
----
+ID di luar ranges tersebut tidak dihitung sebagai topik Math.
 
-## 3. Ketahanan Terhadap Spam Poin
-- **Idempotensi Database:** Jika peserta mengklik tombol "Materi Selanjutnya" berkali-kali pada topik yang sama, sistem frontend mungkin mengirimkan `chapter_id: 101` berkali-kali ke Google Sheets.
-- **Penyaringan di Leaderboard:** Script backend `computeLiveLeaderboard` secara otomatis menindih data duplikat dengan melakukan agregasi unik berdasarkan NIK. Satu peserta hanya bisa mendapat 15 poin dari `chapter_id: 101` satu kali per `module_id`. Skema poin dipastikan tidak akan bisa dijebol/dimanipulasi ganda.
+## Formula leaderboard
+
+Hanya row `status=completed` yang dihitung:
+
+```text
+points = aggregate quiz score
+       + (valid completed topics × 15)
+       + (completed practice records × 5)
+```
+
+Info, references, discussion, per-submodule quiz, invalid IDs, dan in-progress rows
+tidak memberi poin.
+
+## Idempotence dan sync
+
+- Backend upsert key: participant + module + chapter. Save berulang memperbarui row
+  yang sama, bukan menambah row baru.
+- Local state menyimpan `completed[]` dan `pending[]`.
+- Server acknowledgment sukses menghapus item dari pending.
+- Kegagalan server mempertahankan completion lokal, menampilkan status pending, dan
+  menyediakan retry.
+- Aggregate quiz hanya ditulis setelah ketujuh `quiz-01..quiz-07` memiliki score.
+
+## Release boundary
+
+Generic progress marker tidak sama dengan persistence jawaban practice atau isi
+discussion. Kedua kontrak tersebut masih release gate terpisah. Semua route Math tetap
+locked pada hostname non-local sampai activation eksplisit.

@@ -11,7 +11,7 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
-const HERAI_BACKEND_VERSION = '2026.3.9-exercise-completeness';
+const HERAI_BACKEND_VERSION = '2026.3.10-math-progress-contract';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
 const PARTICIPANT_ACCOUNT_TYPE = 'participant';
 const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
@@ -37,6 +37,46 @@ const ACTIVE_FOUNDATION_MODULE_IDS = [
   'konsep-ai-modern',
   'evaluation',
   'evolution'
+];
+const MATH_PROGRESS_TOPIC_COUNTS = {
+  '01': 7,
+  '02': 8,
+  '03': 8,
+  '04': 8,
+  '05': 8,
+  '06': 8,
+  '07': 7
+};
+const PARTICIPANT_PROGRESS_MODULE_IDS = [
+  'ai-fundamentals',
+  'python-untuk-ai',
+  'reasoning',
+  'konsep-ai-modern',
+  'evaluation',
+  'evolution',
+  'machine-learning',
+  'computer-vision',
+  'deep-learning',
+  'reinforcement-learning',
+  'infrastructure',
+  'data-engineering',
+  'data-science',
+  'bioinformatics',
+  'deployment',
+  'front-end',
+  'back-end',
+  'large-language-model',
+  'agentic-ai',
+  'vlm',
+  'multimodal-llm',
+  'healthcare',
+  'geospatial',
+  'manufacturing',
+  'culture',
+  'business-insight',
+  'people-business-mgt',
+  'ui-ux',
+  'math-for-ai'
 ];
 // Expected non-empty answer count per module for submitted exercises.
 // Draft boleh parsial, tetapi submit wajib seluruh jawaban terisi.
@@ -775,6 +815,24 @@ function getParticipantDashboardData(payload) {
  * Formula: points = sum(quiz_scores) + (chapters_completed × 15) + (practices_completed × 5)
  * Falls back to seed data if no progress exists yet.
  */
+function isValidMathTopicProgressId(chapterId) {
+  var value = String(chapterId || '');
+  if (!/^\d{3}$/.test(value)) return false;
+  var numericId = Number(value);
+  var submoduleId = String(Math.floor(numericId / 100)).padStart(2, '0');
+  var topicId = numericId % 100;
+  return Boolean(MATH_PROGRESS_TOPIC_COUNTS[submoduleId]
+    && topicId >= 1
+    && topicId <= MATH_PROGRESS_TOPIC_COUNTS[submoduleId]);
+}
+
+function isValidMathProgressChapterId(chapterId) {
+  var value = String(chapterId || '');
+  if (value === 'quiz' || isValidMathTopicProgressId(value)) return true;
+  var semanticMatch = value.match(/^(info|practice|quiz|discussion|references)-(0[1-7])$/);
+  return Boolean(semanticMatch && MATH_PROGRESS_TOPIC_COUNTS[semanticMatch[2]]);
+}
+
 function computeLiveLeaderboard(requesterNik, context) {
   var source = context || {};
   var activeAccounts = Array.isArray(source.activeAccounts)
@@ -801,7 +859,7 @@ function computeLiveLeaderboard(requesterNik, context) {
   const agg = {};
   progressRows.forEach(function(row) {
     const nik = String(row.nik || '').replace(/\D/g, '');
-    if (!nik) return;
+    if (!nik || String(row.status || '') !== 'completed') return;
     
     if (!agg[nik]) {
       agg[nik] = { chapters: 0, totalQuizScore: 0, practices: 0 };
@@ -810,9 +868,12 @@ function computeLiveLeaderboard(requesterNik, context) {
     const chId = String(row.chapter_id || '');
     if (chId === 'quiz') {
       agg[nik].totalQuizScore += parseInt(row.score) || 0;
-    } else if (chId === 'practice') {
+    } else if (chId === 'practice'
+      || (String(row.module_id || '') === 'math-for-ai' && /^practice-0[1-7]$/.test(chId))) {
       agg[nik].practices += 1;
-    } else if (!isNaN(parseInt(chId))) {
+    } else if (String(row.module_id || '') === 'math-for-ai'
+      ? isValidMathTopicProgressId(chId)
+      : /^\d+$/.test(chId)) {
       agg[nik].chapters += 1;
     }
   });
@@ -3297,11 +3358,31 @@ function saveParticipantProgress(payload) {
   if (!participant) return { status: 'error', message: 'Peserta tidak ditemukan.' };
 
   var now = new Date().toISOString();
-  var moduleId = String(payload.module_id);
-  var chapterId = String(payload.chapter_id);
-  var status = payload.status || 'completed';
-  var score = payload.score !== undefined ? Number(payload.score) : null;
+  var moduleId = String(payload.module_id).trim();
+  var chapterId = String(payload.chapter_id).trim();
+  var status = String(payload.status || 'completed').trim();
+  var hasScore = payload.score !== undefined && payload.score !== null && payload.score !== '';
+  var score = hasScore ? Number(payload.score) : null;
   var participantRowId = String(participant.rowId || '');
+
+  if (!/^[a-z0-9][a-z0-9_-]{0,79}$/i.test(moduleId)) {
+    return { status: 'error', message: 'module_id tidak valid.' };
+  }
+  if (PARTICIPANT_PROGRESS_MODULE_IDS.indexOf(moduleId) < 0) {
+    return { status: 'error', message: 'Module progres tidak dikenali.' };
+  }
+  if (!/^[a-z0-9][a-z0-9_-]{0,79}$/i.test(chapterId)) {
+    return { status: 'error', message: 'chapter_id tidak valid.' };
+  }
+  if (['not_started', 'in_progress', 'completed'].indexOf(status) < 0) {
+    return { status: 'error', message: 'Status progres tidak valid.' };
+  }
+  if (moduleId === 'math-for-ai' && !isValidMathProgressChapterId(chapterId)) {
+    return { status: 'error', message: 'Item Math for AI tidak dikenali.' };
+  }
+  if (score !== null && (!isFinite(score) || score < 0 || score > 100)) {
+    return { status: 'error', message: 'Score wajib berada pada rentang 0–100.' };
+  }
 
   var progressRows = getRows(SHEETS.participantProgress);
   var existing = progressRows.find(function(row) {

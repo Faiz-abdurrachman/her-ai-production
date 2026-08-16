@@ -10,6 +10,7 @@
     const DASHBOARD_CACHE_TTL_MS = 5 * 60 * 1000;
     const DASHBOARD_CACHE_MAX_STALE_MS = 30 * 60 * 1000;
     const DASHBOARD_REQUEST_TIMEOUT_MS = 20000;
+    const PROGRESS_SAVE_TIMEOUT_MS = 10000;
 
     var _dashboardDataCache = null;
     var _dashboardDataPromise = null;
@@ -27,7 +28,7 @@
             this._pending[name] = new Promise(function(resolve, reject) {
                 var s = document.createElement('script');
                 var version = name === 'math-learning'
-                    ? '20260812-probability-integrated-fix8'
+                    ? '20260816-release-safety-v1'
                     : '20260803-discussion-name-fix';
                 s.src = '/js/frontend/fellow-dashboard/' + name + '.js?v=' + version;
                 s.onload = function() { window.__aiLabLoader.cache.add(name); delete window.__aiLabLoader._pending[name]; resolve(); };
@@ -3312,10 +3313,13 @@
         if (!session?.nik || !session?.token) {
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.' };
         }
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, PROGRESS_SAVE_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                signal: controller.signal,
                 body: JSON.stringify({
                     action: 'saveParticipantProgress',
                     nik: session.nik,
@@ -3336,7 +3340,14 @@
             clearParticipantDashboardCache();
             return result;
         } catch (e) {
-            return { status: 'error', message: 'Koneksi terputus. Coba simpan kembali.' };
+            return {
+                status: 'error',
+                message: e?.name === 'AbortError'
+                    ? 'Penyimpanan terlalu lama. Coba sinkronkan kembali.'
+                    : 'Koneksi terputus. Coba simpan kembali.'
+            };
+        } finally {
+            clearTimeout(timeoutId);
         }
     };
 
@@ -3345,10 +3356,13 @@
         if (!session?.nik || !session?.token) {
             return { status: 'error', message: 'Sesi peserta tidak tersedia. Silakan login ulang.', data: [] };
         }
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, PROGRESS_SAVE_TIMEOUT_MS);
         try {
             var response = await fetch('/__gas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                signal: controller.signal,
                 body: JSON.stringify({
                     action: 'getParticipantProgress',
                     nik: session.nik,
@@ -3365,7 +3379,15 @@
             }
             return { status: 'success', data: Array.isArray(result.data) ? result.data : [] };
         } catch (e) {
-            return { status: 'error', message: 'Koneksi terputus. Progres belum dapat dimuat.', data: [] };
+            return {
+                status: 'error',
+                message: e?.name === 'AbortError'
+                    ? 'Memuat progres terlalu lama. Coba lagi.'
+                    : 'Koneksi terputus. Progres belum dapat dimuat.',
+                data: []
+            };
+        } finally {
+            clearTimeout(timeoutId);
         }
     };
 

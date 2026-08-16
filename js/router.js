@@ -21,6 +21,14 @@ window.switchCvLocalTab = function(el, mode) {
     }
 };
 
+const MATH_RELEASE_CONFIG = Object.freeze({
+    localPreviewEnabled: true,
+    releasedSubmodules: Object.freeze([]),
+    overviewPage: "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/overview.html",
+    lessonPage: "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/math-learning.html",
+    lockedPage: "/pages/frontend/fellow-dashboard/under-development.html"
+});
+
 const router = {
     // ==========================================
     // 1. Peta Rute (URL Hash -> Lokasi File HTML)
@@ -616,6 +624,7 @@ const router = {
     },
 
     getLocalMathPreviewRoute(path) {
+        if (!MATH_RELEASE_CONFIG.localPreviewEnabled) return null;
         const hostname = window.location.hostname;
         const isLocalPreview = hostname === "localhost"
             || hostname === "127.0.0.1"
@@ -641,6 +650,45 @@ const router = {
             return "/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/01-kenapa-ai-butuh-matematika/materi.html";
         }
         return null;
+    },
+
+    isMathRoute(path) {
+        return path === "/participant-ai-lab-math"
+            || path.startsWith("/participant-ai-lab-math-")
+            || path.startsWith("/participant-ai-lab-math/");
+    },
+
+    getMathSubmoduleId(path) {
+        const routePrefixes = [
+            ["01", "/participant-ai-lab-math/kenapa-ai-butuh-matematika"],
+            ["02", "/participant-ai-lab-math/linear-algebra"],
+            ["03", "/participant-ai-lab-math/statistics-for-ai"],
+            ["04", "/participant-ai-lab-math/probability"],
+            ["05", "/participant-ai-lab-math/calculus"],
+            ["06", "/participant-ai-lab-math/optimization"],
+            ["07", "/participant-ai-lab-math/integrated-case-study"]
+        ];
+        const match = routePrefixes.find(([, prefix]) => path === prefix || path.startsWith(`${prefix}/`));
+        return match ? match[0] : null;
+    },
+
+    getMathRoute(path) {
+        if (!this.isMathRoute(path)) return null;
+
+        const localPreviewRoute = this.getLocalMathPreviewRoute(path);
+        if (localPreviewRoute) return localPreviewRoute;
+
+        if (path === "/participant-ai-lab-math") {
+            return MATH_RELEASE_CONFIG.releasedSubmodules.length
+                ? MATH_RELEASE_CONFIG.overviewPage
+                : MATH_RELEASE_CONFIG.lockedPage;
+        }
+
+        const submoduleId = this.getMathSubmoduleId(path);
+        const isRegisteredRoute = Boolean(this.routes[path]);
+        return submoduleId && isRegisteredRoute && MATH_RELEASE_CONFIG.releasedSubmodules.includes(submoduleId)
+            ? MATH_RELEASE_CONFIG.lessonPage
+            : MATH_RELEASE_CONFIG.lockedPage;
     },
 
     renderParticipantAccessNotice(appContent, navContainer, footerContainer, options = {}) {
@@ -714,8 +762,8 @@ const router = {
             return;
         }
 
-        const localMathPreviewRoute = this.getLocalMathPreviewRoute(path);
-        const routeUrl = localMathPreviewRoute || (this.isComputerVisionLockedRoute(path)
+        const mathRoute = this.getMathRoute(path);
+        const routeUrl = mathRoute || (this.isComputerVisionLockedRoute(path)
             ? "/pages/frontend/fellow-dashboard/under-development.html"
             : this.routes[path]);
         const appContent = document.getElementById("app-content");
