@@ -160,363 +160,33 @@ const CHAPTERS = [
     }
 ];
 
-    const PYTHON_GUIDES = [
-        {
-hook: {
-                question: "Metrik Evaluasi — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Metrik Evaluasi sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Metrik Evaluasi", "Materi Metrik Evaluasi dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Metrik Evaluasi",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Metrik Evaluasi", "Konsep dalam Metrik Evaluasi."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Metrik Evaluasi?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Metrik Evaluasi dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "1"
-        },
-        {
-hook: {
-                question: "Confusion Matrix — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Confusion Matrix sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Confusion Matrix", "Materi Confusion Matrix dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Confusion Matrix",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Confusion Matrix", "Konsep dalam Confusion Matrix."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Confusion Matrix?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Confusion Matrix dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "2"
-        },
-        {
-hook: {
-                question: "ROC & AUC — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi ROC & AUC sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["ROC & AUC", "Materi ROC & AUC dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "ROC & AUC",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["ROC & AUC", "Konsep dalam ROC & AUC."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang ROC & AUC?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan ROC & AUC dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "3"
-        },
-        {
-hook: {
-                question: "Cross-Validation — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Cross-Validation sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Cross-Validation", "Materi Cross-Validation dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Cross-Validation",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Cross-Validation", "Konsep dalam Cross-Validation."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Cross-Validation?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Cross-Validation dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "4"
-        },
-        {
-hook: {
-                question: "Bias-Variance — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Bias-Variance sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Bias-Variance", "Materi Bias-Variance dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Bias-Variance",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Bias-Variance", "Konsep dalam Bias-Variance."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Bias-Variance?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Bias-Variance dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "5"
-        },
-        {
-hook: {
-                question: "Model Selection — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Model Selection sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Model Selection", "Materi Model Selection dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Model Selection",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Model Selection", "Konsep dalam Model Selection."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Model Selection?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Model Selection dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "6"
-        },
-        {
-hook: {
-                question: "Error Analysis — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Error Analysis sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Error Analysis", "Materi Error Analysis dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Error Analysis",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Error Analysis", "Konsep dalam Error Analysis."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Error Analysis?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Error Analysis dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "7"
-        },
-        {
-hook: {
-                question: "Benchmarking — konsep kunci yang perlu dipahami.",
-                answerA: {
-                    label: "Mitos",
-                    text: "Anggapan umum yang perlu diluruskan.",
-                    icon: "fas fa-times-circle"
-                },
-                answerB: {
-                    label: "Fakta",
-                    text: "Pemahaman berdasarkan praktik dan bukti.",
-                    icon: "fas fa-check-circle"
-                },
-                message: "Materi Benchmarking sedang dikembangkan oleh tim kurikulum HerAI. Konten lengkap akan mencakup penjelasan konsep, contoh kasus, langkah kerja, dan latihan."
-            },
-flow: [
-                ["Persiapan", "Pelajari materi."],
-                ["Praktik", "Kerjakan latihan."],
-                ["Evaluasi", "Ukur pemahaman."]
-            ],
-deepDive: [
-                ["Benchmarking", "Materi Benchmarking dalam pengembangan.", "Konten sedang dikurasi oleh tim."]
-            ],
-workedExample: [
-                "Benchmarking",
-                ["Deskripsi", "Contoh kasus sedang disiapkan."]
-            ],
-glossary: [
-                ["Benchmarking", "Konsep dalam Benchmarking."]
-            ],
-quickCheck: {
-                question: "Apa yang Anda ketahui tentang Benchmarking?",
-                options: ["Pilihan A", "Pilihan B", "Pilihan C"],
-                answer: 0,
-                explanationCorrect: "Tepat.",
-                explanationWrong: "Coba lagi."
-            },
-challenge: {
-                instruction: "Jelaskan Benchmarking dengan kalimat Anda sendiri.",
-                placeholder: "Tulis jawaban Anda...",
-                example: ""
-            },
-roadmapRef: "8"
-        }
-    ];;;
 
-    CHAPTERS.forEach(function (chapter, index) {
-        Object.assign(chapter, PYTHON_GUIDES[index]);
+    CHAPTERS.forEach(function (chapter) {
+        chapter.hook = {
+            question: "Apa dasar keputusan evaluasi AI yang dapat dipertanggungjawabkan?",
+            answerA: {
+                label: "Kesan awal",
+                text: "Output terlihat lancar sehingga langsung dianggap layak.",
+                icon: "fas fa-wand-magic-sparkles"
+            },
+            answerB: {
+                label: "Bukti terukur",
+                text: "Tujuan, failure case, data uji, metrik, dan batas risiko diperiksa bersama.",
+                icon: "fas fa-clipboard-check"
+            },
+            message: "Mulai dari tujuan dan risiko, lalu gunakan bukti yang relevan untuk menentukan apakah sistem layak dipakai, perlu diperbaiki, atau harus ditahan."
+        };
+        chapter.flow = [
+            ["Tetapkan tujuan", "Definisikan pengguna, kebutuhan, dan kegagalan yang paling berbahaya."],
+            ["Kumpulkan bukti", "Uji output dan sistem dengan data, rubrik, serta metrik yang sesuai."],
+            ["Ambil keputusan", "Bandingkan hasil dengan release criteria dan tentukan tindak lanjut."]
+        ];
+        chapter.challenge = {
+            instruction: "Pilih satu konsep dari " + chapter.title + ". Tuliskan satu kasus uji, bukti yang perlu dikumpulkan, dan keputusan yang akan diambil dari hasilnya.",
+            placeholder: "Kasus uji, bukti, dan keputusan...",
+            example: "Contoh: uji pertanyaan ambigu, nilai ketepatan serta kemampuan meminta klarifikasi, lalu tahan rilis bila respons berisiko masih melewati batas."
+        };
+        chapter.learningOutcomes = (chapter.objectives || []).slice();
     });
 
 
@@ -532,7 +202,7 @@ roadmapRef: "8"
                 "Langkah Pengerjaan"
             ]
         ],
-        "guide": "<em>Pembahasan latihan ini sedang disusun oleh tim kurikulum HerAI.</em>"
+        "guide": "Gunakan struktur: tujuan dan pengguna → risiko atau failure case → bukti atau metrik → keputusan dan tindak lanjut. Pastikan setiap pilihan memiliki alasan yang dapat diuji."
     },
     {
         "id": "PRACTICE-2",
@@ -544,7 +214,7 @@ roadmapRef: "8"
                 "Langkah Pengerjaan"
             ]
         ],
-        "guide": "<em>Pembahasan latihan ini sedang disusun oleh tim kurikulum HerAI.</em>"
+        "guide": "Gunakan struktur: tujuan dan pengguna → risiko atau failure case → bukti atau metrik → keputusan dan tindak lanjut. Pastikan setiap pilihan memiliki alasan yang dapat diuji."
     },
     {
         "id": "PRACTICE-3",
@@ -556,7 +226,7 @@ roadmapRef: "8"
                 "Langkah Pengerjaan"
             ]
         ],
-        "guide": "<em>Pembahasan latihan ini sedang disusun oleh tim kurikulum HerAI.</em>"
+        "guide": "Gunakan struktur: tujuan dan pengguna → risiko atau failure case → bukti atau metrik → keputusan dan tindak lanjut. Pastikan setiap pilihan memiliki alasan yang dapat diuji."
     },
     {
         "id": "PRACTICE-4",
@@ -568,7 +238,7 @@ roadmapRef: "8"
                 "Langkah Pengerjaan"
             ]
         ],
-        "guide": "<em>Pembahasan latihan ini sedang disusun oleh tim kurikulum HerAI.</em>"
+        "guide": "Gunakan struktur: tujuan dan pengguna → risiko atau failure case → bukti atau metrik → keputusan dan tindak lanjut. Pastikan setiap pilihan memiliki alasan yang dapat diuji."
     },
     {
         "id": "PRACTICE-5",
@@ -580,7 +250,7 @@ roadmapRef: "8"
                 "Langkah Pengerjaan"
             ]
         ],
-        "guide": "<em>Pembahasan latihan ini sedang disusun oleh tim kurikulum HerAI.</em>"
+        "guide": "Gunakan struktur: tujuan dan pengguna → risiko atau failure case → bukti atau metrik → keputusan dan tindak lanjut. Pastikan setiap pilihan memiliki alasan yang dapat diuji."
     }
 ];
 
@@ -867,43 +537,6 @@ var SOURCE_VISUALS = {
         });
     }
 
-    function _isPlaceholderText(text) {
-        if (!text) return true;
-        var markers = ['dalam pengembangan', 'sedang dikurasi', 'sedang disiapkan', 'Konten sedang', 'Konsep dalam ', 'Contoh kasus sedang', 'sedang dikembangkan'];
-        for (var i = 0; i < markers.length; i++) { if (text.indexOf(markers[i]) !== -1) return true; }
-        return false;
-    }
-
-    function renderPythonDeepDive(module) {
-        if (!module) return "";
-        var parts = [];
-
-        if (module.deepDive && module.deepDive.length && !module.deepDive.some(function(s) { return _isPlaceholderText(s[1]); })) {
-            var roadmapHtml = '<section class="ai-modern-beginner-roadmap" data-python-injected data-section="konsep">' +
-                '<div class="ai-modern-roadmap-head"><i class="fas fa-compass" aria-hidden="true"></i><div><span>Evaluasi AI</span><h3>Metrik dan validasi model AI</h3><p>Gunakan penjelasan berikut untuk menghubungkan kode, data, failure case, dan keputusan dalam workflow AI.</p></div></div>' +
-                '<div class="ai-modern-roadmap-strip" aria-hidden="true">' + module.deepDive.map(function (step, index) { return '<div><span>' + (index + 1) + '</span><i class="fas fa-book-open-reader"></i><strong>' + escapeHtml(step[0]) + '</strong></div>'; }).join("") + '</div>' +
-                '<div class="ai-modern-roadmap-progress"><span data-roadmap-progress>Langkah 1 dari ' + module.deepDive.length + '</span><b><i data-roadmap-bar></i></b></div>' +
-                '<div class="ai-modern-roadmap-steps">' + module.deepDive.map(function (step, index) {
-                    return '<details data-roadmap-step="' + index + '"' + (index === 0 ? " open" : "") + '><summary><span>' + String(index + 1).padStart(2, "0") + '</span><i class="fas fa-book-open-reader" aria-hidden="true"></i><div><strong>' + escapeHtml(step[0]) + '</strong></div><i class="fas fa-chevron-down" aria-hidden="true"></i></summary><div class="ai-modern-roadmap-body"><p>' + escapeHtml(step[1]) + '</p>' + (step[2] ? '<p>' + escapeHtml(step[2]) + '</p>' : '') + '</div></details>';
-                }).join("") + '</div></section>';
-            parts.push(roadmapHtml);
-        }
-
-        if (module.workedExample && module.workedExample.length && !module.workedExample.slice(1).some(function(s) { return _isPlaceholderText(s[1]); })) {
-            var title = module.workedExample[0];
-            var steps = module.workedExample.slice(1);
-            var exampleHtml = '<section class="ai-modern-worked-example" data-python-injected data-section="contoh"><div class="ai-modern-worked-head"><i class="fas fa-magnifying-glass-chart" aria-hidden="true"></i><div><span>Contoh Terurai</span><h3>' + escapeHtml(title) + '</h3></div></div><div class="ai-modern-worked-steps">' + steps.map(function (step, index) { return '<article><span>' + (index + 1) + '</span><div><strong>' + escapeHtml(step[0]) + '</strong><p>' + escapeHtml(step[1]) + '</p></div></article>'; }).join("") + '</div></section>';
-            parts.push(exampleHtml);
-        }
-
-        if (module.glossary && module.glossary.length && !module.glossary.some(function(g) { return _isPlaceholderText(g[1]); })) {
-            var glossaryHtml = '<section class="ai-modern-beginner-glossary" data-python-injected data-section="ringkasan"><div class="ai-modern-glossary-head"><i class="fas fa-language" aria-hidden="true"></i><div><span>Glossary Pemula</span><h3>Istilah yang perlu kamu kuasai</h3><p>Buka setiap istilah untuk mengulang definisinya sebelum lanjut.</p></div></div><div class="ai-modern-glossary-grid">' + module.glossary.map(function (item, index) { return '<details' + (index === 0 ? " open" : "") + '><summary><span>' + String(index + 1).padStart(2, "0") + '</span><strong>' + escapeHtml(item[0]) + '</strong><i class="fas fa-chevron-down" aria-hidden="true"></i></summary><p>' + escapeHtml(item[1]) + '</p></details>'; }).join("") + '</div></section>';
-            parts.push(glossaryHtml);
-        }
-
-        return parts.join("\n");
-    }
-
     function initSourceVisualLab(container, config) {
         if (!config) return;
         const stage = container.querySelector(".reasoning-concept-stage");
@@ -1017,7 +650,7 @@ var SOURCE_VISUALS = {
                         <div class="reasoning-visual-head"><i class="fas fa-route" aria-hidden="true"></i><div><span>Visual reasoning flow</span><h3>Alur pikir yang bisa dilacak</h3></div></div>
                         ${renderFlow(chapter.flow)}
                     </section>`;
-                } else if (text.includes("quick check") && chapter.quickCheck && !chapter.quickCheck.options[0].includes("Pilihan A")) {
+                } else if (text.includes("quick check") && chapter.quickCheck) {
                     replacement = `<section class="reasoning-quick-check" data-check-answer="${chapter.quickCheck.answer}">
                         <div class="reasoning-quick-head"><i class="fas fa-circle-question" aria-hidden="true"></i><div><span>Quick Check</span><h3>${escapeHtml(chapter.quickCheck.question)}</h3></div></div>
                         <div class="reasoning-check-options">
@@ -1328,7 +961,6 @@ var SOURCE_VISUALS = {
     }
 
     function finalRenderQuickCheckSection(qc) {
-        if (qc && qc.options && qc.options[0] && qc.options[0].includes("Pilihan A")) return "";
         return '<section class="reasoning-quick-check" data-section="check" data-check-answer="' + qc.answer + '">\n                <div class="reasoning-quick-head"><i class="fas fa-circle-question" aria-hidden="true"></i><div><span>Quick Check</span><h3>' + escapeHtml(qc.question) + '</h3></div></div>\n                <div class="reasoning-check-options">\n                    ' + qc.options.map(function (option, index) {
                         return '<button type="button" data-check-option="' + index + '"><b>' + String.fromCharCode(65 + index) + '</b><span>' + escapeHtml(option) + '</span></button>';
                     }).join("") + '\n                </div>\n                <div class="reasoning-check-actions">\n                    <button type="button" class="reasoning-check-submit" data-check-submit><i class="fas fa-check" aria-hidden="true"></i> Periksa Jawaban</button>\n                    <button type="button" class="reasoning-check-retry" data-check-retry hidden><i class="fas fa-rotate-left" aria-hidden="true"></i> Coba Lagi</button>\n                </div>\n                <p class="reasoning-check-feedback" hidden></p>\n            </section>';
@@ -1512,9 +1144,11 @@ var SOURCE_VISUALS = {
 
     function setupVisualNav(container) {
         container.querySelectorAll("[data-jump]").forEach(function (button) {
+            var section = container.querySelector('[data-section="' + button.dataset.jump + '"]');
+            button.hidden = !section;
+            if (!section) return;
             button.addEventListener("click", function () {
-                var section = container.querySelector('[data-section="' + button.dataset.jump + '"]');
-                if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+                section.scrollIntoView({ behavior: "smooth", block: "start" });
             });
         });
     }
@@ -1855,9 +1489,6 @@ var SOURCE_VISUALS = {
                 container.innerHTML = html;
                 container.classList.add("is-source-view");
 
-                var firstSourceHeading = container.querySelector("h1");
-                if (firstSourceHeading) firstSourceHeading.insertAdjacentHTML("beforebegin", renderPythonDeepDive(module));
-
                 // 4. Enhance source visuals
                 enhanceSourceMaterialForCanvas(container, module);
 
@@ -2051,7 +1682,7 @@ var SOURCE_VISUALS = {
                     return `<label><span>${escapeHtml(field[1])}</span><textarea name="${escapeHtml(name)}" rows="4" placeholder="Tulis jawabanmu di sini..."></textarea></label>`;
                 }).join("")}
             </div>
-            ${(item.guide && !item.guide.includes("sedang disusun")) ? 
+            ${item.guide ?
             `<button type="button" class="reasoning-scaffold-reveal-button" data-reasoning-reveal="${escapeHtml(item.id)}" aria-expanded="false"><i class="fas fa-lightbulb" aria-hidden="true"></i> Lihat pembahasan</button>
             <div class="reasoning-scaffold-exercise-answer" data-reasoning-answer="${escapeHtml(item.id)}" hidden><strong>Pembahasan</strong><div class="reasoning-guide-content" style="margin-top: 10px;">${renderFormattedText(item.guide)}</div></div>` 
             : ''}
