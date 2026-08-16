@@ -198,7 +198,7 @@
         '/participant-ai-lab-math/submodule-02/quiz': SUBMODULES[1].items[10].route.slice(1),
         '/participant-ai-lab-math/submodule-02/discussion': SUBMODULES[1].items[11].route.slice(1),
         '/participant-ai-lab-math/submodule-02/references': SUBMODULES[1].items[12].route.slice(1),
-        
+        '/participant-ai-lab-math/submodule-03': SUBMODULES[2].routeBase.slice(1),
         '/participant-ai-lab-math/submodule-03/topic-01': SUBMODULES[2].items[1].route.slice(1),
         '/participant-ai-lab-math/submodule-03/topic-02': SUBMODULES[2].items[2].route.slice(1),
         '/participant-ai-lab-math/submodule-03/topic-03': SUBMODULES[2].items[3].route.slice(1),
@@ -211,7 +211,7 @@
         '/participant-ai-lab-math/submodule-03/quiz': SUBMODULES[2].items[10].route.slice(1),
         '/participant-ai-lab-math/submodule-03/discussion': SUBMODULES[2].items[11].route.slice(1),
         '/participant-ai-lab-math/submodule-03/references': SUBMODULES[2].items[12].route.slice(1),
-        
+        '/participant-ai-lab-math/submodule-04': SUBMODULES[3].routeBase.slice(1),
         '/participant-ai-lab-math/submodule-04/topic-01': SUBMODULES[3].items[1].route.slice(1),
         '/participant-ai-lab-math/submodule-04/topic-02': SUBMODULES[3].items[2].route.slice(1),
         '/participant-ai-lab-math/submodule-04/topic-03': SUBMODULES[3].items[3].route.slice(1),
@@ -224,7 +224,7 @@
         '/participant-ai-lab-math/submodule-04/quiz': SUBMODULES[3].items[10].route.slice(1),
         '/participant-ai-lab-math/submodule-04/discussion': SUBMODULES[3].items[11].route.slice(1),
         '/participant-ai-lab-math/submodule-04/references': SUBMODULES[3].items[12].route.slice(1),
-
+        '/participant-ai-lab-math/submodule-05': SUBMODULES[4].routeBase.slice(1),
         '/participant-ai-lab-math/submodule-05/topic-01': SUBMODULES[4].items[1].route.slice(1),
         '/participant-ai-lab-math/submodule-05/topic-02': SUBMODULES[4].items[2].route.slice(1),
         '/participant-ai-lab-math/submodule-05/topic-03': SUBMODULES[4].items[3].route.slice(1),
@@ -237,6 +237,7 @@
         '/participant-ai-lab-math/submodule-05/quiz': SUBMODULES[4].items[10].route.slice(1),
         '/participant-ai-lab-math/submodule-05/discussion': SUBMODULES[4].items[11].route.slice(1),
         '/participant-ai-lab-math/submodule-05/references': SUBMODULES[4].items[12].route.slice(1),
+        '/participant-ai-lab-math/submodule-06': SUBMODULES[5].routeBase.slice(1),
         '/participant-ai-lab-math/submodule-06/topic-01': SUBMODULES[5].items[1].route.slice(1),
         '/participant-ai-lab-math/submodule-06/topic-02': SUBMODULES[5].items[2].route.slice(1),
         '/participant-ai-lab-math/submodule-06/topic-03': SUBMODULES[5].items[3].route.slice(1),

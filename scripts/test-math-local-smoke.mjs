@@ -106,9 +106,13 @@ async function waitForServer() {
 const routes = [
     '/participant-ai-lab-math/kenapa-ai-butuh-matematika/dunia-nyata-menjadi-representasi-komputasional',
     '/participant-ai-lab-math/linear-algebra/dari-scalar-ke-vector',
+    '/participant-ai-lab-math/submodule-03',
     '/participant-ai-lab-math/statistics-for-ai/mean-median-mode',
+    '/participant-ai-lab-math/submodule-04',
     '/participant-ai-lab-math/probability/conditional-probability',
+    '/participant-ai-lab-math/submodule-05',
     '/participant-ai-lab-math/calculus/partial-derivative',
+    '/participant-ai-lab-math/submodule-06',
     '/participant-ai-lab-math/optimization/learning-rate',
     '/participant-ai-lab-math/integrated-case-study/uncertainty'
 ];
