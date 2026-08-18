@@ -1303,7 +1303,7 @@ function withSpreadsheetRetry(callback) {
 function seedDefaults() {
   upsertByKey(SHEETS.admins, 'id_admin', 'super-admin', {
     id_admin: 'super-admin',
-    password: hashPasswordValue('admin123'),
+    password: hashPasswordValue(PropertiesService.getScriptProperties().getProperty('HERAI_ADMIN_PASSWORD') || ''),
     nama_admin: 'Super Admin',
     peran_admin: 'superadmin',
     permissions: 'all',
