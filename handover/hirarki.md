@@ -1,8 +1,9 @@
 # Hierarki Kurikulum dan Persistensi HerAI
 
-> **Diperbarui:** 16 Agustus 2026
-> Dokumen ini menjelaskan identity/scoring source lokal. Existing GAS deployment sudah
-> diverifikasi pada version `2026.3.11-math-response-persistence`.
+> **Diperbarui:** 17 Agustus 2026
+> Dokumen ini menjelaskan identity/scoring source lokal. Existing GAS deployment
+> terbaru read-only verified pada `2026.3.12-overall-course-progress`; full authorized
+> response mutation/read-back sebelumnya lulus pada `2026.3.11`.
 
 ## Model hierarki
 
@@ -77,7 +78,7 @@ tidak memberi poin.
   menyediakan retry.
 - Aggregate quiz hanya ditulis setelah ketujuh `quiz-01..quiz-07` memiliki score.
 
-## Persistence jawaban Math — local implementation 16 Agustus 2026
+## Persistence jawaban Math — current contract
 
 - Setiap submodule memakai `exercise_id` stabil `practice-01..practice-07`.
 - Setiap latihan mempunyai delapan key exact `answer-01..answer-08`.
@@ -97,11 +98,13 @@ tidak memberi poin.
 ## Release boundary
 
 Generic progress marker tetap bukan pengganti persistence body. Kontrak khusus latihan
-dan diskusi committed lokal pada `5a8998c`; existing GAS deployment sudah exact
-`2026.3.11-math-response-persistence`. Full authorized QA membuktikan invalid-ID
+dan diskusi committed pada `5a8998c`. Full authorized QA terhadap GAS 3.11
+membuktikan invalid-ID
 rejection, 90 canonical progress IDs completed, 7 exact 8-answer practice read-back,
 14 unique discussion prompts, serta tujuh score kuis dan aggregate 100. Satu invalid
 `topic-01` row dari stale-backend preflight tetap menjadi residue QA non-canonical.
 Readiness browser 01–07 lulus untuk 89 route dan 210 blok visual/interaktif. Source
 lokal sekarang mengaktifkan `releasedSubmodules` 01–07 untuk release frontend penuh;
-production tetap locked sampai commit aktivasi tersebut benar-benar di-push/deploy.
+current local main sudah memuatnya, tetapi upstream production push gagal 403. Karena
+itu exact frontend production state tetap `UNVERIFIED`; jangan menghapus rollback
+fixtures atau mengubah identity/scoring tanpa regression penuh.
