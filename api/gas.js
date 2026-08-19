@@ -8,7 +8,9 @@ const CACHE_TTL_SEC = {
   getParticipantDashboardData: 120,
   getParticipantProgress: 180,
   getParticipantDiscussions: 180,
-  getParticipantExerciseSubmissions: 120
+  getParticipantExerciseSubmissions: 120,
+  getAdminLearningProgressOverview: 600,
+  getAdminParticipantProgressDetail: 600
 };
 
 const CACHED_ACTIONS = new Set(Object.keys(CACHE_TTL_SEC));

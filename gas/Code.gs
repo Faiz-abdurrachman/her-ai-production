@@ -318,6 +318,8 @@ function doPost(e) {
       getData: () => getParticipants(),
       getPublicParticipantResult: () => getPublicParticipantResult(payload),
       updateStatus: () => updateParticipantStatus(payload),
+      getAdminLearningProgressOverview: () => getAdminLearningProgressOverview(payload),
+      getAdminParticipantProgressDetail: () => getAdminParticipantProgressDetail(payload),
       updateScore: () => updateScore(payload),
       runAiAnalysis: () => runAiAnalysis(payload),
       login: () => login(payload),
@@ -5452,4 +5454,168 @@ function cachePutPresence(key, value, ttlSeconds) {
       Math.max(1, Number(ttlSeconds || 120))
     );
   } catch (e) { /* silent */ }
+}
+
+// ============================================================================
+// ADMIN LEARNING OPERATIONS (PROGRESS PESERTA)
+// ============================================================================
+
+function _getAggregatedProgress(forceRefresh) {
+  const cacheKey = 'admin_learning_progress_aggregate_v2';
+  const cache = CacheService.getScriptCache();
+  if (!forceRefresh) {
+    const cached = cache.get(cacheKey);
+    if (cached) return JSON.parse(cached);
+  }
+  
+  // Pull all progress
+  const allProgress = getRows(SHEETS.participantProgress);
+  
+  // Fetch accounts as the primary source of truth (101 participants + QA)
+  const accounts = getRows(SHEETS.participantAccounts);
+  
+  const activeParticipants = accounts.map(a => ({
+    rowId: String(a.participant_rowId || a.rowId || ''),
+    nik: String(a.nik || '').replace(/\D/g, ''),
+    name: a.nama_lengkap || a.name || '',
+    last_login_at: a.last_login_at || null
+  })).filter(a => a.rowId && a.nik);
+  
+  // Equal-weight for 7 courses
+  const moduleIds = ['ai-fundamentals', 'python-untuk-ai', 'konsep-ai-modern', 'reasoning', 'evaluation', 'evolution', 'math-for-ai'];
+  
+  const moduleRows = getRows(SHEETS.participantDashboardModules);
+  const moduleConfig = {};
+  moduleRows.forEach(r => {
+    moduleConfig[r.module_id] = Number(r.total_chapters) || 0;
+  });
+
+  const participantMap = {};
+  activeParticipants.forEach(p => {
+    participantMap[p.rowId] = {
+      nik: p.nik,
+      name: p.name,
+      courses: {},
+      courseDetails: {},
+      _completedItems: {},
+      overallProgress: 0,
+      lastActiveAt: p.last_login_at
+    };
+  });
+
+  allProgress.forEach(row => {
+    if (participantMap[row.participant_rowId] && row.status === 'completed') {
+      const p = participantMap[row.participant_rowId];
+      if (moduleIds.indexOf(row.module_id) >= 0) {
+        if (!p._completedItems[row.module_id]) {
+          p._completedItems[row.module_id] = {};
+        }
+        p._completedItems[row.module_id][row.chapter_id] = true;
+      }
+    }
+  });
+
+  Object.keys(participantMap).forEach(rowId => {
+    const p = participantMap[rowId];
+    moduleIds.forEach(id => {
+      let completed = 0;
+      let total = 0;
+      if (id === 'math-for-ai') {
+        const items = p._completedItems[id] || {};
+        completed = Object.keys(items).filter(cid => cid !== 'quiz' && isValidMathProgressChapterId(cid)).length;
+        total = MATH_PROGRESS_ITEM_TOTAL;
+        
+        p.mathSubmodules = {};
+        Object.keys(MATH_PROGRESS_TOPIC_COUNTS).forEach(sub => {
+          let subCompleted = 0;
+          let subTotal = MATH_PROGRESS_TOPIC_COUNTS[sub] + 5;
+          Object.keys(items).forEach(cid => {
+             if (String(cid).endsWith('-' + sub) || 
+                 (!isNaN(cid) && Number(cid) >= Number(sub)*100 && Number(cid) < (Number(sub)+1)*100)) {
+               subCompleted++;
+             }
+          });
+          p.mathSubmodules['Submodule ' + sub] = {
+            percentage: Math.min(100, Math.round((subCompleted / subTotal) * 100)),
+            completed: subCompleted,
+            total: subTotal
+          };
+        });
+        
+      } else {
+        const items = p._completedItems[id] || {};
+        total = moduleConfig[id] || 0;
+        completed = Object.keys(items).filter(cid => {
+          const num = Number(cid);
+          return num >= 1 && num <= total;
+        }).length;
+      }
+      p.courses[id] = total > 0 ? Math.min(100, Math.round((completed / total) * 100)) : 0;
+      p.courseDetails[id] = { completed: completed, total: total };
+    });
+    delete p._completedItems;
+  });
+  
+  let totalOverallProgress = 0;
+  let moduleTotals = {};
+  moduleIds.forEach(id => moduleTotals[id] = 0);
+  
+  const detail = [];
+  
+  Object.keys(participantMap).forEach(rowId => {
+    const p = participantMap[rowId];
+    let pTotal = 0;
+    moduleIds.forEach(id => {
+      const val = p.courses[id] || 0;
+      pTotal += val;
+      moduleTotals[id] += val;
+    });
+    p.overallProgress = Number((pTotal / moduleIds.length).toFixed(1)) || 0;
+    totalOverallProgress += p.overallProgress;
+    
+    // Masking NIK: 3271120000000000 -> 3271********0000
+    let maskedNik = p.nik;
+    if (maskedNik.length >= 10) {
+      maskedNik = maskedNik.substring(0, 4) + '***' + maskedNik.substring(maskedNik.length - 4);
+    } else {
+      maskedNik = '***';
+    }
+    p.nik = maskedNik;
+    
+    detail.push(p);
+  });
+  
+  const totalActive = activeParticipants.length;
+  const overview = {
+    totalActiveParticipants: totalActive,
+    averageOverallProgress: totalActive > 0 ? Number((totalOverallProgress / totalActive).toFixed(1)) : 0,
+    moduleStats: moduleIds.map(id => ({
+      moduleId: id,
+      averageProgress: totalActive > 0 ? Number((moduleTotals[id] / totalActive).toFixed(1)) : 0
+    })),
+    lastUpdated: new Date().toISOString()
+  };
+  
+  const result = { overview: overview, detail: detail };
+  
+  // Cache for 10 minutes (600 seconds)
+  cache.put(cacheKey, JSON.stringify(result), 600);
+  
+  return result;
+}
+
+function getAdminLearningProgressOverview(payload) {
+  const data = _getAggregatedProgress(payload.forceRefresh);
+  return {
+    status: 'success',
+    data: data.overview
+  };
+}
+
+function getAdminParticipantProgressDetail(payload) {
+  const data = _getAggregatedProgress(payload.forceRefresh);
+  return {
+    status: 'success',
+    data: data.detail
+  };
 }
