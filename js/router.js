@@ -363,6 +363,7 @@ const router = {
         "/rbac": "/pages/dashboard/rbac.html",
         "/assets": "/pages/dashboard/assets.html",
         "/live-monitor": "/pages/dashboard/live-monitor.html",
+        "/progress-peserta": "/pages/dashboard/progress-peserta.html",
         "/reset-password": "/pages/dashboard/reset-password.html"
     },
 
@@ -1215,6 +1216,7 @@ const router = {
             "/rbac",
             "/assets",
             "/live-monitor",
+            "/progress-peserta",
             "/reset-password"
         ];
 
@@ -1995,6 +1997,8 @@ if (path === "/participant-ai-evolution" && typeof window.initAiEvolutionMateri 
                     window.initRbac();
                 } else if (path === "/live-monitor" && typeof window.initLiveMonitor === "function") {
                     try { window.initLiveMonitor(); } catch(e) { console.error('initLiveMonitor error:', e.message, e.stack); }
+                } else if (path === "/progress-peserta" && typeof window.initProgressPeserta === "function") {
+                    try { window.initProgressPeserta(); } catch(e) { console.error('initProgressPeserta error:', e.message, e.stack); }
                 } else if (path === "/reset-password" && typeof window.initResetPassword === "function") {
                     window.initResetPassword();
                 }

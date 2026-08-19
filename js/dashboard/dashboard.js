@@ -71,9 +71,11 @@
                    targetId === 'nav-final-project' ||
                    targetId === 'nav-certificates' ||
                    targetId === 'nav-settings' ||
-                    targetId === 'nav-audit' ||
-                    targetId === 'nav-live-monitor' ||
-                    targetId === 'nav-rbac'
+                   targetId === 'nav-audit' ||
+                   targetId === 'nav-live-monitor' ||
+                   targetId === 'nav-progress-peserta' ||
+                   targetId === 'nav-reset-password' ||
+                   targetId === 'nav-rbac'
                ) {
                    return; // Jangan ditahan, biarkan router SPA bekerja
                }
