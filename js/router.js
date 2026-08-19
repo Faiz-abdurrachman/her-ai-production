@@ -1331,7 +1331,9 @@ const router = {
                     requestAnimationFrame(() => routeLoading?.isConnected && routeLoading.classList.add("is-visible"));
                 }
                 // Fetch file HTML-nya
-                const response = await fetch(routeUrl);
+                // Bypass cache for HTML fetch during development
+                const fetchUrl = routeUrl + "?v=" + new Date().getTime();
+                const response = await fetch(fetchUrl);
                 if (!response.ok) throw new Error("Gagal fetch file HTML");
                 const routeHtml = await response.text();
                 if (routingSequence !== this.routingSequence) {

@@ -333,15 +333,15 @@
                 
                 .premium-stats-list { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
                 .premium-stat-box {
-                    background: #EFE9EF; border: 1px solid rgba(0,0,0,0.03); border-radius: 12px; padding: 12px 14px 12px 36px; position: relative;
+                    background: #EFE9EF; border: 1px solid rgba(0,0,0,0.03); border-radius: 12px; padding: 12px 60px 12px 36px; position: relative; min-height: 54px; display: flex; flex-direction: column; justify-content: center;
                 }
-                .premium-stat-box::before { content: ''; position: absolute; left: 14px; top: 16px; width: 8px; height: 8px; border-radius: 50%; }
+                .premium-stat-box::before { content: ''; position: absolute; left: 14px; top: 18px; width: 8px; height: 8px; border-radius: 50%; }
                 .premium-stat-box.pink::before { background: #E23183; }
                 .premium-stat-box.green::before { background: #43B581; }
                 .premium-stat-box.gray::before { background: #DCD0DE; }
                 
-                .premium-stat-box-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 2px; display: block; }
-                .premium-stat-box-sub { font-size: 11px; color: #888; }
+                .premium-stat-box-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 2px; display: block; line-height: 1.2; }
+                .premium-stat-box-sub { font-size: 11px; color: #888; line-height: 1.2; display: block; }
                 .premium-stat-box-val { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; font-weight: 800; color: #111; }
                 
                 .premium-pill {
