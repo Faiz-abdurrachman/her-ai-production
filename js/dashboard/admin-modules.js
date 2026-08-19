@@ -3103,169 +3103,386 @@
 
         function showModal(detail) {
             try {
-                // Hapus modal lama jika ada (mencegah duplikat)
                 document.querySelectorAll('.dynamic-progress-modal-overlay').forEach(el => el.remove());
                 
-                let modHtml = '';
+                // Kalkulasi AI Fundamentals
+                let aiSubmodules = [
+                    { id: 'ai-fundamentals', title: 'Pengantar AI' },
+                    { id: 'python-untuk-ai', title: 'Python untuk AI' },
+                    { id: 'konsep-ai-modern', title: 'Konsep AI Modern' },
+                    { id: 'reasoning', title: 'Reasoning AI' },
+                    { id: 'evaluation', title: 'Evaluation AI' },
+                    { id: 'evolution', title: 'Evolution of AI' }
+                ];
+                let aiTotalProg = 0;
+                let aiTuntas = 0;
+                let aiProses = 0;
+                let aiBelum = 0;
+                
+                let aiListHtml = '';
+                
                 if (detail.courses) {
-                    // Definisikan struktur hierarki
-                    const groups = [
-                        {
-                            groupId: 'ai-fundamentals-group',
-                            title: 'AI Fundamentals',
-                            icon: 'fas fa-brain',
-                            submodules: [
-                                { id: 'ai-fundamentals', title: 'Pengantar AI' },
-                                { id: 'python-untuk-ai', title: 'Python untuk AI' },
-                                { id: 'konsep-ai-modern', title: 'Konsep AI Modern' },
-                                { id: 'reasoning', title: 'Reasoning AI' },
-                                { id: 'evaluation', title: 'Evaluation AI' },
-                                { id: 'evolution', title: 'Evolution of AI' }
-                            ]
-                        },
-                        {
-                            groupId: 'math-group',
-                            title: 'Math for AI',
-                            icon: 'fas fa-square-root-variable',
-                            id: 'math-for-ai' // referensi ID backend langsung
-                        }
-                    ];
-
-                    groups.forEach(group => {
-                        let groupCompleted = 0;
-                        let groupTotal = 0;
-                        let groupProg = 0;
-                        let subHtml = '';
-
-                        if (group.groupId === 'ai-fundamentals-group') {
-                            // Kalkulasi agregat AI Fundamentals
-                            let totalSubProg = 0;
-                            group.submodules.forEach(sub => {
-                                const prog = detail.courses[sub.id] || 0;
-                                totalSubProg += prog;
-                                const stats = detail.courseDetails && detail.courseDetails[sub.id] ? detail.courseDetails[sub.id] : { completed: 0, total: 0 };
-                                groupCompleted += stats.completed;
-                                groupTotal += stats.total;
-
-                                const subStatsText = stats.total > 0 ? `<span style="font-size:0.7rem; color: var(--gray-dark); margin-right: 8px;">${stats.completed}/${stats.total}</span>` : '';
-                                
-                                subHtml += `
-                                <div style="display:flex; justify-content:space-between; align-items:center;">
-                                    <span style="font-size: 0.85rem; color: var(--gray-dark);"><i class="fas fa-level-up-alt fa-rotate-90" style="margin-right: 5px; color: var(--primary-pink); opacity: 0.7;"></i>${sub.title}</span>
-                                    <div style="display:flex; align-items:center; width: 130px;">
-                                        ${subStatsText}
-                                        <div style="background:rgba(255,105,180,0.1); flex-grow: 1; height:6px; border-radius:3px; overflow:hidden;">
-                                            <div style="background: var(--primary-pink); height:100%; width:${prog}%; border-radius: 3px;"></div>
-                                        </div>
-                                        <span style="font-size:0.75rem; color:var(--text-dark); font-weight:bold; min-width: 30px; text-align: right;">${prog}%</span>
-                                    </div>
+                    aiSubmodules.forEach(sub => {
+                        const prog = detail.courses[sub.id] || 0;
+                        aiTotalProg += prog;
+                        if (prog === 100) aiTuntas++;
+                        else if (prog > 0) aiProses++;
+                        else aiBelum++;
+                        
+                        const stats = detail.courseDetails && detail.courseDetails[sub.id] ? detail.courseDetails[sub.id] : { completed: 0, total: 0 };
+                        const subStatsText = stats.total > 0 ? `<span style="font-size:0.75rem; color: #888; margin-right: 8px;">${stats.completed}/${stats.total}</span>` : '';
+                        
+                        aiListHtml += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 6px 0;">
+                            <span style="font-size: 0.9rem; color: #444;"><i class="fas fa-level-up-alt fa-rotate-90" style="margin-right: 8px; color: #FF2F8A; opacity: 0.7;"></i>${sub.title}</span>
+                            <div style="display:flex; align-items:center; width: 140px;">
+                                ${subStatsText}
+                                <div style="background:rgba(255,47,138,0.1); flex-grow: 1; height:6px; border-radius:3px; overflow:hidden;">
+                                    <div style="background: #FF2F8A; height:100%; width:${prog}%; border-radius: 3px;"></div>
                                 </div>
-                                `;
-                            });
-                            if (groupCompleted === 0 && totalSubProg > 0) {
-                                groupProg = Math.round(totalSubProg / group.submodules.length);
-                            } else {
-                                groupProg = groupTotal > 0 ? Math.round((groupCompleted / groupTotal) * 100) : 0;
-                            }
-
-                        } else if (group.groupId === 'math-group') {
-                            // Kalkulasi Math for AI
-                            groupProg = detail.courses['math-for-ai'] || 0;
-                            const stats = detail.courseDetails && detail.courseDetails['math-for-ai'] ? detail.courseDetails['math-for-ai'] : { completed: 0, total: 0 };
-                            groupCompleted = stats.completed;
-                            groupTotal = stats.total;
-
-                            const mathTitles = {
-                                'Submodule 01': 'Kenapa AI Butuh Matematika?',
-                                'Submodule 02': 'Linear Algebra',
-                                'Submodule 03': 'Statistics for AI',
-                                'Submodule 04': 'Probability',
-                                'Submodule 05': 'Calculus',
-                                'Submodule 06': 'Optimization',
-                                'Submodule 07': 'Integrated Case Study'
-                            };
-                            if (detail.mathSubmodules) {
-                                for (const [subId, subData] of Object.entries(detail.mathSubmodules)) {
-                                    const subProg = typeof subData === 'object' ? subData.percentage : subData;
-                                    const subStatsText = typeof subData === 'object' ? `<span style="font-size:0.7rem; color: var(--gray-dark); margin-right: 8px;">${subData.completed}/${subData.total}</span>` : '';
-                                    const displayTitle = mathTitles[subId] || subId;
-                                    
-                                    subHtml += `
-                                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                                        <span style="font-size: 0.85rem; color: var(--gray-dark);"><i class="fas fa-level-up-alt fa-rotate-90" style="margin-right: 5px; color: var(--primary-pink); opacity: 0.7;"></i>${displayTitle}</span>
-                                        <div style="display:flex; align-items:center; width: 130px;">
-                                            ${subStatsText}
-                                            <div style="background:rgba(255,105,180,0.1); flex-grow: 1; height:6px; border-radius:3px; overflow:hidden;">
-                                                <div style="background: var(--primary-pink); height:100%; width:${subProg}%; border-radius: 3px;"></div>
-                                            </div>
-                                            <span style="font-size:0.75rem; color:var(--text-dark); font-weight:bold; min-width: 30px; text-align: right;">${subProg}%</span>
-                                        </div>
-                                    </div>
-                                    `;
-                                }
-                            } else {
-                                subHtml = '<p style="font-size:0.8rem; color:var(--gray-dark); margin:0;">Belum ada detail submodul.</p>';
-                            }
-                        }
-
-                        const dataBadge = groupTotal > 0 ? `<span style="font-size:0.75rem; color: var(--gray-dark); background: rgba(0,0,0,0.05); padding: 3px 8px; border-radius: 6px; margin-right: 10px;">${groupCompleted}/${groupTotal} items</span>` : '';
-
-                        // Render Parent Card
-                        modHtml += `
-                        <div style="padding: 16px; border: 1px solid rgba(255,255,255,0.6); border-radius: 16px; background: rgba(255,255,255,0.6); box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(255,105,180,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.03)';">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                                <strong style="color: var(--text-dark); font-size: 1rem; display:flex; align-items:center; gap:8px;"><i class="${group.icon}" style="color:var(--primary-pink);"></i> ${group.title}</strong>
-                                <div style="display: flex; align-items: center;">
-                                    ${dataBadge}
-                                    <span style="font-size:0.9rem; color:var(--primary-pink); font-weight:800; background: rgba(255,105,180,0.1); padding: 4px 10px; border-radius: 12px;">${groupProg}%</span>
-                                </div>
+                                <span style="font-size:0.8rem; color:#111; font-weight:800; min-width: 35px; text-align: right;">${prog}%</span>
                             </div>
-                            <div style="background:rgba(255,105,180,0.1); width:100%; height:10px; border-radius:5px; overflow:hidden; margin-bottom: 15px;">
-                                <div style="background: linear-gradient(90deg, var(--primary-pink), #ff5e8e); height:100%; width:${groupProg}%; box-shadow: 0 0 10px rgba(255, 105, 180, 0.4); border-radius: 5px;"></div>
-                            </div>
-                            <div style="padding-left: 15px; border-left: 2px solid rgba(255,105,180,0.2); display: flex; flex-direction: column; gap: 8px;">
-                                ${subHtml}
-                            </div>
-                        </div>
-                        `;
+                        </div>`;
                     });
                 }
+                const aiGroupProg = detail.courses ? Math.round(aiTotalProg / aiSubmodules.length) : 0;
+                
+                // Kalkulasi Math for AI
+                const mathProg = detail.courses && detail.courses['math-for-ai'] ? detail.courses['math-for-ai'] : 0;
+                const mathStats = detail.courseDetails && detail.courseDetails['math-for-ai'] ? detail.courseDetails['math-for-ai'] : { completed: 0, total: 89 };
+                const mathCompleted = mathStats.completed;
+                const mathTotal = mathStats.total > 0 ? mathStats.total : 89;
+                
+                let mathListHtml = '';
+                let mathSubmodulesCount = 0;
+                let mathTopicsCount = 0;
+                const mathTitles = {
+                    'Submodule 01': 'Kenapa AI Butuh Matematika?',
+                    'Submodule 02': 'Linear Algebra',
+                    'Submodule 03': 'Statistics for AI',
+                    'Submodule 04': 'Probability',
+                    'Submodule 05': 'Calculus',
+                    'Submodule 06': 'Optimization',
+                    'Submodule 07': 'Integrated Case Study'
+                };
+                if (detail.mathSubmodules) {
+                    mathSubmodulesCount = Object.keys(detail.mathSubmodules).length || 7;
+                    for (const [subId, subData] of Object.entries(detail.mathSubmodules)) {
+                        const subProg = typeof subData === 'object' ? subData.percentage : subData;
+                        mathTopicsCount += (typeof subData === 'object' && subData.total) ? subData.total : 0;
+                        const subStatsText = typeof subData === 'object' ? `<span style="font-size:0.75rem; color: #888; margin-right: 8px;">${subData.completed}/${subData.total}</span>` : '';
+                        const displayTitle = mathTitles[subId] || subId;
+                        
+                        mathListHtml += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 6px 0;">
+                            <span style="font-size: 0.9rem; color: #444;"><i class="fas fa-level-up-alt fa-rotate-90" style="margin-right: 8px; color: #FF2F8A; opacity: 0.7;"></i>${displayTitle}</span>
+                            <div style="display:flex; align-items:center; width: 140px;">
+                                ${subStatsText}
+                                <div style="background:rgba(255,47,138,0.1); flex-grow: 1; height:6px; border-radius:3px; overflow:hidden;">
+                                    <div style="background: #FF2F8A; height:100%; width:${subProg}%; border-radius: 3px;"></div>
+                                </div>
+                                <span style="font-size:0.8rem; color:#111; font-weight:800; min-width: 35px; text-align: right;">${subProg}%</span>
+                            </div>
+                        </div>`;
+                    }
+                } else {
+                    mathSubmodulesCount = 7;
+                    mathTopicsCount = 54;
+                    mathListHtml = '<p style="font-size:0.9rem; color:#888; margin:0;">Belum ada detail submodul.</p>';
+                }
+                
+                // Helper untuk diagram SVG bercahaya
+                const getSvgDonut = (prog, type) => {
+                    const radius = 55;
+                    const circum = 2 * Math.PI * radius;
+                    const offset = circum - (prog / 100) * circum;
+                    const gradId = type === 'math' ? 'grad-green' : 'grad-pink';
+                    
+                    return `
+                    <svg width="150" height="150" viewBox="0 0 150 150" style="filter: drop-shadow(0 10px 15px ${type === 'math' ? 'rgba(0,230,118,0.3)' : 'rgba(255,47,138,0.3)'});">
+                        <defs>
+                            <linearGradient id="grad-pink" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#E23183" />
+                                <stop offset="100%" stop-color="#FF2F8A" />
+                            </linearGradient>
+                            <linearGradient id="grad-green" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#00E676" />
+                                <stop offset="100%" stop-color="#43B581" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="75" cy="75" r="${radius}" fill="none" stroke="#EFE9EF" stroke-width="14" />
+                        <circle cx="75" cy="75" r="${radius}" fill="none" stroke="url(#${gradId})" stroke-width="14" 
+                                stroke-dasharray="${circum}" stroke-dashoffset="${offset}" 
+                                stroke-linecap="round" transform="rotate(-90 75 75)" 
+                                style="transition: stroke-dashoffset 1s ease-out;" />
+                    </svg>`;
+                };
                 
                 const modalHtml = `
-<div class="modal-content" style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px) saturate(200%); -webkit-backdrop-filter: blur(24px) saturate(200%); border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 30px 60px rgba(255, 105, 180, 0.15); width:90%; max-width:650px; border-radius: 24px; padding: 35px; max-height:85vh; overflow-y:auto; position:relative;">
-    <button onclick="this.closest('.dynamic-progress-modal-overlay').remove()" style="position:absolute; top:20px; right:20px; width:40px; height:40px; border-radius:50%; background: rgba(255,105,180,0.1); color:var(--primary-pink); border:none; font-size:1.2rem; cursor:pointer; transition: all 0.3s ease; display:flex; align-items:center; justify-content:center;" onmouseover="this.style.background='var(--primary-pink)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(255,105,180,0.1)'; this.style.color='var(--primary-pink)';"><i class="fas fa-times"></i></button>
-    <div style="display:flex; align-items:center; gap: 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,105,180,0.1);">
-        <div style="width: 60px; height: 60px; border-radius: 16px; background: linear-gradient(135deg, var(--primary-pink), #ff5e8e); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; box-shadow: 0 8px 15px rgba(255,105,180,0.3);">
-            <i class="fas fa-user"></i>
-        </div>
-        <div>
-            <h2 style="margin: 0 0 5px 0; font-size: 1.5rem; color: var(--text-dark);">${detail.name || '-'}</h2>
-            <p style="margin: 0; color: var(--gray-dark); font-size: 0.95rem;">
-                <i class="fas fa-id-card" style="color:var(--primary-pink); margin-right:5px;"></i> 
-                NIK: <span style="font-family: monospace; font-size: 1rem; background: rgba(255,105,180,0.1); padding: 2px 8px; border-radius: 6px;">${detail.nik || '-'}</span>
-            </p>
-        </div>
-    </div>
-    
-    <h4 style="color: var(--text-dark); margin-bottom: 15px; display:flex; align-items:center; gap:10px;">
-        <i class="fas fa-layer-group" style="color:var(--primary-pink);"></i> Capaian per Modul
-    </h4>
-    <div style="display:grid; gap:10px;">
-        ${modHtml || '<p>Belum ada progres modul.</p>'}
-    </div>
-    
-    <div style="margin-top:30px; display:flex; justify-content:center;">
-        <button class="btn" style="background: linear-gradient(135deg, var(--primary-pink), #ff5e8e); color: white; padding: 12px 35px; border-radius: 50px; font-weight: 600; box-shadow: 0 8px 20px rgba(255,105,180,0.3); border: none; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 25px rgba(255,105,180,0.4)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 8px 20px rgba(255,105,180,0.3)';" onclick="this.closest('.dynamic-progress-modal-overlay').remove()">Tutup Detail</button>
-    </div>
-</div>
-                `;
+<style>
+.pr-modal-bg {
+    position:fixed; top:0; left:0; width:100%; height:100%; 
+    background:rgba(17, 25, 79, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    z-index:999999; display:flex; justify-content:center; align-items:center; padding: 20px;
+}
+.pr-modal {
+    background: linear-gradient(135deg, #F8F5F8 0%, #F0EAF0 100%);
+    width: 100%; max-width: 850px;
+    border-radius: 30px;
+    max-height: 90vh; overflow-y: auto;
+    position: relative;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2), inset 0 2px 5px rgba(255,255,255,0.8);
+}
+.pr-close {
+    position:absolute; top:25px; right:25px; width:40px; height:40px; border-radius:50%; 
+    background: white; color:#FF2F8A; border:none; font-size:1.2rem; cursor:pointer; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: 0.2s; z-index: 10;
+}
+.pr-close:hover { background: #FF2F8A; color: white; transform: scale(1.1); }
+.pr-header {
+    background: rgba(255,255,255,0.4); padding: 30px 40px; border-radius: 30px 30px 0 0;
+    display: flex; gap: 24px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.8);
+    backdrop-filter: blur(10px);
+}
+.pr-avatar {
+    width: 70px; height: 70px; border-radius: 22px; background: linear-gradient(135deg, #FF2F8A, #ff5e8e); 
+    color: white; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold;
+    box-shadow: 0 10px 20px rgba(255,47,138,0.3);
+}
+.pr-name { font-size: 24px; font-weight: 800; color: #11194F; margin: 0 0 6px 0; letter-spacing: -0.5px;}
+.pr-nik { font-family: monospace; font-size: 15px; background: white; color: #FF2F8A; padding: 6px 14px; border-radius: 10px; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid rgba(255,47,138,0.1); }
+.pr-body { padding: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.pr-body-bottom { grid-column: 1 / -1; }
 
-                const modal = document.createElement('div');
-                modal.className = 'dynamic-progress-modal-overlay';
-                modal.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999999; display:flex; justify-content:center; align-items:center;';
-                modal.innerHTML = modalHtml;
-                document.body.appendChild(modal);
-                console.log('Dynamic modal sukses ditampilkan.');
+/* Card Styles */
+.pr-card {
+    background: rgba(255,255,255,0.85);
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.04), inset 0 2px 0 rgba(255,255,255,1);
+    border: 1px solid rgba(255,255,255,1);
+    backdrop-filter: blur(20px);
+}
+.pr-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.pr-card-title { font-size: 20px; font-weight: 800; color: #11194F; margin: 0; letter-spacing: -0.5px; }
+.pr-badge { background: rgba(255,47,138,0.08); color: #FF2F8A; padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; border: 1px solid rgba(255,47,138,0.15); }
+.pr-badge.green { background: #E8F5E9; color: #2E7D32; border-color: #C8E6C9;}
+
+.pr-grid { display: flex; gap: 24px; align-items: center; }
+
+/* Donut Chart SVG Container */
+.pr-donut {
+    width: 150px; height: 150px;
+    position: relative; display: flex; justify-content: center; align-items: center;
+    flex-shrink: 0;
+}
+.pr-donut-content { position: absolute; z-index: 2; text-align: center; }
+.pr-donut-val { font-size: 34px; font-weight: 800; color: #11194F; line-height: 1; letter-spacing: -1px; }
+.pr-donut-lbl { font-size: 11px; color: #666; font-weight: 600; margin-top: 6px; }
+
+/* Stats List */
+.pr-stats { display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
+.pr-stat-box { 
+    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(248,245,248,1) 100%); 
+    padding: 14px 18px; border-radius: 16px;
+    display: flex; align-items: center; gap: 12px; position: relative;
+    border: 1px solid rgba(255,255,255,1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+.pr-stat-icon {
+    width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: white;
+}
+.dot-green .pr-stat-icon { background: linear-gradient(135deg, #00E676, #43B581); box-shadow: 0 4px 10px rgba(0,230,118,0.3); }
+.dot-pink .pr-stat-icon { background: linear-gradient(135deg, #FF2F8A, #ff5e8e); box-shadow: 0 4px 10px rgba(255,47,138,0.3); }
+.dot-gray .pr-stat-icon { background: linear-gradient(135deg, #B39DDB, #D1C4E9); box-shadow: 0 4px 10px rgba(179,157,219,0.3); }
+
+.pr-stat-text { display: flex; flex-direction: column; }
+.pr-stat-title { font-size: 14px; font-weight: 800; color: #11194F; }
+.pr-stat-sub { font-size: 12px; color: #61698F; font-weight: 500; margin-top:2px; }
+.pr-stat-val-right { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 18px; font-weight: 800; color: #111; }
+
+
+.pr-info-pill {
+    background: rgba(255,47,138,0.03); border: 1px solid rgba(255,47,138,0.1); padding: 16px 20px; border-radius: 16px;
+    font-size: 13px; color: #61698F; display: flex; gap: 12px; align-items: center; line-height: 1.5; margin-top: 24px;
+}
+.pr-info-pill-icon {
+    width: 32px; height: 32px; border-radius: 10px; background: white; color: #FF2F8A; 
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(255,47,138,0.1); flex-shrink: 0;
+}
+.pr-info-pill.green { background: rgba(0,230,118,0.05); color: #2E7D32; border-color: rgba(0,230,118,0.2); }
+.pr-info-pill.green .pr-info-pill-icon { color: #00E676; box-shadow: 0 4px 10px rgba(0,230,118,0.1); }
+
+.pr-list-wrap {
+    margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(0,0,0,0.05);
+}
+.pr-list-wrap > div {
+    background: white; padding: 12px 16px; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(0,0,0,0.03);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+</style>
+<div class="pr-modal-bg dynamic-progress-modal-overlay">
+    <div class="pr-modal">
+        <button class="pr-close" onclick="this.closest('.dynamic-progress-modal-overlay').remove()"><i class="fas fa-times"></i></button>
+        
+        <div class="pr-header">
+            <div class="pr-avatar"><i class="fas fa-user"></i></div>
+            <div>
+                <h2 class="pr-name">${escapeHtml(detail.name || 'Peserta')}</h2>
+                <span class="pr-nik">${escapeHtml(detail.nik || '-')}</span>
+            </div>
+        </div>
+        
+        <div class="pr-body">
+            
+            <!-- SECTION 1: OVERALL -->
+            <div class="pr-card">
+                <div class="pr-card-head">
+                    <h3 class="pr-card-title">Progres Keseluruhan</h3>
+                    <span class="pr-badge green"><i class="fas fa-circle" style="font-size:8px; vertical-align:middle; margin-right:4px;"></i> Live</span>
+                </div>
+                <div class="pr-grid">
+                    <div class="pr-donut">
+                        ${getSvgDonut(overallProg, 'pink')}
+                        <div class="pr-donut-content">
+                            <div class="pr-donut-val">${overallProg}%</div>
+                            <div class="pr-donut-lbl">2 course aktif</div>
+                        </div>
+                    </div>
+                    <div class="pr-stats">
+                        <div class="pr-stat-box dot-pink">
+                            <div class="pr-stat-icon"><i class="fas fa-layer-group"></i></div>
+                            <div class="pr-stat-text">
+                                <span class="pr-stat-title">AI Fundamentals</span>
+                                <span class="pr-stat-sub">6 modul</span>
+                            </div>
+                            <span class="pr-stat-val-right" style="color: #FF2F8A;">${aiGroupProg}%</span>
+                        </div>
+                        <div class="pr-stat-box dot-green">
+                            <div class="pr-stat-icon"><i class="fas fa-square-root-variable"></i></div>
+                            <div class="pr-stat-text">
+                                <span class="pr-stat-title">Math for AI</span>
+                                <span class="pr-stat-sub">${mathTotal} aktivitas</span>
+                            </div>
+                            <span class="pr-stat-val-right" style="color: #00E676;">${mathProg}%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pr-info-pill">
+                    <div class="pr-info-pill-icon"><i class="fas fa-calculator"></i></div>
+                    <div><strong>Rumus:</strong> (${aiGroupProg}% AI Fundamentals + ${mathProg}% Math for AI) &divide; 2 = ${overallProg}%.<br><span style="color:#888; font-size:11px;">Sinkron dengan progres server.</span></div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: AI FUNDAMENTALS -->
+            <div class="pr-card">
+                <div class="pr-card-head">
+                    <h3 class="pr-card-title">Progres AI Fundamentals</h3>
+                    <span class="pr-badge">6 modul</span>
+                </div>
+                <div class="pr-grid">
+                    <div class="pr-donut">
+                        ${getSvgDonut(aiGroupProg, 'pink')}
+                        <div class="pr-donut-content">
+                            <div class="pr-donut-val">${aiGroupProg}%</div>
+                            <div class="pr-donut-lbl">Rata-rata</div>
+                        </div>
+                    </div>
+                    <div class="pr-stats">
+                        <div class="pr-stat-box dot-green">
+                            <div class="pr-stat-icon"><i class="fas fa-check"></i></div>
+                            <div class="pr-stat-text">
+                                <span class="pr-stat-title">Tuntas</span>
+                                <span class="pr-stat-sub">${aiTuntas} Modul</span>
+                            </div>
+                            <span class="pr-stat-val-right" style="color:#00E676;">${aiTuntas}</span>
+                        </div>
+                        <div class="pr-stat-box dot-pink">
+                            <div class="pr-stat-icon"><i class="fas fa-spinner"></i></div>
+                            <div class="pr-stat-text">
+                                <span class="pr-stat-title">Dalam Proses</span>
+                                <span class="pr-stat-sub">${aiProses} Modul</span>
+                            </div>
+                            <span class="pr-stat-val-right" style="color:#FF2F8A;">${aiProses}</span>
+                        </div>
+                        <div class="pr-stat-box dot-gray">
+                            <div class="pr-stat-icon"><i class="fas fa-circle-pause"></i></div>
+                            <div class="pr-stat-text">
+                                <span class="pr-stat-title">Belum Dimulai</span>
+                                <span class="pr-stat-sub">${aiBelum} Modul</span>
+                            </div>
+                            <span class="pr-stat-val-right" style="color:#888;">${aiBelum}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pr-info-pill">
+                    <div class="pr-info-pill-icon"><i class="fas fa-sparkles"></i></div>
+                    <div><strong>Cakupan:</strong> Pengantar AI hingga Evolution of AI.</div>
+                </div>
+                <div class="pr-list-wrap">
+                    ${aiListHtml}
+                </div>
+            </div>
+
+            <!-- SECTION 3: MATH FOR AI -->
+            <div class="pr-card pr-body-bottom">
+                <div class="pr-card-head">
+                    <h3 class="pr-card-title">Progres Belajar</h3>
+                    <span class="pr-badge" style="background: transparent; border: none;"></span>
+                </div>
+                <div class="pr-grid" style="grid-template-columns: 200px 1fr; gap: 40px;">
+                    <div class="pr-donut" style="width:180px; height:180px;">
+                        ${getSvgDonut(mathProg, 'math').replace(/150/g, '180').replace(/75/g, '90').replace(/55/g, '75')}
+                        <div class="pr-donut-content">
+                            <div class="pr-donut-val" style="font-size:42px;">${mathProg}%</div>
+                            <div class="pr-donut-lbl" style="font-size:14px;">Selesai</div>
+                        </div>
+                    </div>
+                    <div class="pr-stats">
+                        <div class="pr-stat-box dot-green">
+                            <div class="pr-stat-icon"><i class="fas fa-badge-check"></i></div>
+                            <div class="pr-stat-text">
+                                <span class="pr-stat-title">Selesai</span>
+                                <span class="pr-stat-sub">${mathCompleted} dari ${mathTotal} bagian</span>
+                            </div>
+                            <span class="pr-stat-val-right" style="color:#00E676;">${mathProg === 100 ? '100%' : mathCompleted}</span>
+                        </div>
+                        <div class="pr-stat-box dot-pink">
+                            <div class="pr-stat-icon"><i class="fas fa-layer-group"></i></div>
+                            <div class="pr-stat-text">
+                                <span class="pr-stat-title">Submodul</span>
+                                <span class="pr-stat-sub">${mathSubmodulesCount} total</span>
+                            </div>
+                            <span class="pr-stat-val-right" style="color:#FF2F8A;">${mathSubmodulesCount}</span>
+                        </div>
+                        <div class="pr-stat-box dot-gray">
+                            <div class="pr-stat-icon"><i class="fas fa-book-open"></i></div>
+                            <div class="pr-stat-text">
+                                <span class="pr-stat-title">Topik materi</span>
+                                <span class="pr-stat-sub">${mathTopicsCount || 54} topik</span>
+                            </div>
+                            <span class="pr-stat-val-right" style="color:#888;">${mathTopicsCount || 54}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pr-info-pill green">
+                    <div class="pr-info-pill-icon"><i class="fas fa-check-circle"></i></div>
+                    <div>Progres terbaru sudah tersinkron dengan akun peserta.</div>
+                </div>
+                <div class="pr-list-wrap" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+                    ${mathListHtml}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>`;
+                
+                const modalWrapper = document.createElement('div');
+                modalWrapper.innerHTML = modalHtml.trim();
+                document.body.appendChild(modalWrapper.firstChild);
             } catch (err) {
                 alert('CRITICAL ERROR saat merender modal: ' + err.message);
                 console.error('Modal error:', err);
