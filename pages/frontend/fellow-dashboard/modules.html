@@ -324,6 +324,9 @@
                     background: conic-gradient(#E23183 0% var(--overall-progress, 0%), #DCD0DE var(--overall-progress, 0%) 100%);
                     display: flex; justify-content: center; align-items: center; position: relative;
                 }
+                .premium-donut.math {
+                    background: conic-gradient(#43B581 0% var(--overall-progress, 0%), #DCD0DE var(--overall-progress, 0%) 100%);
+                }
                 .premium-donut::after {
                     content: ''; position: absolute; width: 90px; height: 90px; background: #F4EFF4; border-radius: 50%;
                 }
@@ -360,7 +363,8 @@
                     min-width: 40px;
                     display: inline-block;
                 }
-                .premium-progress-card[data-module-side-summary-state="loading"] .premium-donut {
+                .premium-progress-card[data-module-side-summary-state="loading"] .premium-donut,
+                .premium-progress-card[data-module-side-summary-state="loading"] .premium-donut.math {
                     background: #f0eaf0;
                 }
                 .premium-progress-card[data-module-side-summary-state="loading"] .premium-donut::before {
@@ -449,7 +453,7 @@
                     <div class="module-side-head"><h2>Progres Belajar</h2></div>
                     
                     <div class="premium-grid">
-                        <div class="premium-donut math" data-math-donut aria-label="Memuat progres Math" style="--overall-progress: 0%; background: conic-gradient(#43B581 0% var(--overall-progress, 0%), #DCD0DE var(--overall-progress, 0%) 100%);">
+                        <div class="premium-donut math" data-math-donut aria-label="Memuat progres Math" style="--overall-progress: 0%;">
                             <div class="premium-donut-content">
                                 <strong data-course-progress="math-for-ai">—</strong>
                                 <span>Selesai</span>

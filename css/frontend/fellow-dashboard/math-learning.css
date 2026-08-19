@@ -142,6 +142,9 @@
   box-shadow: 0 0 0 1px rgba(80, 52, 69, 0.06), 0 15px 32px rgba(118, 48, 84, 0.1);
   justify-self: center;
   width: min(140px, 100%);
+  --completed-end: 0%;
+  --started-end: 0%;
+  background: conic-gradient(#43B581 0% var(--completed-end, 0%), #f0eaf0 var(--completed-end, 0%) 100%);
 }
 
 .math-course-overview .course-summary-card[data-math-overview-state] .progress-donut::after {

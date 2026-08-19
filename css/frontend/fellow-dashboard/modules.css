@@ -14193,7 +14193,9 @@
 
 .fellow-modules-page .module-stat-grid[data-module-summary-state="loading"] strong,
 .module-live-summary[data-module-side-summary-state="loading"] .progress-donut strong,
-.module-live-summary[data-module-side-summary-state="loading"] li b {
+.module-live-summary[data-module-side-summary-state="loading"] li b,
+.course-summary-card[data-learning-summary-state="loading"] .progress-donut strong,
+.course-summary-card[data-learning-summary-state="loading"] li b {
     animation: herai-skeleton-shimmer 1.35s ease-in-out infinite;
     background: linear-gradient(100deg, #f0e8ee 20%, #fff 42%, #f0e8ee 64%);
     background-size: 220% 100%;
@@ -14203,11 +14205,13 @@
     overflow: hidden;
 }
 
-.module-live-summary[data-module-side-summary-state="loading"] .progress-donut {
+.module-live-summary[data-module-side-summary-state="loading"] .progress-donut,
+.course-summary-card[data-learning-summary-state="loading"] .progress-donut {
     background: #f0eaf0;
 }
 
-.module-live-summary[data-module-side-summary-state="loading"] .progress-donut::before {
+.module-live-summary[data-module-side-summary-state="loading"] .progress-donut::before,
+.course-summary-card[data-learning-summary-state="loading"] .progress-donut::before {
     animation: herai-ring-spin 1.05s linear infinite;
     background: conic-gradient(from 25deg, transparent 0 66%, var(--fellow-pink) 78%, #8b5cf6 92%, transparent 100%);
     border-radius: 50%;
@@ -14216,7 +14220,8 @@
     position: absolute;
 }
 
-.module-live-summary[data-module-side-summary-state="loading"] .progress-donut span {
+.module-live-summary[data-module-side-summary-state="loading"] .progress-donut span,
+.course-summary-card[data-learning-summary-state="loading"] .progress-donut span {
     color: #746c78;
 }
 

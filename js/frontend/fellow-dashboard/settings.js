@@ -2231,10 +2231,12 @@
         if (!card) return;
         var summary = normalizeLearningSummary(data || defaultParticipantDashboardData());
         var donut = card.querySelector('[data-learning-summary-donut]');
+        var donutLabel = donut?.querySelector('span');
         if (donut) {
             donut.style.setProperty('--course-progress', summary.progress + '%');
             donut.setAttribute('aria-label', summary.progress + ' persen progres; ' + summary.completed + ' modul tuntas, ' + summary.in_progress + ' dalam proses, ' + summary.not_started + ' belum dimulai');
         }
+        if (donutLabel) donutLabel.textContent = 'Rata-rata';
         var progress = card.querySelector('[data-learning-summary-progress]');
         var completed = card.querySelector('[data-learning-summary-completed]');
         var inProgress = card.querySelector('[data-learning-summary-in-progress]');
@@ -2407,8 +2409,8 @@
 
     function renderParticipantModules(data, state) {
         var summaryGrid = document.querySelector('[data-module-summary-state]');
-        var sideCard = document.querySelector('[data-module-side-summary-state]');
-        if (!summaryGrid && !sideCard) return;
+        var sideCards = document.querySelectorAll('[data-module-side-summary-state]');
+        if (!summaryGrid && !sideCards.length) return;
 
         var modules = participantFoundationModules(data || {});
         var courses = normalizeActiveCourses(data || {});
@@ -2510,10 +2512,10 @@
             summaryGrid.dataset.moduleSummaryState = state;
             summaryGrid.setAttribute('aria-busy', String(state === 'cache'));
         }
-        if (sideCard) {
+        sideCards.forEach(function(sideCard) {
             sideCard.dataset.moduleSideSummaryState = state;
             sideCard.setAttribute('aria-busy', String(state === 'cache'));
-        }
+        });
     }
 
     async function initParticipantModulesData() {
@@ -2543,9 +2545,11 @@
 
     window.__retryParticipantModules = function() {
         var summaryGrid = document.querySelector('[data-module-summary-state]');
-        var sideCard = document.querySelector('[data-module-side-summary-state]');
+        var sideCards = document.querySelectorAll('[data-module-side-summary-state]');
         if (summaryGrid) summaryGrid.setAttribute('aria-busy', 'true');
-        if (sideCard) sideCard.setAttribute('aria-busy', 'true');
+        sideCards.forEach(function(sideCard) {
+            sideCard.setAttribute('aria-busy', 'true');
+        });
         initParticipantModulesData();
     };
 
@@ -3800,7 +3804,7 @@
         }
         if (pageName === 'modules') {
             initModuleInteractions();
-            if (currentPath() === '/participant-modules') {
+            if (currentPath() === '/participant-modules' || document.querySelector('.fellow-modules-page')) {
                 initParticipantModulesData();
             }
             initGeneratedLessonPage();
@@ -3809,7 +3813,7 @@
             initLessonDiscussion();
             initLessonControls();
             initAiIntroInteractive();
-            if (currentPath() === '/participant-ai-fundamentals') {
+            if (currentPath() === '/participant-ai-fundamentals' || document.querySelector('.course-summary-card[data-learning-summary-state]')) {
                 initAiFundamentalsSummary();
             }
         }
