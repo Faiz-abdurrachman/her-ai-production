@@ -303,16 +303,79 @@
             </div>
 
             <aside class="module-right">
-                <section class="module-side-card progress-card module-live-summary" data-module-side-summary-state="loading" aria-busy="true">
+                <style>
+                .module-side-card.premium-progress-card {
+                    background: #F4EFF4; border-radius: 20px; padding: 24px; border: 1px solid rgba(0,0,0,0.02);
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                }
+                .premium-progress-card .module-side-head {
+                    display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
+                }
+                .premium-progress-card .module-side-head h2 { font-size: 18px; font-weight: 800; color: #111; margin: 0; }
+                .premium-progress-card .live-data-badge {
+                    background: #E8F5E9; color: #2E7D32; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; border: 1px solid #C8E6C9; display: flex; align-items: center; gap: 6px;
+                }
+                .premium-progress-card .live-data-badge i { width: 6px; height: 6px; background: #2E7D32; border-radius: 50%; }
+                
+                .premium-grid { display: grid; grid-template-columns: 130px 1fr; gap: 20px; align-items: center; }
+                
+                .premium-donut {
+                    width: 130px; height: 130px; border-radius: 50%;
+                    background: conic-gradient(#E23183 0% var(--overall-progress, 0%), #DCD0DE var(--overall-progress, 0%) 100%);
+                    display: flex; justify-content: center; align-items: center; position: relative;
+                }
+                .premium-donut::after {
+                    content: ''; position: absolute; width: 90px; height: 90px; background: #F4EFF4; border-radius: 50%;
+                }
+                .premium-donut-content { position: relative; z-index: 2; text-align: center; }
+                .premium-donut-content strong { display: block; font-size: 28px; font-weight: 800; color: #222; line-height: 1; letter-spacing: -1px; margin-bottom: 2px; }
+                .premium-donut-content span { font-size: 10px; color: #666; font-weight: 600; display: block; }
+                
+                .premium-stats-list { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+                .premium-stat-box {
+                    background: #EFE9EF; border: 1px solid rgba(0,0,0,0.03); border-radius: 12px; padding: 12px 14px 12px 36px; position: relative;
+                }
+                .premium-stat-box::before { content: ''; position: absolute; left: 14px; top: 16px; width: 8px; height: 8px; border-radius: 50%; }
+                .premium-stat-box.pink::before { background: #E23183; }
+                .premium-stat-box.green::before { background: #43B581; }
+                
+                .premium-stat-box-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 2px; display: block; }
+                .premium-stat-box-sub { font-size: 11px; color: #888; }
+                .premium-stat-box-val { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; font-weight: 800; color: #111; }
+                
+                .premium-pill {
+                    background: rgba(226,49,131,0.03); border: 1px solid rgba(226,49,131,0.1); padding: 12px 16px; border-radius: 12px; font-size: 11px; color: #666; margin-top: 24px; line-height: 1.4;
+                }
+                .premium-sync { text-align: center; font-size: 11px; color: #888; margin-top: 16px; margin-bottom: 0; }
+                </style>
+                <section class="module-side-card premium-progress-card module-live-summary" data-module-side-summary-state="loading" aria-busy="true">
                     <div class="module-side-head"><h2>Progres Keseluruhan</h2><span class="live-data-badge"><i></i> Live</span></div>
-                    <div class="progress-donut" data-module-summary-donut aria-label="Memuat progres dua course aktif"><strong data-module-side-progress>—</strong><span data-module-summary-scope-label>2 course aktif</span></div>
-                    <ul class="course-progress-breakdown" aria-label="Rincian progres tiap course">
-                        <li><i class="pink"></i><span><strong>AI Fundamentals</strong><b data-course-progress="ai-fundamentals-advanced">—</b><small>6 modul</small></span></li>
-                        <li><i class="green"></i><span><strong>Math for AI</strong><b data-course-progress="math-for-ai">—</b><small>89 aktivitas</small></span></li>
-                    </ul>
-                    <p class="module-summary-scope" data-module-summary-scope><strong>Rumus:</strong> rata-rata dua course aktif; masing-masing course berbobot sama.</p>
-                    <p class="summary-sync-state" data-module-summary-status aria-live="polite">Menghubungkan progres tersimpan…</p>
-                    <button type="button" class="module-summary-retry" data-module-summary-retry hidden><i class="fas fa-rotate-right"></i> Coba lagi</button>
+                    
+                    <div class="premium-grid">
+                        <div class="premium-donut" data-module-summary-donut aria-label="Memuat progres dua course aktif" style="--overall-progress: 0%;">
+                            <div class="premium-donut-content">
+                                <strong data-module-side-progress>—</strong>
+                                <span data-module-summary-scope-label>2 course aktif</span>
+                            </div>
+                        </div>
+                        
+                        <ul class="premium-stats-list" aria-label="Rincian progres tiap course">
+                            <li class="premium-stat-box pink">
+                                <span class="premium-stat-box-title">AI Fundamentals</span>
+                                <span class="premium-stat-box-sub">6 modul</span>
+                                <span class="premium-stat-box-val" data-course-progress="ai-fundamentals-advanced">—</span>
+                            </li>
+                            <li class="premium-stat-box green">
+                                <span class="premium-stat-box-title">Math for AI</span>
+                                <span class="premium-stat-box-sub">89 aktivitas</span>
+                                <span class="premium-stat-box-val" data-course-progress="math-for-ai">—</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <p class="premium-pill" data-module-summary-scope><strong>Rumus:</strong> rata-rata dua course aktif; masing-masing course berbobot sama.</p>
+                    <p class="premium-sync" data-module-summary-status aria-live="polite">Menghubungkan progres tersimpan…</p>
+                    <button type="button" class="module-summary-retry" data-module-summary-retry hidden style="width:100%; margin-top:10px;"><i class="fas fa-rotate-right"></i> Coba lagi</button>
                 </section>
 
                 <section class="module-side-card learning-focus-card">
