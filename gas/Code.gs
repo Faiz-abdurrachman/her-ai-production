@@ -5564,13 +5564,20 @@ function _getAggregatedProgress(forceRefresh) {
   
   Object.keys(participantMap).forEach(rowId => {
     const p = participantMap[rowId];
-    let pTotal = 0;
-    moduleIds.forEach(id => {
-      const val = p.courses[id] || 0;
-      pTotal += val;
-      moduleTotals[id] += val;
+    
+    const aiCourseIds = ['ai-fundamentals', 'python-untuk-ai', 'konsep-ai-modern', 'reasoning', 'evaluation', 'evolution'];
+    let aiTotal = 0;
+    aiCourseIds.forEach(id => {
+      aiTotal += (p.courses[id] || 0);
+      moduleTotals[id] += (p.courses[id] || 0);
     });
-    p.overallProgress = Number((pTotal / moduleIds.length).toFixed(1)) || 0;
+    const aiGroupProgress = aiCourseIds.length > 0 ? (aiTotal / aiCourseIds.length) : 0;
+    
+    const mathGroupProgress = p.courses['math-for-ai'] || 0;
+    moduleTotals['math-for-ai'] += mathGroupProgress;
+    
+    // Rata-rata dari 2 grup besar sesuai UI (AI Fundamentals & Math for AI)
+    p.overallProgress = Number(((aiGroupProgress + mathGroupProgress) / 2).toFixed(1)) || 0;
     totalOverallProgress += p.overallProgress;
     
     // Masking NIK: 3271120000000000 -> 3271********0000
