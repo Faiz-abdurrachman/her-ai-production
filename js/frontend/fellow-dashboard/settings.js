@@ -2427,10 +2427,11 @@
             setModuleSummaryValue('[data-course-progress="' + course.course_id + '"]', course.progress + '%');
         });
 
+        var aiProgress = courses.find(function(course) { return course.course_id === 'ai-fundamentals-advanced'; })?.progress;
+        var mathProgress = courses.find(function(course) { return course.course_id === 'math-for-ai'; })?.progress;
+
         var scope = document.querySelector('[data-module-summary-scope]');
         if (scope) {
-            var aiProgress = courses.find(function(course) { return course.course_id === 'ai-fundamentals-advanced'; })?.progress;
-            var mathProgress = courses.find(function(course) { return course.course_id === 'math-for-ai'; })?.progress;
             scope.innerHTML = failedWithoutData
                 ? '<strong>Rumus:</strong> progres dua course aktif belum lengkap.'
                 : '<strong>Rumus:</strong> (' + aiProgress + '% AI Fundamentals + ' + mathProgress + '% Math for AI) ÷ 2 = ' + summary.progress + '%.';
@@ -2443,6 +2444,30 @@
                 ? 'Progres belajar belum dapat dimuat'
                 : summary.progress + ' persen progres keseluruhan; rata-rata AI Fundamentals ' + aiProgress + ' persen dan Math for AI ' + mathProgress + ' persen');
         }
+
+        var aiTuntas = 0, aiProses = 0, aiBelum = 0;
+        modules.forEach(function(m) {
+            if (m.progress >= 100) aiTuntas++;
+            else if (m.progress > 0) aiProses++;
+            else aiBelum++;
+        });
+
+        setModuleSummaryValue('[data-ai-tuntas]', failedWithoutData ? '—' : aiTuntas);
+        setModuleSummaryValue('[data-ai-tuntas-lbl]', failedWithoutData ? '— Modul' : aiTuntas + ' Modul');
+        setModuleSummaryValue('[data-ai-proses]', failedWithoutData ? '—' : aiProses);
+        setModuleSummaryValue('[data-ai-proses-lbl]', failedWithoutData ? '— Modul' : aiProses + ' Modul');
+        setModuleSummaryValue('[data-ai-belum]', failedWithoutData ? '—' : aiBelum);
+        setModuleSummaryValue('[data-ai-belum-lbl]', failedWithoutData ? '— Modul' : aiBelum + ' Modul');
+
+        var aiDonut = document.querySelector('[data-ai-donut]');
+        if (aiDonut) aiDonut.style.setProperty('--overall-progress', (failedWithoutData ? 0 : aiProgress) + '%');
+
+        var mathCompleted = failedWithoutData ? 0 : Math.round(((mathProgress || 0) / 100) * 89);
+        setModuleSummaryValue('[data-math-selesai]', failedWithoutData ? '—' : (mathProgress === 100 ? '100%' : mathCompleted));
+        setModuleSummaryValue('[data-math-selesai-lbl]', failedWithoutData ? '— dari 89 bagian' : mathCompleted + ' dari 89 bagian');
+
+        var mathDonut = document.querySelector('[data-math-donut]');
+        if (mathDonut) mathDonut.style.setProperty('--overall-progress', (failedWithoutData ? 0 : mathProgress) + '%');
 
         modules.forEach(function(module) {
             var card = document.querySelector('[data-module-id="' + module.module_id + '"]');

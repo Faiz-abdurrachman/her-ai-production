@@ -338,6 +338,7 @@
                 .premium-stat-box::before { content: ''; position: absolute; left: 14px; top: 16px; width: 8px; height: 8px; border-radius: 50%; }
                 .premium-stat-box.pink::before { background: #E23183; }
                 .premium-stat-box.green::before { background: #43B581; }
+                .premium-stat-box.gray::before { background: #DCD0DE; }
                 
                 .premium-stat-box-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 2px; display: block; }
                 .premium-stat-box-sub { font-size: 11px; color: #888; }
@@ -408,6 +409,72 @@
                     <p class="premium-pill" data-module-summary-scope><strong>Rumus:</strong> rata-rata dua course aktif; masing-masing course berbobot sama.</p>
                     <p class="premium-sync" data-module-summary-status aria-live="polite">Menghubungkan progres tersimpan…</p>
                     <button type="button" class="module-summary-retry" data-module-summary-retry hidden style="width:100%; margin-top:10px;"><i class="fas fa-rotate-right"></i> Coba lagi</button>
+                </section>
+                
+                <!-- AI Fundamentals Card -->
+                <section class="module-side-card premium-progress-card" data-module-side-summary-state="loading">
+                    <div class="module-side-head"><h2>Progres AI Fundamentals</h2><span class="live-data-badge" style="background:rgba(226,49,131,0.08); color:#E23183; border:none;">6 modul</span></div>
+                    
+                    <div class="premium-grid">
+                        <div class="premium-donut" data-ai-donut aria-label="Memuat progres AI" style="--overall-progress: 0%;">
+                            <div class="premium-donut-content">
+                                <strong data-course-progress="ai-fundamentals-advanced">—</strong>
+                                <span>Rata-rata</span>
+                            </div>
+                        </div>
+                        
+                        <ul class="premium-stats-list">
+                            <li class="premium-stat-box green">
+                                <span class="premium-stat-box-title">Tuntas</span>
+                                <span class="premium-stat-box-sub" data-ai-tuntas-lbl>— Modul</span>
+                                <span class="premium-stat-box-val" data-ai-tuntas>—</span>
+                            </li>
+                            <li class="premium-stat-box pink">
+                                <span class="premium-stat-box-title">Dalam Proses</span>
+                                <span class="premium-stat-box-sub" data-ai-proses-lbl>— Modul</span>
+                                <span class="premium-stat-box-val" data-ai-proses>—</span>
+                            </li>
+                            <li class="premium-stat-box gray">
+                                <span class="premium-stat-box-title">Belum Dimulai</span>
+                                <span class="premium-stat-box-sub" data-ai-belum-lbl>— Modul</span>
+                                <span class="premium-stat-box-val" data-ai-belum>—</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <p class="premium-pill"><strong>Cakupan:</strong> Pengantar AI hingga Evolution of AI.</p>
+                </section>
+
+                <!-- Math for AI Card -->
+                <section class="module-side-card premium-progress-card" data-module-side-summary-state="loading">
+                    <div class="module-side-head"><h2>Progres Belajar</h2></div>
+                    
+                    <div class="premium-grid">
+                        <div class="premium-donut math" data-math-donut aria-label="Memuat progres Math" style="--overall-progress: 0%; background: conic-gradient(#43B581 0% var(--overall-progress, 0%), #DCD0DE var(--overall-progress, 0%) 100%);">
+                            <div class="premium-donut-content">
+                                <strong data-course-progress="math-for-ai">—</strong>
+                                <span>Selesai</span>
+                            </div>
+                        </div>
+                        
+                        <ul class="premium-stats-list">
+                            <li class="premium-stat-box green">
+                                <span class="premium-stat-box-title">Selesai</span>
+                                <span class="premium-stat-box-sub" data-math-selesai-lbl>— dari 89 bagian</span>
+                                <span class="premium-stat-box-val" data-math-selesai>—</span>
+                            </li>
+                            <li class="premium-stat-box pink">
+                                <span class="premium-stat-box-title">Submodul</span>
+                                <span class="premium-stat-box-sub">7 total</span>
+                                <span class="premium-stat-box-val">7</span>
+                            </li>
+                            <li class="premium-stat-box gray">
+                                <span class="premium-stat-box-title">Topik materi</span>
+                                <span class="premium-stat-box-sub">54 topik</span>
+                                <span class="premium-stat-box-val">54</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <p class="premium-pill" style="background:#E8F5E9; border-color:#C8E6C9; color:#2E7D32;"><i class="fas fa-circle" style="font-size:6px; vertical-align:middle; margin-right:4px;"></i> Progres terbaru tersinkron dengan akun peserta.</p>
                 </section>
 
                 <section class="module-side-card learning-focus-card">
