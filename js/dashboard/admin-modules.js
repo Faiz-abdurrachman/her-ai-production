@@ -158,6 +158,11 @@
    window.getCurrentAdminAccess = function() {
        const profile = getStoredAdminProfile();
        const role = normalizeAdminRole(profile);
+       
+       if (role === 'superadmin') {
+           return { profile, role, routes: ['*'] };
+       }
+       
        const explicit = parseAdminPermissions(profile.permissions);
        const routes = explicit.length && !explicit.includes('all')
            ? explicit.map(item => item.startsWith('/') ? item : `/${item}`)
@@ -2831,6 +2836,463 @@
                 submitBtn.innerHTML = originalHtml;
             }
         });
+    };
+
+    // ==========================================
+    // PROGRESS PESERTA (PLAN 1)
+    // ==========================================
+    window.initProgressPeserta = async function() {
+        if (!window.checkAdminAccess || (typeof window.checkAdminAccess === 'function' && !window.checkAdminAccess())) {
+            return;
+        }
+        await window.loadSidebar();
+        window.updateAdminProfile();
+        
+        const container = document.getElementById('progress-overview-container');
+        const tbody = document.getElementById('progress-table-body');
+        const refreshBtn = document.getElementById('refresh-progress-btn');
+        const searchInput = document.getElementById('progress-search-input');
+        const apiUrl = '/__gas';
+        let allData = [];
+
+        async function loadData(forceRefresh = false) {
+            try {
+                if (refreshBtn) {
+                    refreshBtn.disabled = true;
+                    refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat...';
+                }
+                
+                // Fetch Overview
+                const resOverview = await fetch(apiUrl, {
+                    method: 'POST',
+                    body: JSON.stringify(withAdminToken({
+                        action: 'getAdminLearningProgressOverview',
+                        ...window.getCurrentAdminAccess(),
+                        forceRefresh: forceRefresh
+                    }))
+                });
+                
+                // Fetch Detail
+                const resDetail = await fetch(apiUrl, {
+                    method: 'POST',
+                    body: JSON.stringify(withAdminToken({
+                        action: 'getAdminParticipantProgressDetail',
+                        ...window.getCurrentAdminAccess(),
+                        forceRefresh: forceRefresh
+                    }))
+                });
+
+                if (resOverview.ok && resDetail.ok) {
+                    const overviewJson = await resOverview.json();
+                    const detailJson = await resDetail.json();
+                    
+                    if (overviewJson.status === 'success') {
+                        renderOverview(overviewJson.data);
+                    }
+                    if (detailJson.status === 'success') {
+                        allData = detailJson.data || [];
+                        renderTable(allData);
+                    } else {
+                        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:red;">Gagal memuat: ${escapeHtml(detailJson.message || 'Error tidak diketahui')}</td></tr>`;
+                    }
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:red;">Gagal menghubungi server GAS. Pastikan GAS sudah di-deploy.</td></tr>';
+                }
+            } catch (err) {
+                console.error("Gagal memuat data progress", err);
+                if (tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:red;">Terjadi kesalahan jaringan atau server.</td></tr>';
+            } finally {
+                if (refreshBtn) {
+                    refreshBtn.disabled = false;
+                    refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Segarkan Data';
+                }
+            }
+        }
+
+        function getInitials(name) {
+            if (!name) return '??';
+            const parts = name.trim().split(' ');
+            if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+
+        function timeSince(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            const seconds = Math.floor((new Date() - date) / 1000);
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + " tahun yang lalu";
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + " bulan yang lalu";
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + " hari yang lalu";
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + " jam yang lalu";
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + " menit yang lalu";
+            return Math.floor(seconds) + " detik yang lalu";
+        }
+
+        function renderOverview(data) {
+            if (!container) return;
+            
+            // Calculate active in last 7 days from allData
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            const active7d = allData.filter(p => p.lastActiveAt && new Date(p.lastActiveAt) > sevenDaysAgo).length;
+            const activePercent = allData.length > 0 ? ((active7d / allData.length) * 100).toFixed(1) : 0;
+
+            container.innerHTML = `
+                <div class="premium-summary-card">
+                    <div class="premium-summary-icon"><i class="fas fa-users"></i></div>
+                    <div class="premium-summary-content">
+                        <h4>Total Peserta</h4>
+                        <p class="main-val">${data.totalActiveParticipants || allData.length}</p>
+                        <p>Peserta terdaftar</p>
+                    </div>
+                </div>
+                <div class="premium-summary-card">
+                    <div class="premium-summary-icon" style="color: var(--wit-pink);"><i class="fas fa-chart-line"></i></div>
+                    <div class="premium-summary-content">
+                        <h4>Rata-rata Progress</h4>
+                        <p class="main-val pink-text">${data.averageOverallProgress}%</p>
+                        <p>Keseluruhan progress</p>
+                    </div>
+                </div>
+                <div class="premium-summary-card">
+                    <div class="premium-summary-icon"><i class="fas fa-award"></i></div>
+                    <div class="premium-summary-content">
+                        <h4>Peserta Aktif</h4>
+                        <p class="main-val" style="display:flex; align-items:center;">
+                            ${active7d}
+                            <span class="premium-summary-badge">${activePercent}%</span>
+                        </p>
+                        <p>Aktif dalam 7 hari terakhir</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.globalParticipantMap = {};
+        let currentPage = 1;
+        const itemsPerPage = 20;
+        let currentFilteredData = [];
+
+        function renderPagination() {
+            const paginationContainer = document.getElementById('progress-pagination');
+            const pageInfo = document.getElementById('page-info');
+            if (!paginationContainer || !pageInfo) return;
+
+            const totalPages = Math.ceil(currentFilteredData.length / itemsPerPage) || 1;
+            
+            const startIdx = (currentPage - 1) * itemsPerPage + 1;
+            const endIdx = Math.min(currentPage * itemsPerPage, currentFilteredData.length);
+            pageInfo.innerHTML = `Menampilkan ${currentFilteredData.length > 0 ? startIdx : 0} - ${endIdx} dari ${currentFilteredData.length} peserta`;
+
+            let html = '';
+            
+            // Prev button
+            html += `<button class="page-btn" onclick="window.changeProgressPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
+            
+            // Page numbers logic (max 5 buttons)
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+
+            if (startPage > 1) {
+                html += `<button class="page-btn" onclick="window.changeProgressPage(1)">1</button>`;
+                if (startPage > 2) html += `<span style="color:var(--wit-slate); padding: 0 4px;">...</span>`;
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="window.changeProgressPage(${i})">${i}</button>`;
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) html += `<span style="color:var(--wit-slate); padding: 0 4px;">...</span>`;
+                html += `<button class="page-btn" onclick="window.changeProgressPage(${totalPages})">${totalPages}</button>`;
+            }
+
+            // Next button
+            html += `<button class="page-btn" onclick="window.changeProgressPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
+
+            paginationContainer.innerHTML = html;
+        }
+
+        window.changeProgressPage = function(page) {
+            const totalPages = Math.ceil(currentFilteredData.length / itemsPerPage);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderTablePage();
+        };
+
+        function renderTable(dataArray) {
+            currentFilteredData = dataArray;
+            currentPage = 1;
+            renderTablePage();
+        }
+
+        function renderTablePage() {
+            if (!tbody) return;
+            if (currentFilteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--wit-slate);">Tidak ada data ditemukan.</td></tr>';
+                renderPagination();
+                return;
+            }
+            
+            const startIdx = (currentPage - 1) * itemsPerPage;
+            const pageData = currentFilteredData.slice(startIdx, startIdx + itemsPerPage);
+
+            let html = '';
+            pageData.forEach(p => {
+                const tempId = 'id_' + Math.random().toString(36).substr(2, 9);
+                window.globalParticipantMap[tempId] = p;
+                
+                // Get most engaged course based on highest progress
+                let mainCourse = "Kelas AI Mastery"; // Default fallback
+                if (p.courses && Object.keys(p.courses).length > 0) {
+                    const sortedCourses = Object.entries(p.courses).sort((a,b) => b[1] - a[1]);
+                    if (sortedCourses[0][0] === 'ai-fundamentals' || sortedCourses[0][0] === 'math-for-ai') {
+                         mainCourse = "HerAI Labs";
+                    }
+                }
+                if (p.overallProgress === 0) mainCourse = "-";
+
+                // Generate random colors for avatar for variety if we don't have images
+                const colors = ['#FF2F8A', '#B79CFF', '#ff5e8e', '#8F9CFF', '#FF8FC4'];
+                const avatarColor = colors[p.name.length % colors.length];
+
+                html += `
+                <tr>
+                    <td>
+                        <div class="participant-identity">
+                            <div class="participant-avatar" style="color: ${avatarColor}; background: ${avatarColor}15;">${getInitials(p.name)}</div>
+                            <span class="participant-name">${escapeHtml(p.name)}</span>
+                        </div>
+                    </td>
+                    <td class="class-name">${mainCourse}</td>
+                    <td>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: ${p.overallProgress}%;"></div>
+                        </div>
+                    </td>
+                    <td class="progress-percentage">${p.overallProgress}%</td>
+                    <td class="last-active">${timeSince(p.lastActiveAt)}</td>
+                    <td>
+                        <button class="btn-detail" onclick="window.showAdminParticipantDetail('${tempId}')">Detail</button>
+                        <button class="btn-more"><i class="fas fa-ellipsis-v"></i></button>
+                    </td>
+                </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+            renderPagination();
+        }
+
+        window.showAdminParticipantDetail = function(tempId) {
+            console.log('Detail diklik:', tempId);
+            const detail = window.globalParticipantMap[tempId];
+            if (detail) {
+                showModal(detail);
+            } else {
+                alert('Gagal membuka detail. Data tidak ditemukan.');
+            }
+        };
+
+        function showModal(detail) {
+            try {
+                // Hapus modal lama jika ada (mencegah duplikat)
+                document.querySelectorAll('.dynamic-progress-modal-overlay').forEach(el => el.remove());
+                
+                let modHtml = '';
+                if (detail.courses) {
+                    // Definisikan struktur hierarki
+                    const groups = [
+                        {
+                            groupId: 'ai-fundamentals-group',
+                            title: 'AI Fundamentals',
+                            icon: 'fas fa-brain',
+                            submodules: [
+                                { id: 'ai-fundamentals', title: 'Pengantar AI' },
+                                { id: 'python-untuk-ai', title: 'Python untuk AI' },
+                                { id: 'konsep-ai-modern', title: 'Konsep AI Modern' },
+                                { id: 'reasoning', title: 'Reasoning AI' },
+                                { id: 'evaluation', title: 'Evaluation AI' },
+                                { id: 'evolution', title: 'Evolution of AI' }
+                            ]
+                        },
+                        {
+                            groupId: 'math-group',
+                            title: 'Math for AI',
+                            icon: 'fas fa-square-root-variable',
+                            id: 'math-for-ai' // referensi ID backend langsung
+                        }
+                    ];
+
+                    groups.forEach(group => {
+                        let groupCompleted = 0;
+                        let groupTotal = 0;
+                        let groupProg = 0;
+                        let subHtml = '';
+
+                        if (group.groupId === 'ai-fundamentals-group') {
+                            // Kalkulasi agregat AI Fundamentals
+                            let totalSubProg = 0;
+                            group.submodules.forEach(sub => {
+                                const prog = detail.courses[sub.id] || 0;
+                                totalSubProg += prog;
+                                const stats = detail.courseDetails && detail.courseDetails[sub.id] ? detail.courseDetails[sub.id] : { completed: 0, total: 0 };
+                                groupCompleted += stats.completed;
+                                groupTotal += stats.total;
+
+                                const subStatsText = stats.total > 0 ? `<span style="font-size:0.7rem; color: var(--gray-dark); margin-right: 8px;">${stats.completed}/${stats.total}</span>` : '';
+                                
+                                subHtml += `
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <span style="font-size: 0.85rem; color: var(--gray-dark);"><i class="fas fa-level-up-alt fa-rotate-90" style="margin-right: 5px; color: var(--primary-pink); opacity: 0.7;"></i>${sub.title}</span>
+                                    <div style="display:flex; align-items:center; width: 130px;">
+                                        ${subStatsText}
+                                        <div style="background:rgba(255,105,180,0.1); flex-grow: 1; height:6px; border-radius:3px; overflow:hidden;">
+                                            <div style="background: var(--primary-pink); height:100%; width:${prog}%; border-radius: 3px;"></div>
+                                        </div>
+                                        <span style="font-size:0.75rem; color:var(--text-dark); font-weight:bold; min-width: 30px; text-align: right;">${prog}%</span>
+                                    </div>
+                                </div>
+                                `;
+                            });
+                            if (groupCompleted === 0 && totalSubProg > 0) {
+                                groupProg = Math.round(totalSubProg / group.submodules.length);
+                            } else {
+                                groupProg = groupTotal > 0 ? Math.round((groupCompleted / groupTotal) * 100) : 0;
+                            }
+
+                        } else if (group.groupId === 'math-group') {
+                            // Kalkulasi Math for AI
+                            groupProg = detail.courses['math-for-ai'] || 0;
+                            const stats = detail.courseDetails && detail.courseDetails['math-for-ai'] ? detail.courseDetails['math-for-ai'] : { completed: 0, total: 0 };
+                            groupCompleted = stats.completed;
+                            groupTotal = stats.total;
+
+                            const mathTitles = {
+                                'Submodule 01': 'Kenapa AI Butuh Matematika?',
+                                'Submodule 02': 'Linear Algebra',
+                                'Submodule 03': 'Statistics for AI',
+                                'Submodule 04': 'Probability',
+                                'Submodule 05': 'Calculus',
+                                'Submodule 06': 'Optimization',
+                                'Submodule 07': 'Integrated Case Study'
+                            };
+                            if (detail.mathSubmodules) {
+                                for (const [subId, subData] of Object.entries(detail.mathSubmodules)) {
+                                    const subProg = typeof subData === 'object' ? subData.percentage : subData;
+                                    const subStatsText = typeof subData === 'object' ? `<span style="font-size:0.7rem; color: var(--gray-dark); margin-right: 8px;">${subData.completed}/${subData.total}</span>` : '';
+                                    const displayTitle = mathTitles[subId] || subId;
+                                    
+                                    subHtml += `
+                                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                                        <span style="font-size: 0.85rem; color: var(--gray-dark);"><i class="fas fa-level-up-alt fa-rotate-90" style="margin-right: 5px; color: var(--primary-pink); opacity: 0.7;"></i>${displayTitle}</span>
+                                        <div style="display:flex; align-items:center; width: 130px;">
+                                            ${subStatsText}
+                                            <div style="background:rgba(255,105,180,0.1); flex-grow: 1; height:6px; border-radius:3px; overflow:hidden;">
+                                                <div style="background: var(--primary-pink); height:100%; width:${subProg}%; border-radius: 3px;"></div>
+                                            </div>
+                                            <span style="font-size:0.75rem; color:var(--text-dark); font-weight:bold; min-width: 30px; text-align: right;">${subProg}%</span>
+                                        </div>
+                                    </div>
+                                    `;
+                                }
+                            } else {
+                                subHtml = '<p style="font-size:0.8rem; color:var(--gray-dark); margin:0;">Belum ada detail submodul.</p>';
+                            }
+                        }
+
+                        const dataBadge = groupTotal > 0 ? `<span style="font-size:0.75rem; color: var(--gray-dark); background: rgba(0,0,0,0.05); padding: 3px 8px; border-radius: 6px; margin-right: 10px;">${groupCompleted}/${groupTotal} items</span>` : '';
+
+                        // Render Parent Card
+                        modHtml += `
+                        <div style="padding: 16px; border: 1px solid rgba(255,255,255,0.6); border-radius: 16px; background: rgba(255,255,255,0.6); box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(255,105,180,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.03)';">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                <strong style="color: var(--text-dark); font-size: 1rem; display:flex; align-items:center; gap:8px;"><i class="${group.icon}" style="color:var(--primary-pink);"></i> ${group.title}</strong>
+                                <div style="display: flex; align-items: center;">
+                                    ${dataBadge}
+                                    <span style="font-size:0.9rem; color:var(--primary-pink); font-weight:800; background: rgba(255,105,180,0.1); padding: 4px 10px; border-radius: 12px;">${groupProg}%</span>
+                                </div>
+                            </div>
+                            <div style="background:rgba(255,105,180,0.1); width:100%; height:10px; border-radius:5px; overflow:hidden; margin-bottom: 15px;">
+                                <div style="background: linear-gradient(90deg, var(--primary-pink), #ff5e8e); height:100%; width:${groupProg}%; box-shadow: 0 0 10px rgba(255, 105, 180, 0.4); border-radius: 5px;"></div>
+                            </div>
+                            <div style="padding-left: 15px; border-left: 2px solid rgba(255,105,180,0.2); display: flex; flex-direction: column; gap: 8px;">
+                                ${subHtml}
+                            </div>
+                        </div>
+                        `;
+                    });
+                }
+                
+                const modalHtml = `
+<div class="modal-content" style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px) saturate(200%); -webkit-backdrop-filter: blur(24px) saturate(200%); border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 30px 60px rgba(255, 105, 180, 0.15); width:90%; max-width:650px; border-radius: 24px; padding: 35px; max-height:85vh; overflow-y:auto; position:relative;">
+    <button onclick="this.closest('.dynamic-progress-modal-overlay').remove()" style="position:absolute; top:20px; right:20px; width:40px; height:40px; border-radius:50%; background: rgba(255,105,180,0.1); color:var(--primary-pink); border:none; font-size:1.2rem; cursor:pointer; transition: all 0.3s ease; display:flex; align-items:center; justify-content:center;" onmouseover="this.style.background='var(--primary-pink)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(255,105,180,0.1)'; this.style.color='var(--primary-pink)';"><i class="fas fa-times"></i></button>
+    <div style="display:flex; align-items:center; gap: 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,105,180,0.1);">
+        <div style="width: 60px; height: 60px; border-radius: 16px; background: linear-gradient(135deg, var(--primary-pink), #ff5e8e); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; box-shadow: 0 8px 15px rgba(255,105,180,0.3);">
+            <i class="fas fa-user"></i>
+        </div>
+        <div>
+            <h2 style="margin: 0 0 5px 0; font-size: 1.5rem; color: var(--text-dark);">${detail.name || '-'}</h2>
+            <p style="margin: 0; color: var(--gray-dark); font-size: 0.95rem;">
+                <i class="fas fa-id-card" style="color:var(--primary-pink); margin-right:5px;"></i> 
+                NIK: <span style="font-family: monospace; font-size: 1rem; background: rgba(255,105,180,0.1); padding: 2px 8px; border-radius: 6px;">${detail.nik || '-'}</span>
+            </p>
+        </div>
+    </div>
+    
+    <h4 style="color: var(--text-dark); margin-bottom: 15px; display:flex; align-items:center; gap:10px;">
+        <i class="fas fa-layer-group" style="color:var(--primary-pink);"></i> Capaian per Modul
+    </h4>
+    <div style="display:grid; gap:10px;">
+        ${modHtml || '<p>Belum ada progres modul.</p>'}
+    </div>
+    
+    <div style="margin-top:30px; display:flex; justify-content:center;">
+        <button class="btn" style="background: linear-gradient(135deg, var(--primary-pink), #ff5e8e); color: white; padding: 12px 35px; border-radius: 50px; font-weight: 600; box-shadow: 0 8px 20px rgba(255,105,180,0.3); border: none; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 25px rgba(255,105,180,0.4)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 8px 20px rgba(255,105,180,0.3)';" onclick="this.closest('.dynamic-progress-modal-overlay').remove()">Tutup Detail</button>
+    </div>
+</div>
+                `;
+
+                const modal = document.createElement('div');
+                modal.className = 'dynamic-progress-modal-overlay';
+                modal.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999999; display:flex; justify-content:center; align-items:center;';
+                modal.innerHTML = modalHtml;
+                document.body.appendChild(modal);
+                console.log('Dynamic modal sukses ditampilkan.');
+            } catch (err) {
+                alert('CRITICAL ERROR saat merender modal: ' + err.message);
+                console.error('Modal error:', err);
+            }
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const q = e.target.value.toLowerCase();
+                const filtered = allData.filter(d => 
+                    d.name.toLowerCase().includes(q) || d.nik.toLowerCase().includes(q)
+                );
+                renderTable(filtered);
+            });
+        }
+
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => loadData(true));
+        }
+        
+        if (document.getElementById('close-modal-btn')) {
+            document.getElementById('close-modal-btn').addEventListener('click', () => {
+                document.getElementById('progress-detail-modal').style.display = 'none';
+            });
+        }
+
+        loadData();
     };
 
 })();

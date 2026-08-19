@@ -1,0 +1,509 @@
+<div class="dashboard-layout">
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <div class="progress-peserta-premium-scope">
+            <style>
+                .progress-peserta-premium-scope {
+                    --wit-navy: #11194F;
+                    --wit-navy-light: #2A3166;
+                    --wit-slate: #61698F;
+                    --wit-pink: #FF2F8A;
+                    --wit-pink-soft: #FF8FC4;
+                    --wit-lavender: #B79CFF;
+                    --wit-pale: #FDF4F8;
+                    --wit-glass-surface: rgba(255, 255, 255, 0.6);
+                    --wit-glass-border: rgba(255, 255, 255, 0.4);
+                    --wit-glass-shadow: 0 15px 40px rgba(255, 143, 196, 0.08);
+                    
+                    position: relative;
+                    min-height: 100%;
+                    padding: 32px;
+                    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+                    background: linear-gradient(135deg, #FFF5F8 0%, #FAF0F5 100%);
+                    overflow: hidden; /* Prevent blurs from causing scrollbars */
+                }
+
+                /* Decorative Background Elements */
+                .progress-peserta-premium-scope::before,
+                .progress-peserta-premium-scope::after {
+                    content: '';
+                    position: absolute;
+                    pointer-events: none;
+                    z-index: -1;
+                    border-radius: 50%;
+                    filter: blur(120px); /* This makes the colors blend perfectly */
+                }
+                .progress-peserta-premium-scope::before {
+                    top: -10%;
+                    left: -10%;
+                    width: 700px;
+                    height: 700px;
+                    background: rgba(255, 214, 227, 0.8);
+                }
+                .progress-peserta-premium-scope::after {
+                    bottom: -10%;
+                    right: -10%;
+                    width: 800px;
+                    height: 800px;
+                    background: rgba(255, 143, 196, 0.35);
+                }
+
+                /* Header */
+                .premium-header {
+                    background: var(--wit-glass-surface);
+                    backdrop-filter: blur(24px) saturate(135%);
+                    -webkit-backdrop-filter: blur(24px) saturate(135%);
+                    border: 1px solid var(--wit-glass-border);
+                    box-shadow: var(--wit-glass-shadow), inset 0 1px 0 rgba(255,255,255,0.8);
+                    border-radius: 28px;
+                    padding: 24px 32px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 24px;
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                .premium-header-left h1 {
+                    color: var(--wit-navy);
+                    font-size: 28px;
+                    font-weight: 700;
+                    margin: 0 0 4px 0;
+                }
+                .premium-header-left p {
+                    color: var(--wit-slate);
+                    font-size: 14px;
+                    margin: 0;
+                }
+
+                .premium-header-right {
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                }
+
+                .btn-export {
+                    background: linear-gradient(135deg, var(--wit-pink), #ff5e8e);
+                    color: white;
+                    border: none;
+                    border-radius: 999px;
+                    padding: 10px 24px;
+                    font-weight: 600;
+                    font-size: 14px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    box-shadow: 0 8px 20px rgba(255, 47, 138, 0.3);
+                    cursor: pointer;
+                    transition: all 0.2s;
+                }
+                .btn-export:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 12px 25px rgba(255, 47, 138, 0.4);
+                }
+
+                .dropdown-kelas {
+                    background: rgba(255,255,255,0.7);
+                    border: 1px solid var(--wit-glass-border);
+                    color: var(--wit-navy);
+                    padding: 10px 20px;
+                    border-radius: 999px;
+                    font-weight: 600;
+                    font-size: 14px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    cursor: pointer;
+                }
+                .dropdown-kelas i {
+                    color: var(--wit-pink);
+                }
+
+                /* Summary Cards */
+                .premium-summary-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 16px;
+                    margin-bottom: 28px;
+                }
+
+                .premium-summary-card {
+                    background: var(--wit-glass-surface);
+                    backdrop-filter: blur(24px) saturate(135%);
+                    -webkit-backdrop-filter: blur(24px) saturate(135%);
+                    border: 1px solid var(--wit-glass-border);
+                    box-shadow: var(--wit-glass-shadow), inset 0 1px 0 rgba(255,255,255,0.8);
+                    border-radius: 24px;
+                    padding: 24px;
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                    position: relative;
+                }
+                
+                .premium-summary-icon {
+                    width: 56px;
+                    height: 56px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, rgba(255,143,196,0.2), rgba(183,156,255,0.2));
+                    border: 1px solid rgba(255,255,255,0.6);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    color: var(--wit-pink);
+                    font-size: 24px;
+                    box-shadow: inset 0 4px 10px rgba(255,255,255,0.5);
+                }
+                
+                .premium-summary-content h4 {
+                    margin: 0 0 4px 0;
+                    color: var(--wit-navy);
+                    font-weight: 600;
+                    font-size: 14px;
+                }
+                .premium-summary-content .main-val {
+                    margin: 0;
+                    color: var(--wit-navy);
+                    font-weight: 800;
+                    font-size: 32px;
+                    line-height: 1.1;
+                }
+                .premium-summary-content .main-val.pink-text {
+                    color: var(--wit-pink);
+                }
+                .premium-summary-content p {
+                    margin: 4px 0 0 0;
+                    color: var(--wit-slate);
+                    font-size: 13px;
+                }
+                .premium-summary-badge {
+                    background: rgba(255, 47, 138, 0.1);
+                    color: var(--wit-pink);
+                    padding: 4px 10px;
+                    border-radius: 12px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    margin-left: 10px;
+                }
+
+                /* Table Container */
+                .premium-table-container {
+                    background: var(--wit-glass-surface);
+                    backdrop-filter: blur(24px) saturate(135%);
+                    -webkit-backdrop-filter: blur(24px) saturate(135%);
+                    border: 1px solid var(--wit-glass-border);
+                    box-shadow: var(--wit-glass-shadow), inset 0 1px 0 rgba(255,255,255,0.8);
+                    border-radius: 28px;
+                    padding: 28px;
+                }
+
+                .premium-table-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 24px;
+                }
+                .premium-table-header h2 {
+                    margin: 0;
+                    color: var(--wit-navy);
+                    font-weight: 700;
+                    font-size: 20px;
+                }
+
+                .premium-search {
+                    position: relative;
+                    width: 300px;
+                }
+                .premium-search input {
+                    width: 100%;
+                    background: rgba(255,255,255,0.6);
+                    border: 1px solid var(--wit-glass-border);
+                    padding: 10px 16px 10px 40px;
+                    border-radius: 999px;
+                    color: var(--wit-navy);
+                    font-size: 14px;
+                    outline: none;
+                    box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+                    transition: border-color 0.2s;
+                }
+                .premium-search input:focus {
+                    border-color: var(--wit-pink-soft);
+                }
+                .premium-search i {
+                    position: absolute;
+                    left: 14px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: var(--wit-slate);
+                    opacity: 0.7;
+                }
+
+                /* Table Design */
+                .premium-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .premium-table th {
+                    text-align: left;
+                    padding: 12px 16px;
+                    color: var(--wit-slate);
+                    font-weight: 500;
+                    font-size: 13px;
+                    border-bottom: 1px solid rgba(183,156,255,0.2);
+                }
+                .premium-table td {
+                    padding: 16px;
+                    vertical-align: middle;
+                    border-bottom: 1px solid rgba(183,156,255,0.15);
+                }
+                .premium-table tr:hover td {
+                    background: rgba(255, 143, 196, 0.03);
+                }
+
+                /* Rows Styling */
+                .participant-identity {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+                .participant-avatar {
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 50%;
+                    background: var(--wit-pale);
+                    color: var(--wit-pink);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-weight: 700;
+                    font-size: 14px;
+                }
+                .participant-name {
+                    font-weight: 600;
+                    color: var(--wit-navy);
+                    font-size: 14px;
+                }
+
+                .class-name {
+                    color: var(--wit-slate);
+                    font-size: 14px;
+                }
+
+                .progress-track {
+                    background: var(--wit-pale);
+                    height: 6px;
+                    border-radius: 999px;
+                    width: 100px;
+                    overflow: hidden;
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+                .progress-fill {
+                    background: linear-gradient(90deg, var(--wit-pink), #ff5e8e);
+                    height: 100%;
+                    border-radius: 999px;
+                }
+
+                .progress-percentage {
+                    color: var(--wit-pink);
+                    font-weight: 700;
+                    font-size: 14px;
+                }
+
+                .last-active {
+                    color: var(--wit-slate);
+                    font-size: 13px;
+                }
+
+                .btn-detail {
+                    background: rgba(255, 47, 138, 0.08);
+                    border: 1px solid rgba(255, 47, 138, 0.2);
+                    color: var(--wit-pink);
+                    padding: 6px 16px;
+                    border-radius: 999px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    margin-right: 10px;
+                }
+                .btn-detail:hover {
+                    background: rgba(255, 47, 138, 0.15);
+                    transform: translateY(-1px);
+                }
+                .btn-more {
+                    background: transparent;
+                    border: none;
+                    color: var(--wit-slate);
+                    cursor: pointer;
+                    padding: 4px;
+                    font-size: 16px;
+                }
+                .btn-more:hover {
+                    color: var(--wit-navy);
+                }
+
+                /* Pagination */
+                .premium-pagination {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: 24px;
+                    padding-top: 16px;
+                }
+                .pagination-info {
+                    color: var(--wit-slate);
+                    font-size: 13px;
+                }
+                .pagination-controls {
+                    display: flex;
+                    gap: 6px;
+                    align-items: center;
+                }
+                .page-btn {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 8px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background: rgba(255,255,255,0.5);
+                    border: 1px solid var(--wit-glass-border);
+                    color: var(--wit-navy);
+                    font-size: 13px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                }
+                .page-btn:hover:not(:disabled) {
+                    background: rgba(255,255,255,0.8);
+                }
+                .page-btn.active {
+                    background: var(--wit-pink);
+                    color: white;
+                    border-color: var(--wit-pink);
+                    box-shadow: 0 4px 10px rgba(255, 47, 138, 0.3);
+                }
+                .page-btn:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+
+                /* Responsive */
+                @media (max-width: 1024px) {
+                    .premium-summary-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                @media (max-width: 768px) {
+                    .progress-peserta-premium-scope {
+                        padding: 16px;
+                    }
+                    .premium-header {
+                        flex-direction: column;
+                        gap: 16px;
+                        align-items: flex-start;
+                    }
+                    .premium-summary-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .premium-table-header {
+                        flex-direction: column;
+                        gap: 16px;
+                        align-items: flex-start;
+                    }
+                    .premium-search {
+                        width: 100%;
+                    }
+                    .premium-table-container {
+                        overflow-x: auto;
+                    }
+                }
+            </style>
+
+            <!-- Decorative Ambience elements inside main content boundary -->
+            <div style="position: absolute; top: 25%; right: 8%; width: 250px; height: 250px; background: rgba(255, 143, 196, 0.4); filter: blur(90px); pointer-events: none; z-index: -1; border-radius: 50%;"></div>
+            <div style="position: absolute; bottom: 15%; left: 5%; width: 350px; height: 350px; background: rgba(183, 156, 255, 0.3); filter: blur(120px); pointer-events: none; z-index: -1; border-radius: 50%;"></div>
+            
+            <header class="premium-header">
+                <div class="premium-header-left">
+                    <h1>Progress Peserta</h1>
+                    <p>Pantau perkembangan peserta dalam menyelesaikan materi</p>
+                </div>
+                <div class="premium-header-right">
+                    <button class="btn-export" id="refresh-progress-btn">
+                        <i class="fas fa-download"></i> Ekspor Data
+                    </button>
+                    <div class="dropdown-kelas">
+                        Semua Kelas <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+
+            <div class="premium-summary-grid" id="progress-overview-container">
+                <!-- Data will be injected here by admin-modules.js -->
+                <div class="premium-summary-card skeleton">
+                    <div class="premium-summary-icon" style="background: rgba(0,0,0,0.05); border:none;"></div>
+                    <div class="premium-summary-content" style="width: 60%;">
+                        <div style="height:14px; background:rgba(0,0,0,0.05); border-radius:4px; margin-bottom:8px;"></div>
+                        <div style="height:30px; background:rgba(0,0,0,0.05); border-radius:4px;"></div>
+                    </div>
+                </div>
+                <div class="premium-summary-card skeleton">
+                    <div class="premium-summary-icon" style="background: rgba(0,0,0,0.05); border:none;"></div>
+                    <div class="premium-summary-content" style="width: 60%;">
+                        <div style="height:14px; background:rgba(0,0,0,0.05); border-radius:4px; margin-bottom:8px;"></div>
+                        <div style="height:30px; background:rgba(0,0,0,0.05); border-radius:4px;"></div>
+                    </div>
+                </div>
+                <div class="premium-summary-card skeleton">
+                    <div class="premium-summary-icon" style="background: rgba(0,0,0,0.05); border:none;"></div>
+                    <div class="premium-summary-content" style="width: 60%;">
+                        <div style="height:14px; background:rgba(0,0,0,0.05); border-radius:4px; margin-bottom:8px;"></div>
+                        <div style="height:30px; background:rgba(0,0,0,0.05); border-radius:4px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-table-container">
+                <div class="premium-table-header">
+                    <h2>Detail Progress</h2>
+                    <div class="premium-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="progress-search-input" placeholder="Cari nama peserta...">
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="premium-table">
+                        <thead>
+                            <tr>
+                                <th>Nama Peserta</th>
+                                <th>Kelas</th>
+                                <th>Progress</th>
+                                <th>Persentase</th>
+                                <th>Terakhir Aktif</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="progress-table-body">
+                            <!-- Renders dynamically -->
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding:20px; color: var(--wit-slate);">Memuat data peserta...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="premium-pagination">
+                    <div class="pagination-info" id="page-info">Menampilkan 1 - 20 dari 101 peserta</div>
+                    <div class="pagination-controls" id="progress-pagination">
+                        <!-- Renders dynamically -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
