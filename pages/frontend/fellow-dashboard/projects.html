@@ -34,16 +34,21 @@
     </aside>
 
     <main class="fellow-main projects-page">
-        <header class="fellow-topbar">
+        <!-- Botanical Background Corner Accents -->
+        <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/16_flower_branch_right_01.png" alt="" class="gallery-bg-decor-left">
+        <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/17_flower_branch_right_02.png" alt="" class="gallery-bg-decor-right">
+        <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/21_flower_large_bottom_right.png" alt="" class="gallery-bg-decor-bot-right">
+        <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/19_flower_large_top_right.png" alt="" class="gallery-bg-decor-top-right">
+        <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/25_petal_pack_bottom_right.png" alt="" class="gallery-bg-decor-petal-bot">
+        <!-- Doodle accents scattered across gallery -->
+        <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/doodles/58_paperclips_pair.png" alt="" class="gallery-doodle-clips">
+        <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/doodles/49_heart_doodle_center.png" alt="" class="gallery-doodle-heart">
+
+        <header class="fellow-topbar" style="margin-bottom: 24px;">
             <div>
-                <h1 data-fellow-greeting>Proyek</h1>
-                <p>Bangun solusi nyata dan terapkan ilmu AI yang kamu pelajari.</p>
+                <h1 style="font-size: 22px; font-weight: 800; color: #171827; margin: 0;">👋 Halo, <span data-fellow-name>QA Participant</span>!</h1>
             </div>
             <div class="fellow-actions">
-                <label class="fellow-search">
-                    <i class="fas fa-magnifying-glass"></i>
-                    <input type="search" placeholder="Cari proyek...">
-                </label>
                 <button type="button" class="fellow-icon-button" aria-label="Notifikasi">
                     <i class="far fa-bell"></i>
                     <span class="badge">5</span>
@@ -65,318 +70,335 @@
         <div class="projects-layout">
             <div class="projects-main-column">
 
-                <div class="projects-header-row">
-                    <div class="projects-tabs">
-                        <button class="active">Semua Proyek</button>
-                        <button>Proyek Saya</button>
-                        <button>Proyek Tim</button>
-                        <button>Arsip</button>
+                <!-- Asset-Driven Hero Banner (Scrapbook Editorial Canvas) -->
+                <div class="showcase-hero-banner">
+                    <div class="hero-content">
+                        <img src="/assets/herai_gallery_asset_pack/cropped_png/hero/11_banner_herai_innovation_gallery_2026.png" alt="HerAI Innovation Gallery 2026" class="hero-banner-sticker-img">
+                        <h1 class="hero-editorial-title">
+                            10 projects. 10 stories.<span class="sparkle-tag">✦ ✦</span><br>
+                            <span class="pink-highlight">
+                                One showcase.
+                                <svg class="title-flourish-svg" viewBox="0 0 150 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 8C40 2 110 1 148 7" stroke="#ec1970" stroke-width="4" stroke-linecap="round"/>
+                                </svg>
+                            </span>
+                        </h1>
+                        <p class="hero-subtitle">Menampilkan karya AI terbaik dari 10 tim HerAI.<br>Setiap ide adalah langkah menuju dampak nyata.</p>
+                        
+                        <div class="hero-cta-row">
+                            <button class="btn-hero-submit" id="btnSubmitEditProj" type="button">
+                                <i class="fas fa-arrow-up-from-bracket"></i> Submit / Edit Karya Tim
+                            </button>
+                            <button class="btn-hero-guide" id="btnGuideSubmission" type="button" onclick="alert('Panduan Pengumpulan: Pastikan berkas Live Demo, Repository GitHub, dan Slide Pitch Deck Google Drive sudah siap sebelum submit.')">
+                                <i class="far fa-bookmark"></i> Guide Submission
+                            </button>
+                        </div>
+
+                        <!-- Compact Triple Stats Panel (Exact Blueprint 74) -->
+                        <div class="hero-stat-card-row">
+                            <div class="stat-item-block">
+                                <div class="stat-icon-wrap"><i class="fas fa-users"></i></div>
+                                <div class="stat-info-wrap">
+                                    <strong>10</strong>
+                                    <span>Teams</span>
+                                </div>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-item-block">
+                                <div class="stat-icon-wrap"><i class="fas fa-user-graduate"></i></div>
+                                <div class="stat-info-wrap">
+                                    <strong>100</strong>
+                                    <span>Fellows</span>
+                                </div>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-item-block">
+                                <div class="stat-icon-wrap"><i class="far fa-clock"></i></div>
+                                <div class="countdown-stat-wrap">
+                                    <span class="label">Sisa Waktu</span>
+                                    <strong id="heroCountdownTimer">03d 16h 42m</strong>
+                                    <span class="sub">Sampai Deadline</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <button class="btn-primary-pink"><i class="fas fa-plus"></i> Buat Proyek Baru</button>
+
+                    <!-- Right Side: High-Fidelity Scrapbook Artwork & Floating Accents -->
+                    <div class="hero-scrapbook-board">
+                        <img src="/assets/herai_gallery_asset_pack/cropped_png/hero/01_hero_full_scrapbook_composition.png" alt="HerAI Scrapbook Artwork" class="hero-main-artwork-img">
+                        <!-- Note card overlay matching reference -->
+                        <img src="/assets/herai_gallery_asset_pack/cropped_png/hero/02_hero_note_card.png" alt="" class="hero-float-notecard">
+                        <!-- Botanical flowers around composition -->
+                        <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/14_flower_large_center_left.png" alt="" class="hero-float-flower-left">
+                        <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/15_flower_cluster_hero_right_edge.png" alt="" class="hero-float-flower-right">
+                        <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/18_flower_small_top_right.png" alt="" class="hero-float-flower-topright">
+                        <!-- Sparkle / doodle accents -->
+                        <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/doodles/48_sparkle_top.png" alt="" class="hero-float-sparkle">
+                        <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/doodles/50_sparkle_cluster_center.png" alt="" class="hero-float-sparkle-cluster">
+                    </div>
                 </div>
 
-                <div class="projects-stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon pink"><i class="far fa-folder-open"></i></div>
-                        <div class="stat-info">
-                            <span>Total Proyek</span>
-                            <strong>24</strong>
-                            <small>Proyek</small>
-                        </div>
+                <!-- Category Navigation Toolbar -->
+                <div class="showcase-toolbar-wrap" id="showcaseFiltersContainer">
+                    <div class="category-pills" id="projectCategoryPills">
+                        <button class="pill active" data-filter="Semua" type="button"><i class="fas fa-shapes"></i> Semua Kategori</button>
+                        <button class="pill" data-filter="HealthTech" type="button"><i class="fas fa-heart-pulse"></i> HealthTech</button>
+                        <button class="pill" data-filter="EduTech" type="button"><i class="fas fa-graduation-cap"></i> EduTech</button>
+                        <button class="pill" data-filter="GreenTech" type="button"><i class="fas fa-leaf"></i> GreenTech</button>
+                        <button class="pill" data-filter="FinTech" type="button"><i class="fas fa-coins"></i> FinTech</button>
+                        <button class="pill" data-filter="Productivity" type="button"><i class="fas fa-bolt"></i> Productivity</button>
+                        <button class="pill" data-filter="Creative" type="button"><i class="fas fa-palette"></i> Creative</button>
+                        <button class="pill" data-filter="Social Impact" type="button"><i class="fas fa-hand-holding-heart"></i> Social Impact</button>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon purple"><i class="fas fa-user-group"></i></div>
-                        <div class="stat-info">
-                            <span>Proyek Saya</span>
-                            <strong>6</strong>
-                            <small>Proyek</small>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon yellow"><i class="fas fa-users-rectangle"></i></div>
-                        <div class="stat-info">
-                            <span>Proyek Tim</span>
-                            <strong>8</strong>
-                            <small>Proyek</small>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
-                        <div class="stat-info">
-                            <span>Selesai</span>
-                            <strong>10</strong>
-                            <small>Proyek</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="projects-list-header">
-                    <h2>Daftar Proyek</h2>
-                    <div class="projects-filters">
+                    <div class="toolbar-controls">
                         <div class="custom-select">
-                            <select aria-label="Filter status">
-                                <option>Semua Status</option>
-                                <option>Selesai</option>
-                                <option>Sedang Dikerjakan</option>
+                            <select aria-label="Urutkan Proyek" id="selectProjectSort">
+                                <option value="newest">Terbaru</option>
+                                <option value="oldest">Terlama</option>
                             </select>
                             <i class="fas fa-chevron-down"></i>
                         </div>
-                        <div class="custom-select">
-                            <select aria-label="Urutkan">
-                                <option>Terbaru</option>
-                                <option>Terlama</option>
-                            </select>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <button class="view-toggle" aria-label="Toggle grid view"><i class="fas fa-table-cells"></i></button>
                     </div>
                 </div>
 
-                <div class="projects-list">
-                    <!-- Project 1 -->
-                    <article class="project-card">
-                        <div class="project-icon pink">
-                            <i class="fas fa-heart-pulse"></i>
-                        </div>
-                        <div class="project-content">
-                            <div class="project-title-row">
-                                <h3>AI Chatbot Kesehatan Mental</h3>
-                                <span class="badge-category pink">Machine Learning</span>
-                            </div>
-                            <p>Chatbot berbasis NLP untuk memberikan dukungan kesehatan mental awal bagi perempuan muda.</p>
-                            <div class="project-footer">
-                                <div class="team-avatars">
-                                    <img src="https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865" alt="Member">
-                                    <img src="https://ui-avatars.com/api/?name=Budi&background=e9d5ff&color=7e22ce" alt="Member">
-                                    <img src="https://ui-avatars.com/api/?name=Citra&background=fef08a&color=a16207" alt="Member">
-                                    <span class="avatar-more">+2</span>
-                                </div>
-                                <span class="project-date">Diperbarui 2 hari yang lalu</span>
-                            </div>
-                        </div>
-                        <div class="project-status-col">
-                            <div class="status-top">
-                                <span class="badge-status green">Selesai</span>
-                                <button class="btn-more"><i class="fas fa-ellipsis"></i></button>
-                            </div>
-                            <div class="status-progress">
-                                <div class="progress-bar-bg"><div class="progress-bar-fill pink" style="width: 100%"></div></div>
-                                <span class="progress-pct">100%</span>
-                            </div>
-                        </div>
-                    </article>
+                <!-- Gallery Grid: Large Responsive Equal Cards (4 Cols at 1280-1599px, 5 Cols at >=1600px) -->
+                <div class="projects-list" id="projectsGallery">
+                    <!-- Dynamic rendering by projects.js -->
+                </div>
 
-                    <!-- Project 2 -->
-                    <article class="project-card">
-                        <div class="project-icon purple">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="project-content">
-                            <div class="project-title-row">
-                                <h3>Prediksi Harga Rumah</h3>
-                                <span class="badge-category purple">Data Analysis</span>
-                            </div>
-                            <p>Model prediksi harga rumah menggunakan algoritma regresi dan feature engineering.</p>
-                            <div class="project-footer">
-                                <div class="team-avatars">
-                                    <img src="https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865" alt="Member">
-                                    <img src="https://ui-avatars.com/api/?name=Citra&background=fef08a&color=a16207" alt="Member">
-                                    <img src="https://ui-avatars.com/api/?name=Diana&background=bbf7d0&color=15803d" alt="Member">
-                                </div>
-                                <span class="project-date">Diperbarui 5 hari yang lalu</span>
-                            </div>
-                        </div>
-                        <div class="project-status-col">
-                            <div class="status-top">
-                                <span class="badge-status orange">Sedang Dikerjakan</span>
-                                <button class="btn-more"><i class="fas fa-ellipsis"></i></button>
-                            </div>
-                            <div class="status-progress">
-                                <div class="progress-bar-bg"><div class="progress-bar-fill pink" style="width: 65%"></div></div>
-                                <span class="progress-pct">65%</span>
-                            </div>
-                        </div>
-                    </article>
+                <!-- Bottom Decorative Footer Caption -->
+                <div class="gallery-bottom-caption">
+                    <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/23_small_flower_bottom.png" style="width: 22px; height: 22px;" alt="">
+                    <span>10 Tim. 10 Ide. 1 Gerakan.</span>
+                    <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/doodles/49_heart_doodle_center.png" style="width: 18px; height: 18px;" alt="">
+                </div>
+                
+                <!-- WORKSPACE SUBMISSION FORM (Focus Mode, Hidden by default) -->
+                <div class="showcase-form-container" id="projectSubmitForm">
+                    
+                    <div class="workspace-nav">
+                        <button type="button" id="btnBackToGallery" class="btn-back-workspace"><i class="fas fa-arrow-left"></i> Kembali ke Pameran</button>
+                        <h2 class="workspace-title">Workspace Pengumpulan Karya</h2>
+                        <span id="userTeamBadge" class="badge-category pink">Mengecek Tim...</span>
+                    </div>
 
-                    <!-- Project 3 -->
-                    <article class="project-card">
-                        <div class="project-icon yellow">
-                            <i class="fas fa-cart-shopping"></i>
+                    <div class="deadline-banner modern-deadline">
+                        <div>
+                            <h4><i class="fas fa-clock"></i> Deadline Pengumpulan</h4>
+                            <p>Minggu, 23 Agustus 2026 - 23.00 WIB</p>
                         </div>
-                        <div class="project-content">
-                            <div class="project-title-row">
-                                <h3>Rekomendasi Produk Skincare</h3>
-                                <span class="badge-category yellow">Recommendation System</span>
-                            </div>
-                            <p>Sistem rekomendasi produk skincare berdasarkan preferensi dan jenis kulit pengguna.</p>
-                            <div class="project-footer">
-                                <div class="team-avatars">
-                                    <img src="https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865" alt="Member">
-                                    <img src="https://ui-avatars.com/api/?name=Budi&background=e9d5ff&color=7e22ce" alt="Member">
-                                    <img src="https://ui-avatars.com/api/?name=Diana&background=bbf7d0&color=15803d" alt="Member">
-                                </div>
-                                <span class="project-date">Diperbarui 1 minggu yang lalu</span>
-                            </div>
+                        <div id="countdownTimer" class="timer-box">
+                            Mengecek waktu...
                         </div>
-                        <div class="project-status-col">
-                            <div class="status-top">
-                                <span class="badge-status purple">Review</span>
-                                <button class="btn-more"><i class="fas fa-ellipsis"></i></button>
-                            </div>
-                            <div class="status-progress">
-                                <div class="progress-bar-bg"><div class="progress-bar-fill pink" style="width: 80%"></div></div>
-                                <span class="progress-pct">80%</span>
-                            </div>
-                        </div>
-                    </article>
+                    </div>
 
-                    <!-- Project 4 -->
-                    <article class="project-card">
-                        <div class="project-icon green">
-                            <i class="fas fa-seedling"></i>
-                        </div>
-                        <div class="project-content">
-                            <div class="project-title-row">
-                                <h3>Deteksi Penyakit Tanaman</h3>
-                                <span class="badge-category green">Computer Vision</span>
-                            </div>
-                            <p>Aplikasi deteksi penyakit pada tanaman menggunakan image classification.</p>
-                            <div class="project-footer">
-                                <div class="team-avatars">
-                                    <img src="https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865" alt="Member">
-                                    <img src="https://ui-avatars.com/api/?name=Budi&background=e9d5ff&color=7e22ce" alt="Member">
-                                    <img src="https://ui-avatars.com/api/?name=Citra&background=fef08a&color=a16207" alt="Member">
-                                </div>
-                                <span class="project-date">Diperbarui 2 minggu yang lalu</span>
-                            </div>
-                        </div>
-                        <div class="project-status-col">
-                            <div class="status-top">
-                                <span class="badge-status gray">Belum Dimulai</span>
-                                <button class="btn-more"><i class="fas fa-ellipsis"></i></button>
-                            </div>
-                            <div class="status-progress">
-                                <div class="progress-bar-bg"><div class="progress-bar-fill pink" style="width: 0%"></div></div>
-                                <span class="progress-pct">0%</span>
-                            </div>
-                        </div>
-                    </article>
+                    <div class="form-instructions-premium">
+                        <i class="fas fa-circle-info" style="color: #2563eb; font-size: 18px; margin-top: 2px;"></i> 
+                        <span>Lengkapi data di bawah ini untuk mempublikasikan karya tim Anda. Berkas akan otomatis tersimpan ke Google Drive tim dan terdaftar di Google Sheets backend.</span>
+                    </div>
 
-                    <!-- Project 5 -->
-                    <article class="project-card">
-                        <div class="project-icon pink">
-                            <i class="far fa-file-lines"></i>
-                        </div>
-                        <div class="project-content">
-                            <div class="project-title-row">
-                                <h3>Analisis Sentimen Media Sosial</h3>
-                                <span class="badge-category pink">NLP</span>
+                    <!-- Card 1: Basic Info -->
+                    <div class="form-section-card">
+                        <div class="card-header-premium">
+                            <div class="header-icon-box"><i class="fas fa-cube"></i></div>
+                            <div class="header-text-col">
+                                <h3>1. Informasi Utama</h3>
+                                <p>Identitas proyek yang akan tampil di etalase depan.</p>
                             </div>
-                            <p>Analisis sentimen opini publik terhadap kampanye sosial di media sosial.</p>
-                            <div class="project-footer">
-                                <div class="team-avatars">
-                                    <img src="https://ui-avatars.com/api/?name=Aisyah+Putri&background=ffd0e6&color=b01865" alt="Member">
-                                    <img src="https://ui-avatars.com/api/?name=Citra&background=fef08a&color=a16207" alt="Member">
-                                    <img src="https://ui-avatars.com/api/?name=Diana&background=bbf7d0&color=15803d" alt="Member">
+                        </div>
+                        <div class="card-body-premium">
+                            <div class="form-grid-2">
+                                <div class="input-label-col">
+                                    <label for="projectTitle">Judul Proyek</label>
                                 </div>
-                                <span class="project-date">Diperbarui 3 minggu yang lalu</span>
+                                <div class="input-field-col">
+                                    <input type="text" id="projectTitle" placeholder="Contoh: NutriCheck AI" class="modern-input">
+                                </div>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="input-label-col">
+                                    <label for="projectTrack">Kategori / Track</label>
+                                </div>
+                                <div class="input-field-col">
+                                    <select id="projectTrack" class="modern-input">
+                                        <option value="">-- Pilih Kategori --</option>
+                                        <option value="HealthTech">HealthTech</option>
+                                        <option value="EduTech">EduTech</option>
+                                        <option value="GreenTech">GreenTech</option>
+                                        <option value="FinTech">FinTech</option>
+                                        <option value="Productivity">Productivity</option>
+                                        <option value="Creative">Creative</option>
+                                        <option value="Social Impact">Social Impact</option>
+                                        <option value="Lainnya">Lainnya...</option>
+                                    </select>
+                                    <input type="text" id="projectTrackCustom" placeholder="Tuliskan kategori proyekmu..." class="modern-input" style="display: none; margin-top: 10px;">
+                                </div>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="input-label-col">
+                                    <label for="projectTagline">Tagline Singkat</label>
+                                </div>
+                                <div class="input-field-col">
+                                    <input type="text" id="projectTagline" placeholder="Satu kalimat ringkasan solusi (Maks 100 karakter)" class="modern-input">
+                                </div>
                             </div>
                         </div>
-                        <div class="project-status-col">
-                            <div class="status-top">
-                                <span class="badge-status orange">Sedang Dikerjakan</span>
-                                <button class="btn-more"><i class="fas fa-ellipsis"></i></button>
-                            </div>
-                            <div class="status-progress">
-                                <div class="progress-bar-bg"><div class="progress-bar-fill pink" style="width: 40%"></div></div>
-                                <span class="progress-pct">40%</span>
+                    </div>
+
+                    <!-- Card 2: Media Thumbnail -->
+                    <div class="form-section-card">
+                        <div class="card-header-premium">
+                            <div class="header-icon-box"><i class="fas fa-image"></i></div>
+                            <div class="header-text-col">
+                                <h3>2. Thumbnail Proyek</h3>
+                                <p>Gambar cover yang mewakili solusi tim Anda (rasio 16:9 disarankan).</p>
                             </div>
                         </div>
-                    </article>
+                        <div class="card-body-premium">
+                            <div class="upload-dropzone" id="uploadDropzone">
+                                <i class="fas fa-cloud-arrow-up upload-icon" style="font-size: 32px; color: #ec1970;"></i>
+                                <span style="font-weight: 700; color: #334155;">Klik atau seret gambar ke sini (JPG/PNG, Maks 2MB)</span>
+                                <input type="file" id="projectCoverFile" accept="image/*">
+                            </div>
+                            <input type="hidden" id="projectCover">
+                            <div id="projectCoverPreview" class="cover-preview-box" style="display: none;">
+                                <img src="" alt="Cover Preview">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 3: Story -->
+                    <div class="form-section-card">
+                        <div class="card-header-premium">
+                            <div class="header-icon-box"><i class="fas fa-pen-nib"></i></div>
+                            <div class="header-text-col">
+                                <h3>3. Cerita Proyek</h3>
+                                <p>Jelaskan latar belakang masalah dan bagaimana model AI Anda menyelesaikannya.</p>
+                            </div>
+                        </div>
+                        <div class="card-body-premium">
+                            <div class="form-group story-textarea-wrap problem">
+                                <label style="margin-bottom: 8px; display: block; font-weight: 700; color: #334155;">Problem Statement (Latar Belakang Masalah)</label>
+                                <textarea id="projectProblem" rows="4" placeholder="Jelaskan secara ringkas masalah nyata yang melatarbelakangi pembuatan proyek ini..." class="modern-input"></textarea>
+                            </div>
+                            <div class="form-group story-textarea-wrap solution" style="margin-top: 20px;">
+                                <label style="margin-bottom: 8px; display: block; font-weight: 700; color: #334155;">Solusi & Cara Kerja Model AI</label>
+                                <textarea id="projectSolution" rows="4" placeholder="Jelaskan arsitektur model AI atau alur aplikasi yang Anda rancang untuk menyelesaikan masalah tersebut..." class="modern-input"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Deliverables & Tech Stack -->
+                    <div class="form-section-card">
+                        <div class="card-header-premium">
+                            <div class="header-icon-box"><i class="fas fa-link"></i></div>
+                            <div class="header-text-col">
+                                <h3>4. Tautan & Teknologi</h3>
+                                <p>Berkas kode sumber, tautan prototipe aktif, slide presentasi, dan tech stack.</p>
+                            </div>
+                        </div>
+                        <div class="card-body-premium">
+                            <div class="form-grid-2">
+                                <div class="input-label-col">
+                                    <label for="projectRepo">Repository (GitHub)</label>
+                                </div>
+                                <div class="input-field-col">
+                                    <input type="url" id="projectRepo" placeholder="https://github.com/..." class="modern-input">
+                                </div>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="input-label-col">
+                                    <label for="projectDemo">Live Demo / Prototipe</label>
+                                </div>
+                                <div class="input-field-col">
+                                    <input type="url" id="projectDemo" placeholder="https://..." class="modern-input">
+                                </div>
+                            </div>
+                            <div class="form-grid-2">
+                                <div class="input-label-col">
+                                    <label for="projectDeck">Pitch Deck (Slide/PDF Link)</label>
+                                </div>
+                                <div class="input-field-col">
+                                    <input type="url" id="projectDeck" placeholder="https://drive.google.com/..." class="modern-input">
+                                </div>
+                            </div>
+                            
+                            <hr style="border: 0; border-top: 1.5px solid #fce7f3; margin: 24px 0;">
+                            
+                            <div class="form-group">
+                                <label style="margin-bottom: 10px; display: block; font-weight: 700; color: #334155;">Tech Stack Utama (Klik badge untuk memilih)</label>
+                                <div class="tech-picker-badges" id="techPickerContainer">
+                                    <span class="tech-pick-badge" data-tech="Python">Python</span>
+                                    <span class="tech-pick-badge" data-tech="TensorFlow">TensorFlow</span>
+                                    <span class="tech-pick-badge" data-tech="PyTorch">PyTorch</span>
+                                    <span class="tech-pick-badge" data-tech="Scikit-Learn">Scikit-Learn</span>
+                                    <span class="tech-pick-badge" data-tech="Pandas">Pandas</span>
+                                    <span class="tech-pick-badge" data-tech="HuggingFace">HuggingFace</span>
+                                    <span class="tech-pick-badge" data-tech="LangChain">LangChain</span>
+                                    <span class="tech-pick-badge" data-tech="OpenAI API">OpenAI API</span>
+                                    <span class="tech-pick-badge" data-tech="Streamlit">Streamlit</span>
+                                    <span class="tech-pick-badge" data-tech="FastAPI">FastAPI</span>
+                                    <span class="tech-pick-badge" data-tech="Flask">Flask</span>
+                                    <span class="tech-pick-badge" data-tech="React">React</span>
+                                    <span class="tech-pick-badge" data-tech="Tailwind">Tailwind</span>
+                                    <span class="tech-pick-badge" data-tech="Figma">Figma</span>
+                                </div>
+                                <input type="text" id="projectTechStack" placeholder="Atau ketik manual (Contoh: Docker, PostgreSQL, Flutter...)" class="modern-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workspace-footer">
+                        <button type="button" class="btn-submit-large"><i class="fas fa-paper-plane"></i> Publikasikan Karya Tim 🚀</button>
+                    </div>
                 </div>
             </div>
-
-            <aside class="projects-widgets">
-                <!-- Aktivitas Terbaru -->
-                <div class="widget-card activity-widget">
-                    <div class="widget-header">
-                        <h3>Aktivitas Terbaru</h3>
-                        <a href="#">Lihat Semua <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                    <div class="activity-list">
-                        <div class="activity-item">
-                            <div class="activity-icon green"><i class="fas fa-check-circle"></i></div>
-                            <div class="activity-info">
-                                <strong>AI Chatbot Kesehatan Mental</strong>
-                                <p>Proyek kamu telah ditandai sebagai selesai</p>
-                                <span>2 hari yang lalu</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon purple"><i class="fas fa-arrow-up-from-bracket"></i></div>
-                            <div class="activity-info">
-                                <strong>Prediksi Harga Rumah</strong>
-                                <p>Laporan akhir diunggah oleh tim</p>
-                                <span>5 hari yang lalu</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon yellow"><i class="far fa-comment-dots"></i></div>
-                            <div class="activity-info">
-                                <strong>Rekomendasi Produk Skincare</strong>
-                                <p>Mentor memberikan feedback baru</p>
-                                <span>1 minggu yang lalu</span>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon pink"><i class="fas fa-user-plus"></i></div>
-                            <div class="activity-info">
-                                <strong>Deteksi Penyakit Tanaman</strong>
-                                <p>Anggota baru bergabung di proyek</p>
-                                <span>2 minggu yang lalu</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Promo Start Project -->
-                <div class="promo-start-card">
-                    <div class="promo-start-header">
-                        <h3>Mulai Proyek Baru</h3>
-                    </div>
-                    <div class="promo-start-content">
-                        <div class="promo-illustration">
-                            <div class="folder-illus"><i class="fas fa-folder-plus"></i></div>
-                        </div>
-                        <div class="promo-text">
-                            <p>Punya ide proyek keren?<br>Mulai proyek baru dan wujudkan ide kamu bersama tim!</p>
-                            <button class="btn-primary-pink"><i class="fas fa-plus"></i> Buat Proyek Baru</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tips Proyek -->
-                <div class="widget-card tips-widget">
-                    <div class="widget-header">
-                        <h3>Tips Proyek</h3>
-                    </div>
-                    <div class="tips-list">
-                        <div class="tip-item">
-                            <div class="tip-icon"><i class="fas fa-rocket"></i></div>
-                            <p>Pilih topik yang kamu minati dan relevan dengan skill yang kamu pelajari.</p>
-                        </div>
-                        <div class="tip-item">
-                            <div class="tip-icon"><i class="far fa-comments"></i></div>
-                            <p>Diskusikan ide dengan mentor atau tim sebelum memulai.</p>
-                        </div>
-                        <div class="tip-item">
-                            <div class="tip-icon"><i class="fas fa-shield-halved"></i></div>
-                            <p>Gunakan data yang berkualitas untuk hasil yang lebih akurat.</p>
-                        </div>
-                    </div>
-                    <a href="#" class="tips-link">Lihat Panduan Proyek <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </aside>
         </div>
+
     </main>
+
+    <!-- Modal Showcase Detail -->
+    <div class="showcase-modal-overlay" id="showcaseModalOverlay">
+        <div class="showcase-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <button class="showcase-modal-close" onclick="closeShowcaseModal()" type="button" aria-label="Tutup modal"><i class="fas fa-xmark"></i></button>
+            <div class="modal-cover-hero">
+                <img id="modalCoverImg" src="" alt="Project Cover">
+                <div class="modal-hero-overlay">
+                    <span class="category-badge-chip" id="modalTrackBadge" style="margin-bottom: 10px; display: inline-block;">AI Product</span>
+                    <h2 id="modalTitle">Project Title</h2>
+                    <p class="tagline" id="modalTagline">Project Tagline</p>
+                    <div class="modal-team-info">
+                        <img src="" id="modalTeamAvatar" alt="Team">
+                        <span id="modalTeamName">Nama Tim</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body-modern">
+                <div class="modal-main-col">
+                    <div class="modal-story-box">
+                        <h4><i class="fas fa-bullseye" style="color: #ec1970;"></i> Problem Statement</h4>
+                        <p id="modalProblem">Latar belakang masalah.</p>
+                    </div>
+                    <div class="modal-story-box">
+                        <h4><i class="fas fa-lightbulb" style="color: #ca8a04;"></i> Solusi & Cara Kerja</h4>
+                        <p id="modalSolution">Detail arsitektur solusi AI.</p>
+                    </div>
+                </div>
+                <div class="modal-side-col">
+                    <div class="modal-sidebar-box">
+                        <h4><i class="fas fa-rocket" style="color: #ec1970;"></i> Berkas Proyek</h4>
+                        <a href="#" class="deliverable-btn modern-btn" id="modalBtnDemo" target="_blank" rel="noopener noreferrer"><i class="fas fa-arrow-up-right-from-square"></i> Buka Live Demo</a>
+                        <a href="#" class="deliverable-btn modern-btn-outline" id="modalBtnRepo" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Repository Kode</a>
+                        <a href="#" class="deliverable-btn modern-btn-outline" id="modalBtnDeck" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> Pitch Deck Slide</a>
+                    </div>
+                    <div class="modal-sidebar-box">
+                        <h4><i class="fas fa-layer-group" style="color: #7c3aed;"></i> Tech Stack</h4>
+                        <div class="project-tech-stack" id="modalTechStack" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                            <!-- Filled dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>

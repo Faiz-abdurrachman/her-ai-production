@@ -613,7 +613,7 @@ const router = {
     },
 
     isParticipantRouteAllowed(path) {
-        if (path === "/participant-dashboard" || path === "/participant-modules" || path === "/participant-leaderboard" || path === "/participant-settings") return true;
+        if (path === "/participant-dashboard" || path === "/participant-modules" || path === "/participant-leaderboard" || path === "/participant-settings" || path === "/participant-projects") return true;
         return path.startsWith("/participant-ai-") || path.startsWith("/participant-ai-lab-") || path.startsWith("/participant-specialization-") || path.startsWith("/participant-cv-");
     },
 
@@ -698,7 +698,7 @@ const router = {
             appContent.innerHTML = window.renderParticipantAccessState(options);
         } else {
             const title = options.title || "Akses Peserta Dibatasi";
-            const message = options.message || "Saat ini portal peserta membuka Beranda, Modul Pembelajaran, Leaderboard, dan Pengaturan.";
+            const message = options.message || "Saat ini portal peserta membuka Beranda, Modul Pembelajaran, Proyek, Leaderboard, dan Pengaturan.";
             const actionHref = options.actionHref || "#/participant-dashboard";
             const actionLabel = options.actionLabel || "Kembali ke Beranda";
             appContent.innerHTML = `
@@ -1943,6 +1943,9 @@ if (path === "/participant-ai-evolution" && typeof window.initAiEvolutionMateri 
                 } else if (path === "/participant-profile" && typeof window.initFellowDashboardPage === "function") {
                     window.location.hash = "#/participant-settings";
                     return;
+                } else if (path === "/participant-projects" && typeof window.initFellowDashboardPage === "function") {
+                    window.initFellowDashboardPage("projects");
+                    if (typeof window.initProjectsPage === "function") window.initProjectsPage();
                 } else if (path.startsWith("/participant-") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("under-development");
                 } else if (path === "/projects" && typeof window.initProjectsPage === "function") {

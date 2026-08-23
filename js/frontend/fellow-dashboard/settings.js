@@ -68,7 +68,7 @@
             chatroom: false,
             mentor: false,
             tasks: false,
-            projects: false,
+            projects: true,
             events: false,
             community: false,
             certificates: false,
@@ -222,7 +222,7 @@
             }
         });
 
-        var allowedNavKeys = ['dashboard', 'modules', 'leaderboard', 'settings'];
+        var allowedNavKeys = ['dashboard', 'modules', 'leaderboard', 'settings', 'projects'];
         sidebar.querySelectorAll('.fellow-menu a[data-fellow-nav]').forEach(function(link) {
             if (allowedNavKeys.indexOf(link.dataset.fellowNav) === -1) {
                 link.addEventListener('click', function(e) {
@@ -2815,13 +2815,14 @@
                 : [
                     { href: '#/participant-dashboard', label: 'Beranda', icon: 'fa-house', primary: true },
                     { href: '#/participant-modules', label: 'Modul Pembelajaran', icon: 'fa-book-open' },
+                    { href: '#/participant-projects', label: 'Proyek', icon: 'fa-folder-open' },
                     { href: '#/participant-leaderboard', label: 'Leaderboard', icon: 'fa-ranking-star' },
                     { href: '#/participant-settings', label: 'Pengaturan', icon: 'fa-gear' }
                 ]);
         var title = escapeHtml(options.title || 'Akses Peserta Dibatasi');
         var message = options.message
             ? escapeHtml(options.message)
-            : 'Saat ini portal peserta membuka <strong>Beranda</strong>, <strong>Modul Pembelajaran</strong>, <strong>Leaderboard</strong>, dan <strong>Pengaturan</strong>.';
+            : 'Saat ini portal peserta membuka <strong>Beranda</strong>, <strong>Modul Pembelajaran</strong>, <strong>Proyek</strong>, <strong>Leaderboard</strong>, dan <strong>Pengaturan</strong>.';
         var links = actions.map(function(action) {
             return '<a class="' + (action.primary ? 'is-primary' : 'is-secondary') + '" href="' + escapeHtml(action.href) + '"><i class="fas ' + escapeHtml(action.icon || 'fa-arrow-right') + '" aria-hidden="true"></i><span>' + escapeHtml(action.label) + '</span></a>';
         }).join('');
@@ -3787,7 +3788,7 @@
     window.saveParticipantPortalSettings = saveSettings;
     window.applyParticipantPortalSettings = applySettings;
     window.initFellowDashboardPage = async function(pageName = 'dashboard') {
-        var allowedPages = ['dashboard', 'modules', 'leaderboard', 'settings', 'under-development'];
+        var allowedPages = ['dashboard', 'modules', 'leaderboard', 'settings', 'under-development', 'projects'];
         if (allowedPages.indexOf(pageName) === -1) {
             renderParticipantRestricted();
             return;

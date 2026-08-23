@@ -269,7 +269,7 @@ const SCHEMA = {
   [SHEETS.retestAccess]: ['access_id', 'nik', 'nama_lengkap', 'access_code', 'status', 'notes', 'created_at', 'updated_at', 'used_at'],
   [SHEETS.retestSessions]: ['session_id', 'nik', 'nama_lengkap', 'status', 'camera_status', 'mic_status', 'answered_count', 'total_questions', 'score', 'weighted_score', 'section_scores', 'answers', 'focus_flags', 'page_visible', 'active_section', 'section_remaining', 'completed_sections', 'camera_snapshot', 'history_events', 'started_at', 'updated_at', 'submitted_at'],
   [SHEETS.aiResults]: ['rowId', 'nik', 'nama_lengkap', 'ai_summary', 'ai_skills', 'ai_motivation', 'analyzed_at', 'ai_score'],
-  [SHEETS.projects]: ['project_id', 'team_id', 'team_name', 'title', 'members', 'institution', 'track', 'project_title', 'mentor', 'deck_url', 'repo_url', 'demo_url', 'overview', 'details', 'score', 'status', 'notes', 'submitted_at'],
+  [SHEETS.projects]: ['project_id', 'team_id', 'team_name', 'title', 'tagline', 'cover_url', 'tech_stack', 'problem', 'solution', 'members', 'institution', 'track', 'project_title', 'mentor', 'deck_url', 'repo_url', 'demo_url', 'overview', 'details', 'score', 'status', 'notes', 'submitted_at'],
   [SHEETS.certificates]: ['certificate_no', 'participant_rowId', 'nama_lengkap', 'final_score', 'status', 'issued_at', 'certificate_url'],
   [SHEETS.assets]: ['asset_id', 'title', 'type', 'url', 'visible_to', 'status', 'notes'],
   [SHEETS.participantDashboardModules]: ['module_id', 'title', 'subtitle', 'progress', 'icon', 'tone', 'href', 'total_chapters', 'is_active', 'sort_order', 'quiz_total', 'phase_id', 'tracking_enabled', 'dashboard_visible'],
@@ -278,7 +278,7 @@ const SCHEMA = {
   [SHEETS.participantDashboardJourney]: ['phase_id', 'title', 'subtitle', 'progress', 'icon', 'accent', 'source_type', 'locked_label', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardEvents]: ['day', 'month', 'title', 'time', 'url', 'is_active', 'sort_order'],
   [SHEETS.participantDashboardLeaderboard]: ['rank', 'nik', 'name', 'points', 'is_active'],
-  [SHEETS.participantAccounts]: ['account_id', 'nik', 'username', 'generated_password', 'password_hash', 'password_status', 'access_status', 'nama_lengkap', 'email', 'whatsapp', 'participant_rowId', 'participant_stage', 'status_seleksi', 'created_at', 'updated_at', 'created_by', 'last_login_at', 'password_changed_at', 'account_type'],
+  [SHEETS.participantAccounts]: ['account_id', 'nik', 'username', 'generated_password', 'password_hash', 'password_status', 'access_status', 'nama_lengkap', 'email', 'whatsapp', 'participant_rowId', 'participant_stage', 'status_seleksi', 'created_at', 'updated_at', 'created_by', 'last_login_at', 'password_changed_at', 'account_type', 'team_name'],
   [SHEETS.participantActivity]: ['activity_id', 'timestamp', 'nik', 'nama_lengkap', 'activity_type', 'page', 'module_id', 'lesson_id', 'activity', 'score', 'total', 'payload_json', 'user_agent', 'session_id'],
   [SHEETS.participantProgress]: ['progress_id', 'participant_rowId', 'nik', 'module_id', 'chapter_id', 'status', 'score', 'started_at', 'completed_at', 'updated_at'],
   [SHEETS.participantDiscussions]: ['discussion_id', 'participant_rowId', 'nik', 'module_id', 'prompt', 'text', 'replies_json', 'created_at', 'updated_at'],
@@ -420,12 +420,13 @@ function authorizeGasAction(action, payload) {
     'saveReTestAnswer',
     'submitReTest',
     'submitFinalProject',
+    'getFinalProjects',
     'heartbeatPresence'
   ];
   if (participantActions.indexOf(action) >= 0) {
     const claims = requireParticipantToken(payload);
     const retestActions = ['startReTestSession', 'heartbeatReTestSession', 'saveReTestAnswer', 'submitReTest'];
-    const normalActions = ['updateParticipantProfile', 'uploadParticipantPhoto', 'removeParticipantPhoto', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'saveParticipantExerciseDraft', 'submitParticipantExercise', 'getParticipantExerciseSubmissions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest', 'submitFinalProject'];
+    const normalActions = ['updateParticipantProfile', 'uploadParticipantPhoto', 'removeParticipantPhoto', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'saveParticipantExerciseDraft', 'submitParticipantExercise', 'getParticipantExerciseSubmissions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest', 'submitFinalProject', 'getFinalProjects'];
     if (retestActions.indexOf(action) >= 0 && claims.scope !== 'retest') {
       throw new Error('Sesi Re-Test tidak valid. Silakan login ulang.');
     }
@@ -1688,9 +1689,12 @@ function participantLogin(payload) {
     activity: 'Peserta login ke dashboard',
     user_agent: payload.user_agent || payload.userAgent || ''
   });
+  const strippedProfile = stripSensitiveParticipant(participant);
+  strippedProfile.team_name = account.team_name || '';
+  
   return {
     status: 'success',
-    profile: stripSensitiveParticipant(participant),
+    profile: strippedProfile,
     token: auth.token,
     expires_at: auth.expires_at,
     username: account.username || ''
@@ -4558,6 +4562,21 @@ function updateCompetencyDecision(payload) {
 
 function submitFinalProject(payload) {
   const projectId = payload.project_id || `fp_${Date.now()}`;
+  
+  let finalCoverUrl = payload.cover_url || payload.coverUrl || '';
+  // Jika ini adalah Base64 dari input file baru
+  if (finalCoverUrl && finalCoverUrl.startsWith('data:image')) {
+    try {
+      const mimeType = finalCoverUrl.substring(finalCoverUrl.indexOf(':') + 1, finalCoverUrl.indexOf(';')) || 'image/png';
+      const ext = mimeType.split('/')[1] || 'png';
+      const filename = `Cover_${payload.team_id || projectId}_${new Date().getTime()}.${ext}`;
+      finalCoverUrl = saveBase64ToDrive(finalCoverUrl, filename, mimeType);
+    } catch (e) {
+      Logger.log("Error upload drive: " + e.message);
+      finalCoverUrl = ""; // Hindari save base64 ke sheet jika gagal
+    }
+  }
+
   const project = {
     project_id: projectId,
     team_id: payload.team_id || projectId,
@@ -4567,6 +4586,11 @@ function submitFinalProject(payload) {
     institution: payload.institution || '',
     track: payload.track || '',
     project_title: payload.title || payload.project_title || '',
+    tagline: payload.tagline || '',
+    cover_url: payload.cover_url || '',
+    tech_stack: payload.tech_stack || '',
+    problem: payload.problem || '',
+    solution: payload.solution || '',
     mentor: payload.mentor || '',
     deck_url: payload.deckUrl || payload.deck_url || '',
     repo_url: payload.repoUrl || payload.repo_url || '',
@@ -4894,6 +4918,29 @@ function getRequestSpreadsheet() {
     HERAI_REQUEST_SPREADSHEET = SpreadsheetApp.openById(SPREADSHEET_ID);
   }
   return HERAI_REQUEST_SPREADSHEET;
+}
+
+
+function saveBase64ToDrive(base64Data, filename, mimeType) {
+  const folderName = "HerAI_Showcase_Thumbnails";
+  let folder;
+  const folders = DriveApp.getFoldersByName(folderName);
+  if (folders.hasNext()) {
+    folder = folders.next();
+  } else {
+    folder = DriveApp.createFolder(folderName);
+    folder.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  }
+  
+  const base64Str = base64Data.indexOf(',') !== -1 ? base64Data.split(',')[1] : base64Data;
+  const byteArr = Utilities.base64Decode(base64Str);
+  const blob = Utilities.newBlob(byteArr, mimeType, filename);
+  
+  const file = folder.createFile(blob);
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  
+  // Menggunakan URL thumbnail Google Drive (lebih cepat di-load di <img>)
+  return 'https://drive.google.com/thumbnail?id=' + file.getId() + '&sz=w1000';
 }
 
 function getSheet(name) {
@@ -5625,4 +5672,143 @@ function getAdminParticipantProgressDetail(payload) {
     status: 'success',
     data: data.detail
   };
+}
+
+function assignTeams() {
+  const teamMapping = {
+    "destya rosa mardiana": "TEAM 01",
+    "jenny agustina rahman": "TEAM 01",
+    "siti syahlah septiyani": "TEAM 01",
+    "firdiyanti al ma'idha": "TEAM 01",
+    "laras qatrunnada": "TEAM 01",
+    "nazlah auliya": "TEAM 01",
+    "ade megalia utami": "TEAM 01",
+    "berliani risqi dwi saputri": "TEAM 01",
+    "resya anugerah feliany": "TEAM 01",
+    "shafa salsabila kurniawan": "TEAM 01",
+    "evelyn loveina": "TEAM 02",
+    "aisyah": "TEAM 02",
+    "naylha pratama putri": "TEAM 02",
+    "greycia febrina michelle": "TEAM 02",
+    "salmaa khoirun nisaa'": "TEAM 02",
+    "aulia dea fadzila": "TEAM 02",
+    "nur aidah k. s.": "TEAM 02",
+    "ghea citra melani": "TEAM 02",
+    "annisa ariyanti": "TEAM 02",
+    "cici ramadhani": "TEAM 02",
+    "farah aulia kirana": "TEAM 02",
+    "devi permata sari lam": "TEAM 03",
+    "zaneta zaskiamelia sofyan": "TEAM 03",
+    "hilma wahdatul kamilah": "TEAM 03",
+    "vovi siti nurul fathonah": "TEAM 03",
+    "fatiya labibah": "TEAM 03",
+    "diana septiani": "TEAM 03",
+    "nerisma eka putri": "TEAM 03",
+    "anggun lestiana": "TEAM 03",
+    "ike marlina": "TEAM 03",
+    "nur amaliah mukhtar": "TEAM 03",
+    "widiawati": "TEAM 04",
+    "nafeesa hasna putri bimantari": "TEAM 04",
+    "sekar ayu kartika sari": "TEAM 04",
+    "celina pinonkuan": "TEAM 04",
+    "makhfirah karomah": "TEAM 04",
+    "wine widiawaty": "TEAM 04",
+    "sustri elina simamora": "TEAM 04",
+    "muthmainnah": "TEAM 04",
+    "sahara odelia saputri": "TEAM 04",
+    "asyifa arianti": "TEAM 04",
+    "aurel puteri ramadani": "TEAM 05",
+    "shafira nur afni herdiansyah": "TEAM 05",
+    "vira rahman": "TEAM 05",
+    "fildzah izzati ishmah": "TEAM 05",
+    "anisah lathifah kamaliyah putri": "TEAM 05",
+    "ellsa sania": "TEAM 05",
+    "ariella asti cahyani": "TEAM 05",
+    "enjelika may permatasari hutajulu": "TEAM 05",
+    "silvanya assyfa frizli": "TEAM 05",
+    "avivah lismatul roqmah": "TEAM 05",
+    "ayu halimatus sa'diyah": "TEAM 06",
+    "dian margared lekatompessy": "TEAM 06",
+    "karenina nuraini yustika": "TEAM 06",
+    "karina azzahra": "TEAM 06",
+    "dinda fajarwati": "TEAM 06",
+    "andria listiyoning widodo": "TEAM 06",
+    "anastasia debora apitaratu": "TEAM 06",
+    "sulyastri magfira anggai": "TEAM 06",
+    "kelly patricia susanto": "TEAM 06",
+    "laura thea esmeralda": "TEAM 06",
+    "amelia amanatul islam": "TEAM 07",
+    "arsellya dwi anggara": "TEAM 07",
+    "salwa nurul aisha": "TEAM 07",
+    "nazwa keyla ana nurbani": "TEAM 07",
+    "naomi gloria banurea": "TEAM 07",
+    "pradnya narwastu": "TEAM 07",
+    "salwa syahira adhani": "TEAM 07",
+    "zahara chairani": "TEAM 07",
+    "faustine ganiardy": "TEAM 07",
+    "salsabila mahdi": "TEAM 07",
+    "khairani fajriyah": "TEAM 08",
+    "ni putu tirta dewi mahayogi": "TEAM 08",
+    "naila aulia supriadi": "TEAM 08",
+    "reyhana khalilah putri": "TEAM 08",
+    "annisa nur fadlilah": "TEAM 08",
+    "octaviana galuh pratiwi": "TEAM 08",
+    "vannya ade gunawan": "TEAM 08",
+    "nike essyana": "TEAM 08",
+    "diva regita cahyani girsang": "TEAM 08",
+    "chayrunnisya salsabila putri jayanti": "TEAM 08",
+    "salma ninda syahputri": "TEAM 09",
+    "atikah rifdah ansyari": "TEAM 09",
+    "khairun nisa": "TEAM 09",
+    "chettiar ammy laurent": "TEAM 09",
+    "kemilau senandung senja": "TEAM 09",
+    "angelita roselya": "TEAM 09",
+    "yunita theresia hutabarat": "TEAM 09",
+    "salsa darlena rizkia putri": "TEAM 09",
+    "riana ditha lestari": "TEAM 09",
+    "badariandini fitria": "TEAM 09",
+    "aulia putri wardhani": "TEAM 10",
+    "linda septiana": "TEAM 10",
+    "mustika aulia": "TEAM 10",
+    "nisantry tebiary": "TEAM 10",
+    "elfilia angelina": "TEAM 10",
+    "maya maria nainggolan": "TEAM 10",
+    "astri ainun najib": "TEAM 10",
+    "salama sandi haq": "TEAM 10",
+    "shela widiya sari": "TEAM 10"
+  };
+
+  const sheet = getSheet(SHEETS.participantAccounts);
+  ensureSchemaHeaders(sheet, SCHEMA[SHEETS.participantAccounts]);
+  const headers = getHeaders(sheet);
+  const teamColIdx = headers.indexOf('team_name');
+  const nameIdx = headers.indexOf('nama_lengkap');
+  
+  if (teamColIdx === -1 || nameIdx === -1) {
+    Logger.log("Gagal: Kolom tidak ditemukan.");
+    return;
+  }
+
+  const data = sheet.getDataRange().getValues();
+  let updatedCount = 0;
+  
+  for (let i = 1; i < data.length; i++) {
+    const row = data[i];
+    const name = String(row[nameIdx] || '').toLowerCase().trim();
+    
+    let foundTeam = teamMapping[name];
+    if (!foundTeam) {
+      const match = Object.keys(teamMapping).find(k => name.includes(k) || k.includes(name));
+      if (match) foundTeam = teamMapping[match];
+    }
+    
+    if (foundTeam) {
+      while (row.length <= teamColIdx) row.push('');
+      row[teamColIdx] = foundTeam;
+      updatedCount++;
+    }
+  }
+  
+  sheet.getRange(1, 1, data.length, data[0].length).setValues(data);
+  Logger.log(`Berhasil update ${updatedCount} akun dengan data tim!`);
 }
