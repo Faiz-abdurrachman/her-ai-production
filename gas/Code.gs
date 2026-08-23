@@ -356,6 +356,13 @@ function doPost(e) {
         return { status: 'success', data: projects, projects };
       },
       submitFinalProject: () => submitFinalProject(payload),
+      deleteFinalProject: () => {
+        const projectId = payload.project_id || payload.team_id;
+        if (!projectId) throw new Error('ID proyek tidak valid');
+        deleteByKey(SHEETS.projects, 'project_id', projectId);
+        deleteByKey(SHEETS.projects, 'team_id', projectId);
+        return { status: 'success', message: 'Proyek berhasil dihapus', projects: getRows(SHEETS.projects) };
+      },
       saveFinalProject: () => upsertByKey(SHEETS.projects, 'team_id', payload.team_id, payload),
       getCertificates: () => ({ status: 'success', data: getRows(SHEETS.certificates) }),
       generateCertificates: () => generateCertificates(),
@@ -420,13 +427,14 @@ function authorizeGasAction(action, payload) {
     'saveReTestAnswer',
     'submitReTest',
     'submitFinalProject',
+    'deleteFinalProject',
     'getFinalProjects',
     'heartbeatPresence'
   ];
   if (participantActions.indexOf(action) >= 0) {
     const claims = requireParticipantToken(payload);
     const retestActions = ['startReTestSession', 'heartbeatReTestSession', 'saveReTestAnswer', 'submitReTest'];
-    const normalActions = ['updateParticipantProfile', 'uploadParticipantPhoto', 'removeParticipantPhoto', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'saveParticipantExerciseDraft', 'submitParticipantExercise', 'getParticipantExerciseSubmissions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest', 'submitFinalProject', 'getFinalProjects'];
+    const normalActions = ['updateParticipantProfile', 'uploadParticipantPhoto', 'removeParticipantPhoto', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'saveParticipantExerciseDraft', 'submitParticipantExercise', 'getParticipantExerciseSubmissions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest', 'submitFinalProject', 'deleteFinalProject', 'getFinalProjects'];
     if (retestActions.indexOf(action) >= 0 && claims.scope !== 'retest') {
       throw new Error('Sesi Re-Test tidak valid. Silakan login ulang.');
     }
@@ -4577,6 +4585,18 @@ function submitFinalProject(payload) {
     }
   }
 
+  let finalDeckUrl = payload.deck_url || payload.deckUrl || '';
+  if (payload.deck_file_data && payload.deck_file_data.startsWith('data:')) {
+    try {
+      const mimeType = payload.deck_file_data.substring(payload.deck_file_data.indexOf(':') + 1, payload.deck_file_data.indexOf(';')) || 'application/pdf';
+      const ext = mimeType.includes('presentation') || mimeType.includes('powerpoint') ? 'pptx' : 'pdf';
+      const filename = payload.deck_file_name || `Deck_${payload.team_id || projectId}_${new Date().getTime()}.${ext}`;
+      finalDeckUrl = saveBase64ToDrive(payload.deck_file_data, filename, mimeType);
+    } catch (e) {
+      Logger.log("Error upload deck to drive: " + e.message);
+    }
+  }
+
   const project = {
     project_id: projectId,
     team_id: payload.team_id || projectId,
@@ -4587,12 +4607,13 @@ function submitFinalProject(payload) {
     track: payload.track || '',
     project_title: payload.title || payload.project_title || '',
     tagline: payload.tagline || '',
-    cover_url: payload.cover_url || '',
+    cover_url: finalCoverUrl || payload.cover_url || '',
     tech_stack: payload.tech_stack || '',
     problem: payload.problem || '',
     solution: payload.solution || '',
     mentor: payload.mentor || '',
-    deck_url: payload.deckUrl || payload.deck_url || '',
+    deck_url: finalDeckUrl || payload.deck_url || '',
+    deck_file_name: payload.deck_file_name || '',
     repo_url: payload.repoUrl || payload.repo_url || '',
     demo_url: payload.demoUrl || payload.demo_url || '',
     overview: payload.overview || '',

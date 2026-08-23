@@ -10,27 +10,11 @@
 
         <nav class="fellow-menu">
             <a href="#/participant-dashboard" data-fellow-nav="dashboard"><i class="fas fa-house"></i><span>Beranda</span></a>
-            <a href="#/messaging" data-fellow-nav="chatroom"><i class="far fa-comment-dots"></i><span>Chatroom</span><strong>3</strong></a>
-            <a href="#/participant-mentor" data-fellow-nav="mentor"><i class="fas fa-user-group"></i><span>Mentor</span></a>
             <a href="#/participant-modules" data-fellow-nav="modules"><i class="fas fa-book-open"></i><span>Modul</span></a>
-            <a href="#/participant-tasks" data-fellow-nav="tasks"><i class="fas fa-list-check"></i><span>Tugas</span></a>
             <a class="active" href="#/participant-projects" data-fellow-nav="projects"><i class="far fa-folder-open"></i><span>Proyek</span></a>
-            <a href="#/participant-events" data-fellow-nav="events"><i class="far fa-calendar-days"></i><span>Events</span></a>
-            <a href="#/participant-community" data-fellow-nav="community"><i class="fas fa-users"></i><span>Komunitas</span></a>
-        </nav>
-
-        <div class="fellow-menu-label">Lainnya</div>
-        <nav class="fellow-menu secondary">
-            <a href="#/participant-certificates" data-fellow-nav="certificates"><i class="fas fa-certificate"></i><span>Sertifikat</span></a>
             <a href="#/participant-leaderboard" data-fellow-nav="leaderboard"><i class="fas fa-ranking-star"></i><span>Leaderboard</span></a>
-            <a href="#/participant-help" data-fellow-nav="faq"><i class="far fa-circle-question"></i><span>FAQ & Bantuan</span></a>
             <a href="#/participant-settings" data-fellow-nav="settings"><i class="fas fa-gear"></i><span>Pengaturan</span></a>
         </nav>
-
-        <div class="invite-card">
-            <p><strong>Ajak Temanmu!</strong><br>Dapatkan poin tambahan untuk setiap teman yang bergabung.</p>
-            <button type="button">Undang Sekarang</button>
-        </div>
     </aside>
 
     <main class="fellow-main projects-page">
@@ -73,13 +57,13 @@
                                 </svg>
                             </span>
                         </h1>
-                        <p class="hero-subtitle">Menampilkan karya AI terbaik dari 10 tim HerAI.<br>Setiap ide adalah langkah menuju dampak nyata.</p>
+                        <p class="hero-subtitle">Menampilkan inovasi AI terbaik dari tim HerAI Fellowship 2026.<br>Setiap ide adalah langkah nyata menuju dampak berkelanjutan.</p>
                         
                         <div class="hero-cta-row">
                             <button class="btn-hero-submit" id="btnSubmitEditProj" type="button">
-                                <i class="fas fa-arrow-up-from-bracket"></i> Submit / Edit Karya Tim
+                                <i class="fas fa-arrow-up-from-bracket"></i> Submit / Edit Project
                             </button>
-                            <button class="btn-hero-guide" id="btnGuideSubmission" type="button" onclick="alert('Panduan Pengumpulan: Pastikan berkas Live Demo, Repository GitHub, dan Slide Pitch Deck Google Drive sudah siap sebelum submit.')">
+                            <button class="btn-hero-guide" id="btnGuideSubmission" type="button" onclick="openGuideModal()">
                                 <i class="fas fa-book-open"></i> Guide Submission
                             </button>
                         </div>
@@ -151,9 +135,17 @@
                 <div class="showcase-form-container" id="projectSubmitForm">
                     
                     <div class="workspace-nav">
-                        <button type="button" id="btnBackToGallery" class="btn-back-workspace"><i class="fas fa-arrow-left"></i> Kembali ke Pameran</button>
-                        <h2 class="workspace-title">Workspace Pengumpulan Karya</h2>
-                        <span id="userTeamBadge" class="badge-category pink">Mengecek Tim...</span>
+                        <button type="button" id="btnBackToGallery" class="btn-back-workspace"><i class="fas fa-arrow-left"></i> Kembali ke Galeri</button>
+                        <div class="workspace-title-center">
+                            <h2 class="workspace-title">Workspace Pengumpulan Project</h2>
+                        </div>
+                        <div class="workspace-team-badge-wrap" id="userTeamBadge">
+                            <div class="team-avatar-mini" id="userTeamAvatarMini">T10</div>
+                            <div class="team-badge-text-col">
+                                <small class="team-badge-label">Tim Peserta</small>
+                                <span id="userTeamNameText" class="team-name-mini">TEAM 10</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="deadline-banner modern-deadline">
@@ -168,7 +160,7 @@
 
                     <div class="form-instructions-premium">
                         <i class="fas fa-circle-info" style="color: #2563eb; font-size: 18px; margin-top: 2px;"></i> 
-                        <span>Lengkapi data di bawah ini untuk mempublikasikan karya tim Anda. Berkas akan otomatis tersimpan ke Google Drive tim dan terdaftar di Google Sheets backend.</span>
+                        <span>Lengkapi data di bawah ini untuk mempublikasikan project tim Anda. Berkas akan otomatis tersimpan ke Google Drive tim dan terdaftar di Google Sheets backend.</span>
                     </div>
 
                     <!-- Card 1: Basic Info -->
@@ -219,24 +211,31 @@
                         </div>
                     </div>
 
-                    <!-- Card 2: Media Thumbnail -->
+                    <!-- Card 2: Media Thumbnail (Smart Auto-Crop 16:9) -->
                     <div class="form-section-card">
                         <div class="card-header-premium">
                             <div class="header-icon-box"><i class="fas fa-image"></i></div>
                             <div class="header-text-col">
                                 <h3>2. Thumbnail Proyek</h3>
-                                <p>Gambar cover yang mewakili solusi tim Anda (rasio 16:9 disarankan).</p>
+                                <p>Cover thumbnail representasi project tim (sistem otomatis melakukan smart crop ke rasio presisi 16:9).</p>
                             </div>
                         </div>
                         <div class="card-body-premium">
                             <div class="upload-dropzone" id="uploadDropzone">
                                 <i class="fas fa-cloud-arrow-up upload-icon" style="font-size: 32px; color: #ec1970;"></i>
-                                <span style="font-weight: 700; color: #334155;">Klik atau seret gambar ke sini (JPG/PNG, Maks 2MB)</span>
+                                <span style="font-weight: 700; color: #334155;">Pilih atau Seret Foto Cover (Auto-Crop 16:9)</span>
+                                <small style="color: #64748b; font-size: 12px; margin-top: 4px;">Sistem akan mengoptimalkan & mengompresi gambar otomatis ke rasio 16:9.</small>
                                 <input type="file" id="projectCoverFile" accept="image/*">
                             </div>
                             <input type="hidden" id="projectCover">
                             <div id="projectCoverPreview" class="cover-preview-box" style="display: none;">
-                                <img src="" alt="Cover Preview">
+                                <div class="preview-header">
+                                    <span><i class="fas fa-crop-simple" style="color: #ec1970;"></i> Hasil Auto-Crop 16:9</span>
+                                    <button type="button" id="btnRemoveCover" class="btn-remove-cover-thumb"><i class="fas fa-trash"></i> Ganti / Hapus</button>
+                                </div>
+                                <div class="preview-16-9-frame">
+                                    <img src="" alt="Cover Preview 16:9" id="previewImgElement">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -262,56 +261,107 @@
                         </div>
                     </div>
 
-                    <!-- Card 4: Deliverables & Tech Stack -->
-                    <div class="form-section-card">
+                    <!-- Card 4: Berkas & Deliverables -->
+                    <div class="form-section-card" id="cardDeliverables">
                         <div class="card-header-premium">
                             <div class="header-icon-box"><i class="fas fa-link"></i></div>
                             <div class="header-text-col">
-                                <h3>4. Tautan & Teknologi</h3>
-                                <p>Berkas kode sumber, tautan prototipe aktif, slide presentasi, dan tech stack.</p>
+                                <h3>4. Berkas & Deliverables Proyek</h3>
+                                <p>Tautan dan berkas presentasi project yang wajib dilengkapi untuk kurasi & penilaian akhir.</p>
                             </div>
                         </div>
                         <div class="card-body-premium">
+                            <!-- Live Demo -->
                             <div class="form-grid-2">
                                 <div class="input-label-col">
-                                    <label for="projectRepo">Repository (GitHub)</label>
+                                    <label for="projectDemo">Live Demo URL <span class="badge-required">* Wajib</span></label>
+                                    <small class="input-hint-sub">Tautan aplikasi web / prototipe interaktif (Vercel, Streamlit, HuggingFace, dll.)</small>
                                 </div>
                                 <div class="input-field-col">
-                                    <input type="url" id="projectRepo" placeholder="https://github.com/..." class="modern-input">
+                                    <input type="url" id="projectDemo" placeholder="https://demo-proyek.vercel.app" class="modern-input">
+                                    <div id="errorProjectDemo" class="field-error-msg" style="display: none;">
+                                        <i class="fas fa-circle-exclamation"></i>
+                                        <span>Tautan Live Demo wajib diisi & harus berupa URL valid (contoh: https://demo-proyek.vercel.app)</span>
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- Source Code: GitHub / Google Colab -->
                             <div class="form-grid-2">
                                 <div class="input-label-col">
-                                    <label for="projectDemo">Live Demo / Prototipe</label>
+                                    <label for="projectRepo">Source Code <span class="badge-required">* Wajib (GitHub / Colab)</span></label>
+                                    <small class="input-hint-sub">Bisa berupa tautan GitHub Repository atau Google Colab Notebook</small>
                                 </div>
                                 <div class="input-field-col">
-                                    <input type="url" id="projectDemo" placeholder="https://..." class="modern-input">
+                                    <input type="url" id="projectRepo" placeholder="https://github.com/... atau https://colab.research.google.com/..." class="modern-input">
+                                    <div id="errorProjectRepo" class="field-error-msg" style="display: none;">
+                                        <i class="fas fa-circle-exclamation"></i>
+                                        <span>Tautan Source Code (GitHub / Google Colab) wajib diisi & harus berupa URL valid</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-grid-2">
+
+                            <!-- Pitch Deck: File Upload (PDF/PPTX) ONLY -->
+                            <div class="form-grid-2 pitch-deck-grid-row">
                                 <div class="input-label-col">
-                                    <label for="projectDeck">Pitch Deck (Slide/PDF Link)</label>
+                                    <label for="projectDeckFile">Slide Pitch Deck <span class="badge-required">* Wajib Diunggah</span></label>
+                                    <small class="input-hint-sub">Unggah berkas slide presentasi resmi (PDF / PPTX). Berkas tersimpan permanen & dinilai kurator.</small>
                                 </div>
                                 <div class="input-field-col">
-                                    <input type="url" id="projectDeck" placeholder="https://drive.google.com/..." class="modern-input">
+                                    <!-- File Upload Dropzone -->
+                                    <div class="deck-upload-dropzone" id="deckDropzone">
+                                        <i class="fas fa-file-pdf deck-drop-icon"></i>
+                                        <span class="deck-drop-title">Pilih atau Seret Berkas Slide Pitch Deck (PDF / PPTX)</span>
+                                        <small class="deck-drop-sub">Maksimal 50MB. Format PDF sangat disarankan agar tampilan presentasi tetap presisi.</small>
+                                        <input type="file" id="projectDeckFile" accept=".pdf,.pptx,.ppt">
+                                    </div>
+
+                                    <!-- Attached File Preview Card -->
+                                    <div id="deckFileAttachedCard" class="deck-attached-card" style="display: none;">
+                                        <div class="deck-attached-info">
+                                            <div class="deck-file-badge-icon"><i class="fas fa-file-pdf"></i></div>
+                                            <div class="deck-file-meta">
+                                                <strong id="deckFileNameText">Pitch-Deck.pdf</strong>
+                                                <span id="deckFileSizeText">2.4 MB · Berkas resmi terlampir</span>
+                                            </div>
+                                        </div>
+                                        <button type="button" id="btnRemoveDeckFile" class="btn-remove-deck-file"><i class="fas fa-trash"></i> Hapus / Ganti</button>
+                                    </div>
+
+                                    <div id="errorProjectDeck" class="field-error-msg" style="display: none;">
+                                        <i class="fas fa-circle-exclamation"></i>
+                                        <span>Berkas slide Pitch Deck (PDF / PPTX) wajib diunggah sebelum mempublikasikan proyek!</span>
+                                    </div>
+
+                                    <input type="hidden" id="projectDeckFileData">
+                                    <input type="hidden" id="projectDeckFileName">
                                 </div>
                             </div>
-                            
-                            <hr style="border: 0; border-top: 1.5px solid #fce7f3; margin: 24px 0;">
-                            
-                            <div class="form-group">
-                                <label style="margin-bottom: 10px; display: block; font-weight: 700; color: #334155;">Tech Stack Utama (Klik badge untuk memilih)</label>
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Tech Stack -->
+                    <div class="form-section-card">
+                        <div class="card-header-premium">
+                            <div class="header-icon-box"><i class="fas fa-layer-group"></i></div>
+                            <div class="header-text-col">
+                                <h3>5. Tech Stack & Library</h3>
+                                <p>Pilih atau ketik teknologi kecerdasan buatan dan framework yang digunakan.</p>
+                            </div>
+                        </div>
+                        <div class="card-body-premium">
+                            <div class="tech-picker-wrapper">
                                 <div class="tech-picker-badges" id="techPickerContainer">
                                     <span class="tech-pick-badge" data-tech="Python">Python</span>
-                                    <span class="tech-pick-badge" data-tech="TensorFlow">TensorFlow</span>
                                     <span class="tech-pick-badge" data-tech="PyTorch">PyTorch</span>
+                                    <span class="tech-pick-badge" data-tech="TensorFlow">TensorFlow</span>
                                     <span class="tech-pick-badge" data-tech="Scikit-Learn">Scikit-Learn</span>
-                                    <span class="tech-pick-badge" data-tech="Pandas">Pandas</span>
                                     <span class="tech-pick-badge" data-tech="HuggingFace">HuggingFace</span>
-                                    <span class="tech-pick-badge" data-tech="LangChain">LangChain</span>
                                     <span class="tech-pick-badge" data-tech="OpenAI API">OpenAI API</span>
-                                    <span class="tech-pick-badge" data-tech="Streamlit">Streamlit</span>
+                                    <span class="tech-pick-badge" data-tech="Gemini API">Gemini API</span>
+                                    <span class="tech-pick-badge" data-tech="LangChain">LangChain</span>
                                     <span class="tech-pick-badge" data-tech="FastAPI">FastAPI</span>
+                                    <span class="tech-pick-badge" data-tech="Streamlit">Streamlit</span>
                                     <span class="tech-pick-badge" data-tech="Flask">Flask</span>
                                     <span class="tech-pick-badge" data-tech="React">React</span>
                                     <span class="tech-pick-badge" data-tech="Tailwind">Tailwind</span>
@@ -322,8 +372,9 @@
                         </div>
                     </div>
 
-                    <div class="workspace-footer">
-                        <button type="button" class="btn-submit-large"><i class="fas fa-paper-plane"></i> Publikasikan Karya Tim 🚀</button>
+                    <div class="workspace-footer form-submit-row">
+                        <button type="button" class="btn-submit-large" id="btnSubmitFinalProject"><i class="fas fa-paper-plane"></i> Publikasikan Project</button>
+                        <button type="button" class="btn-delete-workspace" id="btnDeleteSubmissionWorkspace" style="display: none;"><i class="fas fa-trash-can"></i> Hapus Project Ini</button>
                     </div>
                 </div>
             </div>
@@ -331,48 +382,248 @@
 
     </main>
 
-    <!-- Modal Showcase Detail -->
+    <!-- Modal Showcase Detail (Approved Scrapbook Dossier Portfolio) -->
     <div class="showcase-modal-overlay" id="showcaseModalOverlay">
-        <div class="showcase-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-            <button class="showcase-modal-close" onclick="closeShowcaseModal()" type="button" aria-label="Tutup modal"><i class="fas fa-xmark"></i></button>
-            <div class="modal-cover-hero">
-                <img id="modalCoverImg" src="" alt="Project Cover">
-                <div class="modal-hero-overlay">
-                    <span class="category-badge-chip" id="modalTrackBadge" style="margin-bottom: 10px; display: inline-block;">AI Product</span>
-                    <h2 id="modalTitle">Project Title</h2>
-                    <p class="tagline" id="modalTagline">Project Tagline</p>
-                    <div class="modal-team-info">
-                        <img src="" id="modalTeamAvatar" alt="Team">
-                        <span id="modalTeamName">Nama Tim</span>
+        <div class="showcase-modal detail-project-modal dossier-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            
+            <!-- Top Floating Washi Tape Label & Decorative Bouquet -->
+            <div class="modal-dossier-top-decor">
+                <div class="modal-washi-label">
+                    <span>✨ HerAI Project Showcase 2026 🌸</span>
+                </div>
+                <img src="/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/28_tape_pink_checkered.png" class="modal-top-tape" alt="" aria-hidden="true">
+                <img src="/assets/herai_gallery_asset_pack/cropped_png/flowers/18_flower_small_top_right.png" class="modal-top-flower" alt="" aria-hidden="true">
+                <button class="showcase-modal-close" onclick="closeShowcaseModal()" type="button" aria-label="Tutup modal"><i class="fas fa-xmark"></i></button>
+            </div>
+
+            <!-- Scrollable Internal Body Container (Prevents bottom clipping) -->
+            <div class="modal-scroll-body">
+                
+                <!-- Header Project Identity Area -->
+                <div class="modal-dossier-header">
+                    <div class="modal-stamp-col">
+                        <div class="modal-number-scallop-stamp">
+                            <span id="modalProjectNumber">01</span>
+                            <img src="/assets/herai_gallery_asset_pack/cropped_png/doodles/58_paperclips_pair.png" class="stamp-paperclip-decor" alt="" aria-hidden="true">
+                        </div>
+                    </div>
+                    
+                    <div class="modal-identity-col">
+                        <h1 id="modalTitle" class="modal-project-title">Project Title</h1>
+                        <p class="modal-project-tagline" id="modalTagline">Aplikasi AI untuk menganalisis dan memahami permasalahan secara cerdas dan tepat sasaran.</p>
+                        
+                        <div class="modal-chips-bar">
+                            <div class="modal-team-chip-dossier">
+                                <div class="modal-team-avatar-box" id="modalTeamAvatarBox">T1</div>
+                                <span id="modalTeamName" class="modal-team-name-text">TEAM 10</span>
+                            </div>
+                            <span class="dossier-pill ai-product"><i class="fas fa-sparkles"></i> AI Product</span>
+                            <span class="dossier-pill category" id="modalTrackBadge"><i class="fas fa-heart-pulse"></i> <span>HealthTech</span></span>
+                        </div>
+                    </div>
+
+                    <div class="modal-stats-col">
+                        <div class="modal-status-badge-box">
+                            <div class="status-published-pill">
+                                <i class="fas fa-circle-check"></i> Published
+                            </div>
+                            <span class="published-date-sub" id="modalPublishedDate">Diterbitkan pada 2026</span>
+                        </div>
+                        <button type="button" class="modal-likes-box" id="modalLikesBox" onclick="window.triggerModalLike(this)" aria-label="Sukai project ini">
+                            <i class="fas fa-heart likes-heart-icon"></i>
+                            <div class="likes-text-wrap">
+                                <strong id="modalLikesCount">140</strong>
+                                <small>Likes</small>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hand-drawn Scribble Wavy Underline Divider -->
+                <div class="modal-dossier-divider">
+                    <div class="wavy-line-brush"></div>
+                </div>
+
+                <!-- Main Content Grid (2 Columns: Left Problem & Solution, Right Resources & Tech Stack) -->
+                <div class="modal-dossier-grid">
+                    
+                    <!-- LEFT COLUMN (~56%): Scrapbook Notebook Sheets -->
+                    <div class="modal-dossier-left">
+                        
+                        <!-- Sheet 1: Problem Statement Notebook Paper -->
+                        <div class="dossier-paper-sheet problem-sheet">
+                            <img src="/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/26_tape_pink_dots_01.png" class="sheet-corner-tape" alt="" aria-hidden="true">
+                            <div class="notebook-binder-holes"></div>
+                            
+                            <div class="sheet-header">
+                                <div class="sheet-icon-circle pink"><i class="fas fa-bullseye"></i></div>
+                                <h3>Problem Statement</h3>
+                            </div>
+                            <p id="modalProblem" class="sheet-content-text">Latar belakang masalah.</p>
+                            
+                            <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/20_flower_petal_mid_right.png" class="sheet-doodle-watermark" alt="" aria-hidden="true">
+                        </div>
+
+                        <!-- Sheet 2: Solusi & Arsitektur AI Buttery Cream Paper -->
+                        <div class="dossier-paper-sheet solution-sheet">
+                            <img src="/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/31_tape_cream.png" class="sheet-corner-tape yellow-tape" alt="" aria-hidden="true">
+                            <div class="notebook-binder-holes yellow-holes"></div>
+                            
+                            <div class="sheet-header">
+                                <div class="sheet-icon-circle amber"><i class="fas fa-lightbulb"></i></div>
+                                <h3>Solusi & Arsitektur AI</h3>
+                            </div>
+                            <p id="modalSolution" class="sheet-content-text">Detail arsitektur solusi AI.</p>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN (~44%): Berkas Tickets & Tech Stack -->
+                    <div class="modal-dossier-right">
+                        
+                        <!-- Panel 1: Berkas Project Tickets -->
+                        <div class="dossier-side-panel files-panel">
+                            <img src="/assets/herai_gallery_asset_pack/cropped_png/doodles/58_paperclips_pair.png" class="panel-paperclip-top" alt="" aria-hidden="true">
+                            
+                            <div class="panel-title-bar">
+                                <i class="fas fa-folder-open panel-folder-icon"></i>
+                                <h3>Berkas Project</h3>
+                                <div class="dashed-title-rule"></div>
+                            </div>
+
+                            <div class="ticket-buttons-stack">
+                                <!-- Demo Ticket -->
+                                <a href="#" class="dossier-ticket-btn demo-ticket" id="modalBtnDemo" target="_blank" rel="noopener noreferrer">
+                                    <div class="ticket-icon-box"><i class="fas fa-arrow-up-right-from-square"></i></div>
+                                    <div class="ticket-text-col">
+                                        <strong>Buka Live Demo</strong>
+                                        <small>Lihat aplikasi secara langsung</small>
+                                    </div>
+                                    <i class="fas fa-arrow-up-right-from-square ticket-arrow"></i>
+                                </a>
+
+                                <!-- GitHub Ticket -->
+                                <a href="#" class="dossier-ticket-btn repo-ticket" id="modalBtnRepo" target="_blank" rel="noopener noreferrer">
+                                    <div class="ticket-icon-box"><i class="fab fa-github"></i></div>
+                                    <div class="ticket-text-col">
+                                        <strong>Repository GitHub</strong>
+                                        <small>Lihat source code project</small>
+                                    </div>
+                                    <i class="fas fa-arrow-up-right-from-square ticket-arrow"></i>
+                                </a>
+
+                                <!-- Pitch Deck Ticket -->
+                                <a href="#" class="dossier-ticket-btn deck-ticket" id="modalBtnDeck" target="_blank" rel="noopener noreferrer">
+                                    <div class="ticket-icon-box"><i class="fas fa-file-pdf"></i></div>
+                                    <div class="ticket-text-col">
+                                        <strong>Pitch Deck Slide</strong>
+                                        <small>Lihat presentasi project</small>
+                                    </div>
+                                    <i class="fas fa-arrow-up-right-from-square ticket-arrow"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Panel 2: Tech Stack Badges -->
+                        <div class="dossier-side-panel stack-panel">
+                            <div class="panel-title-bar">
+                                <i class="fas fa-layer-group panel-stack-icon"></i>
+                                <h3>Tech Stack</h3>
+                                <div class="dashed-title-rule"></div>
+                            </div>
+
+                            <div class="dossier-tech-grid" id="modalTechStack">
+                                <!-- Populated dynamically with brand icons -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Modal Dossier Footer (Attribution & Author Action Bar) -->
+            <div class="modal-dossier-footer">
+                <div class="footer-left-credit">
+                    <img src="/assets/herai_gallery_asset_pack/cropped_png/flowers/23_small_flower_bottom.png" class="footer-flower-icon" alt="" aria-hidden="true">
+                    <span class="footer-made-with">Made with <i class="fas fa-heart" style="color: #ec1970;"></i></span>
+                    <span class="footer-team-text">Made by <strong id="modalFooterTeamName">TEAM 10</strong> · HerAI Fellowship 2026 ✦</span>
+                </div>
+
+                <div class="footer-actions-group" id="modalAuthorActions" style="display: none;">
+                    <button type="button" class="btn-dossier-edit" id="btnModalEditProject"><i class="fas fa-pen-to-square"></i> Edit Project</button>
+                    <button type="button" class="btn-dossier-delete" id="btnModalDeleteProject"><i class="fas fa-trash-can"></i> Hapus Project</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal Guide Submission -->
+    <div class="showcase-modal-overlay" id="showcaseGuideModalOverlay">
+        <div class="showcase-modal guide-modal" role="dialog" aria-modal="true" aria-labelledby="guideModalTitle">
+            <button class="showcase-modal-close" onclick="closeGuideModal()" type="button" aria-label="Tutup panduan"><i class="fas fa-xmark"></i></button>
+            <div class="guide-modal-header">
+                <span class="category-badge-chip" style="margin-bottom: 8px;"><i class="fas fa-book-open" style="color: #ec1970;"></i> Panduan Pameran 2026</span>
+                <h2 id="guideModalTitle" style="font-size: 22px; font-weight: 800; color: #181225; margin: 4px 0 6px 0;">Panduan Pengumpulan Project</h2>
+                <p style="font-size: 13.5px; color: #64748b; margin: 0;">Pastikan berkas project tim Anda telah memenuhi standar kurasi pameran sebelum dipublikasikan.</p>
+            </div>
+            <div class="guide-modal-body">
+                <div class="guide-step-card">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h4>Identitas & Track Project</h4>
+                        <p>Gunakan judul yang ringkas dan memikat. Pilih track AI yang relevan (HealthTech, EduTech, GreenTech, dll.) dan sertakan tagline 1 kalimat.</p>
+                    </div>
+                </div>
+                <div class="guide-step-card">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h4>Foto Cover & Thumbnail (16:9)</h4>
+                        <p>Unggah gambar UI atau mockup solusi Anda. Sistem akan otomatis melakukan smart center crop ke rasio 16:9 agar tampak presisi di kartu pameran.</p>
+                    </div>
+                </div>
+                <div class="guide-step-card">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h4>Cerita Project: Masalah & Solusi AI</h4>
+                        <p>Jelaskan problem statement nyata yang diangkat dan uraikan arsitektur machine learning / AI yang tim Anda kembangkan.</p>
+                    </div>
+                </div>
+                <div class="guide-step-card">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <h4>Tautan Berkas Wajib (Deliverables)</h4>
+                        <ul class="guide-checklist">
+                            <li><i class="fas fa-check-circle" style="color: #ec1970;"></i> <strong>Live Demo:</strong> URL aplikasi aktif (Vercel, Streamlit, HuggingFace, dll.).</li>
+                            <li><i class="fas fa-check-circle" style="color: #ec1970;"></i> <strong>Repository GitHub:</strong> Kode sumber publik dengan dokumentasi README.</li>
+                            <li><i class="fas fa-check-circle" style="color: #ec1970;"></i> <strong>Pitch Deck Drive:</strong> Slide dengan izin akses "Anyone with link can view".</li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            <div class="modal-body-modern">
-                <div class="modal-main-col">
-                    <div class="modal-story-box">
-                        <h4><i class="fas fa-bullseye" style="color: #ec1970;"></i> Problem Statement</h4>
-                        <p id="modalProblem">Latar belakang masalah.</p>
-                    </div>
-                    <div class="modal-story-box">
-                        <h4><i class="fas fa-lightbulb" style="color: #ca8a04;"></i> Solusi & Cara Kerja</h4>
-                        <p id="modalSolution">Detail arsitektur solusi AI.</p>
-                    </div>
-                </div>
-                <div class="modal-side-col">
-                    <div class="modal-sidebar-box">
-                        <h4><i class="fas fa-rocket" style="color: #ec1970;"></i> Berkas Proyek</h4>
-                        <a href="#" class="deliverable-btn modern-btn" id="modalBtnDemo" target="_blank" rel="noopener noreferrer"><i class="fas fa-arrow-up-right-from-square"></i> Buka Live Demo</a>
-                        <a href="#" class="deliverable-btn modern-btn-outline" id="modalBtnRepo" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> Repository Kode</a>
-                        <a href="#" class="deliverable-btn modern-btn-outline" id="modalBtnDeck" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf"></i> Pitch Deck Slide</a>
-                    </div>
-                    <div class="modal-sidebar-box">
-                        <h4><i class="fas fa-layer-group" style="color: #7c3aed;"></i> Tech Stack</h4>
-                        <div class="project-tech-stack" id="modalTechStack" style="display: flex; flex-wrap: wrap; gap: 6px;">
-                            <!-- Filled dynamically by JS -->
-                        </div>
-                    </div>
-                </div>
+            <div class="guide-modal-footer">
+                <button type="button" class="btn-guide-proceed" onclick="proceedFromGuideToWorkspace()">Saya Mengerti & Siap Submit <i class="fas fa-arrow-right"></i></button>
             </div>
         </div>
     </div>
+
+    <!-- Modal Confirmation Dialog -->
+    <div class="showcase-modal-overlay" id="showcaseConfirmModalOverlay">
+        <div class="showcase-modal confirm-modal" role="dialog" aria-modal="true">
+            <div class="confirm-icon-box">
+                <i class="fas fa-triangle-exclamation"></i>
+            </div>
+            <h3 id="confirmModalTitle">Konfirmasi Hapus Project</h3>
+            <p id="confirmModalMsg">Apakah Anda yakin ingin menghapus project tim ini dari pameran Showcase?</p>
+            <div class="confirm-btn-row">
+                <button type="button" class="btn-confirm-cancel" onclick="closeShowcaseConfirm()">Batal</button>
+                <button type="button" class="btn-confirm-proceed" id="btnConfirmProceed">Ya, Hapus Project</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="showcase-toast-container" id="showcaseToastContainer" aria-live="polite"></div>
 </section>

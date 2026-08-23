@@ -225,10 +225,8 @@
         var allowedNavKeys = ['dashboard', 'modules', 'leaderboard', 'settings', 'projects'];
         sidebar.querySelectorAll('.fellow-menu a[data-fellow-nav]').forEach(function(link) {
             if (allowedNavKeys.indexOf(link.dataset.fellowNav) === -1) {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    renderParticipantRestricted();
-                });
+                link.style.display = 'none';
+                link.hidden = true;
             }
         });
     }
@@ -2803,13 +2801,15 @@
 
     function participantAccessStateMarkup(options = {}) {
         var hasCustomAction = Boolean(options.actionHref || options.actionLabel);
+        var isLogin = options.actionHref && options.actionHref.includes('login');
+        var defaultIcon = isLogin ? 'fa-arrow-right-to-bracket' : 'fa-arrow-left';
         var actions = Array.isArray(options.actions) && options.actions.length
             ? options.actions
             : (hasCustomAction
                 ? [{
                     href: options.actionHref || '#/participant-dashboard',
                     label: options.actionLabel || 'Kembali ke Beranda',
-                    icon: options.actionIcon || 'fa-arrow-left',
+                    icon: options.actionIcon || defaultIcon,
                     primary: true
                 }]
                 : [

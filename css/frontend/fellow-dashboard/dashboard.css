@@ -1,7 +1,8 @@
+:root,
 .fellow-dashboard {
     --fellow-bg: #fff7fb;
     --fellow-line: rgba(244, 143, 188, 0.26);
-    --fellow-pink: #f63392;
+    --fellow-pink: #ec1970;
     --fellow-pink-soft: #fff0f7;
     --fellow-text: #16141f;
     --fellow-muted: #6f7282;
@@ -17,11 +18,133 @@
     --fellow-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     --fellow-sidebar-collapsed: 92px;
     --fellow-sidebar-expanded: 288px;
-    background: radial-gradient(circle at 78% 10%, rgba(255, 214, 234, 0.7), transparent 32%), #fffafd;
-    color: var(--fellow-text);
-    display: block;
+}
+
+.fellow-restricted-state {
+    align-items: center;
+    background: radial-gradient(circle at 50% 20%, #ffe4ef 0%, #fff7fb 60%, #fff0f6 100%);
+    display: flex;
     font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    justify-content: center;
     min-height: 100vh;
+    padding: 32px 20px;
+    box-sizing: border-box;
+}
+
+.fellow-restricted-state > div {
+    background: #ffffff;
+    border: 1.5px solid #fce7f3;
+    border-radius: 26px;
+    box-sizing: border-box;
+    box-shadow: 0 24px 64px rgba(236, 25, 112, 0.1), 0 4px 16px rgba(0, 0, 0, 0.02);
+    max-width: 540px;
+    padding: 46px 36px;
+    text-align: center;
+    width: 100%;
+    position: relative;
+}
+
+.fellow-restricted-state i.fa-shield-halved,
+.fellow-restricted-state i.fa-lock {
+    align-items: center;
+    background: linear-gradient(135deg, #fff0f6 0%, #ffe4ef 100%);
+    border: 2px solid #fbcfe8;
+    border-radius: 50%;
+    color: #ec1970;
+    display: inline-flex;
+    font-size: 2rem;
+    height: 76px;
+    justify-content: center;
+    margin-bottom: 22px;
+    width: 76px;
+    box-shadow: 0 8px 24px rgba(236, 25, 112, 0.16);
+}
+
+.fellow-restricted-state h1 {
+    color: #171827;
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin: 0 0 12px;
+    letter-spacing: -0.4px;
+}
+
+.fellow-restricted-state p {
+    color: #64748b;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin: 0 auto 30px;
+    max-width: 460px;
+}
+
+.fellow-restricted-actions {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+}
+
+.fellow-restricted-actions a {
+    align-items: center !important;
+    border: 1.5px solid transparent;
+    border-radius: 14px;
+    display: inline-flex !important;
+    font-weight: 800;
+    font-size: 0.95rem;
+    gap: 9px;
+    justify-content: center !important;
+    min-height: 46px;
+    padding: 12px 28px;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-sizing: border-box;
+    margin: 0 auto !important;
+}
+
+.fellow-restricted-actions a.is-primary {
+    background: linear-gradient(135deg, #ec1970 0%, #db2777 100%) !important;
+    box-shadow: 0 6px 20px rgba(236, 25, 112, 0.32) !important;
+    color: #ffffff !important;
+    min-width: 200px;
+}
+
+.fellow-restricted-actions a.is-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 26px rgba(236, 25, 112, 0.42) !important;
+    color: #ffffff !important;
+}
+
+.fellow-restricted-actions a.is-secondary {
+    background: #fff0f6 !important;
+    border-color: #fbcfe8 !important;
+    color: #be185d !important;
+}
+
+.fellow-restricted-actions a.is-secondary:hover {
+    background: #ffe4ef !important;
+    border-color: #f472b6 !important;
+    transform: translateY(-1px);
+}
+
+.fellow-restricted-actions a i {
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+/* Hide inactive fellow sidebar navigation items cleanly */
+.fellow-menu a[data-fellow-nav="chatroom"],
+.fellow-menu a[data-fellow-nav="mentor"],
+.fellow-menu a[data-fellow-nav="tasks"],
+.fellow-menu a[data-fellow-nav="events"],
+.fellow-menu a[data-fellow-nav="community"],
+.fellow-menu a[data-fellow-nav="certificates"],
+.fellow-menu a[data-fellow-nav="faq"],
+.fellow-menu-label,
+.invite-card {
+    display: none !important;
 }
 
 .fellow-dashboard-locked {
@@ -85,111 +208,6 @@
     min-height: 44px;
     padding: 12px 20px;
     text-decoration: none;
-}
-
-.fellow-restricted-state {
-    align-items: center;
-    background: #fff7fb;
-    display: flex;
-    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 32px;
-}
-.fellow-restricted-state > div {
-    background: #fff;
-    border: 1px solid var(--fellow-line);
-    border-radius: 22px;
-    box-sizing: border-box;
-    box-shadow: 0 22px 60px rgba(170, 52, 104, 0.1);
-    max-width: 620px;
-    padding: 42px 34px;
-    text-align: center;
-    width: 100%;
-}
-.fellow-restricted-state i.fa-shield-halved {
-    align-items: center;
-    background: #ffe0f0;
-    border-radius: 50%;
-    color: var(--fellow-pink);
-    display: inline-flex;
-    font-size: 1.8rem;
-    height: 70px;
-    justify-content: center;
-    margin-bottom: 18px;
-    width: 70px;
-}
-.fellow-restricted-state h1 {
-    color: var(--fellow-text);
-    font-size: 1.65rem;
-    margin: 0 0 10px;
-}
-.fellow-restricted-state p {
-    color: var(--fellow-muted);
-    line-height: 1.7;
-    margin: 0 auto 26px;
-    max-width: 540px;
-}
-.fellow-restricted-actions {
-    display: grid;
-    gap: 12px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.fellow-restricted-actions a {
-    align-items: center;
-    border: 1px solid transparent;
-    border-radius: 12px;
-    display: flex;
-    font-weight: 800;
-    gap: 9px;
-    justify-content: center;
-    min-height: 44px;
-    padding: 12px 20px;
-    text-decoration: none;
-    transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, color 180ms ease;
-}
-.fellow-restricted-actions a.is-primary {
-    background: var(--fellow-pink);
-    box-shadow: 0 8px 20px rgba(246, 51, 146, 0.2);
-    color: #fff;
-}
-.fellow-restricted-actions a.is-secondary {
-    background: #fff7fb;
-    border-color: #f4cfe0;
-    color: #9b275e;
-}
-.fellow-restricted-actions a:hover,
-.fellow-restricted-actions a:focus-visible {
-    border-color: var(--fellow-pink);
-    box-shadow: 0 8px 20px rgba(170, 52, 104, 0.14);
-}
-.fellow-restricted-actions a:focus-visible {
-    outline: 3px solid rgba(246, 51, 146, 0.24);
-    outline-offset: 3px;
-}
-.fellow-restricted-actions a i {
-    font-size: 0.85rem;
-    line-height: 1;
-}
-
-@media (max-width: 520px) {
-    .fellow-restricted-state {
-        padding: 20px;
-    }
-
-    .fellow-restricted-state > div {
-        padding: 34px 22px;
-    }
-
-    .fellow-restricted-actions {
-        grid-template-columns: minmax(0, 1fr);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .fellow-restricted-actions a {
-        transition: none;
-    }
 }
 
 .fellow-dashboard *,
