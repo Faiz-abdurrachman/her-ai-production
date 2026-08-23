@@ -4580,7 +4580,7 @@ function submitFinalProject(payload) {
       const mimeType = rawCoverUrl.substring(rawCoverUrl.indexOf(':') + 1, rawCoverUrl.indexOf(';')) || 'image/png';
       const ext = mimeType.split('/')[1] || 'png';
       const filename = `Cover_${payload.team_id || projectId}_${new Date().getTime()}.${ext}`;
-      finalCoverUrl = saveBase64ToDrive(rawCoverUrl, filename, mimeType);
+      finalCoverUrl = saveBase64ToDrive(rawCoverUrl, filename, mimeType, 'thumbnail');
     } catch (e) {
       Logger.log("Error upload drive: " + e.message);
       throw new Error('Cover gagal diunggah ke Google Drive. Proyek belum disimpan.');
@@ -4596,7 +4596,7 @@ function submitFinalProject(payload) {
       const mimeType = rawDeckData.substring(rawDeckData.indexOf(':') + 1, rawDeckData.indexOf(';')) || 'application/pdf';
       const ext = mimeType.includes('presentation') || mimeType.includes('powerpoint') ? 'pptx' : 'pdf';
       const filename = payload.deck_file_name || `Deck_${payload.team_id || projectId}_${new Date().getTime()}.${ext}`;
-      finalDeckUrl = saveBase64ToDrive(rawDeckData, filename, mimeType);
+      finalDeckUrl = saveBase64ToDrive(rawDeckData, filename, mimeType, 'view');
     } catch (e) {
       Logger.log("Error upload deck to drive: " + e.message);
       throw new Error('Pitch deck gagal diunggah ke Google Drive. Proyek belum disimpan.');
@@ -4950,7 +4950,14 @@ function getRequestSpreadsheet() {
 }
 
 
-function saveBase64ToDrive(base64Data, filename, mimeType) {
+function buildDriveFileUrl(fileId, urlMode) {
+  if (urlMode === 'view') {
+    return 'https://drive.google.com/file/d/' + fileId + '/view';
+  }
+  return 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w1000';
+}
+
+function saveBase64ToDrive(base64Data, filename, mimeType, urlMode) {
   const folderName = "HerAI_Showcase_Thumbnails";
   let folder;
   const folders = DriveApp.getFoldersByName(folderName);
@@ -4968,8 +4975,7 @@ function saveBase64ToDrive(base64Data, filename, mimeType) {
   const file = folder.createFile(blob);
   file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   
-  // Menggunakan URL thumbnail Google Drive (lebih cepat di-load di <img>)
-  return 'https://drive.google.com/thumbnail?id=' + file.getId() + '&sz=w1000';
+  return buildDriveFileUrl(file.getId(), urlMode || 'thumbnail');
 }
 
 function getSheet(name) {

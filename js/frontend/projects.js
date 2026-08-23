@@ -33,6 +33,42 @@
         'fp_1779942600121'
     ]);
 
+    function extractGoogleDriveFileId(rawUrl) {
+        const url = String(rawUrl || '').trim();
+        if (!url) return '';
+
+        try {
+            const parsed = new URL(url);
+            const allowedHosts = new Set(['drive.google.com', 'lh3.googleusercontent.com']);
+            if (!allowedHosts.has(parsed.hostname)) return '';
+
+            const queryId = parsed.searchParams.get('id');
+            if (queryId && /^[a-zA-Z0-9_-]+$/.test(queryId)) return queryId;
+
+            const pathMatch = parsed.pathname.match(/\/(?:file\/)?d\/([a-zA-Z0-9_-]+)/);
+            return pathMatch ? pathMatch[1] : '';
+        } catch (_) {
+            return '';
+        }
+    }
+
+    function normalizeDriveDeckUrl(rawUrl) {
+        const url = String(rawUrl || '').trim();
+        if (!url) return '';
+
+        try {
+            const parsed = new URL(url);
+            const isLegacyThumbnail = (parsed.hostname === 'drive.google.com' && parsed.pathname === '/thumbnail')
+                || parsed.hostname === 'lh3.googleusercontent.com';
+            if (!isLegacyThumbnail) return url;
+
+            const fileId = extractGoogleDriveFileId(url);
+            return fileId ? `https://drive.google.com/file/d/${fileId}/view` : url;
+        } catch (_) {
+            return url;
+        }
+    }
+
     function normalizeProjectRecord(project) {
         if (!project || typeof project !== 'object') return null;
         const normalized = { ...project };
@@ -44,6 +80,7 @@
                     ? ''
                     : String(value);
         });
+        normalized.deck_url = normalizeDriveDeckUrl(normalized.deck_url);
         return normalized;
     }
 
@@ -1492,7 +1529,7 @@
         const btnDeck = document.getElementById('modalBtnDeck');
         if (btnDeck) {
             const deckFile = p.deck_file_data || '';
-            const deckUrl = (p.deck_url || '').trim();
+            const deckUrl = normalizeDriveDeckUrl(p.deck_url);
             const hasDeck = Boolean(deckFile || deckUrl);
 
             if (hasDeck) {
@@ -1503,19 +1540,13 @@
                 const strongText = btnDeck.querySelector('.ticket-text-col strong');
                 const smallText = btnDeck.querySelector('.ticket-text-col small');
 
-                if (deckFile || deckUrl.toLowerCase().endsWith('.pdf') || p.deck_file_name) {
-                    if (iconBox) iconBox.innerHTML = '<i class="fas fa-file-pdf"></i>';
-                    if (strongText) strongText.textContent = 'Unduh / Buka Pitch Deck';
-                    if (smallText) smallText.textContent = p.deck_file_name ? `${p.deck_file_name} (PDF)` : 'Lihat slide presentasi (PDF)';
-                    if (deckFile) {
-                        btnDeck.setAttribute('download', p.deck_file_name || 'Pitch-Deck.pdf');
-                    } else {
-                        btnDeck.removeAttribute('download');
-                    }
+                if (iconBox) iconBox.innerHTML = '<i class="fas fa-file-lines"></i>';
+                if (strongText) strongText.textContent = 'Buka Pitch Deck';
+                if (deckFile) {
+                    if (smallText) smallText.textContent = 'Unduh dokumen pitch deck lengkap';
+                    btnDeck.setAttribute('download', p.deck_file_name || 'Pitch-Deck');
                 } else {
-                    if (iconBox) iconBox.innerHTML = '<i class="fas fa-file-powerpoint"></i>';
-                    if (strongText) strongText.textContent = 'Pitch Deck Slide';
-                    if (smallText) smallText.textContent = 'Buka slide di Google Drive / Web';
+                    if (smallText) smallText.textContent = 'Lihat dokumen lengkap di Google Drive';
                     btnDeck.removeAttribute('download');
                 }
             } else {
