@@ -272,8 +272,8 @@
         const badgeImg = BADGE_ASSETS[index % BADGE_ASSETS.length];
         const initials = team.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'TM';
 
-        // Optional corner flower on selected cards (reference shows flowers on several)
-        const flowerCards = [0, 2, 4, 7, 9];
+        // Optional corner flower on selected cards (reference shows flowers on select cards)
+        const flowerCards = [0, 2, 7];
         const showFlower = flowerCards.includes(index);
         const flowerAssets = [
             '/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/23_small_flower_bottom.png',
