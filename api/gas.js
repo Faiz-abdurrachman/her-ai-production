@@ -38,7 +38,7 @@ function sendJson(res, status, payload) {
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.send(JSON.stringify(payload));
 }
 
@@ -48,12 +48,17 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  const target = process.env.GAS_WEB_APP_URL || DEFAULT_GAS_WEB_APP_URL;
+  if (req.method === 'GET') {
+    sendJson(res, 200, { status: 'success', url: target });
+    return;
+  }
+
   if (req.method !== 'POST') {
     sendJson(res, 405, { status: 'error', message: 'Method not allowed' });
     return;
   }
 
-  const target = process.env.GAS_WEB_APP_URL || DEFAULT_GAS_WEB_APP_URL;
   const body = typeof req.body === 'string' ? req.body : JSON.stringify(req.body || {});
 
   // Parse action+nik for cache routing (best-effort, non-destructive)

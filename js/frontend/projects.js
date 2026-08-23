@@ -19,6 +19,23 @@
     let currentFilter = 'Semua';
     let currentSort = 'newest';
     const SHOWCASE_SUBMIT_TIMEOUT_MS = 120000;
+    const SHOWCASE_PROXY_SAFE_BODY_BYTES = 4 * 1024 * 1024;
+
+    async function getShowcaseSubmitUrl(serializedPayload) {
+        const payloadBytes = new Blob([serializedPayload]).size;
+        if (payloadBytes <= SHOWCASE_PROXY_SAFE_BODY_BYTES) return '/__gas';
+
+        const response = await fetch('/__gas', {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' }
+        });
+        const result = await response.json();
+        const gasUrl = String(result?.url || '');
+        if (!response.ok || result?.status !== 'success' || !gasUrl.startsWith('https://script.google.com/macros/s/')) {
+            throw new Error('Jalur upload langsung tidak tersedia. Silakan muat ulang lalu coba lagi.');
+        }
+        return gasUrl;
+    }
 
     function isValidProject(p) {
         if (!p) return false;
@@ -1070,13 +1087,24 @@
                 try {
                     const controller = new AbortController();
                     submitTimeoutId = setTimeout(() => controller.abort(), SHOWCASE_SUBMIT_TIMEOUT_MS);
-                    const response = await fetch('/__gas', {
+                    const serializedPayload = JSON.stringify(payload);
+                    const submitUrl = await getShowcaseSubmitUrl(serializedPayload);
+                    const response = await fetch(submitUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                        body: JSON.stringify(payload),
+                        body: serializedPayload,
                         signal: controller.signal
                     });
-                    const result = await response.json();
+                    const responseText = await response.text();
+                    let result;
+                    try {
+                        result = JSON.parse(responseText);
+                    } catch (parseError) {
+                        const isTooLarge = response.status === 413 || responseText.startsWith('Request Entity Too Large');
+                        throw new Error(isTooLarge
+                            ? 'Ukuran cover dan pitch deck terlalu besar untuk jalur upload. Kompres berkas lalu coba lagi.'
+                            : `Server mengembalikan respons tidak valid (HTTP ${response.status}).`);
+                    }
                     if (!response.ok || !result || result.status !== 'success') {
                         throw new Error(result?.message || 'Database tidak mengonfirmasi penyimpanan proyek.');
                     }

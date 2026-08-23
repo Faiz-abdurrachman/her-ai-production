@@ -170,6 +170,19 @@ const server = http.createServer(async (request, response) => {
     return;
   }
 
+  if (requestUrl.pathname === '/__gas' && request.method === 'GET') {
+    if (!LIVE_PROXY_ENABLED || !GAS_WEB_APP_URL) {
+      sendJson(response, 503, {
+        status: 'error',
+        code: 'local_gas_proxy_disabled',
+        message: 'Proxy GAS lokal dinonaktifkan agar testing tidak mengubah data live.'
+      });
+    } else {
+      sendJson(response, 200, { status: 'success', url: GAS_WEB_APP_URL });
+    }
+    return;
+  }
+
   if (requestUrl.pathname === '/__settings') {
     if (request.method === 'GET') {
       sendJson(response, 200, { ok: true, settings: {} });
