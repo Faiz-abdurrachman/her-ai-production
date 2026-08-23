@@ -19,6 +19,7 @@
     let currentFilter = 'Semua';
     let currentSort = 'newest';
     const SHOWCASE_SUBMIT_TIMEOUT_MS = 120000;
+    const MAX_DIRECT_DECK_FILE_BYTES = 10 * 1024 * 1024;
     let showcaseSubmitUrlPromise;
     const PROJECT_TEXT_FIELDS = [
         'project_id', 'team_id', 'team_name', 'title', 'members', 'institution',
@@ -66,6 +67,20 @@
             return fileId ? `https://drive.google.com/file/d/${fileId}/view` : url;
         } catch (_) {
             return url;
+        }
+    }
+
+    function isSupportedDriveDeckUrl(rawUrl) {
+        try {
+            const parsed = new URL(String(rawUrl || '').trim());
+            if (parsed.protocol !== 'https:') return false;
+            if (parsed.hostname === 'drive.google.com') {
+                return Boolean(extractGoogleDriveFileId(parsed.toString()));
+            }
+            return parsed.hostname === 'docs.google.com'
+                && /^\/presentation\/d\/[a-zA-Z0-9_-]+/.test(parsed.pathname);
+        } catch (_) {
+            return false;
         }
     }
 
@@ -167,6 +182,7 @@
 
     function saveDraftToStorage() {
         try {
+            const deckFileData = document.getElementById('projectDeckFileData')?.value || '';
             const draft = {
                 title: document.getElementById('projectTitle')?.value || '',
                 track: document.getElementById('projectTrack')?.value || '',
@@ -177,8 +193,12 @@
                 solution: document.getElementById('projectSolution')?.value || '',
                 demo: document.getElementById('projectDemo')?.value || '',
                 repo: document.getElementById('projectRepo')?.value || '',
-                deck_file_data: document.getElementById('projectDeckFileData')?.value || '',
+                // Browsers cannot restore a selected file after reload. Keeping
+                // Base64 here can also exceed localStorage and lose the whole draft.
+                deck_file_data: '',
+                deck_file_attached: deckFileData.startsWith('data:'),
                 deck_file_name: document.getElementById('projectDeckFileName')?.value || '',
+                deck_url: document.getElementById('projectDeckUrl')?.value || '',
                 tech_stack: document.getElementById('projectTechStack')?.value || '',
                 savedAt: Date.now()
             };
@@ -230,6 +250,11 @@
             const repoEl = document.getElementById('projectRepo');
             if (repoEl && (!repoEl.value || isDraftNewer) && draft.repo) repoEl.value = draft.repo;
 
+            const deckUrlEl = document.getElementById('projectDeckUrl');
+            if (deckUrlEl && (!deckUrlEl.value || isDraftNewer) && draft.deck_url) {
+                deckUrlEl.value = draft.deck_url;
+            }
+
             const techEl = document.getElementById('projectTechStack');
             if (techEl && (!techEl.value || isDraftNewer) && draft.tech_stack) {
                 techEl.value = draft.tech_stack;
@@ -239,13 +264,15 @@
                 });
             }
 
-            if (draft.deck_file_data || draft.deck_file_name) {
+            // Backward compatibility for older, small drafts that still contain
+            // the actual Base64 file. A filename alone is not treated as a file.
+            if (String(draft.deck_file_data || '').startsWith('data:')) {
                 const deckCard = document.getElementById('deckFileAttachedCard');
                 const deckDropzone = document.getElementById('deckDropzone');
                 const deckDataHidden = document.getElementById('projectDeckFileData');
                 const deckNameHidden = document.getElementById('projectDeckFileName');
                 const deckFileNameText = document.getElementById('deckFileNameText');
-                if (deckDataHidden && (!deckDataHidden.value || isDraftNewer)) deckDataHidden.value = draft.deck_file_data || 'attached';
+                if (deckDataHidden && (!deckDataHidden.value || isDraftNewer)) deckDataHidden.value = draft.deck_file_data;
                 if (deckNameHidden && (!deckNameHidden.value || isDraftNewer)) deckNameHidden.value = draft.deck_file_name || 'Pitch-Deck.pdf';
                 if (deckFileNameText && (!deckFileNameText.textContent || isDraftNewer)) deckFileNameText.textContent = draft.deck_file_name || 'Pitch-Deck.pdf';
                 if (deckCard) deckCard.style.display = 'flex';
@@ -860,9 +887,14 @@
                 const deckDataHidden = document.getElementById('projectDeckFileData');
                 const deckNameHidden = document.getElementById('projectDeckFileName');
                 const deckFileNameText = document.getElementById('deckFileNameText');
+                const deckUrlInput = document.getElementById('projectDeckUrl');
                 
-                if (myProject.deck_file_data || myProject.deck_file_name || myProject.deck_url) {
-                    if (deckDataHidden) deckDataHidden.value = myProject.deck_file_data || myProject.deck_url || 'attached';
+                if (myProject.deck_url && deckUrlInput) {
+                    deckUrlInput.value = myProject.deck_url;
+                }
+
+                if (String(myProject.deck_file_data || '').startsWith('data:')) {
+                    if (deckDataHidden) deckDataHidden.value = myProject.deck_file_data;
                     if (deckNameHidden) deckNameHidden.value = myProject.deck_file_name || 'Pitch-Deck.pdf';
                     if (deckFileNameText) deckFileNameText.textContent = myProject.deck_file_name || 'Pitch-Deck.pdf';
                     if (deckCard) deckCard.style.display = 'flex';
@@ -995,15 +1027,21 @@
         const deckFileNameText = document.getElementById('deckFileNameText');
         const deckFileSizeText = document.getElementById('deckFileSizeText');
         const btnRemoveDeck = document.getElementById('btnRemoveDeckFile');
+        const deckUrlInput = document.getElementById('projectDeckUrl');
 
         if (deckInput) {
             deckInput.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
 
-                if (file.size > 50 * 1024 * 1024) {
-                    showShowcaseToast('Ukuran berkas pitch deck terlalu besar! Maksimal 50MB.', 'error');
+                if (file.size > MAX_DIRECT_DECK_FILE_BYTES) {
+                    const sizeInMb = (file.size / (1024 * 1024)).toFixed(1);
+                    showShowcaseToast(`File ${sizeInMb} MB terlalu besar untuk upload langsung. Gunakan Google Drive Link di bawah.`, 'error');
                     deckInput.value = '';
+                    if (deckUrlInput) {
+                        deckUrlInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        deckUrlInput.focus();
+                    }
                     return;
                 }
 
@@ -1013,6 +1051,7 @@
                     const base64Data = event.target.result;
                     if (deckDataHidden) deckDataHidden.value = base64Data;
                     if (deckNameHidden) deckNameHidden.value = file.name;
+                    if (deckUrlInput) deckUrlInput.value = '';
                     if (deckFileNameText) deckFileNameText.textContent = file.name;
                     if (deckFileSizeText) deckFileSizeText.textContent = `${sizeInMb} MB · Berkas resmi terlampir`;
                     if (deckCard) deckCard.style.display = 'flex';
@@ -1037,6 +1076,15 @@
                 if (deckCard) deckCard.style.display = 'none';
                 if (deckDropzone) deckDropzone.style.display = 'flex';
                 showShowcaseToast('Berkas pitch deck dihapus.', 'info');
+            });
+        }
+
+        if (deckUrlInput) {
+            deckUrlInput.addEventListener('input', () => {
+                deckUrlInput.classList.remove('input-error');
+                if (deckDropzone) deckDropzone.classList.remove('dropzone-error');
+                const errDeckEl = document.getElementById('errorProjectDeck');
+                if (errDeckEl) errDeckEl.style.display = 'none';
             });
         }
 
@@ -1163,13 +1211,32 @@
 
                 const deckDataVal = document.getElementById('projectDeckFileData')?.value || '';
                 const deckNameVal = document.getElementById('projectDeckFileName')?.value || '';
-                if (!deckDataVal && !deckNameVal) {
+                let deckUrlVal = document.getElementById('projectDeckUrl')?.value.trim() || '';
+                const hasDirectDeckFile = deckDataVal.startsWith('data:');
+
+                if (deckUrlVal && !isSupportedDriveDeckUrl(deckUrlVal)) {
+                    if (deckUrlInput) {
+                        deckUrlInput.classList.add('input-error');
+                        deckUrlInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        deckUrlInput.focus();
+                    }
+                    if (errDeck) errDeck.style.display = 'flex';
+                    showShowcaseToast('Google Drive Link pitch deck tidak valid.', 'error');
+                    return;
+                }
+
+                if (deckUrlVal) {
+                    deckUrlVal = normalizeDriveDeckUrl(deckUrlVal);
+                    if (deckUrlInput) deckUrlInput.value = deckUrlVal;
+                }
+
+                if (!hasDirectDeckFile && !deckUrlVal) {
                     if (deckDropzone) {
                         deckDropzone.classList.add('dropzone-error');
                         deckDropzone.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
                     if (errDeck) errDeck.style.display = 'flex';
-                    showShowcaseToast('Berkas Slide Pitch Deck (PDF / PPTX) wajib diunggah!', 'error');
+                    showShowcaseToast('Unggah pitch deck maksimal 10 MB atau tempel Google Drive Link.', 'error');
                     return;
                 }
 
@@ -1194,8 +1261,11 @@
                     solution: document.getElementById('projectSolution')?.value.trim() || '',
                     repo_url: repoVal,
                     demo_url: demoVal,
-                    deck_file_data: deckDataVal,
-                    deck_file_name: deckNameVal || 'Pitch-Deck.pdf',
+                    deck_url: deckUrlVal,
+                    // A Drive link takes priority so large local files are never
+                    // accidentally serialized into the submission request.
+                    deck_file_data: deckUrlVal ? '' : deckDataVal,
+                    deck_file_name: deckUrlVal ? '' : (deckNameVal || 'Pitch-Deck.pdf'),
                     tech_stack: document.getElementById('projectTechStack')?.value.trim() || '',
                     likes_count: (() => {
                         const existingProj = cachedProjects.find(p => p.project_id === teamId || p.team_id === teamId);

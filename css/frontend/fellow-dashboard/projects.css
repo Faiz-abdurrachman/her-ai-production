@@ -1360,6 +1360,44 @@
     margin-top: 10px;
 }
 
+.deck-url-input-shell {
+    position: relative;
+}
+
+.deck-url-input-shell > i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #16a34a;
+    font-size: 17px;
+    pointer-events: none;
+}
+
+.deck-url-input-shell .modern-input {
+    width: 100%;
+    padding-left: 44px;
+    border-color: #dbe7df;
+    background: #fbfffc;
+}
+
+.deck-url-input-shell .modern-input:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+}
+
+.deck-url-help {
+    display: block;
+    margin-top: 7px;
+    color: #64748b;
+    font-size: 11.5px;
+    line-height: 1.5;
+}
+
+.deck-url-help strong {
+    color: #166534;
+}
+
 .deck-url-divider {
     display: flex;
     align-items: center;

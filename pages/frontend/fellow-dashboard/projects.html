@@ -301,18 +301,18 @@
                                 </div>
                             </div>
 
-                            <!-- Pitch Deck: File Upload (PDF/PPTX) ONLY -->
+                            <!-- Pitch Deck: direct file or Google Drive link -->
                             <div class="form-grid-2 pitch-deck-grid-row">
                                 <div class="input-label-col">
-                                    <label for="projectDeckFile">Slide Pitch Deck <span class="badge-required">* Wajib Diunggah</span></label>
-                                    <small class="input-hint-sub">Unggah berkas slide presentasi resmi (PDF / PPTX). Berkas tersimpan permanen & dinilai kurator.</small>
+                                    <label for="projectDeckFile">Slide Pitch Deck <span class="badge-required">* Wajib Dilampirkan</span></label>
+                                    <small class="input-hint-sub">Unggah langsung maksimal 10 MB atau gunakan Google Drive Link untuk berkas yang lebih besar.</small>
                                 </div>
                                 <div class="input-field-col">
                                     <!-- File Upload Dropzone -->
                                     <div class="deck-upload-dropzone" id="deckDropzone">
                                         <i class="fas fa-file-pdf deck-drop-icon"></i>
                                         <span class="deck-drop-title">Pilih atau Seret Berkas Slide Pitch Deck (PDF / PPTX)</span>
-                                        <small class="deck-drop-sub">Maksimal 50MB. Format PDF sangat disarankan agar tampilan presentasi tetap presisi.</small>
+                                        <small class="deck-drop-sub">Maksimal 10 MB. Untuk file lebih besar, gunakan Google Drive Link.</small>
                                         <input type="file" id="projectDeckFile" accept=".pdf,.pptx,.ppt">
                                     </div>
 
@@ -328,9 +328,20 @@
                                         <button type="button" id="btnRemoveDeckFile" class="btn-remove-deck-file"><i class="fas fa-trash"></i> Hapus / Ganti</button>
                                     </div>
 
+                                    <div class="deck-url-alternative-wrap">
+                                        <div class="deck-url-divider"><span>atau gunakan Google Drive Link</span></div>
+                                        <div class="deck-url-input-shell">
+                                            <i class="fab fa-google-drive" aria-hidden="true"></i>
+                                            <input type="url" id="projectDeckUrl" class="modern-input" placeholder="https://drive.google.com/file/d/.../view" aria-describedby="projectDeckUrlHint">
+                                        </div>
+                                        <small id="projectDeckUrlHint" class="deck-url-help">
+                                            Atur akses file menjadi <strong>Anyone with the link · Viewer</strong>. Jika link dan file sama-sama diisi, link akan digunakan.
+                                        </small>
+                                    </div>
+
                                     <div id="errorProjectDeck" class="field-error-msg" style="display: none;">
                                         <i class="fas fa-circle-exclamation"></i>
-                                        <span>Berkas slide Pitch Deck (PDF / PPTX) wajib diunggah sebelum mempublikasikan proyek!</span>
+                                        <span>Unggah pitch deck maksimal 10 MB atau tempel Google Drive Link yang valid.</span>
                                     </div>
 
                                     <input type="hidden" id="projectDeckFileData">
