@@ -319,13 +319,60 @@
         }
     }
 
-    const DEADLINE_MS = new Date('2026-08-23T23:00:00+07:00').getTime();
+    const DEADLINE_MS = new Date('2026-08-23T23:31:00+07:00').getTime();
     let countdownInterval;
+
+    function isSubmissionClosed() {
+        return Date.now() >= DEADLINE_MS;
+    }
+
+    function showSubmissionClosedMessage() {
+        showShowcaseToast('Pengumpulan project telah ditutup pada 23.31 WIB.', 'error');
+    }
+
+    function lockSubmissionInterface() {
+        const timerEl = document.getElementById('countdownTimer');
+        const heroTimerEl = document.getElementById('heroCountdownTimer');
+        if (timerEl) timerEl.textContent = 'WAKTU HABIS';
+        if (heroTimerEl) heroTimerEl.textContent = '00d 00h 00m';
+
+        const formBtn = document.getElementById('btnSubmitFinalProject');
+        if (formBtn) {
+            formBtn.disabled = true;
+            formBtn.innerHTML = '<i class="fas fa-lock"></i> Pengumpulan Ditutup';
+            formBtn.style.background = '#64748b';
+            formBtn.style.cursor = 'not-allowed';
+        }
+
+        const entryBtn = document.getElementById('btnSubmitEditProj');
+        if (entryBtn) {
+            entryBtn.disabled = true;
+            entryBtn.innerHTML = '<i class="fas fa-lock"></i> Pengumpulan Ditutup';
+        }
+
+        document.querySelectorAll([
+            '#projectSubmitForm input',
+            '#projectSubmitForm textarea',
+            '#projectSubmitForm select',
+            '#projectSubmitForm .tech-pick-badge',
+            '#projectSubmitForm .upload-dropzone',
+            '#projectSubmitForm .deck-upload-dropzone',
+            '#projectSubmitForm button:not(#btnBackToGallery)',
+            '#btnModalEditProject',
+            '#btnModalDeleteProject',
+            '.btn-guide-proceed',
+            '.btn-empty-submit'
+        ].join(', ')).forEach(el => {
+            el.disabled = true;
+            el.setAttribute('aria-disabled', 'true');
+            el.style.pointerEvents = 'none';
+            el.style.opacity = '0.7';
+        });
+    }
 
     function initCountdown() {
         const timerEl = document.getElementById('countdownTimer');
         const heroTimerEl = document.getElementById('heroCountdownTimer');
-        const formBtn = document.getElementById('btnSubmitFinalProject');
         if (!timerEl && !heroTimerEl) return;
 
         if (countdownInterval) clearInterval(countdownInterval);
@@ -335,21 +382,7 @@
             const diff = DEADLINE_MS - now;
 
             if (diff <= 0) {
-                if (timerEl) timerEl.textContent = "WAKTU HABIS";
-                if (heroTimerEl) heroTimerEl.textContent = "00d 00h 00m";
-
-                if (formBtn) {
-                    formBtn.disabled = true;
-                    formBtn.innerHTML = '<i class="fas fa-lock"></i> Pengumpulan Ditutup';
-                    formBtn.style.background = '#64748b';
-                    formBtn.style.cursor = 'not-allowed';
-                }
-
-                document.querySelectorAll('#projectSubmitForm input, #projectSubmitForm textarea, .tech-pick-badge').forEach(el => {
-                    el.disabled = true;
-                    el.style.pointerEvents = 'none';
-                    el.style.opacity = '0.7';
-                });
+                lockSubmissionInterface();
                 if (countdownInterval) clearInterval(countdownInterval);
                 return;
             }
@@ -561,6 +594,7 @@
         }
 
         renderSubmittedProjectCards(list);
+        if (isSubmissionClosed()) lockSubmissionInterface();
     }
 
     function renderSubmittedProjectCards(submittedProjects) {
@@ -806,6 +840,12 @@
         };
 
         const showWorkspaceView = () => {
+            if (isSubmissionClosed()) {
+                lockSubmissionInterface();
+                showSubmissionClosedMessage();
+                return;
+            }
+
             if (gallery) gallery.style.display = 'none';
             if (filters) filters.style.display = 'none';
             if (hero) hero.style.display = 'none';
@@ -1153,6 +1193,12 @@
         if (formBtn) {
             formBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
+
+                if (isSubmissionClosed()) {
+                    lockSubmissionInterface();
+                    showSubmissionClosedMessage();
+                    return;
+                }
                 
                 const session = getSession();
                 const userNik = session.nik || session.participant_nik || session.username || session.id || (session.profile && session.profile.nik) || '';
@@ -1345,8 +1391,12 @@
                     showShowcaseToast(message, 'error');
                 } finally {
                     clearTimeout(submitTimeoutId);
-                    formBtn.innerHTML = originalBtnHtml;
-                    formBtn.disabled = false;
+                    if (isSubmissionClosed()) {
+                        lockSubmissionInterface();
+                    } else {
+                        formBtn.innerHTML = originalBtnHtml;
+                        formBtn.disabled = false;
+                    }
                 }
             });
         }
@@ -1368,6 +1418,12 @@
 
     /* --- DELETE PROJECT FLOW --- */
     async function deleteProject(projectId) {
+        if (isSubmissionClosed()) {
+            lockSubmissionInterface();
+            showSubmissionClosedMessage();
+            return;
+        }
+
         const session = getSession();
         if (!session.nik) {
             showShowcaseToast('Sesi tidak valid, silakan login ulang.', 'error');
@@ -1443,6 +1499,12 @@
     };
 
     window.proceedFromGuideToWorkspace = function() {
+        if (isSubmissionClosed()) {
+            lockSubmissionInterface();
+            showSubmissionClosedMessage();
+            return;
+        }
+
         window.closeGuideModal();
         const btnSubmitEdit = document.getElementById('btnSubmitEditProj');
         if (btnSubmitEdit) btnSubmitEdit.click();
@@ -1639,6 +1701,11 @@
             const editBtn = document.getElementById('btnModalEditProject');
             if (editBtn) {
                 editBtn.onclick = () => {
+                    if (isSubmissionClosed()) {
+                        lockSubmissionInterface();
+                        showSubmissionClosedMessage();
+                        return;
+                    }
                     window.closeShowcaseModal();
                     const btnNew = document.getElementById('btnSubmitEditProj');
                     if (btnNew) btnNew.click();
@@ -1651,6 +1718,8 @@
                     deleteProject(p.project_id || p.team_id);
                 };
             }
+
+            if (isSubmissionClosed()) lockSubmissionInterface();
         }
 
         const modal = document.getElementById('showcaseModalOverlay');
