@@ -20,6 +20,27 @@
     let currentSort = 'newest';
     const SHOWCASE_SUBMIT_TIMEOUT_MS = 120000;
     let showcaseSubmitUrlPromise;
+    const PROJECT_TEXT_FIELDS = [
+        'project_id', 'team_id', 'team_name', 'title', 'members', 'institution',
+        'track', 'project_title', 'mentor', 'deck_url', 'repo_url', 'demo_url',
+        'overview', 'details', 'status', 'notes', 'submitted_at', 'created_at',
+        'tagline', 'cover_url', 'tech_stack', 'problem', 'solution',
+        'deck_file_data', 'deck_file_name'
+    ];
+
+    function normalizeProjectRecord(project) {
+        if (!project || typeof project !== 'object') return null;
+        const normalized = { ...project };
+        PROJECT_TEXT_FIELDS.forEach((field) => {
+            const value = normalized[field];
+            normalized[field] = Array.isArray(value)
+                ? value.join('\n')
+                : value === undefined || value === null
+                    ? ''
+                    : String(value);
+        });
+        return normalized;
+    }
 
     async function getShowcaseSubmitUrl() {
         if (!showcaseSubmitUrlPromise) {
@@ -79,7 +100,7 @@
 
     function isValidProject(p) {
         if (!p) return false;
-        const title = (p.project_title || p.title || '').trim().toUpperCase();
+        const title = String(p.project_title || p.title || '').trim().toUpperCase();
         if (!title) return false;
         if (title === 'MBG' || title.includes('MBG')) return false;
         return true;
@@ -90,7 +111,7 @@
             const raw = localStorage.getItem('herai_submitted_projects');
             if (!raw) return [];
             const list = JSON.parse(raw);
-            return Array.isArray(list) ? list.filter(isValidProject) : [];
+            return Array.isArray(list) ? list.map(normalizeProjectRecord).filter(isValidProject) : [];
         } catch {
             return [];
         }
@@ -417,7 +438,7 @@
             });
             const result = await response.json();
             if (result && result.status === 'success' && Array.isArray(result.data)) {
-                const remoteList = result.data.filter(isValidProject);
+                const remoteList = result.data.map(normalizeProjectRecord).filter(isValidProject);
                 // A successful server read is authoritative. This also removes
                 // legacy local-only entries created by the old silent fallback.
                 cachedProjects = remoteList;
@@ -1124,6 +1145,7 @@
                 };
 
                 const finalizeConfirmedSubmission = (savedProj, message) => {
+                    savedProj = normalizeProjectRecord(savedProj);
                     cachedProjects = cachedProjects.filter(p => p.project_id !== teamId && p.team_id !== teamId);
                     cachedProjects.unshift(savedProj);
                     safeSaveProjectsToStorage(cachedProjects);
