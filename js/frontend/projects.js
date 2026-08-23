@@ -463,7 +463,7 @@
         const coverRaw = (p.cover_url || '').trim();
         const hasCover = coverRaw && !coverRaw.includes('photo-1550751827-4bd374c3f58b');
         const track = p.track || 'AI Solution';
-        const likesCount = p.likes_count || (140 + (index * 19) % 180);
+        const likesCount = (p.likes_count !== undefined && p.likes_count !== null && !isNaN(Number(p.likes_count))) ? Number(p.likes_count) : 0;
         const tagline = p.tagline || 'Solusi inovasi kecerdasan buatan untuk transformasi digital.';
 
         const tapeImg = TAPE_ASSETS[index % TAPE_ASSETS.length];
@@ -1069,6 +1069,10 @@
                     deck_file_data: deckDataVal,
                     deck_file_name: deckNameVal || 'Pitch-Deck.pdf',
                     tech_stack: document.getElementById('projectTechStack')?.value.trim() || '',
+                    likes_count: (() => {
+                        const existingProj = cachedProjects.find(p => p.project_id === teamId || p.team_id === teamId);
+                        return (existingProj && existingProj.likes_count !== undefined && !isNaN(Number(existingProj.likes_count))) ? Number(existingProj.likes_count) : 0;
+                    })(),
                     submitted_at: new Date().toISOString()
                 };
 
@@ -1258,15 +1262,19 @@
     window.openShowcaseModalFromData = function(projectIdOrIndex) {
         let index = -1;
         const p = cachedProjects.find((item, idx) => {
-            if (item.project_id === projectIdOrIndex || item.team_id === projectIdOrIndex) {
+            const match = item.project_id === projectIdOrIndex || 
+                          item.team_id === projectIdOrIndex || 
+                          (item.project_title || item.title) === projectIdOrIndex;
+            if (match) {
                 index = idx;
                 return true;
             }
             return false;
-        }) || cachedProjects[parseInt(projectIdOrIndex, 10)];
+        }) || (typeof projectIdOrIndex === 'number' || /^\d+$/.test(projectIdOrIndex) ? cachedProjects[parseInt(projectIdOrIndex, 10)] : null);
         
-        if (index === -1) index = parseInt(projectIdOrIndex, 10) || 0;
         if (!p) return;
+        if (index === -1) index = cachedProjects.indexOf(p);
+        if (index === -1) index = 0;
 
         const seq = String(index + 1).padStart(2, '0');
         const numEl = document.getElementById('modalProjectNumber');
@@ -1323,7 +1331,7 @@
         // Likes Count
         const likesEl = document.getElementById('modalLikesCount');
         if (likesEl) {
-            likesEl.textContent = p.likes_count || (140 + (index * 19) % 180);
+            likesEl.textContent = (p.likes_count !== undefined && p.likes_count !== null && !isNaN(Number(p.likes_count))) ? Number(p.likes_count) : 0;
         }
 
         const btnDemo = document.getElementById('modalBtnDemo');
