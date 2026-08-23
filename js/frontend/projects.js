@@ -18,6 +18,7 @@
     let cachedProjects = [];
     let currentFilter = 'Semua';
     let currentSort = 'newest';
+    const SHOWCASE_SUBMIT_TIMEOUT_MS = 120000;
 
     function isValidProject(p) {
         if (!p) return false;
@@ -360,27 +361,16 @@
             const result = await response.json();
             if (result && result.status === 'success' && Array.isArray(result.data)) {
                 const remoteList = result.data.filter(isValidProject);
-                const localList = getSavedProjectsFromStorage();
-
-                const map = new Map();
-                remoteList.forEach(p => {
-                    const key = p.project_id || p.team_id;
-                    if (key) map.set(key, p);
-                });
-                localList.forEach(p => {
-                    const key = p.project_id || p.team_id;
-                    if (key) {
-                        map.set(key, { ...(map.get(key) || {}), ...p });
-                    }
-                });
-
-                cachedProjects = Array.from(map.values()).filter(isValidProject);
+                // A successful server read is authoritative. This also removes
+                // legacy local-only entries created by the old silent fallback.
+                cachedProjects = remoteList;
                 safeSaveProjectsToStorage(cachedProjects);
             } else {
-                cachedProjects = getSavedProjectsFromStorage();
+                throw new Error(result?.message || 'Respons sinkronisasi proyek tidak valid.');
             }
         } catch (e) {
             cachedProjects = getSavedProjectsFromStorage();
+            showShowcaseToast('Sinkronisasi database gagal. Menampilkan cache terakhir; coba muat ulang halaman.', 'error');
         } finally {
             applyFiltersAndRender();
         }
@@ -1076,36 +1066,25 @@
                     submitted_at: new Date().toISOString()
                 };
 
+                let submitTimeoutId;
                 try {
-                    let isSuccess = false;
-                    try {
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 12000);
-                        const response = await fetch('/__gas', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                            body: JSON.stringify(payload),
-                            signal: controller.signal
-                        });
-                        clearTimeout(timeoutId);
-                        const result = await response.json();
-                        if (result && result.status === 'success') {
-                            isSuccess = true;
-                            const savedProj = result.project || payload;
-                            cachedProjects = cachedProjects.filter(p => p.project_id !== teamId && p.team_id !== teamId);
-                            cachedProjects.unshift(savedProj);
-                            safeSaveProjectsToStorage(cachedProjects);
-                        }
-                    } catch (err) {
-                        // network/GAS proxy fallback handled safely
+                    const controller = new AbortController();
+                    submitTimeoutId = setTimeout(() => controller.abort(), SHOWCASE_SUBMIT_TIMEOUT_MS);
+                    const response = await fetch('/__gas', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(payload),
+                        signal: controller.signal
+                    });
+                    const result = await response.json();
+                    if (!response.ok || !result || result.status !== 'success') {
+                        throw new Error(result?.message || 'Database tidak mengonfirmasi penyimpanan proyek.');
                     }
 
-                    if (!isSuccess) {
-                        // Local fallback for seamless reliability
-                        cachedProjects = cachedProjects.filter(p => p.project_id !== teamId && p.team_id !== teamId);
-                        cachedProjects.unshift(payload);
-                        safeSaveProjectsToStorage(cachedProjects);
-                    }
+                    const savedProj = result.project || payload;
+                    cachedProjects = cachedProjects.filter(p => p.project_id !== teamId && p.team_id !== teamId);
+                    cachedProjects.unshift(savedProj);
+                    safeSaveProjectsToStorage(cachedProjects);
 
                     clearDraftFromStorage();
                     showShowcaseToast('Proyek tim berhasil disimpan dan dipublikasikan ke etalase Showcase!', 'success');
@@ -1114,8 +1093,12 @@
                     if (btnBack) btnBack.click();
                 } catch (submitErr) {
                     console.error('Submit error:', submitErr);
-                    showShowcaseToast('Terjadi kesalahan saat menyimpan proyek. Silakan coba lagi.', 'error');
+                    const message = submitErr?.name === 'AbortError'
+                        ? 'Penyimpanan belum dikonfirmasi setelah 120 detik. Data tetap di form; silakan coba lagi.'
+                        : `Proyek belum tersimpan ke database. ${submitErr?.message || 'Silakan coba lagi.'}`;
+                    showShowcaseToast(message, 'error');
                 } finally {
+                    clearTimeout(submitTimeoutId);
                     formBtn.innerHTML = originalBtnHtml;
                     formBtn.disabled = false;
                 }

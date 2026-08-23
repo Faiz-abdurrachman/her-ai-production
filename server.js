@@ -73,7 +73,7 @@ async function readRequestBody(request) {
   let size = 0;
   for await (const chunk of request) {
     size += chunk.length;
-    if (size > 1024 * 1024) throw new Error('Request body exceeds 1 MB.');
+    if (size > 50 * 1024 * 1024) throw new Error('Request body exceeds 50 MB.');
     chunks.push(chunk);
   }
   return Buffer.concat(chunks).toString('utf8');
@@ -102,7 +102,7 @@ async function proxyGas(request, response) {
           headers['Content-Type'] = 'text/plain;charset=utf-8';
           headers['Content-Length'] = Buffer.byteLength(bodyData);
         }
-        const opts = { hostname: url.hostname, path: url.pathname + url.search, method, headers, timeout: 30000 };
+        const opts = { hostname: url.hostname, path: url.pathname + url.search, method, headers, timeout: 120000 };
         const proxyReq = https.request(opts, gasRes => {
           let data = '';
           gasRes.on('data', chunk => data += chunk);
