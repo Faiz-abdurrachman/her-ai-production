@@ -19,22 +19,62 @@
     let currentFilter = 'Semua';
     let currentSort = 'newest';
     const SHOWCASE_SUBMIT_TIMEOUT_MS = 120000;
-    const SHOWCASE_PROXY_SAFE_BODY_BYTES = 4 * 1024 * 1024;
+    let showcaseSubmitUrlPromise;
 
-    async function getShowcaseSubmitUrl(serializedPayload) {
-        const payloadBytes = new Blob([serializedPayload]).size;
-        if (payloadBytes <= SHOWCASE_PROXY_SAFE_BODY_BYTES) return '/__gas';
-
-        const response = await fetch('/__gas', {
-            method: 'GET',
-            headers: { 'Accept': 'application/json' }
-        });
-        const result = await response.json();
-        const gasUrl = String(result?.url || '');
-        if (!response.ok || result?.status !== 'success' || !gasUrl.startsWith('https://script.google.com/macros/s/')) {
-            throw new Error('Jalur upload langsung tidak tersedia. Silakan muat ulang lalu coba lagi.');
+    async function getShowcaseSubmitUrl() {
+        if (!showcaseSubmitUrlPromise) {
+            showcaseSubmitUrlPromise = (async () => {
+                const response = await fetch('/__gas', {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+                const result = await response.json();
+                const gasUrl = String(result?.url || '');
+                if (!response.ok || result?.status !== 'success' || !gasUrl.startsWith('https://script.google.com/macros/s/')) {
+                    throw new Error('Jalur upload langsung tidak tersedia. Silakan muat ulang lalu coba lagi.');
+                }
+                return gasUrl;
+            })().catch((error) => {
+                showcaseSubmitUrlPromise = null;
+                throw error;
+            });
         }
-        return gasUrl;
+        return showcaseSubmitUrlPromise;
+    }
+
+    async function confirmShowcaseSubmission(payload) {
+        for (let attempt = 0; attempt < 3; attempt += 1) {
+            if (attempt > 0) {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+            }
+
+            let timeoutId;
+            try {
+                const controller = new AbortController();
+                timeoutId = setTimeout(() => controller.abort(), 15000);
+                const response = await fetch('/__gas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'getFinalProjects' }),
+                    signal: controller.signal
+                });
+
+                const result = await response.json();
+                if (!response.ok || result?.status !== 'success' || !Array.isArray(result.data)) continue;
+
+                const confirmed = result.data.find((project) => {
+                    const sameTeam = project?.project_id === payload.project_id || project?.team_id === payload.team_id;
+                    return sameTeam && project?.submitted_at === payload.submitted_at;
+                });
+                if (confirmed) return confirmed;
+            } catch (error) {
+                console.warn('Showcase submission read-back failed:', error);
+            } finally {
+                clearTimeout(timeoutId);
+            }
+        }
+
+        return null;
     }
 
     function isValidProject(p) {
@@ -1083,12 +1123,26 @@
                     submitted_at: new Date().toISOString()
                 };
 
+                const finalizeConfirmedSubmission = (savedProj, message) => {
+                    cachedProjects = cachedProjects.filter(p => p.project_id !== teamId && p.team_id !== teamId);
+                    cachedProjects.unshift(savedProj);
+                    safeSaveProjectsToStorage(cachedProjects);
+
+                    clearDraftFromStorage();
+                    showShowcaseToast(message, 'success');
+                    applyFiltersAndRender();
+                    const btnBack = document.getElementById('btnBackToGallery');
+                    if (btnBack) btnBack.click();
+                };
+
                 let submitTimeoutId;
                 try {
                     const controller = new AbortController();
                     submitTimeoutId = setTimeout(() => controller.abort(), SHOWCASE_SUBMIT_TIMEOUT_MS);
                     const serializedPayload = JSON.stringify(payload);
-                    const submitUrl = await getShowcaseSubmitUrl(serializedPayload);
+                    // Writes go straight to GAS so Drive uploads are not constrained
+                    // by the Vercel proxy's request-size and execution-time limits.
+                    const submitUrl = await getShowcaseSubmitUrl();
                     const response = await fetch(submitUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -1110,20 +1164,32 @@
                     }
 
                     const savedProj = result.project || payload;
-                    cachedProjects = cachedProjects.filter(p => p.project_id !== teamId && p.team_id !== teamId);
-                    cachedProjects.unshift(savedProj);
-                    safeSaveProjectsToStorage(cachedProjects);
-
-                    clearDraftFromStorage();
-                    showShowcaseToast('Proyek tim berhasil disimpan dan dipublikasikan ke etalase Showcase!', 'success');
-                    applyFiltersAndRender();
-                    const btnBack = document.getElementById('btnBackToGallery');
-                    if (btnBack) btnBack.click();
+                    finalizeConfirmedSubmission(
+                        savedProj,
+                        'Proyek tim berhasil disimpan dan dipublikasikan ke etalase Showcase!'
+                    );
                 } catch (submitErr) {
                     console.error('Submit error:', submitErr);
+                    const isAmbiguousNetworkFailure = submitErr?.name === 'AbortError'
+                        || submitErr instanceof TypeError
+                        || /NetworkError|Failed to fetch|Load failed/i.test(submitErr?.message || '');
+
+                    if (isAmbiguousNetworkFailure) {
+                        const confirmedProject = await confirmShowcaseSubmission(payload);
+                        if (confirmedProject) {
+                            finalizeConfirmedSubmission(
+                                confirmedProject,
+                                'Koneksi sempat terputus, tetapi proyek sudah terkonfirmasi tersimpan di database.'
+                            );
+                            return;
+                        }
+                    }
+
                     const message = submitErr?.name === 'AbortError'
                         ? 'Penyimpanan belum dikonfirmasi setelah 120 detik. Data tetap di form; silakan coba lagi.'
-                        : `Proyek belum tersimpan ke database. ${submitErr?.message || 'Silakan coba lagi.'}`;
+                        : isAmbiguousNetworkFailure
+                            ? 'Koneksi upload ke database terputus dan penyimpanan belum dapat dikonfirmasi. Data tetap di form; cek koneksi lalu coba lagi.'
+                            : `Proyek belum tersimpan ke database. ${submitErr?.message || 'Silakan coba lagi.'}`;
                     showShowcaseToast(message, 'error');
                 } finally {
                     clearTimeout(submitTimeoutId);
