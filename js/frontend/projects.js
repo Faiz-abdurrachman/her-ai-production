@@ -261,6 +261,18 @@
         gallery.innerHTML = cardsHtml;
     }
 
+    function getCategoryIconHtml(track) {
+        const cat = (track || '').toLowerCase();
+        if (cat.includes('health')) return '<i class="fas fa-heart-pulse" style="color: #ec1970;"></i>';
+        if (cat.includes('edu')) return '<i class="fas fa-graduation-cap" style="color: #ec1970;"></i>';
+        if (cat.includes('green')) return '<i class="fas fa-leaf" style="color: #10b981;"></i>';
+        if (cat.includes('fin')) return '<i class="fas fa-coins" style="color: #f59e0b;"></i>';
+        if (cat.includes('product')) return '<i class="fas fa-bolt" style="color: #6366f1;"></i>';
+        if (cat.includes('creat')) return '<i class="fas fa-palette" style="color: #ec4899;"></i>';
+        if (cat.includes('social')) return '<i class="fas fa-hand-holding-heart" style="color: #ef4444;"></i>';
+        return '<i class="fas fa-sparkles" style="color: #ec1970;"></i>';
+    }
+
     function renderSingleProjectCard(p, seq, index) {
         const team = p.team_name || p.members || `Tim ${seq}`;
         const cover = p.cover_url || 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80';
@@ -269,25 +281,15 @@
         const tagline = p.tagline || 'Solusi kecerdasan buatan untuk transformasi digital.';
 
         const tapeImg = TAPE_ASSETS[index % TAPE_ASSETS.length];
-        const badgeImg = BADGE_ASSETS[index % BADGE_ASSETS.length];
         const initials = team.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'TM';
-
-        // Optional corner flower on selected cards (reference shows flowers on select cards)
-        const flowerCards = [0, 2, 7];
-        const showFlower = flowerCards.includes(index);
-        const flowerAssets = [
-            '/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/23_small_flower_bottom.png',
-            '/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/22_daisy_bottom.png'
-        ];
-        const flowerHtml = showFlower ? `<img src="${flowerAssets[index % flowerAssets.length]}" class="card-flower-accent" alt="">` : '';
+        const iconHtml = getCategoryIconHtml(track);
 
         return `
             <article class="project-card" onclick="openShowcaseModalFromData('${index}')" tabindex="0" role="button" aria-label="Lihat detail ${escapeHtml(p.project_title || p.title || 'Proyek')}">
-                <img src="${tapeImg}" class="card-washi-tape-img" alt="">
-                <img src="${badgeImg}" class="card-number-badge-img" alt="${seq}">
+                <img src="${tapeImg}" class="card-washi-tape-img" alt="" aria-hidden="true">
                 
                 <div class="card-header-bar">
-                    <span class="category-badge-chip"><i class="fas fa-sparkles" style="color: #ec1970;"></i> ${escapeHtml(track)}</span>
+                    <span class="category-badge-chip">${iconHtml} <span>${escapeHtml(track)}</span></span>
                 </div>
                 
                 <div class="project-cover">
@@ -305,24 +307,21 @@
                             <div class="maker-avatar-chip">${escapeHtml(initials)}</div>
                             <span>${escapeHtml(team)}</span>
                         </div>
-                        <button type="button" class="btn-reaction-pill" onclick="event.stopPropagation(); window.triggerEmojiBurst(this, '${index}')">
-                            <span>💖</span> <strong class="reaction-count">${likesCount}</strong>
+                        <button type="button" class="btn-reaction-pill" onclick="event.stopPropagation(); window.triggerEmojiBurst(this, '${index}')" aria-label="Sukai proyek">
+                            <i class="fas fa-heart like-heart-icon"></i> <strong class="reaction-count">${likesCount}</strong>
                         </button>
                     </div>
                 </div>
-                ${flowerHtml}
             </article>
         `;
     }
 
     function renderReservedProjectCard(seq, index) {
         const tapeImg = TAPE_ASSETS[index % TAPE_ASSETS.length];
-        const badgeImg = BADGE_ASSETS[index % BADGE_ASSETS.length];
 
         return `
             <article class="project-card reserved-slot-card" tabindex="0" role="button" aria-label="Slot Terpesan Tim ${seq}">
-                <img src="${tapeImg}" class="card-washi-tape-img" alt="">
-                <img src="${badgeImg}" class="card-number-badge-img" alt="${seq}">
+                <img src="${tapeImg}" class="card-washi-tape-img" alt="" aria-hidden="true">
                 
                 <div class="card-header-bar">
                     <span class="category-badge-chip reserved">Reserved</span>
@@ -348,7 +347,7 @@
                             <span>Team ${seq}</span>
                         </div>
                         <span class="btn-reaction-pill" style="opacity: 0.6; cursor: default;">
-                            <span>♡</span> <strong>0</strong>
+                            <i class="far fa-heart" style="color: #ec1970;"></i> <strong>0</strong>
                         </span>
                     </div>
                 </div>

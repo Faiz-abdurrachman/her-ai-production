@@ -101,7 +101,7 @@ const router = {
         "/participant-ai-evolution-discussion": "/pages/frontend/fellow-dashboard/foundation-core-ai/ai-fundamentals-advanced/ai-advanced/06-evolution-of-ai/diskusi.html",
         "/participant-mentor": "/pages/frontend/fellow-dashboard/mentor.html",
         "/participant-tasks": "/pages/frontend/fellow-dashboard/tasks.html",
-        "/participant-projects": "/pages/frontend/fellow-dashboard/projects.html",
+        "/participant-projects": "/pages/frontend/fellow-dashboard/projects.html?v=20260823-layout-cleanup-v1",
         "/participant-events": "/pages/frontend/fellow-dashboard/events.html",
         "/participant-community": "/pages/frontend/fellow-dashboard/community.html",
         "/participant-certificates": "/pages/frontend/fellow-dashboard/certificates.html",
