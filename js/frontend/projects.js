@@ -319,7 +319,7 @@
         }
     }
 
-    const DEADLINE_MS = new Date('2026-08-23T23:45:00+07:00').getTime();
+    const DEADLINE_MS = new Date('2026-08-24T00:05:00+07:00').getTime();
     let countdownInterval;
 
     function isSubmissionClosed() {
@@ -327,7 +327,7 @@
     }
 
     function showSubmissionClosedMessage() {
-        showShowcaseToast('Pengumpulan project telah ditutup pada 23.45 WIB.', 'error');
+        showShowcaseToast('Pengumpulan project telah ditutup pada 24 Agustus 2026 pukul 00.05 WIB.', 'error');
     }
 
     function lockSubmissionInterface() {
