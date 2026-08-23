@@ -27,6 +27,11 @@
         'tagline', 'cover_url', 'tech_stack', 'problem', 'solution',
         'deck_file_data', 'deck_file_name'
     ];
+    const LEGACY_TEST_PROJECT_IDS = new Set([
+        'fp_1779942596777',
+        'fp_1779942601048',
+        'fp_1779942600121'
+    ]);
 
     function normalizeProjectRecord(project) {
         if (!project || typeof project !== 'object') return null;
@@ -102,8 +107,8 @@
         if (!p) return false;
         const title = String(p.project_title || p.title || '').trim().toUpperCase();
         if (!title) return false;
-        if (title === 'MBG' || title.includes('MBG')) return false;
-        return true;
+        const projectId = String(p.project_id || '');
+        return !LEGACY_TEST_PROJECT_IDS.has(projectId);
     }
 
     function getSavedProjectsFromStorage() {
@@ -428,25 +433,43 @@
 
         try {
             const session = getSession();
-            const response = await fetch('/__gas', {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({
-                    action: 'getFinalProjects',
-                    participantToken: session.token || ''
-                })
-            });
-            const result = await response.json();
-            if (result && result.status === 'success' && Array.isArray(result.data)) {
-                const remoteList = result.data.map(normalizeProjectRecord).filter(isValidProject);
-                // A successful server read is authoritative. This also removes
-                // legacy local-only entries created by the old silent fallback.
-                cachedProjects = remoteList;
-                safeSaveProjectsToStorage(cachedProjects);
-            } else {
-                throw new Error(result?.message || 'Respons sinkronisasi proyek tidak valid.');
+            let result;
+            let lastError;
+
+            for (let attempt = 0; attempt < 3; attempt += 1) {
+                if (attempt > 0) {
+                    await new Promise(resolve => setTimeout(resolve, 750 * attempt));
+                }
+
+                try {
+                    const response = await fetch('/__gas', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({
+                            action: 'getFinalProjects',
+                            participantToken: session.token || ''
+                        })
+                    });
+                    result = await response.json();
+                    if (!response.ok || result?.status !== 'success' || !Array.isArray(result.data)) {
+                        throw new Error(result?.message || 'Respons sinkronisasi proyek tidak valid.');
+                    }
+                    break;
+                } catch (error) {
+                    lastError = error;
+                    result = null;
+                }
             }
+
+            if (!result) throw lastError || new Error('Database Showcase tidak dapat dijangkau.');
+
+            const remoteList = result.data.map(normalizeProjectRecord).filter(isValidProject);
+            // A successful server read is authoritative. This also removes
+            // legacy local-only entries created by the old silent fallback.
+            cachedProjects = remoteList;
+            safeSaveProjectsToStorage(cachedProjects);
         } catch (e) {
+            console.error('Showcase database sync failed:', e);
             cachedProjects = getSavedProjectsFromStorage();
             showShowcaseToast('Sinkronisasi database gagal. Menampilkan cache terakhir; coba muat ulang halaman.', 'error');
         } finally {
