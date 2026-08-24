@@ -27,7 +27,16 @@ const router = context.__testedRouter;
 const lockedPage = '/pages/frontend/fellow-dashboard/under-development.html';
 const overviewPage = '/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/overview.html';
 const previewLessonPage = '/pages/frontend/fellow-dashboard/foundation-core-ai/math-for-ai/01-kenapa-ai-butuh-matematika/materi.html';
-const canonicalRoutes = [
+const baseRoutes = [
+    '/participant-ai-lab-math/kenapa-ai-butuh-matematika',
+    '/participant-ai-lab-math/linear-algebra',
+    '/participant-ai-lab-math/statistics-for-ai',
+    '/participant-ai-lab-math/probability',
+    '/participant-ai-lab-math/calculus',
+    '/participant-ai-lab-math/optimization',
+    '/participant-ai-lab-math/integrated-case-study'
+];
+const representativeChildRoutes = [
     '/participant-ai-lab-math/kenapa-ai-butuh-matematika/dunia-nyata-menjadi-representasi-komputasional',
     '/participant-ai-lab-math/linear-algebra/dari-scalar-ke-vector',
     '/participant-ai-lab-math/statistics-for-ai/mean-median-mode',
@@ -36,8 +45,12 @@ const canonicalRoutes = [
     '/participant-ai-lab-math/optimization/learning-rate',
     '/participant-ai-lab-math/integrated-case-study/uncertainty'
 ];
+const canonicalRoutes = [...baseRoutes, ...representativeChildRoutes];
 
 assert.equal(router.getMathRoute('/participant-ai-lab-math'), overviewPage);
+for (const route of baseRoutes) {
+    assert.equal(Boolean(router.routes[route]), true, `${route} must be registered in the SPA route map.`);
+}
 for (const route of canonicalRoutes) assert.equal(router.getMathRoute(route), previewLessonPage);
 
 context.window.location.hostname = 'her-ai.data-sorcerers.com';
@@ -85,11 +98,14 @@ vm.createContext(releaseContext);
 vm.runInContext(`${releaseSource}\n;globalThis.__testedRouter = router;`, releaseContext, { filename: 'js/router.js' });
 const releaseRouter = releaseContext.__testedRouter;
 assert.equal(releaseRouter.getMathRoute('/participant-ai-lab-math'), overviewPage);
-assert.equal(releaseRouter.getMathRoute(canonicalRoutes[0]), previewLessonPage);
-assert.equal(releaseRouter.getMathRoute(canonicalRoutes[1]), previewLessonPage);
-assert.equal(releaseRouter.getMathRoute(canonicalRoutes[2]), lockedPage);
+assert.equal(releaseRouter.getMathRoute(baseRoutes[0]), previewLessonPage);
+assert.equal(releaseRouter.getMathRoute(baseRoutes[1]), previewLessonPage);
+assert.equal(releaseRouter.getMathRoute(baseRoutes[2]), lockedPage);
+assert.equal(releaseRouter.getMathRoute(representativeChildRoutes[0]), previewLessonPage);
+assert.equal(releaseRouter.getMathRoute(representativeChildRoutes[1]), previewLessonPage);
+assert.equal(releaseRouter.getMathRoute(representativeChildRoutes[2]), lockedPage);
 assert.equal(
-    existsSync(resolve(repositoryRoot, releaseRouter.getMathRoute(canonicalRoutes[0]).slice(1))),
+    existsSync(resolve(repositoryRoot, releaseRouter.getMathRoute(baseRoutes[0]).slice(1))),
     true,
     'Released submodules must resolve to a tracked HTML shell that exists.'
 );
