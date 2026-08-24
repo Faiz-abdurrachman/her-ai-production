@@ -45,7 +45,7 @@ const router = {
         "/participant-ai-lab-large-language-model-discussion": "/pages/frontend/fellow-dashboard/generative-multimodal-ai/large-language-model/diskusi.html",
         "/": "/pages/frontend/home.html",
         "/home": "/pages/frontend/home.html",
-        "/projects": "/pages/frontend/projects.html",
+        "/projects": "/pages/frontend/projects.html?v=20260825-public-participant-parity-v1",
         "/announcement": "/pages/frontend/announcement.html",
         "/announcement-stage-1": "/pages/frontend/announcement.html",
         "/announcement-stage-2": "/pages/frontend/announcement.html",

@@ -1,100 +1,183 @@
-<main class="public-showcase-page" id="publicShowcasePage">
-    <section class="public-showcase-hero" aria-labelledby="publicShowcaseTitle">
-        <div class="container public-showcase-hero-grid">
-            <div class="public-showcase-hero-copy">
-                <p class="public-showcase-kicker"><span></span> HerAI Fellowship 2026</p>
-                <h1 id="publicShowcaseTitle">Ideas built by her.<br><em>Ready for the world.</em></h1>
-                <p class="public-showcase-lead">Jelajahi karya final para fellows—solusi AI yang dirancang dari masalah nyata, dibangun bersama, dan siap diuji.</p>
-                <div class="public-showcase-hero-actions">
-                    <button class="public-showcase-primary-action" type="button" data-public-showcase-scroll>
-                        Jelajahi showcase <i class="fas fa-arrow-down" aria-hidden="true"></i>
-                    </button>
-                    <span class="public-showcase-readonly-note"><i class="fas fa-eye" aria-hidden="true"></i> Public viewing</span>
+<main class="public-showcase-page projects-page" id="publicShowcasePage">
+    <div class="projects-layout public-showcase-layout">
+        <div class="projects-main-column">
+            <section class="showcase-hero-banner" aria-labelledby="publicShowcaseTitle">
+                <div class="hero-content">
+                    <img src="/assets/herai_gallery_asset_pack/cropped_png/hero/11_banner_herai_innovation_gallery_2026.png" alt="HerAI Innovation Gallery 2026" class="hero-banner-sticker-img">
+                    <h1 class="hero-editorial-title" id="publicShowcaseTitle">
+                        <span class="headline-first-line">10 projects. 10 stories.<span class="sparkle-tag">✦ ✦</span></span>
+                        <span class="pink-highlight">
+                            One showcase.
+                            <svg class="title-flourish-svg" viewBox="0 0 150 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M2 8C40 2 110 1 148 7" stroke="#ec1970" stroke-width="4" stroke-linecap="round"></path>
+                            </svg>
+                        </span>
+                    </h1>
+                    <p class="hero-subtitle">Menampilkan inovasi AI terbaik dari tim HerAI Fellowship 2026.<br>Setiap ide adalah langkah nyata menuju dampak berkelanjutan.</p>
+
+                    <div class="hero-cta-row">
+                        <button class="btn-hero-submit" type="button" data-public-showcase-scroll>
+                            <i class="fas fa-shapes" aria-hidden="true"></i> Jelajahi Project
+                        </button>
+                        <span class="btn-hero-guide public-showcase-readonly-action">
+                            <i class="fas fa-eye" aria-hidden="true"></i> Public Showcase
+                        </span>
+                    </div>
+
+                    <div class="hero-stat-card-row" aria-label="Ringkasan showcase">
+                        <div class="stat-item-block">
+                            <div class="stat-icon-wrap"><i class="fas fa-cubes" aria-hidden="true"></i></div>
+                            <div class="stat-info-wrap"><strong id="publicShowcaseProjectCount">—</strong><span>Projects</span></div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item-block">
+                            <div class="stat-icon-wrap"><i class="fas fa-users" aria-hidden="true"></i></div>
+                            <div class="stat-info-wrap"><strong id="publicShowcaseTeamCount">—</strong><span>Teams</span></div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item-block">
+                            <div class="stat-icon-wrap"><i class="fas fa-layer-group" aria-hidden="true"></i></div>
+                            <div class="stat-info-wrap"><strong id="publicShowcaseTrackCount">—</strong><span>Tracks</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-scrapbook-board">
+                    <img src="/assets/herai_gallery_asset_pack/cropped_png/hero/01_hero_full_scrapbook_composition.png?v=20260823-uncropped-v1" alt="Kolase karya HerAI Fellowship" class="hero-main-artwork-img">
+                </div>
+            </section>
+
+            <section class="public-showcase-gallery" id="publicShowcaseGallery" aria-labelledby="publicShowcaseGalleryTitle">
+                <div class="public-showcase-gallery-heading">
+                    <div>
+                        <span class="public-showcase-eyebrow"><i class="fas fa-sparkles" aria-hidden="true"></i> HerAI Innovation Gallery</span>
+                        <h2 id="publicShowcaseGalleryTitle">Explore the showcase</h2>
+                    </div>
+                    <p>Buka setiap kartu untuk melihat problem, solusi, tech stack, demo, repository, dan pitch deck.</p>
+                </div>
+
+                <div class="public-showcase-search-row">
+                    <label class="public-showcase-search-control" for="publicShowcaseSearch">
+                        <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                        <input id="publicShowcaseSearch" type="search" placeholder="Cari project, tim, atau teknologi..." autocomplete="off">
+                    </label>
+                    <p class="public-showcase-result-count" id="publicShowcaseResultCount" aria-live="polite">Memuat project...</p>
+                </div>
+
+                <div class="showcase-toolbar-wrap" aria-label="Filter dan urutan project">
+                    <div class="category-pills" id="publicShowcaseFilters" aria-label="Kategori project"></div>
+                    <div class="toolbar-controls">
+                        <div class="custom-select">
+                            <select id="publicShowcaseSort" aria-label="Urutkan project">
+                                <option value="newest">Terbaru</option>
+                                <option value="oldest">Terlama</option>
+                                <option value="az">A–Z</option>
+                            </select>
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="projects-list" id="publicShowcaseGrid" aria-live="polite" aria-busy="true"></div>
+            </section>
+        </div>
+    </div>
+
+    <div class="showcase-modal-overlay public-showcase-modal" id="publicShowcaseModal" hidden>
+        <div class="public-showcase-modal-backdrop" data-public-showcase-close aria-hidden="true"></div>
+        <article class="showcase-modal detail-project-modal dossier-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-dossier-top-decor">
+                <div class="modal-washi-label"><span>✨ HerAI Project Showcase 2026 🌸</span></div>
+                <img src="/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/28_tape_pink_checkered.png" class="modal-top-tape" alt="" aria-hidden="true">
+                <img src="/assets/herai_gallery_asset_pack/cropped_png/flowers/18_flower_small_top_right.png" class="modal-top-flower" alt="" aria-hidden="true">
+                <button class="showcase-modal-close" type="button" data-public-showcase-close aria-label="Tutup detail project"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+            </div>
+
+            <div class="modal-scroll-body">
+                <div class="modal-dossier-header">
+                    <div class="modal-stamp-col">
+                        <div class="modal-number-scallop-stamp">
+                            <span id="modalProjectNumber">01</span>
+                            <img src="/assets/herai_gallery_asset_pack/cropped_png/doodles/58_paperclips_pair.png" class="stamp-paperclip-decor" alt="" aria-hidden="true">
+                        </div>
+                    </div>
+                    <div class="modal-identity-col">
+                        <h2 id="modalTitle" class="modal-project-title"></h2>
+                        <p class="modal-project-tagline" id="modalTagline"></p>
+                        <div class="modal-chips-bar">
+                            <div class="modal-team-chip-dossier">
+                                <div class="modal-team-avatar-box" id="modalTeamAvatarBox"></div>
+                                <span id="modalTeamName" class="modal-team-name-text"></span>
+                            </div>
+                            <span class="dossier-pill ai-product"><i class="fas fa-sparkles" aria-hidden="true"></i> AI Product</span>
+                            <span class="dossier-pill category"><i class="fas fa-shapes" aria-hidden="true"></i> <span id="modalTrackBadge"></span></span>
+                        </div>
+                    </div>
+                    <div class="modal-stats-col">
+                        <div class="modal-status-badge-box">
+                            <div class="status-published-pill"><i class="fas fa-circle-check" aria-hidden="true"></i> Published</div>
+                            <span class="published-date-sub" id="modalPublishedDate"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-dossier-divider" aria-hidden="true"></div>
+
+                <div class="modal-dossier-grid">
+                    <div class="modal-dossier-left">
+                        <section class="dossier-paper-sheet problem-sheet">
+                            <img src="/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/26_tape_pink_dots_01.png" class="sheet-corner-tape" alt="" aria-hidden="true">
+                            <div class="notebook-binder-holes" aria-hidden="true"></div>
+                            <div class="sheet-header">
+                                <div class="sheet-icon-circle pink"><i class="fas fa-bullseye" aria-hidden="true"></i></div>
+                                <h3>Problem Statement</h3>
+                            </div>
+                            <p id="modalProblem" class="sheet-content-text"></p>
+                            <img src="/assets/herai_gallery_asset_pack/transparent_decorations_approx/flowers/20_flower_petal_mid_right.png" class="sheet-doodle-watermark" alt="" aria-hidden="true">
+                        </section>
+
+                        <section class="dossier-paper-sheet solution-sheet">
+                            <img src="/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/31_tape_cream.png" class="sheet-corner-tape yellow-tape" alt="" aria-hidden="true">
+                            <div class="notebook-binder-holes yellow-holes" aria-hidden="true"></div>
+                            <div class="sheet-header">
+                                <div class="sheet-icon-circle amber"><i class="fas fa-lightbulb" aria-hidden="true"></i></div>
+                                <h3>Solusi &amp; Arsitektur AI</h3>
+                            </div>
+                            <p id="modalSolution" class="sheet-content-text"></p>
+                        </section>
+                    </div>
+
+                    <div class="modal-dossier-right">
+                        <section class="dossier-side-panel files-panel">
+                            <img src="/assets/herai_gallery_asset_pack/cropped_png/doodles/58_paperclips_pair.png" class="panel-paperclip-top" alt="" aria-hidden="true">
+                            <div class="panel-title-bar">
+                                <i class="fas fa-folder-open panel-folder-icon" aria-hidden="true"></i>
+                                <h3>Berkas Project</h3>
+                                <div class="dashed-title-rule"></div>
+                            </div>
+                            <div class="ticket-buttons-stack" id="modalProjectLinks"></div>
+                        </section>
+
+                        <section class="dossier-side-panel stack-panel">
+                            <div class="panel-title-bar">
+                                <i class="fas fa-layer-group panel-stack-icon" aria-hidden="true"></i>
+                                <h3>Tech Stack</h3>
+                                <div class="dashed-title-rule"></div>
+                            </div>
+                            <div class="dossier-tech-grid" id="modalTechStack"></div>
+                        </section>
+                    </div>
                 </div>
             </div>
 
-            <aside class="public-showcase-hero-card" aria-label="Ringkasan showcase">
-                <div class="public-showcase-card-orbit" aria-hidden="true"></div>
-                <div class="public-showcase-stat-main">
-                    <strong id="publicShowcaseProjectCount">—</strong>
-                    <span>final projects</span>
+            <footer class="modal-dossier-footer">
+                <div class="footer-left-credit">
+                    <img src="/assets/herai_gallery_asset_pack/cropped_png/flowers/23_small_flower_bottom.png" class="footer-flower-icon" alt="" aria-hidden="true">
+                    <span class="footer-made-with">Made with <i class="fas fa-heart" aria-hidden="true"></i></span>
+                    <span class="footer-team-text">Made by <strong id="modalFooterTeamName"></strong> · HerAI Fellowship 2026 ✦</span>
                 </div>
-                <div class="public-showcase-stat-row">
-                    <div><strong id="publicShowcaseTeamCount">—</strong><span>teams</span></div>
-                    <div><strong id="publicShowcaseTrackCount">—</strong><span>tracks</span></div>
-                </div>
-                <p>Built by HerAI fellows across Indonesia.</p>
-            </aside>
-        </div>
-        <div class="public-showcase-hero-marquee" aria-hidden="true">
-            <span>ARTIFICIAL INTELLIGENCE</span><i>✦</i><span>WOMEN IN TECH</span><i>✦</i><span>REAL-WORLD IMPACT</span><i>✦</i><span>HERAI FELLOWSHIP</span>
-        </div>
-    </section>
-
-    <section class="public-showcase-gallery-section" id="publicShowcaseGallery" aria-labelledby="publicShowcaseGalleryTitle">
-        <div class="container">
-            <div class="public-showcase-section-head">
-                <div>
-                    <p class="public-showcase-kicker"><span></span> The project archive</p>
-                    <h2 id="publicShowcaseGalleryTitle">Meet the builders.<br>Explore their work.</h2>
-                </div>
-                <p>Gunakan pencarian dan kategori untuk menemukan project. Buka setiap karya untuk memeriksa problem, solusi, demo, repository, dan pitch deck.</p>
-            </div>
-
-            <div class="public-showcase-toolbar" aria-label="Filter project">
-                <label class="public-showcase-search" for="publicShowcaseSearch">
-                    <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
-                    <input id="publicShowcaseSearch" type="search" placeholder="Cari project, tim, atau teknologi..." autocomplete="off">
-                </label>
-                <label class="public-showcase-sort" for="publicShowcaseSort">
-                    <span>Urutkan</span>
-                    <select id="publicShowcaseSort">
-                        <option value="newest">Terbaru</option>
-                        <option value="oldest">Terlama</option>
-                        <option value="az">A–Z</option>
-                    </select>
-                </label>
-            </div>
-
-            <div class="public-showcase-filters" id="publicShowcaseFilters" aria-label="Kategori project"></div>
-            <p class="public-showcase-result-count" id="publicShowcaseResultCount" aria-live="polite"></p>
-            <div class="public-showcase-grid" id="publicShowcaseGrid" aria-live="polite" aria-busy="true"></div>
-        </div>
-    </section>
-
-    <section class="public-showcase-closing">
-        <div class="container public-showcase-closing-inner">
-            <p class="public-showcase-kicker"><span></span> Built by Her, Powered by AI</p>
-            <h2>Ten teams. One shared ambition.</h2>
-            <p>Terima kasih telah menyaksikan karya para fellows HerAI Fellowship 2026.</p>
-        </div>
-    </section>
-
-    <div class="public-showcase-modal" id="publicShowcaseModal" hidden>
-        <div class="public-showcase-modal-backdrop" data-public-showcase-close></div>
-        <article class="public-showcase-dialog" role="dialog" aria-modal="true" aria-labelledby="publicShowcaseModalTitle">
-            <button class="public-showcase-modal-close" type="button" data-public-showcase-close aria-label="Tutup detail project">
-                <i class="fas fa-xmark" aria-hidden="true"></i>
-            </button>
-            <div class="public-showcase-modal-cover" id="publicShowcaseModalCover"></div>
-            <div class="public-showcase-modal-body">
-                <div class="public-showcase-modal-meta">
-                    <span id="publicShowcaseModalTrack"></span>
-                    <span id="publicShowcaseModalDate"></span>
-                </div>
-                <h2 id="publicShowcaseModalTitle"></h2>
-                <p class="public-showcase-modal-tagline" id="publicShowcaseModalTagline"></p>
-                <div class="public-showcase-teamline">
-                    <span class="public-showcase-team-avatar" id="publicShowcaseModalAvatar"></span>
-                    <div><small>Created by</small><strong id="publicShowcaseModalTeam"></strong></div>
-                </div>
-                <div class="public-showcase-modal-story">
-                    <section><span>01</span><div><h3>The problem</h3><p id="publicShowcaseModalProblem"></p></div></section>
-                    <section><span>02</span><div><h3>The solution</h3><p id="publicShowcaseModalSolution"></p></div></section>
-                </div>
-                <div class="public-showcase-stack" id="publicShowcaseModalStack"></div>
-                <div class="public-showcase-links" id="publicShowcaseModalLinks"></div>
-            </div>
+                <span class="public-showcase-readonly-badge"><i class="fas fa-eye" aria-hidden="true"></i> Public viewing</span>
+            </footer>
         </article>
     </div>
 </main>

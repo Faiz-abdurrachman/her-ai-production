@@ -1,4 +1,15 @@
 (function() {
+    const TAPE_ASSETS = [
+        '/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/26_tape_pink_dots_01.png',
+        '/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/30_tape_pink_texture.png',
+        '/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/27_tape_lavender_dots.png',
+        '/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/28_tape_pink_checkered.png',
+        '/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/29_tape_pink_dots_02.png',
+        '/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/37_tape_bottom_pink_pattern_01.png',
+        '/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/38_tape_bottom_pink_pattern_02.png',
+        '/assets/herai_gallery_asset_pack/cropped_png/tapes_papers/39_tape_bottom_red_pink.png'
+    ];
+
     const state = {
         projects: [],
         query: '',
@@ -68,18 +79,31 @@
         return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
+    function categoryIcon(track) {
+        const category = String(track || '').toLowerCase();
+        if (category.includes('health')) return 'fa-heart-pulse';
+        if (category.includes('edu')) return 'fa-graduation-cap';
+        if (category.includes('green')) return 'fa-leaf';
+        if (category.includes('fin')) return 'fa-coins';
+        if (category.includes('product')) return 'fa-bolt';
+        if (category.includes('creat')) return 'fa-palette';
+        if (category.includes('social')) return 'fa-hand-holding-heart';
+        return 'fa-sparkles';
+    }
+
     function renderSkeletons() {
         const grid = document.getElementById('publicShowcaseGrid');
         if (!grid) return;
         grid.setAttribute('aria-busy', 'true');
-        grid.innerHTML = Array.from({ length: 6 }, function() {
-            return '<article class="public-showcase-project-card public-showcase-skeleton" aria-hidden="true">' +
-                '<div class="public-showcase-skeleton-block"></div>' +
-                '<div class="public-showcase-skeleton-lines">' +
-                    '<div class="public-showcase-skeleton-line"></div>' +
-                    '<div class="public-showcase-skeleton-line"></div>' +
-                    '<div class="public-showcase-skeleton-line"></div>' +
-                '</div>' +
+        grid.innerHTML = Array.from({ length: 8 }, function() {
+            return '<article class="project-card skeleton-card" aria-hidden="true">' +
+                '<div class="skeleton-tape skeleton-shimmer"></div>' +
+                '<div class="skeleton-badge skeleton-shimmer"></div>' +
+                '<div class="skeleton-img-box skeleton-shimmer"></div>' +
+                '<div class="skeleton-title-box skeleton-shimmer"></div>' +
+                '<div class="skeleton-desc-box skeleton-shimmer"></div>' +
+                '<div class="skeleton-desc-box short skeleton-shimmer"></div>' +
+                '<div class="skeleton-footer-box"><div class="skeleton-avatar-chip skeleton-shimmer"></div><div class="skeleton-name-box skeleton-shimmer"></div></div>' +
             '</article>';
         }).join('');
     }
@@ -88,11 +112,11 @@
         const grid = document.getElementById('publicShowcaseGrid');
         if (!grid) return;
         grid.setAttribute('aria-busy', 'false');
-        grid.innerHTML = '<div class="public-showcase-state">' +
-            '<i class="fas ' + escapeHtml(icon) + '" aria-hidden="true"></i>' +
+        grid.innerHTML = '<div class="gallery-empty-scrapbook public-showcase-state">' +
+            '<div class="empty-sparkle-icon"><i class="fas ' + escapeHtml(icon) + '" aria-hidden="true"></i></div>' +
             '<h3>' + escapeHtml(title) + '</h3>' +
             '<p>' + escapeHtml(message) + '</p>' +
-            (retry ? '<button type="button" id="publicShowcaseRetry">Coba lagi</button>' : '') +
+            (retry ? '<button class="btn-empty-submit" type="button" id="publicShowcaseRetry"><i class="fas fa-rotate-right" aria-hidden="true"></i> Coba lagi</button>' : '') +
         '</div>';
         document.getElementById('publicShowcaseRetry')?.addEventListener('click', loadProjects);
     }
@@ -118,8 +142,9 @@
         if (!options.includes(state.track)) state.track = 'Semua';
         container.innerHTML = options.map(function(track) {
             const active = track === state.track;
-            return '<button class="public-showcase-filter' + (active ? ' active' : '') + '" type="button" data-track="' +
-                escapeHtml(track) + '" aria-pressed="' + active + '">' + escapeHtml(track) + '</button>';
+            return '<button class="pill' + (active ? ' active' : '') + '" type="button" data-track="' +
+                escapeHtml(track) + '" aria-pressed="' + active + '"><i class="fas ' + categoryIcon(track) + '" aria-hidden="true"></i>' +
+                escapeHtml(track === 'Semua' ? 'Semua Kategori' : track) + '</button>';
         }).join('');
         container.querySelectorAll('[data-track]').forEach(function(button) {
             button.addEventListener('click', function() {
@@ -152,9 +177,14 @@
 
     function coverHtml(project) {
         if (project.coverUrl) {
-            return '<img src="' + escapeHtml(project.coverUrl) + '" alt="Cover ' + escapeHtml(project.title) + '" loading="lazy">';
+            return '<div class="project-cover"><img src="' + escapeHtml(project.coverUrl) + '" alt="Cover ' + escapeHtml(project.title) + '" loading="lazy"></div>';
         }
-        return '<div class="public-showcase-cover-fallback" aria-hidden="true">' + escapeHtml(initials(project.title)) + '</div>';
+        const trackSlug = project.track.toLowerCase().replace(/[^a-z0-9]/g, '');
+        return '<div class="project-cover scrapbook-placeholder-frame track-' + escapeHtml(trackSlug) + '" aria-hidden="true">' +
+            '<div class="placeholder-pattern-bg"></div><div class="placeholder-content-center">' +
+            '<div class="placeholder-icon-halo"><i class="fas ' + categoryIcon(project.track) + '"></i></div>' +
+            '<span class="placeholder-track-tag">' + escapeHtml(project.track) + ' Showcase</span></div>' +
+            '<div class="placeholder-sparkle-decor"><i class="fas fa-sparkles"></i></div></div>';
     }
 
     function renderProjects() {
@@ -171,19 +201,17 @@
         }
 
         grid.innerHTML = projects.map(function(project, index) {
-            return '<article class="public-showcase-project-card" tabindex="0" role="button" data-project-id="' + escapeHtml(project.id) +
+            return '<article class="project-card ' + (project.coverUrl ? 'has-cover' : 'has-placeholder') + '" tabindex="0" role="button" data-project-id="' + escapeHtml(project.id) +
                 '" aria-label="Lihat detail project ' + escapeHtml(project.title) + '">' +
-                '<div class="public-showcase-project-cover">' +
-                    coverHtml(project) +
-                    '<span class="public-showcase-project-number">PROJECT ' + String(index + 1).padStart(2, '0') + '</span>' +
-                '</div>' +
-                '<div class="public-showcase-project-content">' +
-                    '<span class="public-showcase-project-track">' + escapeHtml(project.track) + '</span>' +
-                    '<h3>' + escapeHtml(project.title) + '</h3>' +
-                    '<p>' + escapeHtml(project.tagline) + '</p>' +
-                    '<div class="public-showcase-project-footer">' +
-                        '<div class="public-showcase-project-team"><span>' + escapeHtml(initials(project.team)) + '</span><span>' + escapeHtml(project.team) + '</span></div>' +
-                        '<span class="public-showcase-project-arrow" aria-hidden="true"><i class="fas fa-arrow-up-right-from-square"></i></span>' +
+                '<img src="' + TAPE_ASSETS[index % TAPE_ASSETS.length] + '" class="card-washi-tape-img" alt="" aria-hidden="true">' +
+                '<div class="card-header-bar"><span class="category-badge-chip"><i class="fas ' + categoryIcon(project.track) + '" aria-hidden="true"></i><span>' + escapeHtml(project.track) + '</span></span></div>' +
+                coverHtml(project) +
+                '<div class="project-content">' +
+                    '<div class="project-title-row"><h3>' + escapeHtml(project.title) + '</h3></div>' +
+                    '<p class="project-description">' + escapeHtml(project.tagline) + '</p>' +
+                    '<div class="project-footer">' +
+                        '<div class="maker-info"><div class="maker-avatar-chip">' + escapeHtml(initials(project.team)) + '</div><span>' + escapeHtml(project.team) + '</span></div>' +
+                        '<span class="btn-reaction-pill public-showcase-view-pill"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i><strong>Lihat</strong></span>' +
                     '</div>' +
                 '</div>' +
             '</article>';
@@ -193,7 +221,7 @@
             image.addEventListener('error', function() {
                 const projectId = image.closest('[data-project-id]')?.dataset.projectId;
                 const project = state.projects.find(function(item) { return item.id === projectId; });
-                image.replaceWith(createFallbackCover(project?.title));
+                replaceBrokenCover(image, project);
             }, { once: true });
         });
 
@@ -209,18 +237,22 @@
         });
     }
 
-    function createFallbackCover(title) {
-        const fallback = document.createElement('div');
-        fallback.className = 'public-showcase-cover-fallback';
-        fallback.setAttribute('aria-hidden', 'true');
-        fallback.textContent = initials(title);
-        return fallback;
+    function replaceBrokenCover(image, project) {
+        const frame = image.closest('.project-cover');
+        if (!frame) return;
+        frame.className = 'project-cover scrapbook-placeholder-frame';
+        frame.setAttribute('aria-hidden', 'true');
+        frame.innerHTML = '<div class="placeholder-pattern-bg"></div><div class="placeholder-content-center">' +
+            '<div class="placeholder-icon-halo"><i class="fas ' + categoryIcon(project?.track) + '"></i></div>' +
+            '<span class="placeholder-track-tag">' + escapeHtml(project?.track || 'AI Solution') + ' Showcase</span></div>';
     }
 
-    function linkHtml(url, icon, label) {
+    function linkHtml(url, icon, label, description, className) {
         if (!url) return '';
-        return '<a href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">' +
-            '<i class="fas ' + escapeHtml(icon) + '" aria-hidden="true"></i>' + escapeHtml(label) +
+        return '<a class="dossier-ticket-btn ' + escapeHtml(className) + '" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">' +
+            '<div class="ticket-icon-box"><i class="fas ' + escapeHtml(icon) + '" aria-hidden="true"></i></div>' +
+            '<div class="ticket-text-col"><strong>' + escapeHtml(label) + '</strong><small>' + escapeHtml(description) + '</small></div>' +
+            '<i class="fas fa-arrow-up-right-from-square ticket-arrow" aria-hidden="true"></i>' +
         '</a>';
     }
 
@@ -230,48 +262,47 @@
         if (!project || !modal) return;
 
         state.lastFocusedElement = trigger || document.activeElement;
-        const cover = document.getElementById('publicShowcaseModalCover');
-        if (cover) {
-            cover.innerHTML = coverHtml(project);
-            const image = cover.querySelector('img');
-            image?.addEventListener('error', function() {
-                image.replaceWith(createFallbackCover(project.title));
-            }, { once: true });
-        }
+        const projectIndex = state.projects.findIndex(function(item) { return item.id === projectId; });
+        document.getElementById('modalProjectNumber').textContent = String(projectIndex + 1).padStart(2, '0');
+        document.getElementById('modalTrackBadge').textContent = project.track;
+        document.getElementById('modalPublishedDate').textContent = 'Diterbitkan ' + formatDate(project.submittedAt);
+        document.getElementById('modalTitle').textContent = project.title;
+        document.getElementById('modalTagline').textContent = project.tagline;
+        document.getElementById('modalTeamAvatarBox').textContent = initials(project.team);
+        document.getElementById('modalTeamName').textContent = project.team;
+        document.getElementById('modalFooterTeamName').textContent = project.team;
+        document.getElementById('modalProblem').textContent = project.problem;
+        document.getElementById('modalSolution').textContent = project.solution;
 
-        document.getElementById('publicShowcaseModalTrack').textContent = project.track;
-        document.getElementById('publicShowcaseModalDate').textContent = formatDate(project.submittedAt);
-        document.getElementById('publicShowcaseModalTitle').textContent = project.title;
-        document.getElementById('publicShowcaseModalTagline').textContent = project.tagline;
-        document.getElementById('publicShowcaseModalAvatar').textContent = initials(project.team);
-        document.getElementById('publicShowcaseModalTeam').textContent = project.team;
-        document.getElementById('publicShowcaseModalProblem').textContent = project.problem;
-        document.getElementById('publicShowcaseModalSolution').textContent = project.solution;
-
-        const stack = document.getElementById('publicShowcaseModalStack');
+        const stack = document.getElementById('modalTechStack');
         const technologies = project.techStack.split(/[,;\n]/).map(function(item) { return item.trim(); }).filter(Boolean).slice(0, 12);
         if (stack) {
-            stack.innerHTML = technologies.map(function(item) { return '<span>' + escapeHtml(item) + '</span>'; }).join('');
-            stack.hidden = technologies.length === 0;
+            stack.innerHTML = technologies.length
+                ? technologies.map(function(item) { return '<span class="dossier-tech-chip"><i class="fas fa-code" aria-hidden="true"></i>' + escapeHtml(item) + '</span>'; }).join('')
+                : '<span class="public-showcase-empty-stack">Tech stack belum dicantumkan.</span>';
         }
 
-        const links = document.getElementById('publicShowcaseModalLinks');
+        const links = document.getElementById('modalProjectLinks');
         if (links) {
-            links.innerHTML = linkHtml(project.demoUrl, 'fa-play', 'Buka demo') +
-                linkHtml(project.repoUrl, 'fa-code-branch', 'Repository') +
-                linkHtml(project.deckUrl, 'fa-file-lines', 'Pitch deck');
-            links.hidden = !links.innerHTML;
+            links.innerHTML = linkHtml(project.demoUrl, 'fa-arrow-up-right-from-square', 'Buka Live Demo', 'Lihat aplikasi secara langsung', 'demo-ticket') +
+                linkHtml(project.repoUrl, 'fa-code-branch', 'Repository Project', 'Lihat source code project', 'repo-ticket') +
+                linkHtml(project.deckUrl, 'fa-file-pdf', 'Pitch Deck Slide', 'Lihat presentasi project', 'deck-ticket');
+            if (!links.innerHTML) {
+                links.innerHTML = '<p class="public-showcase-empty-links">Belum ada berkas publik yang dicantumkan.</p>';
+            }
         }
 
         modal.hidden = false;
+        window.requestAnimationFrame(function() { modal.classList.add('active'); });
         document.body.style.overflow = 'hidden';
-        modal.querySelector('.public-showcase-modal-close')?.focus();
+        modal.querySelector('.showcase-modal-close')?.focus();
     }
 
     function closeModal() {
         const modal = document.getElementById('publicShowcaseModal');
         if (!modal || modal.hidden) return;
-        modal.hidden = true;
+        modal.classList.remove('active');
+        window.setTimeout(function() { modal.hidden = true; }, 200);
         document.body.style.overflow = '';
         if (state.lastFocusedElement && document.contains(state.lastFocusedElement)) {
             state.lastFocusedElement.focus();
