@@ -355,6 +355,7 @@ function doPost(e) {
         const projects = getRows(SHEETS.projects);
         return { status: 'success', data: projects, projects };
       },
+      getPublicFinalProjects: () => getPublicFinalProjects(),
       submitFinalProject: () => submitFinalProject(payload),
       deleteFinalProject: () => {
         const projectId = payload.project_id || payload.team_id;
@@ -398,7 +399,8 @@ function authorizeGasAction(action, payload) {
     'getCompetencyQuestions',
     'login',
     'getSettings',
-    'getFinalProjects'
+    'getFinalProjects',
+    'getPublicFinalProjects'
   ];
   if (publicActions.indexOf(action) >= 0) return;
 
@@ -4566,6 +4568,54 @@ function updateCompetencyDecision(payload) {
     competency_decided_at: new Date().toISOString()
   });
   return { status: 'success', participant: stripSensitiveParticipant(findParticipantByNik(nik)) };
+}
+
+function getPublicFinalProjects() {
+  const publicStatuses = ['submitted', 'published'];
+  const projects = getRows(SHEETS.projects)
+    .filter(function(project) {
+      const status = String(project.status || 'submitted').toLowerCase().trim();
+      const title = String(project.project_title || project.title || '').trim();
+      return title && publicStatuses.indexOf(status) >= 0;
+    })
+    .map(function(project) {
+      return {
+        project_id: sanitizePublicProjectText(project.project_id, 120),
+        team_id: sanitizePublicProjectText(project.team_id, 120),
+        team_name: sanitizePublicProjectText(project.team_name, 160),
+        title: sanitizePublicProjectText(project.project_title || project.title, 240),
+        tagline: sanitizePublicProjectText(project.tagline, 320),
+        cover_url: sanitizePublicProjectUrl(project.cover_url),
+        track: sanitizePublicProjectText(project.track, 120),
+        tech_stack: sanitizePublicProjectText(project.tech_stack, 500),
+        problem: sanitizePublicProjectText(project.problem || project.overview, 4000),
+        solution: sanitizePublicProjectText(project.solution || project.details, 6000),
+        deck_url: sanitizePublicProjectUrl(project.deck_url),
+        repo_url: sanitizePublicProjectUrl(project.repo_url),
+        demo_url: sanitizePublicProjectUrl(project.demo_url),
+        submitted_at: sanitizePublicProjectText(project.submitted_at, 80)
+      };
+    });
+
+  return {
+    status: 'success',
+    data: projects,
+    count: projects.length
+  };
+}
+
+function sanitizePublicProjectText(value, maxLength) {
+  return String(value === undefined || value === null ? '' : value)
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .trim()
+    .slice(0, maxLength || 1000);
+}
+
+function sanitizePublicProjectUrl(value) {
+  const url = String(value || '').trim();
+  if (!/^https:\/\//i.test(url)) return '';
+  if (/^[^\s]+$/i.test(url) === false) return '';
+  return url.slice(0, 2048);
 }
 
 function submitFinalProject(payload) {

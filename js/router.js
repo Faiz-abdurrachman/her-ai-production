@@ -1948,8 +1948,8 @@ if (path === "/participant-ai-evolution" && typeof window.initAiEvolutionMateri 
                     if (typeof window.initProjectsPage === "function") window.initProjectsPage();
                 } else if (path.startsWith("/participant-") && typeof window.initFellowDashboardPage === "function") {
                     window.initFellowDashboardPage("under-development");
-                } else if (path === "/projects" && typeof window.initProjectsPage === "function") {
-                    window.initProjectsPage();
+                } else if (path === "/projects" && typeof window.initPublicProjectsPage === "function") {
+                    window.initPublicProjectsPage();
                 } else if (path === "/twibbon" && typeof window.initTwibbon === "function") {
                     setTimeout(() => window.initTwibbon(), 100);
                 }

@@ -1,99 +1,100 @@
-<main class="projects-page">
-    <section class="projects-hero">
-        <div class="container projects-hero-grid">
-            <div>
-                <p class="tagline">FINAL PROJECT HUB</p>
-                <h1>HerAI Project Showcase</h1>
-                <p class="lead-text">Ruang publik untuk menampilkan final project setiap tim, lengkap dengan track, deck, demo, dan profil anggota.</p>
-            </div>
-            <div class="projects-hero-panel">
-                <strong>Submission Window</strong>
-                <span>Siap digunakan untuk pengumpulan project akhir fellowship.</span>
-                <a href="#projectSubmissionForm" class="btn btn-primary">Submit Project</a>
-            </div>
-        </div>
-    </section>
-
-    <section class="projects-submission-section">
-        <div class="container projects-layout">
-            <aside class="projects-guideline">
-                <span class="profile-badge">Devpost-style Submission</span>
-                <h2>Data yang Ditampung</h2>
-                <p>Setiap tim dapat mengirim detail project, anggota, asal kampus atau instansi, track, overview, link deck PDF, demo, repository, dan kebutuhan follow-up mentoring.</p>
-                <div class="project-filters" id="projectTrackFilters">
-                    <button class="filter-btn active" data-track="all">All Tracks</button>
-                    <button class="filter-btn" data-track="AI Product">AI Product</button>
-                    <button class="filter-btn" data-track="Data & Analytics">Data & Analytics</button>
-                    <button class="filter-btn" data-track="Automation">Automation</button>
-                    <button class="filter-btn" data-track="Social Impact">Social Impact</button>
+<main class="public-showcase-page" id="publicShowcasePage">
+    <section class="public-showcase-hero" aria-labelledby="publicShowcaseTitle">
+        <div class="container public-showcase-hero-grid">
+            <div class="public-showcase-hero-copy">
+                <p class="public-showcase-kicker"><span></span> HerAI Fellowship 2026</p>
+                <h1 id="publicShowcaseTitle">Ideas built by her.<br><em>Ready for the world.</em></h1>
+                <p class="public-showcase-lead">Jelajahi karya final para fellows—solusi AI yang dirancang dari masalah nyata, dibangun bersama, dan siap diuji.</p>
+                <div class="public-showcase-hero-actions">
+                    <button class="public-showcase-primary-action" type="button" data-public-showcase-scroll>
+                        Jelajahi showcase <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                    </button>
+                    <span class="public-showcase-readonly-note"><i class="fas fa-eye" aria-hidden="true"></i> Public viewing</span>
                 </div>
+            </div>
+
+            <aside class="public-showcase-hero-card" aria-label="Ringkasan showcase">
+                <div class="public-showcase-card-orbit" aria-hidden="true"></div>
+                <div class="public-showcase-stat-main">
+                    <strong id="publicShowcaseProjectCount">—</strong>
+                    <span>final projects</span>
+                </div>
+                <div class="public-showcase-stat-row">
+                    <div><strong id="publicShowcaseTeamCount">—</strong><span>teams</span></div>
+                    <div><strong id="publicShowcaseTrackCount">—</strong><span>tracks</span></div>
+                </div>
+                <p>Built by HerAI fellows across Indonesia.</p>
             </aside>
-
-            <form class="project-submit-card" id="projectSubmissionForm">
-                <div class="project-form-head">
-                    <div>
-                        <p class="tagline">PROJECT INTAKE</p>
-                        <h2>Submit Final Project</h2>
-                    </div>
-                    <span class="monitor-pill ok">Draft Local</span>
-                </div>
-
-                <div class="project-form-grid">
-                    <label>Nama Tim
-                        <input type="text" id="projectTeamName" placeholder="Team Aurora" required>
-                    </label>
-                    <label>Judul Project
-                        <input type="text" id="projectTitle" placeholder="AI Mentor Matching System" required>
-                    </label>
-                    <label>Nama Anggota
-                        <textarea id="projectMembers" rows="3" placeholder="Nama anggota dipisahkan baris baru" required></textarea>
-                    </label>
-                    <label>Asal Kampus/Instansi
-                        <textarea id="projectInstitution" rows="3" placeholder="Universitas / perusahaan / komunitas" required></textarea>
-                    </label>
-                    <label>Track
-                        <select id="projectTrack" required>
-                            <option value="">Pilih track</option>
-                            <option>AI Product</option>
-                            <option>Data & Analytics</option>
-                            <option>Automation</option>
-                            <option>Social Impact</option>
-                            <option>Multimodal AI</option>
-                        </select>
-                    </label>
-                    <label>Link PDF Slide Deck
-                        <input type="url" id="projectDeckUrl" placeholder="https://drive.google.com/..." required>
-                    </label>
-                    <label>Link Demo
-                        <input type="url" id="projectDemoUrl" placeholder="https://...">
-                    </label>
-                    <label>Repository / Assets
-                        <input type="url" id="projectRepoUrl" placeholder="https://github.com/...">
-                    </label>
-                    <label class="project-wide">Overview
-                        <textarea id="projectOverview" rows="4" placeholder="Ringkasan masalah, solusi, dan dampak project" required></textarea>
-                    </label>
-                    <label class="project-wide">Detail Project
-                        <textarea id="projectDetails" rows="6" placeholder="Metode, dataset, model, evaluasi, limitasi, rencana pengembangan" required></textarea>
-                    </label>
-                </div>
-
-                <div class="project-form-actions">
-                    <p id="projectSubmitMessage" class="profile-message"></p>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Simpan Submission</button>
-                </div>
-            </form>
+        </div>
+        <div class="public-showcase-hero-marquee" aria-hidden="true">
+            <span>ARTIFICIAL INTELLIGENCE</span><i>✦</i><span>WOMEN IN TECH</span><i>✦</i><span>REAL-WORLD IMPACT</span><i>✦</i><span>HERAI FELLOWSHIP</span>
         </div>
     </section>
 
-    <section class="projects-grid-section">
+    <section class="public-showcase-gallery-section" id="publicShowcaseGallery" aria-labelledby="publicShowcaseGalleryTitle">
         <div class="container">
-            <div class="section-title">
-                <p class="tagline">SHOWCASE</p>
-                <h2>Project Gallery</h2>
-                <p class="lead-text">Preview submission peserta akan muncul di sini dan siap diintegrasikan ke database final project.</p>
+            <div class="public-showcase-section-head">
+                <div>
+                    <p class="public-showcase-kicker"><span></span> The project archive</p>
+                    <h2 id="publicShowcaseGalleryTitle">Meet the builders.<br>Explore their work.</h2>
+                </div>
+                <p>Gunakan pencarian dan kategori untuk menemukan project. Buka setiap karya untuk memeriksa problem, solusi, demo, repository, dan pitch deck.</p>
             </div>
-            <div class="projects-grid" id="projectsGrid"></div>
+
+            <div class="public-showcase-toolbar" aria-label="Filter project">
+                <label class="public-showcase-search" for="publicShowcaseSearch">
+                    <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                    <input id="publicShowcaseSearch" type="search" placeholder="Cari project, tim, atau teknologi..." autocomplete="off">
+                </label>
+                <label class="public-showcase-sort" for="publicShowcaseSort">
+                    <span>Urutkan</span>
+                    <select id="publicShowcaseSort">
+                        <option value="newest">Terbaru</option>
+                        <option value="oldest">Terlama</option>
+                        <option value="az">A–Z</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="public-showcase-filters" id="publicShowcaseFilters" aria-label="Kategori project"></div>
+            <p class="public-showcase-result-count" id="publicShowcaseResultCount" aria-live="polite"></p>
+            <div class="public-showcase-grid" id="publicShowcaseGrid" aria-live="polite" aria-busy="true"></div>
         </div>
     </section>
+
+    <section class="public-showcase-closing">
+        <div class="container public-showcase-closing-inner">
+            <p class="public-showcase-kicker"><span></span> Built by Her, Powered by AI</p>
+            <h2>Ten teams. One shared ambition.</h2>
+            <p>Terima kasih telah menyaksikan karya para fellows HerAI Fellowship 2026.</p>
+        </div>
+    </section>
+
+    <div class="public-showcase-modal" id="publicShowcaseModal" hidden>
+        <div class="public-showcase-modal-backdrop" data-public-showcase-close></div>
+        <article class="public-showcase-dialog" role="dialog" aria-modal="true" aria-labelledby="publicShowcaseModalTitle">
+            <button class="public-showcase-modal-close" type="button" data-public-showcase-close aria-label="Tutup detail project">
+                <i class="fas fa-xmark" aria-hidden="true"></i>
+            </button>
+            <div class="public-showcase-modal-cover" id="publicShowcaseModalCover"></div>
+            <div class="public-showcase-modal-body">
+                <div class="public-showcase-modal-meta">
+                    <span id="publicShowcaseModalTrack"></span>
+                    <span id="publicShowcaseModalDate"></span>
+                </div>
+                <h2 id="publicShowcaseModalTitle"></h2>
+                <p class="public-showcase-modal-tagline" id="publicShowcaseModalTagline"></p>
+                <div class="public-showcase-teamline">
+                    <span class="public-showcase-team-avatar" id="publicShowcaseModalAvatar"></span>
+                    <div><small>Created by</small><strong id="publicShowcaseModalTeam"></strong></div>
+                </div>
+                <div class="public-showcase-modal-story">
+                    <section><span>01</span><div><h3>The problem</h3><p id="publicShowcaseModalProblem"></p></div></section>
+                    <section><span>02</span><div><h3>The solution</h3><p id="publicShowcaseModalSolution"></p></div></section>
+                </div>
+                <div class="public-showcase-stack" id="publicShowcaseModalStack"></div>
+                <div class="public-showcase-links" id="publicShowcaseModalLinks"></div>
+            </div>
+        </article>
+    </div>
 </main>
