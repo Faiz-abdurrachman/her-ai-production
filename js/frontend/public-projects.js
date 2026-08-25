@@ -175,9 +175,11 @@
         });
     }
 
-    function coverHtml(project) {
+    function coverHtml(project, index) {
         if (project.coverUrl) {
-            return '<div class="project-cover"><img src="' + escapeHtml(project.coverUrl) + '" alt="Cover ' + escapeHtml(project.title) + '" loading="lazy"></div>';
+            const loading = index < 8 ? 'eager' : 'lazy';
+            return '<div class="project-cover public-showcase-project-cover is-loading"><img src="' + escapeHtml(project.coverUrl) +
+                '" alt="" loading="' + loading + '" decoding="async"></div>';
         }
         const trackSlug = project.track.toLowerCase().replace(/[^a-z0-9]/g, '');
         return '<div class="project-cover scrapbook-placeholder-frame track-' + escapeHtml(trackSlug) + '" aria-hidden="true">' +
@@ -205,7 +207,7 @@
                 '" aria-label="Lihat detail project ' + escapeHtml(project.title) + '">' +
                 '<img src="' + TAPE_ASSETS[index % TAPE_ASSETS.length] + '" class="card-washi-tape-img" alt="" aria-hidden="true">' +
                 '<div class="card-header-bar"><span class="category-badge-chip"><i class="fas ' + categoryIcon(project.track) + '" aria-hidden="true"></i><span>' + escapeHtml(project.track) + '</span></span></div>' +
-                coverHtml(project) +
+                coverHtml(project, index) +
                 '<div class="project-content">' +
                     '<div class="project-title-row"><h3>' + escapeHtml(project.title) + '</h3></div>' +
                     '<p class="project-description">' + escapeHtml(project.tagline) + '</p>' +
@@ -218,11 +220,24 @@
         }).join('');
 
         grid.querySelectorAll('.public-showcase-project-cover img').forEach(function(image) {
-            image.addEventListener('error', function() {
+            const showLoadedCover = function() {
+                image.closest('.project-cover')?.classList.remove('is-loading');
+                image.classList.add('is-loaded');
+            };
+            const showCoverFallback = function() {
                 const projectId = image.closest('[data-project-id]')?.dataset.projectId;
                 const project = state.projects.find(function(item) { return item.id === projectId; });
                 replaceBrokenCover(image, project);
-            }, { once: true });
+            };
+
+            image.addEventListener('load', showLoadedCover, { once: true });
+            image.addEventListener('error', showCoverFallback, { once: true });
+
+            // Cached images can finish before listeners are attached after innerHTML.
+            if (image.complete) {
+                if (image.naturalWidth > 0) showLoadedCover();
+                else showCoverFallback();
+            }
         });
 
         grid.querySelectorAll('[data-project-id]').forEach(function(card) {
@@ -240,8 +255,12 @@
     function replaceBrokenCover(image, project) {
         const frame = image.closest('.project-cover');
         if (!frame) return;
-        frame.className = 'project-cover scrapbook-placeholder-frame';
+        const card = frame.closest('.project-card');
+        const trackSlug = String(project?.track || 'ai').toLowerCase().replace(/[^a-z0-9]/g, '');
+        frame.className = 'project-cover scrapbook-placeholder-frame track-' + trackSlug;
         frame.setAttribute('aria-hidden', 'true');
+        card?.classList.remove('has-cover');
+        card?.classList.add('has-placeholder');
         frame.innerHTML = '<div class="placeholder-pattern-bg"></div><div class="placeholder-content-center">' +
             '<div class="placeholder-icon-halo"><i class="fas ' + categoryIcon(project?.track) + '"></i></div>' +
             '<span class="placeholder-track-tag">' + escapeHtml(project?.track || 'AI Solution') + ' Showcase</span></div>';

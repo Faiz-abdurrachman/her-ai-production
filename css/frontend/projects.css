@@ -144,6 +144,32 @@
     outline-offset: 3px;
 }
 
+.public-showcase-page .public-showcase-project-cover {
+    background: linear-gradient(135deg, #fff0f6 0%, #ffe4ef 55%, #fdf2f8 100%);
+}
+
+.public-showcase-page .public-showcase-project-cover.is-loading::after {
+    position: absolute;
+    inset: 0;
+    content: '';
+    background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.72) 45%, transparent 70%);
+    transform: translateX(-100%);
+    animation: public-showcase-cover-loading 1.25s ease-in-out infinite;
+}
+
+.public-showcase-page .public-showcase-project-cover img {
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.25s ease;
+}
+
+.public-showcase-page .public-showcase-project-cover img.is-loaded {
+    opacity: 1;
+}
+
+@keyframes public-showcase-cover-loading {
+    to { transform: translateX(100%); }
+}
+
 .public-showcase-view-pill {
     cursor: inherit;
     pointer-events: none;
