@@ -1569,6 +1569,8 @@
            announcementLive: document.getElementById('togglePengumuman'),
            participantPortalOpen: document.getElementById('toggleParticipantPortal'),
            competencyTestOpen: document.getElementById('toggleCompetencyTest'),
+           finalProjectSubmissionOpen: document.getElementById('toggleFinalProjectSubmission'),
+           finalProjectSubmissionDeadline: document.getElementById('finalProjectSubmissionDeadline'),
            maintenanceMode: document.getElementById('toggleMaintenance'),
            registrationClosedMessage: document.getElementById('msgRegisClosed'),
            twibbonUrl: document.getElementById('urlTwibbon'),
@@ -1579,6 +1581,62 @@
        const participantPortalApiUrl = document.getElementById('participantPortalApiUrl');
        const participantPageFields = [...document.querySelectorAll('[data-participant-page-toggle]')];
        const statusText = document.getElementById('globalSettingsStatus');
+       const finalProjectPolicyPreview = document.getElementById('finalProjectSubmissionPolicyPreview');
+       const defaultFinalProjectDeadline = '2026-08-24T00:05:00+07:00';
+
+       function toJakartaDateTimeLocal(value) {
+           const date = new Date(value || defaultFinalProjectDeadline);
+           if (Number.isNaN(date.getTime())) return '2026-08-24T00:05';
+           const parts = new Intl.DateTimeFormat('en-CA', {
+               timeZone: 'Asia/Jakarta',
+               year: 'numeric',
+               month: '2-digit',
+               day: '2-digit',
+               hour: '2-digit',
+               minute: '2-digit',
+               hourCycle: 'h23'
+           }).formatToParts(date).reduce((result, part) => {
+               result[part.type] = part.value;
+               return result;
+           }, {});
+           return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
+       }
+
+       function fromJakartaDateTimeLocal(value) {
+           const localValue = String(value || '').trim();
+           if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(localValue)) return '';
+           return `${localValue}:00+07:00`;
+       }
+
+       function renderFinalProjectPolicyPreview() {
+           if (!finalProjectPolicyPreview) return;
+           const manualOpen = !!fields.finalProjectSubmissionOpen?.checked;
+           const deadlineIso = fromJakartaDateTimeLocal(fields.finalProjectSubmissionDeadline?.value);
+           const deadlineMs = new Date(deadlineIso || '').getTime();
+           const validDeadline = Number.isFinite(deadlineMs);
+           const effectiveOpen = manualOpen && validDeadline && Date.now() < deadlineMs;
+           const strong = finalProjectPolicyPreview.querySelector('strong');
+           const small = finalProjectPolicyPreview.querySelector('small');
+           finalProjectPolicyPreview.classList.toggle('is-open', effectiveOpen);
+           finalProjectPolicyPreview.classList.toggle('is-closed', !effectiveOpen);
+
+           if (strong) strong.textContent = effectiveOpen ? 'Submission terbuka' : 'Submission tertutup';
+           if (small) {
+               if (!manualOpen) {
+                   small.textContent = 'Ditutup manual oleh Super Admin.';
+               } else if (!validDeadline) {
+                   small.textContent = 'Deadline WIB wajib diisi dengan format yang valid.';
+               } else if (Date.now() >= deadlineMs) {
+                   small.textContent = 'Deadline sudah lewat; backend akan menolak mutation.';
+               } else {
+                   small.textContent = `Terbuka sampai ${new Intl.DateTimeFormat('id-ID', {
+                       dateStyle: 'long',
+                       timeStyle: 'short',
+                       timeZone: 'Asia/Jakarta'
+                   }).format(new Date(deadlineMs))} WIB.`;
+               }
+           }
+       }
 
        async function loadSettingsToForm() {
            const settings = typeof window.getGlobalSettingsAsync === 'function'
@@ -1589,6 +1647,8 @@
            if (fields.announcementLive) fields.announcementLive.checked = settings.announcementLive === true;
            if (fields.participantPortalOpen) fields.participantPortalOpen.checked = settings.participantPortalOpen === true;
            if (fields.competencyTestOpen) fields.competencyTestOpen.checked = settings.competencyTestOpen === true;
+           if (fields.finalProjectSubmissionOpen) fields.finalProjectSubmissionOpen.checked = settings.finalProjectSubmissionOpen !== false;
+           if (fields.finalProjectSubmissionDeadline) fields.finalProjectSubmissionDeadline.value = toJakartaDateTimeLocal(settings.finalProjectSubmissionDeadline);
            if (fields.maintenanceMode) fields.maintenanceMode.checked = settings.maintenanceMode === true;
            if (fields.registrationClosedMessage) fields.registrationClosedMessage.value = settings.registrationClosedMessage || '';
            if (fields.twibbonUrl) fields.twibbonUrl.value = settings.twibbonUrl || '#/twibbon';
@@ -1608,6 +1668,7 @@
                const key = input.getAttribute('data-participant-page-toggle');
                input.checked = participantPages[key] !== false;
            });
+           renderFinalProjectPolicyPreview();
        }
 
        function readSettingsFromForm() {
@@ -1617,6 +1678,8 @@
                announcementLive: !!fields.announcementLive?.checked,
                participantPortalOpen: !!fields.participantPortalOpen?.checked,
                competencyTestOpen: !!fields.competencyTestOpen?.checked,
+               finalProjectSubmissionOpen: !!fields.finalProjectSubmissionOpen?.checked,
+               finalProjectSubmissionDeadline: fromJakartaDateTimeLocal(fields.finalProjectSubmissionDeadline?.value) || defaultFinalProjectDeadline,
                maintenanceMode: !!fields.maintenanceMode?.checked,
                registrationClosedMessage: fields.registrationClosedMessage?.value.trim() || 'Pendaftaran HerAI Fellowship Batch 1 (2026) telah resmi ditutup.',
                twibbonUrl: fields.twibbonUrl?.value.trim() || '#/twibbon',
@@ -1640,31 +1703,42 @@
        }
 
        await loadSettingsToForm();
+       fields.finalProjectSubmissionOpen?.addEventListener('change', renderFinalProjectPolicyPreview);
+       fields.finalProjectSubmissionDeadline?.addEventListener('input', renderFinalProjectPolicyPreview);
 
        const btnSave = document.getElementById('btnSaveGlobalSettings');
        if (btnSave) {
            btnSave.onclick = async () => {
+               const deadlineValue = fromJakartaDateTimeLocal(fields.finalProjectSubmissionDeadline?.value);
+               if (!deadlineValue) {
+                   if (statusText) {
+                       statusText.textContent = 'Deadline Final Project wajib diisi dalam WIB';
+                       statusText.style.color = 'var(--danger)';
+                   }
+                   fields.finalProjectSubmissionDeadline?.focus();
+                   renderFinalProjectPolicyPreview();
+                   return;
+               }
+
                window.logAdminActivity("Mengeksekusi penyimpanan perubahan di Global Settings");
                btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menerapkan...';
                btnSave.disabled = true;
-              if (participantPortalApiUrl) {
-                  localStorage.setItem('heraiParticipantPortalApiUrl', participantPortalApiUrl.value.trim() || 'http://127.0.0.1:8092');
-              }
                const settings = readSettingsFromForm();
-               window.saveGlobalSettings(settings);
                try {
                    const resp = await fetch(API_URL, {
                        method: 'POST',
                        body: JSON.stringify(withAdminToken({ action: 'saveSettings', settings }))
                    });
                    const result = await resp.json().catch(() => ({}));
-                   if (result.status !== 'success') throw new Error(result.message || 'Gagal menyimpan');
-               } catch (e) {
-                   console.warn('Gagal menyimpan settings ke server:', e.message);
-               }
-               setTimeout(() => {
+                   if (!resp.ok || result.status !== 'success') {
+                       throw new Error(result.message || 'Backend tidak mengonfirmasi penyimpanan settings.');
+                   }
+
+                   window.saveGlobalSettings(settings);
+                   if (participantPortalApiUrl) {
+                       localStorage.setItem('heraiParticipantPortalApiUrl', participantPortalApiUrl.value.trim() || 'http://127.0.0.1:8092');
+                   }
                    btnSave.innerHTML = '<i class="fas fa-check"></i> Pengaturan Diterapkan';
-                   btnSave.disabled = false;
                    if (statusText) {
                        statusText.textContent = `Tersimpan ${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`;
                        statusText.style.color = settings.maintenanceMode ? 'var(--danger)' : 'var(--success)';
@@ -1672,8 +1746,23 @@
                    if (typeof window.applyPublicVisibilitySettings === 'function') {
                        window.applyPublicVisibilitySettings(settings);
                    }
-                   setTimeout(() => btnSave.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Terapkan Pengaturan Global', 2000);
-               }, 500);
+                   renderFinalProjectPolicyPreview();
+                   setTimeout(() => {
+                       btnSave.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Terapkan Pengaturan Global';
+                   }, 2000);
+               } catch (e) {
+                   console.error('Gagal menyimpan settings ke server:', e);
+                   btnSave.innerHTML = '<i class="fas fa-triangle-exclamation"></i> Gagal Menerapkan';
+                   if (statusText) {
+                       statusText.textContent = e.message || 'Pengaturan belum tersimpan';
+                       statusText.style.color = 'var(--danger)';
+                   }
+                   setTimeout(() => {
+                       btnSave.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Terapkan Pengaturan Global';
+                   }, 2500);
+               } finally {
+                   btnSave.disabled = false;
+               }
            };
        }
 

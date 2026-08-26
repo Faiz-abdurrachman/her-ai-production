@@ -104,6 +104,7 @@ docs-nazril/
 !/scripts/test-math-release-gate.mjs
 !/scripts/test-math-response-persistence.mjs
 !/scripts/test-progress-scoring.mjs
+!/scripts/test-project-security.mjs
 !/scripts/validate-math-runtime.mjs
 /gas/*
 !/gas/Code.gs

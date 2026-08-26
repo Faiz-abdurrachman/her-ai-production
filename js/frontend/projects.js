@@ -20,6 +20,12 @@
     let currentSort = 'newest';
     const SHOWCASE_SUBMIT_TIMEOUT_MS = 120000;
     const MAX_DIRECT_DECK_FILE_BYTES = 10 * 1024 * 1024;
+    const FINAL_PROJECT_FALLBACK_DEADLINE = '2026-08-24T00:05:00+07:00';
+    let finalProjectSubmissionPolicy = {
+        manual_open: true,
+        deadline: FINAL_PROJECT_FALLBACK_DEADLINE,
+        reason: 'deadline_passed'
+    };
     let showcaseSubmitUrlPromise;
     const PROJECT_TEXT_FIELDS = [
         'project_id', 'team_id', 'team_name', 'title', 'members', 'institution',
@@ -133,7 +139,11 @@
                 const response = await fetch('/__gas', {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: 'getFinalProjects' }),
+                    body: JSON.stringify({
+                        action: 'getParticipantFinalProjects',
+                        participantToken: payload.participantToken || '',
+                        nik: payload.nik || ''
+                    }),
                     signal: controller.signal
                 });
 
@@ -292,6 +302,7 @@
     window.initProjectsPage = async function() {
         updateParticipantGreeting();
         updateTeamBadgeUI();
+        await refreshFinalProjectSubmissionPolicy();
         initCountdown();
         bindFiltersAndSorting();
         bindWorkspaceNavigation();
@@ -319,15 +330,53 @@
         }
     }
 
-    const DEADLINE_MS = new Date('2026-08-24T00:05:00+07:00').getTime();
     let countdownInterval;
 
+    async function refreshFinalProjectSubmissionPolicy() {
+        try {
+            const response = await fetch('/__gas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'getFinalProjectSubmissionPolicy' })
+            });
+            const result = await response.json();
+            if (!response.ok || result?.status !== 'success' || !result.deadline) {
+                throw new Error(result?.message || 'Policy pengumpulan tidak tersedia.');
+            }
+            finalProjectSubmissionPolicy = {
+                manual_open: result.manual_open !== false,
+                deadline: result.deadline,
+                reason: result.reason || (result.open ? 'open' : 'deadline_passed')
+            };
+        } catch (error) {
+            console.warn('Final project submission policy fallback active:', error);
+        }
+        return finalProjectSubmissionPolicy;
+    }
+
+    function getSubmissionDeadlineMs() {
+        const configured = new Date(finalProjectSubmissionPolicy.deadline || '').getTime();
+        return Number.isFinite(configured)
+            ? configured
+            : new Date(FINAL_PROJECT_FALLBACK_DEADLINE).getTime();
+    }
+
     function isSubmissionClosed() {
-        return Date.now() >= DEADLINE_MS;
+        return finalProjectSubmissionPolicy.manual_open === false
+            || Date.now() >= getSubmissionDeadlineMs();
     }
 
     function showSubmissionClosedMessage() {
-        showShowcaseToast('Pengumpulan project telah ditutup pada 24 Agustus 2026 pukul 00.05 WIB.', 'error');
+        if (finalProjectSubmissionPolicy.manual_open === false) {
+            showShowcaseToast('Pengumpulan project sedang ditutup oleh admin.', 'error');
+            return;
+        }
+        const deadlineText = new Intl.DateTimeFormat('id-ID', {
+            dateStyle: 'long',
+            timeStyle: 'short',
+            timeZone: 'Asia/Jakarta'
+        }).format(new Date(getSubmissionDeadlineMs()));
+        showShowcaseToast(`Pengumpulan project telah ditutup pada ${deadlineText} WIB.`, 'error');
     }
 
     function lockSubmissionInterface() {
@@ -379,9 +428,9 @@
 
         const updateTimer = () => {
             const now = Date.now();
-            const diff = DEADLINE_MS - now;
+            const diff = getSubmissionDeadlineMs() - now;
 
-            if (diff <= 0) {
+            if (isSubmissionClosed() || diff <= 0) {
                 lockSubmissionInterface();
                 if (countdownInterval) clearInterval(countdownInterval);
                 return;
@@ -543,7 +592,7 @@
                         method: 'POST',
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                         body: JSON.stringify({
-                            action: 'getFinalProjects',
+                            action: 'getParticipantFinalProjects',
                             participantToken: session.token || ''
                         })
                     });
@@ -1425,7 +1474,7 @@
         }
 
         const session = getSession();
-        if (!session.nik) {
+        if (!session.nik || !session.token) {
             showShowcaseToast('Sesi tidak valid, silakan login ulang.', 'error');
             return;
         }
@@ -1436,7 +1485,7 @@
             async () => {
                 showShowcaseToast('Menghapus project tim...', 'info');
                 try {
-                    await fetch('/__gas', {
+                    const response = await fetch('/__gas', {
                         method: 'POST',
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                         body: JSON.stringify({
@@ -1446,20 +1495,30 @@
                             team_id: projectId
                         })
                     });
-                } catch (err) {
-                    // Continue with local removal
-                }
+                    const result = await response.json().catch(() => ({}));
+                    if (!response.ok || result?.status !== 'success') {
+                        throw new Error(result?.message || 'Database tidak mengonfirmasi penghapusan project.');
+                    }
+                    if (String(result.deleted_project_id || '') !== String(projectId)) {
+                        throw new Error('Acknowledgment penghapusan tidak sesuai dengan project target.');
+                    }
 
-                cachedProjects = cachedProjects.filter(p => p.project_id !== projectId && p.team_id !== projectId);
-                localStorage.setItem('herai_submitted_projects', JSON.stringify(cachedProjects));
-                
-                showShowcaseToast('Project tim berhasil dihapus dari pameran Showcase.', 'success');
-                window.closeShowcaseModal();
-                
-                const btnBack = document.getElementById('btnBackToGallery');
-                if (btnBack) btnBack.click();
-                
-                applyFiltersAndRender();
+                    cachedProjects = cachedProjects.filter(p => p.project_id !== projectId && p.team_id !== projectId);
+                    safeSaveProjectsToStorage(cachedProjects);
+
+                    showShowcaseToast(result.already_absent
+                        ? 'Project tim sudah tidak ada di database.'
+                        : 'Project tim berhasil dihapus dari pameran Showcase.', 'success');
+                    window.closeShowcaseModal();
+
+                    const btnBack = document.getElementById('btnBackToGallery');
+                    if (btnBack) btnBack.click();
+
+                    applyFiltersAndRender();
+                } catch (err) {
+                    console.error('Delete project failed:', err);
+                    showShowcaseToast(`Project belum dihapus. ${err?.message || 'Silakan coba lagi.'}`, 'error');
+                }
             }
         );
     }

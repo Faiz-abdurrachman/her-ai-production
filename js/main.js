@@ -48,6 +48,8 @@
         announcementLaunchAt: '',
         participantPortalOpen: false,
         competencyTestOpen: false,
+        finalProjectSubmissionOpen: true,
+        finalProjectSubmissionDeadline: '2026-08-24T00:05:00+07:00',
         maintenanceMode: false,
         registrationClosedMessage: 'Pendaftaran HerAI Fellowship Batch 1 (2026) telah resmi ditutup.',
         twibbonUrl: '#/twibbon',

@@ -11,7 +11,7 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
-const HERAI_BACKEND_VERSION = '2026.3.12-overall-course-progress';
+const HERAI_BACKEND_VERSION = '2026.8.26-final-project-integrity';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
 const PARTICIPANT_ACCOUNT_TYPE = 'participant';
 const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
@@ -30,6 +30,7 @@ const AUTH_TOKEN_TTL_SECONDS = {
   participant: 12 * 60 * 60,
   retest: 4 * 60 * 60
 };
+const FINAL_PROJECT_SUBMISSION_FALLBACK_DEADLINE = '2026-08-24T00:05:00+07:00';
 const ACTIVE_FOUNDATION_MODULE_IDS = [
   'ai-fundamentals',
   'python-untuk-ai',
@@ -330,7 +331,7 @@ function doPost(e) {
       updateAdmin: () => updateByKey(SHEETS.admins, 'id_admin', payload.id_admin || payload.adminId, normalizeAdmin(payload)),
       deleteAdmin: () => deleteByKey(SHEETS.admins, 'id_admin', payload.id_admin || payload.adminId),
       getSettings: () => ({ status: 'success', settings: getSettingsObject() }),
-      saveSettings: () => saveSettingsObject(payload.settings || {}),
+      saveSettings: () => saveSettingsObject(payload.settings || {}, payload.__adminAuth),
       getStages: () => ({ status: 'success', data: getRows(SHEETS.stages) }),
       saveStage: () => upsertByKey(SHEETS.stages, 'stage_id', payload.stage_id, payload),
       getBootcampSessions: () => ({ status: 'success', data: getRows(SHEETS.bootcamp) }),
@@ -356,14 +357,10 @@ function doPost(e) {
         return { status: 'success', data: projects, projects };
       },
       getPublicFinalProjects: () => getPublicFinalProjects(),
+      getParticipantFinalProjects: () => getParticipantFinalProjects(payload),
+      getFinalProjectSubmissionPolicy: () => getFinalProjectSubmissionPolicy(),
       submitFinalProject: () => submitFinalProject(payload),
-      deleteFinalProject: () => {
-        const projectId = payload.project_id || payload.team_id;
-        if (!projectId) throw new Error('ID proyek tidak valid');
-        deleteByKey(SHEETS.projects, 'project_id', projectId);
-        deleteByKey(SHEETS.projects, 'team_id', projectId);
-        return { status: 'success', message: 'Proyek berhasil dihapus', projects: getRows(SHEETS.projects) };
-      },
+      deleteFinalProject: () => deleteFinalProject(payload),
       saveFinalProject: () => upsertByKey(SHEETS.projects, 'team_id', payload.team_id, payload),
       getCertificates: () => ({ status: 'success', data: getRows(SHEETS.certificates) }),
       generateCertificates: () => generateCertificates(),
@@ -399,8 +396,8 @@ function authorizeGasAction(action, payload) {
     'getCompetencyQuestions',
     'login',
     'getSettings',
-    'getFinalProjects',
-    'getPublicFinalProjects'
+    'getPublicFinalProjects',
+    'getFinalProjectSubmissionPolicy'
   ];
   if (publicActions.indexOf(action) >= 0) return;
 
@@ -431,12 +428,13 @@ function authorizeGasAction(action, payload) {
     'submitReTest',
     'submitFinalProject',
     'deleteFinalProject',
+    'getParticipantFinalProjects',
     'heartbeatPresence'
   ];
   if (participantActions.indexOf(action) >= 0) {
     const claims = requireParticipantToken(payload);
     const retestActions = ['startReTestSession', 'heartbeatReTestSession', 'saveReTestAnswer', 'submitReTest'];
-    const normalActions = ['updateParticipantProfile', 'uploadParticipantPhoto', 'removeParticipantPhoto', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'saveParticipantExerciseDraft', 'submitParticipantExercise', 'getParticipantExerciseSubmissions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest', 'submitFinalProject', 'deleteFinalProject'];
+    const normalActions = ['updateParticipantProfile', 'uploadParticipantPhoto', 'removeParticipantPhoto', 'changeParticipantPassword', 'saveParticipantProgress', 'getParticipantProgress', 'saveParticipantDiscussion', 'getParticipantDiscussions', 'saveParticipantExerciseDraft', 'submitParticipantExercise', 'getParticipantExerciseSubmissions', 'recordParticipantActivity', 'getParticipantDashboardData', 'startCompetencySession', 'heartbeatCompetencySession', 'saveCompetencyAnswer', 'submitCompetencyTest', 'submitFinalProject', 'deleteFinalProject', 'getParticipantFinalProjects'];
     if (retestActions.indexOf(action) >= 0 && claims.scope !== 'retest') {
       throw new Error('Sesi Re-Test tidak valid. Silakan login ulang.');
     }
@@ -4570,6 +4568,101 @@ function updateCompetencyDecision(payload) {
   return { status: 'success', participant: stripSensitiveParticipant(findParticipantByNik(nik)) };
 }
 
+function getFinalProjectSubmissionPolicy(nowMs) {
+  const settings = getSettingsObject();
+  const configuredDeadline = String(settings.finalProjectSubmissionDeadline || '').trim();
+  const configuredDeadlineMs = new Date(configuredDeadline).getTime();
+  const fallbackDeadlineMs = new Date(FINAL_PROJECT_SUBMISSION_FALLBACK_DEADLINE).getTime();
+  const deadlineMs = Number.isFinite(configuredDeadlineMs) ? configuredDeadlineMs : fallbackDeadlineMs;
+  const deadline = Number.isFinite(configuredDeadlineMs)
+    ? configuredDeadline
+    : FINAL_PROJECT_SUBMISSION_FALLBACK_DEADLINE;
+  const manualOpen = settings.finalProjectSubmissionOpen !== false;
+  const currentTimeMs = Number.isFinite(Number(nowMs)) ? Number(nowMs) : Date.now();
+  const deadlinePassed = currentTimeMs >= deadlineMs;
+  const open = manualOpen && !deadlinePassed;
+
+  return {
+    status: 'success',
+    open,
+    manual_open: manualOpen,
+    deadline,
+    reason: !manualOpen ? 'manually_closed' : deadlinePassed ? 'deadline_passed' : 'open',
+    server_time: new Date(currentTimeMs).toISOString()
+  };
+}
+
+function requireFinalProjectSubmissionOpen() {
+  const policy = getFinalProjectSubmissionPolicy();
+  if (!policy.open) {
+    const message = policy.reason === 'manually_closed'
+      ? 'Pengumpulan project sedang ditutup oleh admin.'
+      : 'Batas waktu pengumpulan project telah berakhir.';
+    throw new Error(message);
+  }
+  return policy;
+}
+
+function canonicalFinalProjectTeamId(teamName) {
+  return String(teamName || '').toLowerCase().replace(/[^a-z0-9]/g, '_');
+}
+
+function resolveAuthenticatedFinalProjectTeam(payload) {
+  const claims = payload.__auth || requireParticipantToken(payload);
+  const account = findParticipantAccount(claims.sub);
+  const teamName = String(account && account.team_name || '').trim();
+  const teamId = canonicalFinalProjectTeamId(teamName);
+  if (!account || !account.account_id || !teamName || !teamId) {
+    throw new Error('Tim peserta belum terdaftar. Hubungi admin sebelum mengelola project.');
+  }
+  return { nik: String(claims.sub || ''), team_id: teamId, team_name: teamName };
+}
+
+function assertFinalProjectTargetOwnership(payload, identity) {
+  [payload.project_id, payload.team_id].filter(function(value) {
+    return String(value || '').trim() !== '';
+  }).forEach(function(value) {
+    if (String(value) !== identity.team_id) {
+      throw new Error('Project target tidak sesuai dengan tim pada sesi peserta.');
+    }
+  });
+}
+
+function findFinalProjectForTeam(projects, identity) {
+  return (projects || []).find(function(project) {
+    return String(project.project_id || '') === identity.team_id
+      || String(project.team_id || '') === identity.team_id;
+  }) || null;
+}
+
+function serializePublicFinalProject(project) {
+  return {
+    project_id: sanitizePublicProjectText(project.project_id, 120),
+    team_id: sanitizePublicProjectText(project.team_id, 120),
+    team_name: sanitizePublicProjectText(project.team_name, 160),
+    title: sanitizePublicProjectText(project.project_title || project.title, 240),
+    tagline: sanitizePublicProjectText(project.tagline, 320),
+    cover_url: sanitizePublicProjectUrl(project.cover_url),
+    track: sanitizePublicProjectText(project.track, 120),
+    tech_stack: sanitizePublicProjectText(project.tech_stack, 500),
+    problem: sanitizePublicProjectText(project.problem || project.overview, 4000),
+    solution: sanitizePublicProjectText(project.solution || project.details, 6000),
+    deck_url: sanitizePublicProjectUrl(project.deck_url),
+    repo_url: sanitizePublicProjectUrl(project.repo_url),
+    demo_url: sanitizePublicProjectUrl(project.demo_url),
+    submitted_at: sanitizePublicProjectText(project.submitted_at, 80)
+  };
+}
+
+function serializeParticipantFinalProject(project) {
+  if (!project) return null;
+  return Object.assign({}, serializePublicFinalProject(project), {
+    status: sanitizePublicProjectText(project.status || 'submitted', 40),
+    deck_file_name: sanitizePublicProjectText(project.deck_file_name, 240),
+    is_own_project: true
+  });
+}
+
 function getPublicFinalProjects() {
   const publicStatuses = ['submitted', 'published'];
   const projects = getRows(SHEETS.projects)
@@ -4578,24 +4671,7 @@ function getPublicFinalProjects() {
       const title = String(project.project_title || project.title || '').trim();
       return title && publicStatuses.indexOf(status) >= 0;
     })
-    .map(function(project) {
-      return {
-        project_id: sanitizePublicProjectText(project.project_id, 120),
-        team_id: sanitizePublicProjectText(project.team_id, 120),
-        team_name: sanitizePublicProjectText(project.team_name, 160),
-        title: sanitizePublicProjectText(project.project_title || project.title, 240),
-        tagline: sanitizePublicProjectText(project.tagline, 320),
-        cover_url: sanitizePublicProjectUrl(project.cover_url),
-        track: sanitizePublicProjectText(project.track, 120),
-        tech_stack: sanitizePublicProjectText(project.tech_stack, 500),
-        problem: sanitizePublicProjectText(project.problem || project.overview, 4000),
-        solution: sanitizePublicProjectText(project.solution || project.details, 6000),
-        deck_url: sanitizePublicProjectUrl(project.deck_url),
-        repo_url: sanitizePublicProjectUrl(project.repo_url),
-        demo_url: sanitizePublicProjectUrl(project.demo_url),
-        submitted_at: sanitizePublicProjectText(project.submitted_at, 80)
-      };
-    });
+    .map(serializePublicFinalProject);
 
   return {
     status: 'success',
@@ -4618,9 +4694,89 @@ function sanitizePublicProjectUrl(value) {
   return url.slice(0, 2048);
 }
 
+function sanitizeFinalProjectUrl(value) {
+  const url = String(value || '').trim();
+  if (!/^https?:\/\//i.test(url)) return '';
+  if (/^[^\s]+$/i.test(url) === false) return '';
+  return url.slice(0, 2048);
+}
+
+function resolveFinalProjectSubmissionTimestamp(value, nowMs) {
+  const currentTimeMs = Number.isFinite(Number(nowMs)) ? Number(nowMs) : Date.now();
+  const requestedTimeMs = new Date(String(value || '')).getTime();
+  const maxClockSkewMs = 10 * 60 * 1000;
+  if (Number.isFinite(requestedTimeMs) && Math.abs(currentTimeMs - requestedTimeMs) <= maxClockSkewMs) {
+    return new Date(requestedTimeMs).toISOString();
+  }
+  return new Date(currentTimeMs).toISOString();
+}
+
+function getParticipantFinalProjects(payload) {
+  const identity = resolveAuthenticatedFinalProjectTeam(payload);
+  const allProjects = getRows(SHEETS.projects);
+  const ownProject = findFinalProjectForTeam(allProjects, identity);
+  const ownProjectForClient = serializeParticipantFinalProject(ownProject);
+  const publicProjects = getPublicFinalProjects().data;
+  const data = ownProjectForClient
+    ? [ownProjectForClient].concat(publicProjects.filter(function(project) {
+        return project.project_id !== ownProjectForClient.project_id
+          && project.team_id !== ownProjectForClient.team_id;
+      }))
+    : publicProjects;
+
+  return {
+    status: 'success',
+    data,
+    project: ownProjectForClient,
+    count: data.length
+  };
+}
+
+function deleteFinalProject(payload) {
+  requireFinalProjectSubmissionOpen();
+  const identity = resolveAuthenticatedFinalProjectTeam(payload);
+  assertFinalProjectTargetOwnership(payload, identity);
+  const existingProject = findFinalProjectForTeam(getRows(SHEETS.projects), identity);
+
+  if (!existingProject) {
+    return {
+      status: 'success',
+      deleted: false,
+      already_absent: true,
+      deleted_project_id: identity.team_id,
+      message: 'Project tim sudah tidak ada di database.'
+    };
+  }
+
+  const deleteKey = existingProject.project_id ? 'project_id' : 'team_id';
+  const deleteValue = existingProject.project_id || existingProject.team_id;
+  const deletion = deleteByKey(SHEETS.projects, deleteKey, deleteValue);
+  if (!deletion || deletion.status !== 'success') {
+    throw new Error(deletion && deletion.message || 'Database tidak mengonfirmasi penghapusan project.');
+  }
+
+  const remainingProject = findFinalProjectForTeam(getRows(SHEETS.projects), identity);
+  if (remainingProject) {
+    throw new Error('Project masih ditemukan setelah permintaan hapus. Silakan coba lagi.');
+  }
+
+  return {
+    status: 'success',
+    deleted: true,
+    already_absent: false,
+    deleted_project_id: String(deleteValue),
+    message: 'Project berhasil dihapus dari database.'
+  };
+}
+
 function submitFinalProject(payload) {
-  const projectId = payload.project_id || `fp_${Date.now()}`;
-  const existingProject = getRows(SHEETS.projects).find(row => String(row.project_id || '') === String(projectId)) || {};
+  requireFinalProjectSubmissionOpen();
+  const identity = resolveAuthenticatedFinalProjectTeam(payload);
+  assertFinalProjectTargetOwnership(payload, identity);
+  const projectId = identity.team_id;
+  const existingProject = findFinalProjectForTeam(getRows(SHEETS.projects), identity) || {};
+  const title = sanitizePublicProjectText(payload.title || payload.project_title, 240);
+  if (!title) throw new Error('Judul project wajib diisi.');
 
   const rawCoverUrl = String(payload.cover_url || payload.coverUrl || existingProject.cover_url || '');
   let finalCoverUrl = rawCoverUrl;
@@ -4629,7 +4785,7 @@ function submitFinalProject(payload) {
     try {
       const mimeType = rawCoverUrl.substring(rawCoverUrl.indexOf(':') + 1, rawCoverUrl.indexOf(';')) || 'image/png';
       const ext = mimeType.split('/')[1] || 'png';
-      const filename = `Cover_${payload.team_id || projectId}_${new Date().getTime()}.${ext}`;
+      const filename = `Cover_${projectId}_${new Date().getTime()}.${ext}`;
       finalCoverUrl = saveBase64ToDrive(rawCoverUrl, filename, mimeType, 'thumbnail');
     } catch (e) {
       Logger.log("Error upload drive: " + e.message);
@@ -4645,7 +4801,7 @@ function submitFinalProject(payload) {
     try {
       const mimeType = rawDeckData.substring(rawDeckData.indexOf(':') + 1, rawDeckData.indexOf(';')) || 'application/pdf';
       const ext = mimeType.includes('presentation') || mimeType.includes('powerpoint') ? 'pptx' : 'pdf';
-      const filename = payload.deck_file_name || `Deck_${payload.team_id || projectId}_${new Date().getTime()}.${ext}`;
+      const filename = payload.deck_file_name || `Deck_${projectId}_${new Date().getTime()}.${ext}`;
       finalDeckUrl = saveBase64ToDrive(rawDeckData, filename, mimeType, 'view');
     } catch (e) {
       Logger.log("Error upload deck to drive: " + e.message);
@@ -4655,34 +4811,52 @@ function submitFinalProject(payload) {
     finalDeckUrl = rawDeckData;
   }
 
+  const repoUrl = sanitizeFinalProjectUrl(payload.repoUrl || payload.repo_url);
+  const demoUrl = sanitizeFinalProjectUrl(payload.demoUrl || payload.demo_url);
+  const deckUrl = sanitizeFinalProjectUrl(finalDeckUrl);
+  const coverUrl = sanitizeFinalProjectUrl(finalCoverUrl);
+  if (!repoUrl) throw new Error('Source code URL wajib menggunakan HTTP/HTTPS yang valid.');
+  if (!demoUrl) throw new Error('Live demo URL wajib menggunakan HTTP/HTTPS yang valid.');
+  if (!deckUrl) throw new Error('Pitch deck wajib menggunakan tautan HTTP/HTTPS yang valid.');
+  if (finalCoverUrl && !coverUrl) throw new Error('Cover project wajib menggunakan tautan HTTP/HTTPS yang valid.');
+
+  const submittedAt = resolveFinalProjectSubmissionTimestamp(payload.submittedAt || payload.submitted_at);
+  const existingStatus = String(existingProject.status || '').toLowerCase();
   const project = {
     project_id: projectId,
-    team_id: payload.team_id || projectId,
-    team_name: payload.teamName || payload.team_name || '',
-    title: payload.title || payload.project_title || '',
-    members: payload.members || '',
-    institution: payload.institution || '',
-    track: payload.track || '',
-    project_title: payload.title || payload.project_title || '',
-    tagline: payload.tagline || '',
-    cover_url: finalCoverUrl,
-    tech_stack: payload.tech_stack || '',
-    problem: payload.problem || '',
-    solution: payload.solution || '',
-    mentor: payload.mentor || '',
-    deck_url: finalDeckUrl,
-    deck_file_name: payload.deck_file_name || '',
-    repo_url: payload.repoUrl || payload.repo_url || '',
-    demo_url: payload.demoUrl || payload.demo_url || '',
-    overview: payload.overview || '',
-    details: payload.details || '',
-    score: payload.score || '',
-    status: payload.status || 'submitted',
-    notes: payload.notes || '',
-    submitted_at: payload.submittedAt || payload.submitted_at || new Date().toISOString()
+    team_id: identity.team_id,
+    team_name: identity.team_name,
+    title,
+    members: existingProject.members || '',
+    institution: existingProject.institution || '',
+    track: sanitizePublicProjectText(payload.track, 120),
+    project_title: title,
+    tagline: sanitizePublicProjectText(payload.tagline, 320),
+    cover_url: coverUrl,
+    tech_stack: sanitizePublicProjectText(payload.tech_stack, 500),
+    problem: sanitizePublicProjectText(payload.problem, 4000),
+    solution: sanitizePublicProjectText(payload.solution, 6000),
+    mentor: existingProject.mentor || '',
+    deck_url: deckUrl,
+    deck_file_name: sanitizePublicProjectText(payload.deck_file_name || existingProject.deck_file_name, 240),
+    repo_url: repoUrl,
+    demo_url: demoUrl,
+    overview: existingProject.overview || '',
+    details: existingProject.details || '',
+    score: existingProject.score || '',
+    status: existingStatus === 'published' ? 'published' : 'submitted',
+    notes: existingProject.notes || '',
+    submitted_at: submittedAt
   };
-  upsertByKey(SHEETS.projects, 'project_id', projectId, project);
-  return { status: 'success', project };
+  const writeResult = upsertByKey(SHEETS.projects, 'project_id', projectId, project);
+  if (!writeResult || writeResult.status !== 'success') {
+    throw new Error(writeResult && writeResult.message || 'Database tidak mengonfirmasi penyimpanan project.');
+  }
+  const persistedProject = findFinalProjectForTeam(getRows(SHEETS.projects), identity);
+  if (!persistedProject || String(persistedProject.submitted_at || '') !== submittedAt) {
+    throw new Error('Read-back project tidak sesuai setelah penyimpanan. Silakan coba lagi.');
+  }
+  return { status: 'success', project: serializeParticipantFinalProject(persistedProject) };
 }
 
 function runAiAnalysis(payload) {
@@ -4890,16 +5064,27 @@ function getSettingsObject() {
   }, {});
 }
 
-function saveSettingsObject(settings) {
-  Object.keys(settings).forEach(key => {
-    upsertByKey(SHEETS.settings, 'key', key, {
+function saveSettingsObject(settings, adminAuth) {
+  const updatedBy = String(adminAuth && adminAuth.sub || 'admin');
+  const keys = Object.keys(settings);
+  keys.forEach(key => {
+    const writeResult = upsertByKey(SHEETS.settings, 'key', key, {
       key,
       value: JSON.stringify(settings[key]),
       updated_at: new Date().toISOString(),
-      updated_by: 'dashboard'
+      updated_by: updatedBy
     });
+    if (!writeResult || writeResult.status !== 'success') {
+      throw new Error(writeResult && writeResult.message || `Setting ${key} belum tersimpan.`);
+    }
   });
-  return { status: 'success', settings };
+  const persistedSettings = getSettingsObject();
+  keys.forEach(function(key) {
+    if (JSON.stringify(persistedSettings[key]) !== JSON.stringify(settings[key])) {
+      throw new Error(`Read-back setting ${key} tidak sesuai.`);
+    }
+  });
+  return { status: 'success', settings: persistedSettings };
 }
 
 function getRows(sheetName) {
