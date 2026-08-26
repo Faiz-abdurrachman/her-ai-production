@@ -1599,6 +1599,28 @@
            setSettingsStatus('Ada perubahan yang belum diterapkan.', 'warning');
        }
 
+       function renderPublicAccessStatus() {
+           const items = [
+               { input: fields.registrationOpen, chipId: 'registrationStatusChip' },
+               { input: fields.afirmasiOpen, chipId: 'affirmationStatusChip' },
+               { input: fields.announcementLive, chipId: 'announcementStatusChip' }
+           ];
+
+           items.forEach(({ input, chipId }) => {
+               if (!input) return;
+               const active = !!input.checked;
+               const chip = document.getElementById(chipId);
+               const chipState = chip?.querySelector('em');
+               const switchState = document.querySelector(`[data-switch-state="${input.id}"]`);
+               chip?.classList.toggle('is-off', !active);
+               if (chipState) chipState.textContent = active ? 'Aktif' : 'Nonaktif';
+               if (switchState) {
+                   switchState.textContent = active ? 'Aktif' : 'Nonaktif';
+                   switchState.classList.toggle('is-off', !active);
+               }
+           });
+       }
+
        function toJakartaDateTimeLocal(value) {
            const date = new Date(value || defaultFinalProjectDeadline);
            if (Number.isNaN(date.getTime())) return '2026-08-24T00:05';
@@ -1683,6 +1705,7 @@
                const key = input.getAttribute('data-participant-page-toggle');
                input.checked = participantPages[key] !== false;
            });
+           renderPublicAccessStatus();
            renderFinalProjectPolicyPreview();
        }
 
@@ -1721,6 +1744,9 @@
        isHydratingSettings = false;
        fields.finalProjectSubmissionOpen?.addEventListener('change', renderFinalProjectPolicyPreview);
        fields.finalProjectSubmissionDeadline?.addEventListener('input', renderFinalProjectPolicyPreview);
+       [fields.registrationOpen, fields.afirmasiOpen, fields.announcementLive].forEach(input => {
+           input?.addEventListener('change', renderPublicAccessStatus);
+       });
        settingsForm?.addEventListener('input', markSettingsDirty);
        settingsForm?.addEventListener('change', markSettingsDirty);
 
