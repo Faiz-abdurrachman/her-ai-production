@@ -361,7 +361,7 @@ const router = {
         "/final-project": "/pages/dashboard/final-project.html",
         "/certificates": "/pages/dashboard/certificates.html",
         "/audit-trail": "/pages/dashboard/audit-trail.html",
-        "/global-settings": "/pages/dashboard/global-settings.html?v=20260827-admin-settings-luxury-v3",
+        "/global-settings": "/pages/dashboard/global-settings.html?v=20260827-admin-settings-glass-v4",
         "/learning-content": "/pages/dashboard/learning-content.html",
         "/rbac": "/pages/dashboard/rbac.html",
         "/assets": "/pages/dashboard/assets.html",

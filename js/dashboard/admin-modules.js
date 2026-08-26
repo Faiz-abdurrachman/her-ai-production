@@ -1584,6 +1584,9 @@
        const statusText = document.getElementById('globalSettingsStatus');
        const btnSave = document.getElementById('btnSaveGlobalSettings');
        const finalProjectPolicyPreview = document.getElementById('finalProjectSubmissionPolicyPreview');
+       const announcementLaunchControl = document.getElementById('announcementLaunchControl');
+       const announcementDatePreview = document.getElementById('announcementDatePreview');
+       const announcementTimePreview = document.getElementById('announcementTimePreview');
        const defaultFinalProjectDeadline = '2026-08-24T00:05:00+07:00';
        let isHydratingSettings = true;
 
@@ -1643,6 +1646,38 @@
            const localValue = String(value || '').trim();
            if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(localValue)) return '';
            return `${localValue}:00+07:00`;
+       }
+
+       function renderAnnouncementLaunchPreview() {
+           const localValue = String(fields.announcementLaunchAt?.value || '').trim();
+           const match = localValue.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/);
+           const hasValidValue = !!match;
+           announcementLaunchControl?.classList.toggle('is-empty', !hasValidValue);
+
+           if (!hasValidValue) {
+               if (announcementDatePreview) announcementDatePreview.textContent = 'Pilih tanggal';
+               if (announcementTimePreview) announcementTimePreview.textContent = 'Pilih waktu';
+               return;
+           }
+
+           const [, year, month, day, hour, minute] = match;
+           const jakartaDate = new Date(`${year}-${month}-${day}T${hour}:${minute}:00+07:00`);
+           if (Number.isNaN(jakartaDate.getTime())) {
+               announcementLaunchControl?.classList.add('is-empty');
+               if (announcementDatePreview) announcementDatePreview.textContent = 'Pilih tanggal';
+               if (announcementTimePreview) announcementTimePreview.textContent = 'Pilih waktu';
+               return;
+           }
+
+           if (announcementDatePreview) {
+               announcementDatePreview.textContent = new Intl.DateTimeFormat('id-ID', {
+                   day: 'numeric',
+                   month: 'long',
+                   year: 'numeric',
+                   timeZone: 'Asia/Jakarta'
+               }).format(jakartaDate);
+           }
+           if (announcementTimePreview) announcementTimePreview.textContent = `${hour}.${minute}`;
        }
 
        function renderFinalProjectPolicyPreview() {
@@ -1706,6 +1741,7 @@
                input.checked = participantPages[key] !== false;
            });
            renderPublicAccessStatus();
+           renderAnnouncementLaunchPreview();
            renderFinalProjectPolicyPreview();
        }
 
@@ -1744,6 +1780,25 @@
        isHydratingSettings = false;
        fields.finalProjectSubmissionOpen?.addEventListener('change', renderFinalProjectPolicyPreview);
        fields.finalProjectSubmissionDeadline?.addEventListener('input', renderFinalProjectPolicyPreview);
+       fields.announcementLaunchAt?.addEventListener('input', renderAnnouncementLaunchPreview);
+       fields.announcementLaunchAt?.addEventListener('change', renderAnnouncementLaunchPreview);
+       fields.announcementLaunchAt?.addEventListener('click', () => {
+           if (typeof fields.announcementLaunchAt.showPicker !== 'function') return;
+           try {
+               fields.announcementLaunchAt.showPicker();
+           } catch (_) {
+               // Native input remains usable when a browser blocks programmatic picker opening.
+           }
+       });
+       fields.announcementLaunchAt?.addEventListener('keydown', event => {
+           if (!['Enter', ' '].includes(event.key) || typeof fields.announcementLaunchAt.showPicker !== 'function') return;
+           event.preventDefault();
+           try {
+               fields.announcementLaunchAt.showPicker();
+           } catch (_) {
+               // Keep the native keyboard behavior as the fallback.
+           }
+       });
        [fields.registrationOpen, fields.afirmasiOpen, fields.announcementLive].forEach(input => {
            input?.addEventListener('change', renderPublicAccessStatus);
        });
