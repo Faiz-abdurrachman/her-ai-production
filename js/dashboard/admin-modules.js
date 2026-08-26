@@ -1580,9 +1580,24 @@
        const participantDashboardEnabled = document.getElementById('toggleFellowDashboard');
        const participantPortalApiUrl = document.getElementById('participantPortalApiUrl');
        const participantPageFields = [...document.querySelectorAll('[data-participant-page-toggle]')];
+       const settingsForm = document.getElementById('globalSettingsForm');
        const statusText = document.getElementById('globalSettingsStatus');
+       const btnSave = document.getElementById('btnSaveGlobalSettings');
        const finalProjectPolicyPreview = document.getElementById('finalProjectSubmissionPolicyPreview');
        const defaultFinalProjectDeadline = '2026-08-24T00:05:00+07:00';
+       let isHydratingSettings = true;
+
+       function setSettingsStatus(message, state = 'neutral') {
+           if (!statusText) return;
+           statusText.textContent = message;
+           statusText.dataset.state = state;
+       }
+
+       function markSettingsDirty() {
+           if (isHydratingSettings) return;
+           btnSave?.classList.add('is-dirty');
+           setSettingsStatus('Ada perubahan yang belum diterapkan.', 'warning');
+       }
 
        function toJakartaDateTimeLocal(value) {
            const date = new Date(value || defaultFinalProjectDeadline);
@@ -1703,18 +1718,17 @@
        }
 
        await loadSettingsToForm();
+       isHydratingSettings = false;
        fields.finalProjectSubmissionOpen?.addEventListener('change', renderFinalProjectPolicyPreview);
        fields.finalProjectSubmissionDeadline?.addEventListener('input', renderFinalProjectPolicyPreview);
+       settingsForm?.addEventListener('input', markSettingsDirty);
+       settingsForm?.addEventListener('change', markSettingsDirty);
 
-       const btnSave = document.getElementById('btnSaveGlobalSettings');
        if (btnSave) {
            btnSave.onclick = async () => {
                const deadlineValue = fromJakartaDateTimeLocal(fields.finalProjectSubmissionDeadline?.value);
                if (!deadlineValue) {
-                   if (statusText) {
-                       statusText.textContent = 'Deadline Final Project wajib diisi dalam WIB';
-                       statusText.style.color = 'var(--danger)';
-                   }
+                   setSettingsStatus('Deadline Final Project wajib diisi dalam WIB.', 'danger');
                    fields.finalProjectSubmissionDeadline?.focus();
                    renderFinalProjectPolicyPreview();
                    return;
@@ -1739,26 +1753,25 @@
                        localStorage.setItem('heraiParticipantPortalApiUrl', participantPortalApiUrl.value.trim() || 'http://127.0.0.1:8092');
                    }
                    btnSave.innerHTML = '<i class="fas fa-check"></i> Pengaturan Diterapkan';
-                   if (statusText) {
-                       statusText.textContent = `Tersimpan ${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`;
-                       statusText.style.color = settings.maintenanceMode ? 'var(--danger)' : 'var(--success)';
-                   }
+                   btnSave.classList.remove('is-dirty');
+                   setSettingsStatus(
+                       `Tersimpan ${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`,
+                       settings.maintenanceMode ? 'danger' : 'success'
+                   );
                    if (typeof window.applyPublicVisibilitySettings === 'function') {
                        window.applyPublicVisibilitySettings(settings);
                    }
                    renderFinalProjectPolicyPreview();
                    setTimeout(() => {
-                       btnSave.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Terapkan Pengaturan Global';
+                       btnSave.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Terapkan Pengaturan';
                    }, 2000);
                } catch (e) {
                    console.error('Gagal menyimpan settings ke server:', e);
                    btnSave.innerHTML = '<i class="fas fa-triangle-exclamation"></i> Gagal Menerapkan';
-                   if (statusText) {
-                       statusText.textContent = e.message || 'Pengaturan belum tersimpan';
-                       statusText.style.color = 'var(--danger)';
-                   }
+                   btnSave.classList.add('is-dirty');
+                   setSettingsStatus(e.message || 'Pengaturan belum tersimpan.', 'danger');
                    setTimeout(() => {
-                       btnSave.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Terapkan Pengaturan Global';
+                       btnSave.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Terapkan Pengaturan';
                    }, 2500);
                } finally {
                    btnSave.disabled = false;
@@ -1772,10 +1785,8 @@
                window.resetGlobalSettings();
                localStorage.removeItem('heraiParticipantPortalSettings');
                loadSettingsToForm();
-               if (statusText) {
-                   statusText.textContent = 'Cache pengaturan direset';
-                   statusText.style.color = 'var(--warning)';
-               }
+               btnSave?.classList.add('is-dirty');
+               setSettingsStatus('Cache lokal direset. Terapkan jika ingin menyimpan perubahan.', 'warning');
                window.logAdminActivity("Melakukan reset cache Global Settings");
            };
        }

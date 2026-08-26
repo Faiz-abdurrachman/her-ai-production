@@ -1,388 +1,215 @@
 <div class="dashboard-layout">
-
     <div id="sidebar-container"></div>
 
-    <main class="main-content">
-
-        <header class="topbar">
+    <main class="main-content global-settings-page">
+        <header class="topbar global-settings-topbar">
             <div class="topbar-left">
+                <span class="gs-eyebrow"><i class="fas fa-sliders"></i> System control</span>
                 <h1 class="page-title">Global Settings</h1>
-                <p class="page-subtitle">Kontrol utama visibilitas platform dan status pendaftaran</p>
+                <p class="page-subtitle">Atur akses, pengalaman peserta, dan kontrol program dari satu pusat kendali.</p>
             </div>
             <div class="topbar-right">
-                <div class="admin-profile" style="border-color: var(--danger);">
-                    <div class="admin-info">
-                        <h4>System Admin</h4>
-                        <p style="color: var(--danger);">Root Access</p>
-                    </div>
-                    <div class="admin-avatar" style="background: rgba(230, 57, 70, 0.1); color: var(--danger);">
-                        <i class="fas fa-power-off"></i>
-                    </div>
+                <div class="admin-profile gs-admin-profile">
+                    <div class="admin-info"><h4>System Admin</h4><p>Root Access</p></div>
+                    <div class="admin-avatar"><i class="fas fa-shield-halved"></i></div>
                 </div>
             </div>
         </header>
 
-        <div style="background: rgba(255, 206, 32, 0.1); border-left: 4px solid var(--warning); padding: 15px 20px; border-radius: 8px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px;">
-            <i class="fas fa-exclamation-triangle" style="color: var(--warning); font-size: 1.5rem;"></i>
-            <div>
-                <h4 style="margin: 0; color: var(--dark-purple); font-size: 0.95rem;">Area Kritis / Root Access</h4>
-                <p style="margin: 3px 0 0 0; font-size: 0.85rem; color: var(--text-muted);">Perubahan pada halaman ini akan langsung berdampak pada halaman publik yang diakses oleh user.</p>
-            </div>
-        </div>
-
-        <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px;">
-
-            <div class="glass-panel" style="padding: 30px;">
-                <h3 style="display: flex; align-items: center; gap: 10px; color: var(--dark-purple); border-bottom: 1px solid var(--gray-border); padding-bottom: 15px; margin-top: 0;">
-                    <i class="fas fa-door-open" style="color: var(--icon-blue);"></i> Kontrol Pendaftaran
-                </h3>
-
-                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 25px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div>
-                            <h4 style="margin: 0 0 5px 0; color: var(--text-dark);">Status Pendaftaran</h4>
-                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); max-width: 250px;">Buka atau tutup form pendaftaran di halaman `/register`.</p>
-                        </div>
-                        <label class="master-switch">
-                            <input type="checkbox" checked id="toggleRegis">
-                            <span class="slider-master"></span>
-                        </label>
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div>
-                            <h4 style="margin: 0 0 5px 0; color: var(--text-dark);">Jalur Afirmasi 3T</h4>
-                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); max-width: 250px;">Matikan jika kuota afirmasi sudah terpenuhi lebih dulu.</p>
-                        </div>
-                        <label class="master-switch">
-                            <input type="checkbox" checked id="toggleAfirmasi">
-                            <span class="slider-master"></span>
-                        </label>
-                    </div>
-
-                    <div>
-                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Pesan Penutupan Pendaftaran</label>
-                        <textarea id="msgRegisClosed" rows="3" style="width: 100%; padding: 12px; border: 1px solid var(--gray-border); border-radius: 8px; font-family: 'Inter', sans-serif; outline: none; background: #f8fafc;" placeholder="Contoh: Maaf, kuota HerAI Fellowship 2026 telah terpenuhi.">Pendaftaran HerAI Fellowship Batch 1 (2026) telah resmi ditutup.</textarea>
-                    </div>
+        <section class="gs-hero" aria-labelledby="gsHeroTitle">
+            <div class="gs-hero-copy">
+                <span class="gs-hero-icon" aria-hidden="true"><i class="fas fa-cogs"></i></span>
+                <div>
+                    <span class="gs-kicker">Operational console</span>
+                    <h2 id="gsHeroTitle">Kendalikan status platform dengan jelas dan aman.</h2>
+                    <p>Setiap perubahan baru dianggap aktif setelah backend memberikan konfirmasi penyimpanan.</p>
                 </div>
             </div>
-
-            <div class="glass-panel" style="padding: 30px;">
-                <h3 style="display: flex; align-items: center; gap: 10px; color: var(--dark-purple); border-bottom: 1px solid var(--gray-border); padding-bottom: 15px; margin-top: 0;">
-                    <i class="fas fa-bullhorn" style="color: var(--primary-pink);"></i> Halaman Pengumuman
-                </h3>
-
-                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 25px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div>
-                            <h4 style="margin: 0 0 5px 0; color: var(--text-dark);">Live Pengumuman Tahap 1</h4>
-                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); max-width: 250px;">Buka akses peserta untuk mengecek hasil seleksi (NIK Checker).</p>
-                        </div>
-                        <label class="master-switch">
-                            <input type="checkbox" id="togglePengumuman"> <span class="slider-master"></span>
-                        </label>
-                    </div>
-
-                    <div>
-                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">URL Generator Twibbon</label>
-                        <input type="text" id="urlTwibbon" value="#/twibbon" style="width: 100%; padding: 12px; border: 1px solid var(--gray-border); border-radius: 8px; font-family: 'Inter', sans-serif; outline: none; background: #f8fafc;">
-                    </div>
-
-                    <div>
-                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Jadwal Buka Pengumuman Otomatis</label>
-                        <input type="datetime-local" id="announcementLaunchAt" style="width: 100%; padding: 12px; border: 1px solid var(--gray-border); border-radius: 8px; font-family: 'Inter', sans-serif; outline: none; background: #f8fafc;">
-                        <p style="margin: 8px 0 0; font-size: 0.8rem; color: var(--text-muted);">Jika diisi, halaman pengumuman akan menampilkan countdown dan otomatis terbuka saat waktunya tiba.</p>
-                    </div>
-
-                    <div>
-                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Notifikasi Tambahan (Peserta Lolos)</label>
-                        <input type="text" id="msgLolosInfo" value="Harap periksa email Anda untuk undangan grup Telegram." style="width: 100%; padding: 12px; border: 1px solid var(--gray-border); border-radius: 8px; font-family: 'Inter', sans-serif; outline: none; background: #f8fafc;">
-                    </div>
-                </div>
+            <div class="gs-hero-meta" aria-label="Informasi operasional">
+                <span><i class="fas fa-clock"></i> Zona waktu WIB</span>
+                <span><i class="fas fa-database"></i> Backend acknowledged</span>
             </div>
-
-            <div class="glass-panel" style="padding: 30px;">
-                <h3 style="display: flex; align-items: center; gap: 10px; color: var(--dark-purple); border-bottom: 1px solid var(--gray-border); padding-bottom: 15px; margin-top: 0;">
-                    <i class="fas fa-user-lock" style="color: var(--icon-purple);"></i> Portal Profil Peserta
-                </h3>
-
-                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 25px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div>
-                            <h4 style="margin: 0 0 5px 0; color: var(--text-dark);">Tampilkan Login Peserta</h4>
-                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); max-width: 250px;">Aktifkan link `/profile` setelah peserta boleh membuat password dan masuk ke dashboard profil.</p>
-                        </div>
-                        <label class="master-switch">
-                            <input type="checkbox" id="toggleParticipantPortal">
-                            <span class="slider-master"></span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass-panel" style="padding: 30px;">
-                <h3 style="display: flex; align-items: center; gap: 10px; color: var(--dark-purple); border-bottom: 1px solid var(--gray-border); padding-bottom: 15px; margin-top: 0;">
-                    <i class="fas fa-table-columns" style="color: var(--primary-pink);"></i> Dashboard Peserta
-                </h3>
-
-                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 20px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 18px;">
-                        <div>
-                            <h4 style="margin: 0 0 5px 0; color: var(--text-dark);">Aktifkan Dashboard Peserta</h4>
-                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); max-width: 330px;">Master control untuk seluruh halaman peserta seperti Beranda, Modul, Tugas, Proyek, dan Sertifikat.</p>
-                        </div>
-                        <label class="master-switch">
-                            <input type="checkbox" id="toggleFellowDashboard" checked>
-                            <span class="slider-master"></span>
-                        </label>
-                    </div>
-
-                    <div style="background: #f8fafc; border: 1px solid var(--gray-border); border-radius: 14px; padding: 16px;">
-                        <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 14px;">Visibilitas Halaman/Menu Peserta</label>
-                        <div class="participant-page-toggle-grid">
-                            <label><input type="checkbox" data-participant-page-toggle="dashboard" checked> Beranda</label>
-                            <label><input type="checkbox" data-participant-page-toggle="modules" checked> Modul</label>
-                            <label><input type="checkbox" data-participant-page-toggle="chatroom" checked> Chatroom</label>
-                            <label><input type="checkbox" data-participant-page-toggle="mentor" checked> Mentor</label>
-                            <label><input type="checkbox" data-participant-page-toggle="tasks" checked> Tugas</label>
-                            <label><input type="checkbox" data-participant-page-toggle="projects" checked> Proyek</label>
-                            <label><input type="checkbox" data-participant-page-toggle="events" checked> Events</label>
-                            <label><input type="checkbox" data-participant-page-toggle="community" checked> Komunitas</label>
-                            <label><input type="checkbox" data-participant-page-toggle="certificates" checked> Sertifikat</label>
-                            <label><input type="checkbox" data-participant-page-toggle="leaderboard" checked> Leaderboard</label>
-                            <label><input type="checkbox" data-participant-page-toggle="faq" checked> FAQ & Bantuan</label>
-                            <label><input type="checkbox" data-participant-page-toggle="settings" checked> Pengaturan</label>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Participant Portal API URL</label>
-                        <input type="text" id="participantPortalApiUrl" value="http://127.0.0.1:8092" style="width: 100%; padding: 12px; border: 1px solid var(--gray-border); border-radius: 8px; font-family: 'Inter', sans-serif; outline: none; background: #f8fafc;">
-                        <p style="margin: 8px 0 0; font-size: 0.8rem; color: var(--text-muted);">Local default: <code>http://127.0.0.1:8092</code>. Saat deploy, isi dengan URL service Go participant portal.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass-panel" style="padding: 30px;">
-                <h3 style="display: flex; align-items: center; gap: 10px; color: var(--dark-purple); border-bottom: 1px solid var(--gray-border); padding-bottom: 15px; margin-top: 0;">
-                    <i class="fas fa-square-root-variable" style="color: var(--icon-blue);"></i> Seleksi Tahap 2
-                </h3>
-
-                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 25px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div>
-                            <h4 style="margin: 0 0 5px 0; color: var(--text-dark);">Aktifkan Tes Kompetensi</h4>
-                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); max-width: 250px;">Buka akses `/competency-test` untuk peserta yang lolos tahap 1.</p>
-                        </div>
-                        <label class="master-switch">
-                            <input type="checkbox" id="toggleCompetencyTest">
-                            <span class="slider-master"></span>
-                        </label>
-                    </div>
-                    <p style="margin: 0; font-size: 0.82rem; color: var(--text-muted); background: #f8fafc; border: 1px solid var(--gray-border); border-radius: 8px; padding: 12px;">
-                        Jika toggle ini nonaktif, peserta akan melihat halaman terkunci walaupun sudah login profil.
-                    </p>
-                </div>
-            </div>
-
-            <div class="glass-panel final-project-control-panel" style="padding: 30px;">
-                <h3 style="display: flex; align-items: center; gap: 10px; color: var(--dark-purple); border-bottom: 1px solid var(--gray-border); padding-bottom: 15px; margin-top: 0;">
-                    <i class="fas fa-calendar-check" style="color: var(--primary-pink);"></i> Pengumpulan Final Project
-                </h3>
-
-                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 22px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 18px;">
-                        <div>
-                            <h4 style="margin: 0 0 5px 0; color: var(--text-dark);">Izinkan Submit, Edit & Hapus</h4>
-                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); max-width: 310px;">Master control untuk workspace project peserta. Backend tetap menolak mutation setelah deadline.</p>
-                        </div>
-                        <label class="master-switch">
-                            <input type="checkbox" id="toggleFinalProjectSubmission">
-                            <span class="slider-master"></span>
-                        </label>
-                    </div>
-
-                    <div>
-                        <label for="finalProjectSubmissionDeadline" style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Deadline (WIB)</label>
-                        <input type="datetime-local" id="finalProjectSubmissionDeadline" class="final-project-deadline-input">
-                        <p style="margin: 8px 0 0; font-size: 0.8rem; color: var(--text-muted);">Perubahan baru aktif setelah backend mengonfirmasi penyimpanan.</p>
-                    </div>
-
-                    <div id="finalProjectSubmissionPolicyPreview" class="final-project-policy-status" aria-live="polite">
-                        <span class="final-project-policy-dot" aria-hidden="true"></span>
-                        <div>
-                            <strong>Status sedang dimuat</strong>
-                            <small>Menunggu policy dari backend.</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass-panel" style="padding: 30px; border: 1px solid rgba(230,57,70,0.3); background: #fffafb;">
-                <h3 style="display: flex; align-items: center; gap: 10px; color: var(--danger); border-bottom: 1px solid rgba(230,57,70,0.2); padding-bottom: 15px; margin-top: 0;">
-                    <i class="fas fa-radiation"></i> Danger Zone
-                </h3>
-
-                <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 20px;">
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(230,57,70,0.05); border-radius: 8px; border: 1px dashed rgba(230,57,70,0.3);">
-                        <div>
-                            <h4 style="margin: 0 0 5px 0; color: var(--danger);">Maintenance Mode</h4>
-                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Tutup sementara seluruh front-end website.</p>
-                        </div>
-                        <label class="master-switch danger-switch">
-                            <input type="checkbox" id="toggleMaintenance">
-                            <span class="slider-master"></span>
-                        </label>
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-radius: 8px;">
-                        <div>
-                            <h4 style="margin: 0 0 5px 0; color: var(--text-dark);">Reset Cache Sistem</h4>
-                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Paksa perbarui data jika sinkronisasi macet.</p>
-                        </div>
-                        <button class="btn-cyber" id="btnClearGlobalCache" style="background: transparent; border: 1px solid var(--gray-border); color: var(--text-dark); box-shadow: none;">
-                            <i class="fas fa-sync"></i> Clear Cache
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
-            <div style="display: flex; align-items: center; justify-content: flex-end; padding-top: 15px;">
-                <span id="globalSettingsStatus" style="margin-right: 15px; color: var(--text-muted); font-size: 0.9rem; font-weight: 700;"></span>
-                <button class="btn-cyber" id="btnSaveGlobalSettings" style="background: var(--dark-purple); font-size: 1.1rem; padding: 12px 30px;">
-                    <i class="fas fa-cloud-upload-alt"></i> Terapkan Pengaturan Global
-                </button>
-            </div>
-
         </section>
 
+        <aside class="gs-critical-note" aria-label="Peringatan area kritis">
+            <span class="gs-critical-icon" aria-hidden="true"><i class="fas fa-triangle-exclamation"></i></span>
+            <div><strong>Area kritis · Root Access</strong><p>Perubahan di halaman ini dapat langsung memengaruhi akses publik dan workspace peserta.</p></div>
+        </aside>
+
+        <div id="globalSettingsForm" class="gs-content">
+            <section class="gs-group" aria-labelledby="publicAccessHeading">
+                <div class="gs-group-heading">
+                    <span class="gs-group-index">01</span>
+                    <div><span class="gs-kicker">Public access</span><h2 id="publicAccessHeading">Gerbang publik</h2><p>Kontrol titik masuk utama sebelum peserta mengakses program.</p></div>
+                </div>
+
+                <div class="gs-grid gs-grid-two">
+                    <article class="glass-panel gs-card">
+                        <header class="gs-card-header">
+                            <span class="gs-card-icon is-blue"><i class="fas fa-door-open"></i></span>
+                            <div><span class="gs-card-kicker">Registration</span><h3>Kontrol Pendaftaran</h3></div>
+                        </header>
+                        <div class="gs-card-body">
+                            <div class="gs-control-row">
+                                <div><h4>Status Pendaftaran</h4><p>Buka atau tutup form pendaftaran di halaman <code>/register</code>.</p></div>
+                                <label class="master-switch" title="Ubah status pendaftaran"><input type="checkbox" checked id="toggleRegis" aria-label="Buka pendaftaran"><span class="slider-master"></span></label>
+                            </div>
+                            <div class="gs-control-row">
+                                <div><h4>Jalur Afirmasi 3T</h4><p>Matikan ketika kuota afirmasi sudah terpenuhi lebih awal.</p></div>
+                                <label class="master-switch" title="Ubah status jalur afirmasi"><input type="checkbox" checked id="toggleAfirmasi" aria-label="Buka jalur afirmasi 3T"><span class="slider-master"></span></label>
+                            </div>
+                            <div class="gs-field">
+                                <label for="msgRegisClosed">Pesan penutupan pendaftaran</label>
+                                <textarea id="msgRegisClosed" rows="3" placeholder="Contoh: Maaf, kuota HerAI Fellowship 2026 telah terpenuhi.">Pendaftaran HerAI Fellowship Batch 1 (2026) telah resmi ditutup.</textarea>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="glass-panel gs-card">
+                        <header class="gs-card-header">
+                            <span class="gs-card-icon is-pink"><i class="fas fa-bullhorn"></i></span>
+                            <div><span class="gs-card-kicker">Announcement</span><h3>Halaman Pengumuman</h3></div>
+                        </header>
+                        <div class="gs-card-body">
+                            <div class="gs-control-row">
+                                <div><h4>Live Pengumuman Tahap 1</h4><p>Buka akses peserta untuk mengecek hasil seleksi melalui NIK Checker.</p></div>
+                                <label class="master-switch" title="Ubah status pengumuman"><input type="checkbox" id="togglePengumuman" aria-label="Tampilkan pengumuman tahap 1"><span class="slider-master"></span></label>
+                            </div>
+                            <div class="gs-field"><label for="urlTwibbon">URL generator Twibbon</label><input type="text" id="urlTwibbon" value="#/twibbon"></div>
+                            <div class="gs-field"><label for="announcementLaunchAt">Jadwal buka otomatis</label><input type="datetime-local" id="announcementLaunchAt"><small>Halaman menampilkan countdown dan terbuka otomatis saat jadwal tiba.</small></div>
+                            <div class="gs-field"><label for="msgLolosInfo">Notifikasi tambahan peserta lolos</label><input type="text" id="msgLolosInfo" value="Harap periksa email Anda untuk undangan grup Telegram."></div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="gs-group" aria-labelledby="participantHeading">
+                <div class="gs-group-heading">
+                    <span class="gs-group-index">02</span>
+                    <div><span class="gs-kicker">Participant experience</span><h2 id="participantHeading">Akses peserta</h2><p>Atur portal, dashboard, dan tahapan belajar tanpa mengubah hak akses inti.</p></div>
+                </div>
+
+                <div class="gs-participant-layout">
+                    <div class="gs-stack">
+                        <article class="glass-panel gs-card gs-card-compact">
+                            <header class="gs-card-header"><span class="gs-card-icon is-purple"><i class="fas fa-user-lock"></i></span><div><span class="gs-card-kicker">Profile portal</span><h3>Portal Profil Peserta</h3></div></header>
+                            <div class="gs-card-body"><div class="gs-control-row">
+                                <div><h4>Tampilkan Login Peserta</h4><p>Aktifkan <code>/profile</code> setelah peserta boleh membuat password dan masuk.</p></div>
+                                <label class="master-switch" title="Ubah akses portal profil"><input type="checkbox" id="toggleParticipantPortal" aria-label="Tampilkan login peserta"><span class="slider-master"></span></label>
+                            </div></div>
+                        </article>
+
+                        <article class="glass-panel gs-card gs-card-compact">
+                            <header class="gs-card-header"><span class="gs-card-icon is-blue"><i class="fas fa-square-root-variable"></i></span><div><span class="gs-card-kicker">Stage two</span><h3>Seleksi Tahap 2</h3></div></header>
+                            <div class="gs-card-body">
+                                <div class="gs-control-row">
+                                    <div><h4>Aktifkan Tes Kompetensi</h4><p>Buka <code>/competency-test</code> untuk peserta yang lolos tahap pertama.</p></div>
+                                    <label class="master-switch" title="Ubah akses tes kompetensi"><input type="checkbox" id="toggleCompetencyTest" aria-label="Aktifkan tes kompetensi"><span class="slider-master"></span></label>
+                                </div>
+                                <p class="gs-inline-note"><i class="fas fa-lock"></i> Saat nonaktif, halaman tetap terlihat tetapi terkunci untuk peserta.</p>
+                            </div>
+                        </article>
+                    </div>
+
+                    <article class="glass-panel gs-card gs-card-dashboard">
+                        <header class="gs-card-header"><span class="gs-card-icon is-pink"><i class="fas fa-table-columns"></i></span><div><span class="gs-card-kicker">Participant workspace</span><h3>Dashboard Peserta</h3></div></header>
+                        <div class="gs-card-body">
+                            <div class="gs-control-row">
+                                <div><h4>Aktifkan Dashboard Peserta</h4><p>Master control untuk Beranda, Modul, Tugas, Proyek, Sertifikat, dan area peserta lainnya.</p></div>
+                                <label class="master-switch" title="Ubah status dashboard peserta"><input type="checkbox" id="toggleFellowDashboard" checked aria-label="Aktifkan dashboard peserta"><span class="slider-master"></span></label>
+                            </div>
+                            <fieldset class="participant-page-selector">
+                                <legend>Visibilitas halaman dan menu</legend>
+                                <div class="participant-page-toggle-grid">
+                                    <label><input type="checkbox" data-participant-page-toggle="dashboard" checked> Beranda</label>
+                                    <label><input type="checkbox" data-participant-page-toggle="modules" checked> Modul</label>
+                                    <label><input type="checkbox" data-participant-page-toggle="chatroom" checked> Chatroom</label>
+                                    <label><input type="checkbox" data-participant-page-toggle="mentor" checked> Mentor</label>
+                                    <label><input type="checkbox" data-participant-page-toggle="tasks" checked> Tugas</label>
+                                    <label><input type="checkbox" data-participant-page-toggle="projects" checked> Proyek</label>
+                                    <label><input type="checkbox" data-participant-page-toggle="events" checked> Events</label>
+                                    <label><input type="checkbox" data-participant-page-toggle="community" checked> Komunitas</label>
+                                    <label><input type="checkbox" data-participant-page-toggle="certificates" checked> Sertifikat</label>
+                                    <label><input type="checkbox" data-participant-page-toggle="leaderboard" checked> Leaderboard</label>
+                                    <label><input type="checkbox" data-participant-page-toggle="faq" checked> FAQ & Bantuan</label>
+                                    <label><input type="checkbox" data-participant-page-toggle="settings" checked> Pengaturan</label>
+                                </div>
+                            </fieldset>
+                            <div class="gs-field"><label for="participantPortalApiUrl">Participant Portal API URL</label><input type="text" id="participantPortalApiUrl" value="http://127.0.0.1:8092"><small>Local default: <code>http://127.0.0.1:8092</code>. Isi dengan URL service Go saat deployment.</small></div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="gs-group" aria-labelledby="finalProjectHeading">
+                <div class="gs-group-heading">
+                    <span class="gs-group-index">03</span>
+                    <div><span class="gs-kicker">Program control</span><h2 id="finalProjectHeading">Pengumpulan Final Project</h2><p>Tentukan jendela submission peserta dengan policy backend sebagai sumber kebenaran.</p></div>
+                </div>
+                <article class="glass-panel gs-card final-project-control-panel">
+                    <div class="final-project-control-grid">
+                        <div class="final-project-control-copy">
+                            <span class="gs-card-icon is-pink"><i class="fas fa-calendar-check"></i></span>
+                            <span class="gs-card-kicker">Authoritative window</span><h3>Submission Workspace</h3>
+                            <p>Admin mengatur akses, tetapi backend tetap menjadi penentu akhir untuk submit, edit, dan hapus.</p>
+                        </div>
+                        <div class="final-project-control-fields">
+                            <div class="gs-control-row">
+                                <div><h4>Izinkan Submit, Edit & Hapus</h4><p>Master control untuk workspace project peserta.</p></div>
+                                <label class="master-switch" title="Ubah status pengumpulan"><input type="checkbox" id="toggleFinalProjectSubmission" aria-label="Izinkan pengumpulan Final Project"><span class="slider-master"></span></label>
+                            </div>
+                            <div class="gs-field"><label for="finalProjectSubmissionDeadline">Deadline (WIB)</label><input type="datetime-local" id="finalProjectSubmissionDeadline" class="final-project-deadline-input"><small>Perubahan aktif hanya setelah backend mengonfirmasi penyimpanan.</small></div>
+                        </div>
+                        <div id="finalProjectSubmissionPolicyPreview" class="final-project-policy-status" aria-live="polite">
+                            <span class="final-project-policy-dot" aria-hidden="true"></span><div><strong>Status sedang dimuat</strong><small>Menunggu policy dari backend.</small></div>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <section class="gs-group" aria-labelledby="dangerHeading">
+                <div class="gs-group-heading">
+                    <span class="gs-group-index">04</span>
+                    <div><span class="gs-kicker">System safety</span><h2 id="dangerHeading">Danger Zone</h2><p>Gunakan kontrol sistem hanya ketika dampaknya sudah dipahami.</p></div>
+                </div>
+                <article class="glass-panel gs-card gs-danger-card">
+                    <div class="gs-danger-grid">
+                        <div class="gs-danger-item is-critical">
+                            <span class="gs-danger-icon"><i class="fas fa-radiation"></i></span><div><h4>Maintenance Mode</h4><p>Tutup sementara seluruh frontend website.</p></div>
+                            <label class="master-switch danger-switch" title="Ubah maintenance mode"><input type="checkbox" id="toggleMaintenance" aria-label="Aktifkan maintenance mode"><span class="slider-master"></span></label>
+                        </div>
+                        <div class="gs-danger-item">
+                            <span class="gs-danger-icon is-neutral"><i class="fas fa-rotate"></i></span><div><h4>Reset Cache Sistem</h4><p>Segarkan cache lokal jika sinkronisasi tampilan macet.</p></div>
+                            <button class="gs-secondary-button" id="btnClearGlobalCache" type="button"><i class="fas fa-sync"></i> Clear Cache</button>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <div class="gs-action-dock" role="region" aria-label="Aksi penyimpanan pengaturan">
+                <div class="gs-action-copy"><span class="gs-action-icon"><i class="fas fa-cloud-arrow-up"></i></span><div><strong>Terapkan perubahan ke sistem</strong><span id="globalSettingsStatus" role="status" aria-live="polite" data-state="neutral">Belum ada perubahan baru.</span></div></div>
+                <button class="btn-cyber gs-save-button" id="btnSaveGlobalSettings" type="button"><i class="fas fa-cloud-upload-alt"></i> Terapkan Pengaturan</button>
+            </div>
+        </div>
     </main>
 </div>
 
 <style>
-    /* Styling khusus Master Switch untuk Global Settings */
-    .master-switch {
-        position: relative;
-        display: inline-block;
-        width: 50px;
-        height: 28px;
-    }
-    .master-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-    .slider-master {
-        position: absolute;
-        cursor: pointer;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background-color: #cbd5e1;
-        transition: .4s;
-        border-radius: 34px;
-    }
-    .slider-master:before {
-        position: absolute;
-        content: "";
-        height: 20px;
-        width: 20px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        transition: .4s;
-        border-radius: 50%;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    /* Warna nyala default (Biru/Pink tergantung tema, kita pakai biru tech) */
-    .master-switch input:checked + .slider-master {
-        background-color: var(--icon-blue);
-    }
-    .master-switch input:checked + .slider-master:before {
-        transform: translateX(22px);
-    }
-
-    /* Warna nyala untuk Danger Zone (Merah) */
-    .danger-switch input:checked + .slider-master {
-        background-color: var(--danger);
-    }
-
-    /* Fokus Input */
-    input[type="text"]:focus, input[type="datetime-local"]:focus, textarea:focus {
-        border-color: var(--icon-blue) !important;
-    }
-    .final-project-control-panel {
-        background: linear-gradient(145deg, #ffffff 0%, #fff7fb 100%);
-        border: 1px solid rgba(236, 25, 112, 0.18);
-    }
-    .final-project-deadline-input {
-        background: #fff;
-        border: 1px solid var(--gray-border);
-        border-radius: 10px;
-        color: var(--text-dark);
-        font: inherit;
-        min-height: 46px;
-        outline: none;
-        padding: 10px 12px;
-        width: 100%;
-    }
-    .final-project-policy-status {
-        align-items: center;
-        background: #f8fafc;
-        border: 1px solid var(--gray-border);
-        border-radius: 12px;
-        display: flex;
-        gap: 12px;
-        padding: 13px 15px;
-    }
-    .final-project-policy-status strong,
-    .final-project-policy-status small {
-        display: block;
-    }
-    .final-project-policy-status strong {
-        color: var(--text-dark);
-        font-size: 0.9rem;
-    }
-    .final-project-policy-status small {
-        color: var(--text-muted);
-        font-size: 0.78rem;
-        margin-top: 3px;
-    }
-    .final-project-policy-dot {
-        background: #94a3b8;
-        border-radius: 50%;
-        box-shadow: 0 0 0 5px rgba(148, 163, 184, 0.14);
-        flex: 0 0 auto;
-        height: 10px;
-        width: 10px;
-    }
-    .final-project-policy-status.is-open .final-project-policy-dot {
-        background: var(--success);
-        box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.14);
-    }
-    .final-project-policy-status.is-closed .final-project-policy-dot {
-        background: var(--danger);
-        box-shadow: 0 0 0 5px rgba(230, 57, 70, 0.12);
-    }
-    .participant-page-toggle-grid {
-        display: grid;
-        gap: 10px 14px;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    }
-    .participant-page-toggle-grid label {
-        align-items: center;
-        background: #fff;
-        border: 1px solid var(--gray-border);
-        border-radius: 10px;
-        color: var(--text-dark);
-        display: flex;
-        font-size: 0.86rem;
-        font-weight: 700;
-        gap: 9px;
-        min-height: 42px;
-        padding: 10px 12px;
-    }
-    .participant-page-toggle-grid input {
-        accent-color: var(--primary-pink);
-    }
+    .global-settings-page{--gs-ink:#1a0b2e;--gs-soft:#f7f8fc;--gs-pink:#fff0f7;--gs-shadow:0 18px 45px rgba(26,11,46,.06);padding-bottom:48px}
+    .global-settings-topbar{align-items:flex-end;margin-bottom:26px}.gs-eyebrow,.gs-kicker,.gs-card-kicker{color:var(--primary-pink);display:block;font-size:.7rem;font-weight:900;letter-spacing:.14em;margin-bottom:7px;text-transform:uppercase}.gs-eyebrow i{margin-right:5px}.gs-admin-profile{border-color:rgba(230,57,70,.24);box-shadow:0 8px 22px rgba(230,57,70,.06)}.gs-admin-profile .admin-info p{color:var(--danger)}.gs-admin-profile .admin-avatar{background:rgba(230,57,70,.09);color:var(--danger)}
+    .gs-hero{align-items:center;background:radial-gradient(circle at 90% 20%,rgba(255,20,147,.14),transparent 30%),linear-gradient(125deg,#1a0b2e,#401653);border-radius:24px;box-shadow:0 22px 50px rgba(26,11,46,.16);color:#fff;display:flex;gap:28px;justify-content:space-between;margin-bottom:18px;overflow:hidden;padding:30px 32px;position:relative}.gs-hero::after{border:1px solid rgba(255,255,255,.08);border-radius:50%;content:"";height:210px;position:absolute;right:-72px;top:-92px;width:210px}.gs-hero-copy{align-items:flex-start;display:flex;gap:18px;max-width:680px;position:relative;z-index:1}.gs-hero-icon,.gs-card-icon,.gs-critical-icon,.gs-danger-icon,.gs-action-icon{align-items:center;display:flex;flex:0 0 auto;justify-content:center}.gs-hero-icon{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:15px;font-size:1.2rem;height:48px;width:48px}.gs-hero .gs-kicker{color:#ff8bc5}.gs-hero h2{color:#fff;font-family:'Space Grotesk',sans-serif;font-size:clamp(1.35rem,2.2vw,1.9rem);line-height:1.2;margin:0}.gs-hero p{color:rgba(255,255,255,.72);font-size:.88rem;line-height:1.65;margin:8px 0 0}.gs-hero-meta{display:flex;flex:0 0 auto;flex-direction:column;gap:9px;position:relative;z-index:1}.gs-hero-meta span{align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:999px;color:rgba(255,255,255,.86);display:flex;font-size:.74rem;font-weight:800;gap:8px;min-height:34px;padding:7px 12px}.gs-hero-meta i{color:#ff8bc5}
+    .gs-critical-note{align-items:center;background:#fffaf0;border:1px solid rgba(255,206,32,.38);border-radius:16px;display:flex;gap:14px;margin-bottom:42px;padding:15px 18px}.gs-critical-icon{background:rgba(255,206,32,.16);border-radius:11px;color:#c78d00;height:38px;width:38px}.gs-critical-note strong{color:var(--gs-ink);display:block;font-size:.86rem}.gs-critical-note p{color:var(--text-muted);font-size:.8rem;line-height:1.5;margin:3px 0 0}
+    .gs-content{display:flex;flex-direction:column;gap:46px}.gs-group{min-width:0}.gs-group-heading{align-items:flex-start;display:flex;gap:14px;margin-bottom:18px}.gs-group-index{align-items:center;background:var(--gs-pink);border:1px solid rgba(255,20,147,.12);border-radius:10px;color:var(--primary-pink);display:flex;flex:0 0 auto;font-family:'Space Grotesk',sans-serif;font-size:.78rem;font-weight:900;height:34px;justify-content:center;width:38px}.gs-group-heading .gs-kicker{margin:0 0 2px}.gs-group-heading h2{color:var(--gs-ink);font-family:'Space Grotesk',sans-serif;font-size:1.3rem;line-height:1.25;margin:0}.gs-group-heading p{color:var(--text-muted);font-size:.82rem;line-height:1.5;margin:4px 0 0}
+    .gs-grid{display:grid;gap:22px}.gs-grid-two{align-items:start;grid-template-columns:repeat(2,minmax(0,1fr))}.gs-card{border-radius:20px;box-shadow:var(--gs-shadow);min-width:0;overflow:hidden;padding:0}.gs-card-header{align-items:center;border-bottom:1px solid var(--gray-border);display:flex;gap:13px;padding:20px 22px}.gs-card-icon{border-radius:12px;font-size:1rem;height:40px;width:40px}.gs-card-icon.is-blue{background:rgba(59,130,246,.1);color:var(--icon-blue)}.gs-card-icon.is-pink{background:rgba(255,20,147,.09);color:var(--primary-pink)}.gs-card-icon.is-purple{background:rgba(139,92,246,.1);color:var(--icon-purple)}.gs-card-kicker{font-size:.62rem;margin-bottom:2px}.gs-card-header h3,.final-project-control-copy h3{color:var(--gs-ink);font-family:'Space Grotesk',sans-serif;font-size:1.08rem;line-height:1.25;margin:0}.gs-card-body{display:flex;flex-direction:column;gap:20px;padding:22px}
+    .gs-control-row{align-items:flex-start;display:flex;gap:18px;justify-content:space-between}.gs-control-row>div{min-width:0}.gs-control-row h4,.gs-danger-item h4{color:var(--text-dark);font-size:.89rem;line-height:1.35;margin:0 0 5px}.gs-control-row p,.gs-danger-item p{color:var(--text-muted);font-size:.78rem;line-height:1.55;margin:0;max-width:390px}.global-settings-page code{background:#f1f3f8;border-radius:5px;color:#6c3a8d;font-family:inherit;font-size:.92em;padding:1px 5px}
+    .gs-field label,.participant-page-selector legend{color:var(--text-muted);display:block;font-size:.68rem;font-weight:900;letter-spacing:.08em;margin-bottom:8px;text-transform:uppercase}.gs-field input,.gs-field textarea{background:var(--gs-soft);border:1px solid var(--gray-border);border-radius:11px;color:var(--text-dark);font:inherit;font-size:.82rem;min-height:44px;outline:none;padding:11px 13px;transition:.16s;width:100%}.gs-field textarea{line-height:1.55;min-height:88px;resize:vertical}.gs-field input:hover,.gs-field textarea:hover{background:#fff;border-color:#cbd5e1}.gs-field input:focus,.gs-field textarea:focus{background:#fff;border-color:var(--primary-pink);box-shadow:0 0 0 4px rgba(255,20,147,.09)}.gs-field small{color:var(--text-muted);display:block;font-size:.72rem;line-height:1.5;margin-top:7px}
+    .master-switch{display:inline-block;flex:0 0 auto;height:28px;position:relative;width:50px}.master-switch input{height:100%;margin:0;opacity:0;position:absolute;width:100%}.slider-master{background:#cbd5e1;border-radius:999px;bottom:0;cursor:pointer;left:0;position:absolute;right:0;top:0;transition:.18s}.slider-master::before{background:#fff;border-radius:50%;bottom:4px;box-shadow:0 2px 6px rgba(15,23,42,.2);content:"";height:20px;left:4px;position:absolute;transition:.18s;width:20px}.master-switch input:checked+.slider-master{background:var(--icon-blue);box-shadow:0 5px 13px rgba(59,130,246,.2)}.master-switch input:checked+.slider-master::before{transform:translateX(22px)}.master-switch input:focus-visible+.slider-master{box-shadow:0 0 0 4px rgba(59,130,246,.18)}.danger-switch input:checked+.slider-master{background:var(--danger)}
+    .gs-participant-layout{display:grid;gap:22px;grid-template-columns:minmax(280px,.82fr) minmax(0,1.45fr)}.gs-stack{display:grid;gap:22px;grid-template-rows:repeat(2,minmax(0,1fr))}.gs-card-compact{display:flex;flex-direction:column}.gs-card-compact .gs-card-body{flex:1;justify-content:center}.participant-page-selector{background:var(--gs-soft);border:1px solid var(--gray-border);border-radius:14px;margin:0;min-width:0;padding:16px}.participant-page-selector legend{margin:0;padding:0 4px}.participant-page-toggle-grid{display:grid;gap:8px;grid-template-columns:repeat(3,minmax(0,1fr))}.participant-page-toggle-grid label{align-items:center;background:#fff;border:1px solid var(--gray-border);border-radius:9px;color:var(--text-dark);cursor:pointer;display:flex;font-size:.76rem;font-weight:750;gap:8px;min-height:38px;padding:8px 10px;transition:.16s}.participant-page-toggle-grid label:hover{background:var(--gs-pink);border-color:rgba(255,20,147,.22)}.participant-page-toggle-grid input{accent-color:var(--primary-pink)}.participant-page-toggle-grid label:has(input:focus-visible){box-shadow:0 0 0 3px rgba(255,20,147,.12)}.gs-inline-note{align-items:flex-start;background:var(--gs-soft);border:1px solid var(--gray-border);border-radius:11px;color:var(--text-muted);display:flex;font-size:.73rem;gap:8px;line-height:1.5;margin:0;padding:11px 12px}.gs-inline-note i{color:var(--icon-blue);margin-top:2px}
+    .final-project-control-panel{background:radial-gradient(circle at 4% 10%,rgba(255,20,147,.08),transparent 28%),linear-gradient(145deg,#fff,#fff8fc);border-color:rgba(255,20,147,.2);box-shadow:0 20px 48px rgba(255,20,147,.07);padding:26px}.final-project-control-grid{align-items:center;display:grid;gap:24px;grid-template-columns:minmax(220px,.8fr) minmax(300px,1.2fr)}.final-project-control-copy .gs-card-icon{margin-bottom:16px}.final-project-control-copy>p{color:var(--text-muted);font-size:.8rem;line-height:1.6;margin:8px 0 0;max-width:390px}.final-project-control-fields{background:rgba(255,255,255,.78);border:1px solid rgba(255,20,147,.12);border-radius:16px;display:flex;flex-direction:column;gap:18px;padding:18px}.final-project-policy-status{align-items:center;background:#f8fafc;border:1px solid var(--gray-border);border-radius:13px;display:flex;gap:12px;grid-column:1/-1;padding:13px 15px}.final-project-policy-status strong,.final-project-policy-status small{display:block}.final-project-policy-status strong{color:var(--text-dark);font-size:.83rem}.final-project-policy-status small{color:var(--text-muted);font-size:.73rem;margin-top:3px}.final-project-policy-dot{background:#94a3b8;border-radius:50%;box-shadow:0 0 0 5px rgba(148,163,184,.14);flex:0 0 auto;height:10px;width:10px}.final-project-policy-status.is-open{background:rgba(5,205,153,.06);border-color:rgba(5,205,153,.2)}.final-project-policy-status.is-open .final-project-policy-dot{background:var(--success)}.final-project-policy-status.is-closed{background:rgba(230,57,70,.05);border-color:rgba(230,57,70,.16)}.final-project-policy-status.is-closed .final-project-policy-dot{background:var(--danger)}
+    .gs-danger-card{background:#fffafb;border-color:rgba(230,57,70,.2);padding:20px}.gs-danger-grid{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr))}.gs-danger-item{align-items:center;background:#fff;border:1px solid var(--gray-border);border-radius:14px;display:grid;gap:13px;grid-template-columns:auto minmax(0,1fr) auto;min-height:88px;padding:15px}.gs-danger-item.is-critical{background:rgba(230,57,70,.035);border-color:rgba(230,57,70,.18)}.gs-danger-item.is-critical h4{color:var(--danger)}.gs-danger-icon{background:rgba(230,57,70,.09);border-radius:11px;color:var(--danger);height:38px;width:38px}.gs-danger-icon.is-neutral{background:#f1f3f8;color:var(--text-muted)}.gs-secondary-button{align-items:center;background:#fff;border:1px solid var(--gray-border);border-radius:10px;color:var(--text-dark);cursor:pointer;display:inline-flex;font-size:.75rem;font-weight:800;gap:7px;min-height:40px;padding:9px 12px;transition:.16s}.gs-secondary-button:hover{border-color:var(--danger);color:var(--danger);transform:translateY(-1px)}
+    .gs-action-dock{align-items:center;backdrop-filter:blur(18px);background:rgba(255,255,255,.94);border:1px solid rgba(26,11,46,.1);border-radius:18px;bottom:16px;box-shadow:0 18px 44px rgba(26,11,46,.14);display:flex;gap:20px;justify-content:space-between;padding:14px 16px;position:sticky;z-index:20}.gs-action-copy{align-items:center;display:flex;gap:12px;min-width:0}.gs-action-icon{background:var(--gs-pink);border-radius:11px;color:var(--primary-pink);height:40px;width:40px}.gs-action-copy strong,#globalSettingsStatus{display:block}.gs-action-copy strong{color:var(--gs-ink);font-size:.82rem}#globalSettingsStatus{color:var(--text-muted);font-size:.72rem;line-height:1.4;margin-top:3px;overflow-wrap:anywhere}#globalSettingsStatus[data-state=warning]{color:#a06b00}#globalSettingsStatus[data-state=success]{color:#078766}#globalSettingsStatus[data-state=danger]{color:var(--danger)}.gs-save-button{background:var(--gs-ink);border-radius:12px;box-shadow:0 10px 22px rgba(26,11,46,.2);flex:0 0 auto;font-size:.86rem;min-height:46px;padding:12px 20px}.gs-save-button.is-dirty{background:var(--primary-pink);box-shadow:0 10px 22px rgba(255,20,147,.22)}.gs-save-button:disabled{cursor:wait;opacity:.7;transform:none}.gs-secondary-button:focus-visible,.gs-save-button:focus-visible{outline:3px solid rgba(255,20,147,.2);outline-offset:3px}
+    @media(max-width:1080px){.gs-participant-layout,.final-project-control-grid{grid-template-columns:1fr}.gs-stack{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none}.final-project-policy-status{grid-column:auto}.participant-page-toggle-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.gs-danger-grid{grid-template-columns:1fr}}
+    @media(max-width:760px){.global-settings-page{padding-bottom:26px}.global-settings-topbar{align-items:flex-start;gap:15px}.gs-hero{align-items:flex-start;flex-direction:column;padding:24px 20px}.gs-hero-meta{flex-direction:row;flex-wrap:wrap}.gs-critical-note{margin-bottom:34px}.gs-grid-two,.gs-stack{grid-template-columns:1fr}.gs-content{gap:38px}.gs-card-header,.gs-card-body{padding-left:18px;padding-right:18px}.final-project-control-panel{padding:20px 18px}.gs-action-dock{align-items:stretch;bottom:10px;flex-direction:column;gap:12px}.gs-save-button{justify-content:center;width:100%}}
+    @media(max-width:480px){.global-settings-topbar .topbar-right{width:100%}.gs-admin-profile{justify-content:space-between;width:100%}.gs-hero-copy{flex-direction:column}.gs-hero-meta{align-items:stretch;flex-direction:column;width:100%}.gs-hero-meta span{justify-content:center}.gs-critical-note{align-items:flex-start}.gs-participant-layout{grid-template-columns:minmax(0,1fr)}.participant-page-toggle-grid{grid-template-columns:1fr}.gs-danger-item{align-items:start;grid-template-columns:auto minmax(0,1fr)}.gs-danger-item>:last-child{grid-column:2;justify-self:start}}
+    @media(prefers-reduced-motion:reduce){.global-settings-page *,.global-settings-page *::before,.global-settings-page *::after{transition-duration:.01ms!important}}
 </style>
