@@ -28,6 +28,7 @@ docs-nazril/
 
 # Production branch hygiene
 *.md
+!/README.md
 !/materi2/
 /materi2/*
 !/materi2/math for ai/
