@@ -11,7 +11,7 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
-const HERAI_BACKEND_VERSION = '2026.8.31-admin-progress-integrity';
+const HERAI_BACKEND_VERSION = '2026.8.31-admin-progress-cache-chunks';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
 const PARTICIPANT_ACCOUNT_TYPE = 'participant';
 const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
@@ -5779,8 +5779,10 @@ function cachePutPresence(key, value, ttlSeconds) {
 // ADMIN LEARNING OPERATIONS (PROGRESS PESERTA)
 // ============================================================================
 
-var ADMIN_LEARNING_PROGRESS_CACHE_KEY = 'admin_learning_progress_snapshot_v3';
+var ADMIN_LEARNING_PROGRESS_CACHE_KEY = 'admin_learning_progress_snapshot_v4';
 var ADMIN_LEARNING_PROGRESS_CACHE_SECONDS = 300;
+var ADMIN_LEARNING_PROGRESS_CACHE_CHUNK_BYTES = 70000;
+var ADMIN_LEARNING_PROGRESS_CACHE_MAX_CHUNKS = 50;
 
 var ADMIN_FOUNDATION_MODULE_TITLES = {
   'ai-fundamentals': 'Pengantar AI',
@@ -6088,15 +6090,153 @@ function buildAdminLearningProgressSnapshot(source) {
   };
 }
 
+function adminProgressCacheManifestKey() {
+  return ADMIN_LEARNING_PROGRESS_CACHE_KEY + ':manifest';
+}
+
+function adminProgressCacheChunkKey(index) {
+  return ADMIN_LEARNING_PROGRESS_CACHE_KEY + ':chunk:' + String(index);
+}
+
+function adminProgressCacheByteLength(value) {
+  return Utilities.newBlob(String(value || '')).getBytes().length;
+}
+
+function adminProgressSplitCacheValue(value, maxBytes) {
+  var source = String(value || '');
+  var byteLimit = Math.max(1024, Number(maxBytes || ADMIN_LEARNING_PROGRESS_CACHE_CHUNK_BYTES));
+  var chunks = [];
+  var start = 0;
+  while (start < source.length) {
+    var low = start + 1;
+    var high = Math.min(source.length, start + byteLimit);
+    var bestEnd = start;
+    while (low <= high) {
+      var midpoint = Math.floor((low + high) / 2);
+      var candidateEnd = midpoint;
+      if (candidateEnd < source.length
+        && /[\uD800-\uDBFF]/.test(source.charAt(candidateEnd - 1))
+        && /[\uDC00-\uDFFF]/.test(source.charAt(candidateEnd))) {
+        candidateEnd--;
+      }
+      if (candidateEnd <= start) candidateEnd = start + 1;
+      if (adminProgressCacheByteLength(source.slice(start, candidateEnd)) <= byteLimit) {
+        bestEnd = candidateEnd;
+        low = midpoint + 1;
+      } else {
+        high = midpoint - 1;
+      }
+    }
+    if (bestEnd <= start) return [];
+    chunks.push(source.slice(start, bestEnd));
+    start = bestEnd;
+  }
+  return chunks;
+}
+
+function adminProgressCacheRemoveKeys(cache, keys) {
+  var uniqueKeys = (keys || []).filter(function(key, index, values) {
+    return key && values.indexOf(key) === index;
+  });
+  if (!uniqueKeys.length) return;
+  if (typeof cache.removeAll === 'function') {
+    cache.removeAll(uniqueKeys);
+    return;
+  }
+  uniqueKeys.forEach(function(key) { cache.remove(key); });
+}
+
+function adminProgressClearCache(cache) {
+  var targetCache = cache || CacheService.getScriptCache();
+  var keys = [ADMIN_LEARNING_PROGRESS_CACHE_KEY, adminProgressCacheManifestKey()];
+  try {
+    var manifestRaw = targetCache.get(adminProgressCacheManifestKey());
+    var manifest = manifestRaw ? JSON.parse(manifestRaw) : null;
+    var chunkCount = Math.min(
+      ADMIN_LEARNING_PROGRESS_CACHE_MAX_CHUNKS,
+      Math.max(0, Number(manifest && manifest.chunkCount || 0))
+    );
+    for (var index = 0; index < chunkCount; index++) {
+      keys.push(adminProgressCacheChunkKey(index));
+    }
+  } catch (e) { /* stale or malformed manifest */ }
+  try { adminProgressCacheRemoveKeys(targetCache, keys); } catch (e) { /* cache is best effort */ }
+}
+
+function adminProgressReadCache(cache) {
+  var targetCache = cache || CacheService.getScriptCache();
+  try {
+    var direct = targetCache.get(ADMIN_LEARNING_PROGRESS_CACHE_KEY);
+    if (direct) return JSON.parse(direct);
+    var manifestRaw = targetCache.get(adminProgressCacheManifestKey());
+    if (!manifestRaw) return null;
+    var manifest = JSON.parse(manifestRaw);
+    var chunkCount = Number(manifest && manifest.chunkCount || 0);
+    if (!Number.isInteger(chunkCount)
+      || chunkCount < 1
+      || chunkCount > ADMIN_LEARNING_PROGRESS_CACHE_MAX_CHUNKS) return null;
+    var keys = [];
+    for (var index = 0; index < chunkCount; index++) keys.push(adminProgressCacheChunkKey(index));
+    var values = typeof targetCache.getAll === 'function' ? targetCache.getAll(keys) : {};
+    var serialized = '';
+    for (var chunkIndex = 0; chunkIndex < keys.length; chunkIndex++) {
+      var chunk = values[keys[chunkIndex]];
+      if (chunk === undefined && typeof targetCache.get === 'function') chunk = targetCache.get(keys[chunkIndex]);
+      if (typeof chunk !== 'string') return null;
+      serialized += chunk;
+    }
+    if (Number(manifest.serializedLength || 0) !== serialized.length) return null;
+    return JSON.parse(serialized);
+  } catch (e) {
+    return null;
+  }
+}
+
+function adminProgressWriteCache(cache, snapshot) {
+  var targetCache = cache || CacheService.getScriptCache();
+  var serialized = JSON.stringify(snapshot);
+  var writtenKeys = [];
+  try {
+    adminProgressClearCache(targetCache);
+    if (adminProgressCacheByteLength(serialized) <= ADMIN_LEARNING_PROGRESS_CACHE_CHUNK_BYTES) {
+      targetCache.put(ADMIN_LEARNING_PROGRESS_CACHE_KEY, serialized, ADMIN_LEARNING_PROGRESS_CACHE_SECONDS);
+      writtenKeys.push(ADMIN_LEARNING_PROGRESS_CACHE_KEY);
+      return true;
+    }
+    var chunks = adminProgressSplitCacheValue(serialized, ADMIN_LEARNING_PROGRESS_CACHE_CHUNK_BYTES);
+    if (!chunks.length || chunks.length > ADMIN_LEARNING_PROGRESS_CACHE_MAX_CHUNKS) return false;
+    for (var index = 0; index < chunks.length; index++) {
+      var chunkKey = adminProgressCacheChunkKey(index);
+      targetCache.put(chunkKey, chunks[index], ADMIN_LEARNING_PROGRESS_CACHE_SECONDS);
+      writtenKeys.push(chunkKey);
+    }
+    targetCache.put(adminProgressCacheManifestKey(), JSON.stringify({
+      version: 1,
+      chunkCount: chunks.length,
+      serializedLength: serialized.length
+    }), ADMIN_LEARNING_PROGRESS_CACHE_SECONDS);
+    return true;
+  } catch (e) {
+    try {
+      adminProgressCacheRemoveKeys(
+        targetCache,
+        writtenKeys.concat([ADMIN_LEARNING_PROGRESS_CACHE_KEY, adminProgressCacheManifestKey()])
+      );
+    } catch (cleanupError) { /* incomplete chunks expire naturally */ }
+    adminProgressClearCache(targetCache);
+    return false;
+  }
+}
+
 function invalidateAdminLearningProgressCache() {
-  try { CacheService.getScriptCache().remove(ADMIN_LEARNING_PROGRESS_CACHE_KEY); } catch (e) {}
+  try { adminProgressClearCache(CacheService.getScriptCache()); } catch (e) {}
 }
 
 function _getAdminLearningProgressSnapshot(forceRefresh) {
   var cache = CacheService.getScriptCache();
   if (!isTruthy(forceRefresh)) {
-    var cached = cache.get(ADMIN_LEARNING_PROGRESS_CACHE_KEY);
-    if (cached) return JSON.parse(cached);
+    var cached = adminProgressReadCache(cache);
+    if (cached) return cached;
   }
   var snapshot = buildAdminLearningProgressSnapshot({
     accounts: getRows(SHEETS.participantAccounts),
@@ -6105,7 +6245,9 @@ function _getAdminLearningProgressSnapshot(forceRefresh) {
     targetEmailSet: getTargetParticipantPortalEmailSet(),
     now: new Date()
   });
-  cache.put(ADMIN_LEARNING_PROGRESS_CACHE_KEY, JSON.stringify(snapshot), ADMIN_LEARNING_PROGRESS_CACHE_SECONDS);
+  // CacheService membatasi ukuran setiap value. Cache bersifat best effort:
+  // snapshot live tetap dikembalikan walaupun cache sedang penuh atau gagal.
+  adminProgressWriteCache(cache, snapshot);
   return snapshot;
 }
 

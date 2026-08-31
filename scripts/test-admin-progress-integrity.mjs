@@ -5,10 +5,25 @@ import vm from 'node:vm';
 
 const repositoryRoot = resolve(import.meta.dirname, '..');
 const source = readFileSync(resolve(repositoryRoot, 'gas/Code.gs'), 'utf8');
-const context = { console };
+const context = {
+    console,
+    Utilities: {
+        newBlob: value => ({
+            getBytes: () => ({ length: Buffer.byteLength(String(value || ''), 'utf8') })
+        })
+    }
+};
 vm.createContext(context);
 vm.runInContext(
-    `${source}\n;globalThis.__adminProgressApi = { buildAdminLearningProgressSnapshot };`,
+    `${source}\n;globalThis.__adminProgressApi = {
+        buildAdminLearningProgressSnapshot,
+        adminProgressSplitCacheValue,
+        adminProgressWriteCache,
+        adminProgressReadCache,
+        adminProgressClearCache,
+        cacheKey: ADMIN_LEARNING_PROGRESS_CACHE_KEY,
+        cacheChunkBytes: ADMIN_LEARNING_PROGRESS_CACHE_CHUNK_BYTES
+    };`,
     context,
     { filename: 'gas/Code.gs' }
 );
@@ -158,4 +173,85 @@ assert.equal(emptySnapshot.overview.averageOverallProgress, 0);
 assert.equal(emptySnapshot.overview.activePercent, 0);
 assert.deepEqual(Array.from(emptySnapshot.participants), []);
 
-console.log('Admin progress integrity valid: eligibility, module flags, canonical counting, activity window, masking, and course parity pass.');
+class SizeLimitedCache {
+    constructor(limitBytes = 100000) {
+        this.limitBytes = limitBytes;
+        this.values = new Map();
+    }
+    get(key) { return this.values.has(key) ? this.values.get(key) : null; }
+    getAll(keys) {
+        return Object.fromEntries(keys.filter(key => this.values.has(key)).map(key => [key, this.values.get(key)]));
+    }
+    put(key, value) {
+        if (Buffer.byteLength(String(value), 'utf8') > this.limitBytes) {
+            throw new Error('Argument too large: value');
+        }
+        this.values.set(key, String(value));
+    }
+    remove(key) { this.values.delete(key); }
+    removeAll(keys) { keys.forEach(key => this.values.delete(key)); }
+}
+
+const stressTargetEmailSet = {};
+const stressAccounts = Array.from({ length: 120 }, (_, index) => {
+    const sequence = String(index + 1).padStart(4, '0');
+    const email = `stress.${sequence}@example.com`;
+    stressTargetEmailSet[email] = true;
+    return {
+        account_id: `stress-account-${sequence}`,
+        participant_rowId: `stress-row-${sequence}`,
+        nik: `327100000000${sequence}`,
+        nama_lengkap: `Peserta Stress 🚀 ${sequence}`,
+        email,
+        access_status: 'active',
+        account_type: 'participant'
+    };
+});
+const stressSnapshot = api.buildAdminLearningProgressSnapshot({
+    accounts: stressAccounts,
+    progressRows: [],
+    moduleRows,
+    targetEmailSet: stressTargetEmailSet,
+    now
+});
+const stressSerialized = JSON.stringify(stressSnapshot);
+assert.ok(Buffer.byteLength(stressSerialized, 'utf8') > 100000, 'Stress snapshot must exceed one GAS cache value.');
+assert.equal(stressSnapshot.participants.length, 120);
+
+const unicodeValue = '🚀 peserta-valid '.repeat(10000);
+const unicodeChunks = Array.from(api.adminProgressSplitCacheValue(unicodeValue, api.cacheChunkBytes));
+assert.equal(unicodeChunks.join(''), unicodeValue);
+assert.equal(unicodeChunks.every(chunk => Buffer.byteLength(chunk, 'utf8') <= api.cacheChunkBytes), true);
+
+const cache = new SizeLimitedCache();
+assert.equal(api.adminProgressWriteCache(cache, stressSnapshot), true);
+assert.ok(cache.values.has(`${api.cacheKey}:manifest`));
+assert.ok([...cache.values.keys()].filter(key => key.includes(':chunk:')).length > 1);
+assert.equal([...cache.values.values()].every(value => Buffer.byteLength(value, 'utf8') <= 100000), true);
+const cachedStressSnapshot = api.adminProgressReadCache(cache);
+assert.equal(cachedStressSnapshot.participants.length, 120);
+assert.equal(cachedStressSnapshot.overview.totalParticipants, 120);
+assert.equal(cachedStressSnapshot.participants[0].name.includes('🚀'), true);
+
+assert.equal(api.adminProgressWriteCache(cache, emptySnapshot), true);
+assert.equal(cache.values.has(api.cacheKey), true);
+assert.equal([...cache.values.keys()].some(key => key.includes(':chunk:')), false);
+
+const failingCache = new SizeLimitedCache();
+failingCache.put = () => { throw new Error('Simulated cache outage'); };
+assert.equal(api.adminProgressWriteCache(failingCache, stressSnapshot), false);
+assert.equal(api.adminProgressReadCache(failingCache), null);
+
+const partialWriteCache = new SizeLimitedCache();
+const partialPut = partialWriteCache.put.bind(partialWriteCache);
+partialWriteCache.put = (key, value) => {
+    if (key.endsWith(':manifest')) throw new Error('Simulated manifest outage');
+    partialPut(key, value);
+};
+assert.equal(api.adminProgressWriteCache(partialWriteCache, stressSnapshot), false);
+assert.equal(partialWriteCache.values.size, 0);
+
+api.adminProgressClearCache(cache);
+assert.equal(cache.values.size, 0);
+
+console.log('Admin progress integrity valid: eligibility, scoring parity, 120-participant chunk cache, Unicode boundaries, invalidation, and non-blocking fallback pass.');
