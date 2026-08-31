@@ -33,13 +33,20 @@ vm.runInContext(
 
 const api = context.__adminProgressApi;
 const qaPreviewStart = source.indexOf('function previewQaMathProgressIntegrity()');
-const qaPreviewEnd = source.indexOf('\nfunction buildAdminLearningProgressSnapshot', qaPreviewStart);
+const qaPreviewEnd = source.indexOf('\nfunction summarizeQaAdminLearningSnapshot', qaPreviewStart);
 assert.ok(qaPreviewStart >= 0 && qaPreviewEnd > qaPreviewStart, 'QA Math preview must remain present and editor-only.');
 const qaPreviewSource = source.slice(qaPreviewStart, qaPreviewEnd);
 assert.doesNotMatch(qaPreviewSource, /updateByKey|upsertByKey|addRowObject|appendRow|deleteRow|setValue|setValues|clearContent/);
 const doPostSource = source.slice(source.indexOf('function doPost'), source.indexOf('\nfunction doGet'));
 assert.equal(doPostSource.includes('previewQaMathProgressIntegrity'), false, 'QA Math preview must never be exposed through doPost.');
 assert.equal(doPostSource.includes('previewQaAdminLearningSnapshotIntegrity'), false, 'QA Admin snapshot preview must never be exposed through doPost.');
+assert.equal(doPostSource.includes('repairMathForAiTrackingConfiguration'), false, 'Math tracking repair must never be exposed through doPost.');
+const mathRepairStart = source.indexOf('function repairMathForAiTrackingConfiguration()');
+const mathRepairEnd = source.indexOf('\nfunction buildAdminLearningProgressSnapshot', mathRepairStart);
+assert.ok(mathRepairStart >= 0 && mathRepairEnd > mathRepairStart, 'Math tracking repair must remain inspectable.');
+const mathRepairSource = source.slice(mathRepairStart, mathRepairEnd);
+assert.match(mathRepairSource, /updateByKey\(SHEETS\.participantDashboardModules, 'module_id', 'math-for-ai'/);
+assert.doesNotMatch(mathRepairSource, /SHEETS\.participantProgress|SHEETS\.participantAccounts|deleteRow|deleteByKey|addRowObject|upsertByKey/);
 const now = '2026-08-31T12:00:00.000Z';
 const targetEmailSet = {
     'regular.one@example.com': true,
@@ -271,6 +278,28 @@ assert.equal(disabledMathModuleConfiguration.matching_rows, 1);
 assert.equal(disabledMathModuleConfiguration.rows[0].effective_active, true);
 assert.equal(disabledMathModuleConfiguration.rows[0].effective_tracking, false);
 assert.equal(disabledMathModuleConfiguration.has_accepted_configuration, false);
+
+const staleMathModuleRows = moduleRows.map(row => row.module_id === 'math-for-ai'
+    ? { ...row, total_chapters: 7, is_active: 'false', tracking_enabled: 'false' }
+    : row);
+const staleMathSnapshot = api.buildAdminLearningProgressSnapshot({
+    accounts,
+    progressRows,
+    moduleRows: staleMathModuleRows,
+    targetEmailSet,
+    now
+});
+assert.equal(staleMathSnapshot.participants.find(participant => participant.isQa).mathForAi.completedActivities, 0);
+const repairedMathSnapshot = api.buildAdminLearningProgressSnapshot({
+    accounts,
+    progressRows,
+    moduleRows: staleMathModuleRows.map(row => row.module_id === 'math-for-ai'
+        ? { ...row, total_chapters: 89, is_active: 'true', tracking_enabled: 'true' }
+        : row),
+    targetEmailSet,
+    now
+});
+assert.equal(repairedMathSnapshot.participants.find(participant => participant.isQa).mathForAi.completedActivities, 1);
 
 const moduleFlagSnapshot = api.buildAdminLearningProgressSnapshot({
     accounts: accounts.slice(0, 1),

@@ -11,7 +11,7 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
-const HERAI_BACKEND_VERSION = '2026.9.1-qa-math-integrity-preview';
+const HERAI_BACKEND_VERSION = '2026.9.1-math-tracking-repair';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
 const PARTICIPANT_ACCOUNT_TYPE = 'participant';
 const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
@@ -6090,6 +6090,107 @@ function previewQaAdminLearningSnapshotIntegrity() {
   };
   Logger.log(JSON.stringify(result));
   return result;
+}
+
+/**
+ * Repair sempit untuk row konfigurasi Math for AI yang masih memakai nilai legacy.
+ * Editor-only. Menyimpan backup Script Property dan rollback otomatis jika read-back gagal.
+ * Tidak menyentuh participant_progress, akun, profil, atau data peserta.
+ */
+function repairMathForAiTrackingConfiguration() {
+  var lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  var properties = PropertiesService.getScriptProperties();
+  var backupKey = 'HERAI_MATH_TRACKING_REPAIR_BACKUP';
+  var before = null;
+  var writeStarted = false;
+  try {
+    var rows = getRows(SHEETS.participantDashboardModules).filter(function(row) {
+      return String(row && row.module_id || '').trim() === 'math-for-ai';
+    });
+    if (rows.length !== 1) {
+      throw new Error('Repair ditolak: math-for-ai harus memiliki tepat satu row konfigurasi. Ditemukan ' + rows.length + '.');
+    }
+    var current = rows[0];
+    before = {
+      is_active: current.is_active === undefined ? '' : current.is_active,
+      tracking_enabled: current.tracking_enabled === undefined ? '' : current.tracking_enabled,
+      total_chapters: current.total_chapters === undefined ? '' : current.total_chapters
+    };
+    var currentSummary = summarizeAdminMathModuleConfiguration(rows);
+    if (currentSummary.has_accepted_configuration
+      && Number(current.total_chapters || 0) === MATH_PROGRESS_ITEM_TOTAL) {
+      return {
+        status: 'success',
+        changed: false,
+        already_configured: true,
+        module_id: 'math-for-ai',
+        progress_rows_changed: 0,
+        configuration: currentSummary.rows[0]
+      };
+    }
+    if ([7, MATH_PROGRESS_ITEM_TOTAL].indexOf(Number(current.total_chapters || 0)) < 0) {
+      throw new Error('Repair ditolak: total_chapters memiliki nilai tak terduga ' + String(current.total_chapters || '') + '.');
+    }
+
+    properties.setProperty(backupKey, JSON.stringify({
+      saved_at: new Date().toISOString(),
+      module_id: 'math-for-ai',
+      fields: before
+    }));
+    writeStarted = true;
+    var updateResult = updateByKey(SHEETS.participantDashboardModules, 'module_id', 'math-for-ai', {
+      is_active: 'true',
+      tracking_enabled: 'true',
+      total_chapters: MATH_PROGRESS_ITEM_TOTAL
+    });
+    if (!updateResult || updateResult.status !== 'success') {
+      throw new Error('Update konfigurasi Math gagal: ' + String(updateResult && updateResult.message || 'unknown error'));
+    }
+    SpreadsheetApp.flush();
+
+    var readBackRows = getRows(SHEETS.participantDashboardModules).filter(function(row) {
+      return String(row && row.module_id || '').trim() === 'math-for-ai';
+    });
+    var readBack = summarizeAdminMathModuleConfiguration(readBackRows);
+    if (readBackRows.length !== 1
+      || !readBack.has_accepted_configuration
+      || Number(readBackRows[0].total_chapters || 0) !== MATH_PROGRESS_ITEM_TOTAL) {
+      throw new Error('Read-back konfigurasi Math tidak sesuai kontrak true/true/89.');
+    }
+    invalidateSharedCaches();
+    invalidateAdminLearningProgressCache();
+    return {
+      status: 'success',
+      changed: true,
+      already_configured: false,
+      module_id: 'math-for-ai',
+      before: before,
+      after: {
+        is_active: 'true',
+        tracking_enabled: 'true',
+        total_chapters: MATH_PROGRESS_ITEM_TOTAL
+      },
+      backup_property: backupKey,
+      progress_rows_changed: 0,
+      participant_accounts_changed: 0,
+      cache_invalidated: true
+    };
+  } catch (error) {
+    if (writeStarted && before) {
+      try {
+        updateByKey(SHEETS.participantDashboardModules, 'module_id', 'math-for-ai', before);
+        SpreadsheetApp.flush();
+        invalidateSharedCaches();
+        invalidateAdminLearningProgressCache();
+      } catch (rollbackError) {
+        throw new Error(error.message + ' Rollback otomatis juga gagal: ' + rollbackError.message);
+      }
+    }
+    throw error;
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function buildAdminLearningProgressSnapshot(source) {
