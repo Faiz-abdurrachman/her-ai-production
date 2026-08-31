@@ -29,6 +29,7 @@ docs-nazril/
 # Production branch hygiene
 *.md
 !/README.md
+!/tests/manual-production/README.md
 !/materi2/
 /materi2/*
 !/materi2/math for ai/
@@ -117,3 +118,9 @@ docs-nazril/
 *participant-accounts*.csv
 *database_pendaftar*.csv
 hirarki.md
+
+# Protected local/manual QA scratch files
+/test-admin-btn.mjs
+/test-admin-ui.js
+/test.js
+/test.py

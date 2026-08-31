@@ -134,6 +134,8 @@ Her-AI/
 │   └── Code.gs                # canonical backend source
 ├── materi2/                   # tracked canonical Math runtime content
 ├── scripts/                   # deterministic validation scripts
+├── tests/
+│   └── manual-production/     # manual QA only; never run without explicit approval
 └── vendor/                    # local third-party runtime assets
 ```
 
