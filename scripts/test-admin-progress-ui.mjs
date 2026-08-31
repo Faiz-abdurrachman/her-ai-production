@@ -102,9 +102,12 @@ try {
     assert.deepEqual(await page.$$eval('.premium-table th', nodes => nodes.map(node => node.textContent.trim())), [
         'Nama Peserta', 'AI Fundamentals', 'Math for AI', 'Overall', 'Terakhir Belajar', 'Aksi'
     ]);
+    assert.equal(await page.$eval('.premium-table caption', node => node.textContent.trim()), 'Progress belajar peserta pada dua modul aktif');
     assert.equal(await page.$$eval('#progress-table-body tr', rows => rows.length), 2);
     assert.equal(await page.$eval('#progress-table-body', node => node.textContent.includes('Kelas AI Mastery') || node.textContent.includes('HerAI Labs')), false);
     assert.deepEqual(await page.$$eval('.premium-summary-content .main-val', nodes => nodes.map(node => node.textContent.replace(/\s+/g, ' ').trim())), ['2', '6%', '1 50%']);
+    assert.match(await page.$eval('#progress-overview-container', node => node.textContent.replace(/\s+/g, ' ')), /Rata-rata dari 2 modul aktif/);
+    assert.deepEqual(await page.$$eval('#progress-table-body tr:first-child .course-progress-meta', nodes => nodes.slice(1).map(node => node.textContent.trim())), ['1 / 6 submodul', '1 / 89 aktivitas']);
 
     const detailButtonHeight = await page.$eval('.btn-detail', button => button.getBoundingClientRect().height);
     assert.ok(detailButtonHeight >= 44, 'Detail touch target must be at least 44px high.');
@@ -115,7 +118,39 @@ try {
     assert.match(modalText, /12%/);
     assert.match(modalText, /1 \/ 89 aktivitas/);
     assert.match(modalText, /54 topik/);
+    assert.match(modalText, /Modul · 6 submodul/);
+    assert.match(modalText, /Modul · 7 submodul/);
+    assert.match(modalText, /Rincian 6 submodul/);
+    assert.match(modalText, /Rincian 7 submodul/);
     assert.match(modalText, /Nilai ini memakai snapshot server/);
+    assert.equal(/\bcourse\b/i.test(modalText), false, 'Modal must use the Module → Submodule hierarchy consistently.');
+    assert.deepEqual(await page.$$eval('[data-learning-module]', nodes => nodes.map(node => node.dataset.learningModule)), [
+        'ai-fundamentals-advanced', 'math-for-ai'
+    ]);
+    assert.deepEqual(await page.$$eval('[data-learning-module="ai-fundamentals-advanced"] .pr-detail-row', nodes => nodes.map(node => ({
+        id: node.dataset.submoduleId,
+        title: node.querySelector('.pr-detail-name').textContent.trim()
+    }))), [
+        { id: 'ai-fundamentals', title: 'Pengantar AI' },
+        { id: 'python-untuk-ai', title: 'Python untuk AI' },
+        { id: 'reasoning', title: 'Reasoning AI' },
+        { id: 'konsep-ai-modern', title: 'Konsep AI Modern' },
+        { id: 'evaluation', title: 'Evaluation AI' },
+        { id: 'evolution', title: 'Evolution of AI' }
+    ]);
+    assert.deepEqual(await page.$$eval('[data-learning-module="math-for-ai"] .pr-detail-row', nodes => nodes.map(node => ({
+        id: node.dataset.submoduleId,
+        title: node.querySelector('.pr-detail-name').textContent.trim()
+    }))), [
+        { id: '01', title: 'Kenapa AI Butuh Matematika' },
+        { id: '02', title: 'Aljabar Linear' },
+        { id: '03', title: 'Statistika untuk AI' },
+        { id: '04', title: 'Probabilitas' },
+        { id: '05', title: 'Kalkulus' },
+        { id: '06', title: 'Optimisasi' },
+        { id: '07', title: 'Studi Kasus Terintegrasi' }
+    ]);
+    assert.deepEqual(await page.$$eval('.pr-modal-dialog [role="progressbar"]', nodes => nodes.map(node => Number(node.getAttribute('aria-valuenow')))), [12, 23, 1]);
     assert.equal(pageErrors.length, 0, pageErrors.join('\n'));
 
     await page.keyboard.press('Escape');
@@ -125,15 +160,22 @@ try {
     assert.equal(postedPayloads.at(-1).forceRefresh, true);
 
     await page.setViewport({ width: 390, height: 844, isMobile: true });
+    await page.click('#progress-table-body .btn-detail');
+    await page.waitForSelector('.pr-modal-dialog');
     const overflowAudit = await page.evaluate(() => ({
         viewport: document.documentElement.clientWidth,
         pageWidth: document.documentElement.scrollWidth,
-        tableWrapperScrolls: document.querySelector('.premium-table').parentElement.scrollWidth > document.querySelector('.premium-table').parentElement.clientWidth
+        tableWrapperScrolls: document.querySelector('.premium-table').parentElement.scrollWidth > document.querySelector('.premium-table').parentElement.clientWidth,
+        modalWidth: document.querySelector('.pr-modal-dialog').getBoundingClientRect().width,
+        modalViewport: window.innerWidth,
+        modalContentFits: document.querySelector('.pr-modal-dialog').scrollWidth <= document.querySelector('.pr-modal-dialog').clientWidth
     }));
     assert.equal(overflowAudit.pageWidth <= overflowAudit.viewport, true, JSON.stringify(overflowAudit));
     assert.equal(overflowAudit.tableWrapperScrolls, true);
+    assert.equal(overflowAudit.modalWidth <= overflowAudit.modalViewport, true, JSON.stringify(overflowAudit));
+    assert.equal(overflowAudit.modalContentFits, true, JSON.stringify(overflowAudit));
     assert.equal(pageErrors.length, 0, pageErrors.join('\n'));
-    console.log('Admin progress UI valid: one snapshot request, truthful columns/KPIs, working modal, refresh, accessibility, and mobile containment pass.');
+    console.log('Admin progress UI valid: authoritative values, Module → Submodule hierarchy, canonical order, working modal, refresh, accessibility, and mobile containment pass.');
 } finally {
     await browser.close();
     await new Promise(resolveClose => server.close(resolveClose));

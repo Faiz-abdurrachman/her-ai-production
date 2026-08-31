@@ -3042,6 +3042,23 @@
         const errorBox = document.getElementById('progress-error');
         const apiUrl = '/__gas';
         const itemsPerPage = 20;
+        const foundationSubmoduleDefinitions = [
+            { id: 'ai-fundamentals', title: 'Pengantar AI' },
+            { id: 'python-untuk-ai', title: 'Python untuk AI' },
+            { id: 'reasoning', title: 'Reasoning AI' },
+            { id: 'konsep-ai-modern', title: 'Konsep AI Modern' },
+            { id: 'evaluation', title: 'Evaluation AI' },
+            { id: 'evolution', title: 'Evolution of AI' }
+        ];
+        const mathSubmoduleDefinitions = [
+            { id: '01', title: 'Kenapa AI Butuh Matematika' },
+            { id: '02', title: 'Aljabar Linear' },
+            { id: '03', title: 'Statistika untuk AI' },
+            { id: '04', title: 'Probabilitas' },
+            { id: '05', title: 'Kalkulus' },
+            { id: '06', title: 'Optimisasi' },
+            { id: '07', title: 'Studi Kasus Terintegrasi' }
+        ];
 
         let allData = [];
         let currentFilteredData = [];
@@ -3111,11 +3128,71 @@
             errorBox.style.display = 'none';
         };
 
-        const courseCell = function(course, label) {
-            const safeCourse = course || {};
-            const progress = clampPercent(safeCourse.progress);
-            const completed = Number(safeCourse.completedActivities ?? safeCourse.completedModules ?? 0);
-            const total = Number(safeCourse.totalActivities ?? safeCourse.moduleTotal ?? 0);
+        const orderSubmoduleRows = function(rows, definitions, idKey) {
+            const sourceRows = Array.isArray(rows) ? rows : [];
+            const rowsById = {};
+            sourceRows.forEach(function(row) {
+                const id = String(row && row[idKey] || '');
+                if (id && !rowsById[id]) rowsById[id] = row;
+            });
+            const knownIds = definitions.map(function(definition) { return definition.id; });
+            const orderedRows = definitions.filter(function(definition) {
+                return Boolean(rowsById[definition.id]);
+            }).map(function(definition) {
+                return Object.assign({}, rowsById[definition.id], {
+                    submoduleId: definition.id,
+                    title: definition.title
+                });
+            });
+            sourceRows.forEach(function(row) {
+                const id = String(row && row[idKey] || '');
+                if (id && knownIds.indexOf(id) < 0) {
+                    orderedRows.push(Object.assign({}, row, { submoduleId: id }));
+                }
+            });
+            return orderedRows;
+        };
+
+        const buildLearningHierarchy = function(participant) {
+            const source = participant || {};
+            const ai = source.aiFundamentals || {};
+            const math = source.mathForAi || {};
+            const aiRows = orderSubmoduleRows(ai.modules, foundationSubmoduleDefinitions, 'moduleId');
+            const mathSourceRows = Object.keys(math.submodules || {}).map(function(id) {
+                return Object.assign({}, math.submodules[id] || {}, { submoduleId: id });
+            });
+            const mathRows = orderSubmoduleRows(mathSourceRows, mathSubmoduleDefinitions, 'submoduleId');
+            return {
+                modules: [
+                    {
+                        moduleId: 'ai-fundamentals-advanced',
+                        title: 'AI Fundamentals',
+                        progress: ai.progress,
+                        completed: Number(ai.completedModules || 0),
+                        total: Number(ai.moduleTotal || aiRows.length),
+                        itemLabel: 'submodul',
+                        submodules: aiRows
+                    },
+                    {
+                        moduleId: 'math-for-ai',
+                        title: 'Math for AI',
+                        progress: math.progress,
+                        completed: Number(math.completedActivities || 0),
+                        total: Number(math.totalActivities || 0),
+                        itemLabel: 'aktivitas',
+                        topicTotal: Number(math.topicTotal || 0),
+                        submoduleTotal: mathSubmoduleDefinitions.length,
+                        submodules: mathRows
+                    }
+                ]
+            };
+        };
+
+        const moduleCell = function(moduleSummary, label) {
+            const safeModule = moduleSummary || {};
+            const progress = clampPercent(safeModule.progress);
+            const completed = Number(safeModule.completed || 0);
+            const total = Number(safeModule.total || 0);
             return [
                 '<td class="course-progress-cell">',
                     '<div class="course-progress-row">',
@@ -3124,7 +3201,7 @@
                         '</div>',
                         '<span class="progress-percentage">', formatPercent(progress), '%</span>',
                     '</div>',
-                    '<span class="course-progress-meta">', completed, ' / ', total, ' ', total === 1 ? 'item' : (safeCourse.totalActivities !== undefined ? 'aktivitas' : 'modul'), '</span>',
+                    '<span class="course-progress-meta">', completed, ' / ', total, ' ', escapeHtml(safeModule.itemLabel || 'item'), '</span>',
                 '</td>'
             ].join('');
         };
@@ -3145,7 +3222,7 @@
                 '<div class="premium-summary-card">',
                     '<div class="premium-summary-icon"><i class="fas fa-chart-line" aria-hidden="true"></i></div>',
                     '<div class="premium-summary-content"><h4>Rata-rata Progress</h4>',
-                    '<p class="main-val pink-text">', average, '%</p><p>Rata-rata dua course aktif</p></div>',
+                    '<p class="main-val pink-text">', average, '%</p><p>Rata-rata dari 2 modul aktif</p></div>',
                 '</div>',
                 '<div class="premium-summary-card">',
                     '<div class="premium-summary-icon"><i class="fas fa-bolt" aria-hidden="true"></i></div>',
@@ -3192,6 +3269,7 @@
                 const key = 'participant-' + startIndex + '-' + index;
                 const name = String(participant.name || 'Peserta');
                 const overall = clampPercent(participant.overallProgress);
+                const hierarchy = buildLearningHierarchy(participant);
                 participantMap[key] = participant;
                 return [
                     '<tr>',
@@ -3200,8 +3278,8 @@
                             '<div><span class="participant-name">', escapeHtml(name), '</span>',
                             '<span class="course-progress-meta">NIK ', escapeHtml(participant.maskedNik || participant.nik || '****'), '</span></div>',
                         '</div></td>',
-                        courseCell(participant.aiFundamentals, 'Progress AI Fundamentals ' + name),
-                        courseCell(participant.mathForAi, 'Progress Math for AI ' + name),
+                        moduleCell(hierarchy.modules[0], 'Progress AI Fundamentals ' + name),
+                        moduleCell(hierarchy.modules[1], 'Progress Math for AI ' + name),
                         '<td class="course-progress-cell"><div class="course-progress-row">',
                             '<div class="progress-track" role="progressbar" aria-label="Progress keseluruhan ', escapeAttr(name), '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="', overall, '">',
                                 '<div class="progress-fill" style="width:', overall, '%"></div>',
@@ -3235,7 +3313,7 @@
                 '.pr-modal-body{padding:26px;display:grid;gap:18px}.pr-overall-card,.pr-course-card{border:1px solid #f0dce7;border-radius:20px;background:white;padding:20px}',
                 '.pr-overall-card{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center;background:linear-gradient(135deg,#fff6fa,#faf7ff)}',
                 '.pr-overall-value{font-size:42px;font-weight:800;color:#ff2f8a}.pr-overall-label{color:#61698f;font-size:13px}',
-                '.pr-course-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.pr-course-card h3{margin:0;font-size:17px}.pr-course-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}',
+                '.pr-course-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.pr-course-card h3{margin:2px 0 0;font-size:17px}.pr-course-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.pr-level-label{display:block;color:#7a81a3;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}',
                 '.pr-pill{padding:6px 10px;border-radius:999px;background:#fff0f7;color:#d92372;font-size:12px;font-weight:700}.pr-modal-track{height:8px;overflow:hidden;border-radius:999px;background:#fceaf2}.pr-modal-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#ff2f8a,#ff78ac)}',
                 '.pr-course-meta{display:flex;justify-content:space-between;gap:12px;margin-top:8px;color:#61698f;font-size:12px}.pr-detail-group{margin-top:14px;border-top:1px solid #f2e3eb;padding-top:12px}.pr-detail-group summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700;color:#2a3166}',
                 '.pr-detail-row{display:grid;grid-template-columns:minmax(120px,1fr) 120px 48px;gap:12px;align-items:center;padding:10px 0;border-top:1px solid #f7edf2;font-size:12px}.pr-detail-name{font-weight:600}.pr-detail-count{color:#61698f}',
@@ -3265,17 +3343,16 @@
             ].join('');
         };
 
-        const detailRowsHtml = function(rows, type) {
+        const detailRowsHtml = function(rows, unit) {
             const sourceRows = Array.isArray(rows) ? rows : [];
             if (!sourceRows.length) return '<p class="pr-modal-subtitle">Belum ada konfigurasi aktif.</p>';
             return sourceRows.map(function(row) {
                 const progress = clampPercent(row.progress);
-                const title = row.title || row.moduleId || 'Modul';
-                const unit = type === 'math' ? 'aktivitas' : 'bab';
+                const title = row.title || row.submoduleId || row.moduleId || 'Submodul';
                 return [
-                    '<div class="pr-detail-row">',
+                    '<div class="pr-detail-row" data-submodule-id="', escapeAttr(row.submoduleId || row.moduleId || ''), '">',
                         '<span class="pr-detail-name">', escapeHtml(title), '</span>',
-                        '<span class="pr-detail-count">', Number(row.completed || 0), ' / ', Number(row.total || 0), ' ', unit, '</span>',
+                        '<span class="pr-detail-count">', Number(row.completed || 0), ' / ', Number(row.total || 0), ' ', escapeHtml(unit), '</span>',
                         '<strong>', formatPercent(progress), '%</strong>',
                     '</div>'
                 ].join('');
@@ -3286,26 +3363,9 @@
             closeModal();
             ensureModalStyles();
             modalReturnFocus = trigger || document.activeElement;
-            const ai = participant.aiFundamentals || {};
-            const math = participant.mathForAi || {};
-            const mathTitles = {
-                '01': 'Kenapa AI Butuh Matematika',
-                '02': 'Aljabar Linear',
-                '03': 'Statistika untuk AI',
-                '04': 'Probabilitas',
-                '05': 'Kalkulus',
-                '06': 'Optimisasi',
-                '07': 'Studi Kasus Terintegrasi'
-            };
-            const mathRows = Object.keys(math.submodules || {}).sort().map(function(id) {
-                const row = math.submodules[id] || {};
-                return {
-                    title: (id + ' · ' + (row.title || mathTitles[id] || 'Submodul')),
-                    completed: row.completed,
-                    total: row.total,
-                    progress: row.progress
-                };
-            });
+            const hierarchy = buildLearningHierarchy(participant);
+            const aiModule = hierarchy.modules[0];
+            const mathModule = hierarchy.modules[1];
             const name = String(participant.name || 'Peserta');
             const overall = clampPercent(participant.overallProgress);
             const wrapper = document.createElement('div');
@@ -3323,21 +3383,21 @@
                         '<section class="pr-overall-card" aria-label="Ringkasan progress keseluruhan">',
                             '<div><div class="pr-overall-value">', formatPercent(overall), '%</div><div class="pr-overall-label">Overall progress dari server</div></div>',
                             '<div>', progressBarHtml(overall, 'Overall progress ' + name),
-                                '<p class="pr-modal-subtitle">Rata-rata setara AI Fundamentals dan Math for AI. Nilai ini memakai snapshot server, bukan dihitung ulang di browser.</p>',
+                                '<p class="pr-modal-subtitle">Rata-rata setara dari 2 modul: AI Fundamentals dan Math for AI. Nilai ini memakai snapshot server, bukan dihitung ulang di browser.</p>',
                             '</div>',
                         '</section>',
                         '<div class="pr-course-grid">',
-                            '<section class="pr-course-card">',
-                                '<div class="pr-course-head"><h3>AI Fundamentals</h3><span class="pr-pill">', formatPercent(ai.progress), '%</span></div>',
-                                progressBarHtml(ai.progress, 'AI Fundamentals ' + name),
-                                '<div class="pr-course-meta"><span>', Number(ai.completedModules || 0), ' modul tuntas</span><span>', Number(ai.moduleTotal || 0), ' modul aktif</span></div>',
-                                '<details class="pr-detail-group" open><summary>Rincian modul</summary>', detailRowsHtml(ai.modules, 'ai'), '</details>',
+                            '<section class="pr-course-card" data-learning-module="', escapeAttr(aiModule.moduleId), '">',
+                                '<div class="pr-course-head"><div><span class="pr-level-label">Modul · ', aiModule.total, ' submodul</span><h3>', escapeHtml(aiModule.title), '</h3></div><span class="pr-pill">', formatPercent(aiModule.progress), '%</span></div>',
+                                progressBarHtml(aiModule.progress, aiModule.title + ' ' + name),
+                                '<div class="pr-course-meta"><span>', aiModule.completed, ' submodul tuntas</span><span>', aiModule.total, ' submodul terpantau</span></div>',
+                                '<details class="pr-detail-group" open><summary>Rincian ', aiModule.total, ' submodul</summary>', detailRowsHtml(aiModule.submodules, 'bab'), '</details>',
                             '</section>',
-                            '<section class="pr-course-card">',
-                                '<div class="pr-course-head"><h3>Math for AI</h3><span class="pr-pill">', formatPercent(math.progress), '%</span></div>',
-                                progressBarHtml(math.progress, 'Math for AI ' + name),
-                                '<div class="pr-course-meta"><span>', Number(math.completedActivities || 0), ' / ', Number(math.totalActivities || 89), ' aktivitas</span><span>', Number(math.topicTotal || 54), ' topik</span></div>',
-                                '<details class="pr-detail-group"><summary>Rincian 7 submodul</summary>', detailRowsHtml(mathRows, 'math'), '</details>',
+                            '<section class="pr-course-card" data-learning-module="', escapeAttr(mathModule.moduleId), '">',
+                                '<div class="pr-course-head"><div><span class="pr-level-label">Modul · ', mathModule.submoduleTotal, ' submodul</span><h3>', escapeHtml(mathModule.title), '</h3></div><span class="pr-pill">', formatPercent(mathModule.progress), '%</span></div>',
+                                progressBarHtml(mathModule.progress, mathModule.title + ' ' + name),
+                                '<div class="pr-course-meta"><span>', mathModule.completed, ' / ', mathModule.total, ' aktivitas</span><span>', mathModule.topicTotal, ' topik</span></div>',
+                                '<details class="pr-detail-group"><summary>Rincian ', mathModule.submoduleTotal, ' submodul</summary>', detailRowsHtml(mathModule.submodules, 'aktivitas'), '</details>',
                             '</section>',
                         '</div>',
                         '<div class="pr-activity-note"><strong>Terakhir belajar:</strong> ', escapeHtml(formatTimestamp(participant.lastLearningAt)),
