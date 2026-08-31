@@ -5996,6 +5996,73 @@ function previewQaMathProgressIntegrity() {
   return result;
 }
 
+function summarizeQaAdminLearningSnapshot(snapshot, maskedNik) {
+  var source = snapshot || {};
+  var participant = (Array.isArray(source.participants) ? source.participants : []).find(function(row) {
+    return Boolean(row && row.isQa)
+      && String(row.maskedNik || row.nik || '') === String(maskedNik || '');
+  }) || null;
+  return {
+    snapshot_available: Boolean(snapshot),
+    generated_at: source.generatedAt || null,
+    qa_found: Boolean(participant),
+    qa_math_progress: participant ? Number(participant.mathForAi && participant.mathForAi.progress || 0) : null,
+    qa_math_completed: participant ? Number(participant.mathForAi && participant.mathForAi.completedActivities || 0) : null,
+    qa_math_total: participant ? Number(participant.mathForAi && participant.mathForAi.totalActivities || 0) : null,
+    qa_overall_progress: participant ? Number(participant.overallProgress || 0) : null,
+    qa_last_learning_at: participant && participant.lastLearningAt || null,
+    qa_submodules: participant && participant.mathForAi && participant.mathForAi.submodules
+      ? Object.keys(participant.mathForAi.submodules).reduce(function(result, submoduleId) {
+        var submodule = participant.mathForAi.submodules[submoduleId] || {};
+        result[submoduleId] = {
+          completed: Number(submodule.completed || 0),
+          total: Number(submodule.total || 0),
+          progress: Number(submodule.progress || 0)
+        };
+        return result;
+      }, {})
+      : {},
+    scope_qa_participants: Number(source.scope && source.scope.qaParticipants || 0),
+    diagnostic_accepted_rows: Number(source.diagnostics && source.diagnostics.acceptedProgressRows || 0),
+    diagnostic_invalid_rows: Number(source.diagnostics && source.diagnostics.invalidProgressRows || 0)
+  };
+}
+
+/**
+ * Membandingkan kalkulasi snapshot langsung dengan cache Admin Progress.
+ * Editor-only, read-only, dan hanya mengeluarkan ringkasan akun QA termasking.
+ */
+function previewQaAdminLearningSnapshotIntegrity() {
+  var config = readQaParticipantConfig();
+  var maskedNik = maskParticipantNik(config.nik);
+  var directSnapshot = buildAdminLearningProgressSnapshot({
+    accounts: getRows(SHEETS.participantAccounts),
+    progressRows: getRows(SHEETS.participantProgress),
+    moduleRows: getRows(SHEETS.participantDashboardModules),
+    targetEmailSet: getTargetParticipantPortalEmailSet(),
+    now: new Date()
+  });
+  var cachedSnapshot = adminProgressReadCache(CacheService.getScriptCache());
+  var result = {
+    status: 'success',
+    read_only: true,
+    masked_nik: maskedNik,
+    cache_key: ADMIN_LEARNING_PROGRESS_CACHE_KEY,
+    direct: summarizeQaAdminLearningSnapshot(directSnapshot, maskedNik),
+    cached: summarizeQaAdminLearningSnapshot(cachedSnapshot, maskedNik)
+  };
+  result.comparison = {
+    direct_is_89_of_89: result.direct.qa_math_completed === MATH_PROGRESS_ITEM_TOTAL
+      && result.direct.qa_math_total === MATH_PROGRESS_ITEM_TOTAL,
+    cache_matches_direct: result.cached.snapshot_available
+      && result.cached.qa_math_completed === result.direct.qa_math_completed
+      && result.cached.qa_math_total === result.direct.qa_math_total
+      && result.cached.qa_math_progress === result.direct.qa_math_progress
+  };
+  Logger.log(JSON.stringify(result));
+  return result;
+}
+
 function buildAdminLearningProgressSnapshot(source) {
   var input = source || {};
   var accounts = Array.isArray(input.accounts) ? input.accounts : [];

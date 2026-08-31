@@ -22,6 +22,7 @@ vm.runInContext(
         adminProgressReadCache,
         adminProgressClearCache,
         buildQaMathProgressIntegrityPreview,
+        summarizeQaAdminLearningSnapshot,
         cacheKey: ADMIN_LEARNING_PROGRESS_CACHE_KEY,
         cacheChunkBytes: ADMIN_LEARNING_PROGRESS_CACHE_CHUNK_BYTES
     };`,
@@ -37,6 +38,7 @@ const qaPreviewSource = source.slice(qaPreviewStart, qaPreviewEnd);
 assert.doesNotMatch(qaPreviewSource, /updateByKey|upsertByKey|addRowObject|appendRow|deleteRow|setValue|setValues|clearContent/);
 const doPostSource = source.slice(source.indexOf('function doPost'), source.indexOf('\nfunction doGet'));
 assert.equal(doPostSource.includes('previewQaMathProgressIntegrity'), false, 'QA Math preview must never be exposed through doPost.');
+assert.equal(doPostSource.includes('previewQaAdminLearningSnapshotIntegrity'), false, 'QA Admin snapshot preview must never be exposed through doPost.');
 const now = '2026-08-31T12:00:00.000Z';
 const targetEmailSet = {
     'regular.one@example.com': true,
@@ -233,6 +235,29 @@ assert.equal(completeQaMathPreview.math_progress.admin_linked_completed_unique, 
 assert.equal(completeQaMathPreview.math_progress.invalid_rows, 1);
 assert.equal(completeQaMathPreview.finding, 'fully_complete_with_ignored_extra_rows');
 assert.match(completeQaMathPreview.recommended_next_step, /Tidak perlu recovery/);
+
+const qaAdminSnapshotSummary = api.summarizeQaAdminLearningSnapshot({
+    generatedAt: '2026-09-01T02:00:00.000Z',
+    scope: { qaParticipants: 1 },
+    diagnostics: { acceptedProgressRows: 89, invalidProgressRows: 4 },
+    participants: [{
+        isQa: true,
+        maskedNik: '9000********0001',
+        overallProgress: 86,
+        lastLearningAt: '2026-08-16T14:35:12.082Z',
+        mathForAi: {
+            progress: 100,
+            completedActivities: 89,
+            totalActivities: 89,
+            submodules: { '01': { completed: 12, total: 12, progress: 100 } }
+        }
+    }]
+}, '9000********0001');
+assert.equal(qaAdminSnapshotSummary.qa_found, true);
+assert.equal(qaAdminSnapshotSummary.qa_math_progress, 100);
+assert.equal(qaAdminSnapshotSummary.qa_math_completed, 89);
+assert.equal(qaAdminSnapshotSummary.qa_math_total, 89);
+assert.equal(JSON.stringify(qaAdminSnapshotSummary.qa_submodules), JSON.stringify({ '01': { completed: 12, total: 12, progress: 100 } }));
 
 const moduleFlagSnapshot = api.buildAdminLearningProgressSnapshot({
     accounts: accounts.slice(0, 1),
