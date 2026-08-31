@@ -207,6 +207,33 @@ const emptyQaMathPreview = api.buildQaMathProgressIntegrityPreview({
 assert.equal(emptyQaMathPreview.math_progress.related_rows, 0);
 assert.equal(emptyQaMathPreview.finding, 'no_server_math_progress');
 
+const canonicalMathIds = [];
+const mathTopicTotals = { '01': 7, '02': 8, '03': 8, '04': 8, '05': 8, '06': 8, '07': 7 };
+Object.entries(mathTopicTotals).forEach(([submoduleId, topicTotal]) => {
+    canonicalMathIds.push(`info-${submoduleId}`);
+    for (let topic = 1; topic <= topicTotal; topic += 1) {
+        canonicalMathIds.push(String(Number(submoduleId) * 100 + topic));
+    }
+    canonicalMathIds.push(`practice-${submoduleId}`, `quiz-${submoduleId}`, `discussion-${submoduleId}`, `references-${submoduleId}`);
+});
+assert.equal(canonicalMathIds.length, 89);
+const completeQaMathPreview = api.buildQaMathProgressIntegrityPreview({
+    qaNik: '9000000000000001',
+    accounts,
+    participants: qaParticipantRows,
+    progressRows: canonicalMathIds.map(chapterId => ({
+        participant_rowId: 'row-qa', nik: '9000000000000001',
+        module_id: 'math-for-ai', chapter_id: chapterId, status: 'completed'
+    })).concat([{
+        participant_rowId: 'row-qa', nik: '9000000000000001',
+        module_id: 'math-for-ai', chapter_id: 'legacy-invalid', status: 'completed'
+    }])
+});
+assert.equal(completeQaMathPreview.math_progress.admin_linked_completed_unique, 89);
+assert.equal(completeQaMathPreview.math_progress.invalid_rows, 1);
+assert.equal(completeQaMathPreview.finding, 'fully_complete_with_ignored_extra_rows');
+assert.match(completeQaMathPreview.recommended_next_step, /Tidak perlu recovery/);
+
 const moduleFlagSnapshot = api.buildAdminLearningProgressSnapshot({
     accounts: accounts.slice(0, 1),
     progressRows,

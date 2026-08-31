@@ -5923,6 +5923,13 @@ function buildQaMathProgressIntegrityPreview(source) {
   } else if (!accountRowId || !participantRowId || accountRowId !== participantRowId) {
     finding = 'qa_identity_linkage_mismatch';
     nextStep = 'Backup lalu selaraskan linkage QA saja; jangan mengubah row peserta resmi.';
+  } else if (adminCompletedCount === MATH_PROGRESS_ITEM_TOTAL) {
+    finding = invalidRows.length || legacyRows.length
+      ? 'fully_complete_with_ignored_extra_rows'
+      : 'ok';
+    nextStep = invalidRows.length || legacyRows.length
+      ? 'Tidak perlu recovery; 89/89 canonical lengkap. Row ekstra tetap diabaikan oleh scoring.'
+      : 'Tidak ada pemulihan yang diperlukan.';
   } else if (completedCount > adminCompletedCount || wrongLinkageRows.length) {
     finding = 'progress_row_linkage_mismatch';
     nextStep = 'Backup row Math QA lalu relink hanya row yang terbukti milik QA.';
