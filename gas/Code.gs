@@ -6028,6 +6028,33 @@ function summarizeQaAdminLearningSnapshot(snapshot, maskedNik) {
   };
 }
 
+function summarizeAdminMathModuleConfiguration(moduleRows) {
+  var matchingRows = (Array.isArray(moduleRows) ? moduleRows : []).filter(function(row) {
+    return String(row && row.module_id || '').trim() === 'math-for-ai';
+  });
+  return {
+    matching_rows: matchingRows.length,
+    rows: matchingRows.map(function(row) {
+      var total = Math.max(0, Math.floor(Number(row.total_chapters || 0)));
+      var active = moduleFlag(row.is_active, true);
+      var tracking = isModuleTrackingEnabled(row);
+      return {
+        is_active_raw: row.is_active === undefined ? null : String(row.is_active),
+        tracking_enabled_raw: row.tracking_enabled === undefined ? null : String(row.tracking_enabled),
+        total_chapters: total,
+        effective_active: active,
+        effective_tracking: tracking,
+        accepted_by_admin_snapshot: active && tracking && total > 0
+      };
+    }),
+    has_accepted_configuration: matchingRows.some(function(row) {
+      return moduleFlag(row.is_active, true)
+        && isModuleTrackingEnabled(row)
+        && Math.max(0, Math.floor(Number(row.total_chapters || 0))) > 0;
+    })
+  };
+}
+
 /**
  * Membandingkan kalkulasi snapshot langsung dengan cache Admin Progress.
  * Editor-only, read-only, dan hanya mengeluarkan ringkasan akun QA termasking.
@@ -6035,10 +6062,11 @@ function summarizeQaAdminLearningSnapshot(snapshot, maskedNik) {
 function previewQaAdminLearningSnapshotIntegrity() {
   var config = readQaParticipantConfig();
   var maskedNik = maskParticipantNik(config.nik);
+  var moduleRows = getRows(SHEETS.participantDashboardModules);
   var directSnapshot = buildAdminLearningProgressSnapshot({
     accounts: getRows(SHEETS.participantAccounts),
     progressRows: getRows(SHEETS.participantProgress),
-    moduleRows: getRows(SHEETS.participantDashboardModules),
+    moduleRows: moduleRows,
     targetEmailSet: getTargetParticipantPortalEmailSet(),
     now: new Date()
   });
@@ -6048,6 +6076,7 @@ function previewQaAdminLearningSnapshotIntegrity() {
     read_only: true,
     masked_nik: maskedNik,
     cache_key: ADMIN_LEARNING_PROGRESS_CACHE_KEY,
+    math_module_configuration: summarizeAdminMathModuleConfiguration(moduleRows),
     direct: summarizeQaAdminLearningSnapshot(directSnapshot, maskedNik),
     cached: summarizeQaAdminLearningSnapshot(cachedSnapshot, maskedNik)
   };

@@ -23,6 +23,7 @@ vm.runInContext(
         adminProgressClearCache,
         buildQaMathProgressIntegrityPreview,
         summarizeQaAdminLearningSnapshot,
+        summarizeAdminMathModuleConfiguration,
         cacheKey: ADMIN_LEARNING_PROGRESS_CACHE_KEY,
         cacheChunkBytes: ADMIN_LEARNING_PROGRESS_CACHE_CHUNK_BYTES
     };`,
@@ -258,6 +259,18 @@ assert.equal(qaAdminSnapshotSummary.qa_math_progress, 100);
 assert.equal(qaAdminSnapshotSummary.qa_math_completed, 89);
 assert.equal(qaAdminSnapshotSummary.qa_math_total, 89);
 assert.equal(JSON.stringify(qaAdminSnapshotSummary.qa_submodules), JSON.stringify({ '01': { completed: 12, total: 12, progress: 100 } }));
+
+const activeMathModuleConfiguration = api.summarizeAdminMathModuleConfiguration(moduleRows);
+assert.equal(activeMathModuleConfiguration.matching_rows, 1);
+assert.equal(activeMathModuleConfiguration.has_accepted_configuration, true);
+assert.equal(activeMathModuleConfiguration.rows[0].accepted_by_admin_snapshot, true);
+const disabledMathModuleConfiguration = api.summarizeAdminMathModuleConfiguration([{
+    module_id: 'math-for-ai', total_chapters: 89, is_active: 'true', tracking_enabled: 'false'
+}]);
+assert.equal(disabledMathModuleConfiguration.matching_rows, 1);
+assert.equal(disabledMathModuleConfiguration.rows[0].effective_active, true);
+assert.equal(disabledMathModuleConfiguration.rows[0].effective_tracking, false);
+assert.equal(disabledMathModuleConfiguration.has_accepted_configuration, false);
 
 const moduleFlagSnapshot = api.buildAdminLearningProgressSnapshot({
     accounts: accounts.slice(0, 1),
