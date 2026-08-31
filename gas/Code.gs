@@ -11,7 +11,7 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
-const HERAI_BACKEND_VERSION = '2026.8.31-admin-progress-cache-chunks';
+const HERAI_BACKEND_VERSION = '2026.9.1-qa-math-integrity-preview';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
 const PARTICIPANT_ACCOUNT_TYPE = 'participant';
 const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
@@ -5825,6 +5825,168 @@ function adminProgressMathSubmoduleId(chapterId) {
     return String(Math.floor(Number(value) / 100)).padStart(2, '0');
   }
   return '';
+}
+
+function buildQaMathProgressIntegrityPreview(source) {
+  var input = source || {};
+  var accounts = Array.isArray(input.accounts) ? input.accounts : [];
+  var participants = Array.isArray(input.participants) ? input.participants : [];
+  var progressRows = Array.isArray(input.progressRows) ? input.progressRows : [];
+  var qaNik = String(input.qaNik || '').replace(/\D/g, '');
+  var qaAccounts = accounts.filter(function(row) {
+    return isQaParticipantAccount(row)
+      && String(row.nik || row.username || '').replace(/\D/g, '') === qaNik;
+  });
+  var qaParticipants = participants.filter(function(row) {
+    return normalizeParticipantAccountType(row && row.account_type) === QA_PARTICIPANT_ACCOUNT_TYPE
+      && String(row.nik || '').replace(/\D/g, '') === qaNik;
+  });
+  var account = qaAccounts[0] || null;
+  var accountRowId = String(account && (account.participant_rowId || account.rowId) || '').trim();
+  var participant = qaParticipants.find(function(row) {
+    return accountRowId && String(row.rowId || '').trim() === accountRowId;
+  }) || qaParticipants[0] || null;
+  var participantRowId = String(participant && participant.rowId || '').trim();
+  var relevantRowIds = {};
+  if (accountRowId) relevantRowIds[accountRowId] = true;
+  if (participantRowId) relevantRowIds[participantRowId] = true;
+
+  var qaRelatedRows = progressRows.filter(function(row) {
+    var rowNik = String(row && row.nik || '').replace(/\D/g, '');
+    var rowId = String(row && row.participant_rowId || '').trim();
+    return Boolean((qaNik && rowNik === qaNik) || (rowId && relevantRowIds[rowId]));
+  });
+  var mathRows = qaRelatedRows.filter(function(row) {
+    return String(row && row.module_id || '').trim() === 'math-for-ai';
+  });
+  var canonicalRows = mathRows.filter(function(row) {
+    var chapterId = String(row && row.chapter_id || '').trim();
+    return chapterId !== 'quiz' && isValidMathProgressChapterId(chapterId);
+  });
+  var completedCanonicalIds = {};
+  var inProgressCanonicalIds = {};
+  var notStartedCanonicalIds = {};
+  var bySubmodule = {};
+  Object.keys(MATH_PROGRESS_TOPIC_COUNTS).forEach(function(submoduleId) {
+    bySubmodule[submoduleId] = { completed: 0, total: Number(MATH_PROGRESS_TOPIC_COUNTS[submoduleId] || 0) + 5 };
+  });
+  canonicalRows.forEach(function(row) {
+    var chapterId = String(row.chapter_id || '').trim();
+    var status = String(row.status || '').trim().toLowerCase();
+    if (status === 'completed') completedCanonicalIds[chapterId] = true;
+    else if (status === 'in_progress') inProgressCanonicalIds[chapterId] = true;
+    else if (status === 'not_started') notStartedCanonicalIds[chapterId] = true;
+  });
+  Object.keys(completedCanonicalIds).forEach(function(chapterId) {
+    var submoduleId = adminProgressMathSubmoduleId(chapterId);
+    if (bySubmodule[submoduleId]) bySubmodule[submoduleId].completed++;
+  });
+
+  function canonicalCompletedForRowId(rowId) {
+    if (!rowId) return 0;
+    var completed = {};
+    canonicalRows.forEach(function(row) {
+      var chapterId = String(row.chapter_id || '').trim();
+      if (String(row.participant_rowId || '').trim() === rowId
+        && String(row.status || '').trim().toLowerCase() === 'completed') {
+        completed[chapterId] = true;
+      }
+    });
+    return Object.keys(completed).length;
+  }
+
+  var invalidRows = mathRows.filter(function(row) {
+    var chapterId = String(row && row.chapter_id || '').trim();
+    var status = String(row && row.status || '').trim().toLowerCase();
+    return (chapterId !== 'quiz' && !isValidMathProgressChapterId(chapterId))
+      || ['not_started', 'in_progress', 'completed'].indexOf(status) < 0;
+  });
+  var legacyRows = mathRows.filter(function(row) {
+    return /^(?:[1-7]|practice)$/.test(String(row && row.chapter_id || '').trim());
+  });
+  var aggregateQuizRows = mathRows.filter(function(row) {
+    return String(row && row.chapter_id || '').trim() === 'quiz';
+  });
+  var wrongLinkageRows = mathRows.filter(function(row) {
+    var rowId = String(row && row.participant_rowId || '').trim();
+    return Boolean(accountRowId && rowId !== accountRowId);
+  });
+  var timestamps = mathRows.map(adminProgressLatestTimestamp).filter(Boolean).sort();
+  var completedCount = Object.keys(completedCanonicalIds).length;
+  var adminCompletedCount = canonicalCompletedForRowId(accountRowId);
+  var participantCompletedCount = canonicalCompletedForRowId(participantRowId);
+  var finding = 'ok';
+  var nextStep = 'Tidak ada pemulihan yang diperlukan.';
+  if (qaAccounts.length !== 1 || qaParticipants.length !== 1) {
+    finding = 'qa_identity_ambiguous';
+    nextStep = 'Periksa collision atau record QA yang hilang sebelum menyentuh progress.';
+  } else if (!accountRowId || !participantRowId || accountRowId !== participantRowId) {
+    finding = 'qa_identity_linkage_mismatch';
+    nextStep = 'Backup lalu selaraskan linkage QA saja; jangan mengubah row peserta resmi.';
+  } else if (completedCount > adminCompletedCount || wrongLinkageRows.length) {
+    finding = 'progress_row_linkage_mismatch';
+    nextStep = 'Backup row Math QA lalu relink hanya row yang terbukti milik QA.';
+  } else if (!mathRows.length) {
+    finding = 'no_server_math_progress';
+    nextStep = 'Cari backup reset QA atau sinkronkan ulang completion lokal QA yang masih memiliki bukti.';
+  } else if (legacyRows.length || invalidRows.length) {
+    finding = 'legacy_or_invalid_math_progress';
+    nextStep = 'Petakan hanya ID yang memiliki bukti; jangan mengonversi satu marker menjadi 89 completion.';
+  } else if (adminCompletedCount < MATH_PROGRESS_ITEM_TOTAL) {
+    finding = 'incomplete_server_math_progress';
+    nextStep = 'Sinkronkan ulang item QA yang pending dan verifikasi acknowledgment per ID.';
+  }
+
+  return {
+    status: qaAccounts.length === 1 && qaParticipants.length === 1 ? 'success' : 'error',
+    read_only: true,
+    masked_nik: maskParticipantNik(qaNik),
+    identity: {
+      qa_account_records: qaAccounts.length,
+      qa_participant_records: qaParticipants.length,
+      account_has_participant_row_id: Boolean(accountRowId),
+      participant_has_row_id: Boolean(participantRowId),
+      row_id_match: Boolean(accountRowId && participantRowId && accountRowId === participantRowId)
+    },
+    math_progress: {
+      related_rows: mathRows.length,
+      canonical_rows: canonicalRows.length,
+      canonical_completed_unique: completedCount,
+      canonical_in_progress_unique: Object.keys(inProgressCanonicalIds).length,
+      canonical_not_started_unique: Object.keys(notStartedCanonicalIds).length,
+      missing_from_89: Math.max(0, MATH_PROGRESS_ITEM_TOTAL - adminCompletedCount),
+      admin_linked_completed_unique: adminCompletedCount,
+      participant_linked_completed_unique: participantCompletedCount,
+      wrong_linkage_rows: wrongLinkageRows.length,
+      legacy_rows: legacyRows.length,
+      invalid_rows: invalidRows.length,
+      aggregate_quiz_rows: aggregateQuizRows.length,
+      server_progress_percent: MATH_PROGRESS_ITEM_TOTAL
+        ? Math.min(100, Math.round((adminCompletedCount / MATH_PROGRESS_ITEM_TOTAL) * 100))
+        : 0,
+      fully_completed_on_server: adminCompletedCount === MATH_PROGRESS_ITEM_TOTAL,
+      latest_timestamp: timestamps.length ? timestamps[timestamps.length - 1] : null,
+      by_submodule: bySubmodule
+    },
+    finding: finding,
+    recommended_next_step: nextStep
+  };
+}
+
+/**
+ * Diagnosis editor-only dan read-only untuk progress Math akun QA.
+ * Tidak didaftarkan di doPost dan tidak melakukan update/delete/append apa pun.
+ */
+function previewQaMathProgressIntegrity() {
+  var config = readQaParticipantConfig();
+  var result = buildQaMathProgressIntegrityPreview({
+    qaNik: config.nik,
+    accounts: getRows(SHEETS.participantAccounts),
+    participants: getRows(SHEETS.participants),
+    progressRows: getRows(SHEETS.participantProgress)
+  });
+  Logger.log(JSON.stringify(result));
+  return result;
 }
 
 function buildAdminLearningProgressSnapshot(source) {

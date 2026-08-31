@@ -21,6 +21,7 @@ vm.runInContext(
         adminProgressWriteCache,
         adminProgressReadCache,
         adminProgressClearCache,
+        buildQaMathProgressIntegrityPreview,
         cacheKey: ADMIN_LEARNING_PROGRESS_CACHE_KEY,
         cacheChunkBytes: ADMIN_LEARNING_PROGRESS_CACHE_CHUNK_BYTES
     };`,
@@ -29,6 +30,13 @@ vm.runInContext(
 );
 
 const api = context.__adminProgressApi;
+const qaPreviewStart = source.indexOf('function previewQaMathProgressIntegrity()');
+const qaPreviewEnd = source.indexOf('\nfunction buildAdminLearningProgressSnapshot', qaPreviewStart);
+assert.ok(qaPreviewStart >= 0 && qaPreviewEnd > qaPreviewStart, 'QA Math preview must remain present and editor-only.');
+const qaPreviewSource = source.slice(qaPreviewStart, qaPreviewEnd);
+assert.doesNotMatch(qaPreviewSource, /updateByKey|upsertByKey|addRowObject|appendRow|deleteRow|setValue|setValues|clearContent/);
+const doPostSource = source.slice(source.indexOf('function doPost'), source.indexOf('\nfunction doGet'));
+assert.equal(doPostSource.includes('previewQaMathProgressIntegrity'), false, 'QA Math preview must never be exposed through doPost.');
 const now = '2026-08-31T12:00:00.000Z';
 const targetEmailSet = {
     'regular.one@example.com': true,
@@ -157,6 +165,47 @@ assert.equal(snapshot.overview.moduleStats.find(module => module.moduleId === 'a
 assert.equal(snapshot.overview.moduleStats.find(module => module.moduleId === 'math-for-ai').averageProgress, 0.5);
 assert.equal(snapshot.diagnostics.orphanProgressRows, 1);
 assert.ok(snapshot.diagnostics.invalidProgressRows >= 2);
+
+const qaParticipantRows = [{
+    rowId: 'row-qa', nik: '9000000000000001', nama_lengkap: 'QA Account', account_type: 'qa'
+}];
+const qaMathPreview = api.buildQaMathProgressIntegrityPreview({
+    qaNik: '9000000000000001',
+    accounts,
+    participants: qaParticipantRows,
+    progressRows
+});
+assert.equal(qaMathPreview.status, 'success');
+assert.equal(qaMathPreview.read_only, true);
+assert.equal(qaMathPreview.masked_nik, '9000********0001');
+assert.equal(qaMathPreview.identity.row_id_match, true);
+assert.equal(qaMathPreview.math_progress.related_rows, 1);
+assert.equal(qaMathPreview.math_progress.canonical_completed_unique, 1);
+assert.equal(qaMathPreview.math_progress.admin_linked_completed_unique, 1);
+assert.equal(qaMathPreview.math_progress.missing_from_89, 88);
+assert.equal(qaMathPreview.finding, 'incomplete_server_math_progress');
+
+const wrongQaLinkagePreview = api.buildQaMathProgressIntegrityPreview({
+    qaNik: '9000000000000001',
+    accounts,
+    participants: qaParticipantRows,
+    progressRows: [{
+        participant_rowId: 'row-qa-before-reset', nik: '9000000000000001',
+        module_id: 'math-for-ai', chapter_id: '101', status: 'completed',
+        updated_at: '2026-08-20T12:00:00.000Z'
+    }]
+});
+assert.equal(wrongQaLinkagePreview.identity.row_id_match, true);
+assert.equal(wrongQaLinkagePreview.math_progress.canonical_completed_unique, 1);
+assert.equal(wrongQaLinkagePreview.math_progress.admin_linked_completed_unique, 0);
+assert.equal(wrongQaLinkagePreview.math_progress.wrong_linkage_rows, 1);
+assert.equal(wrongQaLinkagePreview.finding, 'progress_row_linkage_mismatch');
+
+const emptyQaMathPreview = api.buildQaMathProgressIntegrityPreview({
+    qaNik: '9000000000000001', accounts, participants: qaParticipantRows, progressRows: []
+});
+assert.equal(emptyQaMathPreview.math_progress.related_rows, 0);
+assert.equal(emptyQaMathPreview.finding, 'no_server_math_progress');
 
 const moduleFlagSnapshot = api.buildAdminLearningProgressSnapshot({
     accounts: accounts.slice(0, 1),
