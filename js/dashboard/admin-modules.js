@@ -3020,677 +3020,461 @@
     };
 
     // ==========================================
-    // PROGRESS PESERTA (PLAN 1)
+    // PROGRESS PESERTA — authoritative server snapshot
     // ==========================================
     window.initProgressPeserta = async function() {
-        if (!window.checkAdminAccess || (typeof window.checkAdminAccess === 'function' && !window.checkAdminAccess())) {
-            return;
+        if (!window.checkAdminAccess || !window.checkAdminAccess()) return;
+
+        if (typeof window.__cleanupProgressPeserta === 'function') {
+            window.__cleanupProgressPeserta();
         }
+
         await window.loadSidebar();
         window.updateAdminProfile();
-        
+
         const container = document.getElementById('progress-overview-container');
         const tbody = document.getElementById('progress-table-body');
         const refreshBtn = document.getElementById('refresh-progress-btn');
         const searchInput = document.getElementById('progress-search-input');
+        const paginationContainer = document.getElementById('progress-pagination');
+        const pageInfo = document.getElementById('page-info');
+        const snapshotStatus = document.getElementById('progress-snapshot-status');
+        const errorBox = document.getElementById('progress-error');
         const apiUrl = '/__gas';
-        let allData = [];
-
-        async function loadData(forceRefresh = false) {
-            try {
-                if (refreshBtn) {
-                    refreshBtn.disabled = true;
-                    refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat...';
-                }
-                
-                // Fetch Overview
-                const resOverview = await fetch(apiUrl, {
-                    method: 'POST',
-                    body: JSON.stringify(withAdminToken({
-                        action: 'getAdminLearningProgressOverview',
-                        ...window.getCurrentAdminAccess(),
-                        forceRefresh: forceRefresh
-                    }))
-                });
-                
-                // Fetch Detail
-                const resDetail = await fetch(apiUrl, {
-                    method: 'POST',
-                    body: JSON.stringify(withAdminToken({
-                        action: 'getAdminParticipantProgressDetail',
-                        ...window.getCurrentAdminAccess(),
-                        forceRefresh: forceRefresh
-                    }))
-                });
-
-                if (resOverview.ok && resDetail.ok) {
-                    const overviewJson = await resOverview.json();
-                    const detailJson = await resDetail.json();
-                    
-                    if (overviewJson.status === 'success') {
-                        renderOverview(overviewJson.data);
-                    }
-                    if (detailJson.status === 'success') {
-                        allData = detailJson.data || [];
-                        renderTable(allData);
-                    } else {
-                        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:red;">Gagal memuat: ${escapeHtml(detailJson.message || 'Error tidak diketahui')}</td></tr>`;
-                    }
-                } else {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:red;">Gagal menghubungi server GAS. Pastikan GAS sudah di-deploy.</td></tr>';
-                }
-            } catch (err) {
-                console.error("Gagal memuat data progress", err);
-                if (tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:red;">Terjadi kesalahan jaringan atau server.</td></tr>';
-            } finally {
-                if (refreshBtn) {
-                    refreshBtn.disabled = false;
-                    refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Segarkan Data';
-                }
-            }
-        }
-
-        function getInitials(name) {
-            if (!name) return '??';
-            const parts = name.trim().split(' ');
-            if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-        }
-
-        function timeSince(dateString) {
-            if (!dateString) return '-';
-            const date = new Date(dateString);
-            const seconds = Math.floor((new Date() - date) / 1000);
-            let interval = seconds / 31536000;
-            if (interval > 1) return Math.floor(interval) + " tahun yang lalu";
-            interval = seconds / 2592000;
-            if (interval > 1) return Math.floor(interval) + " bulan yang lalu";
-            interval = seconds / 86400;
-            if (interval > 1) return Math.floor(interval) + " hari yang lalu";
-            interval = seconds / 3600;
-            if (interval > 1) return Math.floor(interval) + " jam yang lalu";
-            interval = seconds / 60;
-            if (interval > 1) return Math.floor(interval) + " menit yang lalu";
-            return Math.floor(seconds) + " detik yang lalu";
-        }
-
-        function renderOverview(data) {
-            if (!container) return;
-            
-            // Calculate active in last 7 days from allData
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-            const active7d = allData.filter(p => p.lastActiveAt && new Date(p.lastActiveAt) > sevenDaysAgo).length;
-            const activePercent = allData.length > 0 ? ((active7d / allData.length) * 100).toFixed(1) : 0;
-
-            container.innerHTML = `
-                <div class="premium-summary-card">
-                    <div class="premium-summary-icon"><i class="fas fa-users"></i></div>
-                    <div class="premium-summary-content">
-                        <h4>Total Peserta</h4>
-                        <p class="main-val">${data.totalActiveParticipants || allData.length}</p>
-                        <p>Peserta terdaftar</p>
-                    </div>
-                </div>
-                <div class="premium-summary-card">
-                    <div class="premium-summary-icon" style="color: var(--wit-pink);"><i class="fas fa-chart-line"></i></div>
-                    <div class="premium-summary-content">
-                        <h4>Rata-rata Progress</h4>
-                        <p class="main-val pink-text">${data.averageOverallProgress}%</p>
-                        <p>Keseluruhan progress</p>
-                    </div>
-                </div>
-                <div class="premium-summary-card">
-                    <div class="premium-summary-icon"><i class="fas fa-award"></i></div>
-                    <div class="premium-summary-content">
-                        <h4>Peserta Aktif</h4>
-                        <p class="main-val" style="display:flex; align-items:center;">
-                            ${active7d}
-                            <span class="premium-summary-badge">${activePercent}%</span>
-                        </p>
-                        <p>Aktif dalam 7 hari terakhir</p>
-                    </div>
-                </div>
-            `;
-        }
-
-        window.globalParticipantMap = {};
-        let currentPage = 1;
         const itemsPerPage = 20;
+
+        let allData = [];
         let currentFilteredData = [];
+        let currentPage = 1;
+        let participantMap = {};
+        let activeModal = null;
+        let modalReturnFocus = null;
+        let previousBodyOverflow = '';
 
-        function renderPagination() {
-            const paginationContainer = document.getElementById('progress-pagination');
-            const pageInfo = document.getElementById('page-info');
-            if (!paginationContainer || !pageInfo) return;
-
-            const totalPages = Math.ceil(currentFilteredData.length / itemsPerPage) || 1;
-            
-            const startIdx = (currentPage - 1) * itemsPerPage + 1;
-            const endIdx = Math.min(currentPage * itemsPerPage, currentFilteredData.length);
-            pageInfo.innerHTML = `Menampilkan ${currentFilteredData.length > 0 ? startIdx : 0} - ${endIdx} dari ${currentFilteredData.length} peserta`;
-
-            let html = '';
-            
-            // Prev button
-            html += `<button class="page-btn" onclick="window.changeProgressPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
-            
-            // Page numbers logic (max 5 buttons)
-            let startPage = Math.max(1, currentPage - 2);
-            let endPage = Math.min(totalPages, startPage + 4);
-            if (endPage - startPage < 4) {
-                startPage = Math.max(1, endPage - 4);
-            }
-
-            if (startPage > 1) {
-                html += `<button class="page-btn" onclick="window.changeProgressPage(1)">1</button>`;
-                if (startPage > 2) html += `<span style="color:var(--wit-slate); padding: 0 4px;">...</span>`;
-            }
-
-            for (let i = startPage; i <= endPage; i++) {
-                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="window.changeProgressPage(${i})">${i}</button>`;
-            }
-
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) html += `<span style="color:var(--wit-slate); padding: 0 4px;">...</span>`;
-                html += `<button class="page-btn" onclick="window.changeProgressPage(${totalPages})">${totalPages}</button>`;
-            }
-
-            // Next button
-            html += `<button class="page-btn" onclick="window.changeProgressPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
-
-            paginationContainer.innerHTML = html;
-        }
-
-        window.changeProgressPage = function(page) {
-            const totalPages = Math.ceil(currentFilteredData.length / itemsPerPage);
-            if (page < 1 || page > totalPages) return;
-            currentPage = page;
-            renderTablePage();
+        const clampPercent = function(value) {
+            const number = Number(value);
+            return Number.isFinite(number) ? Math.max(0, Math.min(100, number)) : 0;
         };
 
-        function renderTable(dataArray) {
-            currentFilteredData = dataArray;
-            currentPage = 1;
-            renderTablePage();
-        }
+        const formatPercent = function(value) {
+            const number = clampPercent(value);
+            return Number.isInteger(number) ? String(number) : number.toFixed(1);
+        };
 
-        function renderTablePage() {
+        const getInitials = function(name) {
+            const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+            if (!parts.length) return '??';
+            if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+            return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+        };
+
+        const formatTimestamp = function(value) {
+            if (!value) return 'Belum ada aktivitas belajar';
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return 'Waktu tidak tersedia';
+            return new Intl.DateTimeFormat('id-ID', {
+                dateStyle: 'medium',
+                timeStyle: 'short'
+            }).format(date);
+        };
+
+        const relativeTime = function(value) {
+            if (!value) return 'Belum pernah belajar';
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return 'Waktu tidak tersedia';
+            const deltaSeconds = Math.round((date.getTime() - Date.now()) / 1000);
+            const units = [
+                ['year', 31536000],
+                ['month', 2592000],
+                ['day', 86400],
+                ['hour', 3600],
+                ['minute', 60]
+            ];
+            const formatter = new Intl.RelativeTimeFormat('id-ID', { numeric: 'auto' });
+            for (const unit of units) {
+                if (Math.abs(deltaSeconds) >= unit[1]) {
+                    return formatter.format(Math.round(deltaSeconds / unit[1]), unit[0]);
+                }
+            }
+            return 'baru saja';
+        };
+
+        const showError = function(message) {
+            if (!errorBox) return;
+            errorBox.textContent = String(message || 'Data progress tidak dapat dimuat.');
+            errorBox.style.display = 'block';
+        };
+
+        const clearError = function() {
+            if (!errorBox) return;
+            errorBox.textContent = '';
+            errorBox.style.display = 'none';
+        };
+
+        const courseCell = function(course, label) {
+            const safeCourse = course || {};
+            const progress = clampPercent(safeCourse.progress);
+            const completed = Number(safeCourse.completedActivities ?? safeCourse.completedModules ?? 0);
+            const total = Number(safeCourse.totalActivities ?? safeCourse.moduleTotal ?? 0);
+            return [
+                '<td class="course-progress-cell">',
+                    '<div class="course-progress-row">',
+                        '<div class="progress-track" role="progressbar" aria-label="', escapeAttr(label), '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="', progress, '">',
+                            '<div class="progress-fill" style="width:', progress, '%"></div>',
+                        '</div>',
+                        '<span class="progress-percentage">', formatPercent(progress), '%</span>',
+                    '</div>',
+                    '<span class="course-progress-meta">', completed, ' / ', total, ' ', total === 1 ? 'item' : (safeCourse.totalActivities !== undefined ? 'aktivitas' : 'modul'), '</span>',
+                '</td>'
+            ].join('');
+        };
+
+        const renderOverview = function(overview) {
+            if (!container) return;
+            const data = overview || {};
+            const total = Number(data.totalParticipants || 0);
+            const average = formatPercent(data.averageOverallProgress);
+            const active = Number(data.activeLearners7d || 0);
+            const activePercent = formatPercent(data.activePercent);
+            container.innerHTML = [
+                '<div class="premium-summary-card">',
+                    '<div class="premium-summary-icon"><i class="fas fa-users" aria-hidden="true"></i></div>',
+                    '<div class="premium-summary-content"><h4>Total Peserta</h4>',
+                    '<p class="main-val">', total, '</p><p>Peserta aktif dalam cohort resmi</p></div>',
+                '</div>',
+                '<div class="premium-summary-card">',
+                    '<div class="premium-summary-icon"><i class="fas fa-chart-line" aria-hidden="true"></i></div>',
+                    '<div class="premium-summary-content"><h4>Rata-rata Progress</h4>',
+                    '<p class="main-val pink-text">', average, '%</p><p>Rata-rata dua course aktif</p></div>',
+                '</div>',
+                '<div class="premium-summary-card">',
+                    '<div class="premium-summary-icon"><i class="fas fa-bolt" aria-hidden="true"></i></div>',
+                    '<div class="premium-summary-content"><h4>Peserta Aktif Belajar</h4>',
+                    '<p class="main-val" style="display:flex;align-items:center">', active,
+                    ' <span class="premium-summary-badge">', activePercent, '%</span></p>',
+                    '<p>Memiliki aktivitas belajar dalam 7 hari</p></div>',
+                '</div>'
+            ].join('');
+        };
+
+        const renderPagination = function() {
+            if (!paginationContainer || !pageInfo) return;
+            const totalPages = Math.max(1, Math.ceil(currentFilteredData.length / itemsPerPage));
+            currentPage = Math.min(currentPage, totalPages);
+            const startIndex = currentFilteredData.length ? (currentPage - 1) * itemsPerPage + 1 : 0;
+            const endIndex = Math.min(currentPage * itemsPerPage, currentFilteredData.length);
+            pageInfo.textContent = 'Menampilkan ' + startIndex + '–' + endIndex + ' dari ' + currentFilteredData.length + ' peserta';
+
+            const controls = [];
+            controls.push('<button class="page-btn" type="button" data-page="' + (currentPage - 1) + '" aria-label="Halaman sebelumnya" ' + (currentPage === 1 ? 'disabled' : '') + '><i class="fas fa-chevron-left" aria-hidden="true"></i></button>');
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            startPage = Math.max(1, endPage - 4);
+            for (let page = startPage; page <= endPage; page++) {
+                controls.push('<button class="page-btn ' + (page === currentPage ? 'active' : '') + '" type="button" data-page="' + page + '" aria-label="Halaman ' + page + '" ' + (page === currentPage ? 'aria-current="page"' : '') + '>' + page + '</button>');
+            }
+            controls.push('<button class="page-btn" type="button" data-page="' + (currentPage + 1) + '" aria-label="Halaman berikutnya" ' + (currentPage === totalPages ? 'disabled' : '') + '><i class="fas fa-chevron-right" aria-hidden="true"></i></button>');
+            paginationContainer.innerHTML = controls.join('');
+        };
+
+        const renderTablePage = function() {
             if (!tbody) return;
-            if (currentFilteredData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--wit-slate);">Tidak ada data ditemukan.</td></tr>';
+            participantMap = {};
+            if (!currentFilteredData.length) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--wit-slate)">Tidak ada peserta yang cocok.</td></tr>';
                 renderPagination();
                 return;
             }
-            
-            const startIdx = (currentPage - 1) * itemsPerPage;
-            const pageData = currentFilteredData.slice(startIdx, startIdx + itemsPerPage);
 
-            let html = '';
-            pageData.forEach(p => {
-                const tempId = 'id_' + Math.random().toString(36).substr(2, 9);
-                window.globalParticipantMap[tempId] = p;
-                
-                // Get most engaged course based on highest progress
-                let mainCourse = "Kelas AI Mastery"; // Default fallback
-                if (p.courses && Object.keys(p.courses).length > 0) {
-                    const sortedCourses = Object.entries(p.courses).sort((a,b) => b[1] - a[1]);
-                    if (sortedCourses[0][0] === 'ai-fundamentals' || sortedCourses[0][0] === 'math-for-ai') {
-                         mainCourse = "HerAI Labs";
-                    }
-                }
-                if (p.overallProgress === 0) mainCourse = "-";
-
-                // Generate random colors for avatar for variety if we don't have images
-                const colors = ['#FF2F8A', '#B79CFF', '#ff5e8e', '#8F9CFF', '#FF8FC4'];
-                const avatarColor = colors[p.name.length % colors.length];
-
-                html += `
-                <tr>
-                    <td>
-                        <div class="participant-identity">
-                            <div class="participant-avatar" style="color: ${avatarColor}; background: ${avatarColor}15;">${getInitials(p.name)}</div>
-                            <span class="participant-name">${escapeHtml(p.name)}</span>
-                        </div>
-                    </td>
-                    <td class="class-name">${mainCourse}</td>
-                    <td>
-                        <div class="progress-track">
-                            <div class="progress-fill" style="width: ${p.overallProgress}%;"></div>
-                        </div>
-                    </td>
-                    <td class="progress-percentage">${p.overallProgress}%</td>
-                    <td class="last-active">${timeSince(p.lastActiveAt)}</td>
-                    <td>
-                        <button class="btn-detail" onclick="window.showAdminParticipantDetail('${tempId}')">Detail</button>
-                        <button class="btn-more"><i class="fas fa-ellipsis-v"></i></button>
-                    </td>
-                </tr>
-                `;
-            });
-            tbody.innerHTML = html;
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const pageData = currentFilteredData.slice(startIndex, startIndex + itemsPerPage);
+            tbody.innerHTML = pageData.map(function(participant, index) {
+                const key = 'participant-' + startIndex + '-' + index;
+                const name = String(participant.name || 'Peserta');
+                const overall = clampPercent(participant.overallProgress);
+                participantMap[key] = participant;
+                return [
+                    '<tr>',
+                        '<td><div class="participant-identity">',
+                            '<div class="participant-avatar" aria-hidden="true">', escapeHtml(getInitials(name)), '</div>',
+                            '<div><span class="participant-name">', escapeHtml(name), '</span>',
+                            '<span class="course-progress-meta">NIK ', escapeHtml(participant.maskedNik || participant.nik || '****'), '</span></div>',
+                        '</div></td>',
+                        courseCell(participant.aiFundamentals, 'Progress AI Fundamentals ' + name),
+                        courseCell(participant.mathForAi, 'Progress Math for AI ' + name),
+                        '<td class="course-progress-cell"><div class="course-progress-row">',
+                            '<div class="progress-track" role="progressbar" aria-label="Progress keseluruhan ', escapeAttr(name), '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="', overall, '">',
+                                '<div class="progress-fill" style="width:', overall, '%"></div>',
+                            '</div><span class="progress-percentage">', formatPercent(overall), '%</span>',
+                        '</div></td>',
+                        '<td class="last-active"><span title="', escapeAttr(formatTimestamp(participant.lastLearningAt)), '">', escapeHtml(relativeTime(participant.lastLearningAt)), '</span></td>',
+                        '<td><button class="btn-detail" type="button" data-participant-key="', key, '">Detail</button></td>',
+                    '</tr>'
+                ].join('');
+            }).join('');
             renderPagination();
-        }
+        };
 
-        window.showAdminParticipantDetail = function(tempId) {
-            console.log('Detail diklik:', tempId);
-            const detail = window.globalParticipantMap[tempId];
-            if (detail) {
-                showModal(detail);
-            } else {
-                alert('Gagal membuka detail. Data tidak ditemukan.');
+        const renderTable = function(data) {
+            currentFilteredData = Array.isArray(data) ? data : [];
+            currentPage = 1;
+            renderTablePage();
+        };
+
+        const ensureModalStyles = function() {
+            if (document.getElementById('admin-progress-modal-styles')) return;
+            const style = document.createElement('style');
+            style.id = 'admin-progress-modal-styles';
+            style.textContent = [
+                '.pr-modal-overlay{position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(17,25,79,.58);backdrop-filter:blur(10px)}',
+                '.pr-modal-dialog{width:min(900px,100%);max-height:92vh;overflow:auto;border-radius:26px;background:#fffafd;box-shadow:0 30px 70px rgba(17,25,79,.28);color:#11194f;font-family:"Plus Jakarta Sans",sans-serif}',
+                '.pr-modal-header{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 28px;border-bottom:1px solid #f0dce7;background:rgba(255,250,253,.96);backdrop-filter:blur(12px)}',
+                '.pr-modal-heading{display:flex;align-items:center;gap:14px}.pr-modal-avatar{width:52px;height:52px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(135deg,#ff2f8a,#ff78ac);color:white;font-weight:800}',
+                '.pr-modal-title{margin:0;font-size:22px}.pr-modal-subtitle{margin:4px 0 0;color:#61698f;font-size:13px}',
+                '.pr-modal-close{min-width:44px;height:44px;border:1px solid #f2c8db;border-radius:50%;background:white;color:#d92372;cursor:pointer;font-size:18px}.pr-modal-close:hover{background:#fff0f7}',
+                '.pr-modal-body{padding:26px;display:grid;gap:18px}.pr-overall-card,.pr-course-card{border:1px solid #f0dce7;border-radius:20px;background:white;padding:20px}',
+                '.pr-overall-card{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center;background:linear-gradient(135deg,#fff6fa,#faf7ff)}',
+                '.pr-overall-value{font-size:42px;font-weight:800;color:#ff2f8a}.pr-overall-label{color:#61698f;font-size:13px}',
+                '.pr-course-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.pr-course-card h3{margin:0;font-size:17px}.pr-course-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}',
+                '.pr-pill{padding:6px 10px;border-radius:999px;background:#fff0f7;color:#d92372;font-size:12px;font-weight:700}.pr-modal-track{height:8px;overflow:hidden;border-radius:999px;background:#fceaf2}.pr-modal-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#ff2f8a,#ff78ac)}',
+                '.pr-course-meta{display:flex;justify-content:space-between;gap:12px;margin-top:8px;color:#61698f;font-size:12px}.pr-detail-group{margin-top:14px;border-top:1px solid #f2e3eb;padding-top:12px}.pr-detail-group summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700;color:#2a3166}',
+                '.pr-detail-row{display:grid;grid-template-columns:minmax(120px,1fr) 120px 48px;gap:12px;align-items:center;padding:10px 0;border-top:1px solid #f7edf2;font-size:12px}.pr-detail-name{font-weight:600}.pr-detail-count{color:#61698f}',
+                '.pr-activity-note{padding:14px 16px;border-radius:14px;background:#f7f3ff;color:#4e5681;font-size:13px;line-height:1.5}',
+                '.pr-modal-close:focus-visible,.pr-detail-group summary:focus-visible{outline:3px solid rgba(255,47,138,.28);outline-offset:2px}',
+                '@media(max-width:700px){.pr-modal-overlay{padding:8px}.pr-modal-dialog{max-height:96vh;border-radius:20px}.pr-modal-header,.pr-modal-body{padding:18px}.pr-overall-card{grid-template-columns:1fr}.pr-course-grid{grid-template-columns:1fr}.pr-detail-row{grid-template-columns:1fr 80px 42px}}',
+                '@media(prefers-reduced-motion:reduce){.pr-modal-overlay *{transition:none!important;animation:none!important}}'
+            ].join('');
+            document.head.appendChild(style);
+        };
+
+        const closeModal = function() {
+            if (!activeModal) return;
+            activeModal.remove();
+            activeModal = null;
+            document.body.style.overflow = previousBodyOverflow;
+            if (modalReturnFocus && document.contains(modalReturnFocus)) modalReturnFocus.focus();
+            modalReturnFocus = null;
+        };
+
+        const progressBarHtml = function(progress, label) {
+            const safeProgress = clampPercent(progress);
+            return [
+                '<div class="pr-modal-track" role="progressbar" aria-label="', escapeAttr(label), '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="', safeProgress, '">',
+                    '<div class="pr-modal-fill" style="width:', safeProgress, '%"></div>',
+                '</div>'
+            ].join('');
+        };
+
+        const detailRowsHtml = function(rows, type) {
+            const sourceRows = Array.isArray(rows) ? rows : [];
+            if (!sourceRows.length) return '<p class="pr-modal-subtitle">Belum ada konfigurasi aktif.</p>';
+            return sourceRows.map(function(row) {
+                const progress = clampPercent(row.progress);
+                const title = row.title || row.moduleId || 'Modul';
+                const unit = type === 'math' ? 'aktivitas' : 'bab';
+                return [
+                    '<div class="pr-detail-row">',
+                        '<span class="pr-detail-name">', escapeHtml(title), '</span>',
+                        '<span class="pr-detail-count">', Number(row.completed || 0), ' / ', Number(row.total || 0), ' ', unit, '</span>',
+                        '<strong>', formatPercent(progress), '%</strong>',
+                    '</div>'
+                ].join('');
+            }).join('');
+        };
+
+        const showModal = function(participant, trigger) {
+            closeModal();
+            ensureModalStyles();
+            modalReturnFocus = trigger || document.activeElement;
+            const ai = participant.aiFundamentals || {};
+            const math = participant.mathForAi || {};
+            const mathTitles = {
+                '01': 'Kenapa AI Butuh Matematika',
+                '02': 'Aljabar Linear',
+                '03': 'Statistika untuk AI',
+                '04': 'Probabilitas',
+                '05': 'Kalkulus',
+                '06': 'Optimisasi',
+                '07': 'Studi Kasus Terintegrasi'
+            };
+            const mathRows = Object.keys(math.submodules || {}).sort().map(function(id) {
+                const row = math.submodules[id] || {};
+                return {
+                    title: (id + ' · ' + (row.title || mathTitles[id] || 'Submodul')),
+                    completed: row.completed,
+                    total: row.total,
+                    progress: row.progress
+                };
+            });
+            const name = String(participant.name || 'Peserta');
+            const overall = clampPercent(participant.overallProgress);
+            const wrapper = document.createElement('div');
+            wrapper.className = 'pr-modal-overlay dynamic-progress-modal-overlay';
+            wrapper.innerHTML = [
+                '<section class="pr-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="pr-modal-title">',
+                    '<header class="pr-modal-header">',
+                        '<div class="pr-modal-heading"><div class="pr-modal-avatar" aria-hidden="true">', escapeHtml(getInitials(name)), '</div><div>',
+                            '<h2 class="pr-modal-title" id="pr-modal-title">', escapeHtml(name), '</h2>',
+                            '<p class="pr-modal-subtitle">NIK ', escapeHtml(participant.maskedNik || participant.nik || '****'), '</p>',
+                        '</div></div>',
+                        '<button class="pr-modal-close" type="button" aria-label="Tutup detail progress"><i class="fas fa-times" aria-hidden="true"></i></button>',
+                    '</header>',
+                    '<div class="pr-modal-body">',
+                        '<section class="pr-overall-card" aria-label="Ringkasan progress keseluruhan">',
+                            '<div><div class="pr-overall-value">', formatPercent(overall), '%</div><div class="pr-overall-label">Overall progress dari server</div></div>',
+                            '<div>', progressBarHtml(overall, 'Overall progress ' + name),
+                                '<p class="pr-modal-subtitle">Rata-rata setara AI Fundamentals dan Math for AI. Nilai ini memakai snapshot server, bukan dihitung ulang di browser.</p>',
+                            '</div>',
+                        '</section>',
+                        '<div class="pr-course-grid">',
+                            '<section class="pr-course-card">',
+                                '<div class="pr-course-head"><h3>AI Fundamentals</h3><span class="pr-pill">', formatPercent(ai.progress), '%</span></div>',
+                                progressBarHtml(ai.progress, 'AI Fundamentals ' + name),
+                                '<div class="pr-course-meta"><span>', Number(ai.completedModules || 0), ' modul tuntas</span><span>', Number(ai.moduleTotal || 0), ' modul aktif</span></div>',
+                                '<details class="pr-detail-group" open><summary>Rincian modul</summary>', detailRowsHtml(ai.modules, 'ai'), '</details>',
+                            '</section>',
+                            '<section class="pr-course-card">',
+                                '<div class="pr-course-head"><h3>Math for AI</h3><span class="pr-pill">', formatPercent(math.progress), '%</span></div>',
+                                progressBarHtml(math.progress, 'Math for AI ' + name),
+                                '<div class="pr-course-meta"><span>', Number(math.completedActivities || 0), ' / ', Number(math.totalActivities || 89), ' aktivitas</span><span>', Number(math.topicTotal || 54), ' topik</span></div>',
+                                '<details class="pr-detail-group"><summary>Rincian 7 submodul</summary>', detailRowsHtml(mathRows, 'math'), '</details>',
+                            '</section>',
+                        '</div>',
+                        '<div class="pr-activity-note"><strong>Terakhir belajar:</strong> ', escapeHtml(formatTimestamp(participant.lastLearningAt)),
+                            participant.lastModuleId ? '<br><span>Aktivitas terakhir: ' + escapeHtml(participant.lastModuleId) + ' / ' + escapeHtml(participant.lastItemId || '-') + '</span>' : '',
+                            '<br><span>Snapshot server: ', escapeHtml(formatTimestamp(participant.snapshotGeneratedAt)), '</span>',
+                        '</div>',
+                    '</div>',
+                '</section>'
+            ].join('');
+            previousBodyOverflow = document.body.style.overflow;
+            document.body.appendChild(wrapper);
+            document.body.style.overflow = 'hidden';
+            activeModal = wrapper;
+            wrapper.querySelector('.pr-modal-close').addEventListener('click', closeModal);
+            wrapper.addEventListener('click', function(event) {
+                if (event.target === wrapper) closeModal();
+            });
+            wrapper.querySelector('.pr-modal-close').focus();
+        };
+
+        const renderSnapshot = function(snapshot) {
+            if (!snapshot || !snapshot.overview || !Array.isArray(snapshot.participants)) {
+                throw new Error('Format snapshot progress tidak valid.');
+            }
+            allData = snapshot.participants.map(function(participant) {
+                return Object.assign({}, participant, { snapshotGeneratedAt: snapshot.generatedAt || null });
+            });
+            renderOverview(snapshot.overview);
+            renderTable(allData);
+            if (snapshotStatus) {
+                const ttlMinutes = Math.max(1, Math.round(Number(snapshot.cacheTtlSeconds || 300) / 60));
+                snapshotStatus.textContent = 'Snapshot server ' + formatTimestamp(snapshot.generatedAt) + ' · cache maksimal ' + ttlMinutes + ' menit';
             }
         };
 
-        function showModal(detail) {
+        const setLoading = function(isLoading) {
+            if (!refreshBtn) return;
+            refreshBtn.disabled = isLoading;
+            refreshBtn.innerHTML = isLoading
+                ? '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Memuat…'
+                : '<i class="fas fa-sync-alt" aria-hidden="true"></i> Segarkan Data';
+        };
+
+        const loadData = async function(forceRefresh) {
+            clearError();
+            setLoading(true);
+            if (snapshotStatus) snapshotStatus.textContent = forceRefresh ? 'Meminta snapshot terbaru dari server…' : 'Memuat snapshot server…';
             try {
-                document.querySelectorAll('.dynamic-progress-modal-overlay').forEach(el => el.remove());
-                
-                // Kalkulasi AI Fundamentals
-                let aiSubmodules = [
-                    { id: 'ai-fundamentals', title: 'Pengantar AI' },
-                    { id: 'python-untuk-ai', title: 'Python untuk AI' },
-                    { id: 'konsep-ai-modern', title: 'Konsep AI Modern' },
-                    { id: 'reasoning', title: 'Reasoning AI' },
-                    { id: 'evaluation', title: 'Evaluation AI' },
-                    { id: 'evolution', title: 'Evolution of AI' }
-                ];
-                let aiTotalProg = 0;
-                let aiTuntas = 0;
-                let aiProses = 0;
-                let aiBelum = 0;
-                
-                let aiListHtml = '';
-                
-                if (detail.courses) {
-                    aiSubmodules.forEach(sub => {
-                        const prog = detail.courses[sub.id] || 0;
-                        aiTotalProg += prog;
-                        if (prog === 100) aiTuntas++;
-                        else if (prog > 0) aiProses++;
-                        else aiBelum++;
-                        
-                        const stats = detail.courseDetails && detail.courseDetails[sub.id] ? detail.courseDetails[sub.id] : { completed: 0, total: 0 };
-                        const subStatsText = stats.total > 0 ? `<span style="font-size:0.75rem; color: #888; margin-right: 8px;">${stats.completed}/${stats.total}</span>` : '';
-                        
-                        aiListHtml += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 6px 0;">
-                            <span style="font-size: 0.9rem; color: #444;"><i class="fas fa-level-up-alt fa-rotate-90" style="margin-right: 8px; color: #FF2F8A; opacity: 0.7;"></i>${sub.title}</span>
-                            <div style="display:flex; align-items:center; width: 140px;">
-                                ${subStatsText}
-                                <div style="background:rgba(255,47,138,0.1); flex-grow: 1; height:6px; border-radius:3px; overflow:hidden;">
-                                    <div style="background: #FF2F8A; height:100%; width:${prog}%; border-radius: 3px;"></div>
-                                </div>
-                                <span style="font-size:0.8rem; color:#111; font-weight:800; min-width: 35px; text-align: right;">${prog}%</span>
-                            </div>
-                        </div>`;
-                    });
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(withAdminToken(Object.assign({
+                        action: 'getAdminLearningProgressSnapshot',
+                        forceRefresh: Boolean(forceRefresh)
+                    }, window.getCurrentAdminAccess())))
+                });
+                const result = await response.json().catch(function() { return null; });
+                if (!response.ok || !result || result.status !== 'success') {
+                    throw new Error(result && result.message ? result.message : 'Server tidak mengembalikan snapshot progress.');
                 }
-                const aiGroupProg = detail.courses ? Math.round(aiTotalProg / aiSubmodules.length) : 0;
-                
-                // Kalkulasi Math for AI
-                const mathProg = detail.courses && detail.courses['math-for-ai'] ? detail.courses['math-for-ai'] : 0;
-                const mathStats = detail.courseDetails && detail.courseDetails['math-for-ai'] ? detail.courseDetails['math-for-ai'] : { completed: 0, total: 89 };
-                const mathCompleted = mathStats.completed;
-                const mathTotal = mathStats.total > 0 ? mathStats.total : 89;
-                
-                let mathListHtml = '';
-                let mathSubmodulesCount = 0;
-                let mathTopicsCount = 0;
-                const mathTitles = {
-                    'Submodule 01': 'Kenapa AI Butuh Matematika?',
-                    'Submodule 02': 'Linear Algebra',
-                    'Submodule 03': 'Statistics for AI',
-                    'Submodule 04': 'Probability',
-                    'Submodule 05': 'Calculus',
-                    'Submodule 06': 'Optimization',
-                    'Submodule 07': 'Integrated Case Study'
-                };
-                if (detail.mathSubmodules) {
-                    mathSubmodulesCount = Object.keys(detail.mathSubmodules).length || 7;
-                    for (const [subId, subData] of Object.entries(detail.mathSubmodules)) {
-                        const subProg = typeof subData === 'object' ? subData.percentage : subData;
-                        mathTopicsCount += (typeof subData === 'object' && subData.total) ? subData.total : 0;
-                        const subStatsText = typeof subData === 'object' ? `<span style="font-size:0.75rem; color: #888; margin-right: 8px;">${subData.completed}/${subData.total}</span>` : '';
-                        const displayTitle = mathTitles[subId] || subId;
-                        
-                        mathListHtml += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 6px 0;">
-                            <span style="font-size: 0.9rem; color: #444;"><i class="fas fa-level-up-alt fa-rotate-90" style="margin-right: 8px; color: #FF2F8A; opacity: 0.7;"></i>${displayTitle}</span>
-                            <div style="display:flex; align-items:center; width: 140px;">
-                                ${subStatsText}
-                                <div style="background:rgba(255,47,138,0.1); flex-grow: 1; height:6px; border-radius:3px; overflow:hidden;">
-                                    <div style="background: #FF2F8A; height:100%; width:${subProg}%; border-radius: 3px;"></div>
-                                </div>
-                                <span style="font-size:0.8rem; color:#111; font-weight:800; min-width: 35px; text-align: right;">${subProg}%</span>
-                            </div>
-                        </div>`;
-                    }
-                } else {
-                    mathSubmodulesCount = 7;
-                    mathTopicsCount = 54;
-                    mathListHtml = '<p style="font-size:0.9rem; color:#888; margin:0;">Belum ada detail submodul.</p>';
+                renderSnapshot(result.data);
+            } catch (error) {
+                console.error('Gagal memuat snapshot progress peserta:', error);
+                showError(error.message || 'Terjadi kesalahan jaringan atau server.');
+                if (tbody && !allData.length) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:28px;color:#8f174e">Data belum dapat ditampilkan. Coba segarkan kembali.</td></tr>';
                 }
-                
-                // Helper untuk diagram SVG bercahaya
-                const getSvgDonut = (prog, type) => {
-                    const radius = 55;
-                    const circum = 2 * Math.PI * radius;
-                    const offset = circum - (prog / 100) * circum;
-                    const gradId = type === 'math' ? 'grad-green' : 'grad-pink';
-                    
-                    return `
-                    <svg width="150" height="150" viewBox="0 0 150 150" style="filter: drop-shadow(0 10px 15px ${type === 'math' ? 'rgba(0,230,118,0.3)' : 'rgba(255,47,138,0.3)'});">
-                        <defs>
-                            <linearGradient id="grad-pink" x1="0%" y1="100%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#E23183" />
-                                <stop offset="100%" stop-color="#FF2F8A" />
-                            </linearGradient>
-                            <linearGradient id="grad-green" x1="0%" y1="100%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#00E676" />
-                                <stop offset="100%" stop-color="#43B581" />
-                            </linearGradient>
-                        </defs>
-                        <circle cx="75" cy="75" r="${radius}" fill="none" stroke="#EFE9EF" stroke-width="14" />
-                        <circle cx="75" cy="75" r="${radius}" fill="none" stroke="url(#${gradId})" stroke-width="14" 
-                                stroke-dasharray="${circum}" stroke-dashoffset="${offset}" 
-                                stroke-linecap="round" transform="rotate(-90 75 75)" 
-                                style="transition: stroke-dashoffset 1s ease-out;" />
-                    </svg>`;
-                };
-                
-                const modalHtml = `
-<style>
-.pr-modal-bg {
-    position:fixed; top:0; left:0; width:100%; height:100%; 
-    background:rgba(17, 25, 79, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    z-index:999999; display:flex; justify-content:center; align-items:center; padding: 20px;
-}
-.pr-modal {
-    background: linear-gradient(135deg, #F8F5F8 0%, #F0EAF0 100%);
-    width: 100%; max-width: 850px;
-    border-radius: 30px;
-    max-height: 90vh; overflow-y: auto;
-    position: relative;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.2), inset 0 2px 5px rgba(255,255,255,0.8);
-}
-.pr-close {
-    position:absolute; top:25px; right:25px; width:40px; height:40px; border-radius:50%; 
-    background: white; color:#FF2F8A; border:none; font-size:1.2rem; cursor:pointer; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: 0.2s; z-index: 10;
-}
-.pr-close:hover { background: #FF2F8A; color: white; transform: scale(1.1); }
-.pr-header {
-    background: rgba(255,255,255,0.4); padding: 30px 40px; border-radius: 30px 30px 0 0;
-    display: flex; gap: 24px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.8);
-    backdrop-filter: blur(10px);
-}
-.pr-avatar {
-    width: 70px; height: 70px; border-radius: 22px; background: linear-gradient(135deg, #FF2F8A, #ff5e8e); 
-    color: white; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold;
-    box-shadow: 0 10px 20px rgba(255,47,138,0.3);
-}
-.pr-name { font-size: 24px; font-weight: 800; color: #11194F; margin: 0 0 6px 0; letter-spacing: -0.5px;}
-.pr-nik { font-family: monospace; font-size: 15px; background: white; color: #FF2F8A; padding: 6px 14px; border-radius: 10px; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid rgba(255,47,138,0.1); }
-.pr-body { padding: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.pr-body-bottom { grid-column: 1 / -1; }
-
-/* Card Styles */
-.pr-card {
-    background: rgba(255,255,255,0.85);
-    border-radius: 24px;
-    padding: 28px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.04), inset 0 2px 0 rgba(255,255,255,1);
-    border: 1px solid rgba(255,255,255,1);
-    backdrop-filter: blur(20px);
-}
-.pr-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-.pr-card-title { font-size: 20px; font-weight: 800; color: #11194F; margin: 0; letter-spacing: -0.5px; }
-.pr-badge { background: rgba(255,47,138,0.08); color: #FF2F8A; padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; border: 1px solid rgba(255,47,138,0.15); }
-.pr-badge.green { background: #E8F5E9; color: #2E7D32; border-color: #C8E6C9;}
-
-.pr-grid { display: flex; gap: 24px; align-items: center; }
-
-/* Donut Chart SVG Container */
-.pr-donut {
-    width: 150px; height: 150px;
-    position: relative; display: flex; justify-content: center; align-items: center;
-    flex-shrink: 0;
-}
-.pr-donut-content { position: absolute; z-index: 2; text-align: center; }
-.pr-donut-val { font-size: 34px; font-weight: 800; color: #11194F; line-height: 1; letter-spacing: -1px; }
-.pr-donut-lbl { font-size: 11px; color: #666; font-weight: 600; margin-top: 6px; }
-
-/* Stats List */
-.pr-stats { display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
-.pr-stat-box { 
-    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(248,245,248,1) 100%); 
-    padding: 14px 18px; border-radius: 16px;
-    display: flex; align-items: center; gap: 12px; position: relative;
-    border: 1px solid rgba(255,255,255,1);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-}
-.pr-stat-icon {
-    width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: white;
-}
-.dot-green .pr-stat-icon { background: linear-gradient(135deg, #00E676, #43B581); box-shadow: 0 4px 10px rgba(0,230,118,0.3); }
-.dot-pink .pr-stat-icon { background: linear-gradient(135deg, #FF2F8A, #ff5e8e); box-shadow: 0 4px 10px rgba(255,47,138,0.3); }
-.dot-gray .pr-stat-icon { background: linear-gradient(135deg, #B39DDB, #D1C4E9); box-shadow: 0 4px 10px rgba(179,157,219,0.3); }
-
-.pr-stat-text { display: flex; flex-direction: column; }
-.pr-stat-title { font-size: 14px; font-weight: 800; color: #11194F; }
-.pr-stat-sub { font-size: 12px; color: #61698F; font-weight: 500; margin-top:2px; }
-.pr-stat-val-right { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 18px; font-weight: 800; color: #111; }
-
-
-.pr-info-pill {
-    background: rgba(255,47,138,0.03); border: 1px solid rgba(255,47,138,0.1); padding: 16px 20px; border-radius: 16px;
-    font-size: 13px; color: #61698F; display: flex; gap: 12px; align-items: center; line-height: 1.5; margin-top: 24px;
-}
-.pr-info-pill-icon {
-    width: 32px; height: 32px; border-radius: 10px; background: white; color: #FF2F8A; 
-    display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(255,47,138,0.1); flex-shrink: 0;
-}
-.pr-info-pill.green { background: rgba(0,230,118,0.05); color: #2E7D32; border-color: rgba(0,230,118,0.2); }
-.pr-info-pill.green .pr-info-pill-icon { color: #00E676; box-shadow: 0 4px 10px rgba(0,230,118,0.1); }
-
-.pr-list-wrap {
-    margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(0,0,0,0.05);
-}
-.pr-list-wrap > div {
-    background: white; padding: 12px 16px; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(0,0,0,0.03);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-}
-
-</style>
-<div class="pr-modal-bg dynamic-progress-modal-overlay">
-    <div class="pr-modal">
-        <button class="pr-close" onclick="this.closest('.dynamic-progress-modal-overlay').remove()"><i class="fas fa-times"></i></button>
-        
-        <div class="pr-header">
-            <div class="pr-avatar"><i class="fas fa-user"></i></div>
-            <div>
-                <h2 class="pr-name">${escapeHtml(detail.name || 'Peserta')}</h2>
-                <span class="pr-nik">${escapeHtml(detail.nik || '-')}</span>
-            </div>
-        </div>
-        
-        <div class="pr-body">
-            
-            <!-- SECTION 1: OVERALL -->
-            <div class="pr-card">
-                <div class="pr-card-head">
-                    <h3 class="pr-card-title">Progres Keseluruhan</h3>
-                    <span class="pr-badge green"><i class="fas fa-circle" style="font-size:8px; vertical-align:middle; margin-right:4px;"></i> Live</span>
-                </div>
-                <div class="pr-grid">
-                    <div class="pr-donut">
-                        ${getSvgDonut(overallProg, 'pink')}
-                        <div class="pr-donut-content">
-                            <div class="pr-donut-val">${overallProg}%</div>
-                            <div class="pr-donut-lbl">2 course aktif</div>
-                        </div>
-                    </div>
-                    <div class="pr-stats">
-                        <div class="pr-stat-box dot-pink">
-                            <div class="pr-stat-icon"><i class="fas fa-layer-group"></i></div>
-                            <div class="pr-stat-text">
-                                <span class="pr-stat-title">AI Fundamentals</span>
-                                <span class="pr-stat-sub">6 modul</span>
-                            </div>
-                            <span class="pr-stat-val-right" style="color: #FF2F8A;">${aiGroupProg}%</span>
-                        </div>
-                        <div class="pr-stat-box dot-green">
-                            <div class="pr-stat-icon"><i class="fas fa-square-root-variable"></i></div>
-                            <div class="pr-stat-text">
-                                <span class="pr-stat-title">Math for AI</span>
-                                <span class="pr-stat-sub">${mathTotal} aktivitas</span>
-                            </div>
-                            <span class="pr-stat-val-right" style="color: #00E676;">${mathProg}%</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="pr-info-pill">
-                    <div class="pr-info-pill-icon"><i class="fas fa-calculator"></i></div>
-                    <div><strong>Rumus:</strong> (${aiGroupProg}% AI Fundamentals + ${mathProg}% Math for AI) &divide; 2 = ${overallProg}%.<br><span style="color:#888; font-size:11px;">Sinkron dengan progres server.</span></div>
-                </div>
-            </div>
-
-            <!-- SECTION 2: AI FUNDAMENTALS -->
-            <div class="pr-card">
-                <div class="pr-card-head">
-                    <h3 class="pr-card-title">Progres AI Fundamentals</h3>
-                    <span class="pr-badge">6 modul</span>
-                </div>
-                <div class="pr-grid">
-                    <div class="pr-donut">
-                        ${getSvgDonut(aiGroupProg, 'pink')}
-                        <div class="pr-donut-content">
-                            <div class="pr-donut-val">${aiGroupProg}%</div>
-                            <div class="pr-donut-lbl">Rata-rata</div>
-                        </div>
-                    </div>
-                    <div class="pr-stats">
-                        <div class="pr-stat-box dot-green">
-                            <div class="pr-stat-icon"><i class="fas fa-check"></i></div>
-                            <div class="pr-stat-text">
-                                <span class="pr-stat-title">Tuntas</span>
-                                <span class="pr-stat-sub">${aiTuntas} Modul</span>
-                            </div>
-                            <span class="pr-stat-val-right" style="color:#00E676;">${aiTuntas}</span>
-                        </div>
-                        <div class="pr-stat-box dot-pink">
-                            <div class="pr-stat-icon"><i class="fas fa-spinner"></i></div>
-                            <div class="pr-stat-text">
-                                <span class="pr-stat-title">Dalam Proses</span>
-                                <span class="pr-stat-sub">${aiProses} Modul</span>
-                            </div>
-                            <span class="pr-stat-val-right" style="color:#FF2F8A;">${aiProses}</span>
-                        </div>
-                        <div class="pr-stat-box dot-gray">
-                            <div class="pr-stat-icon"><i class="fas fa-circle-pause"></i></div>
-                            <div class="pr-stat-text">
-                                <span class="pr-stat-title">Belum Dimulai</span>
-                                <span class="pr-stat-sub">${aiBelum} Modul</span>
-                            </div>
-                            <span class="pr-stat-val-right" style="color:#888;">${aiBelum}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="pr-info-pill">
-                    <div class="pr-info-pill-icon"><i class="fas fa-sparkles"></i></div>
-                    <div><strong>Cakupan:</strong> Pengantar AI hingga Evolution of AI.</div>
-                </div>
-                <div class="pr-list-wrap">
-                    ${aiListHtml}
-                </div>
-            </div>
-
-            <!-- SECTION 3: MATH FOR AI -->
-            <div class="pr-card pr-body-bottom">
-                <div class="pr-card-head">
-                    <h3 class="pr-card-title">Progres Belajar</h3>
-                    <span class="pr-badge" style="background: transparent; border: none;"></span>
-                </div>
-                <div class="pr-grid" style="grid-template-columns: 200px 1fr; gap: 40px;">
-                    <div class="pr-donut" style="width:180px; height:180px;">
-                        ${getSvgDonut(mathProg, 'math').replace(/150/g, '180').replace(/75/g, '90').replace(/55/g, '75')}
-                        <div class="pr-donut-content">
-                            <div class="pr-donut-val" style="font-size:42px;">${mathProg}%</div>
-                            <div class="pr-donut-lbl" style="font-size:14px;">Selesai</div>
-                        </div>
-                    </div>
-                    <div class="pr-stats">
-                        <div class="pr-stat-box dot-green">
-                            <div class="pr-stat-icon"><i class="fas fa-badge-check"></i></div>
-                            <div class="pr-stat-text">
-                                <span class="pr-stat-title">Selesai</span>
-                                <span class="pr-stat-sub">${mathCompleted} dari ${mathTotal} bagian</span>
-                            </div>
-                            <span class="pr-stat-val-right" style="color:#00E676;">${mathProg === 100 ? '100%' : mathCompleted}</span>
-                        </div>
-                        <div class="pr-stat-box dot-pink">
-                            <div class="pr-stat-icon"><i class="fas fa-layer-group"></i></div>
-                            <div class="pr-stat-text">
-                                <span class="pr-stat-title">Submodul</span>
-                                <span class="pr-stat-sub">${mathSubmodulesCount} total</span>
-                            </div>
-                            <span class="pr-stat-val-right" style="color:#FF2F8A;">${mathSubmodulesCount}</span>
-                        </div>
-                        <div class="pr-stat-box dot-gray">
-                            <div class="pr-stat-icon"><i class="fas fa-book-open"></i></div>
-                            <div class="pr-stat-text">
-                                <span class="pr-stat-title">Topik materi</span>
-                                <span class="pr-stat-sub">${mathTopicsCount || 54} topik</span>
-                            </div>
-                            <span class="pr-stat-val-right" style="color:#888;">${mathTopicsCount || 54}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="pr-info-pill green">
-                    <div class="pr-info-pill-icon"><i class="fas fa-check-circle"></i></div>
-                    <div>Progres terbaru sudah tersinkron dengan akun peserta.</div>
-                </div>
-                <div class="pr-list-wrap" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-                    ${mathListHtml}
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>`;
-                
-                const modalWrapper = document.createElement('div');
-                modalWrapper.innerHTML = modalHtml.trim();
-                document.body.appendChild(modalWrapper.firstChild);
-            } catch (err) {
-                alert('CRITICAL ERROR saat merender modal: ' + err.message);
-                console.error('Modal error:', err);
+                if (snapshotStatus) snapshotStatus.textContent = 'Snapshot gagal dimuat';
+            } finally {
+                setLoading(false);
             }
-        }
+        };
+
+        const onModalKeydown = function(event) {
+            if (event.key === 'Escape' && activeModal) closeModal();
+            if (event.key === 'Tab' && activeModal) {
+                const focusable = Array.from(activeModal.querySelectorAll('button:not([disabled]),summary,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])'));
+                if (!focusable.length) return;
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first.focus();
+                }
+            }
+        };
+
+        const onProgressRouteChange = function() {
+            closeModal();
+        };
 
         if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                const q = e.target.value.toLowerCase();
-                const filtered = allData.filter(d => 
-                    d.name.toLowerCase().includes(q) || d.nik.toLowerCase().includes(q)
-                );
-                renderTable(filtered);
+            searchInput.addEventListener('input', function(event) {
+                const query = String(event.target.value || '').trim().toLowerCase();
+                renderTable(allData.filter(function(participant) {
+                    return String(participant.name || '').toLowerCase().includes(query)
+                        || String(participant.maskedNik || participant.nik || '').toLowerCase().includes(query);
+                }));
             });
         }
 
-        if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => loadData(true));
-        }
-        
-        if (document.getElementById('close-modal-btn')) {
-            document.getElementById('close-modal-btn').addEventListener('click', () => {
-                document.getElementById('progress-detail-modal').style.display = 'none';
+        if (refreshBtn) refreshBtn.addEventListener('click', function() { loadData(true); });
+        if (paginationContainer) {
+            paginationContainer.addEventListener('click', function(event) {
+                const button = event.target.closest('[data-page]');
+                if (!button || button.disabled) return;
+                const page = Number(button.dataset.page);
+                const totalPages = Math.max(1, Math.ceil(currentFilteredData.length / itemsPerPage));
+                if (page < 1 || page > totalPages) return;
+                currentPage = page;
+                renderTablePage();
             });
         }
+        if (tbody) {
+            tbody.addEventListener('click', function(event) {
+                const button = event.target.closest('[data-participant-key]');
+                if (!button) return;
+                const participant = participantMap[button.dataset.participantKey];
+                if (!participant) {
+                    showError('Detail peserta tidak ditemukan pada halaman ini. Silakan segarkan data.');
+                    return;
+                }
+                showModal(participant, button);
+            });
+        }
+        document.addEventListener('keydown', onModalKeydown);
+        window.addEventListener('hashchange', onProgressRouteChange);
 
-        loadData();
+        window.__cleanupProgressPeserta = function() {
+            closeModal();
+            document.removeEventListener('keydown', onModalKeydown);
+            window.removeEventListener('hashchange', onProgressRouteChange);
+        };
+
+        loadData(false);
     };
-
 })();

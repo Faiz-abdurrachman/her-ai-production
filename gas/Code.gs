@@ -11,7 +11,7 @@
  */
 
 const SPREADSHEET_ID = '1n4ZVYq90RyAz-XUOA7cR9yZTrrvZsPZQuNZK1il_0-w';
-const HERAI_BACKEND_VERSION = '2026.8.26-final-project-integrity';
+const HERAI_BACKEND_VERSION = '2026.8.31-admin-progress-integrity';
 const PASSWORD_HASH_PREFIX = 'pw$1$';
 const PARTICIPANT_ACCOUNT_TYPE = 'participant';
 const QA_PARTICIPANT_ACCOUNT_TYPE = 'qa';
@@ -321,6 +321,7 @@ function doPost(e) {
       updateStatus: () => updateParticipantStatus(payload),
       getAdminLearningProgressOverview: () => getAdminLearningProgressOverview(payload),
       getAdminParticipantProgressDetail: () => getAdminParticipantProgressDetail(payload),
+      getAdminLearningProgressSnapshot: () => getAdminLearningProgressSnapshot(payload),
       updateScore: () => updateScore(payload),
       runAiAnalysis: () => runAiAnalysis(payload),
       login: () => login(payload),
@@ -3509,6 +3510,7 @@ function saveParticipantProgress(payload) {
 
   invalidateUserCaches(participant.nik);
   cacheRemove('leader');
+  invalidateAdminLearningProgressCache();
   return { status: 'success' };
 }
 
@@ -5777,171 +5779,351 @@ function cachePutPresence(key, value, ttlSeconds) {
 // ADMIN LEARNING OPERATIONS (PROGRESS PESERTA)
 // ============================================================================
 
-function _getAggregatedProgress(forceRefresh) {
-  const cacheKey = 'admin_learning_progress_aggregate_v2';
-  const cache = CacheService.getScriptCache();
-  if (!forceRefresh) {
-    const cached = cache.get(cacheKey);
-    if (cached) return JSON.parse(cached);
-  }
-  
-  // Pull all progress
-  const allProgress = getRows(SHEETS.participantProgress);
-  
-  // Fetch accounts as the primary source of truth (101 participants + QA)
-  const accounts = getRows(SHEETS.participantAccounts);
-  
-  const activeParticipants = accounts.map(a => ({
-    rowId: String(a.participant_rowId || a.rowId || ''),
-    nik: String(a.nik || '').replace(/\D/g, ''),
-    name: a.nama_lengkap || a.name || '',
-    last_login_at: a.last_login_at || null
-  })).filter(a => a.rowId && a.nik);
-  
-  // Equal-weight for 7 courses
-  const moduleIds = ['ai-fundamentals', 'python-untuk-ai', 'konsep-ai-modern', 'reasoning', 'evaluation', 'evolution', 'math-for-ai'];
-  
-  const moduleRows = getRows(SHEETS.participantDashboardModules);
-  const moduleConfig = {};
-  moduleRows.forEach(r => {
-    moduleConfig[r.module_id] = Number(r.total_chapters) || 0;
-  });
+var ADMIN_LEARNING_PROGRESS_CACHE_KEY = 'admin_learning_progress_snapshot_v3';
+var ADMIN_LEARNING_PROGRESS_CACHE_SECONDS = 300;
 
-  const participantMap = {};
-  activeParticipants.forEach(p => {
-    participantMap[p.rowId] = {
-      nik: p.nik,
-      name: p.name,
-      courses: {},
-      courseDetails: {},
-      _completedItems: {},
-      overallProgress: 0,
-      lastActiveAt: p.last_login_at
+var ADMIN_FOUNDATION_MODULE_TITLES = {
+  'ai-fundamentals': 'Pengantar AI',
+  'python-untuk-ai': 'Python untuk AI',
+  'reasoning': 'Reasoning',
+  'konsep-ai-modern': 'Konsep AI Modern',
+  'evaluation': 'Evaluation',
+  'evolution': 'Evolution'
+};
+
+var ADMIN_MATH_SUBMODULE_TITLES = {
+  '01': 'Kenapa AI Butuh Matematika',
+  '02': 'Aljabar Linear',
+  '03': 'Statistika untuk AI',
+  '04': 'Probabilitas',
+  '05': 'Kalkulus',
+  '06': 'Optimisasi',
+  '07': 'Studi Kasus Terintegrasi'
+};
+
+function adminProgressIsoTimestamp(value) {
+  if (!value) return '';
+  var date = value instanceof Date ? value : new Date(value);
+  return isNaN(date.getTime()) ? '' : date.toISOString();
+}
+
+function adminProgressLatestTimestamp(row) {
+  var timestamps = [row && row.updated_at, row && row.completed_at, row && row.started_at]
+    .map(adminProgressIsoTimestamp)
+    .filter(Boolean)
+    .sort();
+  return timestamps.length ? timestamps[timestamps.length - 1] : '';
+}
+
+function adminProgressMathSubmoduleId(chapterId) {
+  var value = String(chapterId || '');
+  var semantic = value.match(/^(?:info|practice|quiz|discussion|references)-(0[1-7])$/);
+  if (semantic) return semantic[1];
+  if (isValidMathTopicProgressId(value)) {
+    return String(Math.floor(Number(value) / 100)).padStart(2, '0');
+  }
+  return '';
+}
+
+function buildAdminLearningProgressSnapshot(source) {
+  var input = source || {};
+  var accounts = Array.isArray(input.accounts) ? input.accounts : [];
+  var progressRows = Array.isArray(input.progressRows) ? input.progressRows : [];
+  var moduleRows = Array.isArray(input.moduleRows) ? input.moduleRows.slice() : [];
+  var targetEmailSet = input.targetEmailSet || {};
+  var generatedAt = adminProgressIsoTimestamp(input.now || new Date()) || new Date().toISOString();
+  var activeCutoffMs = new Date(generatedAt).getTime() - (7 * 24 * 60 * 60 * 1000);
+  var scope = {
+    totalAccountRows: accounts.length,
+    regularParticipants: 0,
+    excludedQa: 0,
+    excludedDisabled: 0,
+    excludedOutsideCohort: 0,
+    excludedMissingIdentity: 0,
+    excludedDuplicateIdentity: 0
+  };
+
+  if (!moduleRows.some(function(row) { return String(row.module_id || '') === 'ai-fundamentals'; })) {
+    moduleRows.push(defaultIntroTrackingModule());
+  }
+
+  var configuredModules = {};
+  moduleRows.forEach(function(row) {
+    var moduleId = String(row.module_id || '');
+    if (ACTIVE_FOUNDATION_MODULE_IDS.indexOf(moduleId) < 0 && moduleId !== 'math-for-ai') return;
+    if (!moduleFlag(row.is_active, true) || !isModuleTrackingEnabled(row)) return;
+    var total = moduleId === 'math-for-ai'
+      ? MATH_PROGRESS_ITEM_TOTAL
+      : Math.max(0, Math.floor(Number(row.total_chapters || 0)));
+    if (!total) return;
+    configuredModules[moduleId] = {
+      moduleId: moduleId,
+      title: String(row.title || ADMIN_FOUNDATION_MODULE_TITLES[moduleId] || moduleId),
+      total: total
     };
   });
 
-  allProgress.forEach(row => {
-    if (participantMap[row.participant_rowId] && row.status === 'completed') {
-      const p = participantMap[row.participant_rowId];
-      if (moduleIds.indexOf(row.module_id) >= 0) {
-        if (!p._completedItems[row.module_id]) {
-          p._completedItems[row.module_id] = {};
-        }
-        p._completedItems[row.module_id][row.chapter_id] = true;
-      }
+  var foundationModules = ACTIVE_FOUNDATION_MODULE_IDS
+    .filter(function(moduleId) { return Boolean(configuredModules[moduleId]); })
+    .map(function(moduleId) { return configuredModules[moduleId]; });
+
+  var eligibleByRowId = {};
+  var eligibleByNik = {};
+  var knownRowIds = {};
+  var knownNiks = {};
+  var participants = [];
+
+  accounts.forEach(function(account) {
+    var rowId = String(account && (account.participant_rowId || account.rowId) || '').trim();
+    var nik = String(account && (account.nik || account.username) || '').replace(/\D/g, '');
+    if (rowId) knownRowIds[rowId] = true;
+    if (nik) knownNiks[nik] = true;
+    if (isQaParticipantAccount(account)) {
+      scope.excludedQa++;
+      return;
+    }
+    if (!isTargetParticipantForPortal(account, targetEmailSet)) {
+      scope.excludedOutsideCohort++;
+      return;
+    }
+    if (!isParticipantAccountActive(account)) {
+      scope.excludedDisabled++;
+      return;
+    }
+    if (!account.account_id || !rowId || !nik) {
+      scope.excludedMissingIdentity++;
+      return;
+    }
+    if (eligibleByRowId[rowId] || eligibleByNik[nik]) {
+      scope.excludedDuplicateIdentity++;
+      return;
+    }
+    var participant = {
+      participantRowId: rowId,
+      maskedNik: maskParticipantNik(nik),
+      name: String(account.nama_lengkap || account.name || 'Peserta'),
+      lastLoginAt: adminProgressIsoTimestamp(account.last_login_at),
+      _nik: nik,
+      _completed: {},
+      _validRows: [],
+      _lastLearningAt: '',
+      _lastModuleId: '',
+      _lastItemId: ''
+    };
+    eligibleByRowId[rowId] = participant;
+    if (!eligibleByNik[nik]) eligibleByNik[nik] = participant;
+    participants.push(participant);
+    scope.regularParticipants++;
+  });
+
+  var diagnostics = {
+    totalProgressRows: progressRows.length,
+    acceptedProgressRows: 0,
+    excludedAccountProgressRows: 0,
+    orphanProgressRows: 0,
+    invalidProgressRows: 0
+  };
+
+  progressRows.forEach(function(row) {
+    var rowId = String(row && row.participant_rowId || '').trim();
+    var nik = String(row && row.nik || '').replace(/\D/g, '');
+    var participant = eligibleByRowId[rowId] || (!rowId && eligibleByNik[nik]);
+    if (!participant) {
+      if ((rowId && knownRowIds[rowId]) || (nik && knownNiks[nik])) diagnostics.excludedAccountProgressRows++;
+      else diagnostics.orphanProgressRows++;
+      return;
+    }
+
+    var moduleId = String(row.module_id || '');
+    var chapterId = String(row.chapter_id || '');
+    var status = String(row.status || '').toLowerCase();
+    var moduleConfig = configuredModules[moduleId];
+    var validChapter = false;
+    if (moduleConfig && moduleId === 'math-for-ai') {
+      validChapter = chapterId !== 'quiz' && isValidMathProgressChapterId(chapterId);
+    } else if (moduleConfig && ACTIVE_FOUNDATION_MODULE_IDS.indexOf(moduleId) >= 0) {
+      validChapter = /^\d+$/.test(chapterId)
+        && Number(chapterId) >= 1
+        && Number(chapterId) <= moduleConfig.total;
+    }
+    if (!moduleConfig || !validChapter || ['not_started', 'in_progress', 'completed'].indexOf(status) < 0) {
+      diagnostics.invalidProgressRows++;
+      return;
+    }
+
+    diagnostics.acceptedProgressRows++;
+    participant._validRows.push(row);
+    var timestamp = adminProgressLatestTimestamp(row);
+    if (timestamp && (!participant._lastLearningAt || timestamp > participant._lastLearningAt)) {
+      participant._lastLearningAt = timestamp;
+      participant._lastModuleId = moduleId;
+      participant._lastItemId = chapterId;
+    }
+    if (status === 'completed') {
+      if (!participant._completed[moduleId]) participant._completed[moduleId] = {};
+      participant._completed[moduleId][chapterId] = true;
     }
   });
 
-  Object.keys(participantMap).forEach(rowId => {
-    const p = participantMap[rowId];
-    moduleIds.forEach(id => {
-      let completed = 0;
-      let total = 0;
-      if (id === 'math-for-ai') {
-        const items = p._completedItems[id] || {};
-        completed = Object.keys(items).filter(cid => cid !== 'quiz' && isValidMathProgressChapterId(cid)).length;
-        total = MATH_PROGRESS_ITEM_TOTAL;
-        
-        p.mathSubmodules = {};
-        Object.keys(MATH_PROGRESS_TOPIC_COUNTS).forEach(sub => {
-          let subCompleted = 0;
-          let subTotal = MATH_PROGRESS_TOPIC_COUNTS[sub] + 5;
-          Object.keys(items).forEach(cid => {
-             if (String(cid).endsWith('-' + sub) || 
-                 (!isNaN(cid) && Number(cid) >= Number(sub)*100 && Number(cid) < (Number(sub)+1)*100)) {
-               subCompleted++;
-             }
-          });
-          p.mathSubmodules['Submodule ' + sub] = {
-            percentage: Math.min(100, Math.round((subCompleted / subTotal) * 100)),
-            completed: subCompleted,
-            total: subTotal
-          };
-        });
-        
-      } else {
-        const items = p._completedItems[id] || {};
-        total = moduleConfig[id] || 0;
-        completed = Object.keys(items).filter(cid => {
-          const num = Number(cid);
-          return num >= 1 && num <= total;
-        }).length;
-      }
-      p.courses[id] = total > 0 ? Math.min(100, Math.round((completed / total) * 100)) : 0;
-      p.courseDetails[id] = { completed: completed, total: total };
-    });
-    delete p._completedItems;
+  var moduleProgressTotals = {};
+  ACTIVE_FOUNDATION_MODULE_IDS.concat(['math-for-ai']).forEach(function(moduleId) {
+    moduleProgressTotals[moduleId] = 0;
   });
-  
-  let totalOverallProgress = 0;
-  let moduleTotals = {};
-  moduleIds.forEach(id => moduleTotals[id] = 0);
-  
-  const detail = [];
-  
-  Object.keys(participantMap).forEach(rowId => {
-    const p = participantMap[rowId];
-    
-    const aiCourseIds = ['ai-fundamentals', 'python-untuk-ai', 'konsep-ai-modern', 'reasoning', 'evaluation', 'evolution'];
-    let aiTotal = 0;
-    aiCourseIds.forEach(id => {
-      aiTotal += (p.courses[id] || 0);
-      moduleTotals[id] += (p.courses[id] || 0);
+
+  participants.forEach(function(participant) {
+    var moduleStates = foundationModules.map(function(moduleConfig) {
+      var completed = Object.keys(participant._completed[moduleConfig.moduleId] || {}).length;
+      var progress = Math.min(100, Math.round((completed / moduleConfig.total) * 100));
+      moduleProgressTotals[moduleConfig.moduleId] += progress;
+      return {
+        moduleId: moduleConfig.moduleId,
+        title: moduleConfig.title,
+        completed: completed,
+        total: moduleConfig.total,
+        progress: progress
+      };
     });
-    const aiGroupProgress = aiCourseIds.length > 0 ? (aiTotal / aiCourseIds.length) : 0;
-    
-    const mathGroupProgress = p.courses['math-for-ai'] || 0;
-    moduleTotals['math-for-ai'] += mathGroupProgress;
-    
-    // Rata-rata dari 2 grup besar sesuai UI (AI Fundamentals & Math for AI)
-    p.overallProgress = Number(((aiGroupProgress + mathGroupProgress) / 2).toFixed(1)) || 0;
-    totalOverallProgress += p.overallProgress;
-    
-    // Masking NIK: 3271120000000000 -> 3271********0000
-    let maskedNik = p.nik;
-    if (maskedNik.length >= 10) {
-      maskedNik = maskedNik.substring(0, 4) + '***' + maskedNik.substring(maskedNik.length - 4);
-    } else {
-      maskedNik = '***';
-    }
-    p.nik = maskedNik;
-    
-    detail.push(p);
+    var aiSummary = summarizeTrackedModules(moduleStates);
+    var mathSummary = computeMathCourseProgress(participant._validRows);
+    var mathSubmodules = {};
+    Object.keys(MATH_PROGRESS_TOPIC_COUNTS).forEach(function(submoduleId) {
+      var completedItems = Object.keys(participant._completed['math-for-ai'] || {}).filter(function(chapterId) {
+        return adminProgressMathSubmoduleId(chapterId) === submoduleId;
+      }).length;
+      var totalItems = Number(MATH_PROGRESS_TOPIC_COUNTS[submoduleId] || 0) + 5;
+      mathSubmodules[submoduleId] = {
+        submoduleId: submoduleId,
+        title: ADMIN_MATH_SUBMODULE_TITLES[submoduleId] || ('Submodul ' + submoduleId),
+        topicTotal: Number(MATH_PROGRESS_TOPIC_COUNTS[submoduleId] || 0),
+        completed: completedItems,
+        total: totalItems,
+        progress: totalItems ? Math.min(100, Math.round((completedItems / totalItems) * 100)) : 0
+      };
+    });
+    moduleProgressTotals['math-for-ai'] += mathSummary.progress;
+
+    var courses = buildActiveLearningCourses(aiSummary, participant._validRows);
+    var overallSummary = summarizeTrackedModules(courses);
+    participant.aiFundamentals = {
+      progress: aiSummary.progress,
+      completedModules: aiSummary.completed,
+      moduleTotal: aiSummary.total,
+      modules: moduleStates
+    };
+    participant.mathForAi = {
+      progress: mathSummary.progress,
+      completedActivities: mathSummary.completed_items,
+      totalActivities: mathSummary.total_items,
+      topicTotal: Object.keys(MATH_PROGRESS_TOPIC_COUNTS).reduce(function(total, submoduleId) {
+        return total + Number(MATH_PROGRESS_TOPIC_COUNTS[submoduleId] || 0);
+      }, 0),
+      submodules: mathSubmodules
+    };
+    participant.overallProgress = overallSummary.progress;
+    participant.lastLearningAt = participant._lastLearningAt || null;
+    participant.lastModuleId = participant._lastModuleId || null;
+    participant.lastItemId = participant._lastItemId || null;
+
+    // Compatibility fields keep the former admin readers reversible.
+    participant.nik = participant.maskedNik;
+    participant.lastActiveAt = participant.lastLearningAt;
+    participant.courses = {};
+    participant.courseDetails = {};
+    moduleStates.forEach(function(module) {
+      participant.courses[module.moduleId] = module.progress;
+      participant.courseDetails[module.moduleId] = { completed: module.completed, total: module.total };
+    });
+    participant.courses['math-for-ai'] = mathSummary.progress;
+    participant.courseDetails['math-for-ai'] = {
+      completed: mathSummary.completed_items,
+      total: mathSummary.total_items
+    };
+    participant.mathSubmodules = mathSubmodules;
+    delete participant._nik;
+    delete participant._completed;
+    delete participant._validRows;
+    delete participant._lastLearningAt;
+    delete participant._lastModuleId;
+    delete participant._lastItemId;
+    delete participant.participantRowId;
   });
-  
-  const totalActive = activeParticipants.length;
-  const overview = {
-    totalActiveParticipants: totalActive,
-    averageOverallProgress: totalActive > 0 ? Number((totalOverallProgress / totalActive).toFixed(1)) : 0,
-    moduleStats: moduleIds.map(id => ({
-      moduleId: id,
-      averageProgress: totalActive > 0 ? Number((moduleTotals[id] / totalActive).toFixed(1)) : 0
-    })),
-    lastUpdated: new Date().toISOString()
+
+  participants.sort(function(a, b) {
+    return String(a.name || '').localeCompare(String(b.name || ''), 'id');
+  });
+  var totalParticipants = participants.length;
+  var overallTotal = participants.reduce(function(total, participant) {
+    return total + Number(participant.overallProgress || 0);
+  }, 0);
+  var activeLearners7d = participants.filter(function(participant) {
+    var timestamp = participant.lastLearningAt ? new Date(participant.lastLearningAt).getTime() : NaN;
+    return !isNaN(timestamp) && timestamp >= activeCutoffMs;
+  }).length;
+  var moduleStats = Object.keys(moduleProgressTotals).filter(function(moduleId) {
+    return Boolean(configuredModules[moduleId]);
+  }).map(function(moduleId) {
+    return {
+      moduleId: moduleId,
+      averageProgress: totalParticipants
+        ? Number((moduleProgressTotals[moduleId] / totalParticipants).toFixed(1))
+        : 0
+    };
+  });
+
+  return {
+    generatedAt: generatedAt,
+    cacheTtlSeconds: ADMIN_LEARNING_PROGRESS_CACHE_SECONDS,
+    scope: scope,
+    overview: {
+      totalParticipants: totalParticipants,
+      totalActiveParticipants: totalParticipants,
+      averageOverallProgress: totalParticipants ? Number((overallTotal / totalParticipants).toFixed(1)) : 0,
+      activeLearners7d: activeLearners7d,
+      activePercent: totalParticipants ? Number(((activeLearners7d / totalParticipants) * 100).toFixed(1)) : 0,
+      moduleStats: moduleStats,
+      lastUpdated: generatedAt
+    },
+    participants: participants,
+    diagnostics: diagnostics
   };
-  
-  const result = { overview: overview, detail: detail };
-  
-  // Cache for 10 minutes (600 seconds)
-  cache.put(cacheKey, JSON.stringify(result), 600);
-  
-  return result;
+}
+
+function invalidateAdminLearningProgressCache() {
+  try { CacheService.getScriptCache().remove(ADMIN_LEARNING_PROGRESS_CACHE_KEY); } catch (e) {}
+}
+
+function _getAdminLearningProgressSnapshot(forceRefresh) {
+  var cache = CacheService.getScriptCache();
+  if (!isTruthy(forceRefresh)) {
+    var cached = cache.get(ADMIN_LEARNING_PROGRESS_CACHE_KEY);
+    if (cached) return JSON.parse(cached);
+  }
+  var snapshot = buildAdminLearningProgressSnapshot({
+    accounts: getRows(SHEETS.participantAccounts),
+    progressRows: getRows(SHEETS.participantProgress),
+    moduleRows: getRows(SHEETS.participantDashboardModules),
+    targetEmailSet: getTargetParticipantPortalEmailSet(),
+    now: new Date()
+  });
+  cache.put(ADMIN_LEARNING_PROGRESS_CACHE_KEY, JSON.stringify(snapshot), ADMIN_LEARNING_PROGRESS_CACHE_SECONDS);
+  return snapshot;
+}
+
+function getAdminLearningProgressSnapshot(payload) {
+  return { status: 'success', data: _getAdminLearningProgressSnapshot(payload && payload.forceRefresh) };
+}
+
+function _getAggregatedProgress(forceRefresh) {
+  var snapshot = _getAdminLearningProgressSnapshot(forceRefresh);
+  return { overview: snapshot.overview, detail: snapshot.participants };
 }
 
 function getAdminLearningProgressOverview(payload) {
-  const data = _getAggregatedProgress(payload.forceRefresh);
-  return {
-    status: 'success',
-    data: data.overview
-  };
+  return { status: 'success', data: _getAggregatedProgress(payload && payload.forceRefresh).overview };
 }
 
 function getAdminParticipantProgressDetail(payload) {
-  const data = _getAggregatedProgress(payload.forceRefresh);
-  return {
-    status: 'success',
-    data: data.detail
-  };
+  return { status: 'success', data: _getAggregatedProgress(payload && payload.forceRefresh).detail };
 }
 
 function assignTeams() {
