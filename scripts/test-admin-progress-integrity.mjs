@@ -93,6 +93,8 @@ const progressRows = [
     { participant_rowId: 'row-1', nik: '1111222233334444', module_id: 'math-for-ai', chapter_id: 'quiz', status: 'completed', updated_at: '2026-08-31T11:59:00.000Z' },
     { participant_rowId: 'row-1', nik: '1111222233334444', module_id: 'reasoning', chapter_id: '999', status: 'completed', updated_at: '2026-08-31T11:58:00.000Z' },
     { participant_rowId: 'row-2', nik: '5555666677778888', module_id: 'reasoning', chapter_id: '1', status: 'in_progress', updated_at: '2026-08-24T12:00:00.000Z' },
+    { participant_rowId: 'row-qa', nik: '9000000000000001', module_id: 'ai-fundamentals', chapter_id: '1', status: 'completed', updated_at: '2026-08-31T10:00:00.000Z' },
+    { participant_rowId: 'row-qa', nik: '9000000000000001', module_id: 'math-for-ai', chapter_id: 'info-01', status: 'completed', updated_at: '2026-08-31T11:00:00.000Z' },
     { participant_rowId: 'row-disabled', nik: '9000000000000002', module_id: 'reasoning', chapter_id: '1', status: 'completed', updated_at: '2026-08-31T11:00:00.000Z' },
     { participant_rowId: 'missing-row', nik: '9999000011112222', module_id: 'reasoning', chapter_id: '1', status: 'completed', updated_at: '2026-08-31T11:00:00.000Z' }
 ];
@@ -107,19 +109,30 @@ const snapshot = api.buildAdminLearningProgressSnapshot({
 
 assert.equal(snapshot.scope.totalAccountRows, 6);
 assert.equal(snapshot.scope.regularParticipants, 2);
-assert.equal(snapshot.scope.excludedQa, 1);
+assert.equal(snapshot.scope.qaParticipants, 1);
+assert.equal(snapshot.scope.excludedQa, 0);
 assert.equal(snapshot.scope.excludedDisabled, 1);
 assert.equal(snapshot.scope.excludedOutsideCohort, 1);
 assert.equal(snapshot.scope.excludedMissingIdentity, 1);
 assert.equal(snapshot.overview.totalParticipants, 2);
+assert.equal(snapshot.overview.qaParticipants, 1);
+assert.equal(snapshot.overview.listedAccounts, 3);
 assert.equal(snapshot.overview.activeLearners7d, 2);
 assert.equal(snapshot.overview.activePercent, 100);
-assert.equal(snapshot.participants.length, 2);
+assert.equal(snapshot.participants.length, 3);
 
 const regularOne = snapshot.participants.find(participant => participant.name === 'Regular One');
 const regularTwo = snapshot.participants.find(participant => participant.name === 'Regular Two');
+const qaParticipant = snapshot.participants.find(participant => participant.name === 'QA Account');
 assert.ok(regularOne);
 assert.ok(regularTwo);
+assert.ok(qaParticipant);
+assert.equal(snapshot.participants[0].isQa, true);
+assert.equal(qaParticipant.isQa, true);
+assert.equal(regularOne.isQa, false);
+assert.equal(qaParticipant.aiFundamentals.modules.find(module => module.moduleId === 'ai-fundamentals').completed, 1);
+assert.equal(qaParticipant.mathForAi.completedActivities, 1);
+assert.equal(qaParticipant.lastLearningAt, '2026-08-31T11:00:00.000Z');
 assert.equal(regularOne.maskedNik, '1111********4444');
 assert.equal(regularOne.aiFundamentals.progress, 23);
 assert.equal(regularOne.aiFundamentals.moduleTotal, 6);
@@ -140,6 +153,8 @@ assert.equal(regularOne.lastItemId, 'info-01');
 assert.equal(regularTwo.overallProgress, 0);
 assert.equal(regularTwo.lastLearningAt, '2026-08-24T12:00:00.000Z');
 assert.equal(snapshot.overview.averageOverallProgress, 6);
+assert.equal(snapshot.overview.moduleStats.find(module => module.moduleId === 'ai-fundamentals').averageProgress, 20);
+assert.equal(snapshot.overview.moduleStats.find(module => module.moduleId === 'math-for-ai').averageProgress, 0.5);
 assert.equal(snapshot.diagnostics.orphanProgressRows, 1);
 assert.ok(snapshot.diagnostics.invalidProgressRows >= 2);
 

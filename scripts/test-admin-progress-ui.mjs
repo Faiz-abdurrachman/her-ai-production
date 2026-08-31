@@ -40,10 +40,36 @@ const participantTwo = {
     mathForAi: { progress: 0, completedActivities: 0, totalActivities: 89, topicTotal: 54, submodules: Object.fromEntries(Object.entries(submodules).map(([id, row]) => [id, { ...row, completed: 0, progress: 0 }])) },
     overallProgress: 0, lastLearningAt: null, lastModuleId: null, lastItemId: null
 };
+const participantThree = {
+    participantRowId: 'row-3', maskedNik: '9999********2222', name: 'Regular Complete With A Very Long Participant Name',
+    aiFundamentals: {
+        progress: 100,
+        completedModules: 6,
+        moduleTotal: 6,
+        modules: modules.map(row => ({ ...row, progress: 100, completed: row.total }))
+    },
+    mathForAi: {
+        progress: 100,
+        completedActivities: 89,
+        totalActivities: 89,
+        topicTotal: 54,
+        submodules: Object.fromEntries(Object.entries(submodules).map(([id, row]) => [id, { ...row, completed: row.total, progress: 100 }]))
+    },
+    overallProgress: 100, lastLearningAt: '2026-08-31T12:00:00.000Z',
+    lastModuleId: 'math-for-ai', lastItemId: 'references-07'
+};
+const participantQa = {
+    participantRowId: 'row-qa', maskedNik: '9000********0001', name: 'QA Learning Account', isQa: true,
+    aiFundamentals: { progress: 20, completedModules: 0, moduleTotal: 6, modules: modules.map(row => ({ ...row, progress: row.moduleId === 'ai-fundamentals' ? 20 : 0, completed: row.moduleId === 'ai-fundamentals' ? 1 : 0 })) },
+    mathForAi: { progress: 1, completedActivities: 1, totalActivities: 89, topicTotal: 54, submodules },
+    overallProgress: 11, lastLearningAt: '2026-08-31T10:00:00.000Z',
+    lastModuleId: 'math-for-ai', lastItemId: 'info-01'
+};
+assert.equal(participantOne.overallProgress, Math.round((participantOne.aiFundamentals.progress + participantOne.mathForAi.progress) / 2));
 const snapshot = {
     generatedAt: '2026-08-31T12:00:00.000Z', cacheTtlSeconds: 300,
-    overview: { totalParticipants: 2, averageOverallProgress: 6, activeLearners7d: 1, activePercent: 50 },
-    participants: [participantOne, participantTwo]
+    overview: { totalParticipants: 3, qaParticipants: 1, listedAccounts: 4, averageOverallProgress: 37, activeLearners7d: 2, activePercent: 67 },
+    participants: [participantQa, participantOne, participantTwo, participantThree]
 };
 
 const postedPayloads = [];
@@ -100,18 +126,42 @@ try {
     assert.equal(postedPayloads[0].action, 'getAdminLearningProgressSnapshot');
     assert.equal(postedPayloads[0].forceRefresh, false);
     assert.deepEqual(await page.$$eval('.premium-table th', nodes => nodes.map(node => node.textContent.trim())), [
-        'Nama Peserta', 'AI Fundamentals', 'Math for AI', 'Overall', 'Terakhir Belajar', 'Aksi'
+        'Peserta', 'Progress Keseluruhan', 'Terakhir Belajar', 'Detail'
     ]);
-    assert.equal(await page.$eval('.premium-table caption', node => node.textContent.trim()), 'Progress belajar peserta pada dua modul aktif');
-    assert.equal(await page.$$eval('#progress-table-body tr', rows => rows.length), 2);
+    assert.equal(await page.$eval('.premium-table caption', node => node.textContent.trim()), 'Progress keseluruhan dan aktivitas belajar terakhir peserta');
+    assert.equal(await page.$$eval('#progress-table-body tr', rows => rows.length), 4);
+    assert.equal(await page.$$eval('#progress-table-body .qa-badge', nodes => nodes.length), 1);
+    assert.equal(await page.$eval('#progress-table-body tr:first-child', row => row.dataset.accountKind), 'qa');
+    assert.match(await page.$eval('#page-info', node => node.textContent), /4 akun peserta · 1 QA/);
     assert.equal(await page.$eval('#progress-table-body', node => node.textContent.includes('Kelas AI Mastery') || node.textContent.includes('HerAI Labs')), false);
-    assert.deepEqual(await page.$$eval('.premium-summary-content .main-val', nodes => nodes.map(node => node.textContent.replace(/\s+/g, ' ').trim())), ['2', '6%', '1 50%']);
+    assert.equal(await page.$eval('#progress-table-body', node => /AI Fundamentals|Math for AI/.test(node.textContent)), false, 'Module breakdown belongs in Detail, not the main table.');
+    assert.deepEqual(await page.$$eval('.premium-summary-content .main-val', nodes => nodes.map(node => node.textContent.replace(/\s+/g, ' ').trim())), ['3 +1 QA', '37%', '2 67%']);
+    assert.match(await page.$eval('#progress-overview-container', node => node.textContent.replace(/\s+/g, ' ')), /QA tidak masuk KPI/);
     assert.match(await page.$eval('#progress-overview-container', node => node.textContent.replace(/\s+/g, ' ')), /Rata-rata dari 2 modul aktif/);
-    assert.deepEqual(await page.$$eval('#progress-table-body tr:first-child .course-progress-meta', nodes => nodes.slice(1).map(node => node.textContent.trim())), ['1 / 6 submodul', '1 / 89 aktivitas']);
+    assert.deepEqual(await page.$$eval('#progress-table-body .overall-progress', nodes => nodes.map(node => ({
+        state: node.dataset.progressState,
+        value: node.querySelector('.overall-progress-value').textContent.trim(),
+        label: node.querySelector('.progress-state-label').textContent.trim(),
+        meta: node.querySelector('.overall-progress-meta').textContent.trim(),
+        ariaValue: Number(node.querySelector('[role="progressbar"]').getAttribute('aria-valuenow'))
+    }))), [
+        { state: 'active', value: '11%', label: 'Sedang berjalan', meta: '2 modul aktif · nilai dari server', ariaValue: 11 },
+        { state: 'active', value: '12%', label: 'Sedang berjalan', meta: '2 modul aktif · nilai dari server', ariaValue: 12 },
+        { state: 'empty', value: '0%', label: 'Belum ada progres', meta: '2 modul aktif · nilai dari server', ariaValue: 0 },
+        { state: 'complete', value: '100%', label: 'Selesai', meta: '2 modul aktif · nilai dari server', ariaValue: 100 }
+    ]);
+    assert.match(await page.$eval('#progress-table-body tr[data-account-kind="qa"] .last-active', node => node.textContent.replace(/\s+/g, ' ')), /31 Agu 2026, 17\.00 WIB/);
+    assert.match(await page.$$eval('#progress-table-body tr', rows => rows.find(row => row.querySelector('.participant-name')?.textContent.trim() === 'Regular Two').querySelector('.last-active').textContent.replace(/\s+/g, ' ')), /Belum pernah belajar.*Belum ada aktivitas tersimpan/);
+    if (process.env.ADMIN_PROGRESS_SCREENSHOT_DIR) {
+        await page.screenshot({ path: resolve(process.env.ADMIN_PROGRESS_SCREENSHOT_DIR, 'admin-progress-desktop.png'), fullPage: true });
+    }
 
     const detailButtonHeight = await page.$eval('.btn-detail', button => button.getBoundingClientRect().height);
     assert.ok(detailButtonHeight >= 44, 'Detail touch target must be at least 44px high.');
-    await page.click('#progress-table-body .btn-detail');
+    await page.evaluate(() => {
+        const row = Array.from(document.querySelectorAll('#progress-table-body tr')).find(candidate => candidate.querySelector('.participant-name')?.textContent.trim() === 'Regular One');
+        row.querySelector('.btn-detail').click();
+    });
     await page.waitForSelector('.pr-modal-dialog');
     const modalText = await page.$eval('.pr-modal-dialog', node => node.textContent.replace(/\s+/g, ' '));
     assert.match(modalText, /Regular One/);
@@ -160,22 +210,31 @@ try {
     assert.equal(postedPayloads.at(-1).forceRefresh, true);
 
     await page.setViewport({ width: 390, height: 844, isMobile: true });
-    await page.click('#progress-table-body .btn-detail');
+    if (process.env.ADMIN_PROGRESS_SCREENSHOT_DIR) {
+        await page.screenshot({ path: resolve(process.env.ADMIN_PROGRESS_SCREENSHOT_DIR, 'admin-progress-mobile.png'), fullPage: true });
+    }
+    await page.click('#progress-table-body tr[data-account-kind="qa"] .btn-detail');
     await page.waitForSelector('.pr-modal-dialog');
+    assert.equal(await page.$$eval('.pr-modal-dialog .pr-qa-badge', nodes => nodes.length), 1);
+    assert.match(await page.$eval('.pr-modal-dialog', node => node.textContent.replace(/\s+/g, ' ')), /tidak dihitung ke KPI peserta resmi/);
     const overflowAudit = await page.evaluate(() => ({
         viewport: document.documentElement.clientWidth,
         pageWidth: document.documentElement.scrollWidth,
         tableWrapperScrolls: document.querySelector('.premium-table').parentElement.scrollWidth > document.querySelector('.premium-table').parentElement.clientWidth,
+        mobileRowDisplay: getComputedStyle(document.querySelector('#progress-table-body tr')).display,
+        visibleExactTimestamp: document.querySelector('#progress-table-body tr[data-account-kind="qa"] .last-active-exact')?.textContent.trim(),
         modalWidth: document.querySelector('.pr-modal-dialog').getBoundingClientRect().width,
         modalViewport: window.innerWidth,
         modalContentFits: document.querySelector('.pr-modal-dialog').scrollWidth <= document.querySelector('.pr-modal-dialog').clientWidth
     }));
     assert.equal(overflowAudit.pageWidth <= overflowAudit.viewport, true, JSON.stringify(overflowAudit));
-    assert.equal(overflowAudit.tableWrapperScrolls, true);
+    assert.equal(overflowAudit.tableWrapperScrolls, false, JSON.stringify(overflowAudit));
+    assert.equal(overflowAudit.mobileRowDisplay, 'block');
+    assert.equal(overflowAudit.visibleExactTimestamp, '31 Agu 2026, 17.00 WIB');
     assert.equal(overflowAudit.modalWidth <= overflowAudit.modalViewport, true, JSON.stringify(overflowAudit));
     assert.equal(overflowAudit.modalContentFits, true, JSON.stringify(overflowAudit));
     assert.equal(pageErrors.length, 0, pageErrors.join('\n'));
-    console.log('Admin progress UI valid: authoritative values, Module → Submodule hierarchy, canonical order, working modal, refresh, accessibility, and mobile containment pass.');
+    console.log('Admin progress UI valid: official KPI isolation, visible QA participant, authoritative progress, module detail, refresh, accessibility, and responsive cards pass.');
 } finally {
     await browser.close();
     await new Promise(resolveClose => server.close(resolveClose));

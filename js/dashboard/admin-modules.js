@@ -3116,6 +3116,21 @@
             return 'baru saja';
         };
 
+        const formatExactLearningTimestamp = function(value) {
+            if (!value) return '';
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return 'Waktu tidak tersedia';
+            return new Intl.DateTimeFormat('id-ID', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'Asia/Jakarta',
+                timeZoneName: 'short'
+            }).format(date);
+        };
+
         const showError = function(message) {
             if (!errorBox) return;
             errorBox.textContent = String(message || 'Data progress tidak dapat dimuat.');
@@ -3188,20 +3203,57 @@
             };
         };
 
-        const moduleCell = function(moduleSummary, label) {
-            const safeModule = moduleSummary || {};
-            const progress = clampPercent(safeModule.progress);
-            const completed = Number(safeModule.completed || 0);
-            const total = Number(safeModule.total || 0);
+        const getProgressState = function(value) {
+            const progress = clampPercent(value);
+            if (progress >= 100) return { id: 'complete', label: 'Selesai' };
+            if (progress > 0) return { id: 'active', label: 'Sedang berjalan' };
+            return { id: 'empty', label: 'Belum ada progres' };
+        };
+
+        const overallProgressCellHtml = function(progressValue, moduleCount, participantName) {
+            const progress = clampPercent(progressValue);
+            const state = getProgressState(progress);
             return [
-                '<td class="course-progress-cell">',
-                    '<div class="course-progress-row">',
-                        '<div class="progress-track" role="progressbar" aria-label="', escapeAttr(label), '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="', progress, '">',
+                '<td class="overall-progress-cell" data-label="Progress keseluruhan">',
+                    '<div class="overall-progress" data-progress-state="', state.id, '">',
+                        '<div class="overall-progress-heading">',
+                            '<strong class="overall-progress-value">', formatPercent(progress), '%</strong>',
+                            '<span class="progress-state-label">', escapeHtml(state.label), '</span>',
+                        '</div>',
+                        '<div class="progress-track" role="progressbar" aria-label="Progress keseluruhan ', escapeAttr(participantName), '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="', progress, '">',
                             '<div class="progress-fill" style="width:', progress, '%"></div>',
                         '</div>',
-                        '<span class="progress-percentage">', formatPercent(progress), '%</span>',
+                        '<span class="overall-progress-meta">', Number(moduleCount || 0), ' modul aktif · nilai dari server</span>',
                     '</div>',
-                    '<span class="course-progress-meta">', completed, ' / ', total, ' ', escapeHtml(safeModule.itemLabel || 'item'), '</span>',
+                '</td>'
+            ].join('');
+        };
+
+        const lastLearningCellHtml = function(value) {
+            if (!value) {
+                return [
+                    '<td class="last-active last-active-empty" data-label="Terakhir belajar">',
+                        '<div class="last-active-primary"><i class="far fa-clock" aria-hidden="true"></i><span>Belum pernah belajar</span></div>',
+                        '<span class="last-active-exact">Belum ada aktivitas tersimpan</span>',
+                    '</td>'
+                ].join('');
+            }
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) {
+                return [
+                    '<td class="last-active last-active-empty" data-label="Terakhir belajar">',
+                        '<div class="last-active-primary"><i class="fas fa-exclamation-circle" aria-hidden="true"></i><span>Waktu tidak tersedia</span></div>',
+                    '</td>'
+                ].join('');
+            }
+            const isoTimestamp = date.toISOString();
+            const exactTimestamp = formatExactLearningTimestamp(value);
+            return [
+                '<td class="last-active" data-label="Terakhir belajar">',
+                    '<time class="last-active-primary" datetime="', escapeAttr(isoTimestamp), '" title="', escapeAttr(exactTimestamp), '">',
+                        '<i class="far fa-clock" aria-hidden="true"></i><span>', escapeHtml(relativeTime(value)), '</span>',
+                    '</time>',
+                    '<time class="last-active-exact" datetime="', escapeAttr(isoTimestamp), '">', escapeHtml(exactTimestamp), '</time>',
                 '</td>'
             ].join('');
         };
@@ -3210,6 +3262,7 @@
             if (!container) return;
             const data = overview || {};
             const total = Number(data.totalParticipants || 0);
+            const qaTotal = Number(data.qaParticipants || 0);
             const average = formatPercent(data.averageOverallProgress);
             const active = Number(data.activeLearners7d || 0);
             const activePercent = formatPercent(data.activePercent);
@@ -3217,7 +3270,9 @@
                 '<div class="premium-summary-card">',
                     '<div class="premium-summary-icon"><i class="fas fa-users" aria-hidden="true"></i></div>',
                     '<div class="premium-summary-content"><h4>Total Peserta</h4>',
-                    '<p class="main-val">', total, '</p><p>Peserta aktif dalam cohort resmi</p></div>',
+                    '<p class="main-val">', total,
+                    qaTotal ? ' <span class="premium-summary-badge">+' + qaTotal + ' QA</span>' : '',
+                    '</p><p>Peserta aktif dalam cohort resmi · QA tidak masuk KPI</p></div>',
                 '</div>',
                 '<div class="premium-summary-card">',
                     '<div class="premium-summary-icon"><i class="fas fa-chart-line" aria-hidden="true"></i></div>',
@@ -3240,7 +3295,9 @@
             currentPage = Math.min(currentPage, totalPages);
             const startIndex = currentFilteredData.length ? (currentPage - 1) * itemsPerPage + 1 : 0;
             const endIndex = Math.min(currentPage * itemsPerPage, currentFilteredData.length);
-            pageInfo.textContent = 'Menampilkan ' + startIndex + '–' + endIndex + ' dari ' + currentFilteredData.length + ' peserta';
+            const qaCount = currentFilteredData.filter(function(participant) { return Boolean(participant && participant.isQa); }).length;
+            pageInfo.textContent = 'Menampilkan ' + startIndex + '–' + endIndex + ' dari ' + currentFilteredData.length + ' akun peserta'
+                + (qaCount ? ' · ' + qaCount + ' QA' : '');
 
             const controls = [];
             controls.push('<button class="page-btn" type="button" data-page="' + (currentPage - 1) + '" aria-label="Halaman sebelumnya" ' + (currentPage === 1 ? 'disabled' : '') + '><i class="fas fa-chevron-left" aria-hidden="true"></i></button>');
@@ -3258,7 +3315,7 @@
             if (!tbody) return;
             participantMap = {};
             if (!currentFilteredData.length) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--wit-slate)">Tidak ada peserta yang cocok.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:28px;color:var(--wit-slate)">Tidak ada peserta yang cocok.</td></tr>';
                 renderPagination();
                 return;
             }
@@ -3270,23 +3327,19 @@
                 const name = String(participant.name || 'Peserta');
                 const overall = clampPercent(participant.overallProgress);
                 const hierarchy = buildLearningHierarchy(participant);
+                const isQa = Boolean(participant.isQa);
                 participantMap[key] = participant;
                 return [
-                    '<tr>',
+                    '<tr class="', isQa ? 'qa-participant-row' : '', '" data-account-kind="', isQa ? 'qa' : 'official', '">',
                         '<td><div class="participant-identity">',
                             '<div class="participant-avatar" aria-hidden="true">', escapeHtml(getInitials(name)), '</div>',
-                            '<div><span class="participant-name">', escapeHtml(name), '</span>',
-                            '<span class="course-progress-meta">NIK ', escapeHtml(participant.maskedNik || participant.nik || '****'), '</span></div>',
+                            '<div><div class="participant-name-row"><span class="participant-name">', escapeHtml(name), '</span>',
+                            isQa ? '<span class="qa-badge">QA</span>' : '', '</div>',
+                            '<span class="participant-meta">NIK ', escapeHtml(participant.maskedNik || participant.nik || '****'), '</span></div>',
                         '</div></td>',
-                        moduleCell(hierarchy.modules[0], 'Progress AI Fundamentals ' + name),
-                        moduleCell(hierarchy.modules[1], 'Progress Math for AI ' + name),
-                        '<td class="course-progress-cell"><div class="course-progress-row">',
-                            '<div class="progress-track" role="progressbar" aria-label="Progress keseluruhan ', escapeAttr(name), '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="', overall, '">',
-                                '<div class="progress-fill" style="width:', overall, '%"></div>',
-                            '</div><span class="progress-percentage">', formatPercent(overall), '%</span>',
-                        '</div></td>',
-                        '<td class="last-active"><span title="', escapeAttr(formatTimestamp(participant.lastLearningAt)), '">', escapeHtml(relativeTime(participant.lastLearningAt)), '</span></td>',
-                        '<td><button class="btn-detail" type="button" data-participant-key="', key, '">Detail</button></td>',
+                        overallProgressCellHtml(overall, hierarchy.modules.length, name),
+                        lastLearningCellHtml(participant.lastLearningAt),
+                        '<td data-label="Detail"><button class="btn-detail" type="button" data-participant-key="', key, '">Lihat <i class="fas fa-chevron-right" aria-hidden="true"></i></button></td>',
                     '</tr>'
                 ].join('');
             }).join('');
@@ -3308,7 +3361,7 @@
                 '.pr-modal-dialog{width:min(900px,100%);max-height:92vh;overflow:auto;border-radius:26px;background:#fffafd;box-shadow:0 30px 70px rgba(17,25,79,.28);color:#11194f;font-family:"Plus Jakarta Sans",sans-serif}',
                 '.pr-modal-header{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 28px;border-bottom:1px solid #f0dce7;background:rgba(255,250,253,.96);backdrop-filter:blur(12px)}',
                 '.pr-modal-heading{display:flex;align-items:center;gap:14px}.pr-modal-avatar{width:52px;height:52px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(135deg,#ff2f8a,#ff78ac);color:white;font-weight:800}',
-                '.pr-modal-title{margin:0;font-size:22px}.pr-modal-subtitle{margin:4px 0 0;color:#61698f;font-size:13px}',
+                '.pr-modal-title-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px}.pr-modal-title{margin:0;font-size:22px}.pr-modal-subtitle{margin:4px 0 0;color:#61698f;font-size:13px}.pr-qa-badge{display:inline-flex;align-items:center;padding:4px 8px;border:1px solid #9f7aea;border-radius:999px;background:#f4efff;color:#5b32a3;font-size:11px;font-weight:800;letter-spacing:.04em}',
                 '.pr-modal-close{min-width:44px;height:44px;border:1px solid #f2c8db;border-radius:50%;background:white;color:#d92372;cursor:pointer;font-size:18px}.pr-modal-close:hover{background:#fff0f7}',
                 '.pr-modal-body{padding:26px;display:grid;gap:18px}.pr-overall-card,.pr-course-card{border:1px solid #f0dce7;border-radius:20px;background:white;padding:20px}',
                 '.pr-overall-card{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center;background:linear-gradient(135deg,#fff6fa,#faf7ff)}',
@@ -3368,18 +3421,21 @@
             const mathModule = hierarchy.modules[1];
             const name = String(participant.name || 'Peserta');
             const overall = clampPercent(participant.overallProgress);
+            const isQa = Boolean(participant.isQa);
             const wrapper = document.createElement('div');
             wrapper.className = 'pr-modal-overlay dynamic-progress-modal-overlay';
             wrapper.innerHTML = [
                 '<section class="pr-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="pr-modal-title">',
                     '<header class="pr-modal-header">',
                         '<div class="pr-modal-heading"><div class="pr-modal-avatar" aria-hidden="true">', escapeHtml(getInitials(name)), '</div><div>',
-                            '<h2 class="pr-modal-title" id="pr-modal-title">', escapeHtml(name), '</h2>',
+                            '<div class="pr-modal-title-row"><h2 class="pr-modal-title" id="pr-modal-title">', escapeHtml(name), '</h2>',
+                            isQa ? '<span class="pr-qa-badge">QA</span>' : '', '</div>',
                             '<p class="pr-modal-subtitle">NIK ', escapeHtml(participant.maskedNik || participant.nik || '****'), '</p>',
                         '</div></div>',
                         '<button class="pr-modal-close" type="button" aria-label="Tutup detail progress"><i class="fas fa-times" aria-hidden="true"></i></button>',
                     '</header>',
                     '<div class="pr-modal-body">',
+                        isQa ? '<div class="pr-activity-note"><strong>Akun pengujian QA.</strong> Progress ditampilkan untuk validasi, tetapi tidak dihitung ke KPI peserta resmi.</div>' : '',
                         '<section class="pr-overall-card" aria-label="Ringkasan progress keseluruhan">',
                             '<div><div class="pr-overall-value">', formatPercent(overall), '%</div><div class="pr-overall-label">Overall progress dari server</div></div>',
                             '<div>', progressBarHtml(overall, 'Overall progress ' + name),
@@ -3463,7 +3519,7 @@
                 console.error('Gagal memuat snapshot progress peserta:', error);
                 showError(error.message || 'Terjadi kesalahan jaringan atau server.');
                 if (tbody && !allData.length) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:28px;color:#8f174e">Data belum dapat ditampilkan. Coba segarkan kembali.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:28px;color:#8f174e">Data belum dapat ditampilkan. Coba segarkan kembali.</td></tr>';
                 }
                 if (snapshotStatus) snapshotStatus.textContent = 'Snapshot gagal dimuat';
             } finally {

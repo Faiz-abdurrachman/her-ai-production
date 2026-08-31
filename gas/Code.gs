@@ -5779,7 +5779,7 @@ function cachePutPresence(key, value, ttlSeconds) {
 // ADMIN LEARNING OPERATIONS (PROGRESS PESERTA)
 // ============================================================================
 
-var ADMIN_LEARNING_PROGRESS_CACHE_KEY = 'admin_learning_progress_snapshot_v4';
+var ADMIN_LEARNING_PROGRESS_CACHE_KEY = 'admin_learning_progress_snapshot_v5';
 var ADMIN_LEARNING_PROGRESS_CACHE_SECONDS = 300;
 var ADMIN_LEARNING_PROGRESS_CACHE_CHUNK_BYTES = 70000;
 var ADMIN_LEARNING_PROGRESS_CACHE_MAX_CHUNKS = 50;
@@ -5838,6 +5838,7 @@ function buildAdminLearningProgressSnapshot(source) {
   var scope = {
     totalAccountRows: accounts.length,
     regularParticipants: 0,
+    qaParticipants: 0,
     excludedQa: 0,
     excludedDisabled: 0,
     excludedOutsideCohort: 0,
@@ -5878,13 +5879,10 @@ function buildAdminLearningProgressSnapshot(source) {
   accounts.forEach(function(account) {
     var rowId = String(account && (account.participant_rowId || account.rowId) || '').trim();
     var nik = String(account && (account.nik || account.username) || '').replace(/\D/g, '');
+    var isQa = isQaParticipantAccount(account);
     if (rowId) knownRowIds[rowId] = true;
     if (nik) knownNiks[nik] = true;
-    if (isQaParticipantAccount(account)) {
-      scope.excludedQa++;
-      return;
-    }
-    if (!isTargetParticipantForPortal(account, targetEmailSet)) {
+    if (!isQa && !isTargetParticipantForPortal(account, targetEmailSet)) {
       scope.excludedOutsideCohort++;
       return;
     }
@@ -5904,6 +5902,7 @@ function buildAdminLearningProgressSnapshot(source) {
       participantRowId: rowId,
       maskedNik: maskParticipantNik(nik),
       name: String(account.nama_lengkap || account.name || 'Peserta'),
+      isQa: isQa,
       lastLoginAt: adminProgressIsoTimestamp(account.last_login_at),
       _nik: nik,
       _completed: {},
@@ -5915,7 +5914,8 @@ function buildAdminLearningProgressSnapshot(source) {
     eligibleByRowId[rowId] = participant;
     if (!eligibleByNik[nik]) eligibleByNik[nik] = participant;
     participants.push(participant);
-    scope.regularParticipants++;
+    if (isQa) scope.qaParticipants++;
+    else scope.regularParticipants++;
   });
 
   var diagnostics = {
@@ -5976,7 +5976,7 @@ function buildAdminLearningProgressSnapshot(source) {
     var moduleStates = foundationModules.map(function(moduleConfig) {
       var completed = Object.keys(participant._completed[moduleConfig.moduleId] || {}).length;
       var progress = Math.min(100, Math.round((completed / moduleConfig.total) * 100));
-      moduleProgressTotals[moduleConfig.moduleId] += progress;
+      if (!participant.isQa) moduleProgressTotals[moduleConfig.moduleId] += progress;
       return {
         moduleId: moduleConfig.moduleId,
         title: moduleConfig.title,
@@ -6002,7 +6002,7 @@ function buildAdminLearningProgressSnapshot(source) {
         progress: totalItems ? Math.min(100, Math.round((completedItems / totalItems) * 100)) : 0
       };
     });
-    moduleProgressTotals['math-for-ai'] += mathSummary.progress;
+    if (!participant.isQa) moduleProgressTotals['math-for-ai'] += mathSummary.progress;
 
     var courses = buildActiveLearningCourses(aiSummary, participant._validRows);
     var overallSummary = summarizeTrackedModules(courses);
@@ -6051,13 +6051,15 @@ function buildAdminLearningProgressSnapshot(source) {
   });
 
   participants.sort(function(a, b) {
+    if (Boolean(a.isQa) !== Boolean(b.isQa)) return a.isQa ? -1 : 1;
     return String(a.name || '').localeCompare(String(b.name || ''), 'id');
   });
-  var totalParticipants = participants.length;
-  var overallTotal = participants.reduce(function(total, participant) {
+  var officialParticipants = participants.filter(function(participant) { return !participant.isQa; });
+  var totalParticipants = officialParticipants.length;
+  var overallTotal = officialParticipants.reduce(function(total, participant) {
     return total + Number(participant.overallProgress || 0);
   }, 0);
-  var activeLearners7d = participants.filter(function(participant) {
+  var activeLearners7d = officialParticipants.filter(function(participant) {
     var timestamp = participant.lastLearningAt ? new Date(participant.lastLearningAt).getTime() : NaN;
     return !isNaN(timestamp) && timestamp >= activeCutoffMs;
   }).length;
@@ -6079,6 +6081,8 @@ function buildAdminLearningProgressSnapshot(source) {
     overview: {
       totalParticipants: totalParticipants,
       totalActiveParticipants: totalParticipants,
+      qaParticipants: scope.qaParticipants,
+      listedAccounts: participants.length,
       averageOverallProgress: totalParticipants ? Number((overallTotal / totalParticipants).toFixed(1)) : 0,
       activeLearners7d: activeLearners7d,
       activePercent: totalParticipants ? Number(((activeLearners7d / totalParticipants) * 100).toFixed(1)) : 0,
